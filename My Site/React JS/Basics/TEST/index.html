@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> TEST </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script> 
+</head>
+<body>
+<h1> TEST </h1>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+<h3 style="color:darkblue;"><u> To-Do App </u></h3>
+    <pre>
+// main HTML file (index.html) --------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    &lt;!DOCTYPE html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8" /&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+        &lt;meta name="description" content="Web site created using create-react-app"/&gt;
+        &lt;title&gt;Todo App&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        
+        &lt;div id="todoApp"&gt;&lt;/div&gt;
+        
+        
+    &lt;/body&gt;
+    &lt;/html&gt;
+    
+    
+// main React script file (index.js) --------------------------------------------------
+// ------------------------------------------------------------------------------------
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    
+    import TodoItem from './TodoItem';
+    import todosDoc from './todosDoc';
+    import './TodoStyle.css';
+    
+    class App extends React.Component{
+        constructor(){
+            super();
+            this.state = {todos:todosDoc};
+        }
+        render(){
+            var todoItemComponents = this.state.todos.map(item =&gt; &lt;TodoItem todo={item} key={item.id} /&gt;);
+            return(
+                &lt;div className="appCont"&gt;
+                    {todoItemComponents}
+                &lt;/div&gt;
+            );
+        };
+    };
+    
+    ReactDOM.render(&lt;App /&gt;, document.getElementById('todoApp'));    
+    
+    
+// (TodoItem.js) file -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    import React from 'react';
+    
+    class TodoItem extends React.Component{
+        constructor(props){
+            super(props);
+            this.state = {
+                completed:this.props.todo.completed,
+                itemColor: 'back',
+                textDeco: 'default'
+            };
+        }
+        checkStatus = () => {
+            if(this.state.completed){
+                this.setState({completed:false});
+            } else {
+                this.setState({completed:true});
+            }
+        }
+        render(){
+            var itemColor, textDeco;
+            if(this.state.completed){
+                itemColor = 'gray';
+                textDeco = 'line-through';        
+            } else {
+                itemColor = 'black';
+                textDeco = 'none';
+            }
+            return (
+                &lt;div onClick={this.checkStatus} style={{color:itemColor, textDecoration:textDeco}}&gt;
+                    &lt;input type="checkbox" checked={this.state.completed} /&gt; &lt;span&gt; {this.props.todo.text} &lt;/span&gt;
+                &lt;/div&gt;
+            );
+        }
+    }
+    
+    export default TodoItem;    
+    
+    
+// (todosDoc.js) file -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var todos = [
+        {id: 1, text: 'Take out the trash', completed: true},
+        {id: 2,  text: 'Grocery Shopping', completed: false},
+        {id: 3,  text: 'Clean gecko tank', completed: false},
+        {id: 4, text: 'Mow Lawn', completed: true},
+        {id: 5, text: 'Catch up on Arrested Developement', completed: false}
+    ];
+    
+    export default todos;    
+    
+    
+// (todosStyle.css) file --------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    .appCont{
+        border: solid 2px black;
+        border-radius: 15px;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        max-width: 350px;
+        margin: auto;
+        padding: 20px 10px;
+        background-color: lightblue;
+    }
+    .appCont div {
+        margin: 5px 0;
+        text-align: left;
+        user-select: none;
+    }
+    .appCont div:hover {
+        cursor: default;
+    }
+
+    .appCont input[type='checkbox']:checked{
+        background-color: lime;
+        border: solid 10px red;
+    }
+    </pre>
+    
+    <br><br>
+</body>
+</html>

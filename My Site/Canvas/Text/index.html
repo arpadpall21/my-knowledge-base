@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> Text </title>    
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Text (ver 2.9) </h1>
+    <p> Updated ( 2018-11-05 / 2018-11-29 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>  
+        <a href="../index.html">Canvas></a> Text  
+    </p>
+<table class="table">
+    <tr>
+        <th> Method / Property </th>
+        <th style="width:60%;"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.fillText("<strong>text</strong>", <strong>x</strong>, <strong>y</strong>, <i>max_width(nr)</i>) </td>
+        <td> draws a filled text on the canvas </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.font = "<strong>CSSFont shorthand(font-style | font-variant | font-weight | font-size | line-height | font-family)</strong>" </td>
+        <td> gets or sets the font style of the canvas context (font-size and font-family minimum required!) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.measureText("<strong>text</strong>") </td>
+        <td> returns the <mark>TextMetrics</mark> object which has the <mark>width</mark> property containing the given text length (in pixels) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.strokeText("<strong>text</strong>", <strong>x</strong>, <strong>y</strong>, <i>max_width(nr)</i>) </td>
+        <td> draws a stroke (not filled) text on the canvas </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.textAlign = "<strong>start(default)/end/left/right/center</strong>" </td>
+        <td> gets or sets the horizontal position to the text <u>compared to the set</u> text coordinates of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.textBaseline = "<strong>alphabetic(default)/top/bottom/middle/ideographic/hanging</strong>" </td>
+        <td> gets or sets the vertical (baseline) position of the text of the canvas context </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p> - </p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>   
+<h2 style="color:darkblue;"><u> <mark>strokeText()</mark> / <mark>fillText()</mark> / <mark>measureText()</mark> / <mark>font</mark> / <mark>textAling</mark> / <mark>textBaseline</mark> </u></h2> 
+    <pre class="syntax">
+SYNTAX :    <strong>canvasCtx2D</strong>.strokeText("<strong>text</strong>", <strong>x</strong>, <strong>y</strong>, <i>max_width(nr)</i>)         // draws a stroke (not filled) text on the canvas
+            <strong>canvasCtx2D</strong>.fillText("<strong>text</strong>", <strong>x</strong>, <strong>y</strong>, <i>max_width(nr)</i>)           // draws a filled text on the canvas
+                - <i>max_width(nr)</i> : scales down (compresses) the text to fit in the specified width (<u>does not cut letters of!</u>) 
+
+            <strong>canvasCtx2D</strong>.measureText("<strong>text</strong>")                             // returns the <mark>TextMetrics</mark> object which has the <mark>width</mark> property containing the given text length (in pixels)
+            
+            <strong>canvasCtx2D</strong>.font = "<strong>CSSFont shorthand(font-style | font-variant | font-weight | font-size | line-height | font-family)</strong>"    // gets or sets the font style of the canvas context (font-size and font-family minimum required!)  
+                - "<strong>CSSFont</strong>" : CSS "font" shorthand porperty (default "<mark>10px sans-serif</mark>")
+            <strong>canvasCtx2D</strong>.textAlign = "<strong>start(default)/end/left/right/center</strong>"                            // gets or sets the horizontal position to the text <u>compared to the set</u> text coordinates of the canvas context  
+            <strong>canvasCtx2D</strong>.textBaseline = "<strong>alphabetic(default)/top/bottom/middle/ideographic/hanging</strong>"    // gets or sets the vertical (baseline) position of the text of the canvas context
+    </pre>
+    <img src="defaultTextPosition.jpg" alt="Canvas default text position">
+    <img src="textAlign.jpg" alt="textAlign canvas property">
+    <img src="textBaseline.jpg" alt="textBaseline canvas property">
+    <pre>
+    &lt;canvas id ="demo" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var ctx = document.getElementById("demo").getContext("2d");
+    ctx.font = "bold italic 18px Arial";                                // font style declared to the context (same values are used as in CSS "font" shorthand property) // -! size and font-family minimum MUST be specified!     
+    ctx.textAlign = "center";                                           // text centered around its coordinates
+    ctx.textBaseline = "middle";                                        // baseline (vectical coordinates) set to the middle of the text
+    ctx.strokeText("myText", 150, 75);                                  // draws a stroke (not filled) text (centered perfectly because of the "textAlign" and "textBaseline" settings)
+   
+    ctx.textAlign = "right";
+    ctx.textBaseline = "bottom";
+    var canvasText = "myText 2"
+    ctx.fillText(canvasText, 300, 150, 70);                             // text placed on the right-bottom corner ("textAlign" and "textBaseline" settings makes this easy)         
+                                                                            // max-width set to 70px <u>(text is compressed to fit in 70px width)</u>
+    ctx.measureText(canvasText);                                        // -> {width:77.3701171875}     // object holds the textWidth information in pixels
+&lt;/script&gt;
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>strokeText()</mark> / <mark>fillText()</mark> / <mark>measureText()</mark> methods TEST </u></h4>    
+    <canvas id="textTest" style="border:solid 1px black"></canvas>
+<script>
+    var textCanvas = function() {
+        var ctx = document.getElementById("textTest").getContext("2d");
+        ctx.strokeText("Hello Word", 20, 20);                                       // stoke text looks thicker because the letters are small and the stroke around it makes it thicker
+        ctx.fillText("Hello Word", 20, 35);
+        
+        ctx.beginPath();
+        ctx.moveTo(20, 45.5);
+        ctx.lineTo(280, 45.5);
+        ctx.stroke();
+        var myText = "My Custom text";
+        ctx.fillText(myText, 20, 65);                                               // string drawn 
+        ctx.fillText(`text length = ${ctx.measureText(myText).width}`, 20, 80);     // measure the text length
+        
+        ctx.beginPath();
+        ctx.moveTo(20, 90.5);
+        ctx.lineTo(280, 90.5);
+        ctx.strokeText(myText, 20, 105, 100);                                       // no text compression, text-max with limited to 100px
+        ctx.fillText(myText, 20, 120, 50);                                          // text max-width limited to 40px
+        ctx.strokeText(myText, 20, 135, 35);                                        // text max-width limited to 35px
+        ctx.stroke();
+    }
+    textCanvas();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="textTest" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var textCanvas = function() {
+        var ctx = document.getElementById("textTest").getContext("2d");
+        ctx.strokeText("Hello Word", 20, 20);                                       // stoke text looks thicker because the letters are small and the stroke around it makes it thicker
+        ctx.fillText("Hello Word", 20, 35);
+        
+        ctx.beginPath();
+        ctx.moveTo(20, 45.5);
+        ctx.lineTo(280, 45.5);
+        ctx.stroke();
+        var myText = "My Custom text";
+        ctx.fillText(myText, 20, 65);                                               // string drawn 
+        ctx.fillText(`text length = ${ctx.measureText(myText).width}`, 20, 80);     // measure the text length
+        
+        ctx.beginPath();
+        ctx.moveTo(20, 90.5);
+        ctx.lineTo(280, 90.5);
+        ctx.strokeText(myText, 20, 105, 100);                                       // no text compression, text-max with limited to 100px
+        ctx.fillText(myText, 20, 120, 50);                                          // text max-width limited to 40px
+        ctx.strokeText(myText, 20, 135, 35);                                        // text max-width limited to 35px
+        ctx.stroke();
+    }
+    textCanvas();
+&lt;/script&gt;        
+        </pre>
+        </details>
+<h4><u> <mark>font</mark> property TEST </u></h4>    
+    <p> - TEST[2018-11-15], using external fonts set by @font-face roule CSS = EDGE supports it / Chrome and Opera No support / Mozilla <u>does not even display the text (no fallback)</u> </p>
+    <canvas id="fontTest" style="border:solid 1px black"></canvas>
+<script>
+    var fontTest = function() {
+        var ctx = document.getElementById("fontTest").getContext("2d");
+        ctx.strokeText("Hello Word", 20, 20);
+        
+        ctx.font = "italic 18px serif";             // font style set
+        ctx.strokeText("Hello Word", 20, 40);
+        
+        ctx.font = "bold small-caps 16px Candra";   // font style set
+        ctx.fillText("Hellow Word", 20, 60);
+        
+        ctx.font = "16px myFont";                   // @font-face set in CSS (very poor browser support [2018-11-15])
+        ctx.fillText("CSS External Font", 20, 80);
+    }
+    fontTest();
+</script>  
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="fontTest" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var fontTest = function() {
+        var ctx = document.getElementById("fontTest").getContext("2d");
+        ctx.strokeText("Hello Word", 20, 20);
+        
+        ctx.font = "italic 18px serif";             // font style set
+        ctx.strokeText("Hello Word", 20, 40);
+        
+        ctx.font = "bold small-caps 16px Candra";   // font style set
+        ctx.fillText("Hellow Word", 20, 60);
+        
+        ctx.font = "16px myFont";                   // @font-face set in CSS (very poor browser support [2018-11-15])
+        ctx.fillText("CSS External Font", 20, 80);
+    }
+    fontTest();
+&lt;/script&gt;  
+        
+-- CODE (CSS) --
+    @font-face {
+        font-family: myFont;
+        src: url(Font-Families/CoveredByYourGrace.ttf);
+    }
+        </pre>
+        </details>
+<h4><u> <mark>textAlign</mark> TEST </u></h4>    
+    <canvas id="textAlignTEST" style="border:solid 1px black;"></canvas>
+<script>
+    var textAlignT = function() {
+        var ctx = document.getElementById("textAlignTEST").getContext("2d");
+        ctx.strokeStyle = "red";
+        ctx.font = "14px sans-serif";
+        ctx.moveTo(150, 0);
+        ctx.lineTo(150, 150);
+        ctx.stroke();
+        
+        ctx.fillText("Text Align DEFAULT (start)", 150, 20);    // textAlign = "start"  (beginning of the text)
+        
+        ctx.textAlign = "left";                                 // left of the text
+        ctx.fillText("Text Align LEFT", 150, 50);
+        
+        ctx.textAlign = "end";                                  // end of the text
+        ctx.fillText("Text Align END", 150, 80);
+        
+        ctx.textAlign = "right";
+        ctx.fillText("Text Align RIGHT", 150, 110);             // right of the text
+        
+        ctx.textAlign = "center";                               // text centered at the specified coordonates
+        ctx.fillText("Text Align CENTER", 150, 140);
+    }
+    textAlignT();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="textAlignTEST" style="border:solid 1px black;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var textAlignT = function() {
+        var ctx = document.getElementById("textAlignTEST").getContext("2d");
+        ctx.strokeStyle = "red";
+        ctx.font = "14px sans-serif";
+        ctx.moveTo(150, 0);
+        ctx.lineTo(150, 150);
+        ctx.stroke();
+        
+        ctx.fillText("Text Align DEFAULT (start)", 150, 20);    // textAlign = "start"  (beginning of the text)
+        
+        ctx.textAlign = "left";                                 // left of the text
+        ctx.fillText("Text Align LEFT", 150, 50);
+        
+        ctx.textAlign = "end";                                  // end of the text
+        ctx.fillText("Text Align END", 150, 80);
+        
+        ctx.textAlign = "right";
+        ctx.fillText("Text Align RIGHT", 150, 110);             // right of the text
+        
+        ctx.textAlign = "center";                               // text centered at the specified coordonates
+        ctx.fillText("Text Align CENTER", 150, 140);
+    }
+    textAlignT();
+&lt;/script&gt;     
+        </pre>
+        </details>
+<h4><u> <mark>textBaseline</mark> TEST </u></h4>    
+    <canvas id="baselineAlignTEST" style="border:solid 1px black;" width="600"></canvas>
+<script>
+    var baselineTest = function() {
+        var ctx = document.getElementById("baselineAlignTEST").getContext("2d");
+        ctx.font = "30px Arial";
+        ctx.strokeStyle = "red";
+        
+        ctx.beginPath();                            // draw first guide line
+        ctx.moveTo(0, 40.5);
+        ctx.lineTo(600, 40.5);
+        ctx.stroke();
+        
+        ctx.fillText("alphabetic", 2, 40.5);        // default textBaseline value is "alphabetic"
+        
+        ctx.textBaseline = "ideographic";
+        ctx.fillText("ideographic", 200, 40.5);     
+        
+        ctx.textBaseline = "hanging";
+        ctx.fillText("hanging", 400, 40.5);
+        
+        ctx.beginPath();                            // draw second guide line
+        ctx.moveTo(0, 110.5);
+        ctx.lineTo(600, 110.5);
+        ctx.stroke();
+        
+        ctx.textBaseline = "bottom";
+        ctx.fillText("bottom", 2, 110.5);
+        
+        ctx.textBaseline = "middle";
+        ctx.fillText("middle", 200, 110.5);
+        
+        ctx.textBaseline = "top";
+        ctx.fillText("top", 400, 110.5);
+    }
+    baselineTest();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="baselineAlignTEST" style="border:solid 1px black;" width="600"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var baselineTest = function() {
+        var ctx = document.getElementById("baselineAlignTEST").getContext("2d");
+        ctx.font = "30px Arial";
+        ctx.strokeStyle = "red";
+        
+        ctx.beginPath();                            // draw first guide line
+        ctx.moveTo(0, 40.5);
+        ctx.lineTo(600, 40.5);
+        ctx.stroke();
+        
+        ctx.fillText("alphabetic", 2, 40.5);        // default textBaseline value is "alphabetic"
+        
+        ctx.textBaseline = "ideographic";
+        ctx.fillText("ideographic", 200, 40.5);     
+        
+        ctx.textBaseline = "hanging";
+        ctx.fillText("hanging", 400, 40.5);
+        
+        ctx.beginPath();                            // draw second guide line
+        ctx.moveTo(0, 110.5);
+        ctx.lineTo(600, 110.5);
+        ctx.stroke();
+        
+        ctx.textBaseline = "bottom";
+        ctx.fillText("bottom", 2, 110.5);
+        
+        ctx.textBaseline = "middle";
+        ctx.fillText("middle", 200, 110.5);
+        
+        ctx.textBaseline = "top";
+        ctx.fillText("top", 400, 110.5);
+    }
+    baselineTest();
+&lt;/script&gt;      
+        </pre>
+        </details>
+</details>   
+    
+    <br>
+</body>
+</html>

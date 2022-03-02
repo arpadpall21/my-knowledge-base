@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Cluster </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Cluster (ver 4.0.0) </h1>
+    <p> Updated ( 2020-07-07 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Cluster
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>cluster</strong>.disconnect(<i>fn</i>) </td>
+        <td> 
+            - calls <mark>disconnect()</mark> on each cluster workers present in the <mark>cluster.workers</mark> property <br>
+            - once all cluster workers are disconnected all internal domain sockets (handles) are closed and the callback is called <u>(the master process can die gracefully)</u> <br>
+            - this method callable only from the master process
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td>  
+            <strong>cluster</strong>.fork(<i class="openable">env:obj<div>
+                <p> - object sets environment varialbes in the spawned cluster worker (ex: <mark>{KEY1:'env var value'</mark>}) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - spawns a new cluster worker process (which immediately runs this file (code) in the newly spawned cluster worker process) <br>
+            - this method callable only from the master process
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>cluster</strong>.isMaster </td>
+        <td> 
+            - <u>[DEPRECATED V16.0.0 use <mark>isPrimary</mark> instead]</u> returns <span class="openable"><mark>true</mark> if this code is running in the master process<div>
+                <p> - if <mark>process.env.NODE_UNIQUE_ID</mark> is <mark>undefined</mark> this value is set to <mark>true</mark> </p>
+            </div></span>, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.8.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>cluster</strong>.isPrimary </td>
+        <td> 
+            - returns <span class="openable"><mark>true</mark> if this code is running in the master process<div>
+                <p> - if <mark>process.env.NODE_UNIQUE_ID</mark> is <mark>undefined</mark> this value is set to <mark>true</mark> </p>
+            </div></span>, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2021-06-09">
+                <span><i class="fab fa-node-js"></i> 16.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>cluster</strong>.isWorker </td>
+        <td> 
+            - returns <mark>true</mark> if this code is running in a cluster worker process, otherwise returns <mark>false</mark> 
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.01">
+        <td> <strong>cluster</strong>.schedulingPolicy </td>
+        <td> 
+            - gets or sets how the load is distributed among cluster worker processes (Default except on Windows: <mark>2</mark>) <br>
+            - (<mark>2</mark> | <mark>cluster.SCHED_RR</mark> = round-robin fashion) (<mark>1</mark> | <mark>cluster.SCHED_NONE</mark> = OS handles the load distribution) <br>
+            - once the <mark>setupMaster()</mark> is called  or the first cluster worker process is spawned this option is frozen and cannot be changed anymore <br>
+            - this option can be changed by the <mark>NODE_CLUSTER_SHED_POLICY</mark> environment variable (<mark>'rr'</mark> or <mark>'none'</mark>)
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.11.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>cluster</strong>.settings </td>
+        <td> 
+            - <u>after calling <mark>setupMaster()</mark> or <mark>fork()</mark></u> returns an <span class="openable">object<div>
+                <p> execArgv: <strong>[str, ...]</strong> - list of argument passed to the Node.js executable (Default: <mark>process.execArgv</mark>) </p>
+                <p> exec: <strong>str</strong> - file path to the worker file (Default: <mark>process.argv[1]</mark>) </p>
+                <p> args: <strong>[str, ...]</strong> - string arguments passed to the worker (Default: <mark>process.argv.slice(2)</mark>)</p>
+                <p> cwd: <strong>str</strong> - Current Working Directory of the cluster worker process (Default: <mark>undefined</mark> = inherits from the parent) </p>
+                <p> serialization: <strong>str</strong> - serialization used to send message between processes (<mark>'json'</mark> or <mark>'advanced'</mark>) (Default: <mark>false</mark>) </p>
+                <p> silet: <strong>bol</strong> - send or not the output on the parent <mark>stdio</mark> (Default: <mark>false</mark>) </p>
+                <p> stdio: <strong>arr</strong> - stdio configuration for the cluster worker (must contain <mark>'ipc'</mark>) (this option overrides the <mark>silet</mark> option) </p>
+                <p> uid: <strong>nr</strong> - user Identifier of the process </p>
+                <p> gid: <strong>nr</strong> - group Identifier of the process </p>
+                <p> inspectPort: <strong>nr|fn</strong> - sets an inspector Port of the Worker (Default: workers get their debut port incremented form the parent <mark>process.debugPort</mark>) </p>
+                <p> windowsHide: <strong>bol</strong> - hide the forked process console window (Windows only) (Default: <mark>false</mark>) </p>
+            </div></span> which contains cluster worker process settings for new cluster workers <br>
+            - shouldn't be set manually (from a cluster worker process always returns <mark>undefined</mark>) 
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.1 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 6.4.0 - <mark>stdio</mark> option </p>
+                    <p> - 8.2.0 - <mark>inspectPort</mark> option </p>
+                    <p> - 9.4.0 - <mark>windowsHide</mark> option </p>
+                    <p> - 9.5.0 - <mark>cwd</mark> option </p>
+                    <p> - 12.16.0 / 13.2.0 - <mark>serialization</mark> option </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td>  
+            <strong>cluster</strong>.setupMaster(<i class="openable">option:obj<div>
+                <p> execArgv: <strong>[str, ...]</strong> - list of argument passed to the Node.js executable (Default: <mark>process.execArgv</mark>) </p>
+                <p> exec: <strong>str</strong> - file path to the worker file (Default: <mark>process.argv[1]</mark>) </p>
+                <p> args: <strong>[str, ...]</strong> - string arguments passed to the worker (Default: <mark>process.argv.slice(2)</mark>)</p>
+                <p> cwd: <strong>str</strong> - Current Working Directory of the cluster worker process (Default: <mark>undefined</mark> = inherits from the parent) </p>
+                <p> serialization: <strong>str</strong> - serialization used to send message between processes (<mark>'json'</mark> or <mark>'advanced'</mark>) (Default: <mark>false</mark>) </p>
+                <p> silet: <strong>bol</strong> - send or not the output on the parent <mark>stdio</mark> (Default: <mark>false</mark>) </p>
+                <p> stdio: <strong>arr</strong> - stdio configuration for the cluster worker (must contain <mark>'ipc'</mark>) (this option overrides the <mark>silet</mark> option) </p>
+                <p> uid: <strong>nr</strong> - user Identifier of the process </p>
+                <p> gid: <strong>nr</strong> - group Identifier of the process </p>
+                <p> inspectPort: <strong>nr|fn</strong> - sets an inspector Port of the Worker (Default: workers get their debut port incremented form the parent <mark>process.debugPort</mark>) </p>
+                <p> windowsHide: <strong>bol</strong> - hide the forked process console window (Windows only) (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - <u>[DEPRECATED after V16.0.0 use <mark>setupPrimary()</mark> instead]</u> changes the default behaviour for future cluster worker processes (does not affect cluster workers already running) <br>
+            - this method callable only from the master process
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.4.0 <mark>stdio</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td>  
+            <strong>cluster</strong>.setupPrimary(<i class="openable">option:obj<div>
+                <p> execArgv: <strong>[str, ...]</strong> - list of argument passed to the Node.js executable (Default: <mark>process.execArgv</mark>) </p>
+                <p> exec: <strong>str</strong> - file path to the worker file (Default: <mark>process.argv[1]</mark>) </p>
+                <p> args: <strong>[str, ...]</strong> - string arguments passed to the worker (Default: <mark>process.argv.slice(2)</mark>)</p>
+                <p> cwd: <strong>str</strong> - Current Working Directory of the cluster worker process (Default: <mark>undefined</mark> = inherits from the parent) </p>
+                <p> serialization: <strong>str</strong> - serialization used to send message between processes (<mark>'json'</mark> or <mark>'advanced'</mark>) (Default: <mark>false</mark>) </p>
+                <p> silet: <strong>bol</strong> - send or not the output on the parent <mark>stdio</mark> (Default: <mark>false</mark>) </p>
+                <p> stdio: <strong>arr</strong> - stdio configuration for the cluster worker (must contain <mark>'ipc'</mark>) (this option overrides the <mark>silet</mark> option) </p>
+                <p> uid: <strong>nr</strong> - user Identifier of the process </p>
+                <p> gid: <strong>nr</strong> - group Identifier of the process </p>
+                <p> inspectPort: <strong>nr|fn</strong> - sets an inspector Port of the Worker (Default: workers get their debut port incremented form the parent <mark>process.debugPort</mark>) </p>
+                <p> windowsHide: <strong>bol</strong> - hide the forked process console window (Windows only) (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - changes the default behaviour for future cluster worker processes (does not affect cluster workers already running) <br>
+            - this method callable only from the master process
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 16.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>cluster</strong>.worker </td>
+        <td> 
+            - references the current worker object (not available in the master process)
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>cluster</strong>.workers </td>
+        <td> 
+            - returns an object which stores active cluster worker objects keyed by their <mark>id</mark> (available in the master process) <br>
+            - a cluster worker is removed after it has been disconnected and exited (before the <mark>disconnect</mark> and <mark>exit</mark> events)    
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.01">
+        <td colspan="2"> events </td>
+    </tr>
+    <tr class="40.01">
+        <td>  
+            <strong>cluster.listener</strong>('disconnect', <strong class="openable">fn(clusterWorker)<div>
+                <p> - the cluster worker (object) which disconnects its IPC channel from the parent process </p> 
+            </div></strong>)
+        </td>
+        <td> - emitted (master process) when a cluster worker disconnects its IPC channel linking it to the master process 
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.02">
+        <td>  
+            <strong>cluster.listener</strong>('exit', <strong class="openable">fn(clusterWorker, exitCode, sig<div>
+                <p> - <strong>clusterWorker</strong> - the exited cluster worker (object) </p>
+                <p> - <strong>exitCode</strong> - exit code </p>
+                <p> - <strong>sig</strong> - signal that caused the process to be killed (ex: <mark>SIGHUP</mark>) </p>
+            </div>)</strong>)
+        </td>
+        <td> - emitted (master process) when a cluster worked exited
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.02">
+        <td>  
+            <strong>cluster.listener</strong>('fork', <strong class="openable">fn(clusterWorker)<div>
+                <p> - the newly forked (created) cluster worker (object) </p>
+            </div></strong>)
+        </td>
+        <td> - emitted (master process) when a new cluster worker is created
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="45.01">
+        <td>  
+            <strong>cluster.listener</strong>('listening', <strong class="openable">fn(clusterWorker, address)<div>
+                <p> - <strong>clusterWorker</strong> - the cluster worker (object) from which the server emits the <mark>listening</mark> event </p>
+                <p> - <strong>address</strong> - object containing the address on which the server is listening (ex: <mark>{address:'127.0.0.1', port:1000, addressType:4}</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> - emitted (master process) when a server from a cluster worker emits the <mark>listening</mark> event
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="50.01">
+        <td>  
+            <strong>cluster.listener</strong>('message' <strong>fn(<spawn class="openable">clusterWorker<div>
+                <p> - the cluster worker which sends the message </p>
+            </div></spawn>, msg, <strong class="openable">handle<div>
+                <p> - running server object (server which is listening) </p>
+                <p> - server socket <u>which is connected</u> </p>
+                <p> - in not an active server or server socket was sent = <mark>undefined</mark> </p>
+            </div></strong>)</strong>)
+        </td>
+        <td> - emitted (master process) when the master process receives a message from one of its cluster workers (through IPC)
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 2.5.0 </span>
+                <span><i class="fab fa-node-js"></i> 6.0.0 <strong>clusterWorker</strong> argument </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.03">
+        <td>  
+            <strong>cluster.listener</strong>('online', <strong class="openable">fn(clusterWorker)<div>
+                <p> - the running cluster worker (object) </p>
+            </div></strong>)
+        </td>
+        <td> - emitted (master process) when a newly created cluster worker starts running
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.01">
+        <td>  
+            <strong>cluster.listener</strong>('setup', <strong class="openable">fn(setup:obj)<div>
+                <p> - <strong>setup:obj</strong> = <mark>cluster.settings</mark> (at the time the <mark>cluster.setupMaster()</mark> was called) </p>
+            </div></strong>)
+        </td>
+        <td> - emitted (master process) each time the <mark><strong>cluster</strong>.setupMaster()</mark> or <mark><strong>cluster</strong>.setupPrimary()</mark> method is called 
+            <span class="browserSupport" title="updated : 2020-07-08">
+                <span><i class="fab fa-node-js"></i> 0.7.1 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Worker 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>clusterWorker</strong> </td>
+        <td> 
+            - represents the cluster worker process which is basically a forked child process, created by <mark><strong>cluster</strong>.fork()</mark> <br>
+            - contains all public informations and methods about the cluster worker (extends <mark>EventEmitter</mark>) <br>
+            - from the master process they are reachable in the <mark><strong>cluster</strong>.workers</mark> property <br>
+            - form the cluster worker process reachable by the <mark><strong>clusterWorker</strong>.worker</mark> property  
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>clusterWorker</strong>.disconnect() </td>
+        <td> 
+            - in the cluster worker closes all servers, once all servers emit the <mark>close</mark> event then disconnects the IPC channel (so the cluster worker process can die gracefully) <br>
+            - in the master process send an internal message to the worker causing the call <mark>disconnect()</mark> on itself <br>
+            - gracefully closes servers only <u>(client connections are shut down immediately)</u> <br>
+            - returns this <strong>clusterWorker</strong> object 
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.7 </span>
+                <span><i class="fab fa-node-js"></i> 7.3.0 returns this <mark>clusterWorker</mark> </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>clusterWorker</strong>.exitedAfterDisconnect </td>
+        <td> 
+            - returns <mark>true</mark> if the cluster worker exited due to <mark>disconnect()</mark> or <mark>kill()</mark> methods <br>
+            - returns <mark>false</mark> if the cluster worker exited for some other reasons <br>
+            - returns <mark>undefined</mark> if the cluster worker is still running 
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>clusterWorker</strong>.id </td>
+        <td> - returns the (unique) Identifier (number) of the worker 
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.8.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>clusterWorker</strong>.isConnected() </td>
+        <td> - returns <mark>true</mark> if the cluster worker is connected to its master process via IPC channel, otherwise returns <mark>false</mark>   
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>clusterWorker</strong>.isDead() </td>
+        <td> - returns <mark>true</mark> if the cluster worker process was terminated, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td>  
+            <strong>clusterWorker</strong>.kill(<i class="openable">sig<div>
+                <p> - signal to send to the cluster worker process (Default: <mark>SIGTERM</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - in the cluster worker disconnects the IPC channel then exits the process with exit code <mark>0</mark> <br>
+            - in the master process disconnects the IPC channel then kills the cluster worker with a signal <br>
+            - this method is not identical with the <mark>process.kill()</mark> method because it attempts to disconnect the IPC channel before sending a signal 
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>clusterWorker</strong>.process </td>
+        <td> - returns the created (forker) <strong>childProcess</strong> object (in the master process)  
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td>  
+            <strong>clusterWorker</strong>.send(<strong>msg</strong>, <i class="openable">handle<div>
+                <p> - running server object (server which is listening) </p>
+                <p> - server socket <u>which is connected</u> </p>
+                <p> - in not an active server or server socket was sent the receiving side receives <mark>undefined</mark> </p>
+            </div></i>, <i class="openable">option:obj<div>
+                <p> keepOpen: <strong>bol</strong> - keepOpen: <strong>bol</strong> - used when passing <mark>net.Socket</mark> instances (as <i>handle</i>), when <mark>true</mark> the socket is kept open in the sending process (Default: <mark>false</mark>) </p>
+            </div></i>, <strong class="openable">fn(err)<div>
+                <p> - <strong>err</strong> - (if sending successful = <mark>null</mark>) (if sending fails = <mark>null</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - in the cluster worker sends a message to the master process <br>
+            - in the master process sends a message to this <strong>clusterWorker</strong> <br>
+            - on successful sending returns <mark>true</mark> and the callback is fired (if provided) 
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+                <span><i class="fab fa-node-js"></i> 4.0.0 callback </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td colspan="2"> events </td>
+    </tr>
+    <tr class="40.01">
+        <td> <strong>clusterWorker.listener</strong>('disconnect', <strong>fn</strong>) </td>
+        <td> 
+            - emitted when the cluster worker disconnects its IPC channel which links it to the master process   
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.01">
+        <td> <strong>clusterWorker.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> 
+            - emitted when the child process cannot be spawned, cannot be killed or message sending fails
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.02">
+        <td>  
+            <strong>clusterWorker.listener</strong>('exit', <strong class="openable">fn(exitCode, sig)<div>
+                <p> - <strong>exitCode</strong> - exit code </p>
+                <p> - <strong>sig</strong> - signal that caused the process to be killed (ex: <strong>SIGHUP</strong>) </p>
+            </div></strong>)
+        </td>
+        <td> - emitted when the cluster worker exited
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.11.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="45.01">
+        <td> <strong>clusterWorker.listener</strong>('listening', <strong>fn</strong>) </td>
+        <td> - emitted when a server from the cluster worker emits the <mark>listening</mark> event <u>(not emitted in the worker)</u>
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="50.01">
+        <td>  
+            <strong>clusterWorker.listener</strong>('message' <strong>fn(msg, <strong class="openable">handle<div>
+                <p> - running server object (server which is listening) </p>
+                <p> - server socket <u>which is connected</u> </p>
+                <p> - in not an active server or server socket was sent = <mark>undefined</mark> </p>
+            </div></strong>)</strong>)
+        </td>
+        <td> 
+            - in the cluster worker emitted when a message is received from the master process <br>
+            - in the master process emitted when a message is received from this <strong>clusterWorker</strong> 
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.01">
+        <td> <strong>clusterWorker.listener</strong>('online', <strong>fn</strong>) </td>
+        <td> emitted when the cluster worker starts running <u>(not emitted in the worker)</u>
+            <span class="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v14.x/docs/api/cluster.html" target="blank_">Cluster (nodejs.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>cluster</mark> module allows to run multiple child processes (cluster workers) at the same time <u style="color:yellow">(which share the same server port)</u> to take advange of multi CPU systems (designed to run multiple servers in one group but can be used for other tasks as well) </p>
+    <p> - the master process can spawn multiple cluster workers (by using the <mark>cluster.fork()</mark>), these clusters workers are spawned as <mark>child_process.fork()</mark> and communicate with the parent (master process) through IPC channels </p>    
+    <p> - there are 2 way the master process distribute incomming connections </p>
+    <p style="text-indent:25px;"> - 1) <u>(Default (except on Windows))</u> incomming connections are distributed in a rond-robin fashion (the load is equally distributed among cluster workers) </p>
+    <p style="text-indent:25px;"> - 2) the master process creates the listening socket and sends it to the cluster worker which then directly uses the socket to listen incomming connections (ex: <mark>clusterWorker.send('', socket)</mark>) </p>
+    <p> - as long as some cluster worker is still alive the master process will listen to incomming connections, when all cluster workers died the master process stops listening for new connection and drops all connections </p>
+    <p> - running cluster worker inside cluster worker is not allowed (calling <mark>cluster.fork()</mark> inside a cluster worker throws an error) </p>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {                                                            // the mainCluster runs this clode block only 
+        process.pid;                                                                   // -> 25448                      // process ID of the mainCluster 
+        
+        cluster.fork();                                                                // creates a childCluster        // -! once the childCluster is created runs this file (code) in a separate child process     
+        cluster.fork();                                                                // ...
+        cluster.fork();                                                                // ...
+    } else if (cluster.isWorker) {                                                     // childClusters runs this clode block only
+        process.pid;                                                                   // -> 25455  |  25465  | 25471   // process ID of the childClusters  
+        // childCluster code here ...
+    };
+    </pre>
+    <pre>
+    var cluster = require('cluster');
+    var os = require('os');
+    var http2 = require('http2');
+    
+    if (cluster.isMaster) {
+        var cpus = os.cpus().length;                                                   // the mainCluster checks how many processors the system has 
+        for(i = 0; i &lt; cpus; i++){
+            cluster.fork();                                                            // spawns as many child clusters as there are processors in the system (12 in my case);
+        }
+    } else {
+        var server = http2.createServer().listen(1000, 'localhost');                   // as many http2 server processes created as many processors are in the system (effective load handling)   
+        server.on('stream', function(stream){                                          // all servers share the same port (1000)
+            sream.end('server response');
+        });
+    };
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>fork()</mark> / <mark>disconnect()</mark> / <mark>isMaster</mark> / <mark>isPrimary</mark> / <mark>isWorker</mark> / <mark>schedulingPolicy</mark> / <mark>setupMaster()</mark> / <mark>setupPrimary()</mark> / <mark>settings</mark> / <mark>worker</mark> / <mark>workers</mark> properties and methods </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>fork</mark> / <mark>online</mark> / <mark>disconnect</mark> / <mark>exit</mark> / <mark>listening</mark> / <mark>message</mark> / <mark>setup</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var cluster = require('cluster');
+    var http2 = require('http2');
+    
+// isMaster ---------------------------------------------------------------------------
+    if (cluster.isMaster) {                                                            // -> true                   // in this code block only the master process code is running 
+        cluster.fork();                                                                // -> cluster worker object  // spawns a cluster worker 
+        cluster.fork();                                                                // -> cluster worker object  // spawns a cluster worker 
+    
+  // disconnect() ---------------------------------------------------------------------
+        cluster.disconnect(()=>{});                                                    // calls 'disconnect()' on all cluster workers (callback fired when all child process are exited)    
+        
+  // schedulingPolicy -----------------------------------------------------------------
+        cluster.schedulingPolicy;                                                      // -> 2                      // the master process uses round-robin algorithms to distribute the load among its cluster workers    
+        
+  // setupMaster() / settings ---------------------------------------------------------
+        cluster.setupMaster({uid:111});                                                // sets the default behaviour for newly created cluster workers   
+        cluster.settings;                                                              // -> {uid:111, ...}         // configurations for new cluster worker processes (must be called after 'fork()' or 'setupMaster()')    
+        
+  // workers --------------------------------------------------------------------------
+        cluster.workers;                                                               // -> {1:Worker{...}. 2:Worker{...}}     // cluster workers of this master process (keyed by their id)    
+        
+  // fork / online (events) -----------------------------------------------------------
+        cluster.on('fork', function(clusW){                                            // emitted when a new cluster worker is created (forked)  
+            clusW;                                                                       // -> the cluster worker which was forked 
+        });
+        
+        cluster.on('online', function(clusW){                                          // emitted when a newly created cluster worker is running    
+            clusW;                                                                       // -> the cluster worker which start running 
+        });
+        
+  // disconnect / exit (events) -------------------------------------------------------
+        cluster.on('disconnect', function(clusW){                                      // emitted when a cluster worker disconnects it IPC channel from the master process   
+            clusW;                                                                       // -> the cluster worker which is disconnecting  
+        });
+        
+        cluster.on('exit', function(clusW, exitCode, sig){                             // emitted when a cluster worker it exited    
+            clusW;                                                                       // -> the exiting cluster worker 
+            exitCode;                                                                    // -> 0        // exit code  
+            sig;                                                                         // -> signal that causes the cluster worker process to be killed    
+        });
+        
+  // listening (event) ----------------------------------------------------------------
+        cluster.on('listening', function(clusW, add){                                  // emitted when a server from a cluster worker emits the 'listening' event 
+            clusW;                                                                       // -> the cluster worker from which the server emitted the 'listening' event  
+            add;                                                                         // -> {addressType:4, address:'127.0.0.1', port:1000, fd:undefined}    // address on which the server is listening    
+        });
+        
+  // setup (event) --------------------------------------------------------------------
+        cluster.on('setup', function(settings){                                        // emitted when the 'cluster.setupMaster()' method is called   
+            settings;                                                                    // -> 'cluster.settings' object set by the 'cluster.setupMaster()' process    
+        });
+        
+  // message (event) ------------------------------------------------------------------
+        cluster.on('message', function(clusW, msg){                                    // emitted when a message is received from one of the cluster workers     
+            clusW;                                                                       // -> cluster worker whish sends the messge 
+            msg;                                                                         // -> received message  
+        });
+        
+        
+// isWorker ---------------------------------------------------------------------------
+    } else if (cluster.isWorker) {                                                     // -> true                   // in this code block only cluster worker code is running   
+    
+  // worker ---------------------------------------------------------------------------
+        cluster.worker;                                                                // -> Worker{...}            // references this cluster worker (object)    
+    };    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>fork()</mark> / <mark>disconnect()</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    var http2 = require('http2');
+    
+    if (cluster.isMaster) {
+        for(i = 0; i &lt; 4; i++){
+            cluster.fork();                                                            // spawns 4 cluster workers 
+        }
+        
+        setTimeout(function(){
+            cluster.disconnect(function(){                                             // calls 'disconnect()' on all cluster workes 
+                console.log( 'cluster workers are disconnected' );                     // once all cluster worker closes their servers this callback is fired 
+            });
+        }, 7000);
+    } else {
+        console.log( `Worker Process ID = ${process.pid}` );
+        var server = http2.createServer().listen(1000, 'localhost');                   // 4 servers running inside the cluster workers 
+        
+        server.on('stream', function(stream){
+            sream.end('server response');
+        });
+    };
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>fork()</mark> env argument TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    var http2 = require('http2');
+    
+    if (cluster.isMaster) {
+        for(i = 0; i &lt; 2; i++){
+            cluster.fork({KEY1:'egy', KEY2:'ketto'});                                  // setting environment varialbes in the spawned cluster worker
+        }
+    } else {
+        console.log( process.env.KEY1 );                                               // -> 'egy'   | 'egy'           // cluster worker environment variable value 
+        console.log( process.env.KEY2 );                                               // -> 'ketto' | 'ketto' 
+    };
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>isMaster</mark> / <mark>isWorker</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        cluster.fork();
+        
+        console.log( cluster.isMaster );                                               // -> true
+        console.log( cluster.isWorker );                                               // -> false 
+    } else {
+        console.log( cluster.isMaster );                                               // -> false 
+        console.log( cluster.isWorker );                                               // -> true 
+    };
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>schedulingPolicy</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        console.log( cluster.SCHED_RR );                                               // -> 2
+        console.log( cluster.SCHED_NONE );                                             // -> 1
+        
+        cluster.schedulingPolicy = cluster.SCHED_NONE;
+        
+        console.log( cluster.schedulingPolicy );                                       // -> 1
+    } else {
+    
+    };
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> set <mark>schedulingPolicy</mark> through environment varialbes TEST </u></h4>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ export NODE_CLUSTER_SCHED_POLICY='none'    // set schedulingPolicy environment variable  
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ node main
+    1
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$  
+    </pre>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        console.log( cluster.schedulingPolicy );                                       // -> 1     // default changed because the schedulingPolicy environment variable is set
+    } else {
+    
+    };
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setupMaster()</mark> / <mark>settings</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        console.log( cluster.settings );                                               // -> {}            // the 'setupMaster()' method or 'fork()' not yet called 
+        cluster.setupMaster();                      
+        console.log( cluster.settings );                                               // -> {args:[] ...}
+        
+        for(i = 0; i &lt; 12; i++){
+            cluster.fork();     
+        }
+        
+        console.log( cluster.settings );                                               // -> {args:[] ...}
+        
+    } else {
+        console.log( cluster.settings );                                               // -> undefined 
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ node main
+    {}
+    {
+      args: [],
+      exec: '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST/main',
+      execArgv: [],
+      silent: false
+    }
+    {
+      args: [],
+      exec: '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST/main',
+      execArgv: [],
+      silent: false
+    }
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    undefined
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>worker</mark> / <mark>workers</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        for(i = 0; i &lt; 2; i++){
+            cluster.fork();     
+        }
+        
+        console.log( cluster.workers );                                                // -> {1:Worker{...}}       // all cluster workers unning (keyed by their id)
+        
+    } else {
+        console.log( cluster.worker );                                                 // references the worker object itself 
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ node main
+    {                                                                                  // cluster.workers          // main process 
+    '1': Worker { ... },
+    '1': Worker { ... }
+    }
+    Worker { ... }                                                                     // cluster.worker           // cluster worker process 
+    Worker { ... }                                                                     // cluster.worker           // cluster worker process 
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>fork</mark> / <mark>online</mark> (events) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        cluster.on('fork', function(clusterWorker){
+            console.log( `cluster worker ${clusterWorker.id} is forked`);
+        });
+        
+        cluster.on('online', function(clusterWorker){
+            console.log( `cluster worker ${clusterWorker.id} is online`);
+        })
+    
+        for(i = 0; i &lt; 4; i++){
+            cluster.fork();     
+        }
+        
+    } else {
+        
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ node main
+    cluster worker 1 is forked
+    cluster worker 2 is forked
+    cluster worker 3 is forked
+    cluster worker 4 is forked
+    cluster worker 3 is online
+    cluster worker 1 is online
+    cluster worker 4 is online
+    cluster worker 2 is online
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>disconnect</mark> / <mark>exit</mark> (events) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        cluster.on('disconnect', function(workClust){
+            console.log( `cluster worker ${workClust.id} disconnected its IPC channel!` );
+        });
+        
+        cluster.on('exit', function(workClust, exitCode, sig){
+            console.log( `cluster worker ${workClust.id} is exited with exit code = ${exitCode} and "${sig}" signal` );
+        });
+        
+        for(i = 0; i &lt; 4; i++){
+            cluster.fork();     
+        }
+        
+    } else {
+        if( cluster.worker.id == 2 || cluster.worker.id == 3) process.exit(21);        // exit 2nd and 3rd cluster worker 
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ node main
+    cluster worker 2 disconnected its IPC channel!
+    cluster worker 2 is exited with exit code = 21 and "null" signal
+    cluster worker 3 disconnected its IPC channel!
+    cluster worker 3 is exited with exit code = 21 and "null" signal
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>listening</mark> (event) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    var http2 = require('http2');
+    
+    if (cluster.isMaster) {
+        cluster.fork();
+        cluster.fork();
+        
+        cluster.on('listening', function(workClust, add){                       // emited when the server from the cluster worker emits the 'listening event'  
+            console.log( `cluster worker ${workClust.id} is listening!` );
+            console.log( add );
+        });
+    } else {
+        var server = http2.createServer().listen(1000, 'localhost');   
+        
+        server.on('stream', function(stream){
+            sream.end('server response');
+        });
+        
+        server.on('listening', ()=>{ console.log(`server ${cluster.worker.id} is listening!`) })    // 'disconnect' event on the cluster emited after this event is emitted!  
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ sudo node main
+    server 1 is listening!
+    server 2 is listening!
+    cluster worker 1 is listening!
+    { addressType: 4, address: '127.0.0.1', port: 1000, fd: undefined }
+    cluster worker 2 is listening!
+    { addressType: 4, address: '127.0.0.1', port: 1000, fd: undefined }
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>message</mark> (event) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        cluster.fork();
+        cluster.fork();
+        
+        cluster.on('message', function(workClust, msg, fh){             // listening for incomming messages from all cluster workers   
+            console.log( workClust.id );
+            console.log( msg );
+        });
+    } else {
+        cluster.worker.send('some message');                            // sending a messge from the cluster worker 
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ sudo node main
+    1
+    some message
+    2
+    some message
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setup</mark> (event) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+
+    if (cluster.isMaster) {
+        cluster.setupMaster();
+        
+        cluster.on('setup', function(settings){
+            console.log( settings );
+        });
+    } else {
+    
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ node main
+    {
+      args: [],
+      exec: '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST/main',
+      execArgv: [],
+      silent: false
+    }
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> ClusterWorker <mark>disconnect()</mark> / <mark>kill()</mark> / <mark>exitedAfterDisconnect</mark> / <mark>id</mark> / <mark>isConnected()</mark> / <mark>idDead()</mark> / <mark>process</mark> / <mark>send()</mark> properties and methods </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>online</mark> / <mark>disocnnect</mark> / <mark>exit</mark> / <mark>listening</mark> / <mark>message</mark> / <mark>error</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clsWorker = cluster.fork();
+        
+  // disconnect() ---------------------------------------------------------------------
+        clsWorker.disconnect();                                                        // closes the cluster worker's servers then disconnects the IPC channel then the cluster worker process dies gracefully    
+        
+  // kill() ---------------------------------------------------------------------------
+        clsWorker.kill();                                                              // disconnects the cluster worker IPC channel then kills the process with a signal ('SIGTERM')   
+                                                                                       // -! not the same as 'process.kill()' this method closes the IPC channel before killing the process    
+        
+  // exitAfterDisconnect --------------------------------------------------------------
+        clsWorker.exitAfterDisconnect;                                                 // -> true               // this cluster worker process is exited due to a 'disconnect()' or 'kill()' method    
+        
+  // process --------------------------------------------------------------------------
+        clsWorker.porcess;                                                             // -> ChildProcess{...}  // the forked child process object 
+        
+  // online / listening / error (events) ----------------------------------------------
+        clsWorker.on('online', ()=>{});                                                // emitted when this cluster worker starts running  
+        
+        clsWorker.on('listening', ()=>{});                                             // emitted when a server from this cluster worker emits its 'listening' event     
+        
+        clsWorker.on('error', function(err){                                           // emitted when this cluster worker emits an 'error' event   
+            err;                                                                         // -> the emitted error    
+        });
+        
+  // disconnect / exit (events) -------------------------------------------------------
+        clsWorker.on('disconnect', ()=>{});                                            // emitted when the IPC channel of this cluster worker is disconnected   
+        
+        clsWorker.on('exit', function(exitCode, sig){                                  // emitted when this cluster worker process is exited 
+            extiCode;                                                                    // -> exit code 
+            sig;                                                                         // -> signal which killed this process   
+        });
+        
+        
+    } else {
+        var server = http2.createServer().listen(1000, 'localhost');                   // server running in the cluster worker 
+        server.on('stream', function(stream){
+            sream.end('server response');
+        }); 
+        
+  // disconnect() ---------------------------------------------------------------------
+        cluster.worker.disconnect();                                                   // closes this cluster worker's servers then disconnects the IPC channel then this cluster worker process dies gracefully    
+        
+  // kill() ---------------------------------------------------------------------------
+        cluster.worker.kill();                                                         // disconnects this cluster worker IPC channel then exits this cluster worker process with '0' exit code     
+                                                                                       // -! not the same as 'process.kill()' 
+                                                                                       
+  // id / isConnected() / isDead() ----------------------------------------------------
+        cluster.worker.id;                                                             // -> 1                  // cluster worker identifier 
+        
+        cluster.worker.isConnected();                                                  // -> true               // this cluster worker process is connected to the master process through IPC    
+        cluster.worker.isDead();                                                       // -> false              // this cluster worker is still running   
+    }
+    </pre>
+    <p> - message sending </p>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        clusterWorker.send('message from master process to cluster worker');           // sends a message to this cluster worker  
+        
+        clusterWorker.on('message', function(msg){                                     // emitted when a message is received from this cluster worker (throug IPC)    
+            console.log( msg );                                                        // -> 'message from cluster worker to master process'
+        });
+    } else {
+        cluster.worker.send('message from cluster worker to master process');          // sends a message to the master process  
+        
+        cluster.worker.on('message', function(msg, handle){                            // emitted when a message is received from the master proces (through IPC)   
+            console.log( msg );                                                        // -> 'message from master process to cluster worker'  
+        });
+    }    
+    </pre>
+    <p> - handing socket to the cluster worker <u style="color:yellow">(self made code [TESTED: 2020-07-09])</u> </p>
+    <pre>
+    var cluster = require('cluster');``
+    var http = require('http');
+    
+    if (cluster.isMaster) {    
+        var clustWorker = cluster.fork();
+        
+        var server = http.createServer(function(incMsg, srvResp){
+            clustWorker.send('socket', srvResp.socket);                                // sending the socket to the cluster worker 
+        }).listen(1000, 'localhost');
+    } else {
+        cluster.worker.on('message', function(msg, handle){
+            handle.end('HTTP/1.1 200 OK\r\n\r\nserver response');                      // responding from the cluster worker process  
+        });
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>disconnect()</mark> / <mark>disconnect</mark> (event) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    var http2 = require('http2');
+    
+    if (cluster.isMaster) {
+        cluster.fork();
+        cluster.fork();
+    } else {
+        var server = http2.createServer().listen(1000, 'localhost');  
+        server.on('stream', function(stream){
+            sream.end('server response');
+        });
+        
+        cluster.worker.on('disconnect', function(){                                    // emitted when the worker's IPC channel is disconnected from the master proces   
+            console.log( `cluster worker ${this.id} id disconnected` );
+        });
+        
+        setTimeout(function(){
+            cluster.worker.disconnect();                                               // disconnecting the cluster after 5 seconds 
+        }, 5000);
+    };
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ sudo node main
+    cluster worker 1 id disconnected
+    cluster worker 2 id disconnected
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$     
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>disconnect()</mark> VS <mark>kill()</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        cluster.on('exit', function(clWorker, exitCode, sig){
+            console.log( exitCode );                                                   // -> null
+            console.log( sig );                                                        // -> 'SIGTERM'         // cluster worker killed by signal 
+        });
+        
+        setTimeout(function(){
+            clusterWorker.kill();                                                      // kills the cluster worker with a signal (after 5 seconds)
+        }, 5000);
+    } else {
+        
+    }
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>exitedAfterDisconnect</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        console.log( clusterWorker.exitedAfterDisconnect );                            // -> undefined     // cluster worker still running 
+        
+        cluster.on('exit', function(clWorker, exitCode, sig){
+            console.log( clusterWorker.exitedAfterDisconnect );                        // -> true          // the cluster worker was exited due to the 'kill() ' or 'disconnect()' method   
+        });
+    } else {
+        setTimeout(function(){
+            cluster.worker.kill();
+        }, 2000);
+    }
+    </pre>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        console.log( clusterWorker.exitedAfterDisconnect );                            // -> undefined     // cluster worker still running 
+        
+        cluster.on('exit', function(clWorker, exitCode, sig){
+            console.log( clusterWorker.exitedAfterDisconnect );                        // -> false         // the cluster worker was NOT exited due to the     'kill()' or 'disconnect()' method   
+        });
+        
+    } else {
+        setTimeout(function(){
+            process.kill(process.pid);                                                 // immediately kills the process 
+        }, 2000);
+    }
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>id</mark> / <mark>isConnected()</mark> / <mark>isDead()</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        console.log( clusterWorker.id );                                               // -> 1 
+        console.log( clusterWorker.isConnected() );                                    // -> true
+        console.log( clusterWorker.isDead() );                                         // -> false  
+        
+        cluster.on('exit', function(clWorker, exitCode, sig){
+            console.log( clusterWorker.id );                                           // -> 1 
+            console.log( clusterWorker.isConnected() );                                // -> false
+            console.log( clusterWorker.isDead() );                                     // -> true  
+        });
+    } else {
+        setTimeout(function(){
+            process.kill(process.pid);
+        }, 3000);
+    }
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>process</mark> TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        console.log( clusterWorker.process );                                          // -> ChildProcess{...}
+    } else {
+        
+    }    
+    </pre>
+    <pre class="cmd">
+all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ sudo node main
+    ChildProcess {
+        _events: [Object: null prototype] 
+        ...
+    }
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>online</mark> / <mark>exit</mark> / <mark>listening</mark> (events) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    var http2 = require('http2');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        clusterWorker.on('online', function(){
+            console.log( `cluster worker ${this.id} is online` );
+        });
+        clusterWorker.on('exit', function(exitCode, sig){
+            console.log( `cluster worker ${this.id} is exited with the ${exitCode} exit code` );
+        });
+        clusterWorker.on('listening', function(){
+            console.log( `cluster worker ${this.id} is listening` );
+        });
+        
+    } else {
+        var server = http2.createServer().listen(1000, 'localhost');  
+        server.on('stream', function(stream){
+            sream.end('server response');
+        }); 
+        
+        setTimeout(function(){
+            cluster.worker.kill();
+        }, 5000);
+    }
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$ sudo node main
+    cluster worker 1 is online
+    cluster worker 1 is listening
+    cluster worker 1 is exited with the 0 exit code
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Cluster/TEST$    
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>send()</mark> / <mark>message</mark> (event) TEST </u></h4>
+    <pre>
+    var cluster = require('cluster');
+    
+    if (cluster.isMaster) {
+        var clusterWorker = cluster.fork();
+        
+        clusterWorker.send('message from master process to cluster worker');
+        
+        clusterWorker.on('message', function(msg){
+            console.log( msg );                                                        // -> 'message from cluster worker to master process'
+        });
+    } else {
+        cluster.worker.send('message from cluster worker to master process');
+        
+        cluster.worker.on('message', function(msg, handle){
+            console.log( msg );                                                        // -> 'message from master process to cluster worker'  
+        });
+    }
+    </pre>
+</details>
+
+    <br><br>
+</body>
+</html>

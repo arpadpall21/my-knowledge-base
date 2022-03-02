@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> TEST </title>    
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1> TEST </h1>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+    
+
+<h2><u> Global Object test </u></h2>
+    <p id="globObj"></p>
+<script>
+    var globVAR = "I'm a string, I belong to the global Object";
+    
+    window.document.getElementById('globObj').innerHTML = window.globVAR;
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="globObj"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var globVAR = "I'm a string, I belong to the global Object";
+    
+    window.document.getElementById('globObj').innerHTML = window.globVAR;
+&lt;/script&gt;
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2><u> Test <mark>Object.defineProperties()</mark> on prototype </u></h2>
+    <p id="defineNewProperties"></p>
+<script>
+    function Printer(a, b) {
+        this.mark = a;
+        this.origin = b;      
+            Object.defineProperties(this, {color : {value:"white", enumerable:true, writable:true}})
+                // default value = counted and can be modified but cannot be deleted because the "coifigurable" attribute is false by default
+            Object.defineProperties(this, {material : {value:"plastic", enumerable:true, configurable:true}});
+                // default value = counted and can be deleted because the "configurable" attribute is set to "true"
+            Object.defineProperties(this, {type : {value:"inkJet"}});
+                // default value = not counted and displayed because "enumerable" attribute is "false" by default!
+                //               = cannot be modified because the "writable" attribute is "false" by default! 
+                Object.defineProperties(this, {dataprint : {get : 
+                    function() {
+                        return this.mark + " / " + 
+                        this.origin + " / " + 
+                        this.color + " / " +
+                        this.material + " / " +        // this will return "undefined" because it is deleted later
+                        this.type;
+                    }
+                }});
+                    // this propertes works as a getter it READS the data (interestingly it reads ALL PROPERTIES)
+                Object.defineProperties(this, {dataset : {set : 
+                    function(value) { 
+                        this.mark = this.mark + value;
+                        this.origin = this.origin + value;
+                        this.color = this.color + value;
+                        this.material = this.material + value;
+                        this.type = this.type + value;
+                    }
+                }});
+    }
+    
+// Object created with the "Printer" prototype
+    var canon = new Printer("Canon", "Japan");
+        canon.color = "black";              
+        delete canon.color;                 // this wont' work because the "color" propertie's "configurable" is "false" by default!
+        delete canon.material;
+        canon.type = "Modified";            // this won't work because the "type" propertie's "writable" is "false" be default!
+       
+    
+// roling through the "canon" object's properties
+    var i, printerCollect = "";
+    for (i in canon) {
+        printerCollect += " - " + canon[i] + "<br>";
+    }
+    
+// we use the setter property to update the values
+    canon.dataset = " *".fontcolor("yellow");       // the setter property is called here (it writes data)!
+    
+// print
+    document.getElementById('defineNewProperties').innerHTML =
+        printerCollect + "<br>" +
+        canon.dataprint;                            // the getter property is called here (it reads and prints data)!
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="defineNewProperties"&gt;&lt;/p&gt;
+&lt;script&gt;
+    function Printer(a, b) {
+        this.mark = a;
+        this.origin = b;      
+            Object.defineProperties(this, {color : {value:"white", enumerable:true, writable:true}})
+                // default value = counted and can be modified but cannot be deleted because the "coifigurable" attribute is false by default
+            Object.defineProperties(this, {material : {value:"plastic", enumerable:true, configurable:true}});
+                // default value = counted and can be deleted because the "configurable" attribute is set to "true"
+            Object.defineProperties(this, {type : {value:"inkJet"}});
+                // default value = not counted and displayed because "enumerable" attribute is "false" by default!
+                //               = cannot be modified because the "writable" attribute is "false" by default! 
+                Object.defineProperties(this, {dataprint : {get : 
+                    function() {
+                        return this.mark + " / " + 
+                        this.origin + " / " + 
+                        this.color + " / " +
+                        this.material + " / " +        // this will return "undefined" because it is deleted later
+                        this.type;
+                    }
+                }});
+                    // this propertes works as a getter it READS the data (interestingly it reads ALL PROPERTIES)
+                Object.defineProperties(this, {dataset : {set : 
+                    function(value) { 
+                        this.mark = this.mark + value;
+                        this.origin = this.origin + value;
+                        this.color = this.color + value;
+                        this.material = this.material + value;
+                        this.type = this.type + value;
+                    }
+                }});
+    }
+    
+// Object created with the "Printer" prototype
+    var canon = new Printer("Canon", "Japan");
+        canon.color = "black";              
+        delete canon.color;                 // this wont' work because the "color" propertie's "configurable" is "false" by default!
+        delete canon.material;
+        canon.type = "Modified";            // this won't work because the "type" propertie's "writable" is "false" be default!
+       
+    
+// roling through the "canon" object's properties
+    var i, printerCollect = "";
+    for (i in canon) {
+        printerCollect += " - " + canon[i] + "&lt;br&gt;";
+    }
+    
+// we use the setter property to update the values
+    canon.dataset = " *".fontcolor("yellow");       // the setter property is called here (it writes data)!
+    
+// print
+    document.getElementById('defineNewProperties').innerHTML =
+        printerCollect + "&lt;br&gt;" +
+        canon.dataprint;                            // the getter property is called here (it reads and prints data)!
+&lt;/script&gt;
+        </pre>
+        </details>
+<!------------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2><u> test <mark>Object.defineProperties()</mark> on Object literals </u></h2>
+    <p id="printPropTest"></p>
+<script>
+    var doll = {};
+        Object.defineProperties(doll, {hair : {enumerable:true}});          
+            // property will be counted but has no value;
+        Object.defineProperties(doll, {race : {value:"african", enumerable:true, writable:true}});
+            // property will be counted and printed, cannot be deleted
+        Object.defineProperties(doll, {nice: {value:true, writable:true, enumerable:true}});
+            // property can be overwritten        
+        Object.defineProperties(doll, {eyeColor : {value:"brown", enumerable:true, writable:true, configurable:true}});
+            // property can be deleted lated because "configurable" attribute is set to "true" 
+// define get and set properties
+        Object.defineProperties(doll, {printDefinedData : {get: 
+            function() {
+                return "the doll's race is = " + doll.race;
+            }
+        }});
+        Object.defineProperties(doll, {setRace : {set:
+            function(value) {
+                doll.race = value;                            
+            }
+        }});
+    
+    
+// modification testing
+    delete doll.race;               // this won't work because attribute "configurable" is "false" by default
+    doll.nice = false;          
+    delete doll.eyeColor;           // property deleted
+    doll.setRace = "european";      // set property called to update the "race" property (property must be "writable:true" set!)   
+    
+// loop through object properties
+    var o, dollCollect = "";
+    for (o in doll) {
+        dollCollect += " - " + doll[o] + "<br>";
+    }
+    
+// print
+    document.getElementById('printPropTest').innerHTML = 
+        dollCollect + "<br>" +
+        doll.printDefinedData;                      // "get" property printed here
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="printPropTest"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var doll = {};
+        Object.defineProperties(doll, {hair : {enumerable:true}});          
+            // property will be counted but has no value;
+        Object.defineProperties(doll, {race : {value:"african", enumerable:true, writable:true}});
+            // property will be counted and printed, cannot be deleted
+        Object.defineProperties(doll, {nice: {value:true, writable:true, enumerable:true}});
+            // property can be overwritten        
+        Object.defineProperties(doll, {eyeColor : {value:"brown", enumerable:true, writable:true, configurable:true}});
+            // property can be deleted lated because "configurable" attribute is set to "true" 
+// define get and set properties
+        Object.defineProperties(doll, {printDefinedData : {get: 
+            function() {
+                return "the doll's race is = " + doll.race;
+            }
+        }});
+        Object.defineProperties(doll, {setRace : {set:
+            function(value) {
+                doll.race = value;                            
+            }
+        }});
+    
+    
+// modification testing
+    delete doll.race;               // this won't work because attribute "configurable" is "false" by default
+    doll.nice = false;          
+    delete doll.eyeColor;           // property deleted
+    doll.setRace = "european";      // set property called to update the "race" property (property must be "writable:true" set!)   
+    
+// loop through object properties
+    var o, dollCollect = "";
+    for (o in doll) {
+        dollCollect += " - " + doll[o] + "&lt;br&gt;";
+    }
+    
+// print
+    document.getElementById('printPropTest').innerHTML = 
+        dollCollect + "<br>" +
+        doll.printDefinedData;                      // "get" property printed here
+&lt;/script&gt;
+        </pre>
+        </details>
+<!------------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2><u> test <mark>Object.freeze()</mark></u></h2>
+    <p id="printFreeze"></p>
+    <p id="printFreeze_2"></p>
+<script>
+    var mercedess = {mark:"mercedess", type:"class-c"}; 
+    Object.freeze(mercedess);                               // prevents all modification on the Object
+    
+// modification attempts (all failed because of the ( Object.freeze() )
+    mercedess.mark = "merci";               // modifing a property
+    mercedess.color = "black";              // add property
+    delete mercedess.type;
+    
+// loop through the properties and print them
+    var objCollect = "";
+    for (var k in mercedess) {
+        objCollect += mercedess[k] + "<br>";
+    }
+    document.getElementById('printFreeze').innerHTML = objCollect;
+    
+    
+// atempt to create a new object with the Object.freeze()
+    var applePie = {taste:"strawberry", size:"medium", origin:"american"};
+    var cheeseCake = Object.freeze(applePie);                               // creates a new copy
+    
+// attempt modifications 
+    applePie.taste = "raspberry";           // original object can be  modified 
+    cheeseCake.taste = "bitter";            // newly created Object's properties cannot be modifed because the are "freezed" 
+    
+// loop through properties and print
+    var cheeseCakeCollect = "";
+    for (var i in cheeseCake) {
+        cheeseCakeCollect += " - " + cheeseCake[i] + "<br>"
+    }
+    document.getElementById('printFreeze_2').innerHTML = 
+        applePie.taste + " / " + applePie.size + "<br>" +
+        cheeseCakeCollect;
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="printFreeze"&gt;&lt;/p&gt;
+    &lt;p id="printFreeze_2"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var mercedess = {mark:"mercedess", type:"class-c"}; 
+    Object.freeze(mercedess);                               // prevents all modification on the Object
+    
+// modification attempts (all failed because of the ( Object.freeze() )
+    mercedess.mark = "merci";               // modifing a property
+    mercedess.color = "black";              // add property
+    delete mercedess.type;
+    
+// loop through the properties and print them
+    var objCollect = "";
+    for (var k in mercedess) {
+        objCollect += mercedess[k] + "&lt;br&gt;";
+    }
+    document.getElementById('printFreeze').innerHTML = objCollect;
+    
+    
+// atempt to create a new object with the Object.freeze()
+    var applePie = {taste:"strawberry", size:"medium", origin:"american"};
+    var cheeseCake = Object.freeze(applePie);                               // creates a new copy
+    
+// attempt modifications 
+    applePie.taste = "raspberry";           // original object can be  modified 
+    cheeseCake.taste = "bitter";            // newly created Object's properties cannot be modifed because the are "freezed" 
+    
+// loop through properties and print
+    var cheeseCakeCollect = "";
+    for (var i in cheeseCake) {
+        cheeseCakeCollect += " - " + cheeseCake[i] + "&lt;br&gt;"
+    }
+    document.getElementById('printFreeze_2').innerHTML = 
+        applePie.taste + " / " + applePie.size + "&lt;br&gt;" +
+        cheeseCakeCollect;
+&lt;/script&gt;
+        </pre>
+        </details>    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+</body>
+</html>

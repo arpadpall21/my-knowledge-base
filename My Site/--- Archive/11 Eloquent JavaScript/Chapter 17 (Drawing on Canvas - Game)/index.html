@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> TEST </title>    
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script> 
+</head>
+<body>
+<h1> Chapter 17 : (Drawing on Canvas) </h1>
+    <p> Updated (2018-01-20) </p>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+<h4><u> Shapes </u></h4>
+    <p style="background-color:yellow;"> - in this exercise eloquent_JS uses the sine and cosine methods to calculate a position on the circle's surface (see the last two shapes) </p>
+    <p> - my Solutions </p>
+    <canvas width="600" height="200" id="canvas_1" style="border:solid 2px blue;"></canvas>
+    <p> - Eloquent JS solutions </p>
+    <canvas width="600" height="200" id="canvas_1EloqJS" style="border:solid 2px blue;"></canvas>
+<script>
+    (function(){
+        var ctx = document.querySelector("#canvas_1").getContext("2d");
+        var ctxE = document.querySelector("#canvas_1EloqJS").getContext("2d");
+// (my CODE) draw trapezoid             -> OK
+        function drawTrapezoid(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x + 20, y);
+            ctx.lineTo(x + 80, y);
+            ctx.lineTo(x + 100, y + 50);
+            ctx.lineTo(x, y + 50);
+            ctx.closePath();
+            ctx.stroke();
+        }
+        drawTrapezoid(10, 50);
+        
+// (my CODE) draw colored diamond       -> OK
+        function drawDiamond(x, y, color) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            ctx.translate(x + 35, y + 35);
+            ctx.rotate(Math.PI / 4);
+            ctx.fillRect(-35, -35, 70, 70);
+            ctx.fill();
+            ctx.restore();
+        }   
+        drawDiamond(130, 50, "red");
+     
+// (my CODE) draw zigZag line           -> OK
+        function drawZigZag(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            var currentYpos = y;
+            for(let i = 6; i > 0; i--) {
+                ctx.lineTo(x + 70, currentYpos + 5);
+                ctx.lineTo(x, currentYpos + 10);
+                currentYpos += 10;
+            }
+            ctx.stroke();
+        }
+        drawZigZag(230, 50);
+        
+// (my CODE) draw spiral out of 100 straight lines
+        function drawSpiralLines(x, y) {
+            ctx.beginPath();
+            var currentRad = 0;
+            for(let i = 1; i <= 100; i++) {
+                ctx.arc(x, y, i / 2, currentRad, currentRad + 0.25);
+                currentRad += 0.25;
+            }
+            ctx.stroke();
+        }
+        drawSpiralLines(350, 100);
+        
+    // Eloquent_JS solution 
+        function spiral(x, y) {
+            let radius = 50, xCenter = x + radius, yCenter = y + radius;
+            ctxE.beginPath();
+            ctxE.moveTo(xCenter, yCenter);          // move to the circle center from the starting point
+            for (let i = 0; i < 300; i++) {
+                let angle = i * Math.PI / 30;       // breaks down a half circle into 30 radian positions
+                let dist = radius * i / 300;        // breaks down the 50 into 300 pieces
+                ctxE.lineTo(xCenter + Math.cos(angle) * dist,       // calculates the current horizontal position
+                            yCenter + Math.sin(angle) * dist);      // calculates the current vertical postion
+            }
+            ctxE.stroke();
+        }
+        spiral(340, 20);
+        
+// (my CODE) draw yellow star (FAILED I' couldn't calculate the position on the cirle in order the draw proper lines between them)
+        function yellowStar(x, y) {
+            var startRad = 0;
+            var endRad = 0;
+            ctx.beginPath();
+            for(let i = 0; i < 8; i++) {
+                endRad += Math.PI / 4;
+                ctx.arc(x, y, 50, startRad, endRad);
+                
+                var lastX = x + 50 * Math.cos(endRad);
+                var lastY = y + 50 * Math.sin(endRad);  
+                
+                ctx.moveTo(x + 50, y);
+                ctx.quadraticCurveTo(x, y, lastX, lastY);
+                
+                startRad += Math.PI / 4;
+                
+                
+                /*
+            // these beauties return the last coordinates on the circle     
+                var lastX = x + 50 * Math.cos(currentAngle);
+                var lastY = y + 50 * Math.sin(currentAngle);  
+                
+            
+                console.log(lastX);
+                console.log(lastY);
+                */
+            }
+            ctx.stroke();
+        }
+        yellowStar(500, 100);
+        
+    // Eloquent_JS solution
+        function star(x, y) {
+            let radius = 50, xCenter = x + radius, yCenter = y + radius;
+            ctxE.beginPath();
+            ctxE.moveTo(xCenter + radius, yCenter);
+            for (let i = 1; i <= 8; i++) {
+                let angle = i * Math.PI / 4;
+                ctxE.quadraticCurveTo(xCenter, yCenter,                 // radius = hypotenuse
+                        xCenter + Math.cos(angle) * radius,             // calculates the current horizontal position
+                        yCenter + Math.sin(angle) * radius);            // calculates the current vertical position
+            }
+            ctxE.fillStyle = "gold";
+            ctxE.fill();
+        }
+        star(440, 20);
+    })();
+</script>    
+<details>
+<summary> CODE : </summary>
+<pre>
+    &lt;canvas width="600" height="200" id="canvas_1" style="border:solid 2px blue;"&gt;&lt;/canvas&gt;
+    &lt;canvas width="600" height="200" id="canvas_1EloqJS" style="border:solid 2px blue;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    (function(){
+        var ctx = document.querySelector("#canvas_1").getContext("2d");
+        var ctxE = document.querySelector("#canvas_1EloqJS").getContext("2d");
+// (my CODE) draw trapezoid             -&gt; OK
+        function drawTrapezoid(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x + 20, y);
+            ctx.lineTo(x + 80, y);
+            ctx.lineTo(x + 100, y + 50);
+            ctx.lineTo(x, y + 50);
+            ctx.closePath();
+            ctx.stroke();
+        }
+        drawTrapezoid(10, 50);
+        
+// (my CODE) draw colored diamond       -&gt; OK
+        function drawDiamond(x, y, color) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            ctx.translate(x + 35, y + 35);
+            ctx.rotate(Math.PI / 4);
+            ctx.fillRect(-35, -35, 70, 70);
+            ctx.fill();
+            ctx.restore();
+        }   
+        drawDiamond(130, 50, "red");
+     
+// (my CODE) draw zigZag line           -&gt; OK
+        function drawZigZag(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            var currentYpos = y;
+            for(let i = 6; i > 0; i--) {
+                ctx.lineTo(x + 70, currentYpos + 5);
+                ctx.lineTo(x, currentYpos + 10);
+                currentYpos += 10;
+            }
+            ctx.stroke();
+        }
+        drawZigZag(230, 50);
+        
+// (my CODE) draw spiral out of 100 straight lines
+        function drawSpiralLines(x, y) {
+            ctx.beginPath();
+            var currentRad = 0;
+            for(let i = 1; i &lt;= 100; i++) {
+                ctx.arc(x, y, i / 2, currentRad, currentRad + 0.25);
+                currentRad += 0.25;
+            }
+            ctx.stroke();
+        }
+        drawSpiralLines(350, 100);
+        
+    // Eloquent_JS solution 
+        function spiral(x, y) {
+            let radius = 50, xCenter = x + radius, yCenter = y + radius;
+            ctxE.beginPath();
+            ctxE.moveTo(xCenter, yCenter);          // move to the circle center from the starting point
+            for (let i = 0; i &lt; 300; i++) {
+                let angle = i * Math.PI / 30;       // breaks down a half circle into 30 radian positions
+                let dist = radius * i / 300;        // breaks down the 50 into 300 pieces
+                ctxE.lineTo(xCenter + Math.cos(angle) * dist,       // calculates the current horizontal position
+                            yCenter + Math.sin(angle) * dist);      // calculates the current vertical postion
+            }
+            ctxE.stroke();
+        }
+        spiral(340, 20);
+        
+// (my CODE) draw yellow star (FAILED I' couldn't calculate the position on the cirle in order the draw proper lines between them)
+        function yellowStar(x, y) {
+            var startRad = 0;
+            var endRad = 0;
+            ctx.beginPath();
+            for(let i = 0; i &lt; 8; i++) {
+                endRad += Math.PI / 4;
+                ctx.arc(x, y, 50, startRad, endRad);
+                
+                var lastX = x + 50 * Math.cos(endRad);
+                var lastY = y + 50 * Math.sin(endRad);  
+                
+                ctx.moveTo(x + 50, y);
+                ctx.quadraticCurveTo(x, y, lastX, lastY);
+                
+                startRad += Math.PI / 4;
+                
+                
+                /*
+            // these beauties return the last coordinates on the circle     
+                var lastX = x + 50 * Math.cos(currentAngle);
+                var lastY = y + 50 * Math.sin(currentAngle);  
+                
+            
+                console.log(lastX);
+                console.log(lastY);
+                */
+            }
+            ctx.stroke();
+        }
+        yellowStar(500, 100);
+        
+    // Eloquent_JS solution
+        function star(x, y) {
+            let radius = 50, xCenter = x + radius, yCenter = y + radius;
+            ctxE.beginPath();
+            ctxE.moveTo(xCenter + radius, yCenter);
+            for (let i = 1; i &lt;= 8; i++) {
+                let angle = i * Math.PI / 4;
+                ctxE.quadraticCurveTo(xCenter, yCenter,                 // radius = hypotenuse
+                        xCenter + Math.cos(angle) * radius,             // calculates the current horizontal position
+                        yCenter + Math.sin(angle) * radius);            // calculates the current vertical position
+            }
+            ctxE.fillStyle = "gold";
+            ctxE.fill();
+        }
+        star(440, 20);
+    })();
+&lt;/script&gt;
+</pre>
+</details>    
+<!---------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> Apple Pie Names </u></h4>
+    <canvas width="600" height="300" id="apple_pie" style="border:solid 2px blue;"></canvas>
+<script>
+(function(){
+    let cx = document.getElementById("apple_pie").getContext("2d");
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    let total = results.reduce((sum, {count}) => sum + count, 0);
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    for (let result of results) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        var middleAngle = (currentAngle + sliceAngle + currentAngle) / 2;
+        cx.beginPath();
+        cx.arc(centerX, centerY, 130, currentAngle, currentAngle + sliceAngle);
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+        cx.fillStyle = result.color;
+        cx.fill();
+        
+    // draw the corresponding name on the slice (flip to be readable the left part of the circle)    
+        cx.beginPath();
+        cx.save();
+        cx.fillStyle = "darkblue";
+        cx.textBaseline = "middle";
+        cx.font = "bold 16px sans-serif";
+        cx.translate(centerX, centerY);
+        cx.rotate(middleAngle);
+        
+        if(middleAngle > (Math.PI / 2)) {       // mirroring the text what is in the left part of the circle
+            cx.scale(-1, -1);
+            let txtLength = cx.measureText(result.name);
+            cx.fillText(result.name, -txtLength.width - 15, 0);
+        } else {
+            cx.fillText(result.name, 15, 0);
+        }
+        cx.restore();
+    }
+})();
+</script>
+<details>
+<summary> CODE : </summary>
+<pre>
+&lt;canvas width="600" height="300" id="apple_pie" style="border:solid 2px blue;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+(function(){
+    let cx = document.getElementById("apple_pie").getContext("2d");
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    let total = results.reduce((sum, {count}) => sum + count, 0);
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    // Add code to draw the slice labels in this loop.
+    for (let result of results) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        var middleAngle = (currentAngle + sliceAngle + currentAngle) / 2;
+        cx.beginPath();
+        cx.arc(centerX, centerY, 130, currentAngle, currentAngle + sliceAngle);
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+        cx.fillStyle = result.color;
+        cx.fill();
+        
+    // draw the corresponding name on the slice (flip to be readable the left part of the circle)    
+        cx.beginPath();
+        cx.save();
+        cx.fillStyle = "darkblue";
+        cx.textBaseline = "middle";
+        cx.font = "bold 16px sans-serif";
+        cx.translate(centerX, centerY);
+        cx.rotate(middleAngle);
+        
+        if(middleAngle > (Math.PI / 2)) {       // mirroring the text what is in the left part of the circle
+            cx.scale(-1, -1);
+            let txtLength = cx.measureText(result.name);
+            cx.fillText(result.name, -txtLength.width - 15, 0);
+        } else {
+            cx.fillText(result.name, 15, 0);
+        }
+        cx.restore();
+    }
+})();
+&lt;/script&gt;
+</pre>
+</details>
+<br>
+    <canvas width="600" height="300" id="apple_pie_2" style="border:solid 2px blue;"></canvas>
+<script>
+(function(){
+    let cx = document.getElementById("apple_pie_2").getContext("2d");
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "Me", count: 478, color: "orange"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    let total = results.reduce((sum, {count}) => sum + count, 0);
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    for (let result of results) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        var middleAngle = (currentAngle + sliceAngle + currentAngle) / 2;
+        cx.beginPath();
+        cx.arc(centerX, centerY, 100, currentAngle, currentAngle + sliceAngle);
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+        cx.fillStyle = result.color;
+        cx.fill();
+        
+        cx.beginPath();
+        cx.fillStyle = "darkblue";
+        cx.strokeStyle = "darkblue";
+        cx.textBaseline = "middle";
+        cx.font = "bold 16px sans-serif";
+        cx.moveTo(centerX + 100 * Math.cos(middleAngle), centerY + 100 * Math.sin(middleAngle));
+        cx.moveTo(centerX + 100 * Math.cos(middleAngle), centerY + 100 * Math.sin(middleAngle));
+        cx.lineTo(centerX + 110 * Math.cos(middleAngle), centerY + 110 * Math.sin(middleAngle));
+        cx.arc(centerX + 110 * Math.cos(middleAngle), centerY + 110 * Math.sin(middleAngle), 2, 0, Math.PI * 2 );
+        
+        if(middleAngle > Math.PI / 2) {
+            let txtLength = cx.measureText(result.name);
+            cx.fillText(result.name, centerX + 120 * Math.cos(middleAngle) - txtLength.width, centerY + 120 * Math.sin(middleAngle));
+        } else {
+            cx.fillText(result.name, centerX + 120 * Math.cos(middleAngle), centerY + 120 * Math.sin(middleAngle));
+        }
+        cx.stroke();
+        cx.fill();
+    }
+})();
+</script>
+<details>
+<summary> CODE : </summary>
+<pre>
+&lt;canvas width="600" height="300" id="apple_pie_2" style="border:solid 2px blue;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+(function(){
+    let cx = document.getElementById("apple_pie_2").getContext("2d");
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "Me", count: 478, color: "orange"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    let total = results.reduce((sum, {count}) => sum + count, 0);
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    for (let result of results) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        var middleAngle = (currentAngle + sliceAngle + currentAngle) / 2;
+        cx.beginPath();
+        cx.arc(centerX, centerY, 100, currentAngle, currentAngle + sliceAngle);
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+        cx.fillStyle = result.color;
+        cx.fill();
+        
+        cx.beginPath();
+        cx.fillStyle = "darkblue";
+        cx.strokeStyle = "darkblue";
+        cx.textBaseline = "middle";
+        cx.font = "bold 16px sans-serif";
+        cx.moveTo(centerX + 100 * Math.cos(middleAngle), centerY + 100 * Math.sin(middleAngle));
+        cx.moveTo(centerX + 100 * Math.cos(middleAngle), centerY + 100 * Math.sin(middleAngle));
+        cx.lineTo(centerX + 110 * Math.cos(middleAngle), centerY + 110 * Math.sin(middleAngle));
+        cx.arc(centerX + 110 * Math.cos(middleAngle), centerY + 110 * Math.sin(middleAngle), 2, 0, Math.PI * 2 );
+        
+        if(middleAngle &gt; Math.PI / 2) {
+            let txtLength = cx.measureText(result.name);
+            cx.fillText(result.name, centerX + 120 * Math.cos(middleAngle) - txtLength.width, centerY + 120 * Math.sin(middleAngle));
+        } else {
+            cx.fillText(result.name, centerX + 120 * Math.cos(middleAngle), centerY + 120 * Math.sin(middleAngle));
+        }
+        cx.stroke();
+        cx.fill();
+    }
+})();
+&lt;/script&gt;
+</pre>
+</details>    
+    <p> - Eloquent_JS solution </p>
+    <canvas width="600" height="300" id="apple_pie_eJS" style="border:solid 2px blue;"></canvas>
+<script>   
+    let cx = document.getElementById("apple_pie_eJS").getContext("2d");
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "Me", count: 478, color: "orange"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    let total = results.reduce(function(sum, choice) {
+        return sum + choice.count;
+    }, 0);
+
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    results.forEach(function(result) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        cx.beginPath();
+        cx.arc(centerX, centerY, 100, currentAngle, currentAngle + sliceAngle);
+        
+        let middleAngle = currentAngle + 0.5 * sliceAngle;
+        let textX = Math.cos(middleAngle) * 120 + centerX;
+        let textY = Math.sin(middleAngle) * 120 + centerY;
+        cx.textBaseLine = "middle";
+        if (Math.cos(middleAngle) > 0) {
+            cx.textAlign = "left";
+        } else {
+            cx.textAlign = "right";
+        }
+        cx.font = "15px sans-serif";
+        cx.fillStyle = "black";
+        cx.fillText(result.name, textX, textY);
+
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+        cx.fillStyle = result.color;
+        cx.fill();
+    });
+</script>    
+<details>
+<summary> CODE : </summary>
+<pre>
+&lt;canvas width="600" height="300" id="apple_pie_eJS" style="border:solid 2px blue;"&gt;&lt;/canvas&gt;
+&lt;script&gt;   
+    let cx = document.getElementById("apple_pie_eJS").getContext("2d");
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "Me", count: 478, color: "orange"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    let total = results.reduce(function(sum, choice) {
+        return sum + choice.count;
+    }, 0);
+
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    results.forEach(function(result) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        cx.beginPath();
+        cx.arc(centerX, centerY, 100, currentAngle, currentAngle + sliceAngle);
+        
+        let middleAngle = currentAngle + 0.5 * sliceAngle;
+        let textX = Math.cos(middleAngle) * 120 + centerX;
+        let textY = Math.sin(middleAngle) * 120 + centerY;
+        cx.textBaseLine = "middle";
+        if (Math.cos(middleAngle) &gt; 0) {
+            cx.textAlign = "left";
+        } else {
+            cx.textAlign = "right";
+        }
+        cx.font = "15px sans-serif";
+        cx.fillStyle = "black";
+        cx.fillText(result.name, textX, textY);
+
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+        cx.fillStyle = result.color;
+        cx.fill();
+    });
+&lt;/script&gt;
+</pre>
+</details>    
+<!---------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> Bouncing Ball </u></h4>
+    <canvas width="500" height="300" style="border:solid 2px blue;" id="bouncingBall"></canvas>
+<script>
+(function() {    
+    let cx = document.querySelector("#bouncingBall").getContext("2d");
+    cx.fillStyle = "green";
+
+    let lastTime = null;
+    function frame(time) {
+        if (lastTime != null) {
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    
+    var currentX = 20;
+    var currentY = 20;
+    var moveX = 1;
+    var moveY = 1;
+    function updateAnimation(step) {
+        cx.clearRect(0, 0, 500, 300);
+        cx.beginPath();
+        
+        if(currentX >= 488) moveX = -moveX;
+        if(currentY >= 288) moveY = -moveY;
+        if(currentX <= 12) moveX = -moveX;
+        if(currentY <= 12) moveY = -moveY;
+        
+        currentX += moveX;
+        currentY += moveY;
+        cx.arc(currentX, currentY, 20, 0, Math.PI * 2);
+        cx.fill();
+    }
+})();
+</script>
+<details>
+<summary> CODE : </summary>
+<pre>
+&lt;canvas width="500" height="300" style="border:solid 2px blue;" id="bouncingBall"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+(function() {    
+    let cx = document.querySelector("#bouncingBall").getContext("2d");
+    cx.fillStyle = "green";
+
+    let lastTime = null;
+    function frame(time) {
+        if (lastTime != null) {
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    
+    var currentX = 20;
+    var currentY = 20;
+    var moveX = 1;
+    var moveY = 1;
+    function updateAnimation(step) {
+        cx.clearRect(0, 0, 500, 300);
+        cx.beginPath();
+        
+        if(currentX &gt;= 488) moveX = -moveX;
+        if(currentY &gt;= 288) moveY = -moveY;
+        if(currentX &lt;= 12) moveX = -moveX;
+        if(currentY &gt;= 12) moveY = -moveY;
+        
+        currentX += moveX;
+        currentY += moveY;
+        cx.arc(currentX, currentY, 20, 0, Math.PI * 2);
+        cx.fill();
+    }
+})();
+&lt;/script&gt;
+</pre>
+</details>
+    <p> - Eloquent JS solution </p>
+    <canvas width="400" height="400" id="bouncingBall_JS"></canvas>
+<script>
+(function(){
+    let cx = document.querySelector("#bouncingBall_JS").getContext("2d");
+
+    let lastTime = null;
+    function frame(time) {
+        if (lastTime != null) {
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    let x = 100, y = 300;
+    let radius = 10;
+    let speedX = 100, speedY = 60;
+
+    function updateAnimation(step) {
+        cx.clearRect(0, 0, 400, 400);
+        cx.strokeStyle = "blue";
+        cx.lineWidth = 4;
+        cx.strokeRect(25, 25, 350, 350);
+
+        x += step * speedX;
+        y += step * speedY;
+        if (x < 25 + radius || x > 375 - radius) speedX = -speedX;
+        if (y < 25 + radius || y > 375 - radius) speedY = -speedY;
+        cx.fillStyle = "red";
+        cx.beginPath();
+        cx.arc(x, y, radius, 0, 7);
+        cx.fill();
+    }
+})();
+</script>
+<details>
+<summary> CODE : </summary>
+<pre>
+&lt;canvas width="400" height="400" id="bouncingBall_JS"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+(function(){
+    let cx = document.querySelector("#bouncingBall_JS").getContext("2d");
+
+    let lastTime = null;
+    function frame(time) {
+        if (lastTime != null) {
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    let x = 100, y = 300;
+    let radius = 10;
+    let speedX = 100, speedY = 60;
+
+    function updateAnimation(step) {
+        cx.clearRect(0, 0, 400, 400);
+        cx.strokeStyle = "blue";
+        cx.lineWidth = 4;
+        cx.strokeRect(25, 25, 350, 350);
+
+        x += step * speedX;
+        y += step * speedY;
+        if (x &lt; 25 + radius || x &gt; 375 - radius) speedX = -speedX;
+        if (y &lt; 25 + radius || y &gt; 375 - radius) speedY = -speedY;
+        cx.fillStyle = "red";
+        cx.beginPath();
+        cx.arc(x, y, radius, 0, 7);
+        cx.fill();
+    }
+})();
+&lt;/script&gt;
+</pre>
+</details>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+</body>
+</html>

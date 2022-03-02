@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> HTTP Header Fields </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> HTTP Header Fields (ver 4.0.0) </h1>
+    <p> Updated ( 2020-07-16 )</p>
+    <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
+        <a href="../index.html">HTTP Protocols></a> Header Fields
+    </p>
+    <p class="subSite">
+        <a href="#authentication">Authentication</a> / 
+        <a href="#caching">Caching</a> / 
+        <a href="#conditionals">Conditionals</a> / 
+        <a href="#connection_management">Connection Management</a> / 
+        <a href="#content_negotiation">Content Negotiation</a> / 
+        <a href="#controls">Controls</a> / 
+        <a href="#cookies">Cookies</a> / 
+        <a href="#cors">CORS</a> / 
+        <a href="#do_not_track">No Not Track</a> / 
+        <a href="#downloads">Downloads</a> / 
+        <a href="#message_body_information">Message Body Information</a> / 
+        <a href="#proxies">Proxies</a> / 
+        <a href="#redirects">Redirects</a> / 
+        <a href="#request_context">Request Context</a> / 
+        <a href="#response_context">Response Context</a> / 
+        <a href="#range_requests">Range Requests</a> / 
+        <a href="#security">Security</a> / 
+        <a href="#transfer_coding">Transfer Coding</a> / 
+        <a href="#other">Other</a> / 
+        <a href="#http/2">HTTP/2 Pseudo Header Fields</a> 
+    </p>
+    
+    
+    
+    <pre class="syntax">
+SYNTAX:     req             = Request Header Fields
+            res             = Response Header Fields 
+            gen             = General Header Fields (both Request and Response headers)
+            ent             = Entity Headers (metadata about the body or resource both Request and Response)
+            
+            <span style="color:orange">colored orange</span>  = Forbidden Header Name = header cannot be modified programatically
+            <span style="color:lightgreen">colored green</span>   = Not-Forbidden Headers Name = can be modified programatically  
+    </pre>
+<table class="table">
+<caption> 
+    HTTP Headers <span style="color:orangered;" title="cannot be modified programatically">(Forbidden)</span> <span style="color:green;" title="can be modified programatically">(Modifiable)</span>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:3%;"> Type </th>
+        <th style="width:30%;"> Header </th>
+        <th> Description </th>
+    </tr>
+    <tr class="01">
+        <td>  </td>
+        <td> <strong>headerName</strong>: <strong>val</strong> </td>
+        <td> 
+            - <span class="openable">ASCII characters allowed<div>
+                <p> a-z A-Z 0-9 ! # $ % & ' * + - . ^ _ ` | ~ </p>
+            </div></span> <br>
+            - <strong>headerName</strong> is case insensitive <br>
+            - white space after the <mark>:</mark> is ignored  </td>
+    </tr>
+    <tr class="05.01">
+        <td colspan="3" id="authentication"> Authentication </td>
+    </tr>
+    <tr class="05.02">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            Authorization: <span class="openable"><strong>type credentials</strong><div>
+                <p> <strong>type</strong> </p>
+                <p> - authentication type (ex: <mark>"Basic"</mark>) </p>
+                <p> - <a href="https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml" target="_blank"> Hypertext Transfer Protocol (HTTP) Authentication Scheme Registry (iana.org) </a></p>
+                <p> <strong>credentials</strong> </p>
+                <p> - username and password combined with a colon (<mark>aladin:opensesame</mark>), the resulting string is base64 encoded (<mark>YWxhZGRpbjpvcGVuc2VzYW1l</mark>) </p>
+            </div></span>
+        </td>
+        <td> - contains the credentials to authenticate the user agent to a server (after the server responded with a <mark>401 Unauthorized</mark> status and the <mark>WWW-Authenticate</mark> header)    
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 1 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 1 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Proxy-Authenticate: <span class="openable"><strong>type</strong> <small>[realm=<strong>realm</strong>]</small> <div>
+                <p> <strong>type</strong> </p>
+                <p> - authentication type (ex: <mark>"Basic"</mark>) </p>
+                <p> - <a href="https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml" target="_blank"> Hypertext Transfer Protocol (HTTP) Authentication Scheme Registry (iana.org) </a></p>
+                <p> <small>[realm=<strong>realm</strong>]</small> </p>
+                <p> - descriptions of the protected area, if not specified the client ofter display a formated hostname instead </p>
+            </div></span>
+        </td>
+        <td> - defines the authentication method that is used to gain access to a source behind a proxy-server (sent along with <mark>407 Proxy Authentication Required</mark> response)  
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 1 </span>
+                <span><i class="fab fa-opera"></i> 1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.03">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            Proxy-Authorization: <span class="openable"><strong>type credentials</strong><div>
+                <p> <strong>type</strong> </p>
+                <p> - authentication type (ex: <mark>"Basic"</mark>) </p>
+                <p> - <a href="https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml" target="_blank"> Hypertext Transfer Protocol (HTTP) Authentication Scheme Registry (iana.org) </a></p>
+                <p> <strong>credentials</strong> </p>
+                <p> - username and password combined with a colon (<mark>aladin:opensesame</mark>), the resulting string is base64 encoded (<mark>YWxhZGRpbjpvcGVuc2VzYW1l</mark>) </p>
+            </div></span>
+        </td>
+        <td> - contains the credentials to authenticate the user agent to a proxy server (after the server responded with <mark>407 Proxy Authentication Required</mark> status and the <mark>Proxy-Authenticate</mark> header)    
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 1 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.01">
+        <td> <span style="color:green;">res</span>  </td>
+        <td>  
+            WWW-Authenticate: <span class="openable"><strong>type</strong> <small>[realm=<strong>realm</strong>]</small> <small>[charset=<strong>charset</strong>]</small><div>
+                <p> <strong>type</strong> </p>
+                <p> - authentication type (ex: <mark>"Basic"</mark>) </p>
+                <p> - <a href="https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml" target="_blank"> Hypertext Transfer Protocol (HTTP) Authentication Scheme Registry (iana.org) </a></p>
+                <p> <small>[realm=<strong>realm</strong>]</small> </p>
+                <p> - descriptions of the protected area, if not specified the client ofter display a formated hostname instead </p>
+                <p> <small>[charset=<strong>charset</strong>]</small> </p>
+                <p> - server prefered encoding format (only <mark>"UTF-8"</mark> allowed) </p>
+            </div></span>
+        </td>
+        <td> - defines the authentication method that is used to gain access to a source (send along with <mark>401 Unauthorized</mark> response)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 1 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 1 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10">
+        <td colspan="3" id="caching"> Caching </td>
+    </tr>
+    <tr class="10.01">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Age: <span class="openable"><strong>nr:sec</strong><div>
+                <p> - time in seconds </p>
+            </div></span>
+        </td>
+        <td> - duration (in seconds) the resource was cached in a proxy server cache <br>
+             - calculated relative to the proxy's current time 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11.01">
+        <td> <span style="color:green;">gen</span> </td>
+        <td>  
+            Cache-Control: <span class="openable"><strong>directive</strong><i>, ...</i><div>
+                <p> - multiple directives are separated with commans, some directive may have argument which can be a token or quoted string </p>
+                <p style="font-size:1.2em; font-weight:bold;"> Request </p>
+                <p> <mark>max-age=<strong>nr:sec</strong></mark> - time the resource is considered 'fresh' (relative to the request time) </p>
+                <p> <mark>max-stale<i>=nr:sec</i></mark> - indicates that the client will accept a stale response (optionally upper limit of staleness the client will accept) </p>
+                <p> <mark>min-fresh=<strong>nr:sec</strong></mark> - the client wants a response that is 'fresh' (indicated by the seconds) </p>
+                <p> <mark>no-cache</mark> - may be stored by any cache (MUST be validated by the origin server first) </p>
+                <p> <mark>no-store</mark> - response shouldn't be cached </p>
+                <p> <mark>no-transform</mark> - an intermediate cache or proxy cannot edit the response body </p>
+                <p> <mark>only-if-cached</mark> - respond only using a stored response or respond with a <mark>504</mark> status code </p>
+                <p style="font-size:1.2em; font-weight:bold;"> Response</mark> </p>
+                <p> <mark> must-revalidate</mark> - once the response becomes 'stale', it must be validated on the origin server </p>
+                <p> <mark>no-cache</mark> - may be stored by any cache (MUST be validated by the origin server first) </p>
+                <p> <mark>no-transform</mark> - an intermediate cache or proxy cannot edit the response body </p>
+                <p> <mark> public</mark> - can be stored by any cache (even if it's not cachable) </p>
+                <p> <mark> private</mark> - storable only by the browser's cache </p>
+                <p> <mark> proxy-revalidate</mark> - once the response becomes 'stale', it must be validated on the proxy server </p>
+                <p> <mark>max-age=<strong>nr:sec</strong></mark> - time the resource is considered 'fresh' (relative to the request time) </p>
+                <p> <mark> s-maxage=<strong>nr:sec</strong></mark> - overrides <mark>max-age</mark> value and <mark>Expires</mark> header <u>only for shared caches (proxy) ignored by private caches</u> </p>
+            </div></span>
+        </td>
+        <td>  
+            - directives (instructions) for <span class="openable">caching<div>
+            <p style="font-size:1.2em; font-weight:bold;"> 1) Response cached if </p>
+            <p> - status code is <mark>301|302|307|308|410</mark> <b>and</b> </p>
+            <p> - the <mark>Cache-Control</mark> header does NOT have <mark>no-store</mark> (if proxy server it does not have <mark>Cache-Control: private</mark>) <b>and</b> </p>
+            <p> - <mark>Authorization</mark> is unsed </p>
+            <p style="font-size:1.2em; font-weight:bold;"> 2) Response cached if </p>
+            <p> - status code is <mark>301|302|307|308|410</mark> <b>or</b> </p>
+            <p> - <mark>Cache-Control</mark> has <mark>public|max-age|s-maxage</mark> <b>or</b> </p>
+            <p> - <mark>Expires</mark> header set </p>
+            </div></span> (CORS) <br>
+            - has precedence over <mark>Pragma</mark> 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+                <span class="openable"> more... <div>
+                    <p> <mark>immutable</mark> (experimental) </p>
+                        <span><i class="fab fa-chrome"></i> NO </span>
+                        <span><i class="fab fa-firefox"></i> 49 </span>
+                        <span><i class="fab fa-opera"></i> NO </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                        <span><i class="fab fa-safari"></i> 11 </span>
+                </div></span>
+            </span> 
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Clear-Site-Data: <span class="openable"><strong>directive</strong><i>, ...</i><div>
+                <p> <mark>"cache"</mark> - server wishes to remove locally cached data (es: browser cache, etc...) </p>
+                <p> <mark>"cookies"</mark> - server wiches to remove all cookies for the origin (HTTP credentials also cleared out) </p>
+                <p> <mark>"storage"</mark> - server wiches to remove DOM storage for the origin </p>
+                <p> <mark>"executionContexts"</mark> - server wishes to reload all browsing contexts for the origin </p>
+                <p> <mark>"*"</mark> - server wishes to clear out all types of data for the origin </p>
+            </div></span>
+        </td>
+        <td> - <i class="fas fa-flask"></i> server wants to clear browing data (cookies, storage, cache) associated with the requesting website 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 61 </span>
+                <span><i class="fab fa-firefox"></i> 63 </span>
+                <span><i class="fab fa-opera"></i> 48 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+                <span class="openable"><i ></i> more... <div>
+                    <p> <mark>executionContexts</mark> directive support </p>
+                        <span><i class="fab fa-chrome"></i> 61 </span>
+                        <span><i class="fab fa-firefox"></i> 63 </span>
+                        <span><i class="fab fa-opera"></i> 48 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> ? </span> 
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Expires: <span class="openable"><strong>httpDate</strong><div>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - after this date the server response is considered 'stale' (CORS) usend in <mark>HTTP/1.0</mark> <br>
+            - mostly ignored if there is a <mark>Cache-Control</mark> header is specified 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11.02">
+        <td> <span style="color:green;">gen</span> </td>
+        <td>  
+            Pragma: <span class="openable"><strong>directive</strong><div>
+                <p> <mark>no-cache</mark> - same as <mark>Cache-Control: no-cache</mark> may be stored by any cache (MUST be validated by the origin server first) </p>
+        </div></span>
+        </td>
+        <td> 
+            - caching used in <mark>HTTP/1.0</mark> (CORS) (Kept for backward compatibility) <br>
+            - mostly ignored if there is a <mark>Cache-Control</mark> header is specified 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11.03">
+        <td> <span style="color:green;">gen</span> </td>
+        <td>  
+            Warning: <span class="openable"><strong>code agent text date</strong><div>
+                <p> <strong>code</strong> - warning number </p>
+                <p> <strong>agent</strong> - name of pseudonym of the server </p>
+                <p> <strong>text</strong> - advisory text </p>
+                <p> <strong>date</strong> - optional if more than one <mark>Warning</mark> header is set </p>
+                <p style="font-size:1.2em; font-weight:bold"> Warning Codes </p>
+                <p> <mark>110 Response is Stale</mark> - A response provided by a cache is stale (the expiration time set for it has passed) </p>
+                <p> <mark>111 Revalidation Failed</mark> - attempt to validate the response failed, due to an inability to reach the server </p>
+                <p> <mark>112 Disconnected Operation</mark> - The cache is disconnected from the rest of the network </p>
+                <p> <mark>113 Heuristic Expiration</mark> - Sent If a cache heuristically chose a freshness lifetime greater than 24 hours and the response's age is greater than 24 hours </p>
+                <p> <mark>199 Miscellaneous Warning</mark> - Arbitrary, non-specific warning </p>
+                <p> <mark>214 Transformation Applied</mark> - Added by a proxy if it applies any transformation to the representation, such as changing the content-coding, media-type or the like </p>
+                <p> <mark>299 Miscellaneous Persistent Warning</mark> - Same as 199, but indicating a persistent warning </p>
+            </div></span>
+        </td>
+        <td> - general warning information (may deprecate soon [TESTED: 2020-07-14])
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td colspan="3" id="conditionals"> Conditionals </td>
+    </tr>
+    <tr class="16.01">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            ETag: <span class="openable"><strong>"ETag:str"</strong><div>
+                <p> <mark>W/<strong>"value"</strong></mark> - weak validator (content considered almost the same) </p>
+                <p> <mark><strong>"value"</strong></mark> - strong validator (ASCII) (content considered strictliy the same) </p>
+            </div></span>
+        </td>
+        <td> 
+            - <span class="openable">server sends a unique version identifier (string) of its resource<div>
+            <p> - <mark>If-Match</mark> and <mark>If-None-Match</mark> use it to change the behaviour of the request </p>
+        </div></span>
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            If-Match: <span class="openable"><strong>"ETag:str"</strong><i>, ...</i><div>
+                <p> - <mark><strong>"ETag"</strong></mark> - unique string which identifies the content </p>
+                <p> - <mark>*</mark> = any resource </p>
+            </div></span>
+        </td>
+        <td> 
+            - <span class="openable">client makes the request conditional and applies the method only if the stored resource matches one of the passed ETags<div>
+            <p> - comparison with the stored server ETag uses <u>strong algorithm (two files identical byte to byte)</u>  
+        </div></span>
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.05">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            If-Modified-Since: <span class="openable"><strong>httpDate</strong><div>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - makes the request conditional, the server sends <mark>200 OK</mark> only if the resouce has been modified after the given date <br>
+            - if the request is not been modified since, the response will be <mark>304 Not Modified</mark> <br>
+            - <mark>GET</mark> and <mark>HEAD</mark> requests only
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            If-None-Match: <span class="openable"><strong>"ETag:str"</strong><i>, ...</i><div>
+                <p> - <mark><strong>"ETag"</strong></mark> - unique string which identifies the content </p>
+                <p> - <mark>*</mark> = any resource </p>
+            </div></span>
+        </td>
+        <td> 
+            - <span class="openable">client makes the request conditional and applies the method only if the stored resource does not match one of the passed ETags<div>
+            <p> - comparison with the stored server ETag uses <u>strong algorithm (two files identical byte to byte)</u>  </p>
+        </div></span>
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.04">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            If-Unmodified-Since: <span class="openable"><strong>httpDate</strong><div>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - client makes the request conditional, the server sends back the resource only if it was not modified after the passed date <br>
+            - if the resource was modified after the passed date the server will respond with <mark>412 Precondigion Failed</mark> 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Last-Modified: <span class="openable"><strong>httpDate</strong><div>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - <span class="openable">server indicates the last time when the its resource was modified (used for version controling) (CORS)<div>
+            <p> - less accurate then the <mark>ETag</mark> header but easier to calculate </p>
+            <p> - requests using <mark>If-Modified-Since</mark> and <mark>If-Unmodified-Since</mark> make use of this filed </p>
+        </div></span>
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.03">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Vary: <span class="openable"><strong>headerName</strong><i>, ...</i><div>
+                <p> <strong>headerName</strong> - the header(s) which considered by the server (or cache) when generating a response </p>
+                <p> <mark>*</mark> - all headers are considered important (content is negotiated based on all requested headers) </p>
+            </div></span>
+        </td>
+        <td> 
+            - tells the client that the <span class="openable">response was generated <div>
+            <p> - this is intended to be used for content negotiation (response negotiated based on the requested header) </p>
+            <p> - caches can use this to make sure that the right content is delivered under the requested URL </p>
+            <p> - also can be used for user-agent detection, the server (or cache) sens the right version of the requesting user agent (mobile, desctop, etc..) </p>
+        </div></span> based on the passed header(s) (multiple responses are available based on this requested header value) <br>
+            - the server indicates which headers are uses for content negotiation 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td colspan="3" id="connection_management"> Connection Management </td>
+    </tr>
+    <tr class="20.02">
+        <td> <span style="color:orangered;">gen</span> </td>
+        <td>  
+            Connection: <span class="openable">close|keep-alive<div>
+                <p> <mark>close</mark> - closes the connection after the current transaction is finished <u>(Default on HTTP/1.0)</u> </p>
+                <p> <mark>keep-alive</mark> - connectin kept open after the current transaction is finished <u>(Default on HTTP/1.1)</u> </p>
+            </div></span>
+        </td>
+        <td> 
+            - determines if the connection stays open after the current network transaction is finished <u>(prohibited in HTTP/2)</u>    
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.03">
+        <td> <span style="color:orangered;">gen</span> </td>
+        <td>  
+            Keep-Alive: <span class="openable"><strong>param</strong><i>, ...</i><div>
+                <p> <mark>timeout=<strong>nr:sec</strong></mark> - time the connection has to be kept open (in seconds) </p>
+                <p> <mark>max=<strong>nr</strong></mark> - number of requests before closing the connection </p>
+            </div></span>
+        </td>
+        <td> 
+            - determines how a keep-alive connection should stay open (only when <mark>Connection:keep-alive</mark>) <u>(prohibited in HTTP/2)</u>
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td colspan="3" id="content_negotiation"> Content Negotiation </td>
+    </tr>
+    <tr class="25.02">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            Accept: <span class="openable"><strong>MIMEtype/subMIMEtype</strong><i>, ...</i><div>
+                <p> <mark><strong>MIMEtype/subMIMEtype</strong></mark> - single precise MIME type (ex: <mark>text/html</mark>) </p>
+                <p> <mark><strong>MIMEtype</strong>/*</mark> - MIME type without subtype (ex: <mark>image/*</mark>) </p>
+                <p> <mark>*/*</mark> - any MIME type </p>
+                <p> <mark><strong>MIMEtype/subMIMEtype</strong>;q=<strong>nr</strong></mark> the q-factor (quality value) defines the precendece of the MIME type in the row (Default: <mark>1</mark>) </p>
+                <p><b><u> Example: </u></b></p>
+                <p> <mark>Accept: text/html, application/xhtml+xml;q=0.9, */*;q=0.8</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - client advertises which content type(s) can understand (the response content type is indicated in the <mark>Content-Type</mark> response header) (CORS)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span class="openable"><i class="fab fa-firefox"></i> yes <div>
+                    <p> <mark>66</mark> default value changed to <mark>*/*</mark> </p>
+                </div></span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td>  
+            Accept-Charset: <span class="openable"><strong>charSet</strong><i>, ...</i><div>
+                <p> <mark><strong>charSet</strong></mark> - single character encoding (ex: <mark>iso-8859</mark>) </p>
+                <p> <mark>*</mark> - any character encoding </p>
+                <p> <mark><strong>charSet</strong>;q=<strong>nr</strong></mark> the q-factor (quality value) defines the precendece of the character encoding in the row (Default: <mark>1</mark>) </p>
+                <p><b><u> Example: </u></b></p>
+                <p> <mark>Accept-Charset: utf-8, iso-8859-1;q=0.5, *;q=0.1</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - client advertises which character encodings can understand <u>(all browser omit this header [TESTED: 2020-07-15])</u>     
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> NO after 27 </span>
+                <span><i class="fab fa-firefox"></i> NO after 10 </span>
+                <span><i class="fab fa-opera"></i> NO after 11 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO after 8 </span>
+                <span><i class="fab fa-safari"></i> NO after 5</span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.04">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td>  
+            Accept-Encoding: <span class="openable"><strong>compress</strong><i>, ...</i><div>
+                <p> <mark>gzip</mark> - Lempel-Ziv coding (LZ77), with a 32-bit CRC </p>
+                <p> <mark>compress</mark> - Lempel-Ziv-Welch (LZW) algorithm </p>
+                <p> <mark>deflate</mark> - zlib structure, with the deflate compression algorithm </p>
+                <p> <mark>br</mark> - Brotli algorithm </p>
+                <p> <mark>identity</mark> - no compression no modification </p>
+                <p> <mark>*</mark> - any compression algorithms </p>
+                <p> <mark><strong>compress</strong>;q=<strong>nr</strong></mark> the q-factor (quality value) defines the precendece of the encoding (compression) in the row (Default: <mark>1</mark>) </p>
+                <p><b><u> Example: </u></b></p>
+                <p> <mark>Accept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - client advertises which content encoding (compression algorithms) can understand (the response content encoding is indicated in the <mark>Content-Encoding</mark> response header)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.05">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            Accept-Language: <span class="openable"><strong>lang</strong><i>, ...</i><div>
+                <p> <mark>lang</mark> - describes the language (ex: <mark>de-CH</mark>) <a href="https://www.techonthenet.com/js/language_tags.php" target="_blank">some BCP47 language tags</a></p>
+                <p> <mark>*</mark> - any language </p>
+                <p> <mark><strong>lang</strong>;q=<strong>nr</strong></mark> the q-factor (quality value) defines the precendece of the language in the row (Default: <mark>1</mark>) </p>
+                <p><b><u> Example: </u></b></p>
+                <p> <mark>Accept-Language: en-US,en;q=0.5</mark> </p>
+            </div></span>
+        </td>
+        <td> 
+            - client advertises which languages can understand (the response language is indicated in the <mark>Content-Language</mark> response header) (CORS)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td colspan="3" id="controls"> Controls </td>
+    </tr>
+    <tr class="30.02">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td> Expect: 100-continue </td>
+        <td> 
+            - client indicates that the server should continue responding (respond with <mark>100 Continue</mark> or <mark>417 Expectation Failed</mark>)  
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="31">
+        <td> <span style="color:green;;">ent</span> </td>
+        <td> Link: &lt;<strong>URL</strong>&gt;; <small>[<i>param</i>=<i>val</i>; <i>...</i>]</small><i>, ...</i> </td>
+        <td>  
+            - sends links in the header (used with <mark>103 Early Hints</mark> response so the client can gets the links before the final respone) <br>
+            - links are semantically equivalent to HTML <mark>&lt;link&gt;</mark> element, parameters (<i>param</i>) are equivalent to attributes of the <mark>&lt;link&gt;</mark> element 
+            <span class="browserSupport" title="updated : 2021-01-29">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.01">
+        <td colspan="3" id="cookies"> Cookies </td>
+    </tr>
+    <tr class="35.02">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td> Cookie: <strong>key=val</strong>; <i>...</i> </td>
+        <td> 
+            - client sends cookies to the server (previously received by the <mark>Set-Cookie</mark> response header) <br>
+            - only one should be sent to the server containing the cookie list 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="36">
+        <td> <span style="color:orangered;">res</span> </td>
+        <td>  
+            Set-Cookie: <span class="openable"><strong>cookie</strong><div>
+                <p> <mark><strong>key=val</strong></mark> - the cookie key can contain ASCII characters except control characters (space, tab) and <mark>( ) &lt; &gt; @ , ; : \ " / [ ] ? = { } .</mark>, the cookie value can contain ASCII characters except control characters (space, tab, etc...), <mark>__Secure-</mark> cookie names must be set with the <mark>Secure</mark> attribute from a secure page (<mark>HTTPS</mark>), <mark>__Host-</mark>  cookie names must be set with the <mark>Secure</mark> attribute from a secure page (<mark>HTTPS</mark>) must not have <mark>Domain</mark> specified and path must be <mark>/</mark> </p>
+                <p> <mark><strong>key=val</strong>; Expires=<strong>date</strong></mark> - lifetime of the cookie (if not specified = session cookie) </p>
+                <p> <mark><strong>key=val</strong>; Max-Age=<strong>nr:sec</strong></mark> - lifetime of the cookie (in seconds) <u>(has precedence over <mark>Expires</mark>)</u> </p>
+                <p> <mark><strong>key=val</strong>; Domain=<strong>domain</strong></mark> - host to which the cookie will be sent (if omitted = current domain not including subdomains) </p>
+                <p> <mark><strong>key=val</strong>; Path=<strong>path</strong></mark> - path in URL </p>
+                <p> <mark><strong>key=val</strong>; Secure</mark> - secure cookie (<mark>https</mark> must be used) </p>
+                <p> <mark><strong>key=val</strong>; HttpOnly</mark> - JavaScript cannot access to cookies through the <mark>document.cookie</mark> property </p>
+                <p> <mark><strong>key=val</strong>; SameSite=Lax|Strict|None</mark> - (<mark>Lax</mark> = cookie is allowed to be sent with top-level navigations and with <mark>GET</mark> request initiated by third party sites <u>(Default usually)</u>) (<mark>Strict</mark> = cookie only sent to the site which set it 'same-site') (<mark>None</mark> = the browser sends the cookie with both cross-site and same-site requests) </p>
+                <p> - multiple attributes can be used (ex: <mark>Set-Cookie: key=val; Domain=myDomain.com; Secure; HttpOnly</mark>) </p>
+            </div></span>
+        </td>
+        <td> 
+            - server send a cookie to the user-agent (browser), so the user-agent can send it back to the server later <br>
+            - multiple fields are allowed in a response header    
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+                <span class="openable"> more... <div>
+                    <p> - <mark>HttpOnly</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 1 </span>
+                        <span><i class="fab fa-firefox"></i> 3 </span>
+                        <span><i class="fab fa-opera"></i> 11 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                        <span><i class="fab fa-safari"></i> 5 </span>
+                    <p> - <mark>Max-Age</mark> </p>
+                        <span><i class="fab fa-chrome"></i> yes </span>
+                        <span><i class="fab fa-firefox"></i> yes </span>
+                        <span><i class="fab fa-opera"></i> yes </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                        <span><i class="fab fa-safari"></i> yes </span>
+                    <p> - <mark>SameSite</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 51 </span>
+                        <span><i class="fab fa-firefox"></i> 60 </span>
+                        <span><i class="fab fa-opera"></i> 39 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                        <span><i class="fab fa-safari"></i> 13 </span>
+                    <p> - <mark>SameSite</mark> Default to <mark>Lax</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 80 </span>
+                        <span><i class="fab fa-firefox"></i> 69 </span> 
+                        <span><i class="fab fa-opera"></i> 67 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 80 </span>
+                        <span><i class="fab fa-safari"></i> NO </span>
+                    <p> - <mark>SameSite=Lax</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 51 </span>
+                        <span><i class="fab fa-firefox"></i> 60 </span> 
+                        <span><i class="fab fa-opera"></i> 39 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                        <span><i class="fab fa-safari"></i> 13 </span>
+                    <p> - <mark>SameSite=None</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 51 </span>
+                        <span><i class="fab fa-firefox"></i> 60 </span> 
+                        <span><i class="fab fa-opera"></i> 39 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                        <span><i class="fab fa-safari"></i> 13 </span>
+                    <p> - <mark>SameSite=Strict</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 51 </span>
+                        <span><i class="fab fa-firefox"></i> 60 </span> 
+                        <span><i class="fab fa-opera"></i> 39 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                        <span><i class="fab fa-safari"></i> 12 </span>
+                    <p> - Cookie prefixes </p>
+                        <span><i class="fab fa-chrome"></i> 49 </span>
+                        <span><i class="fab fa-firefox"></i> 50 </span> 
+                        <span><i class="fab fa-opera"></i> 36 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> yes </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.01">
+        <td colspan="3" id="cors"> CORS </td>
+    </tr>
+    <tr class="41.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Access-Control-Allow-Credentials: true </td>
+        <td> 
+            - after receiving a request with credentials (cookies, authentication, etc...) the server tells browsers to expose the response to frontend JavaScript code <br>
+            - after a preflight request indicates that the acual request can be made using credentials 
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="41.03">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Access-Control-Allow-Headers: <strong>headerName</strong><i>, ...</i> </td>
+        <td> 
+            - response to a preflight request the server indicates which headers can be used for the actual request <br>
+            - required if the request contains an <mark>Access-Control-Request-Headers</mark> header   
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+                <span class="openable"> more... <div>
+                    <p> <mark>*</mark> wildcard support </p>
+                        <span><i class="fab fa-chrome"></i> 63 </span>
+                        <span><i class="fab fa-firefox"></i> 69 </span>
+                        <span><i class="fab fa-opera"></i> 50 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> NO </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="41.04">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Access-Control-Allow-Methods: <span class="openable"><strong>reqMethod</strong><i>, ...</i><div>
+                <p> <mark><strong>reqMethod</strong></mark> - request method(s) (ex: <mark>PUT</mark>) </p>
+                <p> <mark>*</mark> - all request methods </p>  
+            </div></span>
+        </td>
+        <td> 
+            - response to a preflight request the server indicates which request method(s) can be used for the actual request
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+                <span class="openable"> more <div>
+                    <p> <mark>*</mark> wildcard support </p>
+                        <span><i class="fab fa-chrome"></i> 63 </span>
+                        <span><i class="fab fa-firefox"></i> 69 </span>
+                        <span><i class="fab fa-opera"></i> 50 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> NO </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="41.01">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Access-Control-Allow-Origin: <span class="openable"><strong>origin</strong><div>
+                <p> <mark><strong>origin</strong></mark> - origin (ex: <mark>https://developer.mozilla.org</mark>) </p>
+                <p> <mark>*</mark> - all origins allowed </p>
+                <p> <mark>null</mark> - not recommended to use </p>
+            </div></span>
+        </td>
+        <td> 
+            - server indicates which third-party origin (url) can access its resources
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="41.06">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Access-Control-Expose-Headers: <strong>headerName</strong><i>, ...</i> </td>
+        <td> 
+            - server indicates which response headers can be exposed to frontend JavaScript <br>
+            - by default <span class="openable">7 CORS safelisted response headers are exposed<div>
+                <p> <mark>Cache-Control</mark> </p>
+                <p> <mark>Content-Language</mark> </p>
+                <p> <mark>Content-Length</mark> </p>
+                <p> <mark>Content-Type</mark> </p>
+                <p> <mark>Expires</mark> </p>
+                <p> <mark>Last-Modified</mark> </p>
+                <p> <mark>Pragma</mark> </p>
+            </div></span> if we want more this is where we list them    
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+                <span class="openable"> more... <div>
+                    <p><mark>*</mark> wildcard support </p>
+                        <span><i class="fab fa-chrome"></i> 65 </span>
+                        <span><i class="fab fa-firefox"></i> 69 </span>
+                        <span><i class="fab fa-opera"></i> 52 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> NO </span>
+                        </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="41.05">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Access-Control-Max-Age: <strong>nr:sec</strong> </td>
+        <td> 
+            - server indicates how long a preflight response <span class="openable">can be cached<div> 
+                <p> Firefox = <mark>86400</mark> </p>
+                <p> Chromium (prior v76) = <mark>600</mark> </p>
+                <p> Chromium (v76 and after) = <mark>7200</mark> </p>
+                <p> Chromium default = <mark>5</mark> </p>
+                <p> <mark>-1</mark> = disable caching, all calls must require a preflight request </p>
+            </div></span> (information contained in the <mark>Access-Control-Allow-Methods</mark> and <mark>Access-Control-Allow-Headers</mark> headers)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.02">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td> Access-Control-Request-Headers: <strong>headerName</strong><i>, ...</i> </td>
+        <td> 
+            - for preflight requests, the browsers indicates which http headers the client wishes to use for the actual request  
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.03">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td> Access-Control-Request-Method: <strong>reqMethod</strong> </td>
+        <td> 
+            - for preflight requests, the browsers indicates which http request method the client wishes to use for the actual request
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.04">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td>  
+            Origin: <strong class="openable">origin<div>
+                <p> SYNTAX: <strong>scheme</strong>://<strong>hostName</strong><small>[:<i>port</i>]</small> </p>
+            </div></strong>
+        </td>
+        <td> 
+            - client indicates its origin (sent with the cross-origin request)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span class="openable"><i class="fab fa-firefox"></i> 70 <div>
+                    <p> - partial until <mark>58</mark> = not sent with <mark>POST</mark> request </p>
+                </div></span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span class="openable"><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes <div>
+                    <p> - not sent with <mark>POST</mark> request </p>
+                </div></span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="41.07">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Timing-Allow-Origin: <strong class="openable">origin<div>
+                <p> SYNTAX: <strong>scheme</strong>://<strong>hostName</strong><small>[:<i>port</i>]</small> </p>
+                <p> <mark>*</mark> - all origins </p>
+            </div></strong>
+        </td>
+        <td> 
+            - server specifies origins that are allowed to see timing metrics generated by the <mark>Resource Timing API</mark> (mitigate timing attacks)
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="45.01">
+        <td colspan="3" id="do_not_track"> Do Not Track </td>
+    </tr>
+    <tr class="45.02">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td>  
+            DNT: <span class="openable">0|1|null<div>
+                <p> <mark>0</mark> - allow tracking </p>
+                <p> <mark>1</mark> - disallow tracking </p>
+                <p> <mark>null</mark> - tracking preference not specified</p>
+            </div></span>
+        </td>
+        <td> 
+            - (Do Not Track) client indicates the user's tracking preference (privacy VS personalized content)   
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> 23 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 9 </span>
+                <span><i class="fab fa-safari"></i> NOT after 12.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="45.03">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Tk: <strong class="openable">directive<div>
+                <p> <mark>!</mark> - Under construction (server tests tracking status) </p>
+                <p> <mark>?</mark> - Dynamic (server need more information to determine tracking) </p>
+                <p> <mark>G</mark> - Gateway or multiple parties (server acting as a gateway) </p>
+                <p> <mark>N</mark> - Not tracking </p>
+                <p> <mark>T</mark> - Tracking </p>
+                <p> <mark>C</mark> - Tracking with consent (server tracks with prior consent) </p>
+                <p> <mark>P</mark> - Potential consent (server doesn't know in real-time whether it has received prior consent for tracking) </p>
+                <p> <mark>D</mark> - Disregarding DNT (server does not respect the client's tracking preference) </p>
+                <p> <mark>U</mark> - Updated (request resulted in a potential change) </p>
+            </div></strong>
+        </td>
+        <td> 
+            - server indicates the tracking status applied to the corresponding request
+            <span class="browserSupport" title="updated : 2020-07-18">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="50.01">
+        <td colspan="3" id="downloads"> Downloads </td>
+    </tr>
+    <tr class="50.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Content-Disposition: <strong class="openable">directive<div>
+                <p> <mark>inline</mark> - content displayed as web page or part of a web page </p>
+                <p> <mark>attachement</mark> - the content is for downloading ('Save As' dialog window presented in most browser) </p>
+                <p> <mark>attachement; filename="<strong>fileName</strong>"</mark> - the content is for downloading file name is proposed to save the content ('Save As' dialog window presented in most browser) </p>
+            </div></strong>
+        </td>
+        <td> 
+            - server indicates that the content should be displayed as a web page (or part of a web page) or should be downloaded as an attachement <br>
+            - has some other form related functionalities as general header but that isn't clear for me [TESTED: 2020-07-16]
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.01">
+        <td colspan="3" id="message_body_information"> Message Body Information </td>
+    </tr>
+    <tr class="55.04">
+        <td> <span style="color:green;">ent</span> </td>
+        <td>  
+            Content-Encoding: <span class="openable"><strong>compress</strong><i>, ...</i><div>
+                <p> <mark>gzip</mark> - Lempel-Ziv coding (LZ77), with a 32-bit CRC </p>
+                <p> <mark>compress</mark> - Lempel-Ziv-Welch (LZW) algorithm </p>
+                <p> <mark>deflate</mark> - zlib structure, with the deflate compression algorithm </p>
+                <p> <mark>br</mark> - Brotli algorithm </p>
+                <p> <mark>identity</mark> - no compression no modification </p>
+            </div></span>
+        </td>
+        <td> 
+            - indicates which encoding (compression type) is applied to the payload
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+                <span class="openable"></i> more... <div>
+                    <p> - <mark>br</mark> (experimental) </p>
+                        <span><i class="fab fa-chrome"></i> 50 </span>
+                        <span><i class="fab fa-firefox"></i> 44 </span>
+                        <span><i class="fab fa-opera"></i> 36 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 15 </span>
+                        <span><i class="fab fa-safari"></i> NO </span>                    
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.05">
+        <td> <span style="color:green;">ent</span> </td>
+        <td>  
+            Content-Language: <span class="openable"><strong>lang</strong><i>, ...</i><div>
+                <p> <mark>lang</mark> - describes the language (ex: <mark>de-CH</mark>) <a href="https://www.techonthenet.com/js/language_tags.php" target="    _blank">some BCP47 language tags</a></p>
+            </div></span>
+        </td>
+        <td> 
+            - indicates the content language(s) intended for the audience
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.02">
+        <td> <span style="color:orangered;">ent</span> </td>
+        <td> Content-Length: <strong>nr:byte</strong> </td>
+        <td> 
+            - size of the resource in bytes 
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.06">
+        <td> <span style="color:green;">ent</span> </td>
+        <td> Content-Location: <strong>url</strong> </td>
+        <td> 
+            - indicates the location of the current <u>negotiated cotnent</u>
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="55.03">
+        <td> <span style="color:green;">ent</span> </td>
+        <td>  
+            Content-Type: <strong class="openable">MIMEtype<div>
+                <p> <mark><strong>MIMEtype</strong></mark> - MIME type (ex: <mark>text/html</mark>) </p>
+                <p> <mark><strong>MIMEtype</strong>; charset=<strong>carSet</strong></mark> - MIME type with character encoding </p>
+                <p> <mark>multipart/form-data; bundary=<strong>boundary</strong></mark> - for multipart entities the boundary directive is required </p>
+                <p> 
+            </div></strong>
+        </td>
+        <td> 
+            - indicates the MIME type of the resource (browsers do MIME sniffing and may not follow the value of this header (<mark>X-Content-Type-Options</mark>)) (CORS)  
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="60.01">
+        <td colspan="3" id="proxies"> Proxies </td>
+    </tr>
+    <tr class="60.02">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            Forwarded: <span class="openable">by=<strong>id</strong>;for=<strong>id</strong>;host=<strong>host</strong>;proto=http|https<div>
+                <p> <mark>by=<strong>id</strong></mark> - where the request came in to the proxy server (IP | <mark>unknown</mark>) </p>
+                <p> <mark>for=<strong>id</strong></mark> - the client that initiated the request and subsequent proxies in the chain of proxies (IP | <mark>    unknown</mark>) </p>
+                <p> <mark>host=<strong>host</strong></mark> - the <mark>Host</mark> request header filed </p>
+                <p> <mark>proto=http|https</mark> - protocol which used to make the request </p>
+            </div></span>
+        </td>
+        <td> 
+            - reverse proxies use this (like NGINX) for tracking informations (for debugging and statistics)
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="60.03">
+        <td> <span style="color:green;">req</span> </td>
+        <td> X-Forwarded-For: <strong>clientIp, proxyIp</strong><i>, ...</i> </td>
+        <td> 
+            - <u>[not-standard = part of <mark>Forwarded</mark>]</u> reverse proxy uses this to list the client and proxies in the chain
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="60.04">
+        <td> <span style="color:green;">req</span> </td>
+        <td> X-Forwarded-Host: <strong>host</strong> </td>
+        <td> 
+            - <u>[not-standard = part of <mark>Forwarded</mark>]</u> revers proxy uses this to tell which is the original host (contains the <mark>Host</mark> value)
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="60.05">
+        <td> <span style="color:lightgreen;">req</span> </td>
+        <td> X-forwarded-Proto: http|https </td>
+        <td> 
+            - <u>[not-standard = part of <mark>Forwarded</mark>]</u> protocol used between the client and the load balancer
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="61">
+        <td> <span style="color:orangered;">gen</span> </td>
+        <td> Via: <small>[<i>httpProtocolName</i>/]</small><strong>httpProtocolVersion host</strong> <small>[:<i>port</i>]</small> </td>
+        <td> 
+            - poxyes and reverse proxies adds this header for forward message tracking (to avoid request loops)
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="65.01">
+        <td colspan="3" id="redirects"> Redirects </td>
+    </tr>
+    <tr class="65.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Location: <strong>url</strong> </td>
+        <td> 
+            - server tell the browsers that the page is redirected to the specified url (for <mark>3**</mark> or <mark>201 Created</mark> responses)   
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="70.01">
+        <td colspan="3" id="request_context"> Request Context </td>
+    </tr>
+    <tr class="70.02">
+        <td> <span style="color:green;">req</span> </td>
+        <td> From: <strong>email</strong> </td>
+        <td> 
+            - contains an e-mail address who controls the user-agent
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="70.03">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td> Host: <strong>host</strong>:<strong>port</strong> </td>
+        <td> 
+            - specifies the host and port number to which the reqest is being sent (required in all <mark>HTTP/1.1</mark> requests)    
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="70.04">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td> Referer: <strong>url</strong> </td>
+        <td> 
+            - contains the address of the previous page from which a link to the current requested page was followed (misspelling of 'referrer')    
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+                <span class="openable"></i> more... <div>
+                    <p> - length limited to 4096 bytes </p>
+                        <span><i class="fab fa-chrome"></i> 77 </span>
+                        <span><i class="fab fa-firefox"></i> 70 </span>
+                        <span><i class="fab fa-opera"></i> 64 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> NO </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="71">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Referrer-Policy: <strong class="openable">policy<div>
+                <p> <mark>no-referrer</mark> - the <mark>Referer</mark> header omited = no referrer information is sent with the request </p>
+                
+                <p> <mark>no-referrer-when-downgrade</mark> - <b>(Default)</b> if the provided value is invalid the <mark>origin</mark> <mark>path</mark> <mark>querystring</mark> of the URL are sent as referrer <u>when the protocol security stays the same level or improuves but isnt' sent when the protocol security downgrades (HTTPS -&gt; HTTP) </u></p>
+                <p> <mark>origin</mark> - only the origin is sent as referrer (es: <mark>https://example.com/page.html</mark> -&gt; <mark>https://example.com/</mark>) </p>
+                <p> <mark>origin-when-cross-origin</mark> - for cross-origin requests only the origin part is sent of the URL </p>
+                <p> <mark>same-origin</mark> - for cross-origin request no referrer information is sent </p>
+                <p> <mark>strict-origin</mark> - send the origin only when the security level stays the same (HTTPS -&gt; HTTPS) </p>
+                <p> <mark>strict-origin-when-corss-origin</mark> - for cross-origin requests send the origin only when the security level stays the same (HTTPS -&gt; HTTPS) </p>
+                <p> <mark>unsafe-url</mark> - send <mark>origin</mark> <mark>path</mark> <mark>querystring</mark> regardless of security </p>
+            </div></strong>
+        </td>
+        <td> 
+            - server controls how much referrer information should be included in a request sent via the <mark>Referer</mark> header <br>
+            - the referrer policy can be set <span class="openable">inside HTML elements which request resources from other servers<div>
+                <p> - the document referrer policy can be set through the <mark>&lt;meta&gt;</mark> element (ex: <mark>&lt;meta name="referrer" content="origin"&gt;</mark>) </p>
+                <p> - HTML elements requesting resources : <mark>&lt;a&gt;</mark> <mark>&lt;area&gt;</mark> <mark>&lt;img&gt;</mark> <mark>&lt;iframe&gt;</mark> <mark>&lt;script&gt;</mark> <mark>&lt;link&gt;</mark> (ex: <mark>&lt;a href="http://example.com" referrerpolicy="origin"&gt;</p> 
+            </div></span>
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> 56 </span>
+                <span><i class="fab fa-firefox"></i> 50 </span>
+                <span><i class="fab fa-opera"></i> 43 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+                <span class="openable"></i> more... <div>
+                    <p> - <mark>same-origin</mark> / <mark>strict-origin</mark> / <mark>strict-origin-when-cross-origin</mark> </p>
+                        <span><i class="fab fa-chrome"></i> 61 </span>
+                        <span><i class="fab fa-firefox"></i> 52 </span>
+                        <span><i class="fab fa-opera"></i> 48 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> 11.1 </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="70.05">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            User-Agent: <span class="openable"><strong>product</strong>/<strong>productVersion</strong> <strong>comment</strong><div>
+                <p> <mark><strong>product</strong></mark> - developer codename </p>
+                <p> <mark><strong>version</strong></mark> - version </p>
+                <p> <mark><strong>comment</strong></mark> - comment (like sub-product information, etc...)</p>
+                <p> <b>Common browser SYNTAX:</b> <mark>Mozilla/5.0 (<strong>systemInfo</strong>) <strong>platform</strong> (<strong>platformDetails</strong>) <strong>extension</strong></mark> </p>
+
+            </div></span>
+        </td>
+        <td> 
+            - client lets network peers identify the application, OS, vendor and/or version of the requesting user-agent (not recommended for browser detection)
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="75.01">
+        <td colspan="3" id="response_context"> Response Context </td>
+    </tr>
+    <tr class="76">
+        <td> <span style="color:green;">ent</span> </td>
+        <td> Allow: <strong>reqMethod</strong><i>, ...</i> </td>
+        <td> 
+            - list the allowed http request methods supported by the resource (required with <mark>405 Method Not Allowed</mark> to indicate which methods are allowed)  
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="75.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Server: <strong>serverInfo</strong> </td>
+        <td> 
+            - desribes the server software used by the orign server
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="80.01">
+        <td colspan="3" id="range_requests"> Range Requests </td>
+    </tr>
+    <tr class="81.01">
+        <td> <span style="color:green;">res</span> </td>
+        <td> Accept-Ranges: bytes </td>
+        <td> 
+            - server advertises the support of range requests
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="81.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Content-Range: <strong class="openable">ranges<div>
+                <p> <mark>bytes <strong>start:nr</strong>-<strong>end:nr</strong>/<strong>fullSize:nr</strong></mark> - beginning and end of the range and the total size of the document </p>
+                <p> <mark>bytes <strong>start:nr</strong>-<strong>end:nr</strong>/*</mark> - the total size of the document is unknown </p>
+                <p> <mark>bytes */<strong>fullSize:nr</strong></mark> - the full document is serverd </p>
+            </div></strong>
+        </td>
+        <td> 
+            - server indicates where the partial message belongs relative to the document
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="80.03">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            If-Range: <strong class="openable">ETag|httpDate<div>
+                <p> <mark><strong>ETag</strong></mark> - ETag value to check </p>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+            </div></strong>
+        </td>
+        <td> 
+            - client makes a range request conditional, if the passed <mark>ETag</mark> or <mark>Last-Modified</mark> value match with the server the condition is fulfilled <br>
+            - if fulfilled the server responds with <mark>206 Partial Content</mark> and sends the requested range <br>
+            - if not fulifled the server responds with <mark>200 OK</mark> and sends the whole document 
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="80.02">
+        <td> <span style="color:green;">req</span> </td>
+        <td>  
+            Range: <strong class="openable">ranges<div>
+                <p> <mark>bytes=<strong>st:nr</strong></mark> - beginning of the requested range (end not specified = document end) </p>
+                <p> <mark>bytes=<strong>start:nr</strong>-<strong>end:nr</strong></mark> - beginning and end of the requested range </p>
+                <p> <mark>bytes=<strong>start:nr</strong>-<strong>end:nr</strong>, <strong>start:nr</strong>-<strong>end:nr</strong><i>, ...</i></mark> - multiple ranges can be specified </p>
+        </div></strong><i>, ...</i>
+        </td>
+        <td> 
+            - client indicates the part of the requested document (range request) <br>
+            - the server responds with <mark>206 Partial Content</mark> or <mark>416 Range Not Satisfiable</mark> if invalid range requested    
+            <span class="browserSupport" title="updated : 2020-07-19">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="85.01">
+        <td colspan="3" id="security"> Security </td>
+    </tr>
+    <tr class="85.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Cross-Origin-Embeder-Policy: <span class="openable">unsafe-none|require-corp<div>
+                <p> <mark>unsafe-none</mark> - <u>(Default)</u> allows the document to fetch cross-origin resouces without using CORS protocol </p>
+                <p> <mark>require-corp</mark> - the <mark>corssorigin</mark> attribute or <mark>Cross-Origin-Resource-Policy</mark> header must be used for cross-origin request, otherwise the request will be blocked </p>
+            </div></span>
+        </td>
+        <td> 
+            - (COEP) forces the document using CORS or CORP protocol for cross-origin request
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> 83 </span>
+                <span><i class="fab fa-firefox"></i> 79 </span>
+                <span><i class="fab fa-opera"></i> NO </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 80 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="85.03">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Strict-Transport-Security: max-age=<strong>nr:sec</strong><span class="openable"><small>[; preload|includeSubDomains]</small><div>
+                <p> <mark>max-age=<strong>nr:sec</strong></mark> - time (second) the browser should remember this feature </p>
+                <p> <mark>max-age=<strong>nr:sec</strong>; preload</mark> - Google maintains an HSTS service which registers this domain as HTTPS only, so this domain can be requested only by using HTTPS </p>
+                <p> <mark>max-age=<strong>nr:sec</strong>; includeSubDomains</mark> - rule applices to all subdomains as well</p>
+            </div></span>
+        </td>
+        <td> 
+            - server instructs the browser that it should only be accessed by using HTTPS (HSTS)
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 12 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="85.05">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            X-Frame-Options: <span class="openable">DENY|SAMEORIGIN<div>
+                <p> <mark>DENY</mark> - cannot be displayed in a frame (even same origin) </p>
+                <p> <mark>SAMEORIGIN</mark> - can be displayed in same-origin frames only </p>
+            </div></span>
+        </td>
+        <td> 
+            - controls if the document can be rendered in a <mark>&lt;frame&gt;</mark> <mark>&lt;iframe&gt;</mark> <mark>&lt;embed&gt;</mark> or <mark>&lt;objects&gt;</mark> element 
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.6.9 </span>
+                <span><i class="fab fa-opera"></i> 10.5 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 8 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+                <span class="openable"> more... <div>
+                    <p> <mark>SAMEORIGIN</mark> </p>
+                    <p> <span><i class="fab fa-chrome"></i> 61 </span> = applies to all of a frame's ancestors </p>
+                    <p> <span><i class="fab fa-firefox"></i> 59 </span> = applies to all of a frame's ancestors </p>
+                    <p> <span><i class="fab fa-opera"></i> 48 </span> = applies to all of a frame's ancestors </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="85.04">
+        <td> <span style="color:green;">res</span> </td>
+        <td> X-Content-Type-Options: nosniff </td>
+        <td> 
+            - server indicates that the browser should follow the <mark>Content-Type</mark> header MIME type when interpreting the document type <br>
+            - browsers do MIME type sniffing (auto detection) by default this header disables this feature 
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span class="openable"><i class="fab fa-chrome"></i> 64 <div>
+                    <p> <mark>1</mark> - not supported for stylesheets </p>
+                </div></span>
+                <span><i class="fab fa-firefox"></i> 50 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 8 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="90.01">
+        <td colspan="3" id="transfer_coding"> Transfer Coding </td>
+    </tr>
+    <tr class="90.02">
+        <td> <span style="color:orangered;">req</span> </td>
+        <td>  
+            TE: <span class="openable"><strong>directive</strong><i>, ...</i><div>
+                <p> <mark>chunked</mark> - <u>for HTTP/1.1 is enabled by default no need to specify</u>  Lempel-Ziv-Welch (LZW) algorithm </p>
+                <p> <mark>deflate</mark> - zlib algorithm </p>
+                <p> <mark>gzip</mark> - Lempel-Ziv coding (LZ77) </p>
+                <p> <mark>trailers</mark> - indicates the client is willing to accept trailers <u>(HTTP/2 accept this value only)</u> </p>
+                <p> <mark><strong>directive</strong>;q=<strong>nr</strong></mark> - the q-factor (quality value) defines the precedence of the encoding in the row (Default <mark>1.0</mark> value can be <mark>0.1 - 1.0</mark>)</p>
+            </div></span>
+        </td>
+        <td> 
+            - client specifies the Transfer-Encoding (besides chunked) the user agent is willing to accept (informally called 'Accept-Transfer-Encoding') <br>
+            - also indicates if the client is willing to accept trailer fields 
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="91.02">
+        <td> <span style="color:orangered;">res</span> </td>
+        <td> Trailer: <strong>httpHeader</strong><i>, ...</i> </td>
+        <td> 
+            - the server allows the sender to send trailers (<mark>TE: trailers</mark> request header is required)  
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="91.01">
+        <td> <span style="color:orangered;">res</span> </td>
+        <td>  
+            Transfer-Encoding: <span class="openable"><strong>compress</strong><i>, ...</i><div>
+                <p> <mark>chunked</mark> - data sent in a series of chunks <u>(not supported by HTTP/2)</u> </p>
+                <p> <mark>compress</mark> - Lempel-Ziv-Welch (LZW) algorithm </p>
+                <p> <mark>deflate</mark> - zlib structure, with the deflate compression algorithm </p>
+                <p> <mark>gzip</mark> - Lempel-Ziv coding (LZ77), with a 32-bit CRC </p>
+                <p> <mark>identity</mark> - no compression no modification </p>
+            </div></span>
+        </td>
+        <td> 
+            - <u class="openable">hop-by-hop header<div>
+                    <p> - 'hop-by-hop' = network node to network node </p>
+                    <p> - each segment of a multi-node connection can use  different <mark>Transfer-Encoding</mark> header, if we want to compress the data over the whole connection the <mark>Content-Encoding</mark> header should be used </p>
+                </div></u> indicates which encoding (compression algorithm) is applied to the payload
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="95.01">
+        <td colspan="3" id="other"> Other </td>
+    </tr>
+    <tr class="90.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Alt-Svc: <span class="openable"><strong>directive</strong><i>, ...</i><div>
+                <p> <mark>clear</mark> - all alternative services invalidated </p>
+                <p> <mark><strong>protocolId</strong>=<small>[host]</small>:<strong>port</strong></mark> - alternative service specified (<strong>protocolId</strong> = ALPN identifier (ex: <mark>h2</mark> = HTTP/2 over TLS)) </p>
+                <p> <mark><strong>protocolId</strong>=<small>[host]</small>:<strong>port</strong>; ma=<strong>nr:sec</strong></mark> - number of seconds the alternative service is considered 'fresh' (Default: 24 hours) </p>
+                <p> <mark><strong>protocolId</strong>=<small>[host]</small>:<strong>port</strong>; persist=1</mark> - cached alternative service configurations are not deleted upon new configurations </p>
+            </div></span>
+        </td>
+        <td> 
+            - advertises an alternative services through which the same resource can be reached
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> 38 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="96">
+        <td> <span style="color:orangered;">gen</span> </td>
+        <td>  
+            Date: <span class="openable"><strong>httpDate</strong><div>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+            </div></span>
+        </td>
+        <td> - date and time at which the message was originated 
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> yes </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="95.02">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Retry-After: <span class="openable"><strong>httpDate|nr:sec</strong><div>
+                <p> http Date Syntax : <strong>dayName</strong>, <strong>day month year hour</strong>:<strong>minute</strong> GMT </p>
+                <p> ex : <mark>Wed, 21 Oct 2015 07:28:00 GMT</mark> </p>
+                <p> <mark>new Date().toUTCString()</mark> </p>
+                <hr>
+                <p> <strong>nr:sec</strong> - seconds </p>
+            </div></span>
+        </td>
+        <td> 
+            - <span class="openable">server indicates how long<div>
+                <p> Use Cases : </p>
+                <p> - the server responds with <mark>503 Service Unavailable</mark>, to indicate how long the service will be unavailable </p>
+                <p> - the server responds with <mark>429 Too Many Requests</mark>, to indicate how long the client should wait before a new follo-up request </p>
+                <p> - the server responds with <mark>301 Moved Permanently</mark>, to indicate when the service will be available again </p>
+            </div></span> the user agent should wait before making a follow-up request
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> NO </span>
+                <span><i class="fab fa-firefox"></i> NO </span>
+                <span><i class="fab fa-opera"></i> NO </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="95.03">
+        <td> <span style="color:green;">res</span> </td>
+        <td>  
+            Sever-Timing: <strong class="openable">timing<div>
+                <p> - apparently ther's no values syntax, bellow there are some examples </p>
+                <p> <mark>Server-Timing: missedCache</mark></p> 
+                <p> <mark>Server-Timing: cpu:dur=2.4</mark></p> 
+                <p> <mark>Server-Timing: db;dur=53, app;dur=47.2</mark> </p>
+            </div></strong>
+        </td>
+        <td> 
+            - communicates server timing metrics to the client (CPU, db, etc...)
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> 65 </span>
+                <span><i class="fab fa-firefox"></i> 61 </span>
+                <span><i class="fab fa-opera"></i> 52 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="95.04">
+        <td> <span style="color:green;">res</span> </td>
+        <td> SourceMap: <strong>url</strong> </td>
+        <td> 
+            - <u>[NOT Standard]</u> links to a generated source map enabling the browser to reconstruct the original source, so we can see reconstructed original code in the debugger
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> 55 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+                <span class="openable"> more... <div>
+                    <p> - implemented with vendor prefix <mark>X-</mark> (<mark>X-SourceMap</mark>) </p>
+                        <span><i class="fab fa-chrome"></i> yes </span>
+                        <span><i class="fab fa-firefox"></i> 27 </span>
+                        <span><i class="fab fa-opera"></i> yes </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> yes </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="95.05">
+        <td> <span style="color:green;">res</span> </td>
+        <td> X-DNS-Prefetch-Control: on|off </td>
+        <td> 
+            - <u>[NOT Standard]</u> enables/disables the <span class="openable">browser DNS-Prefetch feature<div>
+            <p> - the browser performs a pre DNS lookup for its links, so when the user clicks on the link the DNS lookup is already performed </p>
+        </div></span>
+            <span class="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 2 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption id="http/2"> 
+    HTTP/2 Pseudo Header Fields 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:3%;"> Type </th>
+        <th style="width:30%;"> Header </th>
+        <th> Description </th>
+    </tr>
+    <tr class="01.04">
+        <td> req </td>
+        <td> :authority: <small>[<i>userInfo</i>@]</small><strong>host</strong><small>[:<i>port</i>]</small> </td>
+        <td> 
+            - contains the URI authority portion
+            <span class="browserSupport" title="updated : 2020-07-21">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="01.01">
+        <td> req </td>
+        <td> :method: <strong>reqMethod</strong> </td>
+        <td> 
+            - contains the HTTP request method (ex: <mark>GET</mark>) <u>(required 1 in a request)</u>
+            <span class="browserSupport" title="updated : 2020-07-21">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="01.03">
+        <td> req </td>
+        <td> :path: <strong>path_queryStr</strong> </td>
+        <td> 
+            - contains the URI path and query string portion <u>(required 1 in a request)</u>
+            <span class="browserSupport" title="updated : 2020-07-21">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="01.02">
+        <td> req </td>
+        <td>  
+            :scheme: <span class="openable">http|https<div>                                 
+                <p> - the <mark>http</mark> and <mark>https</mark> are the most used schemes but a proxy or gateway can translate for non-HTTP schemes </p>
+            </div></span>
+        </td>
+        <td> 
+            - contains the scheme portion of the URI <u>(required 1 in a request)</u>
+            <span class="browserSupport" title="updated : 2020-07-21">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02">
+        <td> res </td>
+        <td> :status: <strong>resStatusCode</strong> </td>
+        <td> 
+            - contains the response status code (ex: <mark>200</mark>) <u>(required 1 in a response)</u>
+            <span class="browserSupport" title="updated : 2020-07-21">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <p><b><u> Experimental Headers [TEST: 2020-07-14] </u></b></p>
+        <p> Accept-CH </p>
+        <p> Accept-CH-Lifetime </p>
+        <p> Early-Data </p>
+        <p> Content-DPR </p>
+        <p> DPR </p>
+        <p> Device-Memory </p>
+        <p> Save-Data  </p>
+        <p> Viewport-Width </p>
+        <p> Width </p>
+        
+        <p><b><u> NOT TESTED Security Headers [2020-07-21] </u></b></p>
+        <p> Cross-Origin-Opener-Policy - top level document does not share browsing context (prevent XSS attacks when the document is opened in a pop-up window) </p>
+        <p> Cross-Origin-Resource-Policy - blocks cross-origin/cross-site requests </p>
+        <p> Content-Security-Policy - allows to control resources the user agent is allowed to load </p>
+        <p> Content-Security-Policy-Report-Only - does the same as 'Content-Security-Policy' but does not enforce those rules instead reports only </p>
+        <p> Expect-CT - enforces Certificate Transparency requirements </p>
+        <p> Feature-Policy - controls browser features in its own frame </p>
+        <p> Upgrade-Insecure-Requests -  client signals the server that is can handle <mark>Content-Security-Policy: upgrade-insecure-requests</mark> </p>
+        <p> Sec-Fetch-Site </p>
+        <p> Sec-Fetch-Mode </p>
+        <p> Sec-Fetch-User </p>
+        <p> Sec-Fetch-Dest </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers#:~:text=HTTP%20headers%20let%20the%20client,before%20the%20value%20is%20ignored." target="_blank">HTTP headers (developer.mozilla.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> Authentication <mark>Authorization</mark> / <mark>Proxy-Authorization</mark> / <mark>WWW-Authenticate</mark> / <mark>Proxy-Authenticate</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Authorization ----------------------------------------------------------------------
+    Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l                                      // client sends authentication to the server 
+    
+// Proxy-Authorization ----------------------------------------------------------------
+    Proxy-Authorization:  Basic YWxhZGRpbjpvcGVuc2VzYW1l                               // client sends authentication to the proxy server   
+    
+// WWW-Authenticate -------------------------------------------------------------------
+    WWW-Authenticate: Basic                                                            // server advertises its authentication type 
+    WWW-Authenticate: Basic realm="Acess to the staging site" charset="UTF-8"
+    
+// Proxy-Authenticate -----------------------------------------------------------------
+    Proxy-Authenticate: Basic                                                          // proxy-server advertises its authentication method   
+    Proxy-Authenticate: Basic realm="Access to internal site"
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Caching <mark>Age</mark> / <mark>Clear-Site-Data</mark> / <mark>Expires</mark> / <mark>Cache-Control</mark> / <mark>Pragma</mark> / <mark>Warning</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Age / Clear-Site-Data / Age --------------------------------------------------------
+// Age / Clear-Site-Data / Warning ----------------------------------------------------
+    Age: 21                                                                            // seconds the content spent in a proxy server cache     
+                                                                                       
+    Clear-Site-Data: "*"                                                               // server request the browser to clear all browsing data (cookies, storage, cache) 
+    Clear-Site-Data: "cache", "cookies"                                                  // only the cahce and the cookies should be cleared    
+    
+    Warning: 112 - "cache down" "Wed, 21 Oct 2015 07:28:00 GMT"                        // general warning 
+    
+    
+// Cache-Control / Pragma / Warning ---------------------------------------------------
+    Cache-Control: no-store                                                            // coneten shouldn't be cached 
+    Cache-Control: public, max-age=604800                                              // content can be cached by proxies and considered fresh for 24 hours    
+    
+    Cache-Control: no-cache                                                            // content can be cached by must be validated by the origin server before served    
+    
+    // -! the 'Cache-Control' header has precedence over the below header 
+    Expires: Tue, 14 Jul 2020 14:26:11 GMT                                             // before this date the content is considered 'fresh' (after 'stale')    
+    
+    Pragma: no-cache                                                                   // same as 'Cache-Control: no-cache' for HTTP/1.0 (for backward compatibility)   
+    </pre>
+</details>
+<hr>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Conditionals <mark>If-Match</mark> / <mark>If-None-Match</mark> / <mark>In-Unmodified-Since</mark> / <mark>If-Modified-Since</mark> / <mark>ETag</mark> / <mark>Last-Modified</mark> / <mark>Vary</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// If-Match ---------------------------------------------------------------------------
+    If-Match: "bfc13a64729c4290ef5b2c2730249c88ca92d82d"                               // if this ETags matches with the server's ETag the the server will respond    
+    If-Match: "67ab43", "54ed21", "7892dd"
+    If-Match: *                                                                        // any ETag 
+    
+// If-None-Match ----------------------------------------------------------------------
+    If-None-Match: "bfc13a64729c4290ef5b2c2730249c88ca92d82d"                          // if this ETag does not match with the server's ETage the server will respond   
+    If-None-Match: "67ab43", "54ed21", "7892dd"
+    If-None-Match: *                                                                   // any ETag  
+    
+// If-Modified-Since ------------------------------------------------------------------
+    If-Modified-Since: Tue, 14 Jul 2020 19:11:23 GMT                                   // if the content was modified since this date the server will respond   
+    
+// If-Unmodified-Since ----------------------------------------------------------------
+    If-Unmodified-Since: Tue, 14 Jul 2020 19:11:23 GMT                                 // if the content was not modified since this date the server will respond        
+    
+// ETag / Last-Modified ---------------------------------------------------------------
+    ETag: "bfc13a64729c4290ef5b2c2730249c88ca92d82d"                                   // server advertises its ETag    
+    Last-Modified: Tue, 14 Jul 2020 17:30:13 GMT                                       // server indicates the last time the content was modified  
+    
+// Vary -------------------------------------------------------------------------------
+    Vary: User-Agent                                                                   // the requested User-Agent header will be considered when the server generates a response 
+                                                                                       // the server (or cache) respond differently based on the requested value of the User-Agent header (content-negotiation)    
+    
+    Vary: Accept-Language                                                              // the client will get different responses based on the requested Accept-Language header    
+                                                                                       // for example client requesting 'Accept-Language:fr, en-CA' will get different response than client requesting 'Accept-Language: en-US'    
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Connection Management <mark>Connection</mark> / <mark>Keep-Alive</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    Connection: Keep-Alive                                                             // the connection should be kept open (after this response/request) 
+    Keep-Alive: timeout=15, max=1000                                                   // the connection should be kept open for 15 requests or 1000 seconds 
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Connection Negotiation <mark>Accept</mark> / <mark>Accept-Charset</mark> / <mark>Accept-Encoding</mark> / <mark>Accept-Language</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Accept -----------------------------------------------------------------------------
+    Accept: text/html                                                                  // client indicates the MIME types that it can understand  
+    Accept: image/*
+    Accept: */*
+    Accept: text/html, application/xhtml-xml, application/xml;q=0.9, */*;q=0.8         // precedence order   
+    
+// Accept-Charset / Accept-Encoding / Accept-Language ---------------------------------
+    Accept-Charset: utf-8, iso-8859-1;q=0.5, *;q=0.1                                   // client indicates the character encoding that it can uderstand   
+    Accept-Encoding: br;q=1.0, gzip;q=0.8, *;q=0.1                                     // client indicates the compression algorithms that it can understand   
+    Accept-Language: en-US,en;q=0.5                                                    // client indicates the languages that it can understand  
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Controls <mark>Expect</mark> / <mark>Link</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    Expect: 100-continue                                                               // client indicates that the server should continue responding     
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Cookies <mark>Cookie</mark> / <mark>Set-Cookie</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Set-Cookie -------------------------------------------------------------------------
+    Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT                        // server sends cookies to the client 
+    Set-Cookie: __Secure-ID=123; Secure; Domain=example.com
+    Set-Cookie: __Host-ID=123; Secure; Path=/
+    
+// Cookie -----------------------------------------------------------------------------
+    Cookie: PHPSESSID=298zf09hf012fh2; csrftoken=u32t4o3tb3gg43; _gat=1                // client sends cookies to the server 
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> CORS (Cross Origin Resource Sharing) <mark>Access-Control-Request-Headers</mark> / <mark>Access-Control-Request-Method</mark> / <mark>Origin</mark> / <mark>Access-Control-Allow-Origin</mark> / <mark>Access-Control-Allow-Credentials</mark> / <mark>Access-Control-Allow-Headers</mark> / <mark>Access-Control-Allow-Methods</mark> / <mark>Access-Control-Max-Age</mark> / <mark>Acces-Control-Expose-Headers</mark> / <mark>Timing-Allow-Origin</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Access-Control-Request-Headers / Access-Control-Request-Method / Origin ------------
+    Access-Control-Request-Headers: X-PINGOTHER, Content-Type                          // (preflight request) client requesting headers to use for the actual request   
+    Access-Control-Request-Method: POST                                                // (preflight request) client requesting the POST method for the actual request   
+    
+    Origin: https://developer.mozilla.org                                              // origin from which the cross-orign request is made 
+    
+// Access-Control-Allow-Origin / Access-Control-Allow-Credentials ---------------------
+    Access-Control-Allow-Origin: https://developer.mozilla.org                         // server indicates the origin which is allowed to make a cross-origin request    
+    Access-Control-Allow-Credentials: true                                             // server indicates that credentials (cookies, authentications, etc...) can be exposed to frontend JavaScript   
+    
+    
+    
+// Access-Control-Allow-Headers / Access-Control-Allow-Methods ------------------------
+    Access-Control-Allow-Headers: Access-Control-Allow-Headers: X-Custom-Header, Upgrade-Insecure-Requests  // (preflight response) server indicates which headers can be used for the actual request   
+    Access-Control-Allow-Methods: POST, GET, OPTIONS                                   // (preflight response) server indicates which request methods can be used for the actual request    
+    
+// Access-Control-Max-Age -------------------------------------------------------------
+    Access-Control-Max-Age: 60                                                         // server indicates that the preflight request can be cached for 60 seconds 
+    
+// Access-Control-Expose-Headers ------------------------------------------------------
+    Access-Control-Expose-Headers: Content-Length, X-Kuma-Revision                     // server indicates the headers that can be exposed to the frontend JavaScript    
+    
+// Timing-Allow-Origin ----------------------------------------------------------------
+    Timing-Allow-Origin: https://developer.mozilla.org                                 // server indicates which origins are allowed to use timing metrics (to mitigate timing attacs)    
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Do Not Track <mark>DNT</mark> / <mark>Tk</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// DNT --------------------------------------------------------------------------------
+    DNT: 1                                                                             // the client request to disallow tracking (no personal data should be sent to the server (cookies, etc...))   
+    
+// Tk ---------------------------------------------------------------------------------
+    Tk: N                                                                              // the server indicates that it does not track the client   
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Downloads <mark>Dontent-Disposition</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Content-Disposition ----------------------------------------------------------------
+    Content-Disposition: inline;                                                       // the content is intended to be displayed as a web-page (Default)
+    Content-Disposition: attachement; filename="someFile.txt"                          // the content is intended to be downloaded (file name proposed to download)    
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Message Body Information <mark>Content-Length</mark> / <mark>Content-Type</mark> / <mark>Content-Encoding</mark> / <mark>Content-Language</mark> / <mark>Content-Location</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Content-Length / Content-Type / Content-Encoding -----------------------------------
+    Content-Length: 1452467                                                            // the content size is 1452467 bytes
+    Content-Type: text/html; charset=UTF-8                                             // the content MIME type and encoding  
+    Content-Encoding: deflate, gzip                                                    // compression algorithms that the content is compressed or can be deflated     
+    
+// Content-Language / Content-Location ------------------------------------------------
+    Content-Language: en, de                                                           // content language 
+    Content-Location: /my-first-blog-post                                              // location of this (negotiated) content   
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Proxies <mark>Forwarded</mark> / <mark>X-Forwarded-For</mark> / <mark>X-Forwarded-Host</mark> / <mark>X-Forwarded-Proto</mark> / <mark>Via</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Forwarded --------------------------------------------------------------------------
+    Forwarded: for=192.0.2.60;proto=http;by=203.0.113.43                               // the reverse proxy uses this 
+                                                                                         // 'for=192.0.2.60'    // the client who initiated the request (additional IPs depict the proxy chain)  
+                                                                                         // 'proto=http'        // protocol used to make this request 
+                                                                                         // 'by=203.0.113.43'   // from where request came into the reverse proxy  
+    
+// Via --------------------------------------------------------------------------------
+    Via: 1.1 vegur                                                                     // 3 proxy servers added the 'Via' header so the message can be tracked    
+    Via: HTTP/1.1 GWA
+    Via: 1.0 fred, 1.1 p.example.net
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Redirects <mark>Locaition</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Location ---------------------------------------------------------------------------
+    Location: http://www.example.org/index.php                                         // the requested content is redirected to the passed url 
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Request Context <mark>From</mark> / <mark>Host</mark> / <mark>Referer</mark> / <mark>User-Agent</mark> / <mark>Referrer-Policy</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// From / Host / Referer / User-Agent -------------------------------------------------
+    From: webmaster@example.org                                                        // e-mail address who controls the user-agent  
+    Host: developer.cdn.mozilla.net                                                    // the host where the client issues the request to 
+    User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36       // user-agent info  
+    
+    Referer: https://developer.mozilla.org/en-US/docs/Web/JavaScript                   // the web page from which the cross-origin request is issued from 
+    
+// Referrer-Policy --------------------------------------------------------------------
+    Referrer-Policy: origin-when-cross-origin                                          // when this pages makes a cross-origin request the 'Referer' filed can contain only the origin part of the URL   
+                                                                                       // for same-origin request ther's no restriction  
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Response Context <mark>Server</mark> / <mark>Allow</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Server -----------------------------------------------------------------------------
+    Server: Apache/2.4.18 (Ubuntu)                                                     // Apache/2.4.18 server sofware used (runs on Ubuntu)  
+    
+// Allow ------------------------------------------------------------------------------
+    Allow: GET, POST, HEAD                                                             // client or server advertises the supported request methods    
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Range Requests <mark>Range</mark> / <mark>If-Range</mark> / <mark>Accept-Ranges</mark> / <mark>Content-Range</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Range / If-Range -------------------------------------------------------------------
+    Range: bytes=200-1000, 2000-6576, 19000-                                           // 3 parts are requested from the document (the last requested range end is the document last byte)    
+    If-Range: Wed, 21 Oct 2015 07:28:00 GMT                                            // if the document was last modified (this date) the server accept serving the requested range, otherwise serves the whole document    
+    
+// Accept-Ranges / Content-Range ------------------------------------------------------
+    Accept-Ranges: bytes                                                               // server accept range requests 
+    
+    Content-Range: bytes 200-1000/67589                                                // served range 200 to 1000 bytes    // total document size 67589 bytes
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Security <mark>Cross-Origin-Embeder-Policy</mark> / <mark>Strict-Transport-Security</mark> / <mark>X-Content-Type-Options</mark> / <mark>X-Frame-Options</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Cross-Origin-Embeder-Policy --------------------------------------------------------
+    Cross-Origin-Embeder-Policy: require-corp                                          // browser enforces CORS protocol when accessing the page   
+    
+// Strict-Transport-Security ----------------------------------------------------------
+    Strict-Transport-Security: max-age=31536000; includeSubdomains                     // the domain (and subdomains) can be accessed only by using HTTPS protocol   
+    
+// X-Content-Type-Options -------------------------------------------------------------
+    X-Content-Type-Options: nosniff                                                    // the browser strictly interprets the requested document type according to the 'Content-Type' header (disables MIME type auto detection of the browser)    
+    
+// X-Frame-Options --------------------------------------------------------------------
+    X-Frame-Options: DENY                                                              // the document cannot be opened by any frame element (even same-origin requests are denied )    
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Transfer Coding <mark>TE</mark> / <mark>Transfer-Encoding</mark> / <mark>Trailer</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// TE ---------------------------------------------------------------------------------
+    TE: trailers                                                                       // the client accept trailers  
+    
+// Transfer-Encoding / Trailers -------------------------------------------------------
+    Transfer-Encoding: gzip                                                            // gzip compression algorithm is used to the next network node (hop-by-hop)    
+    Trailers: Expires                                                                  // the 'Expires' header is sent as trailer at the end of the message  
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Other <mark>Alt-Svc</mark> / <mark>Retry-After</mark> / <mark>Server-Timing</mark> / <mark>Source-Map</mark> / <mark>X-DNS-Prefetch-Control</mark> / <mark>Date</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Alt-Svc ----------------------------------------------------------------------------
+    Alt-Svc: h2=":443"; ma=2592000;                                                    // the same resource is available on the same origin but on HTTP/2 over TLS   
+    Alt-Svc: h2=":443"; ma=2592000; persist=1                                          // services configuration settings persisted when new network configurations are set 
+    Alt-Svc: h2="alt.example.com:443", h2=":443"    
+    
+// Retry-After ------------------------------------------------------------------------
+    Retry-After: 120                                                                   // the client should make a follow-up request after 2 hours   
+    
+// Server-Timing ----------------------------------------------------------------------
+    Server-Timing: cpu;dur=2.4                                                         // server advertises some of its timings 
+    
+// SourceMap --------------------------------------------------------------------------
+    SourceMap: /sourceMaps/file.js.map                                                 // source-map url so the browser can reconstruct the original code   
+    
+// X-DNS-Prefetch-Control -------------------------------------------------------------
+    X-DNS-Prefetch-Control: on                                                         // the browser will perform pre DNS lookups 
+    
+// Date -------------------------------------------------------------------------------
+    Date: Date: Wed, 21 Oct 2015 07:28:00 GMT                                          // date and time the message was originated  
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 class="headerExtra"><u> HTTP/2 Pseudo-Header Fields </u>
+<h2 style="color:darkblue;"><u> <mark>:method</mark> / <mark>:scheme</mark> / <mark>:path</mark> / <mark>:authority</mark> / <mark>:status</mark> </u></h2>
+    <p> - http2 pseudo-header fields are not http headers, http2 does not use any <u>request line</u> (for request) or <u>status line</u> (for response), inseade these pseudo-headers are used to convey those informations </p> 
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// :scheme / :method / :path / :authority ---------------------------------------------
+    :scheme: https
+    :method: GET
+    :path: /en-US/
+    :authority: developer.mozilla.org
+    
+// :status ----------------------------------------------------------------------------
+    :status: 200 
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

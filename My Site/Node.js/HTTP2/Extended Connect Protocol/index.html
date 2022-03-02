@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Extended CONNECT Protocol </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Extended CONNECT Protocol (ver 3.4.1) </h1>
+    <p> Updated ( 2020-06-13 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">HTTP/2></a> Extended CONNECT Protocol   
+    </p>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the RCF 8441 defines an 'Extended CONNECT Protocol', HTTP/2 may be used to bootstrap a stream using the CONNECT method as a tunnel for other communications </p>
+    <p><u>Client</u></p>
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000');
+    
+    client.on('remoteSettings', function(settings){
+        if (setttings.enableConnectProtocol) {                                         // client checks if the server has the Extended CONNECT Protocol enabled 
+            var req = client.request({':method':'CONNECT'});                           // CONNECT request 
+            // handling CONNECT response...
+        }
+    });
+    </pre>
+    <p><u>Server</u></p>
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer({enableConnectProtocol:true});                      // enable Extended CONNECT Protocol  
+    // handling CONNECT request...
+    </pre>
+
+
+
+</body>
+</html>

@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Web Workers </title>    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">  
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Web Workers (ver 3.4.1) </h1>
+    <p> Updated: ( 2018-06-11 / 2018-06-16 / 2020-12-21 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html"> Web Browser APIs> </a> Web Workers 
+    </p>
+<table class="table">
+<caption> Dedicated Web Worker <mark>Worker</mark> </caption>    
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            new Worker(<strong>url:str</strong>, <i class="openable">option:obj<div>
+                <p> type: <mark>classic|module</mark> - worker type to create (Default: <mark>classic</mark>) </p>
+                <p> credentials: <mark>omit|same-origin|include</mark> - credentials for the worker (Default: <mark>omit</mark> (no credentials required)) </p>
+                <p> name: <strong>str</strong> - name of the Dedicated Worker </p>
+            </div></i>) 
+        </td>
+        <td> creates and returns a Dedicated Web Worker object (<strong>dedicatedWorker</strong>) that executes script at the specified URL <u>(URL must obey the same-origin policy)</u>
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dedicatedWorker</strong>.onerror = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>ErrorEvent</mark> </p>
+            </div></strong> </td>
+        <td>
+            event property fires when an error is thrown in the Worker scope (also works as <mark>error</mark> event on the <strong>dedicatedWorker</strong> object)
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dedicatedWorker</strong>.onmessage = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.data - the received message</mark> </p>
+            </div></strong> </td>
+        <td>
+            event property fires when a message is received from this Dedicated Worker (also works as <mark>message</mark> event on the <strong>dedicatedWorker</strong> object)
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dedicatedWorker</strong>.onmessageerror = <strong>fn(ev)</strong> </td>
+        <td>
+            event property fires when the received message from the worker cannot be deserialized (also works as <mark>messageerror</mark> event on the <strong>dedicatedWorker</strong> object)
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 60 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 47 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dedicatedWorker</strong>.terminate() </td>
+        <td> terminates|closes the worker
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dedicatedWorker</strong>.postMessage(<strong>msg:any</strong>) </td>
+        <td>
+            sends a message to the Dedicated Worker
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> yes </span>
+                <span><i class="fab fa-opera"></i> 47 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> in <mark>DedicatedWorkerGlobalScope</mark> </td>
+    </tr>
+    <tr>
+        <td> self </td>
+        <td>
+            returns this <mark>DedicatedWorkerGlobalScope</mark> object which is the global object of the Dedicated Worker
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> onmessage = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.data - the received message</mark> </p>
+            </div></strong> </td>
+        <td>
+            event property fires when a message is received from the thread that creted this Dedicated Worker (also works as <mark>message</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> global object)
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> onmessageerror = <strong>fn(ev)</strong> </td>
+        <td>
+            event property fires when the received message from the thread that created this Worker cannot be deserialized (also works as <mark>messageerror</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> object)
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 60 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 47 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> onrejectionhandled = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>PromiseRejectionEvent</mark> </p>
+                <p> ev.promise - the promise in question </p>
+            </div></strong> 
+        </td>
+        <td>
+            - event property fires when the <mark>unhandledrejection</mark> event attaches the missing rejection handler to the rejected promise (<mark>catch()</mark> method) (also works as <mark>rejectionhandled</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> object) <br>
+            - <span style="color:orangered;">not working, never fires [TESTED: 2020-12-22] </span> 
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 49 </span>
+                <span><i class="fab fa-firefox"></i> 69 </span>
+                <span><i class="fab fa-opera"></i> 36 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> onunhandledrejection = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>PromiseRejectionEvent</mark> </p>
+                <p> ev.promise - the promise that was rejected and has no rejection handler (<mark>catch()</mark>) </p>
+            </div></strong> 
+        </td>
+        <td>
+            event property fires when a promise (any) is rejected but has no rejection handler (<mark>catch()</mark>) attached to it (also works as <mark>unhandledrejection</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> object)
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 49 </span>
+                <span><i class="fab fa-firefox"></i> 69 </span>
+                <span><i class="fab fa-opera"></i> 36 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> postMessage(<strong>msg:any</strong>) </td>
+        <td>
+            sends a message to main thread that created this Dedicated Worker
+            <span class="browserSupport" title="updated : 2020-12-22">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 3.5 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 4 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Shared Web Worker <mark>SharedWorker</mark> </caption>    
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            new SharedWorker(<strong>url:str</strong>, <i class="openable">option:obj|name:str<div>
+                <p><b> Option Object </b></p>
+                <p> type: <mark>classic|module</mark> - worker type to create (Default: <mark>classic</mark>) </p>
+                <p> credentials: <mark>omit|same-origin|include</mark> - credentials for the worker (Default: <mark>omit</mark> (no credentials required)) </p>
+                <p> name: <strong>str</strong> - name of the Shared Worker </p>
+                <hr>
+                <p><b> Name String </b></p>
+                <p> - name of the Shared Worker </p>
+            </div></i>)
+        </td>
+        <td> 
+            creates and returns a new Shared Web Worker object (<strong>sharedWorker</strong>) that executes the script at the specified url <u>(URL must obey the same-origin policy)</u>
+            <span class="browserSupport" title="updated : 2020-12-28">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 5 - 6.1 / NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>sharedWorker</strong>.port </td>
+        <td> 
+            returns a message port (<strong>msgPort</strong>) that is the <mark>port1</mark> of the <mark>MessageChannel</mark> connecting this thread and the Shared Worker together
+            <span class="browserSupport" title="updated : 2020-12-28">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 5 - 6.1 / NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>msgPort</strong>.onmessage = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.data - the received message</mark> </p>
+            </div></strong>
+        </td>
+        <td> 
+            - event property fires when a message is received through the messge port (from the Shared Worker) <u>(internally calls <mark><strong>msgPort</strong>.start()</mark>)</u> <br>
+            - also works as <mark>message</mark> event on the <strong>msgPort</strong> <u>but in this case the <mark><strong>msgPort</strong>.start()</mark> is not called internally!</u>
+            <span class="browserSupport" title="updated : 2020-12-28">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 5 - 6.1 / NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>msgPort</strong>.postMessage(<strong>msg:any</strong>) </td>
+        <td> 
+            sends a message through the message port (to the Shared Worker)
+            <span class="browserSupport" title="updated : 2020-12-28">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 5 - 6.1 / NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>msgPort</strong>.start() </td>
+        <td> 
+            starts (open) the port (internally called when <mark><strong>msgPort</strong>.onmessage</mark> used)
+            <span class="browserSupport" title="updated : 2020-12-28">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 5 - 6.1 / NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> in <mark>SharedWorkerGlobalScope</mark> </td>
+    </tr>
+    <tr>
+        <td>  
+            onconnect = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.ports[0] - returns a message port (<strong>msgPort</strong>) that is the <mark>port2</mark> of the <mark>MessageChannel</mark> connecting this Shared Worker and the other thread together (we use <mark><strong>msgPort</strong>.onmessage = <strong>fn(ev)</strong></mark> and <mark><strong>msgPort</strong>.postMessage()</mark> to communicate) </p>
+            </div></strong>
+        </td>
+        <td> 
+            event property fires when a thread (browsing context) is connecting to this Shared Worker
+            <span class="browserSupport" title="updated : 2020-12-28">
+                <span><i class="fab fa-chrome"></i> 4 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 10.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 5 - 6.1 / NO </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.w3schools.com/html/html5_webworkers.asp" target="_blank"> Web Workers (w3schools.com) </a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank"> Web Workers API (developer.mozilla.org) </a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm" target="_blank"> Structured Clone Algorithm (developer.mozilla.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - a Web Worker is a separate thread (separate global scope) that can be used to perform CPU intensive tasks, this way the main <mark>window</mark> global scope is not blocked </p>
+    <p> - the basic concept is to send some task to the Worker which computes it then once done it sends back the result to the main <mark>window</mark> global scope (this way the main <mark>window</mark> thread is never blocked) </p>
+    <p> - the communication between threads is made by <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm" target="_blank"> Structured Clone Algorithm</a> that <u>copies the data</u> <u style="color:yellow;">(it supports almost all JavaScript data types excpet <mark>Function</mark> and <mark>Error</mark> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm" target="_blank">(see link)</a>)</u> </p>
+    <p> - creating a Workers from a Worker global scope is allowed </p>
+    <p> - almost all of the <mark>window</mark> methods and properties are available in the Web Worker (like <mark>setTimeout()</mark>) however we have no access to the document DOM </p> 
+    <p> - there are 2 Web Worker types, <mark>DedicatedWorkerGlobalScope</mark> and <mark>SharedWorkerGlobalScope</mark> </p>
+    <img src="Web Workers.jpg" width='900'>
+<hr>
+<!---------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Dedicated Web Workers </u></h2>
+    <p> - Dedicated Web Workers only communicate with the thread (browsing context) that created it </p>
+    <pre class="syntax">
+SYNTAX:     new Worker(<strong>url:str</strong>, <i class="openable">option:obj<div>
+                <p> type: <mark>classic|module</mark> - worker type to create (Default: <mark>classic</mark>) </p>
+                <p> credentials: <mark>omit|same-origin|include</mark> - credentials for the worker (Default: <mark>omit</mark> (no credentials required)) </p>
+                <p> name: <strong>str</strong> - name of the Dedicated Worker </p>
+            </div></i>)                                           // creates and returns a Dedicated Web Worker object (<strong>dedicatedWorker</strong>) that executes script at the specified URL <u>(URL must obey the same-origin policy)</u>    
+            
+            
+            <strong>dedicatedWorker</strong>.terminate()                                                // terminates|closes the worker  
+            <strong>dedicatedWorker</strong>.postMessage(<strong>msg:any</strong>)                                       // sends a message to the Dedicated Worker 
+            
+            
+            <strong>dedicatedWorker</strong>.onmessage = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.data - the received message</mark> </p>
+            </div></strong>                                        // event property fires when a message is received from this Dedicated Worker (also works as <mark>message</mark> event on the <strong>dedicatedWorker</strong> object)    
+            <strong>dedicatedWorker</strong>.onerror = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>ErrorEvent</mark> </p>
+            </div></strong>                                          // event property fires when an error is thrown in the Worker scope (also works as <mark>error</mark> event on the <strong>dedicatedWorker</strong> object)    
+            <strong>dedicatedWorker</strong>.onmessageerror = <strong>fn(ev)</strong>                                    // event property fires when the received message from the worker cannot be deserialized (also works as <mark>messageerror</mark> event on the <strong>dedicatedWorker</strong> object)    
+        
+        
+  <span style="color:darkgray;">// in <mark>DedicatedWorkerGlobalScope</mark> ----------------------------------------------------</span>
+            self                                                                       // returns this <mark>DedicatedWorkerGlobalScope</mark> object which is the global object of the Dedicated Worker    
+            
+            
+            postMessage(<strong>msg:any</strong>)                                                       // sends a message to main thread that created this Dedicated Worker    
+            
+            
+            onmessage = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.data - the received message</mark> </p>
+            </div></strong>                                                        // event property fires when a message is received from the thread that creted this Dedicated Worker (also works as <mark>message</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> global object)    
+            onmessageerror = <strong>fn(ev)</strong>                                                    // event property fires when the received message from the thread that created this Worker cannot be deserialized (also works as <mark>messageerror</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> object)    
+            
+            
+            onunhandledrejection = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>PromiseRejectionEvent</mark> </p>
+                <p> ev.promise - the promise that was rejected and has no rejection handler (<mark>catch()</mark>) </p>
+            </div></strong>                                             // event property fires when a promise (any) is rejected but has no rejection handler (<mark>catch()</mark>) attached to it (also works as <mark>unhandledrejection</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> object)    
+            onrejectionhandled = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>PromiseRejectionEvent</mark> </p>
+                <p> ev.promise - the promise in question </p>
+            </div></strong>                                               // event property fires when the <mark>unhandledrejection</mark> event attaches the missing rejection handler to the rejected promise (<mark>catch()</mark> method) (also works as <mark>rejectionhandled</mark> event on the <mark>DedicatedWorkerGlobalScope</mark> object)    
+                                                                                          <span style="color:orange;">not working, never fires [TESTED: 2020-12-22] </span> 
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+&lt;script&gt;
+    var myWorker = new Worker('worker.js');                                            // Dedicated Worker created 
+    
+    myWorker.onmessage = function(ev){                                                 // event fires when a message is received from the worker    
+        ev.data;                                                                       // -> {p1:'worker', p2:[31, true]}   // the received message    
+    }
+    
+    myWorker.postMessage({p1:'global', p2:[21, false]});                               // sends the object to the worker  
+    
+// onerror ----------------------------------------------------------------------------
+    myWorker.onerror = function(ev){                                                   // event property fires when the worker throws an error  
+        ev;                                                                            // -> ErrorEvent
+    }
+    
+// terminate() ------------------------------------------------------------------------
+    myWorker.terminate();                                                              // terminates (closes) the worker    
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> file </p>
+    <pre>
+    self;                                                                              // -> DedicatedWorkerGlobalScope     // returns the global object of this Dedicated Worker  
+    
+    onmessage = function(ev){                                                          // event fires when a message is received from the thread that created this worker 
+        ev.data;                                                                       // -> {p1:'global', p2:[21, false]}  // the received message   
+    }
+    
+    postMessage({p1:'worker', p2:[31, true]});                                         // sends the object to the thread that created this worker    
+    
+// onunhandledrejection / onrejectionhandled ------------------------------------------
+    onunhandledrejection = function(ev){                                               // event triggered because a promise is rejected but has no rejection handler (catch()) attached to it   
+        ev.promise                                                                     // the promise in question 
+            .catch(err => console.log(err))                                              // attaching a rejection handler to the promise   // -! this should tirgger the 'rejectionhandled' event but it doesn't    
+    }
+    
+    onrejectionhandled = function(ev){                                                 // !! should fire after the 'onunhandledrejection' attaches the 'catch()' to the promise in question but it does not   
+        console.log( 'rejection handled!' );
+    }
+    
+    addEventListener('rejectionhandled', function(ev){                                 // !! should fire after the 'onunhandledrejection' attaches the 'catch()' to the promise in question but it does not   
+        console.log( 'rejection handled!' );
+    })
+    
+    Promise.reject("I'm rejected!");                                                   // rejected promise without rejection handler (catch())
+    
+// Worker from Worker -----------------------------------------------------------------
+    var childWorker = new Worker('child_worker.js');                                   // creating Workers from a Worker is possible    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:yellow;"> - All below tests were performed while this page was hosted from a webserver (<mark>$ python -m SimpleHTTPServer [port]</mark>) </h3>
+<h4 style="color:darkblue;"><u> my first web worker </u></h4>
+    <button id="getWorker_message" onclick="getMyMessage()"> fire worker </button>
+    <p style="color:yellow;"> ready for Worker Message </p>
+<script>
+    var myWorker;
+    
+    function getMyMessage(){
+        if(typeof Worker !== "undefined") {                 // check if browser supports Web Workers
+            if(typeof myWorker == "undefined") {            // check is "myWorker" worker already exists
+                myWorker = new Worker("message.js");        // create new worker object 
+                }
+                myWorker.onmessage = function(event) {      // fires a function uppon message receiving
+                    document.querySelector("#getWorker_message + p").innerHTML = event.data;        // print "event.data" contains the message
+                    myWorker.terminate();                   // terminate worker ("myWorker" doesn't listen to the "message" event any more)
+                    myWorker = "undefined";                 // set the worker "undefined" for later use
+                }
+        }
+        else {
+            document.querySelector("#getWorker_message + p").innerHTML = "Web Worker is not supported!".fontcolor("red");
+        }
+    };
+    
+    /* "message.js" - external javascript file content
+    
+        postMessage( "message sent from My first Web Worker".fontcolor("green") );          // the "postMessage()" method posts the message through the window object
+    
+    */
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+    var myWorker;
+    
+    function getMyMessage(){
+        if(typeof Worker !== "undefined") {                 // check if browser supports Web Workers
+            if(typeof myWorker == "undefined") {            // check is "myWorker" worker already exists
+                myWorker = new Worker("message.js");        // create new worker object 
+                }
+                myWorker.onmessage = function(event) {      // fires a function uppon message receiving
+                    document.querySelector("#getWorker_message + p").innerHTML = event.data;        // print "event.data" contains the message
+                    myWorker.terminate();                   // terminate worker ("myWorker" doesn't listen to the "message" event any more)
+                    myWorker = "undefined";                 // set the worker "undefined" for later use
+                }
+        }
+        else {
+            document.querySelector("#getWorker_message + p").innerHTML = "Web Worker is not supported!".fontcolor("red");
+        }
+    };
+    
+// ---------------------------
+    /* "message.js" - external javascript file content
+    
+        postMessage( "message sent from My first Web Worker".fontcolor("green") );          // the "postMessage()" method posts the message through the window object
+    
+    */
+&lt;/script&gt;
+        </pre>
+        </details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> color Iterate by Web Worker </u></h4>
+    <div id="colorBox" style="float:left; width:50px; height:25px; border:solid black 2px; background-color:blue;"></div>
+    <div style="float:left;">
+        <button onmouseup="iterate_start()"> Start Color Iteration </button><br>
+        <button onmouseup="iterate_stop()"> Stop Worker </button>
+    </div>
+<script>
+    var iterateWorker;          // create variable on the global scope for the o
+// start worker
+    function iterate_start(){
+        if(typeof Worker !== "undefined"){
+            if(typeof iterateWorker == "undefined") {
+                iterateWorker = new Worker("iterate_worker.js");
+            }
+            iterateWorker.onmessage = function(event) {
+                document.getElementById("colorBox").style.backgroundColor = event.data;
+                
+                console.log(event);
+            }
+        }
+        else {
+            alert( "Your Browser Doesn't support Web Workers" )
+        }
+    };
+// stop worker
+    function iterate_stop(){
+        iterateWorker.terminate();
+        iterateWorker = undefined;
+    };
+</script>
+        <details style="clear:both;">
+        <summary> CODE : </summary>
+        <pre>
+    &lt;div id="colorBox" style="float:left; width:50px; height:25px; border:solid black 2px; background-color:blue;"&gt;&lt;/div&gt;
+    &lt;div style="float:left;"&gt;
+        &lt;button onmouseup="iterate_start()"&gt; Start Color Iteration &lt;/button&gt;&lt;br&gt;
+        &lt;button onmouseup="iterate_stop()"&gt; Stop Worker &lt;/button&gt;
+    &lt;/div&gt;
+&lt;script&gt;
+    var iterateWorker;          // create variable on the global scope for the o
+// start worker
+    function iterate_start(){
+        if(typeof Worker !== "undefined"){
+            if(typeof iterateWorker == "undefined") {
+                iterateWorker = new Worker("iterate_worker.js");
+            }
+            iterateWorker.onmessage = function(event) {
+                document.getElementById("colorBox").style.backgroundColor = event.data;
+            }
+        }
+        else {
+            alert( "Your Browser Doesn't support Web Workers" )
+        }
+    };
+// stop worker
+    function iterate_stop(){
+        iterateWorker.terminate();
+        iterateWorker = undefined;
+    };
+    
+/* "iterate_worker.js" - external javascript file content
+    
+var color = "blue";
+
+function changeColor() {    
+    color == "red" ? color = "blue" : color = "red";
+    postMessage(color);
+}
+setInterval("changeColor()", 1000);
+    
+*/
+&lt;/script&gt;
+        </pre>
+        </details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> sending complex data with Web Workers </u></h4>
+    <button onmouseup="getObj()"> Get complex data </button>
+    <p id="getData"></p>
+<script>
+    var dataWorker;
+    
+    function getObj() {
+        if(typeof Worker !== "undefined"){
+            if(typeof dataWorker == "undefined") {
+                dataWorker = new Worker("Complex Data Worker.js");
+            }  
+            dataWorker.onmessage = function(event) {
+                var getWorkerMessageObj = event.data;                   // receives complex data
+            // print received items
+                document.getElementById("getData").innerHTML = 
+                    "string get by Worker = " + getWorkerMessageObj.text + "<br>" +
+                    "number get by Worker = " + getWorkerMessageObj.number + "<br>" +
+                    "boolean get by Worker = " + getWorkerMessageObj.boolean + "<br>" +
+                    "nested object get by Worker = " + getWorkerMessageObj.nestedObj.nestedProp + "<br>" +
+                    "nested Array get by Worker = " + getWorkerMessageObj.nestedArray[0] + " / " + getWorkerMessageObj.nestedArray[1];
+            }
+        }
+        else {
+            alert("This Browser doesn't support Web Workers");
+        }
+    };
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button onmouseup="getObj()"&gt; Get complex data &lt;/button&gt;
+    &lt;p id="getData"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var dataWorker;
+    
+    function getObj() {
+        if(typeof Worker !== "undefined"){
+            if(typeof dataWorker == "undefined") {
+                dataWorker = new Worker("Complex Data Worker.js");
+            }  
+            dataWorker.onmessage = function(event) {
+                var getWorkerMessageObj = event.data;                   // receives complex data
+            // print received items
+                document.getElementById("getData").innerHTML = 
+                    "string get by Worker = " + getWorkerMessageObj.text + "&lt;br&gt;" +
+                    "number get by Worker = " + getWorkerMessageObj.number + "&lt;br&gt;" +
+                    "boolean get by Worker = " + getWorkerMessageObj.boolean + "&lt;br&gt;" +
+                    "nested object get by Worker = " + getWorkerMessageObj.nestedObj.nestedProp + "&lt;br&gt;" +
+                    "nested Array get by Worker = " + getWorkerMessageObj.nestedArray[0] + " / " + getWorkerMessageObj.nestedArray[1];
+            }
+        }
+        else {
+            alert("This Browser doesn't support Web Workers");
+        }
+    };
+    
+// external Web Worker file "Complex Data Worker.js" --------------------------------------------------------------------
+    var myObj = {text: "This text is sent through by the Web Worker",
+                  number: 4512,
+                  boolean: true,
+                  nestedObj: {nestedProp:"nested text"},
+                  nestedArray: ["un", "deux"]
+                  //additionFunc : function(a, b){return a + b;}            // cannot be sent "throws an error"
+                };
+
+    var testFunction = function(a, b) {return a + b;}                       // functions cannot be sent by Web Workers
+
+    postMessage(myObj);
+&lt;/script&gt;
+        </pre>
+        </details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> post multiple messages to Web Worked and process it back </u></h4>
+    <input type="number" id="add_A">
+    <input type="number" id="add_B">
+    <button onmouseup="addition()"> Result </button>
+    <span id="result"> = </span>
+<script>
+    var additionWorker;                                         // worker object must be created in the global scope
+    function addition(){
+// get fields values        
+        var transferObj = {};                                   // create an object to collect the data
+        transferObj.field_A = document.getElementById("add_A").value;
+        transferObj.field_B = document.getElementById("add_B").value;
+// send data to the Web Worker
+        additionWorker = new Worker("Add_Worker.js");           // create a new Worker context in the global scope     
+        additionWorker.postMessage(transferObj);                // send data
+// receiving precessed data
+        additionWorker.onmessage = function(event) {            // receive and print data 
+           document.getElementById("result").innerHTML = " = " + event.data;
+        }
+    };
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;input type="number" id="add_A"&gt;
+    &lt;input type="number" id="add_B"&gt;
+    &lt;button onmouseup="addition()"&gt; Result &lt;/button&gt;
+    &lt;span id="result"&gt; = &lt;/span&gt;
+&lt;script&gt;
+    var additionWorker;                                         // worker object must be created in the global scope
+    function addition(){
+// get fields values        
+        var transferObj = {};                                   // create an object to collect the data
+        transferObj.field_A = document.getElementById("add_A").value;
+        transferObj.field_B = document.getElementById("add_B").value;
+// send data to the Web Worker
+        additionWorker = new Worker("Add_Worker.js");           // create a new Worker context in the global scope     
+        additionWorker.postMessage(transferObj);                // send data
+// receiving precessed data
+        additionWorker.onmessage = function(event) {            // receive and print data 
+           document.getElementById("result").innerHTML = " = " + event.data;
+        }
+    };
+&lt;/script&gt;
+
+// external Web Worker file "Complex Data Worker.js" --------------------------------------------------------------------
+// receiving the message
+    onmessage = function(event) {
+        var transferObj = event.data;               // "event.data"'s data cannot be transfered outside the onmessage function for some reasons!
+// process the received data    
+        var result;                                 // since the function itself cannot be sent by a Web Worker we store the data in a variable
+        process();
+        function process() {
+            result = Number(transferObj.field_A) + Number(transferObj.field_B);     // this function is useless here but I wrote it for demo
+        };
+                          
+// resending the message
+    postMessage( result );            
+    };
+        </pre>
+        </details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> creating a Dedicated Workers from a Dedicated Worker TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var worker = new Worker('worker.js', {name:'testWorker'});                         // Dedicated Worker created 
+    
+    worker.postMessage('message from the global window');                              // sending a message to the created Worker  
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> file </p>
+    <pre>
+    var childWorker = new Worker('child_worker.js');                                   // Dedicated Worker created from a Dedicated Worker
+    
+    onmessage = function(ev){
+        childWorker.postMessage(ev.data);                                              // the received message is forwarded to the child Worker   
+    }
+    </pre>
+    <p> - <mark>child_worker.js</mark> file </p>
+    <pre>
+    onmessage = function(ev){
+        console.log( ev.data );                                                        // -> 'message from the global window'       // message received  
+    }
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>error</mark> event TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var myWorker = new Worker('worker.js');
+        
+    myWorker.onerror = function(ev){
+        console.log(ev);                                                               // -> ErrorEvent
+        console.log(ev.message);                                                       // -> 'Uncaught ReferenceError: d is not defined'
+    }
+    
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> file </p>
+    <pre>
+    onerror = function(err){
+        console.log( err );                                                            // -> 'Uncaught ReferenceError: d is not defined'
+    }
+    
+    d
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>unhandledrejection</mark> and <mark>rejectionhandled</mark> events TEST </u></h4>
+    <p style="background-color:yellow;"> - the <mark>rejectionHandled</mark> event doesn't seems to be working (I've tested multiple ways!) </p>
+    <pre>
+&lt;script&gt;
+    var myWorker = new Worker('worker.js');
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> file </p>
+    <pre>
+    onunhandledrejection = function(ev){                                               // event triggered because a promise is rejected but has no rejection handler (catch()) attached to it 
+        console.log( 'promise has no rejection handler!' );
+        ev.promise                                                                     // the promise in question 
+            .catch(err => console.log(err))                                              // attaching a rejection handler to the promise   // -! this should tirgger the 'rejectionhandled' event but it doesn't    
+    }
+    
+    onrejectionhandled = function(ev){                                                 // -! should fire after the 'onunhandledrejection' attaches the 'catch()' to the promise in question 
+        console.log( 'rejection handled!' );
+    }
+    
+    addEventListener('rejectionhandled', function(ev){                                 // -! should fire after the 'onunhandledrejection' attaches the 'catch()' to the promise in question 
+        console.log( 'rejection handled!' );
+    })
+    
+    Promise.reject("I'm rejected!");                                                   // rejected promise without rejection handler (catch())
+    </pre>
+</details>
+<hr>
+<!---------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Shared Web Workers </u></h2>
+    <p> - one Shared Web Worker can be accessed by multiple threads (browsing contexts) <u>within the same-origin policy</u> </p>
+    <p> - unlike Dedicated Workers, Shared Workers are using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Channel_Messaging_API" target="_blank">Channel Messaging API</a> to cummunicate between threads (browsing contexts) </p>
+    <pre class="syntax">
+SYNTAX:     new SharedWorker(<strong>url:str</strong>, <i class="openable">option:obj|name:str<div>
+                <p><b> Option Object </b></p>
+                <p> type: <mark>classic|module</mark> - worker type to create (Default: <mark>classic</mark>) </p>
+                <p> credentials: <mark>omit|same-origin|include</mark> - credentials for the worker (Default: <mark>omit</mark> (no credentials required)) </p>
+                <p> name: <strong>str</strong> - name of the Shared Worker </p>
+                <hr>
+                <p><b> Name String </b></p>
+                <p> - name of the Shared Worker </p>
+            </div></i>)                            // creates and returns a new Shared Web Worker object (<strong>sharedWorker</strong>) that executes the script at the specified url <u>(URL must obey the same-origin policy)</u>    
+            
+            
+            <strong>sharedWorker</strong>.port                                                          // returns a message port (<strong>msgPort</strong>) that is the <mark>port1</mark> of the <mark>MessageChannel</mark> connecting this thread and the Shared Worker together    
+            
+            
+            <strong>msgPort</strong>.start()                                                            // starts (open) the port (internally called when <mark><strong>msgPort</strong>.onmessage</mark> used)  
+            <strong>msgPort</strong>.onmessage = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.data - the received message</mark> </p>
+            </div></strong>                                                // event property fires when a message is received through the messge port (from the Shared Worker) <u>(internally calls <mark><strong>msgPort</strong>.start()</mark>)</u>    
+                                                                                          also works as <mark>message</mark> event on the <strong>msgPort</strong> <u>but in this case the <mark><strong>msgPort</strong>.start()</mark> is not called internally!</u>    
+            <strong>msgPort</strong>.postMessage(<strong>msg:any</strong>)                                               // sends a message through the message port (to the Shared Worker)    
+            
+            
+  <span style="color:darkgray;">// in <mark>SharedWorkerGlobalScope</mark> -------------------------------------------------------</span>
+            onconnect = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>MessageEvent</mark> </p>
+                <p> ev.ports[0] - returns a message port (<strong>msgPort</strong>) that is the <mark>port2</mark> of the <mark>MessageChannel</mark> connecting this Shared Worker and the other thread together (we use <mark><strong>msgPort</strong>.onmessage = <strong>fn(ev)</strong></mark> and <mark><strong>msgPort</strong>.postMessage()</mark> to communicate) </p>
+            </div></strong>                                                        // event property fires when a thread (browsing context) is connecting to this Shared Worker   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - <mark>index.html</mark> (browsing context) </p>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js');                                        // creates the Shared Worker 
+    
+    worker.port.onmessage = function(ev){                                              // the 'onmessage' event property automatically starts the port (internally calls 'start()')    
+        console.log( ev.data );                                                        // -> 5      // shared worker response    
+    }
+    
+    worker.port.postMessage(5);                                                        // posting data to the Shared Worker    // -! port1 of MessageChannel connecting this thread with the Shared Worker    
+    
+// start() ----------------------------------------------------------------------------
+    worker.port.addEventListener('message', function(ev){                              // this does not start the message port (like the 'onmessage' event property so we have to use the 'start()' method in this case)    
+        console.log( ev.data );
+    });
+    
+    worker.port.start();                                                               // starts the port 
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>index_2.html</mark> (browsing context) </p>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js');                                        // connects to the Shared Worker thread   
+    
+    worker.port.onmessage = function(ev){
+        console.log( ev.data );                                                        // -> 12     // share worker response      // -! the Shared Worker is reachable to both threads (browsing context) within the same origin!    
+    }
+    
+    worker.port.postMessage(7);                                                        // posting data to the Shared Worker    
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> (Shared Worker) is reachable for both <mark>index.html</mark> and <mark>index_2.html</mark> so they can exchange data between them using this Shared Worker thread </p>
+    <pre>
+    var sum = 0;
+    
+    onconnect = function(ev){                                                          // triggers when this Shared Worker connects to the requesting thread (browsing context)    
+        var port = ev.ports[0];                                                        // -! port2 of MessageChannel connecting this Shared Worker thread with the requesting thread    
+        
+        port.onmessage = function(ev){
+            sum += ev.data
+            port.postMessage(sum);                                                     // the computed message is resent  
+        }    
+        
+        console.warn('no warn');                                                       // -! not printed on the console window (the Shared Worker communicates with the MessageChannel API so the console API is not sent through)    
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:yellow;"> - All below tests were performed while this page was hosted from a webserver (<mark>$ python -m SimpleHTTPServer [port]</mark>) </h3>
+<h4 style="color:darkblue;"><u> Shared Worker TEST-1 </u></h4>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js', 'myFirstSharedWorker');
+    
+    worker.port.onmessage = function(ev){                                              // tirggered when a new message is received from the Shared Worker   
+        console.log( ev.data );                                                        // -> 'message-1'            // the sent message is received  
+    }
+    
+    worker.port.postMessage('message-1');                                              // sending a message to the Shared Worker  
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> file </p>
+    <pre>
+    onconnect = function(ev){
+        var port = ev.ports[0];                                                        // message port 
+    
+        port.onmessage = function(ev){
+            port.postMessage(ev.data);                                                 // resending the received data 
+        }
+    
+        console.log('not outputted');                                                  // not printed on console (because the Shared Worker is communicating through a Message Channel)    
+    }                                                                                  // -! this also means that errors are not prompted on console!
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> same Shared Worker accessed by multiple threads (browsing contexts) </u></h4>
+    <p> - 3 documents opened in 3 different browser tabs accessing the same Shared Worker in this test </p>
+    <p> - <mark>index.html</mark> (file) </p>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js');
+    
+    worker.port.onmessage = function(ev){
+        console.log( ev.data );                                                        // -> 'msg index.html | '
+    }
+    
+    worker.port.postMessage('msg index.html');    
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>index_2.html</mark> (file) </p>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js');
+    
+    worker.port.onmessage = function(ev){
+        console.log( ev.data );                                                        // -> 'msg index.html | msg index_2.html | '
+    }
+    
+    worker.port.postMessage('msg index_2.html');    
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>index_3.html</mark> (file) </p>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js');
+    
+    worker.port.onmessage = function(ev){
+        console.log( ev.data );                                                        // -> 'msg index.html | msg index_2.html | msg index_3.html | '
+    }
+    
+    worker.port.postMessage('msg index_3.html');    
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>worker.js</mark> (file) </p>
+    <pre>
+    var messageCollection = ''                                                         // collecting all incomming messages 
+    
+    onconnect = function(ev){
+        var port = ev.ports[0];
+        
+        port.onmessage = function(ev){
+            messageCollection += ev.data + ' | ';                                      // adds the incomming message to the message collection
+            port.postMessage(messageCollection);                                       // message collection is resent to the browsing context   
+        }    
+    }
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>start()</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var worker = new SharedWorker('worker.js');
+    
+    worker.port.start();                                                               // manually starts the message port 
+    
+    worker.port.postMessage('msg index.html');    
+        
+    worker.port.addEventListener('message', function(ev){                              // this does not starts the message port (unlike the onmessage event property)    
+        console.log( ev.data );
+    });
+&lt;/script&gt;
+    </pre>
+</details>    
+    
+    <br><br>
+</body>
+</html>

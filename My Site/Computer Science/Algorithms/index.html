@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Algorithms </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Algorithms </h1>
+    <p> Updated ( 2021-04-05 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html" title="CSS">Computer Science></a> Algorithms
+    </p>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <h4><u> Tail Recursion [learned about: 2021-04-19] </u></h4>
+        <p> - recursive function that never fills the call stack </p>
+        <p> - each recursive call has its own internal state, this way no call stack is needed </p>
+        <hr>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - an algorithm is a set of instructions on a data structure for accomplishing a task </p>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Linear Search (time complexity = <mark>O(n)</mark>) </u></h2>
+    <p> - the linear search can be performed on an unsorted array </p>
+    <p> - we check each elements down the list basically </p>
+<details class="example">
+<summary> Example:  </summary>
+    <pre>
+    function linearSerach(arr, key){
+        for(let i = 0; i &lt; arr.length; i++){
+            if (arr[i][0] == key) return arr[i][1];
+        }
+        return -1;
+    }
+    
+    var arr = [['apple', 2], ['plum', 1], ['pear',3]]
+    
+    console.log( linearSerach(arr, 'apple') );                                         // -> 2
+    console.log( linearSerach(arr, 'plum') );                                          // -> 1
+    console.log( linearSerach(arr, 'orange') );                                        // -> -1    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Binary Search (time complexity = <mark>O(log n)</mark> / <mark>O(1)</mark>) </u></h2>
+    <p> - the binary search is performed on a sorted array </p>
+    <p> - we divide the array by 2 and check if the serached value is smaller or larger than the middle value, this procedure is repeted recursively untill the serached value is found </p>
+<details class="example">
+<summary> Example:  </summary>
+<h4 style="color:darkblue;"><u> - Binary Search TEST </u></h4>
+    <pre>
+    var arr = [-45, -21, -14, -5, 0, 1, 9, 41, 65, 122, 540, 666, 1024, 5487, 51487, 32548];        // sorted Array  
+    
+    function binSearch(arr, target){
+        var left = 0;
+        var right = arr.length -1;
+        
+        while (left &lt;= right) {
+            let mid = Math.floor((left + right) / 2);
+            if (arr[mid] == target) {
+                return mid;                                                            // match returned 
+            } else if (target &lt; arr[mid]) {
+                right = mid - 1;                                                       // if the target is in the left part of the searching field we move the right pointer    
+            } else {
+                left = mid + 1                                                         // if the target is in the right part of the searching field we move the left pointer    
+            }
+        }
+        return -1;                                                                     // if no match found -1 returned 
+    }
+    
+    console.log( binSearch(arr, -14) );                                                // -> 2
+    console.log( binSearch(arr, 122) );                                                // -> 9
+    console.log( binSearch(arr, 555) );                                                // -> -1
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Selection Sort (time complexity = <mark>O(n^2)</mark>) </u></h2>
+    <p> - selection sort is used to sort array elements in ascending order </p>
+    <p> - we check each element and compare it against all the remaining elements in the array, (for each check the leftmost element will be swapped to be the smallest), this process is repeaded untill all elements are checked </p>
+<details class="example">
+<summary> DEMO  </summary>
+    <pre>
+    var myArray = [4, 2, 6, 51, -4, -2, 0, 1, 21, 74, 101, -55, 21];
+    
+    function selectionsort(arr){
+        for(let i = 0; i &lt; arr.length; i++){
+            let minIdx = i; 
+            
+            for(let k = i + 1; k &lt; arr.length; k++){                                   // we only check the number of elements what left (counted from the current min index)
+                if (arr[i] > arr[k]){
+                    let temp = arr[i];                                                 // if the checked element is smaller we swap (becomes the current min index)
+                    arr[i] = arr[k];
+                    arr[k] = temp;
+                }
+            }
+        }
+        return arr
+    }
+    
+    selectionsort(myArray);                                                            // -> [-55, -4, -2,  0,  1,  2, 4,  6, 21, 21, 51, 74, 101]
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Merge Sort (time complexity = <mark>O(n log n)</mark>) </u></h2>
+    <p> - merge sort is used to sort array elements in ascending order </p>
+    <p> - we implement a 'merge' function a temporary array is used, in this arary  we copy all itmes from the original array </p>
+    <p> - then split the temporary array in 2 parts (left, right), then check each parts from left-to-right </p>
+    <p> - where the value is smaller that value will be copied back to the the original array </p>
+    <p> - a parent function recursively splits by to the original array, the from the bottom when only 2 elements are we start calling the 'merge' function to merge sort </p>
+<details class="example">
+<summary> DEMO  </summary>
+    <pre>
+    function merge(arr, leftIdx = 0, rightIdx = arr.length -1){ 
+        let temp = new Array(rightIdx - leftIdx + 1);                                  // at each merge a temporary array is allocated = little bit memory hungry :(  
+        let tempLeftIdx = leftIdx;
+        
+        for(let i = 0; i &lt; temp.length; i++){
+            temp[i] = arr[tempLeftIdx];
+            arr[tempLeftIdx] = undefined;
+            tempLeftIdx++
+        }
+            
+        let mid = Math.floor(temp.length / 2);
+        let l = 0;
+        let r = mid;
+        
+        let partLength = rightIdx - leftIdx;
+        for(let i = 0; i &lt; partLength + 1; i++){
+            if (l == mid){
+                arr[leftIdx] = temp[r];
+                r++;
+            } else if (temp[r] == undefined){
+                arr[leftIdx] = temp[l];
+                l++
+            } else if (temp[l] &lt; temp[r]) {    
+                arr[leftIdx] = temp[l];
+                l++
+            } else { 
+                arr[leftIdx] = temp[r]
+                r++
+            }
+            leftIdx++;
+        }
+        return arr;
+    }
+    
+    function mergeSort(arr, leftIndex = 0, rightIndex = arr.length -1){                // recursively splits the array by 2 
+        if(leftIndex == rightIndex) return arr;
+        
+        let mid = rightIndex - Math.floor((rightIndex - leftIndex) / 2);
+        
+        mergeSort(arr, leftIndex, mid - 1);
+        mergeSort(arr, mid, rightIndex);
+        
+        merge(arr, leftIndex, rightIndex);                                             // merge starts from the bottom to up = merge sort 
+        
+        return arr;
+    }
+    
+    var arr1 = [-1, 10];
+    console.log( mergeSort(arr1) );                                                    // -> [-1, 10]
+    
+    var arr2 = [4, -4, 7, 1];
+    console.log( mergeSort(arr2) );                                                    // -> [-4, 1, 4, 7]
+    
+    var arr3 = [6, 5, 4, 3, 2, 1]; 
+    console.log( mergeSort(arr3) );                                                    // -> [1, 2, 3, 4, 5, 6]
+    
+    var arr4 = [0, 5, 7, -4, 1, 0, 21, 11, 0, 2, 21]; 
+    console.log( mergeSort(arr4) );                                                    // -> [-4, 0, 0,  0,  1, 2, 5, 7, 11, 21, 21]
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Quick Sort (time complexity = <mark>O(n log n)</mark> / <mark>O(n^2)</mark> </u></h2>
+    <p> - quicksort is used to sort array elements in ascending order </p>
+    <p> - for this we implement a 'partition' function which divides and swap array elements into 3 parts...</p>
+    <p style="text-indent:40px;"> 1) the pivot element (arbitrary element)</p>
+    <p style="text-indent:40px;"> 2) left side of the pivot elements are smaller (or equal) than the pivot </p>
+    <p style="text-indent:40px;"> 3) right side of the pivot elements are larger (or equal) than the pivot </p>
+    <p> - the goal of the 'partition' function is to swap the pivot element in the right ascending index</p>
+    <p> - now we recursively call the 'partition' function one each side of the pivot until the whole array is sotred </p>
+<details class="example">
+<summary> DEMO  </summary>
+<h4 style="color:darkblue;"><u> Quick Sort TEST </u></h4>
+    <pre>
+    var arr1 = [321, 2];
+    var arr2 = [3, -2, -1, 0, 33];
+    var arr3 = [3, -2, -1, 0, 2, 4, 1];
+    var arr4 = [-2, 1, 2, 1, -4, 10, -75, 0, 1, 3, 8, 45, 2];
+    var arr5 = [100, 4987, -4165, 48, -47, -8, 0, 0, 11, 145, 55, 55, 4878, 55, 55];
+    var arr6 = [100, 4987, -4165, 48, -47, -8, 0, 0, 11, 145, 55, 55, 4878, 55, 55, 654, -8457, 1, 3485, 2, 21];
+    
+    function quickSort(arr){
+        qs(arr, 0, arr.length - 1);
+    }
+    
+    function qs(arr, l ,r){
+        if (l >= r) return;                                                            // condition ends the recursive call 
+        var p = partition(arr, l, r);
+        
+        qs(arr, l, p - 1);                                                             // recursively calls the partition function 
+        qs(arr, p + 1, r);
+    }
+    
+    function partition(arr, l, r){                                                     // partition function sorts the array in 3 parts                            
+        var pivot = arr[r];                                                                // 1) we chose an arbitrary pivot (the last array item in this case)    
+        var i = l - 1;                                                                     // 2) items left to the pivot are smaller (or equal) than the pivot     
+        var j = l;                                                                         // 3) items right to the pivot are larger (or equal) than the pivot     
+        
+        for(let k = 0; k &lt; r - l; k++){ 
+            if (arr[j] &lt; pivot){
+                i++;
+                let temp = arr[i]; 
+                arr[i] = arr[j];
+                arr[j] = temp;
+                j++;
+            } else {
+                j++;
+            }
+        }
+        arr[r] = arr[i + 1];
+        arr[i + 1] = pivot;
+        
+        return i + 1
+    }
+    
+    quickSort(arr1);
+    arr1;                                                                              // -> [2, 321]
+    
+    quickSort(arr2); 
+    arr2;                                                                              // -> [-2, -1, 0, 3, 33]
+    
+    quickSort(arr3); 
+    arr3;                                                                              // -> [-2, -1, 0, 1, 2, 3, 4]
+    
+    quickSort(arr4);
+    arr4;                                                                              // -> [-75, -4, -2, 0, 1, 1, 1, 2, 2, 3, 8, 10, 45]
+    
+    quickSort(arr5);
+    arr5;                                                                              // -> [-4165, -47, -8, 0, 0, 11, 48, 55, 55, 55, 55, 100, 145, 4878, 4987]
+    
+    quickSort(arr6);
+    arr6;                                                                              // -> [-8457, -4165, -47, -8, 0, 0, 1, 2, 11, 21, 48, 55, 55, 55, 55, 100, 145, 654, 3485, 4878, 4987]
+    </pre>
+</details>
+<details class="example">
+<summary> Example:  </summary>
+<h4 style="color:darkblue;"><u> Quick Sort TEST </u></h4>
+    <pre>
+    var arr1 = [321, 2];
+    var arr2 = [3, -2, -1, 0, 33];
+    var arr3 = [3, -2, -1, 0, 2, 4, 1];
+    var arr4 = [-2, 1, 2, 1, -4, 10, -75, 0, 1, 3, 8, 45, 2];
+    var arr5 = [100, 4987, -4165, 48, -47, -8, 0, 0, 11, 145, 55, 55, 4878, 55, 55];
+    var arr6 = [100, 4987, -4165, 48, -47, -8, 0, 0, 11, 145, 55, 55, 4878, 55, 55, 654, -8457, 1, 3485, 2, 21];
+    
+    function quickSort(arr){
+        qs(arr, 0, arr.length - 1);
+    }
+    
+    function qs(arr, l ,r){
+        if (l >= r) return;                                                            // condition ends the recursive call 
+        var p = partition(arr, l, r);
+        
+        qs(arr, l, p - 1);                                                             // recursively calls the partition function 
+        qs(arr, p + 1, r);
+    }
+    
+    function partition(arr, l, r){                                                     // partition function sorts the array in 3 parts                            
+        var pivot = arr[r];                                                                // 1) we chose an arbitrary pivot (the last array item in this case)    
+        var i = l - 1;                                                                     // 2) items left to the pivot are smaller (or equal) than the pivot     
+        var j = l;                                                                         // 3) items right to the pivot are larger (or equal) than the pivot     
+        
+        for(let k = 0; k &lt; r - l; k++){ 
+            if (arr[j] &lt; pivot){
+                i++;
+                let temp = arr[i]; 
+                arr[i] = arr[j];
+                arr[j] = temp;
+                j++;
+            } else {
+                j++;
+            }
+        }
+        arr[r] = arr[i + 1];
+        arr[i + 1] = pivot;
+        
+        return i + 1
+    }
+    
+    quickSort(arr1);
+    console.log( arr1 );                                                               // -> [2, 321]
+    
+    quickSort(arr2); 
+    console.log( arr2 );                                                               // -> [-2, -1, 0, 3, 33]
+    
+    quickSort(arr3); 
+    console.log( arr3 );                                                               // -> [-2, -1, 0, 1, 2, 3, 4]
+    
+    quickSort(arr4);
+    console.log( arr4 );                                                               // -> [-75, -4, -2, 0, 1, 1, 1, 2, 2, 3, 8, 10, 45]
+    
+    quickSort(arr5);
+    console.log( arr5 );                                                               // -> [-4165, -47, -8, 0, 0, 11, 48, 55, 55, 55, 55, 100, 145, 4878, 4987]
+    
+    quickSort(arr6);
+    console.log( arr6 );                                                               // -> [-8457, -4165, -47, -8, 0, 0, 1, 2, 11, 21, 48, 55, 55, 55, 55, 100, 145, 654, 3485, 4878, 4987]
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Heap Sort (time complexity = <mark>O(n log n)</mark>) </u></h2>
+    <p> - the heap sort is used to return a sorted array from a (Min|Max) Heap data structure</p> 
+    <p> - because the heap always returns its smallest|largest element we just add the returned element at the end of the heap array </p>
+<details class="example">
+<summary> DEMO  </summary>
+    <pre>
+    var minHeap1 = [5, 9, 14];                                                         // minHeaps represented in an array 
+    var minHeap2 = [0, 1, 4, 8, 2, 5, 12, 1];  
+    var minHeap3 = [-41, -4,  0, -2, 1, 21, 11, 51,  3, 100, -2]; 
+    
+    
+    function heapSort(heap){
+        let top; 
+        let lastIndex = heap.length - 1;
+        
+        for(let i = 0; i &lt; heap.length; i++){
+            top = heap[0];
+            
+            [heap[0], heap[lastIndex]] = [heap[lastIndex], heap[0]];
+            
+            let currentParent = 0;
+            lastIndex--;
+            
+            while(typeof currentParent === 'number'){
+                currentParent = heapify(currentParent);
+            }
+        }
+        
+        function heapify(parent){ 
+            let leftChild = (2 * parent) + 1;
+            let rightChild = (2 * parent) + 2;
+            let smallestChild;
+            
+            
+            if(leftChild > lastIndex && rightChild > lastIndex){
+                return false;
+            } else if (rightChild > lastIndex){
+                smallestChild = leftChild;
+            } else {
+                smallestChild = heap[leftChild] &lt; heap[rightChild] ? leftChild : rightChild;
+            }
+            
+            if(heap[parent] > heap[smallestChild]){
+                [heap[parent], heap[smallestChild]] = [heap[smallestChild], heap[parent]];
+                return smallestChild
+            } 
+            
+            return false;
+        }
+        
+        return heap;
+    }
+    
+    
+    heapSort(minHeap1);                                                                // -> [14, 9, 5]
+    heapSort(minHeap2);                                                                // -> [12, 8, 5, 4, 2, 1, 1, 0]
+    heapSort(minHeap3);                                                                // -> [100, 51, 21, 11, 3, 1, 0, -2, -2, -4, -41]    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Breadth-First-Search (time complexity = <mark>O(V + E)</mark> (vertices (vertex) + edges)) </u></h2>
+<h2 style="color:darkblue;"><u> Depth-First-Search (time complexity = <mark>O(V + E)</mark> (vertices (vertex) + edges)) </u></h2>
+    <p> - Breadth First Search and Depth First Search is used to find a vertex in an unweighted graph or tree data structure </p>
+    <p> - <b><u>Breadth-First Search</u></b> </p>
+    <p style="text-indent: 40px;"> - searches closest nodes to the starting point first, therefore it finds the shortes route <u>(in segments)</u> to the target vertex  </p>
+    <p style="text-indent: 40px;"> - searches the neighbours of the start node (1st level) then searches these neighbours neighbours (2nd level) and so on until the target is found </p>
+    <p style="text-indent: 40px;"> - for this uses an internal queue data structure to keep track what has to be checked next (nodes added at the end of the queue, starts checking from the start of the queue) </p>
+    <p> - <b><u>Depth-First Search</u></b> </p>
+    <p style="text-indent: 40px;"> - searches farthest nodes from the starting point first then comes closer and closer to the starting node on the graph until the target is found </p>
+    <p style="text-indent: 40px;"> - for this uses an internal stack data structure to keep track what has to be checked next (if the current node is not the target and all its neighbours are checked we next check the node what is on the top of the stack) </p>
+<details class="example">
+<summary> DEMO  </summary>
+    <p> - Breadth-First Search </p>
+    <pre>
+    var map = {                                                                        // graph data structure 
+        me : {edges:['bob', 'alice', 'claire']},
+        bob : {edges:['anuj', 'peggy', 'me']},
+        alice : {edges:['peggy', 'me']},
+        claire : {edges:['me', 'jonny', 'thom']},
+        peggy : {edges:['bob', 'alice']},
+        jonny : {edges:['claire']},
+        anuj : {edges:['bob']},
+        thom : {edges:['claire', 'steven']},
+        steven : {edges:['thom', 'henry']},
+        henry : {edges:['steven']}
+    }
+    
+    function bfs(graph, start, target, getRoute){
+        if (!graph[start]) {
+            let errMsg = `no "${start}" node exist on the network`
+            throw new Error(errMsg);
+        }
+        
+        let queue = [];
+        let queuePointer = 0;
+        let traceTree = {};
+        graph[start].checked = true;
+        let found = checkNeighbours(graph, start, target, queue, traceTree) ;
+        
+        while(!found && queuePointer &lt; queue.length){ 
+            found = checkNeighbours(graph, queue[queuePointer], target, queue, traceTree);
+            queuePointer++;
+        }
+        
+        for (let i in graph){                                                          // at the end each node checked status is reset (for the next check) 
+            graph[i].checked = false;
+        }
+        
+        if (getRoute && found) {
+            return buildRoute(traceTree, target);
+        }
+        
+        return found;
+    }
+    
+    
+    function checkNeighbours(graph, node, target, queue, tree){                        // returns true if target is a neighbour of the passed 'node' 
+        graph[node].checked = true;                                                    // marking the currently node as checked 
+        tree[node] = [];
+        
+        for(let i = 0; i &lt; graph[node].edges.length; i++){
+            if (target == graph[node].edges[i]) {
+                tree[node].push(target)
+                return true;
+            }
+            
+            if (!graph[graph[node].edges[i]].checked) {                                // if the node was already checked it won't be added to the queue  
+                queue.push(graph[node].edges[i]); 
+                
+                tree[node].push(graph[node].edges[i]);                                 // builds a tree data structure representing possible routes 
+            } 
+            
+            graph[graph[node].edges[i]].checked = true;                                // mark the checked node
+        }
+        
+        return false                                                                   // returns false if target is not a neighbour of the passed 'node' 
+    }
+    
+    
+// route tracing functions ------------------------------------------------------------ 
+    function buildRoute(tree, target){                                                 // retraces from target to start = builds the route 
+        let route = []
+        route.unshift(target)
+        
+        for(let i in tree){
+            if (getParent(tree, route[0])) {
+                route.unshift( getParent(tree, route[0]) );
+            }
+        }
+        
+        return route
+    }
+    
+    
+    function getParent(tree, child){                                                   // helper function return the parent in the trace tree data structure 
+        let parent;
+        
+        for(let i in tree){
+            tree[i].forEach(function(val){
+                if(val == child) {
+                    parent = i;
+                }
+            });
+        } 
+        
+        return parent;  
+    }
+    
+    bfs(map, 'me', 'alice');                                                           // -> true
+    bfs(map, 'me', 'alice', true);                                                     // -> ['me', 'alice]
+    
+    bfs(map, 'anuj', 'alice');                                                         // -> true
+    bfs(map, 'anuj', 'alice', true);                                                   // -> ['anuj', 'bob', 'peggy', 'alice']
+    
+    bfs(map, 'anuj', 'henry');                                                         // -> true 
+    bfs(map, 'anuj', 'henry', true);                                                   // -> ['anuj', 'bob', 'me', 'claire', 'thom', 'steven', 'henry']
+    
+    bfs(map, 'claire', 'franky');                                                      // -> false 
+    bfs(map, 'claire', 'franky', true);                                                // -> false 
+    
+    bfs(map, 'franky', 'bob');                                                         // -> error thrown "no 'franky' node exist on network 
+
+
+
+
+
+
+
+
+
+    </pre>
+    <p> - Depth-First Search </p>
+    <pre>
+    var map = {                                                                        // undirected graph 
+        me : {edges:['bob', 'alice', 'claire']},
+        bob : {edges:['anuj', 'peggy', 'me']},
+        alice : {edges:['peggy', 'me']},
+        claire : {edges:['me', 'jonny', 'thom']},
+        peggy : {edges:['bob', 'alice', 'polly']},
+        polly : {edges:['peggy']},
+        jonny : {edges:['claire']},
+        anuj : {edges:['bob']},
+        thom : {edges:['claire', 'steven']},
+        steven : {edges:['thom', 'henry']},
+        henry : {edges:['steven']}
+    }
+
+    function dfs(graph, start, target){
+        if (!graph[start]) {
+            let errMsg = `no "${start}" node exist on the network`
+            throw new Error(errMsg);
+        }
+        
+        let nextToCheck = [start];                                                     // array used (not primitive) because primitives in JS are immutable 
+        let stack = [];
+        let checkNextNeighbour = nextNeighbour(graph, stack, nextToCheck, target);  
+        
+        while(!checkNextNeighbour && nextToCheck[0] != undefined){
+            checkNextNeighbour = nextNeighbour(graph, stack, nextToCheck, target);  
+        }
+        
+        for (let i in graph){
+            graph[i].checked = false;
+        }
+        
+        return checkNextNeighbour;
+    }
+
+
+    function nextNeighbour(graph, stack, node, target){
+        if (node[0] == target) {
+            return true;
+        } else {            
+            graph[node[0]].checked = true;
+            
+            for(let i = 0; i &lt; graph[node].edges.length; i++){ 
+                if (!graph[graph[node[0]].edges[i]].checked){
+                    stack.push(node[0]);
+                    node[0] = graph[node[0]].edges[i];
+                    
+                    return false;
+                } 
+                
+            }
+            
+            node[0] = stack.pop();
+            return false;
+        }
+    }
+
+
+    console.log( dfs(map, 'me', 'alice') );                                            // -> true
+    console.log( dfs(map, 'anuj', 'alice') );                                          // -> true
+    console.log( dfs(map, 'anuj', 'henry') );                                          // -> true 
+    console.log( dfs(map, 'polly', 'steven') );                                        // -> true 
+    console.log( dfs(map, 'claire', 'franky') );                                       // -> false 
+    console.log( dfs(map, 'franky', 'bob') );                                          // -> error thrown "no 'franky' node exist on network  
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Dijkstra's Algorithms (dájkszrá) (time complexity = <mark>O(E log V)</mark> (edges LOG vertices)) </u></h2>
+    <p> - Dijkstra's Algorithm is used to find the shortest path from a single source to all nodes on a weighted graph </p>
+    <p> - <u>this algorithm works with <a href="../Data Structures/index.html#DAG" target="_blank">DAG (Directed Acyclic Graph)</a> having positive edges only!</u> </p>
+    <p> - at the start and we map the graph and set up a "cost" table (object) with all the nodes and their cost as positive Inifnity (starting node set to 0), this represents the distance from the start to the corresponding node on the graph </p>
+    <p> - we mark the starting node as checked and check the weight to its neighbors </p>
+    <p> - <b><u>rule 1 :</u></b> we update neighbor nodes' values (in the table) if the newly calculated distance to the neighbor is <u>shorter</u> what's in the table currently </p>
+    <p> - <b><u>rule 2 :</u></b> we only check unchecked neighbors </p>
+    <p> - <b><u>rule 3 :</u></b> we take all <u>unchecked</u> nodes from the table and we choose the one with the lowest distance to be checked next </p>
+    <p> - this pattern is repeated with all nodes untill the whole graph is checked </p>
+    <img src="./Dijkstra.gif" height="200">
+<details class="example">
+<summary> DEMO  </summary>
+    <pre>
+    var map1 = {
+        A: {edges:{B:2, C:6}},
+        B: {edges:{A:2, C:3, D:5}},
+        C: {edges:{A:6, B:3, D:1}},
+        D: {edges:{B:5, C:1}}
+    }
+
+    var map2 = {
+        A: {edges:{B:2, C:4}},
+        B: {edges:{A:2, C:1, E:2, D:7}},
+        C: {edges:{A:4, B:1, D:3, E:3}},
+        D: {edges:{B:7, C:3, E:2, F:1}},
+        E: {edges:{C:3, B:2, D:2, F:5}},
+        F: {edges:{D:1, E:5}}
+    }
+
+    var map3 = {
+        A: {edges:{B:1, C:2, X:5}},
+        B: {edges:{A:1, C:5, E:4, D:7}},
+        C: {edges:{A:2, B:5, D:8, E:0, X:3}},
+        D: {edges:{B:7, C:8, E:3, F:7, Y:2}},
+        E: {edges:{C:0, B:4, D:3, F:9, X:1}},
+        F: {edges:{D:7, E:9}},
+        Y: {edges:{D:2}},
+        X: {edges:{A:5, C:3, E:1}}
+    }
+    
+    
+    function dijkstra(graph, start, target){
+        let cost = {} 
+        let result = {}
+        let nrOfNodes = 0;
+        
+        for(let i in graph){
+            nrOfNodes++;
+            result[i] = {cost:Infinity, parent:''};
+            
+            if (i == start) {
+                cost[i] = 0;
+            } else {
+                cost[i] = Infinity;
+            }
+        }
+        
+        for(let i = 0; i &lt; nrOfNodes; i++){
+            prevParent = checkNode(graph, cost, result);
+        }
+        
+        for(let i in graph){
+            graph[i].checked = false;
+        }
+        
+        return buildRoute(result, target, nrOfNodes);
+    }
+    
+    
+    function checkNode(graph, cost, result){
+        let chpNode = '';
+        let nodeVal = Infinity;
+        
+        for (let i in cost){
+            if (cost[i] &lt; nodeVal) {
+                chpNode = i;
+                nodeVal = cost[i];
+            }
+        }
+        
+        graph[chpNode].checked = true;
+        result[chpNode].cost = cost[chpNode];
+        
+        for(let i in graph[chpNode].edges){
+            if (!graph[i].checked) {
+                if (cost[i] > cost[chpNode] + graph[chpNode].edges[i]){                // if the newly calculated route is shorter we update!
+                    cost[i] = graph[chpNode].edges[i] + cost[chpNode];
+                    result[i].parent = chpNode;                                        // only update the parent if shorter route is found 
+                } 
+            }
+        }
+        
+        delete cost[chpNode];
+    }
+    
+    
+    function buildRoute(result, target, nrOfNodes){
+        let routes = {}
+        
+        for(let i in result){
+            if (target !== true) i = target;
+            
+            let route = {cost:result[i].cost, route:[]};
+        
+            let check = i;
+            let parent = result[i].parent;
+            
+            route.route.unshift(check);
+            
+            while(parent !== ''){
+                route.route.unshift(parent)
+                check = parent;
+                parent = result[check].parent        
+            }
+            
+            if (target !== true) return route;
+            
+            routes[i] = route;
+        }
+        
+        return routes;
+    }
+    
+    // map1 --------------------------------------------
+    // shortest route from A to D 
+    console.log( dijkstra(map1, 'A', 'D') );                                           // -> { cost: 6, route: [ 'A', 'B', 'C', 'D' ] }
+    // shortest route from A to all possible nodes 
+    console.log( dijkstra(map1, 'A', true) );                                          // -> { A: { cost: 0, route: [ 'A' ] },
+                                                                                       //      B: { cost: 2, route: [ 'A', 'B' ] },
+                                                                                       //      C: { cost: 5, route: [ 'A', 'B', 'C' ] },
+                                                                                       //      D: { cost: 6, route: [ 'A', 'B', 'C', 'D' ] }}
+    
+    // map2 --------------------------------------------
+    // shortest route from A to F 
+    console.log( dijkstra(map2, 'A', 'F') );                                           // -> { cost: 7, route: [ 'A', 'B', 'C', 'D', 'F' ] }
+    // shortest route from A to all possible nodes 
+    console.log( dijkstra(map2, 'A', true) );                                          // -> { A: { cost: 0, route: [ 'A' ] },
+                                                                                       //      B: { cost: 2, route: [ 'A', 'B' ] },
+                                                                                       //      C: { cost: 3, route: [ 'A', 'B', 'C' ] },
+                                                                                       //      D: { cost: 6, route: [ 'A', 'B', 'C', 'D' ] },
+                                                                                       //      E: { cost: 4, route: [ 'A', 'B', 'E' ] },
+                                                                                       //      F: { cost: 7, route: [ 'A', 'B', 'C', 'D', 'F' ] }}
+        
+    // map3 --------------------------------------------
+    // shortest route from A to F 
+    console.log( dijkstra(map3, 'A', 'F') );                                           // -> { cost: 11, route: [ 'A', 'C', 'E', 'F' ] }
+    // shortest route from A to all possible nodes 
+    console.log( dijkstra(map3, 'A', true) );                                          // -> { A: { cost: 0, route: [ 'A' ] },
+                                                                                       //      B: { cost: 1, route: [ 'A', 'B' ] },
+                                                                                       //      C: { cost: 2, route: [ 'A', 'C' ] },
+                                                                                       //      D: { cost: 5, route: [ 'A', 'C', 'E', 'D' ] },
+                                                                                       //      E: { cost: 2, route: [ 'A', 'C', 'E' ] },
+                                                                                       //      F: { cost: 11, route: [ 'A', 'C', 'E', 'F' ] },
+                                                                                       //      Y: { cost: 7, route: [ 'A', 'C', 'E', 'D', 'Y' ] },
+                                                                                       //      X: { cost: 3, route: [ 'A', 'C', 'E', 'X' ] }}
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Bellman-Ford-Moore Algorithm (time complexity = <mark>O(V E)</mark> (vertices * edges)) </u></h2>
+    <p> - Bellman-Ford-Moore Algorithm is used to find the shortest path from a single source to all nodes on a weighted graph (should be used if Dijkstra fails (has higher time complexity)) </p>
+    <p> - this algorithm also works with negative edges but <u>does not work if the graph has a negative cycle</u></p>
+    <p> - at the start and we map the graph and set up a 'cost' table (object) with all the nodes and their cost as positive Inifnity (starting node set to 0), this represents the distance from the start to the corresponding node on the graph </p>
+    <p> - <b><u>step 1 :</u></b> we check all edges (from - to) and calculate the new distance <u>if the 'to' node has a larger value than the newly calculated value we update it's value in the 'cost' table </u></u>
+    <p> - <b><u>step 2 :</u></b> the step 1 is repeated the number of times there are vertices in the graph <u>-1</u> (this calculates the shortest path to all nodes) </p>
+    <p> - <b><u>step 3 :</u></b> the step 2 is repeated and we check the 'cost' table for changes, if there's a change in the cost table here that means the graph has a negative cycle (error should be thrown) </p>
+<details class="example">
+<summary> DEMO  </summary>
+    <pre>
+    var map1 = {
+        A: {edges:{B:1, C:-2}},
+        B: {edges:{C:-5, E:4,}},
+        C: {edges:{E:0}},
+        D: {edges:{B:7, C:8, E:3, F:-7}},
+        E: {edges:{D:3, F:9, X:-1}},
+        F: {edges:{}},
+        Y: {edges:{D:-2}},
+        X: {edges:{C:3, A:5}}
+    }
+    
+    var map2 = {                                                                       // graph has a negative cycle 
+        A: {edges:{B:1}},
+        B: {edges:{C:-5}},
+        C: {edges:{A:2}},
+    }
+    
+    
+    function bellmandFordMoore(graph, start){
+        let result = {};
+        let counter = 0;
+        
+        for(let i in graph){
+            counter++;
+            
+            if (i == start) {
+                result[i] = 0;
+            } else {
+                result[i] = Infinity;
+            }
+        }
+        
+        for(let i = 0; i &lt; counter - 1; i++){
+            for(let k in graph){
+                checkNeighbour(graph, result, k);
+            }
+        }
+        
+        let resultCopy = {...result};                                                  // from here we check if the graph has a negative cycle 
+        
+        for(let i = 0; i &lt; counter - 1; i++){ 
+            for(let k in graph){
+                checkNeighbour(graph, result, k);
+            }
+            
+        }
+        
+        for(let i in result){
+            if (result[i] !== resultCopy[i]) throw new Error('graph has a negative cycle!'); 
+        }
+        
+        return result;
+    }
+    
+    
+    function checkNeighbour(graph, result, node){ 
+        for(let i in graph[node].edges){
+            if (result[node] + graph[node].edges[i] &lt; result[i]) {
+                result[i] = result[node] + graph[node].edges[i];
+            }
+        }
+    }
+    
+    
+    console.log( bellmandFordMoore(map1, 'A') );                                       // -> { A: 0, B: 1, C: -4, D: -1, E: -4, F: -8, Y: Infinity, X: -5 }
+    console.log( bellmandFordMoore(map1, 'X') );                                       // -> { A: 5, B: 6, C: 1, D: 4, E: 1, F: -3, Y: Infinity, X: 0 }
+    console.log( bellmandFordMoore(map1, 'Y') );                                       // -> { A: 4, B: 5, C: 0, D: -2, E: 0, F: -9, Y: 0, X: -1 }
+    
+    console.log( bellmandFordMoore(map2, 'A') );                                       // -> error thrown 'graph has a negative cycle!'  
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> K-Nearest neighbours (KNN) </u></h2>
+    <p> - the K-Nearest Neighbour (KNN) classification algorithm is used to calculate the <u>euclidean distance</u> (some kind of relationship) between 2 vertices on a 2D space </p>
+    <p> - running this algorithm on multiple vertices we can calculate the closest neighbours ('K') to our position </p>
+    <p> - vertices can have 1 to multiple traits </p>
+    <pre class="syntax">
+SYNTAX:     Math.sqrt((<strong>a1</strong> - <strong>b1</strong>)**2 + (<strong>a2</strong> - <strong>b2</strong>)**2 <small>+</small> <i>...</i>)                               // formula to calculate the Euclidean distance from <strong>a</strong> to <strong>b</strong>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var priyanka = {comedy:3, action:4, drama:4, horror:1, romance:4}
+    var justin = {comedy:4, action:3, drama:5, horror:1, romance:5}
+    var morpheus = {comedy:2, action:5, drama:1, horror:3, romance:1}
+    
+    function kNearest(A, B){
+        let equation = 0;
+        
+        for(let genre in A){
+            equation += (A[genre] - B[genre])**2 ; 
+        }
+        
+        return Math.sqrt(equation);
+    }
+    
+    kNearest(priyanka, justin);                                                        // -> 2                      // euclidean distance between Priyanka and Justin
+    kNearest(priyanka, morpheus);                                                      // -> 4.898979485566356      // euclidean distance between Priyanka and Morpheus    
+    kNearest(justin, morpheus);                                                        // -> 6.6332495807108        // euclidean distance between Justin and Morpheus    
+    
+// equation (priyanka - justin) -------------------------------------------------------
+    √(3-4)^2 + (4-3)^2 + (4-5)^2 + (1-1)^2 + (4-5)^   
+    </pre>
+</details>
+<details class="example">
+<summary> Example: </summary>
+<h4 style="color:darkblue;"><u> distance in film genres </u></h4>
+    <pre>
+    var priyanka = {comedy:3, action:4, drama:4, horror:1, romance:4}
+    var justin = {comedy:4, action:3, drama:5, horror:1, romance:5}
+    var morpheus = {comedy:2, action:5, drama:1, horror:3, romance:1}
+    
+    function kNearest(A, B){
+        let equation = 0;
+        
+        for(let genre in A){
+            equation += (A[genre] - B[genre])**2 ; 
+        }
+        
+        return Math.sqrt(equation);
+    }
+    
+    console.log( kNearest(priyanka, justin) );                                         // -> 2
+    console.log( kNearest(priyanka, morpheus) );                                       // -> 4.898979485566356
+    console.log( kNearest(justin, morpheus) );                                         // -> 6.6332495807108    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Regression (we predict future data based on passed datas) </u></h4>
+    <p> - We use KNN algorithm in order to figure out how many loaves should we make today based on the data in the past </p>
+    <pre>
+// weather on scale = 1(bad) - 5(great)
+// weekend or holiday = 1 (weekend) 0 (holiday)
+// game on? = 1 (yes) 0 (no)
+    
+    var record = {
+        days:{
+            dayA:{weather:5, weekend:1, gameOn:0},
+            dayB:{weather:3, weekend:1, gameOn:1},
+            dayC:{weather:1, weekend:1, gameOn:0},
+            dayD:{weather:4, weekend:0, gameOn:1},
+            dayE:{weather:4, weekend:0, gameOn:0},
+            dayF:{weather:2, weekend:0, gameOn:0}
+        },
+        loavesMadeOnDay:{dayA:300, dayB:225, dayC:75, dayD:300, dayE:150, dayF:50}
+    }
+    
+    var today1 = {weather:4, weekend:1, gameOn:0}
+    var today2 = {weather:2, weekend:0, gameOn:1}
+    var today3 = {weather:5, weekend:0, gameOn:1}
+    
+    
+    function predictNrOfBreads(today, rec){
+        let distances = [];
+        let avg = 0;
+        
+        for(let day in rec.days){
+            distances.push([kNearest(today, rec.days[day]), day]);
+        }
+        
+        distances.sort();
+        for(let i = 0; i &lt; 3; i++){
+            avg += rec.loavesMadeOnDay[distances[i][1]];
+        }
+        
+        return avg / 3;
+    }
+    
+    
+    function kNearest(A, B){
+        let equation = 0;
+        
+        for(let genre in A){
+            equation += (A[genre] - B[genre])**2 ; 
+        }
+        
+        return Math.sqrt(equation);
+    }
+    
+    
+    console.log( predictNrOfBreads(today1, record) );                                  // -> 225 
+    console.log( predictNrOfBreads(today2, record) );                                  // -> 116.66
+    console.log( predictNrOfBreads(today3, record) );                                  // -> 250 
+    </pre>
+    
+</details>
+    
+    <br><br>
+</body>
+</html>

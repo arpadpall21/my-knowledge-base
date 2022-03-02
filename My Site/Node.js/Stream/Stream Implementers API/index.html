@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Stream Implementers API </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Stream Implementers API (ver 3.2) </h1>
+    <p> Updated ( 2019-07-13 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a> 
+        <a href="../index.html">Streams></a> Stream Implementers API  
+    </p>
+<table class="table">
+<caption> Implement Writable Stream</caption>
+    <tr>
+        <th style="width:30%;"> Methond / Properties </th>
+        <th> Value </th>
+    </tr>
+    <tr>
+        <td> new stream.Writable(<i>option:obj</i>) </td>
+        <td> returns a writable stream object instance (must implement the <mark>_write()</mark> method) 
+            <span id="browserSupport" title="updated : 2019-07-14">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 option.emitClose</span>
+                <span><i class="fab fa-node-js"></i> 11.2.0 option.autoDestroy </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writableStream</strong>._final(<strong>fn(<i>err</i>)</strong>) </td>
+        <td> - method fired before the <mark>finish</mark> event <br>
+             - callback function must be called inside <br>
+             - this method should not be called directly 
+            <span id="browserSupport" title="updated : 2019-07-14">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writableStream</strong>._destroy(<strong>err</strong>, <strong>fn(<i>err</i>)</strong>) </td>
+        <td> - called by the <mark>destroy()</mark> method <br>
+             - callback function must be called inside <br>
+             - this method should not be called directly
+            <span id="browserSupport" title="updated : 2019-07-14">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writableStream</strong>._write(<strong>chunk:any</strong>, <strong>encode:str</strong>, <strong>fn(<i>err</i>)</strong>) </td>
+        <td> - called by the <mark>write()</mark> method which passes the data here <br>
+             - the callback function flushes the data from the buffer to the underlying system and signals succes or failed write, <u>(must be called)</u> <br>
+             - this method should not be called directly 
+            <span id="browserSupport" title="updated : 2019-07-14">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writableStream</strong>._writev(<strong>chunk:obj</strong>, <strong>fn(<i>err</i>)</strong>) </td>
+        <td>  - when we write multiple data chunks to the stream this method is called (like when we use <mark>uncork()</mark>) in order to write that data to the underlying system <br>
+               - the callback function flushes the data from the buffer to the underlying system and signals succes or failed write, <u>(must be called)</u> <br>
+              - this method sholud not be called directly            
+              <span id="browserSupport" title="updated : 2019-07-14">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<table class="table">
+<caption> Implement Readable Stream</caption>
+    <tr>
+        <th style="width:30%;"> Methond / Properties </th>
+        <th> Value </th>
+    </tr>
+    <tr>
+        <td> new stream.Readable(<i>option:obj</i>) </td>
+        <td> returns a readable stream object instance (must implement the <mark>_read()</mark> method) 
+            <span id="browserSupport" title="updated : 2019-07-15">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+                <span><i class="fab fa-node-js"></i> 11.2.0 option.autoDestroy</span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writableStream</strong>._destroy(<strong>err</strong>, <strong>fn(<i>err</i>)</strong>) </td>
+        <td> - called by the <mark>destroy()</mark> method <br>
+             - callback function must be called inside <br>
+             - this method should not be called directly
+            <span id="browserSupport" title="updated : 2019-07-15">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>readableStream</strong>.push(<strong>chunk:any</strong><i>, encode:str</i>) </td>
+        <td> - pushes the provided data in the internal buffer queue (pushing a zero byte string like <mark>""</mark> is not recommended!) <br>
+             - returns <mark>true</mark> if there is available space in the buffer queue <br> 
+             - <u>it will continue filling the buffer queue by recalleing the <mark>_read()</mark> method</u> until there is space in the buffer memory <br> 
+             - once the buffer queue is full it will return <mark>false</mark> and stops calling the <mark>_read()</mark> method <br>
+             - passing <mark>null</mark> signals the end of the stream (EOF) <br>
+             - this method should be called inside the <mark>_read()</mark> method only  
+            <span id="browserSupport" title="updated : 2019-07-15">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 chunk can be Uint8Array </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>readableStream</strong>._read(<strong>size:nr</strong>) </td>
+        <td> - called by the <mark>read()</mark> method <br>
+             - provides data in the buffer queue by implementing the <mark>push()</mark> method <br>
+             - data should be provided untill the <mark>push()</mark> method returns false <br>
+             - this method is NOT called again until the <mark>push()</mark> method is called <br>
+             - the size argument is advisory  <br>
+             - this method should not be called directly 
+            <span id="browserSupport" title="updated : 2019-07-15">
+                <span><i class="fab fa-node-js"></i> 0.9.4 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<table class="table">
+<caption> Implement Duplex Stream</caption>
+    <tr>
+        <th style="width:30%;"> Methond / Properties </th>
+        <th> Value </th>
+    </tr>
+    <tr>
+        <td> new stream.Duplex(<i>option:obj</i>) </td>
+        <td> returns a duplex stream object instance (must implement the <mark>_read()</mark> and the <mark>_write()</mark> methods)
+            <span id="browserSupport" title="updated : 2019-07-17">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+                <span><i class="fab fa-node-js"></i> 8.4.0 <mark>readableHighWaterMark</mark> / <mark>writableHighWaterMark</mark> support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <i>some readabel and writable methods</i> </td>
+        <td> both readable and writable implement methods can be implemented in a Duplex stream
+            <span id="browserSupport" title="updated : 2019-07-17">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>duplexStream</strong>._destroy(<strong>err, fn(<i>err</i>)</strong>) </td>
+        <td> method destroys both readable and writable sides of the duplex stream 
+            <span id="browserSupport" title="updated : 2019-07-17">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<table class="table">
+<caption> Implement Transform Stream</caption>
+    <tr>
+        <th style="width:30%;"> Methond / Properties </th>
+        <th> Value </th>
+    </tr>
+    <tr>
+        <td> new stream.Transform(<i>option:obj</i>) </td>
+        <td> returns a transform stream object instance (must implement the <mark>_transform()</mark> methods)
+            <span id="browserSupport" title="updated : 2019-07-21">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> new stream.PassThrough() </td>
+        <td> returns a simple transform stream object which lets the data through without modifying it (does not need to implement any methods)
+            <span id="browserSupport" title="updated : 2019-07-21">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>transformStream</strong>._flush(<strong>fn(<i>err, chunk</i>)</strong>) </td>
+        <td> - called before the <mark>end</mark> event (signals that there is no more data can be read from the readable part of the transfrom stream)<br>
+             - callback function must be called inside (emits the <mark>end</mark> event) <br>
+             - passing a data chunk (as second argument) to the callback function does the same as the <mark>push()</mark> method <br>
+             - this method should not be called directly 
+            <span id="browserSupport" title="updated : 2019-07-21">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>transformStream</strong>._transform(<strong>chunk:any</strong>, <strong>encode:str</strong>, <strong>fn(<i>err, chunk</i>)</strong>) </td>
+        <td> - called by the <mark>write()</mark> method which passes the data here <br>
+             - the passed data is processed (modified) here than written to the readable buffer by the <mark>push()</mark> method <br>
+             - callback function must be called once the processed data is fully consumed from the readable buffer <br>
+             - passing a data chunk (as second argument) to the callback function does the same as the <mark>push()</mark> method <br>
+             - this method should not be called directly
+            <span id="browserSupport" title="updated : 2019-07-21">
+                <span><i class="fab fa-node-js"></i> ?.?.? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v12.x/docs/api/stream.html#stream_api_for_stream_implementers" target="_blank"> Node.js.org - API for stream implementers </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the stream module API let us implement (create our own) streams </p>
+    <p> - the new stream <u>must implement</u> specific methods, otherwise an exeption will be thrown </p> 
+    <ul style="margin:1px ">
+        <li> <b>Writable</b> must implement the <mark>_write()</mark> method and might implement the <mark>_writev()</mark> / <mark>_final()</mark> / <mark>_destory()</mark> methods </li>
+        <li> <b>Readable</b> must implement the <mark>_read()</mark> method and might implement the <mark>_destroy()</mark> method </li>
+        <li> <b>Duplex</b> must implement the <mark>_read()</mark> / <mark>_write()</mark> and might implement the <mark>_writev()</mark> / <mark>_final()</mark> methods </li>
+        <li> <b>Transform</b> must implement the <mark>_transform()</mark> method and might implement the <mark>_flush()</mark> / <mark>_final()</mark> methods </li>
+    </ul>
+    <pre class="syntax">
+SYNTAX :    const { <strong>streamConstructor</strong> } = require('stream'); 
+            
+<span style="color:lightgreen">// ES6 (implement custom constructor) -----------------------------------------</span>
+            class <strong>constructorId</strong> extends <strong>streamConstructor</strong> {
+                constructor(options) {
+                    super(options);                                            // required, references the parent constructor's properties 
+                    <i>other properties to initialize ...</i>
+                }
+                <strong>implementMethod</strong>() {}                                           // required implement method (like <mark>_read()</mark>)
+            }
+    
+<span style="color:lightgreen">// Simplified Construction <b>(from version 1.2.0)</b> -------------------------------</span>
+            <strong>streamId</strong> = new <strong>streamConstructor</strong>( {<strong>implementMethod</strong>(){}<i>, options ...</i>} )
+    </pre>
+    <pre>
+    const {Readable} = require('stream');
+    
+// implement custom constructor -----------------------------------------------
+    class MyReadable extends Readable{
+        constructor(options) {
+            super(options);
+        }
+        _read(size){ };                                                        // required method for the readable stream implementer (we can define how to read the data from the underlying system here)   
+    }
+    
+    var readStream = new MyReadable();
+    readStream.read();                                                         // -! this basically calls the the '_read(size)' method in the constructor   
+    
+// simplified version ---------------------------------------------------------
+    var readStream = new Readable({
+        read: function() { console.log('readed!')}                             // references the '_read()' implementer method 
+    })
+    
+    readStream.read();                                                         // -! this basically calls the the 'read' function in the constructor 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Implement Writable Stream </u></h2>
+<h3 style="color:darkblue;"><u> <mark>_write()</mark> / <mark>_writev()</mark> / <mark>_final()</mark> / <mark>_destroy()</mark></u></h3>
+    <pre class="syntax">
+SYNTAX :    const stream = require('stream');
+        
+            new stream.Writable(<i>option:obj</i>)                                    // returns a writable stream object instance (must implement the <mark>_write()</mark> method)   
+                - <i>option:obj</i>
+                    - highWaterMark: <strong>nr</strong>                // sets the buffer size (Default : 16384 / 16 in object mode)
+                    - decodeStrings: <strong>bol</strong>               // encode the string to Buffer passed to the <mark>write()</mark> method before passing it to the <mark>_write()</mark> method (Default : true)
+                    - defaultEncoding: <strong>str</strong>             // default encoding used in the <mark>write()</mark> method when no encoding is specified in the (Default : 'utf-8')
+                    - objectMode: <strong>bol</strong>                  // sets the stream in object mode (Default : false)
+                    - emitClose: <strong>bol</strong>                   // whether or not the stream emit the <mark>close</mark> event after being destroyed (Default: true)
+                    - write: <strong>fn</strong>                        // implements the <mark>_write()</mark> method <u>(must be implemented)</u>
+                    - writev: <strong>fn</strong>                       // implements the <mark>_writev()</mark> method 
+                    - destroy: <strong>fn</strong>                      // implements the <mark>_destroy()</mark> method 
+                    - final: <strong>fn</strong>                        // implements the <mark>_final()</mark> method 
+                    - autoDestroy: <strong>bol</strong>                 // stream calls the <mark>destroy()</mark> method on itself after ending (Default: false)   
+                    
+<span style="color:lightgreen">// implement methods ----------------------------------------------------------</span>
+            <strong>writableStream</strong>._write(<strong>chunk:any</strong>, <strong>encode:str</strong>, <strong>fn(<i>err</i>)</strong>)              // called by the <mark>write()</mark> method which passes the data here
+                                                                                  the callback function flushes the data from the buffer to the underlying system and signals succes or failed write, <u>(must be called)</u> 
+                                                                                  this method should not be called directly
+                                                                                  
+            <strong>writableStream</strong>._writev(<strong>chunk:obj</strong>, <strong>fn(<i>err</i>)</strong>)                         // when we write multiple data chunks to the stream this method is called (like when we use <mark>uncork()</mark>) in order to write that data to the underlying system  
+                                                                                  the callback function flushes the data from the buffer to the underlying system and signals succes or failed write, <u>(must be called)</u> 
+                                                                                  this method sholud not be called directly
+                                                                                  
+            <strong>writableStream</strong>._destroy(<strong>err</strong>, <strong>fn(<i>err</i>)</strong>)                              // called by the <mark>destroy()</mark> method 
+                                                                                  callback function must be called inside
+                                                                                  this method sholud not be called directly  
+                                                                                   
+            <strong>writableStream</strong>._final(<strong>fn(<i>err</i>)</strong>)                                     // method fired before the <mark>finish</mark> event 
+                                                                                  callback function must be called inside
+                                                                                  this method sholud not be called directly  
+    </pre>
+    <pre>   
+    const {Writable} = require('stream');
+    
+// using ES6 class -----------------------------------------------------------
+    class CustomWritable extends Writable {
+        constructor(options){
+            super(options);
+        }
+        _write(chunk, encode, callback){                                       // the 'write()' method passes the data here                 // !! required method 
+            chunk;                                                             // -> passed data    // we can do various things with the passed data here 
+            callback();                                                        // -! callback must be called at the end in order to flush the data in the underlying system 
+        }
+        _writev(chunks, callback){                                             // invoked when we write multiple data chunks (like when using 'cork()' and "uncork()")  
+            chunks;                                                            // -> passed data chunks 
+            callback();                                                        // -! callback must be called at the end in order to flush the data in the underlying system 
+        }
+        _destory(err, callback) {                                              // invoked when the 'destroy()' method is called on the stream instance
+            callback(err);                                                     // -! error passed in the callback, so the 'destroy()' method can handle the thrown error
+        }                                 
+        _final(callback) { callback(); }                                       // this method fires before the 'finish' event is emitted 
+    }
+    var writeStream = new CustomWritable();  
+    
+// simplified version does the same -------------------------------------------
+    var writeStream = new Writable({
+        // other stream create options ...
+        write(chunk, encode, callback) { callback() },
+        writev(chunk, callback) { callback() },
+        destroy(err, callback) { callback(err) },
+        final(callback) { callback() }
+    });
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:darkblue;"><u> TEST-1 </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Writable, Duplex} = require('stream');
+    const fs = require('fs');
+    
+    var readStream = fs.createReadStream('read.txt');
+    
+    var writeStream = new Writable({
+        highWaterMark: 20000,
+        objectMode: false,
+        write(chunk, encode, callback){                                        // '_write()' method (we can do varios things here) 
+            console.log( chunk.length ); 
+            callback();                                                        // firing the callback function after a successful write 
+        }
+    });
+    
+    readStream.on('data', function(chunk){
+        writeStream.write(chunk, () => console.log('success!'));
+    });
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream Implementers API\01 Implem
+    ent writable stream TEST-1> node main
+        65536
+        success!
+        65536
+        success!
+        65536
+        success!
+        65536
+        success!
+        6248
+        success!
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream Implementers API\01 Implement writable stream TEST-1>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_write()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Writable} = require('stream');
+    
+    class myWritable extends Writable {
+        constructor(option){
+            super(option);
+        } 
+        _write(chunk, encode, callback) {
+            console.log( chunk );
+            callback();                                                        // callback fired after a successful or faild write (required otherwise the stream stops after the first chunk)   
+        }
+    }
+    
+    var writeStream = new myWritable({decodeStrings:false});                   // data won't be decoded to Buffer when we received it in the '_write()' method 
+    writeStream.write('some data');
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\02 _write() TEST> node main
+        some data
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\02 _write() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_writev()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Writable} = require('stream');
+    
+    class MyWritable extends Writable {
+        constructor(option){
+            super(option);
+        } 
+        _write(chunk, encode, callback) {
+            console.log( "_write() called" );
+            console.log( chunk );
+            callback();
+        }
+        _writev(chunks, callback){                                             // called when multile data chunks are written at the same time 
+            console.log( "_wrietv() called" );
+            console.log( chunks );
+            callback();
+        }
+    }
+    
+    var writeStream = new MyWritable();
+    
+    writeStream.cork();
+    writeStream.write('some data');
+    writeStream.write('some data');
+    writeStream.uncork();                                                      // flushing all data chunks to the underlying system 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\03 _writev() TEST> node main
+    _wrietv() called                                                           // -! _writev called 
+    [
+    {
+        chunk: &lt;Buffer 73 6f 6d 65 20 64 61 74 61&gt;,
+        encoding: 'buffer',
+        isBuf: true,
+        callback: [Function: nop],
+        next: {
+        chunk: &lt;Buffer 73 6f 6d 65 20 64 61 74 61&gt;,
+        encoding: 'buffer',
+        isBuf: true,
+        callback: [Function: nop],
+        next: null
+        }
+    },
+    {
+        chunk: &lt;Buffer 73 6f 6d 65 20 64 61 74 61&gt;,
+        encoding: 'buffer',
+        isBuf: true,
+        callback: [Function: nop],
+        next: null
+    },
+    allBuffers: true
+    ]
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\03 _writev() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_destroy()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Writable} = require('stream');
+    
+    class MyWritable extends Writable {
+        constructor(option){
+            super(option);
+        } 
+        _write(chunk, encode, callback) {
+            console.log( "_write() called" );
+            console.log( chunk );
+            callback();
+        }
+        _destroy(err, callback){
+            console.log( '_destory() called!');
+            callback(err);
+        }
+    }
+    
+    var writeStream = new MyWritable();
+    
+    writeStream.destroy('eRRor', function(err) {
+        console.log( err );                                                    // -> 'eRRor' returns the passed error 
+    }); 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\04 _destroy() TEST> node main
+        _destory() called!
+        eRRor
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\04 _destroy() TEST>    
+    </pre>
+<hr>
+    
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_final()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    var {Writable} = require('stream');
+        
+    var writeStream = new Writable({
+        write(chunk, encode, callback) { 
+            callback();
+        },
+        final(callback) {                                                      // executed before the 'finish' event  
+            console.log('_final() called!') 
+            callback();
+        }
+    });
+        
+    writeStream.on('finish', function(){
+        console.log( 'finish event fired!' );
+    });
+        
+    writeStream.write('some data');
+    writeStream.end('last piece of data');
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers API\05 _final() TEST> node main
+        _final() called!                                                       // final called before the finish event!
+        finish event fired! 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers API\05 _final() TEST>    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> throw error while writing TEST </u></h3>
+    <p> - the Node.js specification says that throwing an error in the '_write()' method will result that the stream throws that error </p>
+    <p style="color:yellow;"> - interestingly the the thrown error cannot be handled by the <mark>error</mark> event handler </p> 
+    <pre style="margin-bottom:1px;">
+    var {Writable} = require('stream');
+        
+    var writeStream = new Writable({
+        write(chunk, encode, callback) {
+            if(chunk.toString().indexOf('.') >= 0) { 
+                callback(new Error('myError'))
+            } else { 
+                callback();
+            }
+        }
+    })
+    
+    writeStream.write('data piece.')
+    writeStream.end('last piece of data');
+    
+    writeStream.on('error', function(err){                                     // -! for some reason the thrown error is not handled here 
+        console.log( err );
+    });
+    
+    console.log( 'end of program' );                                           // this never fired because of the thrown error 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers API\06 throw error while writing TEST> node main
+        events.js:177
+            throw er; // Unhandled 'error' event
+            ^
+
+        Error: myError
+            ...
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers API\06 throw error while writing TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Implement Readable Stream </u></h2>
+    <pre class="syntax">
+SYNTAX :    const stream = require('stream');
+        
+            new stream.Readable(<i>option:obj</i>)                                    // returns a readable stream object instance (must implement the <mark>_read()</mark> method)   
+                - <i>option:obj</i>
+                    - highWaterMark: <strong>nr</strong>                // sets the buffer size (Default : 16384 / 16 in object mode)
+                    - encoding: <strong>str</strong>                    // decode the Buffers to the specified string (Default : null) 
+                    - objectMode: <strong>bol</strong>                  // sets the stream in object mode (Default : false)
+                    - read: <strong>fn</strong>                         // implements the <mark>_read()</mark> method <u>(must be implemented)</u>
+                    - destroy: <strong>fn</strong>                      // implements the <mark>_destory()</mark> method 
+                    - autoDestroy: <strong>bol</strong>                 // stream calls the <mark>destroy()</mark> method on itself after ending (Default: false)   
+                    
+<span style="color:lightgreen">// implement methods ----------------------------------------------------------</span>
+            <strong>readableStream</strong>._read(<strong>size:nr</strong>)                                      // called by the <mark>read()</mark> method
+                                                                                  provides data in the buffer queue by implementing the <mark>push()</mark> method  
+                                                                                  data should be provided untill the <mark>push()</mark> method returns false 
+                                                                                  this method is NOT called again until the <mark>push()</mark> method is called 
+                                                                                  the size argument is advisory  
+                                                                                  this method should not be called directly 
+            
+            <strong>readableStream</strong>.push(<strong>chunk:any</strong><i>, encode:str</i>)                         // pushes the provided data in the internal buffer queue (pushing a zero byte string like <mark>""</mark> is not recommended!)
+                                                                                  returns <mark>true</mark> if there is available space in the buffer queue 
+                                                                                  <u>it will continue filling the buffer queue by recalleing the <mark>_read()</mark> method</u> until there is space in the buffer memory 
+                                                                                  once the buffer queue is full it will return <mark>false</mark> and stops calling the <mark>_read()</mark> method  
+                                                                                  passing <mark>null</mark> signals the end of the stream (EOF) 
+                                                                                  this method should be called inside the <mark>_read()</mark> method only  
+            
+            <strong>writableStream</strong>._destroy(<strong>err</strong>, <strong>fn(<i>err</i>)</strong>)                              // called by the <mark>destroy()</mark> method 
+                                                                                  callback function must be called inside 
+                                                                                  this method sholud not be called directly       
+    </pre>
+    <pre>
+    explain why the passed data in the push() method should be continous 
+    
+    const {Readable} = require('stream');
+    
+// using ES6 class ------------------------------------------------------------
+    class MyReadable extends Readable{
+        constructor(options) {
+            super(options);
+        }
+        _read(size) {                                                          // called by the 'read()' method    // -! in real situation the data provided in the 'push()' method should be continous (like a readable stream this is just for demo)   
+            this.push('.');                                                    // this recalls the '_read()' method until the buffer memory is full (16389 times) (basically this fills the entire buffer with '.')   
+        }                                                                      
+        _destory(err, callback) {                                              // invoked when the 'destroy()' method is called on the stream instance
+            callback(err);                                                     // -! error passed in the callback, so the 'destroy()' method can handle the thrown error
+        }                                 
+    }
+    var readStream = new MyReadable();
+    
+// simplified version does the same -------------------------------------------
+    var readStream = new Readable({
+        // other stream create options ...
+        read(size) { this.push('.'); },
+        destroy(err, callback) { callback(err); }
+    });
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:darkblue;"><u> TEST-1 </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Readable} = require('stream');
+    
+    class MyReadable extends Readable {
+        constructor(){
+            super();
+            this.counter = 3;
+        }
+        _read(size) {
+            if(this.counter > 0) {                                            // after the 3rd read the 'push()' method returns null
+                this.push('some data');
+                this.counter -= 1;
+            } else {
+                this.push(null);
+            }
+        }
+    }
+    
+    var readStream = new MyReadable();
+    readStream.setEncoding('utf-8');
+    
+    console.log( readStream.read() );
+    console.log( readStream.read() );
+    console.log( readStream.read() );
+    console.log( readStream.read() );
+    console.log( readStream.read() );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\07 implement readable stream TEST-1> node main
+        some data
+        some data
+        some data
+        null                                                                  // there is no more data in the buffer from here 
+        null
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\07 implement readable stream TEST-1>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_read()</mark> / <mark>push()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Readable} = require('stream');
+    
+    var readStream = new Readable({
+        read(size){
+            this.push('some data');                                           // calls the '_read()' method until it fills up the buffer memory
+        }
+    });
+    
+    console.log( readStream.read() );                                         // -> 'some data'       // at this point only the first pushed data is returned 
+    
+    setImmediate(function(){
+        console.log( readStream.readableLength )                              // -> 16389             // we can see here that the 'push()' method filed the entire buffer memory here 
+        console.log( readStream.read() );                                     // -> we read the entire buffer here 
+    });
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\08 _read() push() TEST> node main
+        &lt;Buffer 73 6f 6d 65 20 64 61 74 61&gt;                                   // -! readStream.read()             // frist call 
+        16389
+        &lt;Buffer 73 6f 6d 65 20 64 61 74 61 73 6f 6d 65 20 64 61 74 61 73 6f 6d 65 20 64 61 74 61 73 6f 6d 65 20 64 61 74 61 73 6f 6d 65 20 64 61 74 61 73 6f 6d 65 20 ... 16348 more bytes&gt;      // -! readStream.read()             // second call (the buffer is filled by now)   
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\08 _read() push() TEST>    
+    </pre>
+    <hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_destroy()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Readable} = require('stream');
+    
+    var readStream = new Readable({
+        read(){},
+        destroy(err, callback) {
+            console.log( '_destory() called!' );
+            callback(err);
+        }
+    });
+    
+    readStream.destroy('B+', function(err){
+        console.log( 'error event fired = ' + err);
+    }); 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\09 _destroy() TEST> node main
+        _destory() called!
+        error event fired = B+                                                // thrown error handled
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\09 _destroy() TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Implement Duplex Stream </u></h2>
+    <p> - the duplex stream implements both writable and readable streams in on instance, <u>writable and readable sides are independent from each other</u></p>
+    <p> - the <mark>Duplex</mark> constructor protoypically inherits from the <mark>Readable</mark> constructor and parasiticaly from the <mark>Writable</mark> constructor </p> 
+    <pre class="syntax">
+SYNTAX :    const stream = require('stream');
+        
+            new stream.Duplex(<i>option:obj</i>)                                      // returns a duplex stream object instance (must implement the <mark>_read()</mark> and the <mark>_write()</mark> methods)   
+                - <i>option:obj</i>
+                    - <strong>read|write options</strong>               // both readable and writable options are available here 
+                    - allowHalfOpen: <strong>bol</strong>               // allow the writable side to stay open after the readable side has been ended (Default : true)
+                    - readableObjectMode: <strong>bol</strong>          // sets the readable side in object mode (Default : false)
+                    - writableObjectMode: <strong>bol</strong>          // sets the writable side in object mode (Defalut : false)
+                    - readableHighWaterMark: <strong>nr</strong>        // sets the buffer size of the readable side (Default : 16384 / 16 in object mode)
+                    - writableHighWaterMark: <strong>nr</strong>        // sets the buffer size of the writable side (Default : 16384 / 16 in object mode)
+                                        
+<span style="color:lightgreen">// implement methods ----------------------------------------------------------</span>
+            - both readable and writable implement methods can be implemented in a Duplex stream  
+            - the <mark>_destroy()</mark> method destroys both sides of the duplex stream   
+    </pre>
+    <pre>
+    const {Duplex} = require('stream');
+    const fs = require('fs');
+    
+    var readStream = fs.createReadStream('read.txt');
+    var writeStream = fs.createWriteStream('write.txt');
+    
+    var duplexStream = new Duplex({
+        read(size) { },
+        write(chunk, encode, callback) {
+            this.push(chunk);                                                  // the passed data chunk is written to the readable side of the stream here 
+            callback();
+        }
+    });
+    
+    readStream.pipe(duplexStream).pipe(writeStream);                           // data is basically passing through the duplex stream here (we can use this for data monitoring, throttle, ect... )
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:darkblue;"><u> implement duplex stream TEST-1 </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Duplex} = require('stream');
+    const fs = require('fs');
+    
+    var readStream = fs.createReadStream('read.txt');
+    var writeStream = fs.createWriteStream('write.txt');
+    
+    var duplexStream = new Duplex({
+        read() {},
+        write(chunk, encode, callback) {
+            console.log(chunk.length);                                        // we simply monitor here the data flowing through chunk by chunk  
+            this.push(chunk);                                                 // -! writing the data from the writable to the readable side  
+            callback();
+        }
+    });
+    
+    readStream.pipe(duplexStream).pipe(writeStream);                          // we simply pass the data through the duplex stream here 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\10 implement duplex stream test> node main
+        529
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\10 implement duplex stream test>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>allowHalfOpen</mark> duplex stream option TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const {Duplex} = require('stream');
+    
+    var duplexStream = new Duplex({
+        allowHalfOpen: false,                                                 // this option ends the writable side as soon the readable side ends  
+        read(size) {
+            this.push(null);                                                  // pushing null in the readable side will end the readable side 
+        },
+        write(chunk, encode, callback) {
+            callback();
+        }
+    });
+    
+    duplexStream.read();
+    duplexStream.write('some data');                                          // -! we do not end the writable side here ('end()' method is not called)
+    
+    // event listeners --------------------------------------------------------------------------
+    duplexStream.on('finish', function(){                                     // listener fired once the writable side ends 
+        console.log('finish event fired!' );
+    });
+    
+    duplexStream.on('end', function(){                                        // listener fired once the readable side ends 
+        console.log('end event fired!' );
+    })    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\11 allowHalfOpen duplex option TEST> node main
+        end event fired!
+        finish event fired!                                                    // finish event confirms the end of the writable side of the duplex stream 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\11 allowHalfOpen duplex option TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Implement Transform Stream </u></h2>
+    <p> - the duplex stream implements both readable and writable streams in one instance, <u>the inputed data on the writable side is computed (modified) than outputed on the readable side</u></p> 
+    <p> - the <mark>Transform</mark> constructor inherits from the <mark>Duplex</mark> constructor</p>
+    <p> - the writable side will be paused if the readable side is not consumed! </p>
+    <pre class="syntax">
+SYNTAX :    const stream = require('stream');
+        
+            new stream.Transform(<i>option:obj</i>)                                   // returns a transform stream object instance (must implement the <mark>_transform()</mark> methods)   
+                - <i>option:obj</i>
+                    - <strong>read|write options</strong>               // both readable and writable options are available here 
+                    - transform: <strong>fn</strong>                    // implements the <mark>_transform()</mark> method, (this basically replaces both the <mark>_read()</mark> and the <mark>_write()</mark> methods in one method in the transform stream) <u>(must be implemented)</u>   
+                    - flush: <strong>fn</strong>                        // implements the <mark>_flush()</mark> method
+                                        
+            new stream.PassThrough()                                           // returns a simple transform stream object which lets the data through without modifying it (does not need to implement any methods)   
+            
+<span style="color:lightgreen">// implement methods ----------------------------------------------------------</span>
+            <strong>transformStream</strong>._transform(<strong>chunk:any</strong>, <strong>encode:str</strong>, <strong>fn(<i>err, chunk</i>)</strong>)  // called by the <mark>write()</mark> method which passes the data here 
+                                                                                  the passed data is processed (modified) here than written to the readable buffer by the <mark>push()</mark> method 
+                                                                                  callback function must be called once the processed data is fully consumed from the readable buffer      
+                                                                                  passing a data chunk (as second argument) to the callback function does the same as the <mark>push()</mark> method     
+                                                                                  this method should not be called directly 
+            
+            <strong>transformStream</strong>._flush(<strong>fn(<i>err, chunk</i>)</strong>)                             // called before the <mark>end</mark> event (signals that there is no more data can be read from the readable part of the transfrom stream)   
+                                                                                  callback function must be called inside (emits the <mark>end</mark> event)  
+                                                                                  passing a data chunk (as second argument) to the callback function does the same as the <mark>push()</mark> method
+                                                                                  this method should not be called directly 
+    </pre>
+    <pre>
+    const {PassThrough, Transform} = require('stream');
+    const fs = require('fs');
+    
+    var readStream = fs.createReadStream('read.txt');
+    var writeStream = fs.createWriteStream('write.txt');
+    
+    var lowerCaseTransform = new Transform({
+        transform(chunk, encode, callback) {
+            var data = String(chunk).toLowerCase();                            // all entered data is transformed to lowercase here 
+            this.push(data);                                                   // chunk pushed to the readable buffer 
+            callback();
+            // callback(null, data);                                           // this does the same as the 'push()' method above (null = null error passed)
+        },
+        flush(callback) {                                                      // this method fires before the 'end' event is emitted (when the readable source is empty) 
+            callback(); 
+            // callback(null, 'some data');                                    // we could use the callback to push a last data chunk (just like above in the 'transform()' method)
+        }                                          
+    });
+    
+    readStream.pipe(lowerCase).pipe(writeStream);    
+    
+// PassThrough ----------------------------------------------------------------
+    var passIt = new PassThrough();                                            // this transform stream simply passes the data through (doesn't need to implement any method)                                                         
+                                                                               // we can use the PassThrough transform stream for like simple data monitoring through event listeners and more ...
+    readStream.pipe(passIt).pipe(writeStream);
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:darkblue;"><u> <mark>_transform()</mark> TEST </u></h3>
+    <p> - this little program transform the entered input to 'x'es </p>
+    <pre style="margin-bottom:1px;">
+    const {Transform} = require('stream');
+    
+    var transformStream = new Transform({
+        transform(chunk, encode, callback) {
+            var convert = chunk.toString().replace(/[a-z]|[0-9]/g, 'x');
+            this.push(convert);
+            callback();
+            // callback(null, convert);                                        // this would do the same as the 'this.push(convert)' does above 
+        }
+    });
+    
+    process.stdin.pipe(transformStream).pipe(process.stdout);
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\12 _transform() TEST> node main
+        kicsi kutya 40 eves
+        xxxxx xxxxx xx xxxx    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>_flush()</mark> TEST </u></h3>
+    <pre style="margin-bottom:1px;">
+    const { Transform} = require('stream');
+    const fs = require('fs');
+    
+    var readStream = fs.createReadStream('read.txt');
+    var writeStream = fs.createWriteStream('write.txt');
+    
+    var transformStream = new Transform({
+        transform(chunk, encode, callback) {
+            callback(null, chunk);
+        },
+        flush(callback) {
+            console.log( '_flush() called' );
+            callback();
+        },
+    });
+    
+    transformStream.on('end', function(){
+        console.log( 'end event called!' );
+    });
+    
+    readStream.pipe(transformStream).pipe(writeStream);
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\13 _flush() TEST> node main
+        _flush() called                                                        // called before the 'end' event 
+        end event called!
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\13 _flush() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------>
+<h3 style="color:darkblue;"><u> <mark>PassThrough</mark> TEST </u></h3>
+    <p> - we simply use the passThrough to monitor the data size passing through here </p>
+    <pre style="margin-bottom:1px;">
+    const {PassThrough} = require('stream');
+    const fs = require('fs');
+    
+    var readStream = fs.createReadStream('read.txt');
+    var writeStream = fs.createWriteStream('write.txt');
+    var myPassThrough = new PassThrough();
+    
+    readStream.pipe(myPassThrough).pipe(writeStream);
+    
+    var dataPassingThrough = 0;
+    myPassThrough.on('data', function(chunk){
+        dataPassingThrough += chunk.length;
+        console.log( dataPassingThrough );
+    });    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\14 PassThrough TEST> node main
+        65536
+        131072
+        152592
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\stream\stream implementers api\14 PassThrough TEST>    
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

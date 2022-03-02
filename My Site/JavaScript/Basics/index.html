@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> JS basics</title>    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+    <script>
+        function function_head(){
+            document.getElementById('head_JS').innerHTML = 'Paragraph Changed'
+        }
+    </script>
+</head>
+<body>
+<h1>  JavaScript Basics (ver 4.0.0) </h1>
+    <p> Updated (2017-05-26 / 2017-06-03 / 2017-08-04 / 2018-06-26 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">JavaScript></a> Basics  
+    </p>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.w3schools.com/js/js_scope.asp" target="_blank" >W3Schools JavaScript Scope </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - avoid using <mark>eval()</mark> and <mark>with()</mark> => slows down your code because of how scopes work in JavaScript </p>
+<h2 style="color:green;"><u> Description and Demonstration: </u></h2>
+    <p> - JavaScript is an OOP (Object Oriented Programing) language officialy <span style="background-color:yellow;">ECMA-262</span>, developed to powers web browser scripting </p>
+    <img src="Event Loop.jpg" height="350px">
+    <p> - JavaScritp is a high-level single threated programming language (does 1 thing at the time only) </p>
+    <p> - JS executes tasks what are queued in the "Call Stack" </p>
+    <p> - JS send tasks to APIs <u style="color:yellow;">(they opperate on their own thread!)</u>, once the API finishes the result is placed in the "Callback Queue" </p>
+    <p> - the <u>"Event Loop"</u> opperates between the "Call Stack" and the "Callback Queue", if the "Call Stack" becomes empty the "Event Loop" moves the next queued task form the "Callback Queue" to the "Call Stack" <u>(callled <b>1 Tick)</b></u>, once the task is executed the next task is moved to the Call Stack untill the Evelnt Loop becomes empty </p>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Expressions and Statements </u></h2>
+    <p> - an expression evaluates to a value, a statement does some kind of action </p> 
+    <pre>
+    2 + 2;                                                                             // expression that returns a value (4)
+    
+    var x = 4;                                                                         // statement binds the 4 literal to the 'x' variable   
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;" id="prec_"><u> White space / line break / <mark>,</mark> (comma) / <mark>;</mark> (semicolon) / <mark>()</mark> expression grouping </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>whiteSpace|lineBreak</strong>                                                       // in JavaScript white spaces and line breaks are simply ignored  
+            
+            <strong>exp</strong>, <i>exp, ...</i>;                                                             // the comma separates expressions, all expressions are evaluated in the sequence and the last one is returned   
+            
+            <strong>statement</strong>;                                                                 // the semicolon indicates the end of a statement <u>(automatically assigned on new line character)</u>    
+            
+            (<strong>exp</strong>) <strong>exp</strong>                                                                  // the expression grouping is the highest operator in JavaScript   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var                                                                                // white spaces are ignored in JavaScript (not Python)
+        x 
+        =       10;      
+        
+// ------------------------------------------------------------------------------------
+    var x = 10                                                                         // semicolon omitted (not recommended but works)
+    var y = 11;
+    
+// ------------------------------------------------------------------------------------
+    var x;
+    var y;
+    
+    x = 21, y = 22, 1 + 1;                                                             // -> 2      // all 3 expressions are evaluated and the last is returned  
+    
+    x;                                                                                 // -> 21
+    y;                                                                                 // -> 22
+    
+// ------------------------------------------------------------------------------------
+    2 + 2 * 2;                                                                         // -> 6      // the multiplication has higher precedence   
+    (2 + 2) * 2;                                                                       // -> 8      // the addition is executed frist then the multiplication   
+    </pre>
+    
+    
+    
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Comments </u></h2> 
+    <pre class="syntax">
+SYNTAX:     <strong>jsCode</strong>                   // <strong>comment</strong>                                        // on a line text after <mark>//</mark> is commented out   
+            
+            <strong>jsCode</strong> /* <strong>comment</strong> */ <strong>jsCode</strong>                                                // text between <mark>/*  */</mark> is commneted out   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// single line comment ----------------------------------------------------------------
+    // this is a single line comment                                                   // single line comment is valid only on this line 
+    var x = 10;                                                                        // -! this is not part of the single line comment because it is in a new line
+    
+// multi line comment -----------------------------------------------------------------
+    /* this is                                                                         // start of multi line comment
+        a multi 
+        line 
+        comment
+        var x = 10;                                                                    // !! this is not evaluated because it is part of the comment 
+    */                                                                                 // end of multi line comment 
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Variables and Scoping </u></h2> 
+    <p> - JavaScript variables are identified by unique names, these unique names are called "identifiers" </p>
+    <p> - JavaScript uses Lexical scope only (does not use any Dynamic scopes)  </p>
+    <p> - Lexical Scope is created at write-time, whereas Dynamic Scope (and <mark>this</mark>) are created at runtime </p>
+    <pre class="syntax">
+SYNTAX :    var|let|const <strong class="openable">identifier<div>
+                <p> - can contain <mark>a-z|A-Z</mark> (letters) / <mark>0-9</mark> (digits) / <mark>$</mark> (dollar signs) / <mark>_</mark> (underscore) </p>
+                <p> - case sensitive and cannot start with a number </p>
+                <p> - reserved words (keywords) cannot be used (like: <mark>for</mark>) </p>
+            </div></strong> = <strong>data</strong>                                           // link to <mark>var</mark> <mark>let</mark> <mark>const</mark> keywords <a href="../Operators and Keywords/index.html#var" target="_blank">[link]</a>
+            
+            var|let|const <strong>varName</strong> <small>[= var|let|const <strong>varName</strong> = <i>...</i>]</small> = <strong>val</strong>                // assingns a value to multiple variables 
+    </pre>
+    <p> - a scope is basically an isolated place where variables are isolated from other scope variables </p>
+    <p> - any child scope can access its parent<u>s</u> variables, but <u>parent scopes cannot access their children sope variables</u> </p>
+    <p> - we have 3 scope types in JavaScript, global scope, function scope and block scope </p>
+    <p> - the <mark>var</mark> variable is function scoped, the <mark>let</mark> and <mark>const</mark> variables are block scoped </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var aspire10_$, $aspire10, _aspire10;                                              // valid identifiers 
+    
+    var 1_aspire;                                                                      // -! invalid identifiers (Syntax Error thrown)
+    let if;                                                                            // reserved word is restricted 
+    
+    var cuteId = "I'm awesome";                                                        // these are different variables 
+    var cuteid = "I'm awesome";
+    </pre>
+    <p> - scope </p>
+    <pre>
+// var --------------------------------------------------------------------------------
+    var x = 1;                                                                         // global scope 
+    
+    function test(){                                                                   // function scope (also block scope)
+        var y = 2;                                                                     // function scoped 
+        x;                                                                             // -> 1
+    }
+    test();
+    
+    
+    {                                                                                  // block scope 
+        var z = 3;                                                                     // -! the var keyword is not block scoped    
+        x;                                                                             // -> 1        
+    }
+    
+    y;                                                                                 // -> throws an Reference Error because the 'y' variable is function scoped    
+    z;                                                                                 // -> 3          // -! the 'z' variable is not block scoped therefore available on the global scope    
+    
+// let --------------------------------------------------------------------------------
+    let x = 1;                                                                         // global scope 
+    
+    function test(){                                                                   // function scope (also block scope)
+        let y = 2;
+        x;                                                                             // -> 1
+    }
+    test();
+    
+    {                                                                                  // block scope 
+        let z = 3;
+        x;                                                                             // -> 1  
+    }
+    
+    z;                                                                                 // -> throws an Reference Error because the 'z' variable is block scoped     
+    y;                                                                                 // -> throws an Reference Error because the 'y' variable is block scoped    
+    
+// const -------------------------------------------------------------------------------
+    const x = 1;                                                                       // global scope 
+    
+    function test(){                                                                   // function scope (also block scope)
+        const y = 2;
+        x;                                                                             // -> 1
+    }
+    test();
+    
+    {                                                                                  // block scope 
+        const z = 3;
+        x;                                                                             // -> 1  
+    }
+    
+    z;                                                                                 // -> throws an Reference Error because the 'z' variable is block scoped     
+    y;                                                                                 // -> throws an Reference Error because the 'y' variable is block scoped    
+    </pre>
+    <p> - deep child scope </p>
+    <pre>
+    let x = 1;  
+    
+    {
+        {
+            let y = 2;
+            {
+                {
+                    x;                                                                 // -> 1      // any parent is reachable from a child scope   
+                    y;                                                                 // -> 2
+                }
+            }
+        }
+    }
+    </pre>
+    <p> - Lexical VS Dynamic scoping </p>
+    <pre>
+    var x = 10;
+    
+    function fn1(){
+        return x;
+    }
+    
+    function fn2(){
+        var x = 20;
+        
+        return fn1();
+    }
+    
+// lexical scoping --------------------------------------------------------------------
+    fn2();                                                                             // -> 10             // lexical scopes are declared at write-time 
+    
+// -! dynamic scoping (JavaScript does not uses this) ---------------------------------
+    fn2();                                                                             // -> 20             // dynamic scopes are called at runtime (looks up the call stack)    
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u>Hoisting</u></h2>
+    <p> - in JavaScript all <u>declarations</u> are hoisted (moved to the top of the current scope) <u>(initializations, definition are not hoisted)</u></p>
+    <p> - it's recommended to place variables on the top of the current scope </p>
+    <pre>
+    a;                                                                                 // -> undefined             // variable declaration is hoisted
+    b;                                                                                 // -> undefined             // -! variable declaration is hoisted but the value initialization is not
+    c;                                                                                 // -> throws a Reference Error because the let is not a declaration (therefore is not hoisted)    
+    
+    var a;                                                                             // this is a declaration;
+    var b = 22;                                                                        // declaration + initialization (the initialization part is not hoisted)     
+    const c = 23;                                                                      // not a declaration 
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4><u> hoisting TEST </u></h4>
+    <p id="hoist_demo"></p>
+<script>
+    var h1 = "executed-1";            // this is a declaration and initialization
+    h2 = "executed-2";                // initializate a value
+    var h4;                 // declaration only on the top but will be undefined because the initialization is on the bottom!
+    
+    document.getElementById('hoist_demo').innerHTML =
+        "Variable \"h1\" is an initialization and declaration on the top = " + h1 + "<br>" +
+        "Variable \"h2\" is initializated on the top but declared on the bottom = " + h2 + "<br>" +
+        "Variable \"h3\" is initializated and declared on the bottom ot the code = " + h3 + "<br>" +
+        "Variable \"h4\" is declared at the top but initializated on the bottom = " + h4;
+    
+    var h2;                 // this is a declaration Javascipt moves it to the top of the code
+    var h3 = "executed-3";            // this initialization and declaration at the bottom JavaScript does not move to the top!
+    h4 = "executed-4";                // initialization only won't be moved to the top eighter!
+</script>
+        <details>
+        <summary> CODE : </summary>
+    <pre>
+    &lt;p id="hoist_demo"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var h1 = 10;            // this is a initialization
+    h2 = 20;                // initializate a value
+    var h4;                 // declaration on the top but will be undefined because the initialization is on the bottom!
+    
+    document.getElementById('hoist_demo').innerHTML =
+        "Variable \"h1\" is an initialization = " + h1 + "&lt;br&gt;" +
+        "Variable \"h2\" is a declaration = " + h2 + "&lt;br&gt;" +
+        "Variable \"h3\" is initializated at the bottom ot the code = " + h3 + "&lt;br&gt;" +
+        "Variable \"h4\" is declared at the top but initializated on the bottom = " + h4;
+    
+    var h2;                 // this is a declaration Javascipt moves it to the top of the code
+    var h3 = 30;            // this initialization is declared at the bottom JavaScript does not move to the top!
+    h4 = 40;                // initialization only won't be moved to the top eighter!
+&lt;/script&gt;
+    </pre>
+        </details>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u>Strict Mode  
+    <span id="browserSupport" title="updated: 2021-06-04">
+        <span><i class="fab fa-chrome"></i> 13 </span>
+        <span><i class="fab fa-firefox"></i> 4 </span>
+        <span><i class="fab fa-opera"></i> 12.1 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+        <span><i class="fab fa-safari"></i> 6 </span>
+        <span><i class="fab fa-node-js"></i> 0.1.14 </span>
+    </span>
+</u></h2>
+    <p> - JavaScript strict mode is a mode to better check for errors, it basically turns "bad syntax" into real errors </p>
+    <pre class="syntax">
+SYNTAX :    "use strict"                                                               // <i class="fab fa-js">5</i> enables strict mode at the beginning of the current scope
+                                                                                          undeclared variables are not allowed (<mark>var</mark> keyword required)   
+                                                                                          deleting variables, objects or functions with the <mark>delete</mark> keyword is not allowed 
+                                                                                          deleting undeletable property is not allowed (ex: <mark>delete Object.prototype</mark>)    
+                                                                                          duplicate arguments is not allowed (ex: <mark>function(a, a){}</mark>)   
+                                                                                          octal literals or octal escape characters are not allowed (ex: <mark>010</mark>)    
+                                                                                          setter or getter only properties are not allowed 
+                                                                                          using the <mark>eval()</mark> method to create variables is not allowed 
+                                                                                          using the <mark>with()</mark> method is not allowed 
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    "use strict";                               // strict mode in global scope <b style="text-decoration:underline;">(local sopes are running in strict mode to in this case!)</b>
+    
+    function myFunc() {
+        "use strict"                            // using strict mode in local scope (in this case the global scope is NOT running in strict mode)
+    }
+    </pre>
+<p><b> - words not allowed as variable names in strict mode </b></p>
+    <pre>
+    arguments       interface       private         static
+    eval            let             protected       yield
+    implements      package         public  
+    </pre>
+<p><b> - undeclared variables will cause error in Strict Mode </b></p>
+    <pre>
+    x = "this string";                          // throws an error in strict mode
+    y = {Mark:"Audi", Model:"A8"};              // throws an error in strict mode
+    </pre>
+<p><b> - deleting variable, object or function is Not Allowed in Strict Mode </b></p>
+    <pre>
+    var x = 21;
+    var y = {p1:10, p2:20};
+    function z(a, b){};
+    
+    delete x;                                   // throws an error in strict mode
+    delete y;                                   // throws an error in strict mode
+    delete z;                                   // throws an error in strict mode
+    </pre>
+<p><b> - duplicating parameters is Not Allowed in Strict Mode</b></p>
+    <pre>
+    function myFunc(a, a){}                     // throws an error in strict mode
+    </pre>
+<p><b> - octal literals <mark>010</mark> and octal escape characters <mark>\"010</mark> are Not Allowed in Stirct Mode </b></p>
+<pre>
+    var x = 010;                                // throws an error in strict mode (octal literal)
+    var y = "\045";                             // throws an error in strict mode (octal escape literal)
+    </pre>
+<p><b> - <u>set</u> read-only and get-only properties are Not Allowed in Strict Mode </b></p>
+   <pre>
+// read-only property -------------------- 
+    var myObj = {prop1:"myVal"};
+    Object.defineProperty(myObj, "prop1", {writable:false});    // <b>this won't throw an error (it is OK <u>to have</u> read-only property)</b>
+    myObj.prop1;                                // -> "myVal"   // we can read read-only property in strict mode no problem!
+    myObj.prop1 = "modifiedVal";                // throws an error in strict mode (read-only property cannot be modified)
+    
+// get-only property ---------------------
+    var myObj = {get prop1() {return "value what you get"}};    // the "prop1" is set as getter-only propearty (no "set" specified)
+    myObj.prop1;                                // -> "value what you get"      // we can read the get-only property no problem!
+    myObj.prop1 = "set new value";              // throws an error in strict mode <u>(because the property has no setter function)</u>     
+    </pre>
+<p><b> - deleting an undeletable property in Strict Mode is Not Allowed </b></p>
+    <pre>
+    delete Object.prototype;                    // throws an error in strict mode
+    </pre>
+<p><b> - using the <mark>eval()</mark> function to create variables is Not Allowed in Strict Mode </b></p>
+    <pre>
+    eval("var x = 'this variable'");            // throws an error in strict mode          
+    </pre>
+<p><b> - using the <mark>with</mark> statement is Not Allowed in Strict Mode </b></p>
+    <pre>
+    with (Math){                                // throws an error in strict mode  
+        x = cos(3 * PI) + sin (LN10)    
+        y = tan(14 * E)  
+    }  
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4><u> undeclared variable in strict mode TEST </u></h4>
+    <p> - open the console window the see the result </p>
+<script>
+    "use strict";
+console.warn("undeclared varialbe");
+    xVar = 45;                                              // not allowed in strict mode
+    xObj = {door1:"men", door2:"women"};                    // not allowed in strict mode
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+    "use strict";
+console.warn("undeclared varialbe");
+    Xvar = 45;                                              // not allowed in strict mode
+    Xobj = {door1:"men", door2:"women"};                    // not allowed in strict mode
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> deleting variable, function or object in strict mode TEST </u></h4>
+    <p> - open the console window the see the result </p>
+<script>
+    "use strict";
+        var delVar = "I am a text string";
+        var delObj = {Name:"Arpad", Surename:"Pall"};
+        function delFunc(x, y){ return x + y; }
+        
+        delete delVar;                          // this is printed as error in console
+        delete delObj;                          // this would be printed if first found error
+        delete delFunc;                         // this would be printed if first found error too
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button onmouseup="delRestrictions()"&gt; TEST &lt;/button&gt;
+&lt;script&gt;
+    "use strict";
+        var delVar = "I am a text string";
+        var delObj = {Name:"Arpad", Surename:"Pall"};
+        function delFunc(x, y){ return x + y; }
+        
+        delete delVar;                          // this is printed as error in console
+        delete delObj;                          // this would be printed if first found error
+        delete delFunc;                         // this would be printed if first found error too
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> duplicated parameters in strict mode TEST </u></h4>
+    <p> - run console you'll see the error on the line <mark>765</mark>(line might be changed by browser)</p>
+    <button onmouseup="duplicateParam()"> TEST </button>
+<script>
+    function duplicateParam() {
+    "use strict";
+        function testFunc(a, a){};              // this fails in strict mode
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+    <pre>
+&lt;script&gt;
+"use strict";
+    function testFunc(a, a){};              // this fails in strict mode
+&lt;/script&gt;
+    </pre>
+        </details>
+<h4><u> Octal literal and octal escape characters</u></h4>
+    <p> - run console you'll see the error on the line <mark>781</mark> (line might be changed by browser)</p>
+<script>
+"use strict";
+    var hexadecimal = 0x10;                 // this doesn't fail in stirct mode
+    var octal = 010;                        // this will fail and printed on console
+    var octal = "\010";                     // this will fail too (it would be printed if this is the first error) 
+</script>
+<h4><u> Writing a "read-only" or "get-only" property </u></h4>
+    <p> - run console you'll see the errors on the <mark>791</mark> and <mark>797</mark> lines (line might be changed by browser)</p>
+<script>
+"use strict";
+    var Obj_1 = {Name:"Arpad", Surename:"Pall"};
+    Object.defineProperty(Obj_1, "Sex", {value:"Male", writable:false});
+    
+    Obj_1.Sex = "Female";                   // this will fail and printed on console                       
+</script>
+<script>
+"use strict";
+    var Obj_2 = {get Name(){return "Arpad"}};
+    
+    Obj_2.Name = "Bircsy";                  // this will fail and printed on console   
+</script>
+        <details>
+        <summary> CODE : </summary>
+    <pre>
+&lt;script&gt;
+"use strict";
+    var Obj_1 = {Name:"Arpad", Surename:"Pall"};
+    Object.defineProperty(Obj_1, "Sex", {value:"Male", writable:false});
+    
+    Obj_1.Sex = "Female";                   // this will fail and printed on console                       
+&lt;/script&gt;
+&lt;script&gt;
+"use strict";
+    var Obj_2 = {get Name(){return "Arpad"}};
+    
+    Obj_2.Name = "Bircsy";                  // this will fail and printed on console
+&lt;/script&gt;
+    </pre>
+        </details>
+<h4><u> delete an undeletable property </u></h4>
+    <p> - run console you'll see the error on the line <mark>821</mark> (first found error reported only)(line might be changed by browser)</p>
+<script>
+"use strict";
+    delete Object.prototype;                // this will fail and printed on console         
+</script>
+        <details>
+        <summary> CODE : </summary>
+    <pre>
+&lt;script&gt;
+"use strict";
+    delete Object.prototype;                // this will fail and printed on console         
+&lt;/script&gt;
+    </pre>
+        </details>
+<h4><u> using the <mark>eval()</mark> function to create a variable </u></h4>
+    <p> - run console you'll see the error on the line <mark>838</mark> (first found error reported only)(line might be changed by browser)</p>
+<script>
+"use strict";
+    eval("var szamjegy = 32;");                    // this will fail and printed on console 
+    
+    document.writeln(szamjegy);
+</script>
+        <details>
+        <summary> CODE : </summary>
+    <pre>
+&lt;script&gt;
+"use strict";
+    eval("var szamjegy = 32;");                    // this will fail and printed on console 
+    
+    document.writeln(szamjegy);
+&lt;/script&gt;
+    </pre>
+        </details>
+<h4><u> using the <mark>with</mark> statement in strict mode </u></h4>
+    <pre>
+    "use strict";
+        with {};                                                                       // -> throws a Syntax Error (with statement not allowed in strict mode)
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4><u> restricted words in Strict Mode </u></h4>
+    <p> - run console you'll see the error on the line <mark>870</mark> (first found error reported only)(line might be changed by browser)</p>
+<script>
+"use strict";
+    var arguments = "this text string";             // this will fail and printed on console 
+    var eval = "this text string";                  // this will fail and would be printed on console if first error
+    var implements = "this text string";            // this will fail and would be printed on console if first error
+    var interface = "this text string";             // this will fail and would be printed on console if first error
+    var let = "this text string";                   // this will fail and would be printed on console if first error
+    var package = "this text string";               // this will fail and would be printed on console if first error
+    var private = "this text string";               // this will fail and would be printed on console if first error
+    var protected = "this text string";             // this will fail and would be printed on console if first error
+    var public = "this text string";                // this will fail and would be printed on console if first error
+    var static = "this text string";                // this will fail and would be printed on console if first error
+    var yield = "this text string";                 // this will fail and would be printed on console if first error
+</script>
+        <details>
+        <summary> CODE : </summary>
+    <pre>
+&lt;script&gt;
+"use strict";
+    var arguments = "this text string";             // this will fail and printed on console 
+    var eval = "this text string";                  // this will fail and would be printed on console if first error
+    var implements = "this text string";            // this will fail and would be printed on console if first error
+    var interface = "this text string";             // this will fail and would be printed on console if first error
+    var let = "this text string";                   // this will fail and would be printed on console if first error
+    var package = "this text string";               // this will fail and would be printed on console if first error
+    var private = "this text string";               // this will fail and would be printed on console if first error
+    var protected = "this text string";             // this will fail and would be printed on console if first error
+    var public = "this text string";                // this will fail and would be printed on console if first error
+    var static = "this text string";                // this will fail and would be printed on console if first error
+    var yield = "this text string";                 // this will fail and would be printed on console if first error
+&lt;/script&gt;
+    </pre>
+        </details>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Explicit VS Implicit data coerction </u></h2>
+    <p> - Explicit coerction when we intentionally convert a data type </p>
+    <p> - JavaScript tries to convert the 'wrong' data type into the 'right' data type on operation <u>this is called implicit coerction in JavaScript</u> </p>
+    <p> - JavaScript uses the <mark>+</mark> operatior for both additon and concatenation, addition for Numbers and concatenations for Strings</p>
+    <p> - JavaScript Operates from left to right, <u>any number after a string will be concatenated</u> in a statement!</p>
+    <pre>
+// explicit coerction -----------------------------------------------------------------
+    var x = '1';
+    
+    var y = Boolean(x);                                                                // -! explicit coerction (we intended to convert the data type)
+    
+    y;                                                                                 // -> true 
+    typeof y;                                                                          // -> 'boolean'
+    
+// implicit coerction -----------------------------------------------------------------
+    var x = '2' * 2;                                                                   // -!
+    
+    x;                                                                                 // -> 4 
+    typeof x;                                                                          // -> 'number'
+    
+// the + operator ---------------------------------------------------------------------
+    1 + 1 + 1;                                                                         // -> 3              // when used with numers performs addition 
+    
+    1 + '1'                                                                            // -> '11'           // data after the '+' operator is concatenated  
+    1 + 1 + '1' + 1 + 1;                                                               // -> '2111' 
+    </pre>
+<details class="example">
+        <summary> Example : </summary>
+<p><u> Adding numbers and strings </u></p>
+    <p id="numberVSstring"></p>
+<script>
+    var a = "The" + " " + "Boss";           // concatenation    - result (string)
+    var b = 5 * 2 - 2;                      // operation        - result (number)
+    var c = "The" + 85 + "'s";              // concatenation    - result (string)
+    var d = 40 + 45 + "is" + 40 + 45;       // concatenation    - result (string) 
+                                            //  numbers before the string calculated, after the string concatenated
+    document.getElementById('numberVSstring').innerHTML = a + " / " + b + " / " + c + " / " + d;
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="numberVSstring"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var a = "The" + " " + "Boss";           // concatenation    - result (string)
+    var b = 5 * 2 - 2;                      // operation        - result (number)
+    var c = "The" + 85 + "'s";              // concatenation    - result (string)
+    var d = 40 + 45 + "is" + 40 + 45;       // concatenation    - result (string) 
+                                            //  numbers before the string calculated, after the string concatenated
+    document.getElementById('numberVSstring').innerHTML = a + " / " + b + " / " + c + " / " + d;
+&lt;/script&gt;
+    </pre>    
+    </details>
+<p><u> String Convertion to Number </u></p>
+    <p id="convert_string_to_number"></p>
+<script>
+    var a = "5" * "5";                              // returns a number
+    var b = "50" / "10";                            // returns a number
+    var c = "25" - "10";                            // returns a number
+    var d = "10" + "10";                            // returns a string
+    var e = "50" * "2" / "5" - "1" + "85";          // returns a string (what a mess) :D 
+    document.getElementById('convert_string_to_number').innerHTML = a + " / " + b + " / " + c + " / " + d + " / " + e;
+    typeof 20;
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="convert_string_to_number"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var a = "5" * "5";                              // returns a number
+    var b = "50" / "10";                            // returns a number
+    var c = "25" - "10";                            // returns a number
+    var d = "10" + "10";                            // returns a string
+    var e = "50" * "2" / "5" - "1" + "85";          // returns a string (what a mess) :D 
+    document.getElementById('convert_string_to_number').innerHTML = a + " / " + b + " / " + c + " / " + d + " / " + e;
+&lt;/script&gt;
+    </pre>
+    </details>
+<p><u> Result <mark>infinity</mark></u></p>
+    <p id="infinity"></p>
+<script>
+    var a = 25 / 0;                     // division by "0"
+    var b = -22 / 0;                    // division by "0"
+    var x = 1542e16000 + 1254e154;
+    var y = -154e355 - 125e546;
+    document.getElementById('infinity').innerHTML = x + " / " + y + " // " + a + " / " + b;
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="infinity"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var a = 25 / 0;                     // division by "0"
+    var b = -22 / 0;                    // division by "0"
+    var x = 1542e16000 + 1254e154;
+    var y = -154e355 - 125e546;
+    document.getElementById('infinity').innerHTML = x + " / " + y + " // " + a + " / " + b;
+&lt;/script&gt;
+    </pre>
+    </details>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Deconstructing Assignement 
+    <span id="browserSupport" title="updated: 2021-07-12">
+        <span><i class="fab fa-chrome"></i> 49 </span>
+        <span><i class="fab fa-firefox"></i> 41 </span>
+        <span><i class="fab fa-opera"></i> 36 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+        <span><i class="fab fa-safari"></i> 8 </span>
+        <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+        <span class="openable">more... <div>
+            <p> computed property names </p>
+                <span id="browserSupport" title="updated: 2021-07-12">
+                    <span><i class="fab fa-chrome"></i> 49 </span>
+                    <span><i class="fab fa-firefox"></i> 41 </span>
+                    <span><i class="fab fa-opera"></i> 36 </span>
+                    <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                    <span><i class="fab fa-safari"></i> 8 </span>
+                    <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+                </span>
+            <hr>
+            <p> rest in Arrays </p>
+                <span id="browserSupport" title="updated: 2021-07-12">
+                    <span><i class="fab fa-chrome"></i> 49 </span>
+                    <span><i class="fab fa-firefox"></i> 41 </span>
+                    <span><i class="fab fa-opera"></i> 36 </span>
+                    <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                    <span><i class="fab fa-safari"></i> 8 </span>
+                    <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+                </span>
+            <hr>
+            <p> <span class="fas fa-lfask"></span> rest in Object </p>
+                <span id="browserSupport" title="updated: 2021-07-12">
+                    <span><i class="fab fa-chrome"></i> 60 </span>
+                    <span><i class="fab fa-firefox"></i> 55 </span>
+                    <span><i class="fab fa-opera"></i> 47 </span>
+                    <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                    <span><i class="fab fa-safari"></i> 11.1 </span>
+                    <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+                </span>
+        </div></span>
+    </span>
+</u></h2>
+    <p> - makes possible to unpack values from arrays, or properties from objects, into distinct variables </p>
+    <pre class="syntax">
+SYNTAX :        [<strong>var</strong><small class="openable">[=<i>val</i>]<div>
+                    <p> - default value (in case no value is assinged to this variable) </p>
+                </div></small><i>, ...</i>, <span class="openable">...<strong>var</strong><div>
+                    <p> - additional values are assigned in this <strong>var</strong> Array </p>
+                </div></span>] = [<strong>val</strong><i>, ...</i>]                                // using Array
+                var|let|const [<strong>var</strong><small class="openable">[=<i>val</i>]<div>
+                    <p> - default value (in case no value is assinged to this variable) </p>
+                </div></small><i>, ...</i>, <span class="openable">...<strong>var</strong><div>
+                    <p> - additional values are assigned in this <strong>var</strong> Array </p>
+                </div></span>] = [<strong>val</strong><i>, ...</i>]        
+                
+                ({<strong>var</strong><small class="openable">[=<i>val</i>]<div>
+                    <p> - default value (in case no value is assinged to this variable) </p>
+                </div></small><i>, ...</i>, <span class="openable">...<strong>var</strong><div>
+                    <p> - additional values are assigned in this <strong>var</strong> Array </p>
+                </div></span>} = {<strong>prop</strong>:<strong>val</strong><i>, ...</i>})                         // using Object  
+                var|let|const {<strong>var</strong><small class="openable">[=<i>val</i>]<div>
+                    <p> - default value (in case no value is assinged to this variable) </p>
+                </div></small><i>, ...</i>, <span class="openable">...<strong>var</strong><div>
+                    <p> - additional values are assigned in this <strong>var</strong> Array </p>
+                </div></span>} = {<strong>prop</strong>:<strong>val</strong><i>, ...</i>}  
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// using Array ------------------------------------------------------------------------
+    [a, b, c] = [21, 22]
+    
+    a;                                                                                 // -> 21
+    b;                                                                                 // -> 22
+    c;                                                                                 // -> undefined 
+    
+  // -------------------------------------------------
+    [a, b, c=23] = [21, 22]                                                            // default value assigned to 'c' variable  
+    
+    a;                                                                                 // -> 21
+    b;                                                                                 // -> 22
+    c;                                                                                 // -> 23
+    
+  // -------------------------------------------------
+    [a, b, ...c] = [21, 22, 23, 24, 25]                                                // the rest of the values are spread in an array of the 'c' variable   
+    
+    a;                                                                                 // -> 21
+    b;                                                                                 // -> 22
+    c;                                                                                 // -> [23, 24, 25]
+    
+// using Object -----------------------------------------------------------------------
+    ({a, b, c} = {a:21, b:22})
+    
+    a;                                                                                 // -> 21
+    b;                                                                                 // -> 22
+    c;                                                                                 // -> undefined  
+    
+  // -------------------------------------------------
+    ({a, b, c=23} = {a:21, b:22})                                                      // default value assigned to 'c' variable   
+    
+    a;                                                                                 // -> 21
+    b;                                                                                 // -> 22
+    c;                                                                                 // -> 23
+    
+  // -------------------------------------------------
+    ({a, b, ...c} = {a:21, b:22, c:23, d:24, e:25});                                   // the rest of the values are spread in an ojbect of the 'c' variable   
+    
+    a;                                                                                 // -> 21 
+    b;                                                                                 // -> 22
+    c;                                                                                 // -> {c:23, d:24, e:25}
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> JavaScript in the browser </u></h2>
+    <p> - in the browser JavaScript can <u>change the content of an HTML element</u>, <u>change HTML attributes</u>, <u>change HTML styles</u> and <u>hide/show HTML elements</u>
+    <p> - JavaScript code can be inserted in the head element or in the body of the HTML document </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+&lt;head&gt;
+    &lt;script&gt;
+        document.write("Hello Word!");                                                 // JavaScript embeded in the head 
+    &lt;/script&gt;
+    &lt;script src="myJavaScript.js"&gt;                                                     // external JavaScript file embeded in the head 
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+        document.write("Hello Word!");                                                 // JavaScript embeded in the body 
+    &lt;/script&gt;
+    &lt;script src="myJavaScript.js"&gt;                                                     // external JavaScript file embeded in the body 
+&lt;/body&gt;
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Change HTML Content TEST </u></h4/> 
+    <p id="JS_html_content_change"> By Clicking on the Button Below this text will Change </p>
+    <button type="button" onclick="document.getElementById('JS_html_content_change').innerHTML = 'Text Changed with JavaScript'"> Click to change the Text above</button>
+    <details>
+    <summary> CODE :</summary>
+        <pre>
+        -- CODE (HTML) --
+        &lt;p id="JS_html_content_change"&gt; By Clicking on the Button Below this text will Change &lt;/p&gt;
+        &lt;button type="button" onclick="document.getElementById('JS_html_content_change').innerHTML = 'Text Changed with JavaScript'"&gt; Click to change the Text above &lt;/button&gt;
+        </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Change HTML Attributes TEST </u></h4>
+    <p> - JavaScript changes the images in this exemple by clicking on these buttons</p>
+    <button onclick="document.getElementById('JS_attribute_change').src='pic_bulbon.gif'">Turn On The Light</button>
+    <img id="JS_attribute_change" src="pic_bulboff.gif">
+    <button onclick="document.getElementById('JS_attribute_change').src='pic_bulboff.gif'">Turn Off The Light</button>
+    <details>
+    <summary> CODE :</summary>
+        <pre>
+        -- CODE (HTML) --
+        &lt;button onclick="document.getElementById('JS_attribute_change').src='pic_bulbon.gif'"&gt;Turn On The Light&lt;/button&gt;
+        &lt;img id="JS_attribute_change" src="pic_bulboff.gif"&gt;
+        &lt;button onclick="document.getElementById('JS_attribute_change').src='pic_bulboff.gif'"&gt;Turn Off The Light&lt;/button&gt;
+        </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Change HTML Styles (CSS) TEST </u></h4>
+    <p> - this is just like changing the attribute</p>
+    <p id="JS_style_change" style="color:blue;"> This text's Size will change by clicking on the button</p>
+    <button onclick="document.getElementById('JS_style_change').style.fontSize='30px'">Change Text Size</button>
+    <details>
+    <summary> CODE :</summary>
+        <pre>
+        -- CODE (HTML) --
+        &lt;p id="JS_style_change" style="color:blue;"&gt; This text's Size will change by clicking on the button&lt;/p&gt;
+        &lt;button onclick="document.getElementById('JS_style_change').style.fontSize='30px'"&gt;Change Text Size&lt;/button&gt;
+        </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Hide and Show HTML Elements TEST </u></h4>
+    <p id="JS_show_and_hide" style="font-size:20px; font-weight:bold; color:blue;"> This text will hide or display with the buttons below</p>
+    <button onclick="document.getElementById('JS_show_and_hide').style.visibility='hidden'">HIDE text</button>
+    <button onclick="document.getElementById('JS_show_and_hide').style.visibility='visible'">SHOW text</button>
+    <details>
+    <summary> CODE :</summary>
+        <pre>
+        -- CODE (HTML) --
+        &lt;p id="JS_show_and_hide" style="font-size:20px; font-weight:bold; color:blue;"&gt; This text will hide or displays with the buttons below &lt;/p&gt;
+        &lt;button onclick="document.getElementById('JS_show_and_hide').style.visibility='hidden'"&gt; HIDE text &lt;/button&gt;
+        &lt;button onclick="document.getElementById('JS_show_and_hide').style.visibility='visible'"&gt; SHOW text &gt;/button&gt;
+        </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> JavaScript code in the <mark>&lt;head&gt;</mark> element </u></h4>
+    <p id="head_JS" style="color:blue; font-weight:bold;"> Paragrap will change with JavaScript placed in the head </p>
+    <button onclick="function_head()"> Change Paragraph (JS in Head)</button>
+        <details>
+        <summary> CODE :</summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;head&gt;
+        &lt;meta charset="utf-8"&gt;
+        &lt;title&gt; JS basics&lt;/title&gt;    
+        &lt;link rel="stylesheet" type="text/css" href="styles.css"&gt;
+        &lt;script&gt;
+            function function_head(){
+                document.getElementById('head_JS').innerHTML = 'Paragraph Changed'
+            }
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;p id="head_JS" style="color:blue; font-weight:bold;"&gt; Paragrap will change with JavaScript placed in the head &lt;/p&gt;
+        &lt;button onclick="function_head()"&gt; Change Paragraph (JS in Head) &lt;/button&gt;
+    &lt;/body&gt;
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Javascript code in the <mark>&lt;body&gt;</mark> element </u></h4>
+    <p id="body_JS" style="color:blue; font-weight:bold;"> Paragrap will change with JavaScript placed in the body </p>
+    <button onclick="function_body()"> Change Paragraph (JS in Body)</button>
+<script>
+    function function_body(){
+        document.getElementById('body_JS').innerHTML = 'Paragraph Changed'
+    }
+</script>
+        <details>
+        <summary> CODE :</summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;p id="body_JS" style="color:blue; font-weight:bold;"&gt; Paragrap will change with JavaScript placed in the body &lt;/p&gt;
+    &lt;button onclick="function_body()"&gt; Change Paragraph (JS in Body)&lt;/button&gt;
+&lt;script&gt;
+    function function_body(){
+        document.getElementById('body_JS').innerHTML = 'Paragraph Changed'
+    }
+&lt;/script&gt;
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><ins> JavaScript code in an External File TEST </ins></h4>
+    <p id="external_JS" style="color:blue; font-weight:bold;"> Paragrap will change with JavaScript placed in an extrenal file </p>
+    <button onclick="function_external()"> Change Paragraph (extrenal JS)</button>
+<script src="myfirst_JS.js"></script>
+        <details>
+        <summary> CODE :</summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;p id="external_JS" style="color:blue; font-weight:bold;"&gt; Paragrap will change with JavaScript placed in an extrenal file &lt;/p&gt;
+    &lt;button onclick="function_external()"&gt; Change Paragraph (extrenal JS) &lt;/button&gt;
+&lt;script src="myfirst_JS.js"&gt;&lt;/script&gt;
+        
+-- CODE (JS) (external file "myfirst_JS.js") --
+    function function_external(){
+        document.getElementById('external_JS').innerHTML = 'Paragraph Changed'
+    }
+        </pre>
+        </details>
+</details>
+    
+    
+    <br><br>
+</body>
+</html>

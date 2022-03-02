@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> HTTP Server </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> HTTP Server (ver 3.4.1) </h1>
+    <p> Updated ( 2020-05-19 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">HTTP></a> HTTP Server 
+    </p>
+<table class="table" id="server">
+<caption> HTTP Server (Server object) </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>http</strong>.createServer(<i class="openable">option:obj<div>
+            <p> IncomingMessage: <strong>obj</strong> - specifies the IncomingMessage class to be used (Default: <mark>IncomingMessage</mark>) </p>
+            <p> ServerResponse: <strong>obj</strong> - specifies the ServerResponse class to be used (Default: <mark>ServerResponse</mark>) </p>
+            <p> insecureHTTPParser: <strong>bol</strong> - invalid HTTP parser used which accept invalid HTTP headers (Default: <mark>false</mark>) <u style="color:orangered;"> [TESTED: 2020-04-29] not working! custom headers can be passed with or without this option to be switched!</u> </p> 
+            <p> maxHeaderSize: <strong>nr</strong> - allowed maximum request header size in bytes (Default: <mark>16384</mark>) <u>(Overrides the <mark>--max-http-header-size</mark> CLI option) </u></p>
+            </div></i>, <i class="openable">fn(incMsg, srvResp)<div>
+                <p> - <mark>request</mark> listener callback </p>
+            </div></i>) 
+        </td>
+        <td> creates and returns an HTTP server (object), the returned httpServer object is extension of <mark>EventEmitter</mark> and <mark>net.Server</mark> classes
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.13 </span>
+                <span><i class="fab fa-node-js"></i> 8.12.0 option argument </span>
+                <span><i class="fab fa-node-js"></i> 13.3.0 maxHeaderSize option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.close(<i>fn(err)</i>) </td>
+        <td> 
+            - asynchronously stops the server listening for new connections <u>(keeps pending connections)</u> <br>
+            - the server is finally closed when all connections are ended <br>
+            - when the server is closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback argument throws if this method is called on a closed server) <br>
+            - returns this <strong>httpSrv</strong> object
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.headersTimeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the parser waits to receive the complete message headers (Default: <mark>60000</mark> / <mark>0</mark> = infinity) <br>
+            - timer starts from the first recieved byte till the end of the message header <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 10.14.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.keepAliveTimeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event for <span class="openable">requested 'keep-alive' connections<div>
+                <p> - for normal connections the server drops the connection after responding with the <mark>end()</mark> method </p>
+                <p> - if the client requests a keep-alive connection (client Agent has the <mark>keepAlive</mark> set) the server <u>doesn't drop the connection after responding with the <mark>end()</mark> method</u> </p> 
+                <p> - this timer kicks-in once the server responded with the <mark>end()</mark> method to a keep-alive request </p> 
+                <p> - if the server receives new data from the client before this timeout expires the <mark>timeout</mark> and <mark>setTimeout()</mark> rules apply! </p>
+            </div></span> (Default: <mark>5000</mark> / <mark>0</mark> = infinity) <br>
+            - counter starts after the server responds to a keep-alive request with <u>the <mark>end()</mark> method</u> <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>            
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv</strong>.listen(<i>port:nr, host:str,</i> <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn(srvResp)<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>) <br>
+            <strong>httpSrv</strong>.listen({port:<strong>nr</strong>, host:<strong>srt</strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>}, <i class="openable">fn(srvResp)<div>  
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously starts the server listening for connections <br>
+            - makes the server emit the <mark>listening</mark> event (if the server is successfully started) <br>
+            - can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method <br>
+            - returns this <strong>httpSrv</strong> object
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.listening </td>
+        <td> returns <mark>true</mark> if the server is listening for connections, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 5.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.maxHeadersCount </td>
+        <td> number of request headers parsed by the parser (Default: <mark>2000</mark>)
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv</strong>.setTimeout(<i class="openable">nr:ms, fn(socket)<div>
+                <p> - <i>nr:mr</i> - set timeout (Default: <mark>120000</mark>) </p>
+                <p> - <i>fn(socket)</i> <mark>timeout</mark> event's callback function (the <mark>socket</mark> argument references the timed out socket </p> 
+            </div></i>)        
+        </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default timeout: <mark>0</mark> / <mark>0</mark> = infinity) <br>
+            - counter reset each time the server receives a new data from the client <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event (which is the 2nd argument) is not listened the connection is dropped)</u>            
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.timeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default: <mark>0</mark> / <mark>0</mark> = infinity) <br>
+            - counter reset each time the server receives a new data from the client <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>            
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+                <span><i class="fab fa-node-js"></i> 13.0.0 (Default: <mark>2000</mark> (before was <mark>0</mark>)) </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('checkContinue', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> 
+            - emitted each time the server receives a message with the <mark>Expect: 100-continue</mark> header (<mark>request</mark> event not emitted) <br>
+            - to respond this request use the <mark><strong>srvResp</strong>.writeContine()</mark> method or generate a <mark>400 Bad Request</mark> response <br>
+            - if this event is not listened for the server automatically responds with a <mark>100 Continue</mark> message  
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('checkExpectation', <strong>fn(incMsg, srvResp</strong>) </td>
+        <td> 
+            - emitted each time the server receives a message with the <mark>Expect: *</mark> header <u>(<mark>100-continue</mark> value excluded)</u> (<mark>request</mark> event not emitted) <br>
+            - if this event is not listened for the server automatically responds with a <mark>417 Expectation Failed</mark> message
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 5.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when server closes (all server connections are closed)
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('clientError', <strong>fn(err, socket)</strong>) </td>
+        <td> 
+            - emitted when the client connection emits an error, the emitted error is forwarded here <br>
+            - if this event is emitted the server should close the connection with the <mark>HTTP/1.1 400 Bad Request</mark> status response through the <strong>socket</strong>
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.94 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv.listener</strong>('connect', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - in the Node documentation it says that it is the <mark>request</mark> events incomingMessage argument but in this listener it does not appear to have any function since the client and the server are communicating through the socket! [TESTED: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the requested client </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)
+        </td>
+        <td> 
+            - emitted when the (proxy) server receives a <mark>CONNECT</mark> request <br>
+            - the server communicates with the client through the <strong>socket</strong> argument (which is the tunnel between the server and the client) <br>
+            - if this event is not listened the connection is dropped   
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('connection', <strong>fn(socket)</strong>) </td>
+        <td> emitted when a new TCP stream is estabilished
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('request', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> emitted each time the server receives a request
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td id="timeout">  
+            <strong>httpSrv.listener</strong>('timeout', <strong>fn(<strong class="openable">socket<div>
+                <p> - the timed out socket </p>
+            </div></strong>)</strong>)
+        </td>
+        <td> 
+            - emitted when the server timeout value expires (see <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>keepAliveTimeout</mark> / <mark>headersTimeout</mark> ) <br>
+            - if this event is not listened the the server drops the keep-alive connection <br>
+            - if this event is listened the server does not close keep-alive connections   
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv.listener</strong>('upgrade', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - in the Node documentation it says that it is the <mark>request</mark> events incomingMessage argument but in this listener it does not appear to have any function since the client and the server are communicating through the socket! [TESTED: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the requested client </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)</strong>)
+        </td>
+        <td> 
+            - emitted each time when the server receives an upgrade request <u>(request with the <mark>Connection: Upgrade</mark> and <mark>Upgrade: *</mark> headers)</u> <br>
+            - the server communicates with the client through the <strong>socket</strong> argument (which is the tunnel between the server and the client)
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.94 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 if not listened the socket is not destroyed </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> ServerResponse object </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong> </td>
+        <td> created internally by the httpServer object on request, it represents the server response (writable stream) </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.addTrailers(<strong class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1':'val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - adds http trailers to the message (headers but at the end of the message) (trailers are supported only by chunked http protocols <mark>HTTP/1.1</mark> and <mark>HTTP/2</mark>) <br>
+            - the <mark>Trailer</mark> header is required which specifies the trailing keys (ex: <mark>Trailer: [trailKey1, trailkey2]</mark>) <br>
+            - must be sent after the message body (otherwise it's silently discarded)  
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.connection </td>
+        <td> <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.cork() </td>
+        <td> 
+            - data written to the stream after this method are stored in the stream buffer memory <a href="../../Stream/Writable Streams/index.html#cork" target="_blank">(Stream method)</a> <br>
+            - data is kept in the memory until eighter the <mark>uncork()</mark> or the <mark>end()</mark> method flushes it to the underlying kernel buffer 
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.end(<strong>chunk:str|buf</strong><i>, encode:str, fn</i>) </td>
+        <td> 
+            - finishes sending the response (optionally sends a last data chunk to the message body) <a href="../../Stream/Writable Streams/index.html#end" target="_blank">(Stream method)</a> <br>
+            - callback called when the response stream is finished <br>
+            - returns this <strong>srvResp</strong> object
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 returns this srvResp object </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.finished </td>
+        <td> <u>[Deprecated since node v.12.16.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.flushHeaders() </td>
+        <td> flushes (already set) request headers to the underlying kernel buffer (sends the message headers to the client)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.getHeader(<strong>headerName:str</strong>) </td>
+        <td> returns the specified response header value
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.getHeaderNames() </td>
+        <td> returns an array which contains all outgoing header keys (lowercased)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 7.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.getHeaders() </td>
+        <td> returns an object which contains a shallow copy of the outgoing headers (key, value) (object has no prototype)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 7.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.hasHeader(<strong>headerName:str</strong>) </td>
+        <td> returns <mark>ture</mark> if the specified header key exist in the outgoing header, otherwise returns <mark>false</mark> (case-insensitive)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 7.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.headersSent </td>
+        <td> returns <mark>true</mark> if the headers are sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.9.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.removeHeader(<strong>headerName:str</strong>) </td>
+        <td> removes the specified header from the outgoing message header (case-insensitive)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.sendDate </td>
+        <td> automatically sets the date header in the response (Default: <mark>true</mark>)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.7.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string</u></p>
+                <p> - if the header has multiple values we can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'langugage=javascript']</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> sets a response header (if the header already exist its value will be reset)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn(socket)<div>
+                <p> - <mark>timeout</mark> listener on this <strong>srvResp</strong> object, (not on the underlying socket! This means is not triggered when the socket or server times out!) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a timer (timeout) on the underlying socket (for 'keep-alive' connections) <br>
+            - on timer expiration the socket and this <strong>httpSrv</strong> object emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened <mark style="background-color:yellow;">on this <strong>httpSrv</strong> object</mark> the connection is dropped)</u> <a href="#timeout" target="_blank">(server timeout event)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.socket </td>
+        <td> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.statusCode </td>
+        <td> gets or sets the response status code (Default: <mark>200</mark>)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.statusMessage </td>
+        <td> gets or sets the response status message (if not set the standard message is used with the status code)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.uncork() </td>
+        <td> flushes all data from the stream buffer to the underlying kernel buffer since the <mark>cork()</mark> method <a href="../../Stream/Writable Streams/index.html#uncork" target="_blank">(Stream method)</a> (must be called the number of times the <mark>cork()</mark> was called)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writableEnded </td>
+        <td> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writableFinished </td>
+        <td> returns <mark>true</mark> if the data has been flushed to the underlying kernel buffer, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.write(<strong>chunk:str|buf</strong><i>, encode:str, fn(err)</i>) </td>
+        <td> 
+            - streams a data chunk to the response message body <a href="../../Stream/Writable Streams/index.html#write" target="_blank">(Stream method)</a> <br>
+            - returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again) <br>
+            - callback called when the data chunk is successfully flushed to the kernel buffer
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writeContinue() </td>
+        <td> sends a <mark>HTTP/1.1 100 Continue</mark> status message to the client (indicates that the client should send the body) (used in with the <mark>checkContinue</mark> event)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.writeHead(<strong>stCode:nr</strong><i>, stMsg:str, <i class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1': val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></i></i>)
+        </td>
+        <td> 
+            - sets the message header <u>and sends</u> it to the remote client (header cannon be modified after this) (must be called before the <mark>write()</mark> and <mark>end()</mark> methods) <br>
+            - returns this <strong>srvResp</strong> object
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.30 </span>
+                <span><i class="fab fa-node-js"></i> 11.10.0 returns thie srvResp object </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writeProcessing() </td>
+        <td> sends a <mark>HTTP/1.1 102 Processing</mark> status message to the client
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp.listener</strong>('close', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> emitted when the connection is terminated
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp.listener</strong>('finish', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> emitted when all response data is flushed to the underlying system
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> IncommingMessage Object </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong> </td>
+        <td> created internally by both the server and the client, it represents their incoming message (readable stream) </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.aborted </td>
+        <td> returns <mark>true</mark> if the <u>client request</u> is aborted, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 10.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.complete </td>
+        <td> returns <mark>true</mark> if the complete message is received and successfully parsed, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.destroy(<i>err:obj</i>) </td>
+        <td> 
+            - destroys the underlying socket <br>
+            - if an error object is provided (as argument) the <mark>error</mark> event is emitted on the socket and on the client|server (the passed error object is received by the error listener)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.headers </td>
+        <td> returns the received client|server headers in a http header object (ex : <mark>{'header1':'val1', 'header2':'val2'}</mark>)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.httpVersion </td>
+        <td> returns the http protocol version (<u>on server side</u> http version sent by the client) (<u>on client side</u> http version connected to the server)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.method </td>
+        <td> returns the request method in a string (on server side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.rawHeaders </td>
+        <td> returns the received raw client|server headers (exactly as the message header was received) in an Array
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.rawTrailers </td>
+        <td> returns the received raw trailers (exactly as the message header was received) in an Array <u>(only populated at the <strong>clientReq</strong>.on(<mark>'end'</mark>) event)</u>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>incMsg</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn(socket)<div>
+                <p> - <mark>timeout</mark> listener on this <mark>incMsg</mark> object, (not on the underlying socket! This means it's not triggered when the socket or the client|server emits the timeout event!) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a timer (timeout) on the underlying socket (for 'keep-alive' connections) <br>
+            - on timer expiration the socket and this <strong>httpClient|httpSrv</strong> object emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened <mark style="background-color:yellow;">on this <strong>httpClient|httpSrv</strong> object</mark> the connection is dropped)</u> <a href="../HTTP Server/index.html#timeout" target="_blank">(server timeout event)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.socket </td>
+        <td> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.statusCode </td>
+        <td> returns the response status code (on client side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.statusMessage </td>
+        <td> returns the response status message (in a string) (on client side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.trailers </td>
+        <td> returns the received trailers in a http header object (ex : <mark>{'header1':'val1', 'header2':'val2'}</mark>) <u>(only populated at the <strong>clientReq</strong>.on(<mark>'end'</mark>) event)</u>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.url </td>
+        <td> returns the request url in a string (on server side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('aborted', <strong>fn</strong>) </td>
+        <td> emitted when the client aborts the request (supported on both client and server sides)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the connection is closed (supported on both client and server sides)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('data', <strong>fn(chunk)</strong>) </td>
+        <td> attaching this listener will switches the stream into flowing readable mode <a href="../../Stream/index.html#data" target="_blank">(Stream Method)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('end', <strong>fn</strong>) </td>
+        <td> emitted when all available data is consumed from the stream <a href="../../Stream/index.html#end" target="_blank">(Stream Method)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - <mark>timeout</mark> and <mark>setTimeout()</mark> = starts timeout after the server recieves a request </p>
+    <p> - <mark>keepAliveTimeout</mark> = starts timeout after the server sends a response </p>
+    <p> - <mark>headersTimeout</mark> = starts timeout after the server receives the first byte </p>
+    <p style="color:yellow;"> - if there is NO <mark>timeout</mark> listener registered on the <mark>httpSrv</mark> object <u>the connection is dropped</u> </p> 
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> HTTP Server <mark>createServer()</mark> / <mark>listening</mark> / <mark>listen()</mark> / <mark>maxHeaderCount</mark> / <mark>close()</mark> / <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>headersTimeout</mark> / <mark>keeptAliveTimeout</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events : <mark>request</mark> / <mark>close</mark> / <mark>timeout</mark> / <mark>checkContinue</mark> / <mark>checkExpectation</mark> / <mark>connect</mark> / <mark>upgrade</mark> / <mark>connections</mark> / <mark>clientError</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>http</strong>.createServer(<i class="openable">option:obj<div>
+        <p> IncomingMessage: <strong>obj</strong> - specifies the IncomingMessage class to be used (Default: <mark>IncomingMessage</mark>) </p>
+        <p> ServerResponse: <strong>obj</strong> - specifies the ServerResponse class to be used (Default: <mark>ServerResponse</mark>) </p>
+        <p> insecureHTTPParser: <strong>bol</strong> - invalid HTTP parser used which accept invalid HTTP headers (Default: <mark>false</mark>) <u style="color:orangered;"> [TESTED: 2020-04-29] not working! custom headers can be passed with or without this option to be switched!</u> </p> 
+        <p> maxHeaderSize: <strong>nr</strong> - allowed maximum request header size in bytes (Default: <mark>16384</mark>) <u>(Overrides the <mark>--max-http-header-size</mark> CLI option) </u></p>
+    </div></i>, <i class="openable">fn(incMsg, srvResp)<div>
+        <p> - <mark>request</mark> listener callback </p>
+    </div></i>)                       // creates and returns an HTTP server (object), the returned httpServer object is extension of <mark>EventEmitter</mark> and <mark>net.Server</mark> classes    
+            
+            <strong>httpSrv</strong>.listening                                                          // returns <mark>true</mark> if the server is listening for connections, otherwise returns <mark>false</mark>   
+            <strong>httpSrv</strong>.listen(<i>port:nr, host:str,</i> <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn(srvResp)<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)              // asynchronously starts the server listening for connections    
+            <strong>httpSrv</strong>.listen({port:<strong>nr</strong>, host:<strong>srt</strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>}, <i class="openable">fn(srvResp)<div>  
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)                makes the server emit the <mark>listening</mark> event (if the server is successfully started)   
+                                                                                          can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method     
+                                                                                          returns this <strong>httpSrv</strong> object    
+            
+            <strong>httpSrv</strong>.maxHeadersCount                                                    // number of request headers parsed by the parser (Default: <mark>2000</mark>)    
+            <strong>httpSrv</strong>.close(<i>fn(err)</i>)                                                     // asynchronously stops the server listening for new connections <u>(keeps pending connections)</u> 
+                                                                                          the server is finally closed when all connections are ended     
+                                                                                          when the server is closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback argument throws if this method is called on a closed server)    
+                                                                                          returns this <strong>httpSrv</strong> object 
+            
+            <strong>httpSrv</strong>.timeout                                                            // gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default: <mark>0</mark> / <mark>0</mark> = infinity)  
+                                                                                          counter reset each time the server receives a new data from the client    
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <strong>httpSrv</strong>.setTimeout(<i class="openable">nr:ms, fn(socket)<div>
+                <p> - <i>nr:mr</i> - set timeout (Default: <mark>120000</mark>) </p>
+                <p> - <i>fn(socket)</i> <mark>timeout</mark> event's callback function (the <mark>socket</mark> argument references the timed out socket </p> 
+            </div></i>)                                     // gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default timeout: <mark>0</mark> / <mark>0</mark> = infinity)  
+                                                                                          counter reset each time the server receives a new data from the client    
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event (which is the 2nd argument) is not listened the connection is dropped)</u>               
+            
+            <strong>httpSrv</strong>.keepAliveTimeout                                                   // gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event for <span class="openable">requested 'keep-alive' connections<div>
+                <p> - for normal connections the server drops the connection after responding with the <mark>end()</mark> method </p>
+                <p> - if the client requests a keep-alive connection (client Agent has the <mark>keepAlive</mark> set) the server <u>doesn't drop the connection after responding with the <mark>end()</mark> method</u> </p> 
+                <p> - this timer kicks-in once the server responded with the <mark>end()</mark> method to a keep-alive request </p> 
+                <p> - if the server receives new data from the client before this timeout expires the <mark>timeout</mark> and <mark>setTimeout()</mark> rules apply! </p>
+            </div></span> (Default: <mark>5000</mark> / <mark>0</mark> = infinity)    
+                                                                                          counter starts after the server responds to a keep-alive request with <u>the <mark>end()</mark> method</u>    
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            
+            
+    <span style="color:darkgray;">// Events -------------------------------------------------------------------------</span>
+            <strong>httpSrv.listener</strong>('request', <strong>fn(incMsg, srvResp)</strong>)                           // emitted each time the server receives a request    
+            <strong>httpSrv.listener</strong>('close', <strong>fn</strong>)                                              // emitted when server closes (all server connections are closed)
+    
+            <strong>httpSrv.listener</strong>('timeout', <strong>fn(<strong class="openable">socket<div>
+                <p> - the timed out socket </p>
+            </div></strong>)</strong>)                                   // emitted when the server timeout value expires (see <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>keepAliveTimeout</mark> / <mark>headersTimeout</mark> )    
+                                                                                          if this event is not listened the the server drops the keep-alive connection 
+                                                                                          if this event is listened the server does not close keep-alive connections   
+            
+            <strong>httpSrv.listener</strong>('checkContinue', <strong>fn(incMsg, srvResp)</strong>)                     // emitted each time the server receives a message with the <mark>Expect: 100-continue</mark> header (<mark>request</mark> event not emitted)  
+                                                                                          to respond this request use the <mark><strong>srvResp</strong>.writeContine()</mark> method or generate a <mark>400 Bad Request</mark> response    
+                                                                                          if this event is not listened for the server automatically responds with a <mark>100 Continue</mark> message  
+            <strong>httpSrv.listener</strong>('checkExpectation', <strong>fn(incMsg, srvResp</strong>)                   // emitted each time the server receives a message with the <mark>Expect: *</mark> header <u>(<mark>100-continue</mark> value excluded)</u> (<mark>request</mark> event not emitted)  
+                                                                                          if this event is not listened for the server automatically responds with a <mark>417 Expectation Failed</mark> message  
+           
+            <strong>httpSrv.listener</strong>('connect', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - in the Node documentation it says that it is the <mark>request</mark> events incomingMessage argument but in this listener it does not appear to have any function since the client and the server are communicating through the socket! [TESTED: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the requested client </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)              // emitted when the (proxy) server receives a <mark>CONNECT</mark> request 
+                                                                                          the server communicates with the client through the <strong>socket</strong> argument (which is the tunnel between the server and the client)   
+                                                                                          if this event is not listened the connection is dropped   
+            <strong>httpSrv.listener</strong>('upgrade', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - in the Node documentation it says that it is the <mark>request</mark> events incomingMessage argument but in this listener it does not appear to have any function since the client and the server are communicating through the socket! [TESTED: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the requested client </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)</strong>)             // emitted each time when the server receives an upgrade request <u>(request with the <mark>Connection: Upgrade</mark> and <mark>Upgrade: *</mark> headers)</u>    
+                                                                                          the server communicates with the client through the <strong>socket</strong> argument (which is the tunnel between the server and the client)   
+            
+            <strong>httpSrv.listener</strong>('connection', <strong>fn(socket)</strong>)                                 // emitted when a new TCP stream is estabilished  
+            <strong>httpSrv.listener</strong>('clientError', <strong>fn(err, socket)</strong>)                           // emitted when the client connection emits an error, the emitted error is forwarded here   
+                                                                                          if this event is emitted the server should close the connection with the <mark>HTTP/1.1 400 Bad Request</mark> status response through the <strong>socket</strong>    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var server = createServer();                                                       // server created (httpServer object returned) 
+    
+// listen() / listening ---------------------------------------------------------------
+    server.listen(8000, '192.168.0.104');                                              // server listening on 192.168.0.104:8000
+    server.listening;                                                                  // -> true             // server is listening for incoming requests   
+    
+// maxHeadersCount / close() ----------------------------------------------------------
+    server.maxHeadersCount;                                                            // -> 2000             // up to 2000 request headers are parsed by the parser 
+    
+    server.close(()=>{});                                                              // gracefully closes the server (server finally closed when all pending connections are closed)    
+    
+// timeout / setTimeout() / headersTimeout --------------------------------------------
+    server.timeout = 10000;                                                            // server emits the 'timeout' event after 10 seconds counted from the last received data piece from the client    
+                                                                                          // counter resets every time there's a new received data    
+                                                                                          // -! if the 'timeout' event is not listened the connection is dropped   
+                                                                                          
+    server.setTimeout(10000, function(socket){                                         // this does the same as above but it has a bult-in 'timeout' listener   
+        socket;                                                                          // -> the timed out socket   
+    });
+    
+    server.headersTimeout = 60000;                                                     // server waits 1 minute to receive the complete message header then emits the 'timeout' event 
+                                                                                          // -! if the 'timeout' event is not listened the connection is dropped   
+    
+// timeout (event) --------------------------------------------------------------------
+    server.on('timeout', function(socket){                                             // -! if this listener is registered the connection which emits the 'timeout' event is NOT closed 
+        socket                                                                           // timed out socket (this method warns connection timeouts, and allows to manually close the connection)    
+    });
+    
+// request / close (events) -----------------------------------------------------------
+    server.on('request', funcion(incMsg, srvRsp){                                      // fired each time the server receives a request  
+        incMsg;                                                                          // IncomingMessage object (readable stream data from the server)
+        srvResp;                                                                         // ServerResponse object (writable stream data to write as response)  
+    });
+    
+    server.on('close', ()=>{});                                                        // fired when the server is fully closed 
+    
+// connect / upgrade (events) ---------------------------------------------------------
+    server.on('connect', function(incMsg, socket, head){                               // emitted when the server receives a 'CONNECT' request 
+        socket;                                                                          // server-client communication tunnel once the 'connect' connection is estabilished (duplex stream), this is where the server respond to the 'CONNNECT' request    
+        head;                                                                            // -> &lt;Buffer ...&gt;     // first received data chunk 
+    });
+    
+    client.on('upgrade', function(incMsg, socket, head){                               // emitted when the server receives an 'Upgrade' request (request with the "Connection: Upgrade" and "Upgrade: *" headers)    
+        socket;                                                                          // server-client communication tunnel once the 'upgrade' connection is estabilished (duplex stream), this is where the server respond to the 'upgrade' request    
+        head;                                                                            // -> &lt;Buffer ...&gt;     // first received data chunk 
+    });
+    
+// checkContinue / checkExpectation (events) ------------------------------------------
+    server.on('checkContinue', function(incMsg, srvResp){                              // fired when the server receives a request with the 'Expect: 100-continue' header   
+        incMsg;                                                                          // IncomingMessage object (readable stream data from the server)
+        srvResp;                                                                         // ServerResponse object (writable stream data to write as response)  
+    });
+    
+    server.on('checkExpectation', function(incMsg, srvResp){                           // fired when the server receives a request with the 'Expect: *' header  // -! 'Expect: 100-continue' excluded    
+        incMsg;                                                                          // IncomingMessage object (readable stream data from the server)
+        srvResp;                                                                         // ServerResponse object (writable stream data to write as response)  
+    });
+    
+// connection / clientError (events) --------------------------------------------------
+    server.on('connection', function(socket){                                          // fired when a new TCP strem is estabilished  
+        socket;                                                                          // the estabilished connection 
+    });
+    
+    server.on('clientError', fuction(err, socket){                                     // emitted when the client connection emits an error 
+        err;                                                                             // the forwarder error from the client 
+        socket;                                                                          // socket where the error occures 
+    });
+    </pre>
+    <p><b><u> Keep-Alive connection <mark>keepAliveTimeout</mark> </u></b></p>
+    <pre>
+// ------------------------------------------------------------------------------------
+// SERVER -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        incMsg.on('data', (chunk)=>{console.log(chunk.toString())});
+        setTimeout(function(){                                                         // !! for some reason I had to set a timer before triggering the 'end()' method to make the keepAliveTimeout work property (for https server works without this stupid timer) [TESTED: 2020-06-30]    
+            srvResp.end('server response');                                            // the server does not drop the connection after this method because the client requests a 'keep-alive' connection
+        }, 0);                                                                         // !! if I remove this timer the keepAliveTimeout does not work BUG maybe???
+    });
+    server.listen(1000, 'localhost', ()=>{console.log('server listening')});
+    
+    server.keepAliveTimeout = 5000;                                                    // default keepAliveTimeout value 
+    
+    server.on('timeout', function(){                                                   // event emitted after 5 seconds (if this listener is not registered the connection is dropped)   
+        console.log('timeout event emitted!');
+    });
+    
+// ------------------------------------------------------------------------------------
+// CLIENT -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    http.globalAgent.keepAlive = true;                                                 // client requests a 'keep-alive' connection (server does not drop the connection after the 'end()' method)   
+    
+    var client = http.request({port:1000, host:'localhost', method:'POST'}, function(incMsg){
+        incMsg.on('data', (chunk)=>{console.log(chunk.toString())});
+    });
+    client.write('client data');
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createServer()</mark> / <mark>listen()</mark> / <mark>listening</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var httpServer = http.createServer(function(req, res){
+        res.statusCode = 200;
+        res.end('Server Response');
+    })
+    
+    httpServer.on('listening', function(){                                             // 'listening' event emitted when the server starts listening 
+        console.log( httpServer.listening );    
+    });
+    
+// listen -----------------------------------------------------------------------------
+    httpServer.listen(80, '192.168.0.104', function(){
+        console.log( 'Server is listening!' );                                         // this callback is basically the same as above 
+    });
+    
+    // httpServer.listen({port:80, host:'192.168.0.104'}, function(){                  // does the same as above TESTED
+    //     console.log( 'Server is listening!' );                                      // this callback is basically the same as above 
+    // });
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/05 createServer() listen() listening TEST$ sudo node srv.js
+        true
+        Server is listening!    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>close()</mark> / <mark>maxHeadersCount</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var httpServer = http.createServer(function(incMsg, srvResp){
+        console.log( incMsg.headers );
+        srvResp.statusCode = 200;
+        srvResp.end('Server Response!');
+    }).listen({port:80, host:'192.168.0.104'}, () => {console.log( 'node server running!')});
+    
+    httpServer.maxHeadersCount = 5;                                                    // can get up to 5 http request headers only 
+    
+    setTimeout(function(){
+        httpServer.close(function(){ console.log('server closed!') });
+    }, 30000);
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/06 close() maxHeadersCount TEST$ sudo node srv.js
+        node server running!
+        {                                                                              // only 5 headers are received 
+        'content-type': 'application/x-www-form-urlencoded',
+        'cusomheader-1': 'cusomtValue',
+        'cusomheader-2': 'cusomtValue',
+        'cusomheader-3': 'cusomtValue',
+        'cusomheader-4': 'cusomtValue'
+        }
+        server closed!                                                                 // server closed and prompted after 30 seconds 
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/06 close() maxHeadersCount TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>timeout</mark> TEST </u></h4>
+    <p> - the client is requesting a POST 'keep-alive' connection, it sends some data on request and after 5 seconds sends some other data to the server </p> 
+    <pre>
+    var http = require('http');
+    
+    var httpServer = http.createServer(function(incMsg, srvResp){
+        srvResp.statusCode = 200;
+        srvResp.end('server response');
+    });
+    
+    httpServer.listen({port:1000});
+    
+// timeout set without 'timeout' listener ---------------------------------------------
+    httpServer.timeout = 10000;                                                        // server keeps a keep-alive connection open for 10s, if the client sends some data before 10s this timer is reset    
+                                                                                       // if the timer expires the connection is closed (after 15 seconds in this example)    
+// timeout set with 'timeout' listener ------------------------------------------------
+    httpServer.timeout = 10000;                                                        // server keeps a keep-alive connection open for 10s, if the client sends some data before 10s this timer is reset    
+        
+    httpServer.on('timeout', function(){                                               // -! event emitted after 15 seconds but the connection is NOT closed because ther's an event listener registered   
+        console.log( 'timeout event emitted!' );
+    });    
+    </pre>
+    <pre class="cmd">
+// example with timeout ----------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/07 timeout setTimeout() headersTimeout keepAliveTimeout TEST$ sudo node srv
+    timeout event emitted!                                                             // triggered afer 15 seconds 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>setTimeout()</mark> TEST </u></h4>
+    <p> - the client is requesting a POST 'keep-alive' connection, it sends some data on request and after 5 seconds sends some other data to the server </p> 
+    <p> - this method basically doing the same as the <mark>server.timeout</mark> with <mark>'timeout'</mark> event listener registered on the server </p>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        srvResp.statusCode = 200;
+        srvResp.end('server response');
+    });
+    
+    server.listen(1000, 'localhost');
+    
+    server.setTimeout(10000, function(socket){                                         // server keeps a keep-alive connection for 10s, if the client sends some data before 10s this timer is reset    
+        console.log( 'timeout event emitted!' );                                       // -! once the timer is expires this event listener is fired but the connection is NOT closed!
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/08 setTimeout() TEST$ sudo node srv
+    timeout event emitted!                                                             // triggered after 15 seconds   
+    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>keepAliveTimeout</mark> TEST </u></h4>
+    <p> - client requesting a keep-alive connection </p>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        srvResp.statusCode = 200;
+        srvResp.end('server response');
+    }).listen(1000, 'localhost', ()=>{ console.log('server listening') });
+    
+    server.keepAliveTimeout = 10000;                                                   // server emits the 'timeout' event 10 seconds after the last sent data to the client with the 'end()' method     
+    
+    server.on('timeout', function(socket){                                             // listener triggered after 10 seconds     
+        console.log( 'timeout event emitted!' );
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/09 keepAliveTimeout TEST$ sudo node srv
+    server listening
+    timeout event emitted!                                                             // triggered after 10 seconds 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>headersTimeout</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost');
+    
+    server.on('request', function(incMsg, srvResp){
+        srvResp.end('server responded!');
+    });
+    
+    server.headersTimeout = 1;                                                         // parser waits 1 millisecond to receive the full message header 
+    
+    server.on('timeout', function(){                                                   // event emitted after 1 second but the connection is NOT dropped 
+        console.log( 'timeout event emitted!' );
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/10 headersTimeout TEST$ sudo node srv
+    timeout event emitted!                                                             // triggered after 1 millisecond 
+    timeout event emitted!                                                             // triggered after 5 seconds (keepAliveTimeout triggers this one)   
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>request</mark> / <mark>close</mark> events TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost');
+    
+// request ----------------------------------------------------------------------------
+    server.on('request', function(incMsg, srvResp){                                    // emitted when the server receives a request 
+        console.log( 'request event emitted!' );
+    });
+    
+// close ------------------------------------------------------------------------------
+    server.on('close', function(){                                                     // emitted when the server is closed 
+        console.log( 'close event emitted!' );
+    });
+    
+    setTimeout(function(){
+        server.close();                                                                // closing the server after 10 seconds (pending connections prevent the server from closing)
+    }, 10000);    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/11 request close events TEST$ sudo node srv.js
+    request event emitted!                                                             // emitted on request 
+    close event emitted!                                                               // a pending connection can prevent the server from closing but once the pending connection is closed the server can close and emits this event   
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/11 request close events TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>checkContinue</mark> / <mark>checkExpectation</mark> events TEST </u></h4>
+    </p> <u>1st request</u> the client request <mark>POST</mark> with a <mark>Expect: 100-continue</mark> header </p>
+    </p> <u>2nd request</u> the client request <mark>POST</mark> with a <mark>Expect: something</mark> header </p>
+    <pre>
+    var http = require('http');
+
+    var server = http.createServer().listen(1000, 'localhost');
+
+    server.on('request', function(){                            // this event not emitted because of the 'Expectation' header 
+        console.log( 'request event emitted!' );
+    });
+    
+// checkContinue -----------------------------------------------
+    server.on('checkContinue', function(incMsg, srvResp){       // emitted on the 1st request (Expectation: 100-continue)
+        console.log( 'checkContinue event emitted!' );
+        
+        srvResp.writeContinue();                                // server responds with 'HTTP/1.1 100 Continue' message 
+    });
+
+// checkExpectation --------------------------------------------
+    server.on('checkExpectation', function(incMsg, srvResp){    // emitted on the 2nd request (Expectation: something)
+        console.log( 'chekcExpecation event emitted!' );
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/12 checkContinue checkExpectation event TEST$ sudo node srv
+    chekcExpecation event emitted!
+    checkContinue event emitted!    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>connect</mark> event TEST </u></h4>
+    <pre>
+// client -----------------------------------------------------------------------------
+    var http = require('http'); 
+    
+    var client = http.request({host:'localhost', port:1000, method:'CONNECT'}).end();  // CONNECT request issued 
+    
+    client.on('connect', function(incMsg, socket, head){                               // emitted when the server respond to a CONNECT request 
+        socket.on('data', (chunk)=>{ console.log(chunk.toString()) });                 // read the incomming message body on the socket 
+    });
+    
+// server -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost');
+    
+    server.on('connect', function(incMsg, clientSocket, head){                         // emitted when the server receives a 'CONNECT' request 
+        clientSocket.write('HTTP/1.1 200 OK\r\n\r\n');                                 // responding to the client 
+        clientSocket.end('proxy responded!');                                          // send message to the client 
+    });
+    </pre>
+    <pre class="cmd">
+// client side ----------------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/28 connect event TEST$ node client
+    proxy responded!
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/28 connect event TEST$
+    
+// server side ----------------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/28 connect event TEST$ sudo node srv
+    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>upgrade</mark> event TEST </u></h4>
+    <pre>
+// client -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var client = http.request({host:'localhost', port:80});
+    
+    client.setHeader('Connection', 'Upgrade');                                         // headers to request an HTTP protocol upgrade 
+    client.setHeader('Upgrade', 'Websocket');
+    client.end();
+    
+    client.on('upgrade', function(incMsg, socket, head){                               // emitted when the client receives a response to a previous requested upgrade request (with the appropriate headers)    
+        console.log( 'upgrade event emitted!' );
+    });    
+    
+// server -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer().listen(80, 'localhost');
+    
+    server.on('upgrade', function(incMsg, socket, head){                               // emitted when the server receives an upgrade request (with the appropriate headers)    
+        console.log( 'update event emitted!' );
+        
+        socket.write('HTTP/1.1 101 Switching Protocols\r\n' +                          // headers to respond to an HTTP protocol upgrade request 
+        'Connection: Upgrade\r\n' +
+        'Upgrade: something\r\n' + 
+        '\r\n');                                                                       // -! last new line required!  
+    });    
+    </pre>
+    <pre class="cmd">
+// client side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Client/30 upgrade event TEST$ node client
+    upgrade event emitted!
+    
+// server side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Client/30 upgrade event TEST$ sudo node srv
+    update event emitted!    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>connection</mark> event TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost');
+    
+    server.on('connection', function(socket){
+        console.log( 'connection event emitted!' );
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP$ node client
+    continue event emitted!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>clientError</mark> event TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost');
+    
+    server.on('request', function(incMsg, srvResp){
+        console.log( 'request received!' );
+    });
+    
+    server.on('clientError', function(err, socket){
+        console.log( 'clientError event emitted!' );
+        
+        console.log(err.message);
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/14 clientError event TEST$ sudo node srv
+    request received!
+    clientError event emitted!
+    Parse Error                                                                        // err.message
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h2 style="color:darkblue;"><u> The <mark>ServerResponse</mark> Object <mark>connection</mark> / <mark>socket</mark> / <mark>cork()</mark> / <mark>uncork()</mark> / <mark>write()</mark> / <mark>end()</mark> / <mark>finished</mark> / <mark>writableEnded()</mark> / <mark>writableFinished</mark> / <mark>setHeader()</mark> / <mark>getHeader()</mark> / <mark>getHeaderNames()</mark> / <mark>getHeaders()</mark> / <mark>hasHeader()</mark> / <mark>removeHeader()</mark> / <mark>flushHeaders()</mark> / <mark>headersSent</mark> / <mark>statusCode</mark> / <mark>statusMessage</mark> / <mark>sendDate</mark> / <mark>writeHead()</mark> / <mark>writeContine()</mark> / <mark>writeProcessing()</mark> / <mark>addTrailers()</mark> / <mark>setTimeout()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events : <mark>close</mark> / <mark>finish</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>srvResp</strong>                                                                    // created internally by the httpServer object on request, it represents the server response (writable stream)    
+            
+            <strong>srvResp</strong>.connection                                                         // <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> references the underlying socket 
+            <strong>srvResp</strong>.socket                                                             // references the underlying socket 
+            
+            <strong>srvResp</strong>.cork()                                                             // data written to the stream after this method are stored in the stream buffer memory <a href="../../Stream/Writable Streams/index.html#cork" target="_blank">(Stream method)</a> 
+                                                                                          data is kept in the memory until eighter the <mark>uncork()</mark> or the <mark>end()</mark> method flushes it to the underlying kernel buffer    
+            <strong>srvResp</strong>.uncork()                                                           // flushes all data from the stream buffer to the underlying kernel buffer since the <mark>cork()</mark> method <a href="../../Stream/Writable Streams/index.html#uncork" target="_blank">(Stream method)</a> (must be called the number of times the <mark>cork()</mark> was called)    
+            <strong>srvResp</strong>.write(<strong>chunk:str|buf</strong><i>, encode:str, fn(err)</i>)                          // streams a data chunk to the response message body <a href="../../Stream/Writable Streams/index.html#write" target="_blank">(Stream method)</a>    
+                                                                                          returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again)    
+                                                                                          callback called when the data chunk is successfully flushed to the kernel buffer
+            <strong>srvResp</strong>.end(<strong>chunk:str|buf</strong><i>, encode:str, fn</i>)                                 // finishes sending the response (optionally sends a last data chunk to the message body) <a href="../../Stream/Writable Streams/index.html#end" target="_blank">(Stream method)</a>    
+                                                                                          callback called when the response stream is finished   
+                                                                                          returns this <strong>srvResp</strong> object    
+            
+            <strong>srvResp</strong>.finished                                                           // <u>[Deprecated since node v.12.16.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>    
+            <strong>srvResp</strong>.writableEnded                                                      // returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>    
+            <strong>srvResp</strong>.writableFinished                                                   // returns <mark>true</mark> if the data has been flushed to the underlying kernel buffer, otherwise returns <mark>false</mark>    
+            
+            <strong>srvResp</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string</u></p>
+                <p> - if the header has multiple values we can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'langugage=javascript']</mark>) </p>
+            </div></strong>)                                // sets a response header (if the header already exist its value will be reset)
+            <strong>srvResp</strong>.getHeader(<strong>headerName:str</strong>)                                          // returns the specified response header value 
+            <strong>srvResp</strong>.getHeaderNames()                                                   // returns an array which contains all outgoing header keys (lowercased)   
+            <strong>srvResp</strong>.getHeaders()                                                       // returns an object which contains a shallow copy of the outgoing headers (key, value) (object has no prototype)   
+            <strong>srvResp</strong>.hasHeader(<strong>headerName:str</strong>)                                          // returns <mark>ture</mark> if the specified header key exist in the outgoing header, otherwise returns <mark>false</mark> (case-insensitive)    
+            <strong>srvResp</strong>.removeHeader(<strong>headerName:str</strong>)                                       // removes the specified header from the outgoing message header (case-insensitive)   
+            <strong>srvResp</strong>.flushHeaders()                                                     // flushes (already set) request headers to the underlying kernel buffer (sends the message headers to the client)    
+            <strong>srvResp</strong>.headersSent                                                        // returns <mark>true</mark> if the headers are sent, otherwise returns <mark>false</mark>
+            
+            <strong>srvResp</strong>.statusCode                                                         // gets or sets the response status code (Default: <mark>200</mark>)
+            <strong>srvResp</strong>.statusMessage                                                      // gets or sets the response status message (if not set the standard message is used with the status code)   
+            <strong>srvResp</strong>.sendDate                                                           // automatically sets the date header in the response (Default: <mark>true</mark>)    
+            
+            <strong>srvResp</strong>.writeHead(<strong>stCode:nr</strong><i>, stMsg:str, <i class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1': val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></i></i>)                      // sets the message header <u>and sends</u> it to the remote client (header cannon be modified after this) (must be called before the <mark>write()</mark> and <mark>end()</mark> methods)    
+                                                                                          returns this <strong>srvResp</strong> object 
+            
+            <strong>srvResp</strong>.writeContinue()                                                    // sends a <mark>HTTP/1.1 100 Continue</mark> status message to the client (indicates that the client should send the body) (used in with the <mark>checkContinue</mark> event)    
+            <strong>srvResp</strong>.writeProcessing()                                                  // sends a <mark>HTTP/1.1 102 Processing</mark> status message to the client    
+            
+            <strong>srvResp</strong>.addTrailers(<strong class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1':'val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></strong>)                                          // adds http trailers to the message (headers but at the end of the message) (trailers are supported only by chunked http protocols <mark>HTTP/1.1</mark> and <mark>HTTP/2</mark>)    
+                                                                                          the <mark>Trailer</mark> header is required which specifies the trailing keys (ex: <mark>Trailer: [trailKey1, trailkey2]</mark>)    
+                                                                                          must be sent after the message body (otherwise it's silently discarded)  
+            
+            <strong>srvResp</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn(socket)<div>
+                <p> - <mark>timeout</mark> listener on this <strong>srvResp</strong> object, (not on the underlying socket! This means is not triggered when the socket or server times out!) </p>
+            </div></i>)                                     // sets a timer (timeout) on the underlying socket (for 'keep-alive' connections) 
+                                                                                          on timer expiration the socket and this <strong>httpSrv</strong> object emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened <mark style="background-color:yellow;">on this <strong>httpSrv</strong> object</mark> the connection is dropped)</u> <a href="#timeout" target="_blank">(server timeout event)</a>   
+                
+    <span style="color:darkgray;">// Events -------------------------------------------------------------------------</span>
+            <strong>srvResp.listener</strong>('close', <strong>fn(incMsg, srvResp)</strong>)                             // emitted when the connection is terminated 
+            <strong>srvResp.listener</strong>('finish', <strong>fn(incMsg, srvResp)</strong>)                            // emitted when all response data is flushed to the underlying system 
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    http.createServer(function(incMsg, srvResp){                                       // 'request' listener callback
+// socket -----------------------------------------------------------------------------
+        srvResp.socket;                                                                // -> Socket{...}        // returns the underlying socket    
+    
+// cork() / uncork() / write() / end() ------------------------------------------------
+        srvResp.cork();                                                                // from this point all written data is stored in the stream buffer (not flushed to the underlying system)   
+            serResp.write('server response');                                          // write data to the stream 
+        srvResp.uncork();                                                              // all data stored in the memory buffer is flushed to the underlying kernel buffer   
+        srvResp.end();                                                                 // finishes the response stream   
+        
+// writableEnded / writableFinished ---------------------------------------------------
+        srvResp.writableEnded;                                                         // -> true               // the 'end()'' method was called   
+        srvResp.writableFinished;                                                      // -> true               // data successfully flushed to the underlying kernel buffer 
+        
+// setHeader() / getHeader() / getHeaderNames() / getHeaders() ------------------------
+// hasHeader() / removeHeader() / flushHeaders() / headersSent ------------------------
+        srvResp.setHeader('myHeader-1', 21);                                           // sets a response header 
+        srvResp.setHeader('myHeader-2', 'val');
+        
+        srvResp.getHeader('myHeader-1');                                               // -> 21                 // the set data type is returned 
+        
+        srvResp.getHeaderNames();                                                      // -> ['myheader-1', 'myheader-2']
+        srvResp.getHeaders();                                                          // -> {'myheader-1':21, 'myheader-2':'val'}
+        
+        srvResp.hasHeader('myHeader-2');                                               // -> true
+            srvResp.removeHeader('myHeader-2');                                        // removes the specified header 
+        srvResp.hasHeader('myHeader-2');                                               // -> false
+    
+        srvResp.flushHeaders();                                                        // flushes the set response headers to the underlying kernel buffer 
+        srvResp.headersSent;                                                           // -> headers flushed 
+        
+// statusCode / statusMessage / sendDate ----------------------------------------------
+        srvResp.statusCode = 200;                                                      // sets the response status code 
+        srvResp.statusMessage = 'OK'                                                   // sets the response status message 
+        srvResp.sendDate = true;                                                       // response date header is automatically generated and sent    
+        
+// writeHead() ------------------------------------------------------------------------
+        srvResp.writeHead(200, 'OK', {'myheader-1':21, 'myheader-2':'val'});           // sets the entire response header       // -! after this method the response head cannot be modified (error will be thrown)    
+        
+// writeContinue() / writeProcessing() ------------------------------------------------
+        srvResp.writeContinue();                                                       // sends a 'HTTP/1.1 100 Continue' response 
+        srvResp.writeProcessing();                                                     // sends a 'HTTP/1.1 102 Processing' response 
+        
+// addTrailers() ----------------------------------------------------------------------
+        srvResp.setHeader('Trailer', ['tr1', 'tr2']);                                  // trailers keys must be specified in a 'Trailer' header 
+        
+        srvResp.addTrailers({'tr1':1, 'tr2':2});                                       // set trailers (http headers but at the end of the message)    
+        srvResp.end();                                                                 // -! trailers must be added in the end of the message 
+        
+// setTimeout() -----------------------------------------------------------------------
+        srvResp.setTimeout(10000, function(){                                          // set a timeout (timer) on the socket 
+        });                                                                            // -! the callback is the 'timeout' listener on the 'srvResp' object (NOT on the socket or the server object)    
+        
+        srvResp.socket.on('timeout', ()=>{});                                          // -! 'timeout' listener on the socket does NOT prevent the connection from dropping (like the server timeout listener)    
+        
+// close / finish (events) ------------------------------------------------------------
+        srvResp.on('finish', function(incMsg, srvResp){                                // fired when the last piece of data is flushed to the underlying kernel buffer  
+            incMsg;                                                                      // this IncomingMessage object 
+            srvResp;                                                                     // this ServerResponse object 
+        });
+        
+        srvResp.on('close', function(incMsg, srvResp){                                 // fired when the connection is terminated   
+            incMsg;                                                                      // this IncomingMessage object 
+            srvResp;                                                                     // this ServerResponse object 
+        });
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>socket</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        console.log( srvResp.socket );                                                 // the underlying socket 
+    });
+    
+    server.listen(1000, 'localhost', function(){
+        console.log( 'server is listening' );
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/15 socket TEST$ sudo node srv
+    server is listening
+    &lt;ref *2&gt; Socket { ... }                                                            // the underlying socket 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>cork()</mark> / <mark>uncork()</mark> / <mark>write()</mark> / <mark>end()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        srvResp.cork();                                                                // data written to the buffer is stored in the stream buffer 
+            srvResp.write('first piece of data');                                      // write data to the stream buffer 
+            srvResp.write('second piece of data');
+        srvResp.uncork();                                                              // all data is flushed from the stream buffer to the underlying system 
+        srvResp.end();                                                                 // end of response 
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening')});
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/16 cork() uncork() write() end() TEST$ sudo node srv
+    server is listening
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>writableEnded</mark> / <mark>writableFinished</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        console.log( srvResp.writableEnded );                                          // -> false
+        console.log( srvResp.writableFinished );                                       // -> false
+        
+        srvResp.end('server response!');
+        
+        console.log( srvResp.writableEnded );                                          // -> true      // 'end()' method called 
+        console.log( srvResp.writableFinished );                                       // -> true      // data flushed to the underlying kernel buffer  
+    }).listen(1000, 'localhost', ()=>{console.log('server listening!')});
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/17 writableEnded writableFinised TEST$ sudo node srv
+    server listening!
+    false                                                                              // srvResp.writableEnded
+    false                                                                              // srvResp.writableFinished
+    true                                                                               // srvResp.writableEnded
+    true                                                                               // srvResp.writableFinished
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>setHeader()</mark> / <mark>getHeader()</mark> / <mark>getHeaderNames()</mark> / <mark>getHeaders()</mark> / <mark>hasHeader()</mark> / <mark>removeHeader()</mark> / <mark>headersSent</mark> / <mark>flushHeaders()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        srvResp.setHeader('MyHeader-1', [1, 2, 3]);
+        srvResp.setHeader('MyHeader-2', 2121);
+        
+        console.log( srvResp.getHeader('MyHeader-1') );                                // -> [1, 2, 3]
+        console.log( srvResp.getHeaderNames() );                                       // -> ['myheader-1', 'myheader-2']
+        console.log( srvResp.getHeaders() );                                           // -> {'myheader-1:[1, 2, 3], 'myheader-2':2121 }
+        
+        console.log( srvResp.hasHeader('myheaDER-2') );                                // -> true              // case-insensitive 
+        console.log( srvResp.hasHeader('MyHeader-3') );                                // -> false 
+        
+        srvResp.removeHeader('myheader-2');
+        console.log( srvResp.getHeaderNames() );                                       // -> ['myheader-1']    // header removed 
+        
+        console.log( srvResp.headersSent );                                            // -> false
+        srvResp.flushHeaders();    
+        console.log( srvResp.headersSent );                                            // -> true
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening!')});    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/18 setHeader() getHeader() getHeaderNames() getHeaders() hasHeader() removeHeader() flushHeaders() headersSent TEST$ sudo node srv
+    server is listening!
+    [ 1, 2, 3 ]                                                                        // srvResp.getHeader('MyHeader-1')
+    [ 'myheader-1', 'myheader-2' ]                                                     // srvResp.getHeaderNames()
+    [Object: null prototype] {'myheader-1':[ 1, 2, 3 ], 'myheader-2':2121}             // srvResp.getHeaders()
+    true                                                                               // srvResp.hasHeader('myheaDER-2')
+    false                                                                              // srvResp.hasHeader('MyHeader-3')
+    [ 'myheader-1' ]                                                                   // srvResp.getHeaderNames()
+    false                                                                              // srvResp.headersSent
+    true                                                                               // srvResp.headersSent
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>statusCode</mark> / <mark>statusMessage</mark> / <mark>sendDate</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+
+    http.createServer(function(incMsg, srvResp){
+        srvResp.statusCode = 999;                                                      // not a valid status code (TEST only!)
+        srvResp.statusMessage = 'some status message';                                 // not a valid status message (TEST only!)
+        srvResp.sendDate = false;                                                      // date header is not automatically set in the header message
+        
+        srvResp.end();
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening')});    
+    </pre>
+    </pre>
+    <pre class='cmd'>
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/19 statusCode statusMessage sendDate TEST$ sudo node srv
+    server is listening
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>writeHead()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    http.createServer(function(incMsg, srvResp){    
+        var headers = {'myheader-1':21, 'myheader-2':false, 'myheader-3':532n }
+        srvResp.writeHead(200, 'OK', headers);                                         // message header set 
+        
+        console.log( srvResp.getHeaders() );                                           // -> {}         // empty because the header is already parsed  
+        
+        srvResp.end()
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening!')});    
+    </pre>
+    <pre class='cmd'>
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/20 writeHead() TEST$ sudo node srv
+    server is listening!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>writeContine()</mark> / <mark>writeProcessing()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost', ()=>{console.log('server is listening!')});
+    
+// writeContine() ---------------------------------------------------------------------
+    server.on('checkContinue', function(incMsg, srvResp){                              // fired on a 'Continue' request 
+        srvResp.writeContinue();                                                       // sends the 'HTTP/1.1 100 Continue' header to the client   
+    });
+    
+// writeProcessing() ------------------------------------------------------------------
+    server.on('request', function(incMsg, srvResp){                                    // server response
+        srvResp.writeProcessing();                                                     // sends the 'HTTP/1.1 102 Processing' header to the client 
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/21 writeContinue()$ sudo node srv
+    server is listening!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>addTrailers()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    http.createServer(function(incMsg, srvResp){
+        srvResp.writeHead(200, {'Content-Type':'text/palin', 'Trailer':['egy', 'ketto']});  // 'Trailer' header contains a list of trailer keys
+                            
+        srvResp.write('some data');                                                    // message body is required for trailers 
+        srvResp.addTrailers({'egy':'1', 'ketto':'2'});                                 // specifying trailers 
+        srvResp.end();
+    }).listen(1000, ()=>{console.log('server is listening')});    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/22 addTrailers() TEST$ sudo node srv
+    server is listening    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>setTimeout()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        srvResp.setTimeout(10000);    
+    }).listen(1000, ()=>{console.log('server is listening!')});
+    
+    server.on('timeout', function(){                                                   // fired after 10 seconds (connection is not dropped because there's a 'timeout' listener registered)    
+        console.log( 'server timed out!');
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/23 setTimeout() TEST$ sudo node srv
+    server is listening!
+    server timed out!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> socket VS server emitting <mark>timeout</mark> event TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        
+        srvResp.setTimeout(5000, function(){  
+            console.log('response timed out!');                                        // callback is a listener registered on the serverResponse object NOT on the socket!    
+        });
+            
+        srvResp.socket.on('timeout', function(){                                       // -! the socket timeout listener does not prevent the socket from closing
+            console.log('socket timed out!');                                          // !! only registering a timeout event listener on ther server object prevents the connection from closing! 
+        });
+        
+        srvResp.end('some data');
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening!')});
+    
+    server.keepAliveTimeout = 0;                                                       // all timeout are disabled on the server 
+    
+// !! in this example the connection is dropped because there's no 'timeout' listener on the serer object 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/24 socket VS server emitting timeout event TEST$ sudo node srv
+    server is listening!
+    socket timed out!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>close</mark> / <mark>finish</mark> events TEST </u></h4>
+    <pre>
+    var http = require('http');
+        
+    http.createServer(function(incMsg, srvResp){
+        srvResp.on('close', ()=>{console.log('close event emitted!')})
+        srvResp.on('finish', ()=>{console.log('finish event emitted!')})
+        
+        srvResp.end('server response');
+    }).listen(1000, ()=>{console.log('server is listening!')});    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Server/25 close finish events TEST$ sudo node srv
+    server is listening!
+    finish event emitted!                                                              // all response data is flushed to the underlying kernel buffer
+    close event emitted!                                                               // connection terminated 
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->    
+<h2 style="color:darkblue;"><u> The <mark>IncomingMessage</mark> Object <mark>aborted</mark> / <mark>complete</mark> / <mark>socket</mark> / <mark>destroy()</mark> / <mark>headers</mark> / <mark>rawHeaders</mark> / <mark>trailers</mark> / <mark>rawTrailers</mark> / <mark>httpVersion</mark> / <mark>method</mark> / <mark>statusCode</mark> / <mark>statusMessage</mark> / <mark>url</mark> / <mark>setTimeout()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events : <mark>aborted</mark> / <mark>close</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>incMsg</strong>                                                                     // created internally by both the server and the client, it represents their incoming message (readable stream)    
+            
+            <strong>incMsg</strong>.aborted                                                             // returns <mark>true</mark> if the <u>client request</u> is aborted, otherwise returns <mark>false</mark>  
+            <strong>incMsg</strong>.complete                                                            // returns <mark>true</mark> if the complete message is received and successfully parsed, otherwise returns <mark>false</mark>   
+            
+            <strong>incMsg</strong>.socket                                                              // references the underlying socket   
+            
+            <strong>incMsg</strong>.destroy(<i>err:obj</i>)                                                    // destroys the underlying socket
+                                                                                          if an error object is provided (as argument) the <mark>error</mark> event is emitted on the socket and on the client|server (the passed error object is received by the error listener)    
+            
+            <strong>incMsg</strong>.headers                                                             // returns the received client|server headers in a http header object (ex : <mark>{'header1':'val1', 'header2':'val2'}</mark>)    
+            <strong>incMsg</strong>.rawHeaders                                                          // returns the received raw client|server headers (exactly as the message header was received) in an Array    
+            <strong>incMsg</strong>.trailers                                                            // returns the received trailers in a http header object (ex : <mark>{'header1':'val1', 'header2':'val2'}</mark>)     <u>(only populated at the <strong>clientReq</strong>.on(<mark>'end'</mark>) event)</u>    
+            <strong>incMsg</strong>.rawTrailers                                                         // returns the received raw trailers (exactly as the message header was received) in an Array <u>(only populated at the <strong>clientReq</strong>.on(<mark>'end'</mark>) event)</u>    
+            
+            <strong>incMsg</strong>.httpVersion                                                         // returns the http protocol version (<u>on server side</u> http version sent by the client) (<u>on client side</u> http version connected to the server)    
+            <strong>incMsg</strong>.method                                                              // returns the request method in a string (on server side)   
+            <strong>incMsg</strong>.statusCode                                                          // returns the response status code (on client side)    
+            <strong>incMsg</strong>.statusMessage                                                       // returns the response status message (in a string) (on client side)   
+            <strong>incMsg</strong>.url                                                                 // returns the request url in a string (on server side)
+            
+            <strong>incMsg</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn(socket)<div>
+                <p> - <mark>timeout</mark> listener on this <mark>incMsg</mark> object, (not on the underlying socket! This means it's not triggered when the socket or the client|server emits the timeout event!) </p>
+            </div></i>)                                      // sets a timer (timeout) on the underlying socket (for 'keep-alive' connections)
+                                                                                          on timer expiration the socket and this <strong>httpClient|httpSrv</strong> object emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened <mark style="background-color:yellow;">on this <strong>httpClient|httpSrv</strong> object</mark> the connection is dropped)</u> <a href="../HTTP Server/index.html#timeout" target="_blank">(server timeout event)</a>    
+            
+    <span style="color:darkgray;">// Events -------------------------------------------------------------------------</span>
+            <strong>incMsg.listener</strong>('aborted', <strong>fn</strong>)                                             // emitted when the client aborts the request (supported on both client and server sides)
+            <strong>incMsg.listener</strong>('close', <strong>fn</strong>)                                               // emitted when the connection is closed (supported on both client and server sides)
+            
+            <strong>incMsg.listener</strong>('data', <strong>fn(chunk)</strong>)                                         // attaching this listener will switches the stream into flowing readable mode <a href="../../Stream/index.html#data" target="_blank">(Stream Method)</a>  
+            <strong>incMsg.listener</strong>('end', <strong>fn</strong>)                                                 // emitted when all available data is consumed from the stream <a href="../../Stream/index.html#end" target="_blank">(Stream Method)</a>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p><b> On client side </b></p>
+    <pre>
+    var http = require('http');
+    
+    var client = http.get({host:'localhost', port:1000}, function(incMsg){
+// aborted / complete -----------------------------------------------------------------
+        incMsg.aborted;                                                                // -> false          // client did not aborted the request 
+        incMsg.complete;                                                               // -> false          // the full message is not yet received an parsed 
+        
+// socket / destroy() -----------------------------------------------------------------
+        incMsg.socket;                                                                 // -> Socket{...}    // returns the underlying socket 
+        incMsg.destroy();                                                              // destroys the underlying socket 
+        
+// headers / rawHeaders / trailers / rawTrailers --------------------------------------
+        incMsg.headers;                                                                // -> {'date':'Mon ...', 'connection':'close', 'content-length':'0'}   
+        incMsg.rawHeaders;                                                             // -> ['Date', 'Mon ...', 'Connection', 'close', 'Content-Length', '0'] 
+        
+        incMsg.on('data', (chunk)=>{console.log(chunk)});
+        incMsg.on('end', function(){
+            incMsg.trailers;                                                           // -> {'tr1':'1', 'tr2':'2'}     // -! available only at the 'end' event   
+            incMsg.rawTrailers;                                                        // -> ['Tr1', '1', 'Tr2', '2']
+        });
+        
+// httpVersion / statusCode / statusMessage -------------------------------------------
+        incMsg.httpVersion;                                                            // -> 1.1 
+        incMsg.statusCode;                                                             // -> 200
+        incMsg.statusMessage;                                                          // -> 'OK'
+        
+// setTimeout() -----------------------------------------------------------------------
+        incMsg.setTimeout(10000, function(){                                           // set a timeout (timer) on the socket 
+        });                                                                            // -! the callback is the 'timeout' listener on the 'incMsg' object (NOT on the socket or on the client object)    
+        
+        incMsg.socket.on('timeout', ()=>{});                                           // -! 'timeout' listener on the socket does NOT prevent the connection from dropping (like the client timeout listener)    
+        
+// aborted / close (events) -----------------------------------------------------------
+        incMsg.on('aborted', ()=>{});                                                  // fired when the client aborted the request    
+        incMsg.on('close', ()=>{});                                                    // fired when the connection is closed  
+        
+// data / end (events) ----------------------------------------------------------------
+        incMsg.on('data', (chunk)=>{console.log(chunk)});                              // reads incomming data chunks (readable stream method)
+        incMsg.on('end', ()=>{});                                                      // fired when the stream is ended 
+    });
+    </pre>
+    <p><b> On server side </b></p>
+    <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+// aborted / complete -----------------------------------------------------------------
+        incMsg.aborted;                                                                // -> false          // client did not aborted the request (would be 'true' if it did)
+        incMsg.complete;                                                               // -> false          // the full message is not yet received an parsed 
+        
+// socket / destroy() -----------------------------------------------------------------
+        incMsg.socket;                                                                 // -> Socket{...}    // returns the underlying socket 
+        incMsg.destroy();                                                              // destroys the underlying socket 
+        
+// headers / rawHeaders ---------------------------------------------------------------
+        incMsg.headers;                                                                // -> {'host':'localhost:1000', 'connection':'close'}
+        incMsg.rawHeaders;                                                             // -> ['Host', 'localhost', 'Connection', 'close']
+        
+// httpVersion / method / url ---------------------------------------------------------
+        incMsg.httpVersion;                                                            // -> 1.1
+        incMsg.method;                                                                 // -> 'GET'
+        incMsg.url;                                                                    // -> '/'            // request url 
+        
+// setTimeout() -----------------------------------------------------------------------
+        incMsg.setTimeout(10000, function(){                                           // set a timeout (timer) on the socket 
+        });                                                                            // -! the callback is the 'timeout' listener on the 'incMsg' object (NOT on the socket or on the server object)    
+        
+        incMsg.socket.on('timeout', ()=>{});                                           // -! 'timeout' listener on the socket does NOT prevent the connection from dropping (like the server timeout listener)    
+        
+// aborted / close (events) -----------------------------------------------------------
+        incMsg.on('aborted', ()=>{});                                                  // fired when the client aborted the request    
+        incMsg.on('close', ()=>{});                                                    // fired when the connection is closed  
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening!')});
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>abort</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var client = http.request({host:'localhost', port:1000}).end();
+    
+    setTimeout(function(){
+        client.abort();                                                                // aborting request after 2 seconds 
+    }, 2000);
+    
+    client.on('response', function(incMsg){
+        incMsg.aborted );                                                 // -> false         // request not aborted yet
+        
+        setTimeout(function(){
+            console.log( incMsg.aborted );                                             // -> true          // abort confirmation (after 4 seconds)
+        }, 4000);
+    });    
+    </pre>
+    <pre class="cmd">
+all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/01 abort TEST$ node client 
+    false
+    true                                                                               // after 4 seconds 
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/01 abort TEST$    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>complete</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    http.get({port:1000}, function(incMsg){
+        console.log( incMsg.complete );                                                // complete message not yet received 
+    
+        setTimeout(function(){
+            console.log( incMsg.complete );                                            // after 2 seconds the complete message is received and parsed by the parser
+        }, 2000)
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/02 complete TEST$ node client
+    false
+    true                                                                               // after 2 seconds 
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/02 complete TEST$     
+</pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>socket</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    http.createServer(function(incMsg, srvResp){
+        console.log( incMsg.socket === srvResp.socket );                               // -> true    
+    }).listen(1000, ()=>{console.log('server is listening')});    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/03 socket TEST$ sudo node srv
+    server is listening
+    true
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>destroy()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var client = http.get({port:1000}, function(incMsg){
+        var myErr = new Error('custom error');
+        incMsg.destroy(myErr);
+        
+        incMsg.socket.on('error', function(err){
+            console.log( err.message );                                                // the passed error object is received here 
+        });
+    });
+    
+    client.on('error', function(err){
+        console.log(err.message);                                                      // the passed error object is received here 
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/04 destroy() TEST$ node client
+    custom error
+    custom error
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/04 destroy() TEST$     
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>headers</mark> / <mark>rawHeaders</mark> / <mark>trailers</mark> / <mark>rawTrailers</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    http.get({port:1000}, function(incMsg){
+        console.log( incMsg.headers );
+        console.log( incMsg.rawHeaders );
+        
+        incMsg.on('data', ()=>{});
+        incMsg.on('end', function(){
+            console.log( incMsg.trailers );                                            // -! only populated in the 'end' event
+            console.log( incMsg.rawTrailers );                                         // -! only populated in the 'end' event
+        });
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/05 headers rawHeaders trailers rawTrarilers TEST$ node client
+    {                                                                                  // incMsg.headers
+    trailer: 'trail1, trail2',
+    date: 'Mon, 25 May 2020 13:37:15 GMT',
+    connection: 'close',
+    'transfer-encoding': 'chunked'
+    }
+    [                                                                                  // incMsg.rawHeaders
+    'Trailer',
+    'trail1',
+    'Trailer',
+    'trail2',
+    'Date',
+    'Mon, 25 May 2020 13:37:15 GMT',
+    'Connection',
+    'close',
+    'Transfer-Encoding',
+    'chunked'
+    ]
+    { trail1: '21', tral2: 'true' }                                                    // incMsg.trailers
+    [ 'trail1', '21', 'tral2', 'true' ]                                                // incMsg.rawTrailers
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/05 headers rawHeaders trailers rawTrarilers TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>httpVersion</mark> / <mark>method</mark> / <mark>statusCode</mark> / <mark>statusMessage</mark> / <mark>url</mark> TEST </u></h4>
+    <pre>
+// client side -----------------------------------------------------------------------
+    var http = require('http');
+    
+    var client = http.get({port:1000});
+    
+    client.on('response', function(incMsg){
+        console.log(incMsg.httpVersion);                                              // -> 1.1 
+        console.log(incMsg.statusCode);                                               // -> 200
+        console.log(incMsg.statusMessage);                                            // -> 'OK'
+        
+    });
+
+// server side -----------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, ()=>{console.log('server is listening!')});
+    
+    server.on('request', function(incMsg, srvResp){
+        console.log(incMsg.httpVersion);                                              // -> 1.1 
+        console.log(incMsg.method);                                                   // -> 'GET'
+        console.log(incMsg.url);                                                      // -> '/'       // request url 
+        
+        srvResp.end();
+    });
+    </pre>
+    <pre class="cmd">
+// client side -----------------------------------------------------------------------
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/06 httpVersion method statusCode statusMessage url TEST$ node client
+    1.1
+    200
+    OK
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/06 httpVersion method statusCode statusMessage url TEST$
+    
+// client side -----------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/06 httpVersion method statusCode statusMessage url TEST$ sudo node srv
+    server is listening!
+    1.1
+    GET
+    /
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setTimeout()</mark> TEST </u></h4>
+    <pre>
+// client side ------------------------------------------------------------------------
+    var http = require('http');
+    
+    http.globalAgent.keepAlive = true;
+    
+    var client = http.request({port:1000, host:'localhost', method:'POST'}, function(incMsg){
+        incMsg.setTimeout(4000, function(){
+            console.log('incomming message timeout');                                  // NOT triggered because the 'timeout' event is not emited on the IncomingMessage object  
+        });
+        
+        incMsg.socket.on('timeout', ()=>{console.log('socket timed out!')});           // 'timeout' event emitted on the socket but this listener does not prevent the connection from closing   
+    }).end();
+        
+    // client.on('timeout', ()=>{console.log('client timed out!')});                   // this 'timeout' listener would prevent the connection from dropping
+        
+// server side ------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, ()=>{console.log('server is listening!')});
+    server.keepAliveTimeout = 0;
+    
+    server.on('request', function(incMsg, srvResp){
+        incMsg.setTimeout(5000, function(){
+            console.log('incomming message timeout');                                  // NOT triggered because the 'timeout' event is not emited on the IncomingMessage object  
+        });
+        
+        incMsg.socket.on('timeout', ()=>{console.log('socket timed out!')});           // 'timeout' event emitted on the socket but this listener does not prevent the connection from closing   
+        
+        srvResp.write('server response');
+    });
+    
+    // server.on('timeout', ()=>{console.log('client timed out!')});                   // this 'timeout' listener would prevent the connection from dropping
+    </pre>
+    <pre class="cmd">
+// client side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/07 setTimeout() TEST$ node client
+    socket timed out!
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/07 setTimeout() TEST$     
+    
+// server side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/07 setTimeout() TEST$ sudo node srv
+    server is listening!
+    socket timed out!
+    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>aborted</mark> / <mark>close</mark> TEST </u></h4>
+    <pre>
+// client side -----------------------------------------------------------------------
+    var http = require('http');
+        
+    var client = http.get({port:1000}, function(incMsg){
+        incMsg.on('aborted', function(){
+            console.log('request aborted!');
+        });
+        
+        incMsg.on('close', function(){
+            console.log('connection closed!');
+        });
+    });
+    
+    setTimeout(function(){
+        client.abort();                                                                // aborts the request after 5 seconds 
+    }, 5000);
+    
+// server side ------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer(function(incMsg, srvResp){
+        incMsg.on('aborted', function(){
+            console.log('request aborted!');
+        });
+        
+        incMsg.on('close', function(){
+            console.log('connection closed!');
+        });
+        
+        srvResp.write('some response');
+    }).listen(1000, ()=>{console.log('server is listening')});    
+    </pre>
+    <pre class="cmd">
+// client side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/08 aborted close events TEST$ node client
+    request aborted!
+    connection closed!
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/08 aborted close events TEST$
+    
+// server side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/IncomingMessage Object/08 aborted close events TEST$ sudo node srv
+    server is listening
+    request aborted!
+    connection closed!
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Transformation </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>    
+<body>
+<h1> Transformation (ver 2.9) </h1>
+    <p> Updated ( 2018-11-05 / 2018-11-29 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>  
+        <a href="../index.html">Canvas></a> Transformation  
+    </p>
+<table class="table">
+    <tr>
+        <th> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.resetTransform() </td>
+        <td> resets the current tranformation matrix (equal to <mark>setTransform(1, 0, 0, 1, 0, 0)</mark>) <u style="color:orangered;">(no EDGE support [2018-11-19])</u> </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.rotate(<strong>radian</strong>) </td>
+        <td> rotates <u>the canvas grid</u> arround the <mark>0, 0</mark> (top left corner) matrix center point of the canvas </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.scale(<strong>x</strong>, <strong>y</strong>) </td>
+        <td> scales <u>the canvas grid</u> arround the <mark>0, 0</mark> (top left corner) (default size is <mark>1</mark> / negative values are allowed they  create mirror effects) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.setTransform(<strong>xScale</strong>, <strong>xSkew</strong>, <strong>ySkew</strong>, <strong>yScale</strong>, <strong>xMove</strong>, <strong>yMove</strong>) </td>
+        <td> resets the transformation matrix to default values than scales, skews, translates, rotates <u>the canvas grid (transformation matrix) <b>again</b></u>  (rotation is achivable (90 degrees maximum) by using the 2 skew values in oposite direction) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.transform(<strong>xScale</strong>, <strong>xSkew</strong>, <strong>ySkew</strong>, <strong>yScale</strong>, <strong>xMove</strong>, <strong>yMove</strong>) </td>
+        <td> scales, skews, translates, rotates <u>the canvas grid (transformation matrix)</u> (rotation is achivable (90 degrees maximum) by using the 2 skew values in oposite direction) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.translate(<strong>x</strong>, <strong>y</strong>) </td>
+        <td> moves <u>the canvas grid</u> on the "x" and "y" axis relative to the <mark>0, 0</mark> (top left corner) coordinates </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p> - </p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - we move/transform the <u>whole canvas grid (matrix)</u> relative to <mark>0, 0</mark> <u>(point of origin)</u> coordinates when transforming </p>
+<h2 style="color:darkblue;"><u> <mark>translate()</mark> / <mark>rotate()</mark> / <mark>scale()</mark> / <mark>transform()</mark> / <mark>setTransform()</mark> / <mark>resetTransform()</mark> </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>canvasCtx2D</strong>.translate(<strong>x</strong>, <strong>y</strong>)                                 // moves <u>the canvas grid</u> on the "x" and "y" axis relative to the <mark>0, 0</mark> (top left corner) coordinates
+            <strong>canvasCtx2D</strong>.rotate(<strong>radian</strong>)                                  // rotates <u>the canvas grid</u> arround the <mark>0, 0</mark> (top left corner) matrix center point of the canvas  
+            <strong>canvasCtx2D</strong>.scale(<strong>x</strong>, <strong>y</strong>)                                     // scales <u>the canvas grid</u> arround the <mark>0, 0</mark> (top left corner) (default size is <mark>1</mark> / negative values are allowed they  create mirror effects)  
+    
+            <strong>canvasCtx2D</strong>.transform(<strong>xScale</strong>, <strong>xSkew</strong>, <strong>ySkew</strong>, <strong>yScale</strong>, <strong>xMove</strong>, <strong>yMove</strong>)       // scales, skews, translates, rotates <u>the canvas grid (transformation matrix)</u> (rotation is achivable (90 degrees maximum) by using the 2 skew values in oposite direction)  
+            <strong>canvasCtx2D</strong>.setTransform(<strong>xScale</strong>, <strong>xSkew</strong>, <strong>ySkew</strong>, <strong>yScale</strong>, <strong>xMove</strong>, <strong>yMove</strong>)    // resets the transformation matrix to default values than scales, skews, translates, rotates <u>the canvas grid (transformation matrix) <b>again</b></u>  (rotation is achivable (90 degrees maximum) by using the 2 skew values in oposite direction)  
+            <strong>canvasCtx2D</strong>.resetTransform()                                            // resets the current tranformation matrix (equal to <mark>setTransform(1, 0, 0, 1, 0, 0)</mark>) <u style="color:orange;">(no EDGE support [2018-11-19])</u>
+    </pre>
+    <pre>
+    &lt;canvas id="demo" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var ctx = document.getElementById("demo").getContext("2d");
+    ctx.translate(150, 75);                                             // canvas grid (transform matrix center point) is moved to the center
+    ctx.rotate(Math.PI / 4);                                            // rotated to 45 degrees
+    ctx.scale(2, 2);                                                    // scaled up to double size
+    
+    ctx.fillRect(-25, -25, 50, 50);                                     // rectangle is drawn on the matrix center point exactly
+    
+// transform() / setTransform() / resetTransform() ------------------    
+    ctx.transform(.8, 1, 0, .8, -25, 25);                               //  scaled down (.8, .8) / horizontal skew (1, 0) / translated (-25, 25)    // -> these transformations are <u>relative</u> to the previously modified transform matrix!   
+    ctx.fillRect(0, 0, 25, 25);
+    
+    ctx.setTransform(1.5, 1, -1, 1.5, 50, 50);                          // resets the current transform matrix and set a new one at the same time                      
+    ctx.fillRect(0, 0, 25, 25);                                             // -! rotation is achived by the two skew values (1, -1) but these are not very well defined and has no defined units like "radian"
+    
+    ctx.resetTransform();                                               // resets the transform matrix to default (same as "setTransform(1, 0, 0, 1, 0, 0)")
+    ctx.fillRect(0, 0, 25, 25);
+&lt;/script&gt;  
+    </pre>
+    <details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>translate()</mark> method TEST </u></h4>    
+    <canvas id="translate" style="border:solid 1px black"></canvas>
+<script>
+    var translateFn = function() {
+        var ctx = document.getElementById("translate").getContext("2d");
+        ctx.save();                                     // save the default state
+        
+        ctx.beginPath();
+        ctx.fillStyle = "#0095DD";
+        ctx.translate(25, 25);                          // all further shapes will be drawn 25px right and 25px bottom to their original position
+        ctx.fillRect(10, 10, 100, 100);
+        
+        ctx.restore();                                  // restore the default state
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(10, 10, 100, 100);                   // original place compared the the translated position of the rectangle
+    }    
+    translateFn();
+</script>        
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="translate" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var translateFn = function() {
+        var ctx = document.getElementById("translate").getContext("2d");
+        ctx.save();                                     // save the default state
+        
+        ctx.beginPath();
+        ctx.fillStyle = "#0095DD";
+        ctx.translate(25, 25);                          // all further shapes will be drawn 25px right and 25px bottom to their original position
+        ctx.fillRect(10, 10, 100, 100);
+        
+        ctx.restore();
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(10, 10, 100, 100);                 // original place compared the the translated position of the rectangle
+    }    
+    translateFn();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<h4><u> <mark>rotate()</mark> method TEST </u></h4> 
+    <p> - the default rotation point of the canvas grid is (0, 0), on the second canvas it is moved on the top of the canvas with the <mark>translate()</mark> method </p>
+    <canvas id="rotate" style="border:solid 1px black"></canvas> 
+    <canvas id="rotate2" style="border:solid 1px black"></canvas>
+<script>
+    function rotate() {
+        var ctx = document.getElementById("rotate").getContext("2d");
+        ctx.save();                                     // original state saved
+        
+        ctx.beginPath();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#0095DD";
+        ctx.rotate(0.5);                                // all further shapes will be drawn rotated (0.5 radian clockwise) 
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.stroke();
+        
+        ctx.restore();
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.stroke();
+        
+// second canvas rotation point is moved to the center
+        ctx2 = document.getElementById("rotate2").getContext("2d");
+        ctx2.translate(150, 75);
+        ctx2.save();                                     // we save here the translated canvas grid 
+        
+        ctx2.beginPath();
+        ctx2.fillStyle = "#0095DD";
+        ctx2.rotate(4);                                 // rotated 4 radian clockwise
+        ctx2.fillRect(0, 0, 100, 100);                  // because the translation the square's top left corner is moved to the canvas' center
+        
+        ctx2.restore();
+        ctx2.fillRect(0, 0, 100, 100);
+    }
+    rotate();
+</script>        
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="rotate" style="border:solid 1px black"&gt;&lt;/canvas&gt; 
+    &lt;canvas id="rotate2" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    function rotate() {
+        var ctx = document.getElementById("rotate").getContext("2d");
+        ctx.save();                                     // original state saved
+        
+        ctx.beginPath();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#0095DD";
+        ctx.rotate(0.5);                                // all further shapes will be drawn rotated (0.5 radian clockwise) 
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.stroke();
+        
+        ctx.restore();
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.stroke();
+        
+// second canvas rotation point is moved to the center
+        ctx2 = document.getElementById("rotate2").getContext("2d");
+        ctx2.translate(150, 75);
+        ctx2.save();                                    // we save here the translated canvas grid 
+        
+        ctx2.beginPath();
+        ctx2.fillStyle = "#0095DD";
+        ctx2.rotate(4);                                 // rotated 4 radian clockwise
+        ctx2.fillRect(0, 0, 100, 100);                  // because the translation the square's top left corner is moved to the canvas' center
+        
+        ctx2.restore();
+        ctx2.fillRect(0, 0, 100, 100);
+    }
+    rotate();
+&lt;/script&gt;     
+        </pre>
+        </details>    
+<h4><u> <mark>scale()</mark> method TEST </u></h4>        
+    <canvas id="scale" style="border:solid 1px black"></canvas>
+<script>
+    function scale() {
+        var ctx = document.getElementById("scale").getContext("2d");
+        ctx.save();
+        ctx.save();                             // 2 default context saves are used in order to restore the default context twice
+        
+        ctx.beginPath();
+        ctx.scale(2, 2);                        // scaled to double size
+        ctx.fillStyle = "#0095DD";
+        ctx.fillRect(10, 10, 50, 50);           // because the starting point is from the top left corner the start coordinates are also scaled up
+        
+        ctx.restore();
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(10, 10, 50, 50);
+        
+        ctx.restore();
+        ctx.translate(150, 75);                 // the transformation center point is moved to the center of the canvas 
+        ctx.font = "17px sans-serif";
+        ctx.scale(-1, 1);                       // horizontal mirror effect created 
+        ctx.fillText("MIRRORED TEXT", 0, 0);    // text is displayed on the center becaus we moved the transformation center point there
+    }
+    scale();
+</script>        
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="scale" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    function scale() {
+        var ctx = document.getElementById("scale").getContext("2d");
+        ctx.save();
+        ctx.save();                             // 2 default context saves are used in order to restore the default context twice
+        
+        ctx.beginPath();
+        ctx.scale(2, 2);                        // scaled to double size
+        ctx.fillStyle = "#0095DD";
+        ctx.fillRect(10, 10, 50, 50);           // because the starting point is from the top left corner the start coordinates are also scaled up
+        
+        ctx.restore();
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(10, 10, 50, 50);
+        
+        ctx.restore();
+        ctx.translate(150, 75);                 // the transformation center point is moved to the center of the canvas 
+        ctx.font = "17px sans-serif";
+        ctx.scale(-1, 1);                       // horizontal mirror effect created 
+        ctx.fillText("MIRRORED TEXT", 0, 0);    // text is displayed on the center becaus we moved the transformation center point there
+    }
+    scale();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<h4><u> <mark>transform()</mark> method TEST </u></h4>
+    <p> - skewing in both direction can create rotation if exact oposite values are used </p>
+    <canvas id="transform" style="border:solid 1px black"></canvas>
+    <canvas id="transform2" style="border:solid 1px black"></canvas>
+<script>
+    function transformFn() {
+        var ctx = document.getElementById("transform").getContext("2d");
+        ctx.save();
+        
+        ctx.fillStyle = "green";
+        ctx.transform(1, 0, 0, 1, 20, 20);          // green rectangle canvas grid moved (20, 20)
+        ctx.fillRect(0, 0, 50, 50);
+        
+        ctx.restore();
+        ctx.fillStyle = "orange";               
+        ctx.transform(.5, 0, 0, 3, 100, 20);        // orange rectangle canvas grid moved (80, 20) and scaled (.5, 3)
+        ctx.fillRect(0, 0, 50, 50);
+        
+// second canvas demonstrate skew (it can create rotation);
+        var ctx2 = document.getElementById("transform2").getContext("2d");
+        ctx2.save();
+        ctx2.save();
+        
+        ctx2.fillStyle = "white";
+        ctx2.transform(1, 1, 0, 1, 20, 20);         // horizontal skew (horizontal line skewed)
+        ctx2.fillRect(0, 0, 50, 50);
+        
+        ctx2.restore();                             // we restore the matrix here!
+        ctx2.fillStyle = "red";
+        ctx2.transform(1, 0, 1, 1, 50, 20);         // vertical skew (vertical line skewed)
+        ctx2.fillRect(0, 0, 50, 50); 
+        
+        ctx2.restore();                             // we restore the matrix here!
+        ctx2.fillStyle = "blue";
+        ctx2.transform(1, 1, -1, 1, 200, 20);       // create rotation effect (1, -1 skew parameters) (cannot rotate all arround like with the rotate method however!)
+        ctx2.fillRect(0, 0, 50, 50);
+    }
+    transformFn();
+</script> 
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="transform" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+    &lt;canvas id="transform2" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    function transformFn() {
+        var ctx = document.getElementById("transform").getContext("2d");
+        ctx.save();
+        
+        ctx.fillStyle = "green";
+        ctx.transform(1, 0, 0, 1, 20, 20);          // green rectangle canvas grid moved (20, 20)
+        ctx.fillRect(0, 0, 50, 50);
+        
+        ctx.restore();
+        ctx.fillStyle = "orange";               
+        ctx.transform(.5, 0, 0, 3, 100, 20);        // orange rectangle canvas grid moved (80, 20) and scaled (.5, 3)
+        ctx.fillRect(0, 0, 50, 50);
+        
+// second canvas demonstrate skew (it can create rotation);
+        var ctx2 = document.getElementById("transform2").getContext("2d");
+        ctx2.save();
+        ctx2.save();
+        
+        ctx2.fillStyle = "white";
+        ctx2.transform(1, 1, 0, 1, 20, 20);         // horizontal skew (horizontal line skewed)
+        ctx2.fillRect(0, 0, 50, 50);
+        
+        ctx2.restore();                             // we restore the matrix here!
+        ctx2.fillStyle = "red";
+        ctx2.transform(1, 0, 1, 1, 50, 20);         // vertical skew (vertical line skewed)
+        ctx2.fillRect(0, 0, 50, 50); 
+        
+        ctx2.restore();                             // we restore the matrix here!
+        ctx2.fillStyle = "blue";
+        ctx2.transform(1, 1, -1, 1, 200, 20);       // create rotation effect (1, -1 skew parameters) (cannot rotate all arround like with the rotate method however!)
+        ctx2.fillRect(0, 0, 50, 50);
+    }
+    transformFn();
+&lt;/script&gt;     
+        </pre>
+        </details>
+<h4><u> <mark>resetTransform()</mark> / <mark>setTransform()</mark> methods TEST </u></h4>    
+    <p> - no EDGE / IE support for <mark>resetTransform()</mark> method [2018-11-19]</p>
+    <canvas id="transformTr" style="border:solid 1px black"></canvas>    
+<script>
+    function transformStuff() {
+        var ctx = document.getElementById("transformTr").getContext("2d");
+        
+        ctx.fillStyle = "white";
+        ctx.transform(1.5, 0, 0, 1.4, 30, 30);          
+        ctx.fillRect(0, 0, 20, 20);
+        
+        ctx.fillStyle = "red";                 
+        ctx.transform(1.5, 0, 0, 1.4, 30, 30);          // transform matrix is added to the previously set transform matrix
+        ctx.fillRect(0, 0, 20, 20);
+        
+        ctx.fillStyle = "orange";
+        ctx.setTransform(3, .5, -0.5, 3, 150, 50);      // resets the transform matrix automatically and set the new values at the same time
+        ctx.fillRect(0, 0, 20, 20);
+        
+        ctx.fillStyle = "blue";
+        ctx.resetTransform();                           // tranform matrix reset (equals to "transform(1, 0, 0, 1, 0, 0)")
+        ctx.fillRect(0, 0, 20, 20);
+    }
+    transformStuff();
+</script>        
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="transformTr" style="border:solid 1px black"&gt;&lt;/canvas&gt;    
+&lt;script&gt;
+    function transformStuff() {
+        var ctx = document.getElementById("transformTr").getContext("2d");
+        
+        ctx.fillStyle = "white";
+        ctx.transform(1.5, 0, 0, 1.4, 30, 30);          
+        ctx.fillRect(0, 0, 20, 20);
+        
+        ctx.fillStyle = "red";                 
+        ctx.transform(1.5, 0, 0, 1.4, 30, 30);          // transform matrix is added to the previously set transform matrix
+        ctx.fillRect(0, 0, 20, 20);
+        
+        ctx.fillStyle = "orange";
+        ctx.setTransform(3, .5, -0.5, 3, 150, 50);      // resets the transform matrix automatically and set the new values at the same time
+        ctx.fillRect(0, 0, 20, 20);
+        
+        ctx.fillStyle = "blue";
+        ctx.resetTransform();                           // tranform matrix reset (equals to "transform(1, 0, 0, 1, 0, 0)")
+        ctx.fillRect(0, 0, 20, 20);
+    }
+    transformStuff();
+&lt;/script&gt;    
+        </pre>
+        </details>
+</details>  
+    
+    <br><br>
+</body>
+</html>

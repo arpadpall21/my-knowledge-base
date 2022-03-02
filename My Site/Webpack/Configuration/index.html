@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Configuration (file) </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Configuration (file) (ver 4.0.0) </h1>
+    <p> Updated ( 2021-02-27)</p>
+    <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
+        <a href="../index.html">Webpack></a> Configuration (file) 
+    </p>
+    <p class="subSite">
+        <a href="#devServer"> devServer </a> /
+        <a href="#devtool"> devtool </a> /
+        <a href="#entry and context"> entry and context </a> /
+        <a href="#experiments"> experiments </a> /
+        <a href="#externals"> externals </a> /
+        <a href="#mode"> mode </a> /
+        <a href="#module"> module </a> /
+        <a href="#node"> node </a> /
+        <a href="#optimization"> optimization </a> /
+        <a href="#output"> output </a> /
+        <a href="#performance"> performacne </a> /
+        <a href="#plugins"> plugins </a> /
+        <a href="#resolve"> resolve </a> /
+        <a href="#stats"> stats </a> /
+        <a href="#target"> target </a> /
+        <a href="#watch"> watch and watchOptions</a> /
+        <a href="#Other Options"> [Other Options] </a>     
+    </p>
+<table class="table">
+<caption>
+    Substitutions in <mark>output</mark> option template strings
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Substitution </th>
+        <th> Description </th>
+    </tr>
+<tr class="05.01">
+<td colspan="2"> 
+            Compilation-level
+</td>
+</tr>
+<tr class="05.02">
+<td> 
+            [fullhash]
+</td>
+<td> 
+            - the full hash of compilation
+</td>
+</tr>
+<tr class="10.01">
+<td colspan="2"> 
+            Chunk-level
+</td>
+</tr>
+<tr class="10.02">
+<td> 
+            [id]
+</td>
+<td> 
+            - ID of the chunk
+</td>
+</tr>
+<tr class="10.03">
+<td> 
+            [name]
+</td>
+<td> 
+            - name of the chunk, if set, otherwise the ID of the chunk
+</td>
+</tr>
+<tr class="10.04">
+<td> 
+            [chunkhash]
+</td>
+<td> 
+            - hash of the chunk, including all elements of the chunk
+</td>
+</tr>
+<tr class="10.05">
+<td> 
+            [contenthash]
+</td>
+<td> 
+            - hash of the chunk, including only elements of this content type (affected by <mark>optimization.realContentHash</mark>)
+</td>
+</tr>
+<tr class="15.01">
+<td colspan="2"> 
+            Module-level
+</td>
+</tr>
+<tr class="15.02">
+<td> 
+            [id]
+</td>
+<td> 
+            - ID of the module
+</td>
+</tr>
+<tr class="15.03">
+<td> 
+            [hash]
+</td>
+<td> 
+            - hash of the module
+</td>
+</tr>
+<tr class="15.04">
+<td> 
+            [contenthash]
+</td>
+<td> 
+            - hash of the content of the module
+</td>
+</tr>
+<tr class="20.01">
+<td colspan="2"> 
+            File-level
+</td>
+</tr>
+<tr class="20.02">
+<td> 
+            [file]
+</td>
+<td> 
+            - filename and path, without query or fragment
+</td>
+</tr>
+<tr class="20.03">
+<td> 
+            [query]
+</td>
+<td> 
+            - query with leading <mark>?</mark>
+</td>
+</tr>
+<tr class="20.04">
+<td> 
+            [fragment]
+</td>
+<td> 
+            - fragment with leading <mark>#</mark>
+</td>
+</tr>
+<tr class="20.05">
+<td> 
+            [base]
+</td>
+<td> 
+            - only filename (including extensions), without path
+</td>
+</tr>
+<tr class="20.06">
+<td> 
+            [path]
+</td>
+<td> 
+            - only path, without filename
+</td>
+</tr>
+<tr class="20.07">
+<td> 
+            [name]
+</td>
+<td> 
+            - only filename without extension or path
+</td>
+</tr>
+<tr class="20.08">
+<td> 
+            [ext]
+</td>
+<td> 
+            - extension with leading
+</td>
+</tr>
+<tr class="25.01">
+<td colspan="2"> 
+            URL-level
+</td>
+</tr>
+<tr class="25.02">
+<td> 
+            [url]
+</td>
+<td> 
+            - URL
+</td>
+</tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://webpack.js.org/configuration/" target="_blank">Webpack Config (webpack.js.org/configuration/)</a></p>  
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - we can configure Webpack through the config file which is by default <mark>webpack.config.js</mark> (other config files can be used on build time through the <mark>--config</mark> flag) </p>
+    <p> - <u>from v4 Webpack does not require a config file</u>, by Default the entry is <mark>src/index.js</mark>, the output is <mark>dist/main.js</mark> and the output code is optimized for production (minimized, etc...) </p>
+    <pre class="syntax">
+<span style="color:darkgray">// webpack config file ----------------------------------------------------------------</span>
+    
+    module.export = { <span style="color:darkgray">// webpack options...</span> }                                          // exports an object which holds webpack configurations    
+    
+    <span style="color:darkgray">// function -----------------------------------------------------------------------</span>
+    module.export = function(<strong>env</strong>) {                                                    // the <strong>env</strong> receives the key/value pair passed through the <mark>--env</mark> flag   
+        return { <span style="color:darkgray">// webpack options...</span> }                                               // exports a function which returns an object holding webpack configurations    
+    }
+    </pre>
+    <p><span style="color:yellow;"> I only list options that I understand here because there are crazy amounts of options available ([likend] the original page) </span></p>
+<h2 style="color:darkblue;" id="entry and context"><u> Entry and Context <a href="https://webpack.js.org/configuration/entry-context/" target="_blank">[link]</a> </u></h2>
+    <p> - specifies entry points </p>
+<details class="example">
+<summary> Options </summary>
+    <pre class="syntax">
+    module.exports = {
+        context: <strong>filePath:str</strong>                                                          // directory where entry files are looked for <u>(must be an absolute path)</u> (Default: current directory)   
+        
+        entry: <strong class="openable">path:str|obj|arr|fn<div>
+            <p> - <strong>str</strong> - a file specified as entry point </p>
+                <hr>
+            <p> - <strong>arr</strong> - array contains multiple entry points </p>
+            <p> all these entries are treated as one entry (webpack will ouptut a single bundle) </p>
+                <hr>
+            <p> - <strong>obj</strong> - object contains key/value pairs where the values are the entry points </p>
+            <p> in this case as many outputs are generated as entry points specified (keys will be the new file names) </p>
+                <hr>
+            <p> - <strong>fn</strong> - function executed when looking for entries (on <mark>make</mark> event) </p>
+            <p> this is dynamic loading which is <u>NOT</u> an entry point </p>
+        </div></strong>                                                    // entry (entries) where Webpack starts building the bundle 
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary >
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        entry: ['./src/index.js', './src/index_.js', './src/index_2.js'],              // all 3 modules are treated as 1 single top-level module (1 bundle is outputted only!)   
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].bundle.js'
+        }, 
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',                                                   // context specifies the base directory where Webpack starts looking for entries    
+        entry: {
+            bl1: './index.js',                                                         // each entry is treated as individual top-level entry point (3 bundles will be outputed)    
+            bl2: './index_.js',                                                          // outputted files will be 'bl1.bundle.js', 'bl2.bundle.js' and 'bl3.bundle.js'    
+            bl3: './index_2.js'
+        },
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].bundle.js'
+        }, 
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="output"><u> Output (and output substitusions) <a href="https://webpack.js.org/configuration/output/" target="_blank">[link]</a> </u></h2>
+    <p> - specifies how and where should output the bundle(s), assets, etc... </p>
+    <p> - Webpack Substitutions are used in output template strings, Webpack replaces these substitution with specific values on output </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        output: {
+            charset: <strong>bol</strong>                                                               // adds <mark>charset="utf-8"</mark> to the HTML script tag (Default: <mark>true</mark>)    
+            
+            
+            filename: <strong>str|fn</strong>                                                           // output bundle name, <u>(substitution required if multiple bundles are outputted ex: <mark>[name].bundle.js</mark>)</u>    
+                                                                                           // can create subdirectories as well (ex: <mark>'./sub/[name].bundle.js'</mark>)    
+                                                                                           // does not affect dynamically loaded chunks   
+            assetModuleFilename: <strong>str</strong>                                                   // name of each output for asset modules output    
+            path: <strong>filePath:str</strong>                                                         // the output directory <u>as absolute path</u>    
+            publicPath: <strong>filePath:str</strong>                                                   // public directory what the browser will reference to server assets    
+            
+            
+            hashDigest: <strong class="openable">hash:str<div>
+                <p> 'hex' (Default) | 'base64' | 'latin1' </p>
+            </div></strong>                                                      // encoding to use when generating a hash 
+            hashDigestLength: <strong>nr</strong>                                                       // the appended hash length (Default: <mark>20</mark>)    
+            
+            
+            sourceMapFilename: <strong>str</strong>                                                     // name of source map files (Defautl: <mark>[file].map[query])</mark>)    
+            
+            
+            clean: <strong>bol</strong>                                                                 // fully cleans the output directory's content <u>before emitting the new bundle(s)</u> <span class="browserSupport" title="updated : 2021-03-01"><span>v5.20.0 </span></span>
+        }
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {  
+        mode: 'development',
+        entry: {
+            in1: './src/index.js',                                                     // there are 2 entries 
+            in2: './src/moduleX.js'
+        },
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].bundle.js'                                               // the '[name]' substitusion here will use the entry object keys 
+        },                                                                               // outputs 2 files 'in1.bundle.js' and 'in2.bundle.js'  
+    }     
+    </pre>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>    
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: './index.js',
+        output: {
+            path: __dirname + '/dist',                                                 // output directory 
+            filename: './sub/[name].bundle.js'                                         // output subdirectory and file name 
+        }, 
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>    
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].bundle.js',
+            assetModuleFilename: 'asset-[name]'                                        // asset name outputed by Webpack 
+        }, 
+        module: {
+            rules: [
+                {
+                    test: /\.txt$/i,
+                    type: 'asset/resource'                                             // outputs *.txt files into the otput directory 
+                }
+            ]
+        },
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>    
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].[contenthash].js',
+            hashDigest: 'base64',                                                      // hash encoding 
+            hashDigestLength: 10                                                       // hash length that is appended to the output file 
+        }, 
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>    
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].[contenthash].js',
+            publicPath: 'https://cdn.example.com/assets/',                             // public path 
+        }, 
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>    
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        // entry: './index.js',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name]-[hash].js',
+            hashDigestLength: 5,
+            clean: true                                                                // essentially does the same as the 'CleanWebpackPlugin' (deletes all files and directories from the output directory before emitting the new bundle)    
+        }, 
+        // plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="mode"><u> Mode <a href="https://webpack.js.org/configuration/mode/" target="_blank">[link]</a> </u></h2>
+    <p> - sets Webpack in Development of in Production mode </p>
+<details class="example">
+<summary> Options </summary>
+    <pre class="syntax">
+    modules.exports = {
+        mode: <span class="openable">'development'|'production'|'none'<div>
+            <p> 'developement' </p>
+            <p> - <mark>process.env.NODE_ENV</mark> is set to <mark>'development'</mark> </p>
+                <hr>
+            <p> 'production' </p>
+            <p> - <mark>process.env.NODE_ENV</mark> is set to <mark>'production'</mark> </p>
+            <p> - the output code is optimized for performance, minified, etc...) </p>
+            <p> - the following plugins are used for production build <mark>FlagDependencyUsagePlugin</mark> <mark>FlagIncludedChunksPlugin</mark>,<mark>ModuleConcatenationPlugin</mark>, <mark>NoEmitOnErrorsPlugin</mark> and <mark>TerserPlugin</mark> </p>
+                <hr>
+            <p> 'none' </p>
+            <p> - opts out any default optimization options </p>
+        </div></span>                                       // Development or Production mode 
+    }  
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {  
+        mode: 'development',                                                           // Webpack runs in Development mode 
+        entry: {
+            in1: './src/index.js', 
+            in2: './src/moduleX.js'
+        },
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].bundle.js' 
+        }
+    }     
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="module"><u> Module <a href="https://webpack.js.org/configuration/module/" target="_blank">[link]</a></u></h2>
+    <p> - defines how different types of modules should be treated </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        module: {
+            noParse: <strong>str|regExp</strong>                                                        // matching files won't be parsed and loaded     
+            
+            rules: <strong>arr</strong>                                                                 // loaders used to load specified files (see loaders) <u>executed from right-to-left</u>    
+        }
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].js',
+        }, 
+        module: {
+            noParse: /exclude.css/,                                                    // files including 'exclude' won't be loaded 
+            rules: [{test:/\.css$/i, use:['style-loader', 'css-loader']}]
+        }
+    } 
+    </pre>
+    <p> <mark>index.js</mark> (file) </p>
+    <pre>
+    import './styles.css';
+    import './exclude.css';                                                            // won't be loaded because of the 'noParse' option 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------>
+    
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="resolve"><u> Resolve <a href="https://webpack.js.org/configuration/resolve/" target="_blank">[link]</a> </u></h2>
+    <p> - defines module resolution </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        resolve: {
+            alias: <strong>obj</strong>                                                                 // contains <span class="openable">path aliases<div>
+            <p> - a reference which holds a path </p>
+            </div></span> (key = alias) (value = referenced path)    
+            
+            
+            extensions: <strong>arr</strong>                                                            // attempts to resolve extensions in the specified order (when no file extension is specified) (Default: <mark>['.wasm', '.mjs', '.js', '.json']</mark>)    
+            enforceExtension: <strong>bol</strong>                                                      // requires file extensions in file paths (Default: <mark>false</mark>) 
+            
+            
+            mainFiles: <strong>arr</strong>                                                             // list of files used when resolving directories (Default: <mark>['index']</mark>)  
+            modules: <strong class="openable">arr<div>
+                <p> - relative path = will be searched similar to Node.js scan (looks through the current directory and its ancestors) </p>
+                <p> - absolute path = only the given directory is searched </p>
+            </div></strong>                                                              // list of directories to be searched when resolving modules (Default: <mark>['node_modules']</mark>)
+            
+            
+            symlinks: <strong>bol</strong>                                                              // symbolic links are resolved to their real path (Default: <mark>true</mark>)    
+            
+            
+            restrictions: [<strong>str|regExp</strong><i>, ...</i>]                                            // list of files that Webpack prevents to be resolved    
+        }
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary >
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        resolve: {
+            alias: {
+                Util: __dirname + '/src/utilities',                                    // path aliases specified 
+                Temp: __dirname + '/src/templates'
+            }
+        },
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].js',
+        }, 
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>index.js</mark> (file) </p>
+    <pre>
+    import 'Util/index';                                                               // path alias 'Util' resolved to "__dirname + '/src/utilities'"
+    import 'Temp/index';                                                               // path alias 'Temp' resolved to "__dirname + '/src/templates'"
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].js',
+        }, 
+        resolve: {
+            mainFiles: ['index', 'main']                                               // if a directory is required these files will be looked for inside 
+        },
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+    <p> <mark>index.js</mark> (file) </p>
+    <pre>
+    import './templates'                                                               // resolves to './templates/index' or './templates/main'
+    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].js',
+        }, 
+        resolve: {
+            restrictions: [/\.cjs$/]                                                   // *.cjs files won't be resolved 
+        },
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="optimization"><u> Optimization <a href="https://webpack.js.org/configuration/optimization/" target="_blank">[link]</a> </u></h2>
+    <p> - from Webpack v4 optimization depends on the chosen <mark>mode</mark>, but we still can manually configure optimization if we want to </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        optimization: {
+            minimize: <strong>bol</strong>                                                              // minimizes the output bundle (Default: <mark>false</mark> on developement | <mark>true</mark> production)    
+            minimizer: <strong>arr</strong>                                                             // list of minimizers to use (Default: <mark>[TerserPlugin]</mark>)    
+            
+            
+            nodeEnv: <strong>bol|str</strong>                                                           // sets the <mark>process.env.NODE_ENV</mark> value (Default: <mark>mode</mark> setting)  
+        }
+    }
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="plugins"><u> Plugins <a href="https://webpack.js.org/configuration/plugins/" target="_blank">[link]</a></u></h2>
+    <p> - specifies Webpack plugins to use on build process </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    const <strong>plugin</strong> = require(<strong>plugin</strong>)                                                     // importing the plugin    
+    
+    module.exports = { 
+        plugins: [new <strong>plugin</strong>() <i>, ...</i>]                                                  // at runtime Webpack uses the plugin  <span style="color:orange;">(a new instance is required this way the same plugin can be used with different settings)</span>    
+    }
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="devServer"><u> DevServer <a href="https://webpack.js.org/configuration/dev-server/" target="_blank">[link]</a></u></h2>
+    <p> - development server (<mark>webpack-dev-server</mark>) options </p>    
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        devServer: {
+            compress: <strong>bol</strong>                                                              // gzip compresses everything served 
+            
+            
+            contentBase: <strong>dirPath:str|bol</strong>                                               // where (static) content should be server from <u>(<mark>devServer.publicPath</mark> takes precedence over this)</u> (Default: current directory)    
+            publicPath: <strong>dirPath:str</strong>                                                    // bundled files will be available in the browser under this path    
+            
+            
+            host: <strong>str</strong>                                                                  // host to use (Default: <mark>'localhost'</mark>)    
+            port: <strong>nr</strong>                                                                   // port to listen to (Default: <mark>8080</mark>)    
+            index: <strong>str</strong>                                                                 // filename that considered the index file (Default: <mark>index.html</mark>)    
+            headers: <strong>obj</strong>                                                               // adds headers to all response 
+            
+            
+            lazy: <strong>bol</strong>                                                                  // compiles requested bundles only <u>(disables file watching)</u>    
+            liveReload: <strong>bol</strong>                                                            // automatically reloads the page when file changes are detedted (Default: <mark>true</mark>)    
+            
+            
+            onListening: <strong>fn(server)</strong>                                                    // executes a function when the dev-server starts listening    
+            open: <strong>bol</strong>                                                                  // opnes the default web browser when the dev-server starts 
+            openPage: <strong>path:str</strong>                                                         // navigates to the specified page when opening the browser    
+        }
+    }
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="devtool"><u> Devtool <a href="https://webpack.js.org/configuration/devtool/" target="_blank">[link]</a></u></h2>
+    <p> - controls how source maps are generated </p>
+<details class="example">
+<summary> Example :  </summary >
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');  
+    
+    module.exports = {  
+        mode: 'development',
+        context: __dirname + '/src',
+        entry: function(){ return './index.js'},
+        output: {
+            path: __dirname + '/dist',
+            filename: '[name].js',
+        }, 
+        devtool: 'inline-source-map',                                                  // source map created on build time  
+        plugins: [new CleanWebpackPlugin()]
+    } 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="target"><u> Target </u></h2>
+    <p> - defines which environment to compile for </p> 
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="watch"><u> Watch and WatchOptions <a href="https://webpack.js.org/configuration/watch/" target="_blank">[link]</a></u></h2>
+    <p> - watch mode options </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        watch: <strong>bol</strong>                                                                     // watch mode turned on when Webpack starts (Default: <mark>false</mark>)   
+        
+        
+        watchOptions: {
+            aggregateTimeout: <strong>ms:nr</strong>                                                    // delay after the first file change detected (Default: <mark>200</mark>)    
+            
+            
+            ignored: <strong>[regExp|str, ...]|regExp|str</strong>                                      // ignores watching the listed items  <u>[TESTED: 2021-03-01 not working]</u>     
+        }
+    }
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="externals"><u> Externals <a href="https://webpack.js.org/configuration/externals/" target="_blank">[link]</a></u></h2>
+    <p> - provides a way of excluding dependencies from the output bundles </p>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="performance"><u> Performance <a href="https://webpack.js.org/configuration/performance/" target="_blank">[link]</a></u></h2>
+    <p> - how webpack notifies you of assets and entry points that exceed a the specific file limit </p>
+<details class="example">
+<summary> Options </summary >
+    <pre class="syntax">
+    module.exports = {
+        performance: {
+            hits: <strong class="openable">str|bol<div>
+                <p> <mark>'warning'</mark> - warning printed </p>
+                <p> <mark>'error'</mark> - error thrown </p>
+                <p> <mark>false</mark> - notification disabled </p>
+            </div></strong>                                                             // how Webpack notifies you when a set file size is exceeded    
+            
+            
+            maxEntrypointSize: <strong>nr</strong>                                                      // maximum entry point file size <u>in bytes</u> (Default: <mark>250000</mark>)    
+            maxAssetSize: <strong>nr</strong>                                                           // an asset is any emitted file from webpack   
+        }
+    }
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="node"><u> Node <a href="https://webpack.js.org/configuration/node/" target="_blank">[link]</a> </u></h2>
+    <p> - configure whether to polyfill or mock certain Node.js globals </p>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="stats"><u> Stats <a href="https://webpack.js.org/configuration/stats/" target="_blank">[link]</a> </u></h2>
+    <p> - precisely control what bundle information gets displayed </p>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="experiments"><u> Experiments <a href="https://webpack.js.org/configuration/experiments/" target="_blank">[link]</a> </u></h2>
+    <p> - introduced in webpack 5 to empower users with the ability to activate and try out experimental features </p>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;" id="Other Options"><u> Other Options <a href="https://webpack.js.org/configuration/other-options/" target="_blank">[link]</a></u></h2>
+    
+    <br><br>
+</body>
+</html>

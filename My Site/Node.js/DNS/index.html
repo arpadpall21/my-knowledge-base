@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> DNS </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> DNS (ver 4.0.0) </h1>
+    <p> Updated ( 2020-05-31 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> DNS
+    </p>
+<table class="table">
+<caption> 
+    Name resolution using OS facilities 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="1.1">
+        <td> 
+            <strong>dns</strong>.lookup(<strong>hostName:str</strong>, <strong class="openable">option:obj<div>
+                <p> family: <strong>nr</strong> - IP family to resolve (<strong>4</strong> = IPv4) (<mark>6</mark> = IPv6) (<mark>0</mark> = IPv4 and IPv6) (Default: <mark>0</mark>) </p>
+                <p> hints: <strong>nr</strong> - (<mark>8</mark> - if IPv6 was specified but not found then returs IPv4 mapped IPv6 addresses <mark>dns.V4MAPPED</mark>) (<mark>16</mark> returns IPv6 and IPv4 mapped IPv6 addresses <mark>dns.ALL</mark>) (<mark>32</mark> - address types are determined by the system address type support <mark>dns.ADDRCONFIG</mark>) </p>
+                <p> all: <strong>bol</strong> - if <mark>true</mark> resolvs all found addresses in an Array (Default: <mark>false</mark>) </p>
+                <p> verbatim: <strong>bol</strong> - (if <mark>true</mark> the received address order is returned as the DNS server returnes them) (if <mark>false</mark> IPv4 addresses placed before IPv6 addresses) (Default: <mark>false</mark>) </p>
+            </div></strong>, <strong>fn(err, add, fam)</strong>) 
+        </td>
+        <td> - asynchronously resolves the passed host name into the first found <mark>A</mark> or <mark>AAAA</mark> record <u>(uses OS facilities)</u>    
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 1.2.0 <mark>all</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 8.5.0 <mark>verbatim</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="1.2">
+        <td> <strong>dns</strong>.lookupService(<strong>add:str</strong>, <strong>port:nr</strong>, <strong>fn(err, host, srv)</strong>) </td>
+        <td> - (reverse lookup) asynchronously resolves the passed IP address and port into a <u>host (PTR record)</u> and <u>service (port = service name (ex:<mark>http</mark>))</u> <u>(uses OS facilities)</u>
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class='2.1'>
+        <td colspan="2"> Promise API </td>
+    </tr> 
+    <tr class='2.2'>
+        <td>  
+            <strong>dns</strong><em>.promises</em>.lookup(<strong>hostName:str</strong>, <strong class="openable">option:obj<div>
+                <p> family: <strong>nr</strong> - IP family to resolve (<strong>4</strong> = IPv4) (<mark>6</mark> = IPv6) (<mark>0</mark> = IPv4 and IPv6) (Default: <mark>0</mark>) </p>
+                <p> hints: <strong>nr</strong> - (<mark>8</mark> - if IPv6 was specified but not found then returs IPv4 mapped IPv6 addresses <mark>dns.V4MAPPED</mark>) (<mark>16</mark> returns IPv6 and IPv4 mapped IPv6 addresses <mark>dns.ALL</mark>) (<mark>32</mark> - address types are determined by the system address type support <mark>dns.ADDRCONFIG</mark>) </p>
+                <p> all: <strong>bol</strong> - if <mark>true</mark> resolvs all found addresses in an Array (Default: <mark>false</mark>) </p>
+                <p> verbatim: <strong>bol</strong> - (if <mark>true</mark> the received address order is returned as the DNS server returnes them) (if <mark>false</mark> IPv4 addresses placed before IPv6 addresses) (Default: <mark>false</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> - resolves the passed host name into the first found <mark>A</mark> or <mark>AAAA</mark> record by using Promise API <u>(uses OS facilities)</u> 
+            <span class="browserSupport" title="updated : 2020-06-02">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class='2.3'>
+        <td> <strong>dns</strong><em>.promises</em>.lookupService(<strong>add:str</strong>, <strong>port:nr</strong>) </td>
+        <td> - (reverse lookup) resolves the passed IP address and port into a <u>host (PTR record)</u> and <u>service (port = service name (ex:<mark>http</mark>))</u> by using Promise API <u>(uses OS facilities)</u>
+            <span class="browserSupport" title="updated : 2020-06-02">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Name resolution using DNS servers 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="01">
+        <td> new <strong>dns</strong>.Resolver() </td>
+        <td> - returns an independent resolver object (<strong>resolver</strong>) (for independent DNS requests) <u>(uses default DNS server settings)</u>    
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02">
+        <td> <strong>resolver</strong>.cancel() </td>
+        <td> - cancels the curren dns request
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.01">
+        <td> <strong>dns|resolver</strong>.getServers() </td>
+        <td> - returns in an Array DNS servers (their IP addresses) used by the resolver
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.01">
+        <td> 
+            <strong>dns|resolver</strong>.resolve(<strong>hostName:str</strong>, <i class="openable">recType<div>
+                <p> <mark>'A'</mark> - IPv4 address (Default) </p>
+                <p> <mark>'AAAA'</mark> - IPv6 address </p>
+                <p> <mark>'CNAME'</mark> - Canonical name records </p>
+                <p> <mark>'MX'</mark> - Mail Exchanger records </p>
+                <p> <mark>'SRV'</mark> - Service records </p>
+                <p> <mark>'TXT'</mark> - Text records</p>
+                <p> <mark>'SOA'</mark> - Start Of Authority records</p>
+                <p> <mark>'PTR'</mark> - Pointer records </p>
+                <p> <mark>'NS'</mark> - Name Server records</p>
+                <p> <mark>'NAPTR'</mark> - Name Authority Pointer records </p>
+                <p> <mark>'ANY'</mark> - all record are resolved </p>
+            </div></i>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's specified records (Default: <mark>A</mark>)
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.27 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            <strong>dns|resolver</strong>.resolve4(<strong>hostName:str</strong>, <i class="openable">option:obj<div>
+                <p> ttl: <strong>bol</strong> - when <mark>true</mark> also returns the records' Time To Live value (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, rec)</strong>) 
+        </td>
+        <td> - asynchronously resolves and returns the host name's <mark>A</mark> (IPv4) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.16 </span>
+                <span><i class="fab fa-node-js"></i> 7.2.0 <mark>option</mark> argument </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td>  
+            <strong>dns|resolver</strong>.resolve6(<strong>hostName:str</strong>, <i class="openable">option:obj<div>
+                <p> ttl: <strong>bol</strong> - when <mark>true</mark> also returns the records' Time To Live value (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, rec)</strong>)
+        </td>
+        <td> - asynchronously resolves and returns the host name's <mark>AAAA</mark> (IPv6) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.16 </span>
+                <span><i class="fab fa-node-js"></i> 7.2.0 <mark>option</mark> argument </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.02">
+        <td> <strong>dns|resolver</strong>.resolveAny(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's all records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.27 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.03">
+        <td> <strong>dns|resolver</strong>.resolveCname(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>CNAME</mark> (Canonical Name) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.3.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.04">
+        <td> <strong>dns|resolver</strong>.resolveMx(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>MX</mark> (Mail Exchanger) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.27 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.10">
+        <td> <strong>dns|resolver</strong>.resolveNaptr(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>NAPTR</mark> (Name Authority Pointer) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.09">
+        <td> <strong>dns|resolver</strong>.resolveNs(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>NS</mark> (Name Server) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.08">
+        <td> <strong>dns|resolver</strong>.resolvePtr(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>PTR</mark> (Pointer) records <u>[TESTED: 2020-06-01 doesn't seems to have any purpose]</u>
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.07">
+        <td> <strong>dns|resolver</strong>.resolveSoa(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>SOA</mark> (Start Of Authority) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.11.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.05">
+        <td> <strong>dns|resolver</strong>.resolveSrv(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>SRV</mark> (Service) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.27 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.06">
+        <td> <strong>dns|resolver</strong>.resolveTxt(<strong>hostName:str</strong>, <strong>fn(err, rec)</strong>) </td>
+        <td> - asynchronously resolves and returns the host name's <mark>TXT</mark> (Text) records
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.27 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06">
+        <td> <strong>dns|resolver</strong>.reverse(<strong>ip:srt</strong>, <strong>fn(err, hostName)</strong>) </td>
+        <td> - (revers lookup) asynchronously resolves and returns an IPv4 or IPv6 address into a host name
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.1.16 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.02">
+        <td> <strong>dns|resolver</strong>.setServers(<strong>[svrIp:str, ...]</strong>) </td>
+        <td> - sets DNS servers (by IP address) for the resolver
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="07.01">
+        <td colspan="2"> Promise API </td>
+    </tr>
+    <tr class="07.02">
+        <td> new <strong>dns<em>.promises</em></strong>.Resolver() </td>
+        <td> - returns an independent Promise resolver object (<strong>resolverProm</strong>) (for independent DNS requests) <u>(uses default DNS server settings)</u>
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="08.01">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.getServers() </td>
+        <td> - returns in an Array DNS servers (their IP addresses) used by the promise resolver
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="09.01">
+        <td>  
+            <strong>dns<em>.promises</em>|resolverProm</strong>.resolve(<strong>hostName:str</strong>, <i class="openable">recType<div>
+                <p> <mark>'A'</mark> - IPv4 address (Default) </p>
+                <p> <mark>'AAAA'</mark> - IPv6 address </p>
+                <p> <mark>'CNAME'</mark> - Canonical name records </p>
+                <p> <mark>'MX'</mark> - Mail Exchanger records </p>
+                <p> <mark>'SRV'</mark> - Service records </p>
+                <p> <mark>'TXT'</mark> - Text records</p>
+                <p> <mark>'SOA'</mark> - Start Of Authority records</p>
+                <p> <mark>'PTR'</mark> - Pointer records </p>
+                <p> <mark>'NS'</mark> - Name Server records</p>
+                <p> <mark>'NAPTR'</mark> - Name Authority Pointer records </p>
+                <p> <mark>'ANY'</mark> - all record are resolved </p>
+            </div></i>)
+        </td>
+        <td> - resolves the host name's specified records by using the Promise API (Default: <mark>A</mark> record)
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td>  
+            <strong>dns<em>.promises</em>|resolverProm</strong>.resolve4(<strong>hostName:str</strong>, <i class="openable">option:obj<div>
+                <p> ttl: <strong>bol</strong> - when <mark>true</mark> also returns the records' Time To Live value (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> - resolves the host name's <mark>A</mark> (IPv4) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td>  
+            <strong>dns<em>.promises</em>|resolverProm</strong>.resolve6(<strong>hostName:str</strong>, <i class="openable">option:obj<div>
+                <p> ttl: <strong>bol</strong> - when <mark>true</mark> also returns the records' Time To Live value (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> - resolves the host name's <mark>AAAA</mark> (IPv6) records by using the Promise API 
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="09.02">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveAny(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host name's all records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveCname(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>CNAME</mark> (Canonical name) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveMx(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>MX</mark> (Mail Exchanger) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.10">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveNaptr(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>NAPTR</mark> (Name Authority Pointer) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.09">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveNs(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>NS</mark> (Name Server) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.08">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolvePtr(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>PTR</mark> (Pointer) records by using the Promise API <u>[TESTED: 2020-06-02 doesn't seems to have any purpose]</u>
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.07">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveSoa(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>SOA</mark> (Start Of Authority) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.05">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveSrv(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>SRV</mark> (Service) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.06">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.resolveTxt(<strong>hostName:str</strong>) </td>
+        <td> - resolves the host names <mark>TXT</mark> (Text) records by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.reverse(<strong>ip:str</strong>) </td>
+        <td> - (reverse lookup) resolves an IPv4 or IPv6 address into a host name by using the Promise API
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="08.02">
+        <td> <strong>dns<em>.promises</em>|resolverProm</strong>.setServers(<strong>[srvIp:str, ...]</strong>) </td>
+        <td> - sets DNS servers (by IP address) for the promise resolver 
+            <span class="browserSupport" title="updated : 2020-06-01">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <a href="https://nodejs.org/dist/latest-v14.x/docs/api/dns.html" target="_blank">Node.js DNS </a>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>dns</mark> module provides name resolution tools </p>
+<h2 class="headerExtra"><u> Name resolution using OS facilities <mark>lookup()</mark> / <mark>lookupService()</mark> </u></h2>
+<h2 style="color:darkblue;"><u> <mark>lookup()</mark> / <mark>lookupService()</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var dns = require('dns');
+    
+// lookup()----------------------------------------------------------------------------
+    dns.lookup('facebook.com', function(err, add, fam){
+        add;                                                                           // -> '31.13.84.36'      // first found IP address
+        fam;                                                                           // -> 4                  // IP family 
+    });
+    
+// lookupService()---------------------------------------------------------------------
+    dns.lookupService('31.13.84.36', 443, function(err, host, srv){                    // reverse lookup 
+        host;                                                                          // -> 'edge-star-mini-shv-01-vie1.facebook.com'  
+        srv;                                                                           // -> 'https'            // service associated with the 443 port   
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>lookup()</mark> / <mark>lookupService()</mark> TEST </u></h4>
+    <pre>
+    var dns = require('dns');
+    
+// lookup() ---------------------------------------------------------------------------
+    dns.lookup('facebook.com', function(err, add, fam){
+        if (err) console.log( err.message );
+        console.log( add );                                                            // -> '31.13.84.36'    
+        console.log( fam );                                                            // -> 4
+    });
+    
+    dns.lookup('facebook.com', {all:true}, function(err, add, fam){
+        if (err) console.log( err.message );
+        console.log( add );                                                            // -> [{address:'31.13.84.36', family:4}, {address:'2a03:2880:f107:83:face:b00c:0:25de', family:6}]    
+        console.log( fam );                                                            // -> undefined
+    });
+    
+// lookupService() --------------------------------------------------------------------
+    dns.lookupService('31.13.84.36', 80, function(err, host, srv){
+        if (err) console.log( err.message );
+        console.log( host );                                                           // -> 'edge-star-mini-shv-01-vie1.facebook.com'
+        console.log( srv );                                                            // -> 'http'  
+    });
+    
+    dns.lookupService('2a03:2880:f107:83:face:b00c:0:25de', 443, function(err, host, srv){
+        if (err) console.log( err.message );
+        console.log( host );                                                           // -> 'edge-star-mini6-shv-01-vie1.facebook.com'
+        console.log( srv );                                                            // -> 'https'
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/DNS/01 lookup() lookupService() TEST$ node dns
+// lookup()----------------------------------------------------------------------------
+    31.13.84.36
+    4
+    [
+    { address: '31.13.84.36', family: 4 },
+    { address: '2a03:2880:f107:83:face:b00c:0:25de', family: 6 }
+    ]
+    undefined
+// lookupService()---------------------------------------------------------------------
+    edge-star-mini-shv-01-vie1.facebook.com
+    http
+    edge-star-mini6-shv-01-vie1.facebook.com
+    https
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/DNS/01 lookup() lookupService() TEST$ 
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Promise API <mark>lookup()</mark> / <mark>lookupService()</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var dnsProm = require('dns').promises;
+    
+// lookup() ---------------------------------------------------------------------------
+    dnsProm.lookup('facebook.com')
+        .then((res)=>{console.log(res)})                                               // -> { address: '31.13.84.36', family: 4 }
+        .catch((rej)=>{console.log(rej)});                                               // if rejected promise -> Error thrown 
+    
+// lookupService() --------------------------------------------------------------------
+    dnsProm.lookupService('31.13.84.36', 443)                                          // reverse lookup   
+        .then((res)=>{console.log(res)})                                               // -> {hostname:'edge-star-mini-shv-01-vie1.facebook.com', service:'https'}    
+
+        .catch((rej)=>{console.log(rej)});                                               // if rejected promise -> Error thrown
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h2 class="headerExtra"><u> Name resolution using DNS servers </u></h2>
+<h2 style="color:darkblue;"><u> <mark>Resolver()</mark> / <mark>cancel()</mark> / <mark>getServers()</mark> / <mark>setServers()</mark> / <mark>resolve()</mark> / <mark>resolveAny()</mark> / <mark>resolve4()</mark> / <mark>resolve6()</mark> / <mark>resolveCname()</mark> / <mark>resolveMx()</mark> / <mark>resolveSrv()</mark> / <mark>resolveTxt()</mark> / <mark>resolveSoa()</mark> / <mark>resolvePtr()</mark> / <mark>resolveNs()</mark> / <mark>resolveNaptr()</mark> / <mark>reverse()</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var dns = require('dns');
+    
+    var myResolver = new dns.Resolver();                                               // creates an independent resolver 
+    
+// getServers() / setServers() --------------------------------------------------------
+    myResolver.setServers(['8.8.8.8', '4.4.4.4']);                                     // sets DNS servers for resolver (2nd is the fallback DNS)   
+    
+    dns.getServers();                                                                  // -> ['127.0.0.53']             // global resolver DNS servers    
+    myResolver.getServers();                                                           // -> ['8.8.8.8', '4.4.4.4']     // independent resolver DNS servers   
+    
+// resolve() / resolveAny() / resolve4() / resolve6() ---------------------------------
+    myResolver.resolve('facebook.com', 'AAAA', function(err, rec){                     // resolves the AAAA (specified) records of 'facebook.com'    
+        rec;                                                                           // -> ['2a03:2880:f107:83:face:b00c:0:25de']    
+    });
+    myResolver.resolveAny('facebook.com', function(err, rec){                          // resolves all records of 'facebook.com'   
+        rec;                                                                           // -> [ all records ...} 
+    });
+    myResolver.resolve4('facebook.com', {ttl:true}, function(err, rec){                // resolves the A records of 'facebook.com'  
+        rec;                                                                           // -> [{ address:'31.13.84.36', ttl:274}] 
+    });
+    myResolver.resolve6('facebook.com', {ttl:true}, function(err, rec){                // resolves the AAAA records of 'facebook.com'    
+        rec;                                                                           // -> [{address:'2a03:2880:f107:83:face:b00c:0:25de', ttl: 230}]  
+    });
+    
+// resolveCname() / resolveMx() / resolveSrv() / resolveTxt() -------------------------
+    myResolver.resolveCname('www.facebook.fr', function(err, rec){                     // resolves the CNAME records of 'facebook.com'  
+        rec;                                                                           // -> ['www.facebook.com']  
+    });
+    myResolver.resolveMx('facebook.com', function(err, rec){                           // resolves the MX records of 'facebook.com'  
+        rec;                                                                           // -> [{exchange:'smtpin.vvv.facebook.com', priority:10}]  
+    });
+    myResolver.resolveSrv('facebook.com', function(err, rec){                          // resolves the SRV records of 'facebook.com' 
+        rec;                                                                           // -> undefined         // no service records found 
+    });
+    myResolver.resolveTxt('facebook.com', function(err, rec){                          // resolves the TXT records of 'facebook.com'  
+        rec;                                                                           // -> [['v=spf1 redirect=_spf.facebook.com'], ['google-site-verification=A2WZWCNQHrGV_TWwKh6KHY90tY0SHZo_RnyMJoDaG0s'], ['google-site-verification=wdH5DTJTc9AYNwVunSVFeK0hYDGUIEOGb-RReU6pJlY']]    
+    });
+    
+// resolveSoa() / resolvePtr() / resolveNs() / resolveNaptr() -------------------------
+    myResolver.resolveSoa('facebook.com', function(err, rec){                          // resolves the SOA records of 'facebook.com'
+        rec;                                                                           // -> {nsname:'a.ns.facebook.com', hostmaster:'dns.facebook.com', serial:1591030305, refresh:14400, retry:1800, expire:604800, minttl:300}    
+    });
+    myResolver.resolvePtr('geeksforgeeks.org', function(err, rec){                     // resolve the PTR records of 'geeksforgeeks.org'    // -! this method doesn't have any sence (alwasy returns undefined)    
+        rec;                                                                           // -> undefined             
+    });
+    myResolver.resolveNs('google.com', function(err, rec){                             // returns the NS records of 'google.com'   
+        rec;                                                                           // -> ['ns4.google.com', 'ns2.google.com', 'ns1.google.com', 'ns3.google.com']    
+    });
+    myResolver.resolveNaptr('google.com', function(err, rec){                          // returns the NAPTR records of 'google.com'
+        rec;                                                                           // -> undefined
+    })
+    
+// reverse() --------------------------------------------------------------------------
+    myResolver.reverse('172.217.164.142', function(err, host){                         // performs a revers lookup 
+        host;                                                                          // -> ['iad30s24-in-f14.1e100.net']
+    });
+    
+// cancel() ---------------------------------------------------------------------------
+    myResolver.cancel();                                                               // cancels the current DNS request 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>Resolver()</mark> / <mark>cancel()</mark> / <mark>getServers()</mark> / <mark>setServers()</mark> TEST </u></h4>
+    <pre>
+    var dns = require('dns');
+    
+// Resolver() -------------------------------------------------------------------------
+    var myResolver = new dns.Resolver();
+    
+// getServers() / setServers() / cancel -----------------------------------------------
+    console.log( myResolver.getServers() );                                            // -> [ '127.0.0.53' ]          // default DNS server used 
+    myResolver.setServers(['0.0.0.10']);                                               // setting an invalid DNS server
+    
+    myResolver.resolve('facebook.com', function(err, recs){                            // DNS request cannot be accomplished because there's no valid DNS server set
+        console.log( recs );                                                           // -> undefined
+    });
+    
+    setTimeout(function(){
+        myResolver.cancel();                                                           // pending DNS request cancelled 
+        
+        myResolver.setServers(['8.8.8.8']);                                            // valid DNS server set
+        myResolver.resolve('facebook.com', function(err, recs){     
+            console.log( recs );                                                       // -> ['31.13.84.36']           // name resolved 
+        });
+    }, 4000);
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/DNS/02 Resolver() cancel() getSerers() setServers() TEST$ node dns
+    [ '127.0.0.53' ]
+    undefined
+    [ '31.13.84.36' ]
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/DNS/02 Resolver() cancel() getSerers() setServers() TEST$  
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>resolve()</mark> / <mark>resolveAny()</mark> / <mark>resolve4()</mark> / <mark>resolve6()</mark> / <mark>resolveCname()</mark> / <mark>resolveMx()</mark> / <mark>resolveNaptr()</mark> / <mark>resolveNs()</mark> / <mark>resolvePtr()</mark> / <mark>resolveSoa()</mark> / <mark>resolveSrv()</mark> / <mark>resolveTxt()</mark> TEST </u></h4>
+    <pre>
+    var dns = require('dns');
+    
+    var myResolver = new dns.Resolver();
+    myResolver.setServers(['8.8.8.8']);
+    
+// resolve() --------------------------------------------------------------------------
+    dns.resolve('facebook.com', 'AAAA', function(err, rec){
+        console.log( '--- resolve() ---' );
+        console.log( rec );                                                            // -> ['2a03:2880:f107:83:face:b00c:0:25de']    // AAAA records returned 
+    });
+    
+// resolveAny() -----------------------------------------------------------------------
+    myResolver.resolveAny('facebook.com', function(err, rec){
+        console.log( '--- resolveAny() ---' );
+        console.log( rec );                                                            // -> [ ... ]                                   // all records 
+    });
+    
+// resolve4() -------------------------------------------------------------------------
+    dns.resolve4('facebook.com', {ttl:true}, function(err, rec){
+        console.log( '--- resolve4() ---');
+        console.log( rec );                                                            // -> [{ address:'31.13.84.36', ttl:274}] 
+    });
+    
+// resolve6() -------------------------------------------------------------------------
+    dns.resolve6('facebook.com', {ttl:true}, function(err, rec){
+        console.log( '--- resolve6() ---');
+        console.log( rec );                                                            // -> [{address:'2a03:2880:f107:83:face:b00c:0:25de', ttl: 230}]  
+    });
+    
+// resolveCname() ---------------------------------------------------------------------
+    myResolver.resolveCname('www.facebook.fr', function(err, rec){
+        console.log( '--- resolveCname() ---' );
+        console.log( rec );                                                            // -> ['www.facebook.com']
+    });
+    
+// resolveMx() ------------------------------------------------------------------------
+    myResolver.resolveMx('facebook.com', function(err, rec){
+        console.log( '--- resolveMx() ---');
+        console.log( rec );                                                            // -> [{exchange:'smtpin.vvv.facebook.com', priority:10}]  
+    });
+    
+// resolveSrv() -----------------------------------------------------------------------
+    myResolver.resolveSrv('facebook.com', function(err, rec){
+        console.log( '--- resolveSrv() ---' );
+        console.log( rec );                                                            // -> undefined         // no service records found 
+    });
+    
+// resolveTxt() -----------------------------------------------------------------------
+    myResolver.resolveTxt('facebook.com', function(err, rec){
+        console.log( '--- resolveTxt ---');
+        console.log( rec );                                                            // -> [['v=spf1 redirect=_spf.facebook.com'], ['google-site-verification=A2WZWCNQHrGV_TWwKh6KHY90tY0SHZo_RnyMJoDaG0s'], ['google-site-verification=wdH5DTJTc9AYNwVunSVFeK0hYDGUIEOGb-RReU6pJlY']]    
+    });
+    
+// resolveSoa() -----------------------------------------------------------------------
+    myResolver.resolveSoa('facebook.com', function(err, rec){
+        console.log( '--- resolveSoa() ---' );
+        console.log( rec );                                                            // -> {nsname:'a.ns.facebook.com', hostmaster:'dns.facebook.com', serial:1591030305, refresh:14400, retry:1800, expire:604800, minttl:300}    
+    });
+    
+// resolvePtr() -----------------------------------------------------------------------
+    myResolver.resolvePtr('geeksforgeeks.org', function(err, rec){
+        console.log( '--- resolvePtr() ---' );
+        console.log( rec );                                                            // -> undefined             
+    });
+    
+// resolveNs() ------------------------------------------------------------------------
+    myResolver.resolveNs('google.com', function(err, rec){
+        console.log( '--- resolveNs() ---' );
+        console.log( rec );                                                            // -> ['ns4.google.com', 'ns2.google.com', 'ns1.google.com', 'ns3.google.com']    
+    });
+    
+// resolveNaptr() ---------------------------------------------------------------------
+    dns.resolveNaptr('google.com', function(err, rec){
+        console.log( '--- resolveNaptr() ---' );
+        console.log( rec );                                                            // -> undefined
+    })
+    
+// reverse() --------------------------------------------------------------------------
+    myResolver.reverse('172.217.164.142', function(err, host){
+        console.log( '--- reverse() ---' );
+        console.log( host );                                                           // -> ['iad30s24-in-f14.1e100.net']
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/DNS/03 resolve() resolveAny() resolve4() resolve6() resolveCname() resolveMx() resolveSrv() resolveTxt() resolveSoa() resolve(Ptr) resolveNs() resolveNatpr() TEST$ node dns
+    --- resolveCname() ---
+    [ 'www.facebook.com' ]
+    --- resolveMx() ---
+    [ { exchange: 'smtpin.vvv.facebook.com', priority: 10 } ]
+    --- resolveNs() ---
+    [
+    'ns4.google.com',
+    'ns2.google.com',
+    'ns1.google.com',
+    'ns3.google.com'
+    ]
+    --- reverse() ---
+    [ 'iad30s24-in-f14.1e100.net' ]
+    --- resolveSrv() ---
+    undefined
+    --- resolveTxt ---
+    [
+    [ 'v=spf1 redirect=_spf.facebook.com' ],
+    [
+        'google-site-verification=A2WZWCNQHrGV_TWwKh6KHY90tY0SHZo_RnyMJoDaG0s'
+    ],
+    [
+        'google-site-verification=wdH5DTJTc9AYNwVunSVFeK0hYDGUIEOGb-RReU6pJlY'
+    ]
+    ]
+    --- resolve4() ---
+    [ { address: '31.13.84.36', ttl: 221 } ]
+    --- resolve6() ---
+    [ { address: '2a03:2880:f107:83:face:b00c:0:25de', ttl: 299 } ]
+    --- resolve() ---
+    [ '2a03:2880:f107:83:face:b00c:0:25de' ]
+    --- resolveNaptr() ---
+    undefined
+    --- resolveSoa() ---
+    {
+    nsname: 'a.ns.facebook.com',
+    hostmaster: 'dns.facebook.com',
+    serial: 1591039665,
+    refresh: 14400,
+    retry: 1800,
+    expire: 604800,
+    minttl: 300
+    }
+    --- resolveAny() ---
+    [
+    { address: '185.60.216.35', ttl: 299, type: 'A' },
+    {
+        address: '2a03:2880:f12d:83:face:b00c:0:25de',
+        ttl: 299,
+        type: 'AAAA'
+    },
+    { exchange: 'smtpin.vvv.facebook.com', priority: 10, type: 'MX' },
+    { value: 'd.ns.facebook.com', type: 'NS' },
+    { value: 'c.ns.facebook.com', type: 'NS' },
+    { value: 'b.ns.facebook.com', type: 'NS' },
+    { value: 'a.ns.facebook.com', type: 'NS' },
+    { entries: [ 'v=spf1 redirect=_spf.facebook.com' ], type: 'TXT' },
+    {
+        entries: [
+        'google-site-verification=A2WZWCNQHrGV_TWwKh6KHY90tY0SHZo_RnyMJoDaG0s'
+        ],
+        type: 'TXT'
+    },
+    {
+        entries: [
+        'google-site-verification=wdH5DTJTc9AYNwVunSVFeK0hYDGUIEOGb-RReU6pJlY'
+        ],
+        type: 'TXT'
+    },
+    {
+        nsname: 'a.ns.facebook.com',
+        hostmaster: 'dns.facebook.com',
+        serial: 1591039665,
+        refresh: 14400,
+        retry: 1800,
+        expire: 604800,
+        minttl: 300,
+        type: 'SOA'
+    }
+    ]
+    --- resolvePtr() ---
+    undefined
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/DNS/03 resolve() resolveAny() resolve4() resolve6() resolveCname() resolveMx() resolveSrv() resolveTxt() resolveSoa() resolve(Ptr) resolveNs() resolveNatpr() TEST$ 
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Promise API <mark>Resolver()</mark> / <mark>getServers()</mark> / <mark>setServers()</mark> / <mark>resolve()</mark> / <mark>resolveAny()</mark> / <mark>resolve4()</mark> / <mark>resolve6()</mark> / <mark>resolveCname()</mark> / <mark>resolveMx()</mark> / 
+/ <mark>resolveSrv()</mark> / <mark>resolveTxt()</mark> / <mark>resolveSoa()</mark> / <mark>resolvePtr()</mark> / <mark>resolveNs()</mark> / <mark>resolveNaptr()</mark> / <mark>reverse()</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var dns = require('dns');
+        
+    var myResolverProm = new dns.promises.Resolver();                                  // creates an independent promise resolver 
+    
+// getServers() / setServers() --------------------------------------------------------
+    myResolverProm.setServers(['8.8.8.8', '4.4.4.4']);                                 // sets DNS servers for the promise resolver (2nd is the fallback DNS)   
+        
+    dns.promises.getServers()                                                          // -> ['127.0.0.53']                // promise global resolver DNS servers    
+    myResolverProm.getServers()                                                        // -> ['8.8.8.8', '4.4.4.4']        // independent promise rersolver DNS servers
+    
+// resolve() / resolveAny() / resolve4() / resolve6() ---------------------------------
+    myResolverProm.resolve('facebook.com', 'AAAA')                                     // resolves the AAAA records (specified) of 'facebook.com'
+        .then((res)=>{console.log(res)})                                                 // -> [ '2a03:2880:f107:83:face:b00c:0:25de' ]
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+    myResolverProm.resolveAny('facebook.com')                                          // resolves all records of 'facebook.com' 
+        .then((res)=>{console.log(res)})                                                 // -> [ all records ...]  
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+    myResolverProm.resolve4('facebook.com')                                            // resolves the A records of 'facebook.com
+        .then((res)=>{console.log(res)})                                                 // -> [ '31.13.84.36' ]
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+    myResolverProm.resolve6('facebook.com')                                            // resolves the AAAA records of 'facebook.com
+        .then((res)=>{console.log(res)})                                                 // -> [ '2a03:2880:f107:83:face:b00c:0:25de' ]    
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+// resolveCname() / resolveMx() / resolveSrv() / resolveTxt() -------------------------
+    myResolverProm.resolveCname('www.facebook.fr')                                     // resolves the CNAME records of 'www.facebook.fr'
+        .then((res)=>{console.log(res)})                                                 // -> [ 'www.facebook.com' ]
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+    myResolverProm.resolveMx('facebook.com')                                           // resolves the MX records of 'facebook.com' 
+        .then((res)=>{console.log(res)})                                                 // -> [{exchange:'smtpin.vvv.facebook.com', priority:10}]   
+        .catch((rej)=>{console.log(rej)})
+    
+    myResolverProm.resolveSrv('facebook.com')                                          // resolves the SRV records of 'facebook.com'
+        .then((res)=>{console.log(res)})
+        .catch((rej)=>{console.log(rej)})                                                // -> Error thrown       // no records found 
+    
+    myResolverProm.resolveTxt('facebook.com')                                          // resolves the TXT records of 'facebook.com'
+        .then((res)=>{console.log(res)})                                                 // -> ['v=spf1 redirect=_spf.facebook.com'], ['google-site-verification=A2WZWCNQHrGV_TWwKh6KHY90tY0SHZo_RnyMJoDaG0s'], ['google-site-verification=wdH5DTJTc9AYNwVunSVFeK0hYDGUIEOGb-RReU6pJlY']]    
+        .catch((rej)=>{console.log(rej)})                                                // -> Error thrown       // no records found 
+    
+// resolveSoa() / resolvePtr() / resolveNs() / resolveNaptr() -------------------------
+    myResolverProm.resolveSoa('facebook.com')                                          // resolves the SOA records of 'facebook.com'   
+        .then((res)=>{console.log(res)})                                                 // -> {nsname:'a.ns.facebook.com', hostmaster:'dns.facebook.com', serial:1591087065, refresh:14400, retry:1800, expire:604800, minttl:300}
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+    myResolverProm.resolvePtr('geeksforgeeks.org')                                     // resolve the PTR records of 'geeksforgeeks.org'
+        .then((res)=>{console.log(res)})                                                 
+        .catch((rej)=>{console.log(rej)})                                                // -> Error thrown         // -! this method doesn't have any sence (always resolved undefined)    
+        
+    myResolverProm.resolveNs('google.com')                                             // resolve the NS records of 'google.com'
+        .then((res)=>{console.log(res)})                                                 // -> ['ns1.google.com', 'ns4.google.com', 'ns3.google.com', 'ns2.google.com']    
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    
+    myResolverProm.resolveNaptr('google.com')                                          // resolve the 'NAPTR' records of 'google.com'
+        .then((res)=>{console.log(res)})
+        .catch((rej)=>{console.log(rej)})                                                // -> Error thrown           // no records found  
+    
+// reverse() --------------------------------------------------------------------------
+    myResolverProm.reverse('172.217.164.142')                                          // performs a reverse lookup 
+        .then((res)=>{console.log(res)})                                                 // -> [ 'iad30s24-in-f14.1e100.net' ]   
+        .catch((rej)=>{console.log(rej)})                                                // if rejected -> Error thrown 
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

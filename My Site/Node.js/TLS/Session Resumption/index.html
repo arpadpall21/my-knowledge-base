@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Session Resumption </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Session Resumption (ver 3.4.1) </h1>
+    <p> Updated ( 2020-06-24 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">TLS (SSL)></a> Session Resumption   
+    </p>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - for ID-based session resumption the session state is saved on both sides </p>
+    <p> - for Ticket-based session resumption the session state is saved only on Client side </p>
+    <p> - TLSv1.3 supports only Ticket-based session resumption </p>
+<h2 style="color:darkblue;"><u> Ticket-based session resumption TEST </u></h2>
+    <p> Client </p>
+    <pre>
+// ------------------------------------------------------------------------------------
+// SERVER -----------------------------------------------------------------------------
+    var tls = require('tls');                                                          // -! single process servers handle ticket-based session resumption mechanism (no extra code needed)   
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('certs/pallCer.cer'), key:fs.readFileSync('certs/pallKey.pem')};   
+    
+    var tlsServer = new tls.Server(options);
+    tlsServer.listen(1000, '127.0.0.1', ()=>{console.log('server listening!')});
+    
+    tlsServer.on('secureConnection', function(tlsSocket){    
+        tlsSocket.write('server response');
+    });
+    
+    
+// ------------------------------------------------------------------------------------
+// CLIENT -----------------------------------------------------------------------------
+    var fs = require('fs');
+    var tls = require('tls');
+    
+    fs.existsSync('session') ? null : fs.writeFileSync('session', '');                 // creates the 'session' file if not exist yet (avoid fs error)
+    
+    var options = {ca:fs.readFileSync('certs/pallCer.cer'), session:fs.readFileSync('session')};    // client reopens with the previously stored session ticket 
+    var client = tls.connect(1000, 'localhost', options);
+    
+    client.on('secureConnect', function(){
+        client.on('data', (chunk)=>{ console.log(chunk.toString()) });
+    });
+    
+    client.on('session', function(session){                                            // emitted when the session ticket is available 
+        fs.writeFileSync('session', session);                                          // the returned session ticket is stored for the next session resumption 
+    });
+    
+    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> ID-based session resumption TEST </u></h2>
+    <pre>
+// ------------------------------------------------------------------------------------
+// SERVER -----------------------------------------------------------------------------
+    var tls = require('tls');
+    var fs = require('fs');
+        
+    var options = {cert:fs.readFileSync('certs/pallCer.cer'), key:fs.readFileSync('certs/pallKey.pem'), 
+                   maxVersion:'TLSv1.2', secureOptions:16384};                         // server supports Id-based session resumption only  
+        
+    var tlsServer = new tls.Server(options);
+    tlsServer.listen(1000, '127.0.0.1', ()=>{console.log('server listening!')});
+        
+    tlsServer.on('secureConnection', function(tlsSocket){    
+        tlsSocket.write('server response');
+    });
+    
+    tlsServer.on('resumeSession', function(id, cb){                                    // emitted when the client requests a session resumption 
+        if (fs.existsSync('sessId')) {                                                 // checks if the 'sessId' file exist which stores the session state 
+            cb(null, fs.readFileSync('sessId'));                                       // responds with the session state to the client 
+        } else {
+            cb();                                                                      // -! the callback must be called in any case 
+        }
+    });
+    
+    tlsServer.on('newSession', function(id, data, cb){                                 // emitted when a new TLS session is created 
+        fs.writeFileSync('sessId', data);                                              // new TLS session state is saved in a file for the next session resumption use 
+        cb();                                                                          // -! callback must be called 
+    });
+    
+    
+// ------------------------------------------------------------------------------------
+// CLIENT -----------------------------------------------------------------------------
+    var fs = require('fs');
+    var tls = require('tls');
+    
+    fs.existsSync('session') ? null : fs.writeFileSync('session', '');                 // creates the 'session' file if not exist yet (avoid fs error)
+    
+    var options = {ca:fs.readFileSync('certs/pallCer.cer'), session:fs.readFileSync('session')};    // client reopnes with the previously saved session Id
+    var client = tls.connect(1000, 'localhost', options);
+    
+    client.on('secureConnect', function(){
+        client.on('data', (chunk)=>{ console.log(chunk.toString()) });
+    });
+    
+    client.on('session', function(session){                                            // emitted when session Id is available 
+        fs.writeFileSync('session', session);                                          // the returned session Id is stored for the next session ressumption 
+    });
+    
+    </pre>
+    
+    
+    
+<br><br>
+</body>
+</html>

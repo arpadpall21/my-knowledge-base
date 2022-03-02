@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Bash (Linux Terminal) </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="../Assets/stylesPages.css"> 
+    <script src="../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Bash (Linux Terminal) (ver 4.0.0) </h1>
+    <p> Updated ( 2020-04-03 )</p>
+    <p class="sitenav"> <a href="../index.html">MySite></a> Bash (Linux Terminal) </p>
+    <p class="subSite">
+        <a href="#compression">Compression</a> / 
+        <a href="#environment_variables">Environment Varialbes</a> / 
+        <a href="#file_system">File System</a> / 
+        <a href="#general">General</a> / 
+        <a href="#general_commands">General Commands</a> / 
+        <a href="#networking">Networking</a> / 
+        <a href="#package_managers">Package Managers</a> / 
+        <a href="#process_management">Process Management</a> / 
+        <a href="#services">Services (Daemons)</a> / 
+        <a href="#users_and_groups">Users and Group</a>
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Command </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2" id="general"> General </td>
+    </tr>
+    <tr>
+        <td> Ctrl + C </td>
+        <td> - stops the current running command </td>
+    </tr>
+    <tr>
+        <td> Ctrl + L </td>
+        <td> - clears the screen </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> --help </td>
+        <td> - prints the command help log </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> -- <i>path</i> </td>
+        <td> - indicates the end of the command (including options) so <u>all characters</u> after it will be interpreted as file path characters </td>
+    </tr>
+    <tr>
+        <td> ~ </td>
+        <td> - (tilde) represents the home directory of the current user </td>
+    </tr>
+    <tr>
+        <td> !! </td>
+        <td> - represents the previous command (it can be extended to add something to the previous command) </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> ; <strong>cmd</strong> </td>
+        <td> - separates commands (does not pipe) </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> | <strong>cmd</strong> </td>
+        <td> - pipes data between commands (programs) from left-to-right </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> > <strong>filePath</strong> </td>
+        <td> - writes the result of returned command into a file (overwites the file's content) (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> >> <strong>filePath</strong> </td>
+        <td> - writes the result of returned command into a file (appends the result to the file's content) (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> <i>cmd</i> <small>|</small> more <i>file ...</i> </td>
+        <td> 
+            - displays the data from stdin (piped data) and the data of the passed file(s) in 'more' view <br>  
+            - (Enter = next line) (Space = next page) (q = exit)
+        </td>
+    </tr>
+    <tr>
+        <td> <i>cmd</i> <small>|</small> less <i>file ...</i> </td>
+        <td> 
+            - displays the data from stdin (piped data) <u>or</u> the data of the passed file(s) in 'less' view <br>  
+            - (free navigation with the usual keys) (Space = next page) (q = exit)
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>cmd</strong> | tee <small>[-a]</small> <strong>filePath</strong> <i>...</i> </td>
+        <td>  
+            - writes the piped data to the specified file(s) (overwrites the files contents) and also prints the written data on the screen <br>
+            - (<small>-a</small>) appends the data to the specified file(s)
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="general_commands"> General Commands </td>
+    </tr>
+    <tr>
+        <td> alias <strong>customCMD</strong>=<strong>cmd</strong> </td>
+        <td> - sets a custom command for the current shell (ex: <mark>alias cls=clear</mark>) </td>
+    </tr>
+    <tr>
+        <td> clear </td>
+        <td> - clears the terminal's screen </td>
+    </tr>
+    <tr>
+        <td> crontab <small>[-e] [-l] [-r] [-i]</small> </td>
+        <td>  
+            - <u>(option required)</u> users' crontab (crontab = cron table) <a href="../11 Operating Systems/Linux/index.html#cron" target="_blank">Cron [link]</a> <br>
+            - (<small>-e</small>) edit the user's crontab file <br>
+            - (<small>-l</small>) print the user's crontab file <br>
+            - (<small>-r</small>) removes the user's crontab file from the <mark>/var/spool/cron/crontabs</mark> directory (doesn't prompt) <br>
+            - (<small>-i</small>) prompts when removing crontab files 
+        </td>
+    </tr>
+    <tr>
+        <td> date </td>
+        <td> - displays the current date and time </td>
+    </tr>
+    <tr>
+        <td> echo <strong>str</strong> </td>
+        <td> - outputs (echos) the entered string </td>
+    </tr>
+    <tr>
+        <td> exit </td>
+        <td> - exits the shell where it is currently running </td>
+    </tr>
+    <tr>
+        <td> free <small>[-h]</small> </td>
+        <td> 
+            - returns the memory (RAM) and the swap area status <br>
+            - (<small>-h</small>) data returned in human readable form (in Gb Mb Kb istead of bytes) 
+        </td>
+    </tr>
+    <tr>
+        <td> history </td>
+        <td> - returns the command history list (<mark>!<strong>cmdNr</strong></mark> = calls the history index command) </td>
+    </tr>
+    <tr>
+        <td> hostnamectl set-hostname <strong>hostName</strong> </td>
+        <td> - sets the host name (system name) </td>
+    </tr>    
+    <tr>
+        <td> man <strong>cmd</strong> </td>
+        <td> - displays 'manual pages' for the passed command in 'less' view </td>
+    </tr>
+    <tr>
+        <td> mc </td>
+        <td> - <i class="fas fa-download"></i> launches the Midnight Commander </td>
+    </tr>
+    <tr>
+        <td> poweroff </td>
+        <td> - shuts down the system </td>
+    </tr>
+    <tr>
+        <td> reboot </td>
+        <td> - reboots the system </td>
+    </tr>
+    <tr>
+        <td> set -|+<strong class="openable">flag<div>
+          <p> <mark>a</mark> - It is used to mark variables that are modified or created for export </p>
+          <p> <mark>b</mark> - It is used to notify of job termination immediately </p>
+          <p> <mark><strong>executable</strong> -c <strong>str</strong></mark> - the following string will be feeded to the executable as a singgle imput (ex: <mark>/bin/bash -c "echo $0 ; echo $SHELL ; tail -f /dev/null"</mark>) </p>
+          <p> <mark>e</mark> - It is used to exit immediately if a command exits with a non-zero status </p>
+          <p> <mark>f</mark> - It is used to disable the file name generation (globbing) </p>
+          <p> <mark>h</mark> - It is used to save the location of commands where they looked up </p>
+          <p> <mark>k</mark> - It is used to place all assignment arguments in the environment variable of a command, except those that precede the command name </p>
+          <p> <mark>m</mark> - It is used to enable Job control </p>
+          <p> <mark>n</mark> - It is used to read commands </p>
+          <p> <mark>o</mark> - It is used for option-name </p>
+          <p> <mark>p</mark> - It is used to disable the processing of the '$ENV' file and import shell functions. It is turned on whenever the real and effective user ids do not match. Turning off this option may cause the working uid and gid to be set as the authorized uid and gid </p>
+          <p> <mark>t</mark> It is used to exit from the command after executing one command </p>
+          <p> <mark>u</mark> It is used to treat unset variables as an error when substituting </p>
+          <p> <mark>v</mark> It is used to print shell input lines </p>
+          <p> <mark>x</mark> It is used to print commands and their arguments in a sequential way (as they are executed) </p>
+          <p> <mark>B</mark> It is used to perform brace expansion by the Shell </p>
+          <p> <mark>C</mark> It is used to disallow existing regular files to be overwritten by redirection of output </p>
+          <p> <mark>E</mark> It is used if the ERR trap is inherited by the shell functions </p>
+          <p> <mark>H</mark> It is used to enable style history substitution. By default, it is on when the shell is interactive </p>
+          <p> <mark>P</mark> It is used if we do not want to follow symbolic links when executing commands </p>
+          <p> <mark>T</mark> If this flag is set, the DEBUG trap is inherited by the shell functions </p>
+        </div></strong></td>
+        <td> - enables/disables the specified <mark><strong>flag</strong></mark> in the current shell (<mark>-<strong>flag</strong></mark> = enable) (<mark>+<strong>flag</strong></mark> = disable) </td>
+    </tr>
+    <tr>
+        <td> source <strong>filePath</strong> </td>
+        <td> - reads the content of a file and executes it </td>
+    </tr>
+    <tr>
+        <td> systemctl suspend </td>
+        <td> - suspends (hybernates) the system </td>
+    </tr>
+    <tr>
+        <td> uname -r </td>
+        <td> - prints the Linux kernel version </td>
+    </tr>
+    <tr>
+        <td> uptime </td>
+        <td> - returns how long the system is running with the current time and the system load averages for the last 1, 5 and 15 minutes </td>
+    </tr>
+    <tr>
+        <td> whereis <strong>cmd</strong> </td>
+        <td> - locates the binaries and the manual files of the command </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="users_and_groups"> Users and Groups </td>
+    </tr>
+    <tr>
+        <td> cat /etc/passwd </td>
+        <td> 
+             - file contains all users in the system <br>
+             - each entry represents a user (<strong>userName</strong> : <em class="openable">x<div> 
+                <p> - the 'x' represents the encrypted password </p>
+            </div></em> : <strong>uid</strong> : <strong>gid</strong> : <strong>fullName</strong> : <strong>homeDirPath</strong> :  <strong>loginShellPath</strong>) 
+        </td>
+    </tr>
+    <tr>
+        <td> cat /etc/group </td>
+        <td> 
+             - file contains all groups in the system <br>
+             - each entry represents a group (<strong>groupName</strong> : <em class="openable">x<div> 
+                <p> - the 'x' represents the encrypted password </p>
+            </div></em> : <strong>gid</strong> : <strong>groupMember</strong><i><small>,</small>...</i>) 
+        </td>
+    </tr>
+    <tr>
+        <td> adduser <small> [--uid <i>uid</i>] [--system] [--no-create-home] [--home <i>dirPath</i>]</small> <strong>userName</strong> </td>
+        <td>  
+            - (no options) adds the specified user to the system (also creates user home directory and primary group) <br>
+            - (<small>--uid <i>uid</i></small>) specifies the user id of the user <br>
+            - (<small>--system</small>) creates a system user <br>
+            - (<small>--no-create-home</small>) does not create home directory for the user <br>
+            - (<small>--home <i>dirPath</i></small>) sets the home directory for the user 
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td> adduser <strong>userName</strong> <strong>groupName</strong> </td>
+        <td> - adds the user to the specified group </td>
+    </tr>
+    <tr>
+        <td> deluser <small>[--remove-all-files] [--remove-home]</small> <strong>userName</strong> </td>
+        <td>  
+            - (no options) removes the specified user from the system <br>
+            - (<small>--remove-all-files</small>) removes all files which belongs to the user <br>
+            - (<small>--remove-home</small>) remove the home directory of the user
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td> deluser <strong>userName</strong> <strong>groupName</strong> </td>
+        <td> - removes the user from the specified group </td>
+    </tr>
+    <tr>
+        <td> groupadd <small>[--gid <i>gid</i>] [--system]</small> <strong>groupName</strong> </td>
+        <td>  
+            - (no options) creates the specified group <br>
+            - (<small>--gid <i>gid</i></small>) sets the gid of the group <br>
+            - (<small>--system</small>) creates a system group 
+        </td>
+    </tr>
+    <tr>
+        <td> groupdel <small>[-f]</small> <strong>groupName</strong> </td>
+        <td>  
+            - removes the specified group <br>
+            - (<small>-f</small>) removes the specified group even if it's a primary group
+        </td>
+    </tr>
+    <tr>
+        <td> groupmod --gid <strong>gid groupName</strong> </td>
+        <td> - sets the GID of the specified group </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td> groupmod --new-name <strong>newName groupName</strong> </td>
+        <td> - changes the specified group's name </td>
+    </tr>
+    <tr>
+        <td> groups <strong>userName</strong> <i>...</i> </td>
+        <td> - returns the groups of the specified user(s) </td>
+    </tr>
+    <tr>
+        <td> id <strong>userName</strong> </td>
+        <td> - returns UID of the passed user and all its groups along with their GIDs </td>
+    </tr>
+    <tr>
+        <td> passwd <small>[-d]</small> <i>userName</i> </td>
+        <td> 
+            - (no options) changes the password for the current user or for the specified user <br>
+            - (<small>-d</small>) deletes the specified user's password (deleted password works when login but on terminal the user still needs password [TESTED: 2020-04-11])
+        </td>
+    </tr>
+    <tr>
+        <td> su <strong>userName</strong> </td>
+        <td> - switches the user on the terminal (<mark>sudo su</mark> = switches to the super user) </td>
+    </tr>
+    <tr>
+        <td> sudo <strong>cmd</strong> </td>
+        <td> - executes the command as root user </td>
+    </tr>
+    <tr>
+        <td> usermod <small>[-d <i>dirPath</i>] [-uid <i>uid</i>] [-gid <i>gid</i>]</small> <strong>userName</strong> </td>
+        <td>  
+            - <u>(option required)</u> modifys the specified user account <br>
+            - (<small>-d <i>dirPath</i></small>) sets the home directory for the user <br>
+            - (<small>-uid <i>uid</i></small>) sets the user id of the user <br>
+            - (<small>-gid <i>gid</i></small>) sets the primary group of the user 
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td> usermod --login <strong>newName userName</strong> </td>
+        <td> - renames the specified user </td>
+    </tr>
+    <tr>
+        <td> w | users </td>
+        <td> - list the currently <u>logged-in users</u> (<mark>w</mark> provides more information) </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="process_management"> Process Management </td>
+    </tr>
+    <tr>
+        <td> $$ </td>
+        <td> - current shell process id (<mark>echo $$</mark> to display) </td>
+    </tr> 
+    <tr>
+        <td> htop </td>
+        <td> - <i class="fas fa-download"></i> process manager (advanced version of <mark>top</mark>) </td>
+    </tr>
+    <tr>
+        <td> kill <strong>pid</strong> <i>...</i> </td>
+        <td> - kill the specified process(es) </td>
+    </tr>
+    <tr>
+        <td> killall <small>[-i] [-s <i>signal</i>] [-v] [-l]</small> <strong>processName</strong> <i>...</i> </td>
+        <td> 
+            - kill the specified process(es) <br>
+            - (<small>-i</small>) case-insensitive <br>
+            - (<small>-s</small> <i>signal</i>) sends the specified signal instead of <mark>SIGTERM</mark> <br>
+            - (<small>-v</small>) report if the signal was successfully sent <br>
+            - (<small>-l</small>) list avaialble signals 
+        </td>
+    </tr>
+    <tr>
+        <td> pgrep <small>[-v] [-P <i>ppid</i>] [-l] [-i] [-n] [-o] [-c]</small> <strong>processName</strong> </td>
+        <td>  
+            - returns the pid(s) for the specified process(es) (oldest in first and so on...) <br>
+            - (<small>-v</small>) returns all other processes than the specified one <br>
+            - (<small>-P</small> <i>ppid</i>) returns all processes belonging to the specified parent process <br>
+            - (<small>-l</small>) process name included <br>
+            - (<small>-i</small>) case-insensitive <br>
+            - (<small>-n</small>) return only the newest process <br>
+            - (<small>-o</small>) return only the oldest process <br>
+            - (<small>-c</small>) return a number indicating the number of processes running under the passed process name <br>
+        </td>
+    </tr>
+    <tr>
+        <td> ps <small>[-A|-e] [aux] [-eH] [-e --forest] [-C <i>processName</i>] [--pid <i>pid</i>] [-U <i>userName</i>] [-G <i>groupName</i>] [-l] [-f]</small></td>
+        <td>  
+            - (no options) returns the processes for the current shell (this terminal's pid) <br>
+            - (<small>-A|-e</small>) returns all processes <br>
+            - (<small>aux</small>) returns all processes in an extra detailed list with executable (command) paths <br>
+            - (<small>-eH</small>) returns all processes as hierarchy tree <br>
+            - (<small>-e --forest</small>) returns all processes as ASCII hierarchy tree <br>
+            - (<small>-C <i>processName</i></small>) returns all processes running under the specified process name <br>
+            - (<small>--pid <i>pid</i></small>) returns the specified processes by its pid <br>
+            - (<small>-U <i>userName</i></small>) returns all processes belonging to the specified user <br>
+            - (<small>-G <i>groupName</i></small>) returns all processes belonging to the specified group <br>
+            - (<small>-l</small>) detailed list with commands <br>
+            - (<small>-f</small>) detailed list with executable (command) paths 
+        </td>
+    </tr>
+    <tr>
+        <td> top </td>
+        <td> - shows running processes <u>in real time</u> </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="services"> Services (Daemons) </td>
+    </tr>
+    <tr>
+        <td> service <strong>serviceName</strong> reload </td>
+        <td> - reloads the system (reloads configurations) </td>
+    </tr>
+    <tr>
+        <td> service <strong>serviceName</strong> start </td>
+        <td> - starts the specified service </td>
+    </tr>
+    <tr>
+        <td> service --status-all </td>
+        <td> - prints all services (<mark>+</mark> = service running | <mark>-</mark> = service not running) </td>
+    </tr>
+    <tr>
+        <td> service <strong>serviceName</strong> status </td>
+        <td> - prints the status of the specified service </td>
+    </tr>
+    <tr>
+        <td> service <strong>serviceName</strong> stop </td>
+        <td> - stops the specified service </td>
+    </tr>
+    <tr>
+        <td> systemctl enable|disable <strong>serviceName</strong> </td>
+        <td> - enables or disables the daemon when the system starts </td>
+    </tr>
+    <tr>
+        <td> systemctl is-enabled <strong>serviceName</strong> </td>
+        <td> - checks whether the service is enabled or disabled</td>
+    </tr>
+    <tr>
+        <td> systemctl reload <strong>serviceName</strong> </td>
+        <td> - reloads the <strong>serviceName</strong>'s configuration file (without restarting the service if possible) </td>
+    </tr>
+    <tr>
+        <td> systemctl restart <strong>serviceName</strong>|all </td>
+        <td> - restart the specified service or all running services </td>
+    </tr>
+    
+    <tr>
+        <td> systemctl start <strong>serviceName</strong> </td>
+        <td> - starts the specified service </td>
+    </tr>
+    <tr>
+        <td> systemctl status <i>serviceName</i> </td>
+        <td> - prints all running services or checks the status of the specified one </td>
+    </tr>
+    <tr>
+        <td> systemctl stop <strong>serviceName</strong> </td>
+        <td> - stops the specified service </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="environment_variables"> Environment Variables </td>
+    </tr>
+    <tr>
+        <td> <strong>envKey</strong>=<strong>envVal</strong> </td>
+        <td> - sets an environment varialbe for the current process only </td>
+    </tr>
+    <tr>
+        <td> export <strong>envKey</strong>=<strong>envVal</strong> </td>
+        <td> - sets an environment varialble for the current process and <u>its child processes</u> </td>
+    </tr>
+    <tr>
+        <td> /home/<strong>user</strong>/.profile </td>
+        <td>  
+            - (file) we can add <u>permanent user environment varialbes</u> <span class="openable">at the bottom of this file<div>
+                <p><mark>export <strong>key</strong>=<strong>val</strong></mark> </p>
+                <p><mark><i>...</i></mark></p>
+                <hr>
+                <p><u> EX: </u></p>
+                <p><mark>export TEST1=21</mark></p>
+                <p><mark>export TEST2=test</mark></p>
+                <p><mark>export TEST2='new val'</mark> (use quotes if the string contains spaces)</p>
+            </div></span> <br>
+            - takes effect after the system is restarted or after the <mark>source /home/<strong>user</strong>/.profile</mark> command <strong>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            $<strong>envKey</strong>
+        </td>
+        <td>
+            - returns the variable's value (ex: <mark>echo $<strong>envKey</strong></mark> | <mark>echo ${<strong>envKey</strong>}</mark>)
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td>
+            ${<strong>envKey</strong>}
+        </td>
+        <td>
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td>
+            ${<strong>envKey</strong>:-<strong>defVal</strong>}
+        </td>
+        <td>
+            - if <strong>envKey</strong> is not set returns <strong>defVal</strong> (default value) <br>
+            - if <strong>envKey</strong> is set returns its value 
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td>
+            ${<strong>envKey</strong>:+<strong>defVal</strong>}
+        </td>
+        <td>
+            - if <strong>envKey</strong> is not set returns an empty string (<mark>''</mark>) <br>
+            - if <strong>envKey</strong> is set returns <strong>defVal</strong> (default value)
+        </td>
+    </tr>
+    <tr>
+        <td> env <small>[-0] [-i <i>cmd</i>]</small> </td>
+        <td>  
+             - (no option) returns all environment varialbes <br>
+             - (<small>-0</small>) removes the new line character from the end of each key/value pairs <br>
+             - (<small>-i <i>cmd</i></small>) runs the command (program) without environment variables 
+        </td>
+    </tr>
+    <tr>
+        <td> printenv <small>[-0]</small> </td>
+        <td>  
+             - (no option) reutns all environment varialbes <br>
+             - (<small>-0</small>) removes the new line character from the end of each key/value pairs  
+        </td>
+    </tr>
+    <tr>
+        <td> unset <strong>envKey</strong> </td>
+        <td> - removes the specified environment varaible </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="file_system"> File System </td>
+    </tr>
+    <tr>
+        <td> cat <small>[-n] [-E] [-s] [>] [>>]</small> <strong>filePath</strong> <i>...</i> </td>
+        <td>  
+             - (no options) read the specified file(s) content and output the read data <br>
+             - (<small>-n</small>) number output lines <br>
+             - (<small>-E</small>) highlight output line ends <br>
+             - (<small>-s</small>) collapses multiple empty lines into a single one <br>
+             - (<small>&gt;</small>) creates a file (if not exist) and writes the specified content to it (overwrites existing files contents) (<mark>cat srcFile > destFile</mark> = copy source file content and overwrite target file content) <br>
+             - (<small>&gt;&gt;</small>) creates a file (if not exist) and appends the specified content to it (appends data to existing files contents) (<mark>cat srcFile >> destFile</mark> = copy source file content and append it to the target file content) 
+        </td>
+    </tr>
+    <tr>
+        <td> cd <strong>dirPath</strong> </td>
+        <td> - navigates to the specified directory </td>
+    </tr>
+    <tr>
+        <td> chmod <small>[-R]</small> <strong>NrNrNr path</strong> </td>
+        <td>  
+             - changes the permissions of the specified file or direcotry <br>
+             - (<strong>NrNrNr</strong>) (<mark>0</mark> = <mark>---</mark>) (<mark>1</mark> = <mark>--x</mark>) (<mark>2</mark> = <mark>-w-</mark>) (<mark>3</mark> = <mark>-wx</mark>) (<mark>4</mark> = <mark>r--</mark>) (<mark>5</mark> = <mark>r-x</mark>) (<mark>6</mark> = <mark>rw-</mark>) (<mark>7</mark> = <mark>rwx</mark>) <br>
+             - (<small>-R</small>) changes the permissions of the targeted directory and <u>all its descendent items</u>
+        </td>
+    </tr>
+    </tr>
+        <tr>
+        <td> chown <small>[-R]</small> <strong>ownerName</strong><small>:</small><i>groupName</i> <strong>path</strong> </td>
+        <td>  
+            - (<strong>ownerName</strong>) changes the owner of the specified file or directory <br>
+            - (<small>:</small><i>groupName</i>) changes the group ownership of the file (can be written as <mark>chown :newGroup file</mark>) <br>
+            - (<small>-R</small>) changes the ownership of the targeted directory and <u>all its descendent items</u>
+        </td>
+    </tr>
+    <tr>
+        <td> cp <small>[-i] [-f] [-p] [-u] [-l] [-s] [-r|-R]</small> <strong>srcPath</strong> <i>scrPath ...</i> <strong>destPath</strong> </td>
+        <td>  
+            - (no options  ) copies (and renames) file(s) <u>(does not prompt!)</u> <u>(cannot copy directories)</u> <br>
+            - (<small>-i</small>) prompts (warns) before overwriting files at destination <br>
+            - (<small>-f</small>) (force) overwrite protected files at destination <br>
+            - (<small>-p</small>) preserves the file's stats (ownership, permission bits, times, etc...) <br>
+            - (<small>-u</small>) copy only if file(s) at destination are older or missing <br>
+            - (<small>-l</small>) creates hard-links instead of copying files or directories <u>(directory hard-links are not allowed)</u><br>
+            - (<small>-s</small>) creates soft-links (symbolic-links) instead of copying files <u>(cannot create directory symbolic-links)</u> <u>(you must be in the directory where you want to create the symbolic-link)</u> <br>
+            - (<small>-r|-R</small>) copies the specified directory and all its items 
+        </td>
+    </tr>
+    <tr>
+        <td> df <small>[-h] [-i] [-a]</small> </td>
+        <td> 
+            - (no options) displays the available space on all <u>mounted</u> file systems <br>
+            - (<small>-h</small>) list sizes in human readable format (G, M, k) <br>
+            - (<small>-i</small>) display inode informations instead of block usage <br>
+            - (<small>-a</small>) display all devices (including zero block sizes)
+        </td>
+    <tr>
+        <td> 
+            diff <small>[-i] [-s] [-q] [-y] [-r]</small> <strong>file1 file2</strong> <br>
+            colordiff <small>[-i] [-s] [-q] [-y] [-r]</small> <strong>file1 file2</strong> 
+        </td>
+        <td>  
+            - compares to files <u>line by line</u> and reports the differences between them, suggest modification to <strong>file1</strong> <br> 
+            - the colordiff <u>installable command</u> does the same in colors <br>
+            ex: <br> 
+            (<mark>4a5,7</mark> = add the below lines to line 5-7) <br> 
+            (<mark>5,7d4</mark> = delete line 5-7) <br>
+            (<mark>5,7c5,7</mark> = change line 5-7 with the below content)) <br>
+            - (<small>-i</small>) case-insensitive check <br>
+            - (<small>-s</small>) does report when files are identical <br>
+            - (<small>-q</small>) quick report instead of suggesting modifications <br>
+            - (<small>-r</small>) recursively compares directories with all their child items <br>
+            - (<small>-y</small>) side by side view (suggested modifications are displayed in the middle) <br>
+        </td>
+    </tr>
+    <tr>
+        <td> du <small>[-h] [-s]</small> <i>path ...</i> </td>
+        <td>  
+            - returns the <u>estimated</u> space used by the specified file or directory (current directory by default) <br> 
+            - (<small>-h</small>) human readable fromat (K, MB, etc..) <br>
+            - (<small>-s</small>) returns the one summerized size only 
+        </td>
+    </tr>
+    <tr>
+        <td> find <strong>dirPath</strong> <i>dirPath ...</i> <small>[-maxdepth <i>nr</i>] [-name '<i>name</i>'] [-iname '<i>name</i>'] [-type f|d|l] [-inum <i>(+|-)nr</i>] [-empty] [-size <i>(+|-)nr</i>G|M|k] [-user '<i>name</i>'] [-group '<i>group</i>'] [<small>-perm <i>NrNrNr</i></small>] [-newer '<i>name</i>'] [-mmin <i>(+|-)nr</i>] [-mtime <i>(+|-)nr</i>] [-amin <i>(+|-)nr</i>] [-atime <i>(+|-)nr</i>] [-cmin <i>(+|-)nr</i>] [-ctime <i>(+|-)nr</i>] [-not] [! <i>criteria</i>] [<i>criteria</i> -or <i>criteria</i>] [-exec <i>cmd</i> {} +]</small> </td>
+        <td>  
+             - find specified items based on the passed criteria <u>(recursively searches the full depth on the passed directory(ies))</u> <br> 
+             - (<small>-maxdepth <i>nr</i></small>) directory depth to search <br>
+             - (<small>-name '<i>name</i>'</small>) by item name <br>
+             - (<small>-iname '<i>name</i>'</small>) by item name (case-insensitive) <br>
+             - (<small>-type f|d|l</small>) by item type (<mark>f</mark> = file) (<mark>d</mark> = directory) (<mark>l</mark> = symbolic link) (<mark>s</mark> = unix domain socket) <u>(by Default searches for all item types)</u><br> 
+             - (<small>-inum <i>(+|-)nr</i></small>) by Inode number (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-empty</small>) by empty files <br>
+             - (<small>-size <i>(+|-)nr</i>G|M|k</small>) by file size (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-user '<i>name</i>'</small>) by user <br>
+             - (<small>-group '<i>group</i>'</small>) by group <br>
+             - (<small>-perm <i>NrNrNr</i></small>) by permission <br>
+             - (<small>-newer '<i>name</i>'</small>) newer than the specified item <br>
+             - (<small>-mmin <i>(+|-)nr</i></small>) by last modified time (in minutes) (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-mtime <i>(+|-)nr</i></small>) by last modified time (in days) (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-amin <i>(+|-)nr</i></small>) by last access time (in minutes) (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-atime <i>(+|-)nr</i></small>) by last access time (in days) (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-cmin <i>(+|-)nr</i></small>) by last change time (in minutes) (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-ctime <i>(+|-)nr</i></small>) by last change time (in days) (<mark>+nr</mark> = greater or equal number) (<mark>-nr</mark> = lower or equal number) <br>
+             - (<small>-not</small>) returns anyting else than the specified criteria <br>
+             - (<small>! <i>criteria</i></small>) removes the specified items (<i>criteria</i>) from the already returned result <br>
+             - (<small><i>-name</i> -or <i>-name</i></small>) groups multiple name criterias <br>
+             - (<small>-exec <i>cmd</i> {} +</small>) executes the specified command on the returned result(s) <br>
+        </td>
+    </tr>
+    <tr>
+        <td> grep <small>[-i -n -h -o -v]</small> <strong>pattern filePath</strong> <i>...</i> </td>
+        <td>  
+            - searches for a <strong>pattern</strong> in the specified files (or piped data), returns each line where there's a match <br>
+            - (<small>-i</small>) case-insensitive search <br>
+            - (<small>-n</small>) print line numb with output lines <br>
+            - (<small>-h</small>) print only the output lines (without the source file path) <br> 
+            - (<small>-o</small>) print only the matched part of the matched line <br>
+            - (<small>-v</small>) print everything other than the matched result 
+        </td>
+    </tr>
+    <tr>
+        <td> head <small>[-n <i>nr</i>]</small> <strong>filePath</strong> <i>...</i> </td>
+        <td> 
+            - returns the first 10 lines of the specified file(s) <br>
+            - (<small>-n <i>nr</i></small>) specifies the number of lines to display 
+        </td>
+    </tr>
+    <tr>
+        <td> ln <small>[-i -f -s]</small> <strong>srcPath destPath</strong> </td>
+        <td>  
+             - creates a hard-link at destination (created link can be named) <u>(directory hard-links are not allowed)</u><br>
+             - (<small>-i</small>) prompt before replacing links at destination <br>
+             - (<small>-f</small>) replaces existing links at destination <br>
+             - (<small>-s</small>) create soft-link (file or directory symbolic-link) instead hard link <u>(you must be in the directory where you want to create the symbolic-link)</u> 
+        </td>
+    </tr>
+    <tr>
+        <td> ls <small>[-l] [-a] [-h] [-i] [-r] [-S]</small> <strong>dirPath</strong> </td>
+        <td> 
+             - (no options) list items in the specified directory <br>
+             - (<small>-l</small>) detailed list (permissions, ownership, size, etc..) <br>
+             - (<small>-a</small>) include hidden items <br>
+             - (<small>-h</small>) list file sizes in human readable format (G, M, k) <br>
+             - (<small>-i</small>) include item Inode numbers <br>
+             - (<small>-r</small>) reverse list order <br>
+             - (<small>-S</small>) sort by file size 
+        </td>
+    </tr>
+    <tr>
+        <td> mkdir <strong>dirPath</strong> <i>...</i> </td>
+        <td> - creates a new directory </td>
+    </tr>
+    <tr>
+        <td> mv <small>[-i] [-f] [-n] [-u]</small> <strong>srcPath</strong> <i>scrPath ...</i> <strong>destPath</strong> </td>
+        <td>  
+             - (no options) moves (and renames) file(s) and directory(ies) <u>(does not prompt)</u> <u>(directories are moved with all their items)</u> <br>
+             - (<small>-i</small>) prompts (warns) before overwriting files at destination <br>
+             - (<small>-f</small>) (force) overwrites files at destination <br>
+             - (<small>-n</small>) does not overwrite existing file(s) at destination <br>
+             - (<small>-u</small>) move only if file(s) at destination are older or missing <br>
+             - (<small>-b</small>) keeps the original file(s) at destination as backup (with <mark>~</mark> extension)  
+        </td>
+    </tr>
+    <tr>
+        <td> pwd </td>
+        <td> - returns the path of the current working directory </td>
+    </tr>
+    <tr>
+        <td> rm <small>[-i] [-f] [-r|-R]</small> <strong>path</strong> <i>...</i> </td>
+        <td>  
+             - (no options) removes the specified file(s) <u>(does not prompt!)</u> <u>(cannot remove directories)</u> <u>(does not remove hidden directories with the <mark>*</mark> character, <mark>.*</mark> = removes all hidden items)</u> <br>
+             - (<small>-i</small>) prompts (warns) before removing items <br>
+             - (<small>-f</small>) (force) removes write protected items <br>
+             - (<small>-r|-R</small>) removes the specified directory and all its items 
+        </td>
+    </tr>
+    <tr>
+        <td> rmdir <strong>dirPath</strong> </td>
+        <td> - removes an <u>empty</u> directory </td>
+    </tr>
+    <tr>
+        <td> stat <strong>path</strong> <i>path ...</i> </td>
+        <td> - prints the stats of the specified file(s) or directory(ies) </td>
+    </tr>
+    <tr>
+        <td> tail <small>[-n <i>nr</i>]</small> <small>[-f]</small> <strong>filePath</strong> <i>...</i> </td>
+        <td>  
+             - returns the last 10 lines of the specified file(s) <br>
+             - (<small>-f</small>) continuously prints the file's last lines when the file is updated (used to continuously monitor server log files) 
+             - (<small>-n <i>nr</i></small>) specifies the number of lines to display 
+        </td>
+    </tr>
+    <tr>
+        <td> touch <strong>file</strong> <i>file ...</i> </td>
+        <td> - creates empty file(s) </td>
+    </tr>
+    <tr>
+        <td> tree <small>[-L <i>nr</i>] [-a] [-d] [-f] [-p] [-u] [-g] [-s] [-s] [-inodes]</small> </td>
+        <td>  
+            - <i class="fas fa-download"></i> (no option) displays the structure of the specified directory in a tree-like format <br>
+            - (<small>-L <i>nr</i></small>) level depth to display <br>
+            - (<small>-a</small>) all items (including hidden onces) <br>
+            - (<small>-d</small>) display directories only <br>
+            - (<small>-f</small>) display the path for all items <br>
+            - (<small>-p</small>) display the item permissions <br>
+            - (<small>-u</small>) display the item owner <br>
+            - (<small>-g</small>) display the item group <br>
+            - (<small>-s</small>) display the item size in bytes  <br>
+            - (<small>-h</small>) display the item size in human readable format (G, M, k)  <br>
+            - (<small>--inodes</small>) display the item inodes <br>
+        </td>
+    </tr>
+    <tr>
+        <td> umask <small>[-S]</small> <i>umaskVal</i> </td>
+        <td>  
+            - (no argument) returns the umask value for the <u>user</u> (Default: umask = <mark>0002</mark> | file permission = <mark>0666</mark> | directory permission = <mark>0777</mark>) <br>
+            - (<small>-S</small>) the umask value is symbolically printed <br>
+            - <i>umaskVal</i> sets the umask value <u>for the current session (umask value resets to <mark>0002</mark>)</u> 
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="compression"> Compression </td>
+    </tr>
+    <tr>
+        <td> gzip <small>[-r] [-d] [-c] [-f] [-k] [-(1-9] [-v] [-l]</small> <strong>filePath</strong> <i>...</i> </td>
+        <td>  
+            - (no options) compresses the specified <u>files</u> by using gzip algorithms, create <mark>*.gz</mark> files <u>(removes the original file(s)</u> <u>(cannot compress directories)</u> <br>
+            - (<small>-r</small>) compress all file(s) in the targeted direcotry (does not compress the directory itself) <br>
+            - (<small>-d</small>) decompresses the specified files  <br>
+            - (<small>-c</small>) the compression result is returned in stdout (printed) <u>(does not modify anyting on the file system)</u> <br>
+            - (<small>-f</small>) overwrite files at destination <br>
+            - (<small>-k</small>) keep original file(s) (instead of removing them) <br>
+            - (<small>-(1-9)</small>) compression level (9 = best compression) (Default: -6) <br>
+            - (<small>-v</small>) pint compression status at the end of the compression process <br>
+            - (<small>-l</small>) compression status of the specified <u>compressed</u> file(s) 
+        </td>
+    </tr>
+    <tr>
+        <td> 
+             tar -cvf <strong>destFile srcPath</strong> <i>...</i>
+        </td>
+        <td> 
+             - creates a <u>uncompressed</u> Linux Archive file (tarball) from the specified items (does not remove original items) <br>
+             - the created file should be <mark>*.tar</mark>
+        </td>
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr> 
+        <td> tar -xvf <strong>tarFile</strong> <small>[-C <i>destDir</i>]</small></td>
+        <td>  
+             - extract files from an <u>uncompressed</u> Linux Archive file (tarball) to the curent directory <br>
+             - (<small>-C <i>destDir</i></small>) target directory where extract files to 
+        </td> 
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr>
+        <td> 
+             tar -cvfz <strong>destFile srcPath</strong> <i>...</i>
+        </td>
+        <td> 
+             - creates a <u>gzip compressed</u> tarball from the specified items (does not remove original items) <br>
+             - the created file should be <mark>*.tar.gz</mark>
+        </td>
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr> 
+        <td> tar -xvfz <strong>tarGzFile</strong> <small>[-C <i>destDir</i>]</small></td>
+        <td>  
+            - uncompresses a <u>gzip compressed</u> tarball to the curent directory <br>
+            - (<small>-C <i>destDir</i></small>) target directory where extract files to 
+        </td> 
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr>
+        <td> 
+            tar -cvfj <strong>destFile srcPath</strong> <i>...</i>
+        </td>
+        <td> 
+            - creates a <u>bzip2 compressed</u> tarball from the specified items (does not remove original items) <br>
+            - the created file should be <mark>*.tar.tbz</mark>
+        </td>
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr> 
+        <td> tar -xvfj <strong>tarGzFile</strong> <small>[-C <i>destDir</i>]</small></td>
+        <td>  
+            - uncompresses a <u>bzip2 compressed</u> tarball to the curent directory <br>
+            - (<small>-C <i>destDir</i></small>) target directory where extract files to 
+        </td> 
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr>
+        <td> tar -rvf <strong>tarFile srcPath</strong> <i>...</i> </td>
+        <td> - add items (<strong>srcPath</strong>) to a <mark>*.tar</mark> file (tarball) <u>(cannot add items to <mark>*.tar.gz</mark> and <mark>*.tar.tbz</mark> files)</u> </td>
+    </tr>
+        <tr> <td></td><td></td> </tr>
+    <tr>
+        <td> tar -tf <strong>tarFile</strong> </td>
+        <td> - list tarball archived items (works on <mark>*.tar</mark> | <mark>*.tar.gz</mark> | <mark>*.tar.tbz</mark> files) </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="package_managers"> Package Managers </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:tan;"> apt (Advanced Packaging Tool) package manager keeps track installed dependencies </td>
+    </tr>
+    <tr>
+        <td> apt install <strong>package</strong> </td>
+        <td> - installs the specified package </td>
+    </tr>
+    <tr>
+        <td> apt update </td>
+        <td> - updates packages on the system (does not upgrades them, only check for available newer versions) </td>
+    </tr>
+    <tr>
+        <td> apt upgrade </td>
+        <td> - upgrades dependencies on the system </td>
+    </tr>
+    <tr>
+        <td> apt remove <strong>package</strong> </td>
+        <td> - removes (uninstalls) the specified package (does not remove package dependencies and configurations) </td>
+    </tr>
+    <tr>
+        <td> apt purge <strong>package</strong> </td>
+        <td> - removes (uninstalls) the specified package and its configurations (does not remove package dependencies)</td>
+    </tr>
+    <tr>
+        <td> apt autoremove </td>
+        <td> - automatically remove <u>all unused</u> dependencies </td>
+    </tr>
+    <tr>
+        <td> apt list <small>[--installed] [package]</small> </td>
+        <td> 
+             - (no arguments) list all packages on the system (including non installed onces) <br>
+             - (<small>--installed</small>) lists installed packages only <br>
+             - (<small>package</small>) lists the specified package 
+        </td>
+    </tr>
+    <tr>
+        <td> apt search <strong>package</strong> </td>
+        <td> - searches for the specified package </td>
+    </tr>
+    <tr>
+        <td> apt policy <strong>package</strong> </td>
+        <td> - pinrts the status of the package (installed status, available version, soruce) </td>
+    </tr>
+    <tr>
+        <td> apt show <strong>package</strong> </td>
+        <td> - prints informations about the specified package </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:tan;"> dpkg = package installer (part of apt) </td>
+    </tr>
+    <tr>
+        <td> dpkg -i <strong>packagePath</strong> </td>
+        <td> - installs the specified pacakge from the local drive </td>
+    </tr>
+    <tr>
+        <td> dpkg -r <strong>package</strong> </td>
+        <td> - removes the specified package (same as <mark>apt remove</mark>) </td>
+    </tr>
+    <tr>
+        <td> dpkg -P <strong>package</strong> </td>
+        <td> - removes the specified package and its configurations (same as <mark>apt purge</mark>) </td>
+    </tr>
+    <tr>
+        <td> dpkg -l <small>[package]</small> </td>
+        <td> -prints all packages on the system or the specified one </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:tan;"> snap = snap package manager (keeps the latest 3 versions) (CLI for Ubuntu App Store) </td>
+    </tr>
+    <tr>
+        <td> snap install <strong>package</strong> </td>
+        <td> - installs the specified snap (package) </td>
+    </tr>
+    <tr>
+        <td> snap refresh <small>[--list]</small> </td>
+        <td> 
+             - (no argument) upgrades all snaps (packages) <br>
+             - (<small>--list</small>) list upgradable packages 
+        </td>
+    </tr>
+    <tr>
+        <td> snap revert <strong>package</strong> </td>
+        <td> - downgrades the specified snap (package) to the previous <u>installed version</u> </td>
+    </tr>
+    <tr>
+        <td> snap disable <strong>package</strong> </td>
+        <td> - disables the specified snap (package) </td>
+    </tr>
+    <tr>
+        <td> snap enable <strong>package</strong> </td>
+        <td> - enables the specified snap (package) </td>
+    </tr>
+    <tr>
+        <td> snap remove <strong>package</strong> </td>
+        <td> - removes the specified snap (package) (and its dependencies) </td>
+    </tr>
+    <tr>
+        <td> snap list <small>[--all] [package] </td>
+        <td>  
+             - (no argument) lists all enabled packages <br>
+             - (<small>--all</small>) lists all packages including disabled onces <br>
+             - (<small>package</small>) lists the specified snap (package) 
+        </td>
+    </tr>
+    <tr>
+        <td> snap find <small>[package]</small> </td>
+        <td> - lists some available snaps (packages) or searches for a specified one </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="networking"> Networking </td>
+    </tr>
+    <tr>
+        <td> curl <small>[--head] [-i] [-s] [-o <i>filePath</i>] [-C]</small> <strong>IP|URL</strong> </td>
+        <td>  
+             - transfer data to|from a server (makes a request basically) (supported protocols are <mark>HTTP</mark>, <mark>HTTPS</mark>, <mark>FTP</mark>, <mark>SFTP</mark>, <mark>TFTP</mark>, <mark>IMAP</mark>, <mark>POP3</mark>, <mark>SCP</mark>, <mark>SMTP</mark>, <mark>TELNET</mark>, <mark>LDAP</mark>, <mark>FILE</mark>) <br>
+             - (<small>--head</small>) makes a HEAD request (only the message header is requested) <br>
+             - (<small>-i</small>) also includes the HTTP header fields in the response <br>
+             - (<small>-s</small>) silent download (does not show download status) <br>
+             - (<small>-o <i>filePath</i></small>) saves the downloaded data in the specified file <br>
+             - (<small>-C</small>) resumes downloading (when download stopped) 
+        </td>
+    </tr>
+    <tr>
+        <td> host <small>[-v]</small> <strong>domain|IP</strong> </td>
+        <td> 
+             - (<strong>domain</strong>) performs a DNS lookup (returns the A and AAAA records) <br>
+             - (<strong>IP</strong>) performs a reverse lookup (returns the PTR (pointer) records) <br>
+             - (<small>-v</small>) 
+        </td>
+    </tr>
+    <tr>
+        <td> hostname <small>[-i]</small> </td>
+        <td>  
+             - (no options) returns the name of this machine <br>
+             - (<small>-i</small>) returns the IP address of this machine
+        </td>
+    </tr>
+    <tr>
+        <td> ifconfig <small>[-a]</small> <i>netwDev</i> </td>
+        <td> 
+             - <i class="fas fa-download"></i> returns details about all <u>active</u> network interfaces on the host (or the specified one) <br>
+             - (<small>-a</small>) returns all network devices (including inactive ones)  
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td> ifconfig <strong>netDev</strong> up|down </td>
+        <td> - enables (<mark>up</mark>) or disables (<mark>down</mark>) the specified network device  
+    </tr>
+    <tr>
+        <td> netstat <small>[-p] [-n] [-a] [-l] [-t] [-u]</small> </td>
+        <td>  
+            - (no options) returns <u>active</u> TCP, UDP and UNIX connections <u>(options can be combined)</u> <br>
+            - (<small>-p</small>) process name and PID is returned which uses the connection <br>
+            - (<small>-n</small>) IP address returned instead of the domain (PTR reccord) <br>
+            - (<small>-a</small>) returns <u>all</u> connections <br>
+            - (<small>-l</small>) listening connections only <br>
+            - (<small>-t</small>) TCP connections only <br>
+            - (<small>-u</small>) UDP connections only <br>
+        </td>
+    </tr>
+    <tr>
+        <td> nmap <small>[-O] [-v]</small> <strong>domain|IP</strong> </td>
+        <td> 
+            - <i class="fas fa-download"></i> checks for open ports on the specified domain or IP address (performs DNS lookup) <br>
+            - (<small>-O</small>) also returns the target's OS <br>
+            - (<small>-v</small>) returns a more detailed data 
+        </td>
+    </tr>
+        <tr><td></td><td></td></tr>
+    <tr>
+        <td> nmap -sP <strong>networkId</strong>/<strong>mask</strong> </td>
+        <td> - scan devices on the specified network (ex: <mark>nmap -sp 192.168.0.0/16</mark>)
+    </tr>
+    <tr>
+        <td> nmcli <small>[device show] [connection show]</small></td>
+        <td>  
+             - (no options) print the network status <br>
+             - (<small>device show</small>) complete information about the devices <br>
+             - (<small>connection show</small>) connection profiles  
+        </td>
+    </tr>
+    <tr>
+        <td> ping <small>[-c <i>nr</i>] [-s <i>nr</i>] [-f] [-i <i>nr</i>] [-w <i>nr</i>]</small> <strong>IP|URL</strong> </td>
+        <td>  
+             - test the connectivity of the specified server (does DNS resolution) <br>
+             - (<small>-c <i>nr</i></small>) how many ping packets to send <br>
+             - (<small>-f</small>) sent packets as soon as possible (floods the network) <br>
+             - (<small>-s <i>nr</i></small>) packet size in bytes (Default: 60bytes) <br>
+             - (<small>-i <i>nr</i></small>) seconds between sending packets (Default :1s) <br>
+             - (<small>-w <i>nr</i></small>) ping duration in seconds <br>
+        </td>
+    </tr>
+    <tr>
+        <td> tcpdump <small>[-D] [i <strong>netwDev</strong>] [-c <strong>nr</strong>] [-A] [-XX] [port <strong>portNr</strong>] [dst <strong>Ip</strong>]</small> </td>
+        <td> 
+            - <i class="fas fa-download"></i> (no options) intercepts packages on all network devices "package sniffer" <br>
+            - (<small>[-D]</small>) displays available network devices (and their status) <br>
+            - (<small>[i <strong>netwDev</strong>]</small>) intercepts packages on the specified network device <br>
+            - (<small>-c <strong>nr</strong></small>) specifies how many packages to intercept <br>
+            - (<small>-A</small>) package content interpreted a ASCII <br>
+            - (<small>-XX</small>) package content interpreted a ASCII and hexadecimal <br>
+            - (<small>port <strong>portNr</strong></small>) interception on the specified port only <br>
+            - (<small>dst <strong>Ip</strong></small>) interception on the specified destination 
+        </td>
+    </tr>
+    <tr>
+        <td> traceroute <strong>IP|URL</strong> </td>
+        <td> - <i class="fas fa-download"></i> traces the netwrok rout to the specified address </td>
+    </tr>
+</table>
+    <br> 
+<table class="table" id="wildcards_globs">
+<caption>
+    Wildcards and Globs 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Wildcards </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2"> Windcards (symbols that stand in for other characters) </td>
+    </tr>
+    <tr>
+        <td> * </td>
+        <td> - matches zero or more characters (any character) </td>
+    </tr>
+    <tr>
+        <td> ? </td>
+        <td> - matches one character (any character) </td>
+    </tr>
+    <tr>
+        <td> [<strong>char</strong>-<strong>char</strong>] </td>
+        <td> - matches one character (any of the specified range (ex: <mark>[a-e]</mark> matches <mark>a</mark> <mark>b</mark> <mark>c</mark> <mark>d</mark> <mark>e</mark>)) </td>
+    </tr>
+    <tr>
+        <td> [<strong>char</strong>...] </td>
+        <td> - matches one character (any of the enclosed character(s) (ex: <mark>[aex]</mark> matches <mark>a</mark> <mark>e</mark> <mark>x</mark>)) </td>
+    </tr>
+    <tr>
+        <td> [!<strong>char</strong>-<strong>char</strong>] </td>
+        <td> - negative match one character (any other thant the specified range (ex: <mark>[!a-e]</mark> matches any other character than  <mark>a</mark> <mark>b</mark> <mark>c</mark> <mark>d</mark> <mark>e</mark>)) </td>
+    </tr>
+    <tr>
+        <td> [!<strong>char</strong>...] </td>
+        <td> - negative match one character (any other than the enclosed character(s) (ex: <mark>[!aex]</mark> matches any other character than <mark>a</mark> <mark>e</mark> <mark>x</mark>)) </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Globs (pathnames expressed with Wildcards) </td>
+    </tr>
+    <tr>
+        <td> / </td>
+        <td> - segment separator <u>(on all platforms)</u> </td>
+    </tr>
+    <tr>
+        <td> * </td>
+        <td> - matches zero or more characters <u>between segment separators</u> </td>
+    </tr>
+    <tr>
+        <td> ** </td>
+        <td> - matches zero or more characters <u>across segment separators</u> </td>
+    </tr>
+    <tr>
+        <td> \\<strong>char</strong> </td>
+        <td> - escapes the character <u>(on all platforms)</u> </td>
+    </tr>
+    <tr>
+        <td> !<strong>glob</strong> </td>
+        <td> - negative glob, removes one glob from a previous positive glob <u>(must come right under a positive glob)</u> </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - wildcard characters (globs) cannot be used in quotes (ex: <mark>"ab*"</mark>) but they can be concatenated (ex: <mark>*"ab"</mark> | <mark>"a"*"b"</mark> | <mark>"ab"*</mark>)</p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - in terminal the <mark>$</mark> represents the current user, the <mark>#</mark> represents the root user </p>
+    
+    
+    
+    <br><br>
+</body>
+</html>

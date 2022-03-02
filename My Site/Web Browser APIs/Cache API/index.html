@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Cache API </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Cache API (ver 4.0.0) </h1>
+    <p> Updated ( 2020-12-29 / 2022-01-30 )</p>
+    <p class="sitenav"> <a href="../index.html">MySite></a>
+        <a href="../index.html"> Web Browser APIs> </a> Cache API
+    </p>
+<table class="table">
+<caption> <mark>CacheStorage</mark> API (holds multiple caches for the same origin) 
+    <span class="browserSupport" title="updated : 2021-01-04">
+        <span><i class="fab fa-chrome"></i> 43 </span>
+        <span><i class="fab fa-firefox"></i> 44 </span>
+        <span><i class="fab fa-opera"></i> 27 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+        <span><i class="fab fa-safari"></i> 11.1 </span>
+    </span> <br>
+        Secure Context Required : 
+    <span class="browserSupport" title="updated : 2021-01-04">
+        <span><i class="fab fa-chrome"></i> 65 </span>
+        <span><i class="fab fa-firefox"></i> 44 </span>
+        <span><i class="fab fa-opera"></i> 52 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+        <span><i class="fab fa-safari"></i> 11.1 </span>
+    </span>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> caches </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a <strong>cacheStorage</strong> object that provides access to <u>all caches (<strong>cache</strong> objects) on this origin</u> (available in all scopes (<mark>window</mark>, workers, etc...)) <br>
+            - <strong>cache</strong> objects are referenced by <strong>cacheKey</strong>s in the cacheStorage
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 43 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>cacheStorage</strong>.delete(<strong>cacheKey:str</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> - deletes a cache from the <strong>cacheStorage</strong> referenced by the passed <strong>cacheKey</strong> <br>
+            - returns a promise that resolves to <mark>true</mark> on successful delete, <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>cacheStorage</strong>.has(<strong>cacheKey:str</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that resolves to <mark>true</mark> if the passed <strong>cacheKey</strong> exist in the <strong>cacheStorage</strong>, <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>cacheStorage</strong>.keys() </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that resolves to an Array containing all <strong>cacheKey</strong>s in the <strong>cacheStorage</strong>
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td>  
+            <strong>cacheStorage</strong>.match(<strong>url:str|req:obj</strong>, <i class="openable">option:obj<div>
+                <p> ignoreSearch: <strong>bol</strong> - ignore the query string part in the URL when performing the search (Default: <mark>false</mark>) </p>
+                <p> ignoreMethod: <strong>bol</strong> - when <mark>true</mark> prevents matching operations from validating the <strong>req</strong> HTTP method (Default: <mark>false</mark>) </p>
+                <p> ignoreVary: <strong>bol</strong> - when <mark>true</mark> the matching operation do not perform <mark>Vary</mark> header matching (Default: <mark>false</mark>) </p>
+            </div></i>)  
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that is resolved to the <u>first found</u> <strong>res</strong> (response) paired with the passed <strong>url|req</strong> <br>
+            - performs a seach <u>in all <strong>cache</strong>s</u> in the <strong>cacheStorage</strong> (convenience method, same as running <mark>match()</mark> on <u>all</u> <strong>cache</strong>s held by the <strong>cacheStorage</strong>)
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 40 / 54 <mark>ignoreMethod</mark> and <mark>ignoreVary</mark> search options </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 27 / 41 <mark>ignoreMethod</mark> and <mark>ignoreVary</mark> search options </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>cacheStorage</strong>.open(<strong>cacheKey:str</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that resolves to a <strong>cache</strong> object which is referenced by the <strong>cacheKey</strong> <br>
+            - if the <strong>cacheKey</strong> doesn't exist in the <strong>cacheStorage</strong> a new <strong>cache</strong> object is created with that <strong>cacheKey</strong>
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> <mark>Cache</mark> API (a cache storing files) 
+    <span class="browserSupport" title="updated : 2021-01-04">
+        <span><i class="fab fa-chrome"></i> 40 only in service worker / 43 </span>
+        <span><i class="fab fa-firefox"></i> 39 </span>
+        <span><i class="fab fa-opera"></i> 27 only in Service Worker / 30 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+        <span><i class="fab fa-safari"></i> 11.1 </span>
+    </span> 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>cache</strong> </td>
+        <td> 
+            <i class="fas fa-flask"></i> - represents a <span class="openable">browser cache storage<div>
+                <p> - contains cached files for the same origin) </p>
+            </div></span> (resolved by the <mark><strong>cacheStorage</strong>.open()</mark> promise) <br>
+            - stores (caches) <span class="openable"><strong>req</strong> (request) / <strong>res</strong> (response) object pairs<div>
+                <p> - the <strong>req</strong> (request) object targets the desired file to store </p>
+                <p> - the <strong>res</strong> (response) object holds the stored file as response </p>
+            </div></span> under the hood 
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 40 only in service worker / 43 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 27 only in Service Worker / 30 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span> 
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>cache</strong>.add(<strong>url:str|req:obj</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> - adds a new <strong class="openable">req/res<div>
+                <p> - the <strong>req</strong> (request) object targets the desired file to store </p>
+                <p> - the <strong>res</strong> (response) object <u>(internally generated)</u> holds the stored file as response </p>
+            </div></strong> object pair to the cache (overrides existing) <br>
+            - returns a promise that is rejected when the file is not found
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 44 / 46 HTTPS required </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 31 / 33 HTTPS required </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>cache</strong>.addAll([<strong>url:str|req:obj</strong><i>, ...</i>]) </td>
+        <td> 
+            <i class="fas fa-flask"></i> - adds multiple <strong class="openable">req/res<div>
+                <p> - the <strong>req</strong> (request) object targets the desired file to store </p>
+                <p> - the <strong>res</strong> (response) object <u>(internally generated)</u> holds the stored file as response </p>
+            </div></strong> object pairs to the cache (overrides existing) <br>
+            - returns a promise that is rejected when a file is not found
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 46 HTTPS required </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 33 HTTPS required </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td>  
+            <strong>cache</strong>.delete(<strong>url:str|req:obj</strong>, <i class="openable">option:obj<div>
+                <p> ignoreSearch: <strong>bol</strong> - ignore the query string part in the URL when performing the search (Default: <mark>false</mark>) </p>
+                <p> ignoreMethod: <strong>bol</strong> - when <mark>true</mark> prevents matching operations from validating the <strong>req</strong> HTTP method (Default: <mark>false</mark>) </p>
+                <p> ignoreVary: <strong>bol</strong> - when <mark>true</mark> the matching operation do not perform <mark>Vary</mark> header matching (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> - deletes the referenced <strong>req</strong> (request) from the cache <br>
+            - returns a promise that resolves to <mark>true</mark> on successful delete, <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 43 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 30 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td>  
+            <strong>cache</strong>.keys(<i class="openable">url:str|req:obj<div>
+                <p> - only the desired request is returned (requests are referenced by file paths as keys (ex: <mark>./index.html</mark>)) </p>
+            </div></i>, <i class="openable">option:obj<div>
+                <p> ignoreSearch: <strong>bol</strong> - ignore the query string part in the URL when performing the search (Default: <mark>false</mark>) </p>
+                <p> ignoreMethod: <strong>bol</strong> - when <mark>true</mark> prevents matching operations from validating the <strong>req</strong> HTTP method (Default: <mark>false</mark>) </p>
+                <p> ignoreVary: <strong>bol</strong> - when <mark>true</mark> the matching operation do not perform <mark>Vary</mark> header matching (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that resolves to an Array containing all <strong>req</strong> objects stored by the cache 
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 43 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 30 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td>  
+            <strong>cache</strong>.match(<strong>url:str|req:obj</strong>, <i class="openable">option:obj<div>
+                <p> ignoreSearch: <strong>bol</strong> - ignore the query string part in the URL when performing the search (Default: <mark>false</mark>) </p>
+                <p> ignoreMethod: <strong>bol</strong> - when <mark>true</mark> prevents matching operations from validating the <strong>req</strong> HTTP method (Default: <mark>false</mark>) </p>
+                <p> ignoreVary: <strong>bol</strong> - when <mark>true</mark> the matching operation do not perform <mark>Vary</mark> header matching (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that is resolved to the <u>first found</u> <strong>res</strong> (response) object paired with the passed <strong>url|req</strong> in the cache, resolved to <mark>undefined</mark> if no match found
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 43 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 30 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td>  
+            <strong>cache</strong>.matchAll(<i class="openable">url:str|req:obj<div>
+                <p> - if <strong>req</strong> is passed only the paired <strong>res</strong> (response) is returned <u>(all paired Responses)</u> </p>
+            </div></i>, <i class="openable">option:obj<div>
+                <p> ignoreSearch: <strong>bol</strong> - ignore the query string part in the URL when performing the search (Default: <mark>false</mark>) </p>
+                <p> ignoreMethod: <strong>bol</strong> - when <mark>true</mark> prevents matching operations from validating the <strong>req</strong> HTTP method (Default: <mark>false</mark>) </p>
+                <p> ignoreVary: <strong>bol</strong> - when <mark>true</mark> the matching operation do not perform <mark>Vary</mark> header matching (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> - returns a promise that is resolved to an Array holding <u>all</u> <strong>res</strong> (response) objects by the cache 
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 47 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 34 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>cache</strong>.put(<strong>url:str|req:obj</strong>, <strong>res</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> - adds a new <strong class="openable">req/res<div>
+                <p> - the <strong>req</strong> (request) object targets the desired file to store </p>
+                <p> - the <strong>res</strong> (response) object holds the stored file as response </p>
+            </div></strong> object pair to the cache (overrides existing) (can be used to cache an opaque <strong>res</strong> (response)) <br>
+            - returns a promise that is rejected when the file is not found <br>
+            - does the same as the <span class="openable"><mark>add()</mark> method<div>
+                <p> - the <mark>add()</mark> method internally generates the <strong>res</strong> (response) object based on the <strong>req</strong> (request) </p>
+            </div></span> but here we manually pass the <strong>res</strong> (response) object
+            <span class="browserSupport" title="updated : 2021-01-04">
+                <span><i class="fab fa-chrome"></i> 43 / 46 HTTPS required </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 30 / 33 HTTPS required </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage" target="_blank">CacheStorage API (developer.mozilla.org) </a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank">Cache API (developer.mozilla.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - files are cached per origin, this also means multiple sites within the same origin share the same cache </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the cacheStorage API allows to store (cache) files <u>for the same origin</u> (API exposed by the <mark>caches</mark> property available in all scopes) </p>
+    <p> - the cacheStorage can hold multiple caches (referenced by cache keys) </p>
+    <p> - caches hold the stored files as <mark>Request</mark>/<mark>Response</mark> object pairs </p> 
+    <p style="text-indent:30px;"> - the <mark>Request</mark> holds the requested file's path (as absolute path) </p>
+    <p style="text-indent:30px;"> - the <mark>Response</mark> holds the file's content as response body </p>
+    <p> - the cache storage space is limited by the browser and the user's disk space (developer's responsability to delete unecessary caches) </p>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - <mark>cacheStorage</mark> API </p>
+    <pre>
+&lt;script&gt;
+    var cacheStorage = window.caches;                                                  // cacheStorage (object) API 
+    
+// open() -----------------------------------------------------------------------------
+    cacheStorage.open('v1')                                                            // creates the 'v1' cache in the cacheStorage    
+        .then( cache => cache )                                                        // -> Cache          // v1 cache
+        .catch( err => err );
+        
+    cacheStorage.open('v2')                                                            // creates the 'v2' cache in the cacheStorage    
+        .then( cache => cache )                                                        // -> Cache          // v2 cache
+        .catch( err => err );
+        
+    cacheStorage.open('v1')                                                            // opens the 'v1' cache in the cacheStorage 
+        .then( cache => cache )                                                        // -> Cache          // v1 cache
+        .catch( err => err );
+    
+// keys() / has() ---------------------------------------------------------------------
+    cacheStorage.keys()                                                                // resolves to all cache keys in the cacheStorage    
+        .then( keys => keys )                                                          // -> ['v1', 'v2']
+        .catch( err => err );
+    
+    cacheStorage.has('v2')                                                             // checks if the cache key exist in the cacheStorage   
+        .then( key => key )                                                            // -> true
+        .catch( err => err );
+    
+// match() ----------------------------------------------------------------------------
+    cacheStorage.match('./index.html')                                                 // check for the './index.html' request in all caches      // find another example below 
+        .then( match => match )                                                        // -> undefined      // no such request in any cache 
+        .catch( err => err );
+    
+// delete() ---------------------------------------------------------------------------
+    cacheStorage.delete('v2')                                                          // deletes the 'v2' cache 
+        .then(del => console.log(del))                                                 // -> true           // successfully deleted 
+        .catch(err => console.log(err));
+    
+    cacheStorage.keys() 
+        .then( keys => keys )                                                          // -> ['v1']
+        .catch( err => err );
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>cache</mark> API </p>
+    <pre>
+&lt;script&gt;  
+    var resp = new Response('some response...')
+    
+    caches.open('v1')                                                                 // creates the v1 cache    
+        .then(function(cache){
+        
+// add() / addAll() / put() ----------------------------------------------------------
+            cache.add('./index.html')                                                 // adds a new request/response object pair to this cache      // -! the request object holds the './index.html' fully resolved path    
+                .catch( err =&gt; err );;                                                                                                              // -! the response object is internally generated and holds the 'index.html' file's content as response body    
+            
+            cache.addAll(['./styles.css', './script.js'])                             // does the same as add() but adds multiple request/response object pairs to this cache    
+                .catch( err =&gt; err );
+            
+            cache.put('./noFile', resp)                                               // adds a new request/response object pair to this cache      // -! the request object holds the './noFile' fully resolved path    
+                .catch( err =&gt; err );                                                   // the response object is manually passed (not internally generated)  // -! the response object is the 'resp' object    
+            
+// keys() ----------------------------------------------------------------------------
+            cache.keys()                                                              // resolves to an Array holding all Request objects by this cache    
+                .then( keys => keys )                                                 // -> [Request, Request, Request, Request]                    // ('./index.html', './styles.css', 'script.js', 'noFile') requests    
+                .catch( err =&gt; err );
+            
+// match() / matchAll() --------------------------------------------------------------
+            cache.match('./index.html')                                               // resolves to the Response object paired with the './index.html' request    
+                .then( res => res )                                                   // -> Response            // holds the 'index.html' file's content as response body    
+                .catch( err => err );
+                
+            cache.match('./noFile') 
+                .then( res => res )                                                   // -> Response            // this is actually the 'resp' Response object (paired with the 'noFile' Request object)    
+                .catch( err => err );
+                
+            cache.matchAll()                                                          // resolves to all Response objects held by this cache   
+                .then( res => res )                                                   // -> [Response, Response, Response, Response]    
+                .catch( err => err );
+            
+// delete() --------------------------------------------------------------------------
+            cache.delete('./script.js')                                               // deletes the './script.js' request/response pair from the cache    
+                .then( res => del )                                                   // -> true                // successfully deleted   
+            
+            cache.keys()
+                .then( keys => keys )                                                 // -> [Request, Request, Request]  
+                
+        }).catch(err =&gt; console.log(err))
+        
+// -----------------------------------------------------------------------------------
+// caches.match() --------------------------------------------------------------------
+    caches.open('v2')                                                                 // now we have two caches 'v1' and 'v2' (for this origin)   
+        .then(function(cache){
+            cache.add('./feature.js')
+        }).catch( err => err )
+    
+    caches.match('./feature.js')                                                      // performs a match seach in all caches (both 'v1' and 'v2')      // -! if multiple caches holds the same request only the first response is returned    
+        .then( match => match );                                                      // -> Response            // Response paired with the './feature.js' request  
+&lt;/script&gt;  
+    </pre>
+</details>
+<details class="example"> 
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> cacheStorage <mark>open()</mark> / <mark>has()</mark> / <mark>keys()</mark> / <mark>delete()</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var cacheStorage = window.caches;
+    
+// open() -----------------------------------------------------------------------------
+    cacheStorage.open('v1')
+        .then(cache =&gt; console.log(cache))                                             // Cache object (created if 'v1' not yet exist )
+        .catch(err =&gt; console.log(err));
+        
+    cacheStorage.open('v2')
+        .then(cache =&gt; console.log(cache))                                             // Cache object (created if 'v2' not yet exist )
+        .catch(err =&gt; console.log(err));
+        
+    cacheStorage.open('v3')
+        .then(cache =&gt; console.log(cache))                                             // Cache object (created if 'v3' not yet exist )
+        .catch(err =&gt; console.log(err));
+        
+    cacheStorage.open('v1')                                                            // accesses an existing cache 
+        .then(cache =&gt; console.log(cache))                                             // -&gt; Cache object 
+        .catch(err =&gt; console.log(err)); 
+    
+// keys() -----------------------------------------------------------------------------
+    cacheStorage.keys() 
+        .then(cache =&gt; console.log(cache))                                             // -&gt; ['v1', 'v2', 'v3']      // lists cache keys in the cacheStorage
+        .catch(err =&gt; console.log(err)); 
+    
+// has() ------------------------------------------------------------------------------ 
+    cacheStorage.has('v2')
+        .then(res =&gt; console.log(res))                                                 // -&gt; true
+        .catch(err =&gt; console.log(err)); 
+        
+    cacheStorage.has('v4')
+        .then(res =&gt; console.log(res))                                                 // -&gt; false
+        .catch(err =&gt; console.log(err)); 
+    
+// delete() ---------------------------------------------------------------------------
+    cacheStorage.delete('v2') 
+        .then(del =&gt; console.log(del))                                                 // -&gt; true
+        .catch(err =&gt; console.log(err)); 
+        
+    cacheStorage.delete('v4') 
+        .then(del =&gt; console.log(del))                                                 // -&gt; false                     // no such cache 
+        .catch(err =&gt; console.log(err)); 
+    
+    cacheStorage.keys() 
+        .then(cache =&gt; console.log(cache))                                             // -&gt; ['v1', 'v3']              // 'v2' cache deleted    
+        .catch(err =&gt; console.log(err)); 
+&lt;/script&gt;
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> cacheStorage <mark>match()</mark> </u></h4>
+    <pre>
+&lt;script&gt;  
+    caches.open('v1')
+        .then(function(cache){            
+            cache.add('./testFile.txt');
+            cache.add('./testFile_2.txt');
+            cache.add('./testFile_3.txt');
+        })
+        .catch(err =&gt; console.log(err));
+    
+    caches.open('v2')                                                                  // we have 2 caches 
+        .then(function(cache){            
+            cache.add('./testFile.txt');
+            cache.add('./testFile_3.txt');
+        })
+        .catch(err =&gt; console.log(err));
+    
+// ------------------------------------------------------------------------------------
+    caches.match('./testFile_3.txt')                                                   // checks for the './testFile_3.txt' request in all caches in the cacheStorage interface    
+        .then(match =&gt; console.log(match))                                             // -&gt; Response          // response paired with the './testFile_3.txt' request   
+        .catch(err =&gt; console.log(err))
+    
+    caches.match('./noFile')
+        .then(match =&gt; console.log(match))                                             // -&gt; undefined         // no such request ('./noFile') in any cache    
+        .catch(err =&gt; console.log(err))
+&lt;/script&gt;  
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> cacheStorage <mark>match()</mark> with multiple cahes holding the same request path</u></h4>
+    <p style="color:yellow;"> - careful about asynchronous race conditions! </p>
+    <pre>
+&lt;script&gt;
+    var resp_1 = new Response('response 1');
+    var resp_2 = new Response('response 2');
+    var resp_3 = new Response('response 3');
+    
+    caches.open('v1')                                                                  // because the asynchronous racing conditions the 'v1' 'v2' 'v3' order is NOT garanteed!   
+        .then(function(cache){
+            cache.put('myRequest', resp_1);
+        }).catch(err =&gt; console.log(err));
+    
+    caches.open('v2')
+        .then(function(cache){
+            cache.put('myRequest', resp_2);
+        }).catch(err =&gt; console.log(err));
+    
+    caches.open('v3')
+        .then(function(cache){
+            cache.put('myRequest', resp_3);
+        }).catch(err =&gt; console.log(err));
+    
+    
+    caches.match('myRequest')                                                          // resolves to the first found response paired with 'myRequest' in all caches 
+        .then(function(res){
+            res.text()
+                .then(body =&gt; console.log(body));                                      // -> 'response 2' 
+        })
+        .catch(err =&gt; console.log(err));
+    
+    
+    caches.keys()
+        .then(key =&gt; console.log(key))                                                 // -> ['v2', 'v3', 'v1']     // -! here is the cache order    
+&lt;/script&gt;
+    </pre>    
+<hr>
+<!--------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> cache <mark>add()</mark> / <mark>addAll()</mark> / <mark>delete()</mark> / <mark>keys()</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var reqObj = new Request('./styles.css');
+    var reqObj_2 = new Request('./styles.css');
+    
+// add() ------------------------------------------------------------------------------
+    caches.open('v1')
+        .then(function(cache){
+            cache.add('../index.html')
+                .catch(err =&gt; console.log(err));                
+            cache.add(reqObj)
+                .catch(err =&gt; console.log(err));                
+                
+            cache.keys()
+                .then(keys =&gt; console.log(keys))                                       // -&gt; [Request, Request]    // cached request objects in this cache ('v1')    
+                .catch(err =&gt; console.log(err));
+        })
+        .catch(err =&gt; console.log(err));
+        
+// addAll() ---------------------------------------------------------------------------
+    caches.open('v2')
+        .then(function(cache){
+            cache.addAll(['./index.html', reqObj_2, '../index.html', '../../index.html'])
+                .catch(err =&gt; console.log(err));
+                
+  // keys() ------------------------------------
+            cache.keys()
+                .then(keys =&gt; console.log(keys))                                       // -&gt; [Request, Request, Request, Request]    // cached request objects in this cache ('v2')    
+                .catch(err =&gt; console.log(err));
+                
+            cache.keys('./index.html')
+                .then(keys =&gt; console.log(keys))                                       // -&gt; [Request]     // only the desired key is returned 
+                .catch(err =&gt; console.log(err));
+            
+        })
+        .catch(err =&gt; console.log(err));
+        
+// delete() ---------------------------------------------------------------------------
+    caches.open('v2')
+        .then(function(cache){
+            cache.delete('./styles.css')
+                .then(del =&gt; console.log(del))                                         // -&gt; true          // request deleted from the cache 
+                .catch(err =&gt; console.log(err))
+            
+            cache.delete('./noFile.css')
+                .then(del =&gt; console.log(del))                                         // -&gt; false         // no such request in the cache  
+                .catch(err =&gt; console.log(err))
+            
+            cache.keys()
+                .then(keys =&gt; console.log(keys))
+                .catch(err =&gt; console.log(err))
+        })
+        .catch(err =&gt; console.log(err))
+&lt;/script&gt;
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> cache <mark>add()</mark> VS <mark>put()</mark> TEST </u></h4>    
+    <pre>
+&lt;script&gt;  
+    var resp = new Response('some response');
+    
+    caches.open('v2')
+        .then(function(cache){            
+            cache.add('./testFile.txt');                                               // generates the Response object internally (basec on the passed request)  
+            cache.put('./testFile_2.txt', resp);                                       // the response object is manualy passed here 
+            
+            cache.keys()
+                .then(keys =&gt; console.log(keys))                                       // -> [Request, Request]  
+                .catch(err =&gt; console.log(err));
+            
+            cache.matchAll()
+                .then(match => console.log(match))                                     // -> [Response, Response]       // the first Response is internally generated by the add() method   
+                .catch(err =&gt; console.log(err));                                                                        // the second Response is added manually by the put() method (is the 'resp' Response object)   
+        })
+        .catch(err =&gt; console.log(err));
+&lt;/script&gt;  
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> cache <mark>match()</mark> VS <mark>matchAll()</mark> TEST </u></h4>    
+    <pre>
+&lt;script&gt;  
+    caches.open('v2')
+        .then(function(cache){            
+            cache.add('./testFile.txt');
+            cache.add('./testFile_2.txt');
+            cache.add('./testFile_3.txt');
+            
+            cache.match('./testFile_2.txt')
+                .then(match =&gt; console.log(match))                                     // -&gt; Response                          // returns the Response object paired with the './testFile_2.txt' request 
+                .catch(err =&gt; console.log(err));            
+            
+            cache.matchAll()
+                .then(match =&gt; console.log(match))                                     // -&gt; [Response, Response, Response]    // returns all Response object stored by the cache 
+                .catch(err =&gt; console.log(err));
+        })
+        .catch(err =&gt; console.log(err));
+&lt;/script&gt;      
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

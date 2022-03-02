@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> HTTP </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> HTTP (ver 3.4.1) </h1>
+    <p> Updated ( 2020-04-16 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> HTTP   
+    </p>
+    <pre class="syntax">
+    <span style="color:deepskyblue;">------- incomming traffic -------> </span>
+    
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> http.ClientRequest
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> net.Server <span style="color:deepskyblue;">-></span> http.Server
+    </pre>
+    <p class="subSite"><a href="HTTP Client/index.html"> HTTP Client (ClientRequest object) (Agent object)> </a></p>
+    <p class="subSite"><a href="HTTP Server/index.html"> HTTP Server (Server object) (ServerResponse object) (IncomingMessage object)> </a></p>
+<table class="table">
+    <tr>
+        <th style="width:30%"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.maxHeaderSize </td>
+        <td> 
+            - returns the maximum allowed http header size in bytes (Default: 16384) (getter only) <br>
+            - can be overridden with the <mark>--max-http-header-size</mark> CLI option or by a http client or server <mark>maxHeaderSize</mark> option
+            <span class="browserSupport" title="updated : 2020-04-28">
+                <span><i class="fab fa-node-js"></i> 11.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.METHODS </td>
+        <td> list all supported HTTP methods by the http module parser
+            <span class="browserSupport" title="updated : 2020-04-28">
+                <span><i class="fab fa-node-js"></i> 0.11.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.STATUS_CODES </td>
+        <td> lists standard HTTP response status codes
+            <span class="browserSupport" title="updated : 2020-04-28">
+                <span><i class="fab fa-node-js"></i> 0.1.22 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> HTTP Client (ClientRequest object) </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http</strong>.get(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)        
+                <br>
+            <strong>http</strong>.get(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>                   
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously issues a GET request to the specified host <br>
+            - return a clientRequest object which is a writable stream, <u>the <mark>end()</mark> method is automatically called on it</u> <br> 
+            - it does the same as the <mark>request()</mark> method with 2 differences (1) issues a GET request) (2) the <mark>end()</mark> method is automatically called on the returend clientRequest object)
+            <span class="browserSupport" title="updated : 2020-05-06">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span> 
+                <span><i class="fab fa-node-js"></i> 7.5.0 WHATWG parameter </span>
+                <span><i class="fab fa-node-js"></i> 13.3.0 maxHeaderSize </span>
+                <span><i class="fab fa-node-js"></i> 13.8.0 insecureHTTPParser </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.request(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)  
+                <br>
+            <strong>http</strong>.request(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>                   
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously issues a request to the specified host <br>
+            - return a clientRequest object which is a writable stream, <u>it must be written at least with the <mark>end()</mark> method in order to issue the request</u> 
+            <span class="browserSupport" title="updated : 2020-05-06">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span> 
+                <span><i class="fab fa-node-js"></i> 7.5.0 WHATWG parameter </span>
+                <span><i class="fab fa-node-js"></i> 13.3.0 maxHeaderSize </span>
+                <span><i class="fab fa-node-js"></i> 13.8.0 insecureHTTPParser </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong> </td>
+        <td> represents an in-progress request whose headers has already been queued (headers are still mutable) extends the <mark>Stream</mark> class </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.abort() </td>
+        <td> <u>[Deprecated since node v.14.0.1 use <mark>destroy()</mark> instead]</u> aborts the request (destroys the socket and drops the remaining data)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.aborted </td>
+        <td> retrns <mark>true</mark> if the request is aborted (when the <mark>abort()</mark> method has been called), otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+                <span><i class="fab fa-node-js"></i> 11.0.0 no longer timestamp </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.connection </td>
+        <td> <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.destroy(<i class="openable">err:obj<div>
+                <p> - throws this error object on error event </p>
+            </div></i>, <i>fn</i>) </td>
+        <td> destorys the request and emits the <mark>error</mark> then the <mark>close</mark> events (drops the remaining data) <a href="../Stream/Writable Streams/index.html#destroy" target="blank_">(Stream method)</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.destroyed </td>
+        <td> eturns <mark>true</mark> if the <mark>destroy()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 14.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.end(<i>chunk:any, encode:str, fn</i>) </td>
+        <td> 
+            - finishes sending the request (optionally sends a last data chunk to the message body) <a href="../Stream/Writable Streams/index.html#end" target="blank_">(Stream method)</a> <br>
+            - callback called when the request stream is finished <br>
+            - returns this <strong>clientReq</strong> object
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 returns this clientRequest object </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.finished </td>
+        <td> <u>[Deprecated since node v.12.16.1 / 13.4.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.0.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.flushHeaders() </td>
+        <td> flushes (already set) request headers to the underlying kernel buffer (sends the message header to the server)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.getHeader(<strong>headName:str</strong>) </td>
+        <td> returns the specified request header value
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.maxHeadersCount </td>
+        <td> gets or sets the maximum number of <u>response headers</u> received from the server (Defalut: <mark>2000</mark>)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.path </td>
+        <td> returns the request URL path in a string
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.removeHeader(<strong>headerName:str</strong>) </td>
+        <td> removes the specified header from the request
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.reusedSocket </td>
+        <td> returns <mark>true</mark> if the underlying socket has already been used by another request, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 12.16.0 </span>
+                <span><i class="fab fa-node-js"></i> 13.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string!</u> </p>
+                <p> - if a header has multiple values whe can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'language=javascript']</mark>) </p>
+            </div></strong>) </td>
+        <td> sets a request header (if the header already exist its value will be reset)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setNoDealy(<strong>bol</strong>) </td>
+        <td> <u>[Internally called]</u> when a socket is assigned to this request <a href="../Net/index.html#setNoDelay" target="_blank">(<strong>socket</strong>.setNoDelay())</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setSocketKeepAlive(<i>enable:bol, initialDelay:nr</i>) </td>
+        <td> <u>[Internally called]</u> when a socket is assigned to this request and is connected <a href="../Net/index.html#setKeepAlive" target="_blank">(<strong>socket</strong>.setKeepAlive()</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setTimeout(<strong>timeout:nr</strong>, <i>fn</i>) </td>
+        <td> <u>[Internally called]</u> when a socket is assigned to this request and is connected <a href="../Net/index.html#setTimeout" target="_blank">(<strong>socket</strong>.setTimeout())</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.socket </td>
+        <td> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.wiritableEnded </td>
+        <td> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.writableFinished </td>
+        <td> returns <mark>true</mark> if the data has been flushed to the underlying kernel buffer, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 12.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.write(<strong>chunk:any</strong><i>, encode:str, fn(err)</i>) </td>
+        <td> 
+            - streams a data chunk to the request message body <a href="../Stream/Writable Streams/index.html#write" target="blank_">(Stream method)</a> <br>
+            - if called multiple time the <mark>Transfer-Encoding: chunk</mark> header is suggested <br>
+            - returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again) <br>
+            - callback called when the data chunk is successfully flushed to the kernel buffer
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('abort', <strong>fn</strong>) </td>
+        <td> emitted when the <mark>abort()</mark> method is called on the client
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.4.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('connect', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - this suppose to be the incomming http message but it does not appear to have any functionality here because the client and the server are communicating through the socket [TESTE: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the server what is responded to the <mark>CONNECT</mark> request </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong></strong>) 
+        </td>
+        <td> 
+            - emitted each time when this client receives a response to a previously issued <mark>CONNECT</mark> request (from a proxy server) <br>
+            - the client communicates with the server through the <strong>socket</strong> argument (which is the tunnel between the client and the server) <br>
+            - if this event is not listened the connection is dropped
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('continue', <strong>fn</strong>) </td>
+        <td> 
+            - emitted when the client receives a <mark>100 Continue</mark> status response <br>
+            - the issued request should contain the <mark>Expect: 100-continue</mark> header
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('information', <strong>fn(<strong class="openable">info:obj<div>
+                <p> httpVersion: <strong>str</strong> </p>
+                <p> httpVersionMajor: <strong>nr</strong> </p>
+                <p> httpVersionMinor: <strong>nr</strong> </p>
+                <p> statusCode: <strong>nr</strong> </p>
+                <p> statusMessage: <strong>str</strong> </p>
+                <p> headers: <strong>obj</strong> </p>
+                <p> rawHeaders: <strong>arr</strong> </p>
+            </div></strong>)</strong>) 
+        </td>
+        <td> emitted when the client receives a <mark>1**</mark> status code response <u>(<mark>101 Upgrade</mark> excluded)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('response', <strong>fn(incMsg)</strong>) </td>
+        <td> emitted each time the client receives a response from the server
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('socket', <strong>fn(socket)</strong>) </td>
+        <td> emitted when the underlying socket is created (or the request is assigned to a socket)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('timeout', <strong>fn</strong>) </td>
+        <td> 
+            - emitted after the set timeout on the client (<mark><strong>http</strong>.request({timeout:2000})</mark>) <br>
+            - does not have any effect on the connection <u>(does not drop the connection or destory the socket)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.7.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('upgrade', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - this suppose to be the incomming http message but it does not appear to have any functionality here because the client and the server are communicating through the socket [TESTE: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the server what is responded to the <mark>CONNECT</mark> request </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>) 
+        </td>
+        <td> 
+            - emitted each time when this client receives a (<mark>101 Switcing Protocols</mark>) response to a previously issued "Upgrade" request (response should contain the <mark>Connection: Upgrade</mark> and <mark>Upgrade: *</mark> headers) <br>
+            - the client communicates with the server through the <strong>socket</strong> argument (which is the tunnel between the client and the server) <br>
+            - if this event is not listened the "Upgrade" connection is dropped <u>(the client cannot insist on protocol upgrade)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.94 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Agent Object</caption>
+    <tr>
+        <th style="width:30%"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.globalAgent </td>
+        <td> returns the global agent which is the default agent for all HTTP client requests
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> new <strong>http</strong>.Agent(<i class="openable">options:obj<div> 
+                <p> keepAlive: <strong>bol</strong> - allows http clients to keep their connections open (live connection) (Default: <mark>false</mark>) </p>
+                <p> keepAliveMsecs: <strong>nr:ms</strong> - initial delay for TCP Keep-Alive packets (only when <mark>keepAlive:true</mark>) </p>
+                <p> maxSockets: <strong>nr</strong> - maximum number of active sockets allowed (when the agent makes the requests) (multiple http client can connect through the same socket) (Default: <mark>Infinity</mark>) </p> 
+                <p> maxFreeSockets: <strong>nr</strong> - maximum number of socket allowed in free state (connection keep-alive state) (only when <mark>keepAlive:true</mark>)(Default: <mark>256</mark>) </p>
+                <p> timeout: <strong>nr:ms</strong> - destroys open sockets after this time (only when <mark>keepAlive:true</mark>) (Default: <mark>0</mark> = no timeout)</p>
+            </div></i>) 
+        </td>
+        <td> 
+            - the returned agent instance manages the connections for its HTTP clients <br>
+            - deals with pending requests, live connections, destroys|reuse sockets <br>
+             - when the agent is set to keep-alive its HTTP clients connections, the <mark>Connection: Keep-Alive</mark> header is automatically sent in the client's request header
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.createConnection(<strong>port:nr</strong>, <i class="openable">host:str<div>
+                <p> - Default <mark>'localhost'</mark> </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener function (fired on successful connection) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - synchronously returns a <strong>socket</strong> object, then asynchronously initiates the connection with <mark><strong>socket</strong>.connect()</mark> internally <br>
+            - on successful connection returns a <strong>socket</strong> object again which keeps the process alive (this socket started the actual connection) <br>
+            - this method is the same as <mark><strong>net</strong>.createConnection()</mark> and <mark><strong>net</strong>.connect()</mark>
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.destroy() </td>
+        <td> immediately destroys all of the agent's sockets (active and free sockets alike)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.freeSockets </td>
+        <td> returns an object with the agent's unused sockets (agent 'keep-alive' socket pool)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.getName(<strong class="openable">options:obj<div>
+                <p> host: <strong>str</strong> - domain name or IP of the server to issue the request to (Default: <mark>'localhost'</mark>) </p>
+                <p> port: <strong>nr</strong> - remote server port </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> family: 4|6 - ip version </p>
+            </div></strong>)
+        </td> 
+        <td> returns a unique string based on the passed request options
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.keepSocketAlive(<strong>socket</strong>) </td>
+        <td> <u>[Internally called]</u> when the socket is detached from the request and can be persisted (keep-alive connection) (same as <mark><strong>socket</strong>.unref()</mark>)  
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.maxFreeSockets </td>
+        <td> gets or sets how many unused (keep-alive) sockets the agent allowed have
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.maxSockets </td>
+        <td> gets or sets how many active sockets the agent is allowed to open at the same time (active socket = traffic going through)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.requests </td>
+        <td> returns an object which contains a queue of <strong>clientRequest</strong> objects what are not yet been assigned to sockets
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.reuseSocket(<strong>socket</strong>, <strong>clientReq</strong>) </td>
+        <td> <u>[Internally called]</u> when the socket is attached to a request after being persisted (keep-alive connection) (same as <mark><strong>socket</strong>.ref()</mark>)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.sockets </td>
+        <td> returns an object which contains sockets currently used by the agent (active sockets)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table" id="server">
+<caption> HTTP Server (Server object) </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>http</strong>.createServer(<i class="openable">option:obj<div>
+            <p> IncomingMessage: <strong>obj</strong> - specifies the IncomingMessage class to be used (Default: <mark>IncomingMessage</mark>) </p>
+            <p> ServerResponse: <strong>obj</strong> - specifies the ServerResponse class to be used (Default: <mark>ServerResponse</mark>) </p>
+            <p> insecureHTTPParser: <strong>bol</strong> - invalid HTTP parser used which accept invalid HTTP headers (Default: <mark>false</mark>) <u style="color:orangered;"> [TESTED: 2020-04-29] not working! custom headers can be passed with or without this option to be switched!</u> </p> 
+            <p> maxHeaderSize: <strong>nr</strong> - allowed maximum request header size in bytes (Default: <mark>16384</mark>) <u>(Overrides the <mark>--max-http-header-size</mark> CLI option) </u></p>
+            </div></i>, <i class="openable">fn(incMsg, srvResp)<div>
+                <p> - <mark>request</mark> listener callback </p>
+            </div></i>) 
+        </td>
+        <td> creates and returns an HTTP server (object), the returned httpServer object is extension of <mark>EventEmitter</mark> and <mark>net.Server</mark> classes
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.13 </span>
+                <span><i class="fab fa-node-js"></i> 8.12.0 option argument </span>
+                <span><i class="fab fa-node-js"></i> 13.3.0 maxHeaderSize option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.close(<i>fn(err)</i>) </td>
+        <td> 
+            - asynchronously stops the server listening for new connections <u>(keeps pending connections)</u> <br>
+            - the server is finally closed when all connections are ended <br>
+            - when the server is closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback argument throws if this method is called on a closed server) <br>
+            - returns this <strong>httpSrv</strong> object
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.headersTimeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the parser waits to receive the complete message headers (Default: <mark>60000</mark> / <mark>0</mark> = infinity) <br>
+            - timer starts from the first recieved byte till the end of the message header <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 10.14.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.keepAliveTimeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event for <span class="openable">requested 'keep-alive' connections<div>
+                <p> - for normal connections the server drops the connection after responding with the <mark>end()</mark> method </p>
+                <p> - if the client requests a keep-alive connection (client Agent has the <mark>keepAlive</mark> set) the server <u>doesn't drop the connection after responding with the <mark>end()</mark> method</u> </p> 
+                <p> - this timer kicks-in once the server responded with the <mark>end()</mark> method to a keep-alive request </p> 
+                <p> - if the server receives new data from the client before this timeout expires the <mark>timeout</mark> and <mark>setTimeout()</mark> rules apply! </p>
+            </div></span> (Default: <mark>5000</mark> / <mark>0</mark> = infinity) <br>
+            - counter starts after the server responds to a keep-alive request with <u>the <mark>end()</mark> method</u> <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>            
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv</strong>.listen(<i>port:nr, host:str,</i> <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn(srvResp)<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>) <br>
+            <strong>httpSrv</strong>.listen({port:<strong>nr</strong>, host:<strong>srt</strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>}, <i class="openable">fn(srvResp)<div>  
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously starts the server listening for connections <br>
+            - makes the server emit the <mark>listening</mark> event (if the server is successfully started) <br>
+            - can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method <br>
+            - returns this <strong>httpSrv</strong> object
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.listening </td>
+        <td> returns <mark>true</mark> if the server is listening for connections, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 5.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.maxHeadersCount </td>
+        <td> number of request headers parsed by the parser (Default: <mark>2000</mark>)
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv</strong>.setTimeout(<i class="openable">nr:ms, fn(socket)<div>
+                <p> - <i>nr:mr</i> - set timeout (Default: <mark>120000</mark>) </p>
+                <p> - <i>fn(socket)</i> <mark>timeout</mark> event's callback function (the <mark>socket</mark> argument references the timed out socket </p> 
+            </div></i>)        
+        </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default timeout: <mark>0</mark> / <mark>0</mark> = infinity) <br>
+            - counter reset each time the server receives a new data from the client <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event (which is the 2nd argument) is not listened the connection is dropped)</u>            
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv</strong>.timeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default: <mark>0</mark> / <mark>0</mark> = infinity) <br>
+            - counter reset each time the server receives a new data from the client <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>            
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+                <span><i class="fab fa-node-js"></i> 13.0.0 (Default: <mark>2000</mark> (before was <mark>0</mark>)) </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('checkContinue', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> 
+            - emitted each time the server receives a message with the <mark>Expect: 100-continue</mark> header (<mark>request</mark> event not emitted) <br>
+            - to respond this request use the <mark><strong>srvResp</strong>.writeContine()</mark> method or generate a <mark>400 Bad Request</mark> response <br>
+            - if this event is not listened for the server automatically responds with a <mark>100 Continue</mark> message  
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('checkExpectation', <strong>fn(incMsg, srvResp</strong>) </td>
+        <td> 
+            - emitted each time the server receives a message with the <mark>Expect: *</mark> header <u>(<mark>100-continue</mark> value excluded)</u> (<mark>request</mark> event not emitted) <br>
+            - if this event is not listened for the server automatically responds with a <mark>417 Expectation Failed</mark> message
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 5.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when server closes (all server connections are closed)
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('clientError', <strong>fn(err, socket)</strong>) </td>
+        <td> 
+            - emitted when the client connection emits an error, the emitted error is forwarded here <br>
+            - if this event is emitted the server should close the connection with the <mark>HTTP/1.1 400 Bad Request</mark> status response through the <strong>socket</strong>
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.94 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv.listener</strong>('connect', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - in the Node documentation it says that it is the <mark>request</mark> events incomingMessage argument but in this listener it does not appear to have any function since the client and the server are communicating through the socket! [TESTED: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the requested client </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)
+        </td>
+        <td> 
+            - emitted when the (proxy) server receives a <mark>CONNECT</mark> request <br>
+            - the server communicates with the client through the <strong>socket</strong> argument (which is the tunnel between the server and the client) <br>
+            - if this event is not listened the connection is dropped   
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('connection', <strong>fn(socket)</strong>) </td>
+        <td> emitted when a new TCP stream is estabilished
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>httpSrv.listener</strong>('request', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> emitted each time the server receives a request
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td id="timeout">  
+            <strong>httpSrv.listener</strong>('timeout', <strong>fn(<strong class="openable">socket<div>
+                <p> - the timed out socket </p>
+            </div></strong>)</strong>)
+        </td>
+        <td> 
+            - emitted when the server timeout value expires (see <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>keepAliveTimeout</mark> / <mark>headersTimeout</mark> ) <br>
+            - if this event is not listened the the server drops the keep-alive connection <br>
+            - if this event is listened the server does not close keep-alive connections   
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>httpSrv.listener</strong>('upgrade', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - in the Node documentation it says that it is the <mark>request</mark> events incomingMessage argument but in this listener it does not appear to have any function since the client and the server are communicating through the socket! [TESTED: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the requested client </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)</strong>)
+        </td>
+        <td> 
+            - emitted each time when the server receives an upgrade request <u>(request with the <mark>Connection: Upgrade</mark> and <mark>Upgrade: *</mark> headers)</u> <br>
+            - the server communicates with the client through the <strong>socket</strong> argument (which is the tunnel between the server and the client)
+            <span class="browserSupport" title="updated : 2020-05-21">
+                <span><i class="fab fa-node-js"></i> 0.1.94 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 if not listened the socket is not destroyed </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> ServerResponse object </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong> </td>
+        <td> created internally by the httpServer object on request, it represents the server response (writable stream) </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.addTrailers(<strong class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1':'val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - adds http trailers to the message (headers but at the end of the message) (trailers are supported only by chunked http protocols <mark>HTTP/1.1</mark> and <mark>HTTP/2</mark>) <br>
+            - the <mark>Trailer</mark> header is required which specifies the trailing keys (ex: <mark>Trailer: [trailKey1, trailkey2]</mark>) <br>
+            - must be sent after the message body (otherwise it's silently discarded)  
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.connection </td>
+        <td> <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.cork() </td>
+        <td> 
+            - data written to the stream after this method are stored in the stream buffer memory <a href="../../Stream/Writable Streams/index.html#cork" target="_blank">(Stream method)</a> <br>
+            - data is kept in the memory until eighter the <mark>uncork()</mark> or the <mark>end()</mark> method flushes it to the underlying kernel buffer 
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.end(<strong>chunk:str|buf</strong><i>, encode:str, fn</i>) </td>
+        <td> 
+            - finishes sending the response (optionally sends a last data chunk to the message body) <a href="../../Stream/Writable Streams/index.html#end" target="_blank">(Stream method)</a> <br>
+            - callback called when the response stream is finished <br>
+            - returns this <strong>srvResp</strong> object
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 returns this srvResp object </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.finished </td>
+        <td> <u>[Deprecated since node v.12.16.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.flushHeaders() </td>
+        <td> flushes (already set) request headers to the underlying kernel buffer (sends the message headers to the client)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.getHeader(<strong>headerName:str</strong>) </td>
+        <td> returns the specified response header value
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.getHeaderNames() </td>
+        <td> returns an array which contains all outgoing header keys (lowercased)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 7.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.getHeaders() </td>
+        <td> returns an object which contains a shallow copy of the outgoing headers (key, value) (object has no prototype)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 7.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.hasHeader(<strong>headerName:str</strong>) </td>
+        <td> returns <mark>ture</mark> if the specified header key exist in the outgoing header, otherwise returns <mark>false</mark> (case-insensitive)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 7.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.headersSent </td>
+        <td> returns <mark>true</mark> if the headers are sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.9.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.removeHeader(<strong>headerName:str</strong>) </td>
+        <td> removes the specified header from the outgoing message header (case-insensitive)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.sendDate </td>
+        <td> automatically sets the date header in the response (Default: <mark>true</mark>)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.7.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string</u></p>
+                <p> - if the header has multiple values we can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'langugage=javascript']</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> sets a response header (if the header already exist its value will be reset)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn(socket)<div>
+                <p> - <mark>timeout</mark> listener on this <strong>srvResp</strong> object, (not on the underlying socket! This means is not triggered when the socket or server times out!) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a timer (timeout) on the underlying socket (for 'keep-alive' connections) <br>
+            - on timer expiration the socket and this <strong>httpSrv</strong> object emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened <mark style="background-color:yellow;">on this <strong>httpSrv</strong> object</mark> the connection is dropped)</u> <a href="#timeout" target="_blank">(server timeout event)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.9.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.socket </td>
+        <td> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.statusCode </td>
+        <td> gets or sets the response status code (Default: <mark>200</mark>)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.statusMessage </td>
+        <td> gets or sets the response status message (if not set the standard message is used with the status code)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.uncork() </td>
+        <td> flushes all data from the stream buffer to the underlying kernel buffer since the <mark>cork()</mark> method <a href="../../Stream/Writable Streams/index.html#uncork" target="_blank">(Stream method)</a> (must be called the number of times the <mark>cork()</mark> was called)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writableEnded </td>
+        <td> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writableFinished </td>
+        <td> returns <mark>true</mark> if the data has been flushed to the underlying kernel buffer, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 12.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.write(<strong>chunk:str|buf</strong><i>, encode:str, fn(err)</i>) </td>
+        <td> 
+            - streams a data chunk to the response message body <a href="../../Stream/Writable Streams/index.html#write" target="_blank">(Stream method)</a> <br>
+            - returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again) <br>
+            - callback called when the data chunk is successfully flushed to the kernel buffer
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writeContinue() </td>
+        <td> sends a <mark>HTTP/1.1 100 Continue</mark> status message to the client (indicates that the client should send the body) (used in with the <mark>checkContinue</mark> event)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>srvResp</strong>.writeHead(<strong>stCode:nr</strong><i>, stMsg:str, <i class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1': val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></i></i>)
+        </td>
+        <td> 
+            - sets the message header <u>and sends</u> it to the remote client (header cannon be modified after this) (must be called before the <mark>write()</mark> and <mark>end()</mark> methods) <br>
+            - returns this <strong>srvResp</strong> object
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.30 </span>
+                <span><i class="fab fa-node-js"></i> 11.10.0 returns thie srvResp object </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp</strong>.writeProcessing() </td>
+        <td> sends a <mark>HTTP/1.1 102 Processing</mark> status message to the client
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp.listener</strong>('close', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> emitted when the connection is terminated
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>srvResp.listener</strong>('finish', <strong>fn(incMsg, srvResp)</strong>) </td>
+        <td> emitted when all response data is flushed to the underlying system
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> IncommingMessage Object </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong> </td>
+        <td> created internally by both the server and the client, it represents their incoming message (readable stream) </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.aborted </td>
+        <td> returns <mark>true</mark> if the <u>client request</u> is aborted, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 10.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.complete </td>
+        <td> returns <mark>true</mark> if the complete message is received and successfully parsed, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.destroy(<i>err:obj</i>) </td>
+        <td> 
+            - destroys the underlying socket <br>
+            - if an error object is provided (as argument) the <mark>error</mark> event is emitted on the socket and on the client|server (the passed error object is received by the error listener)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.headers </td>
+        <td> returns the received client|server headers in a http header object (ex : <mark>{'header1':'val1', 'header2':'val2'}</mark>)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.httpVersion </td>
+        <td> returns the http protocol version (<u>on server side</u> http version sent by the client) (<u>on client side</u> http version connected to the server)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.method </td>
+        <td> returns the request method in a string (on server side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.rawHeaders </td>
+        <td> returns the received raw client|server headers (exactly as the message header was received) in an Array
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.rawTrailers </td>
+        <td> returns the received raw trailers (exactly as the message header was received) in an Array <u>(only populated at the <strong>clientReq</strong>.on(<mark>'end'</mark>) event)</u>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>incMsg</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn(socket)<div>
+                <p> - <mark>timeout</mark> listener on this <mark>incMsg</mark> object, (not on the underlying socket! This means it's not triggered when the socket or the client|server emits the timeout event!) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a timer (timeout) on the underlying socket (for 'keep-alive' connections) <br>
+            - on timer expiration the socket and this <strong>httpClient|httpSrv</strong> object emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened <mark style="background-color:yellow;">on this <strong>httpClient|httpSrv</strong> object</mark> the connection is dropped)</u> <a href="HTTP Server/index.html#timeout" target="_blank">(server timeout event)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.socket </td>
+        <td> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.statusCode </td>
+        <td> returns the response status code (on client side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.statusMessage </td>
+        <td> returns the response status message (in a string) (on client side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.trailers </td>
+        <td> returns the received trailers in a http header object (ex : <mark>{'header1':'val1', 'header2':'val2'}</mark>) <u>(only populated at the <strong>clientReq</strong>.on(<mark>'end'</mark>) event)</u>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg</strong>.url </td>
+        <td> returns the request url in a string (on server side)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('aborted', <strong>fn</strong>) </td>
+        <td> emitted when the client aborts the request (supported on both client and server sides)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.3.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the connection is closed (supported on both client and server sides)
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> 0.4.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('data', <strong>fn(chunk)</strong>) </td>
+        <td> attaching this listener will switches the stream into flowing readable mode <a href="../Stream/index.html#data" target="_blank">(Stream Method)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>incMsg.listener</strong>('end', <strong>fn</strong>) </td>
+        <td> emitted when all available data is consumed from the stream <a href="../Stream/index.html#end" target="_blank">(Stream Method)</a>
+            <span class="browserSupport" title="updated : 2020-05-25">
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v13.x/docs/api/http.html" target="_blank">HTTP module (Node.js) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - Client keep-alive request = Agent has the <mark>keepAlive</mark> option set, the client request the server NOT to close the connection after the server has been responded with the <mark>end()</mark> method </p>
+    <p> - <mark>timeout</mark> and <mark>setTimeout()</mark> = starts timeout after the server recieves a request (Default: <mark>0</mark> (timer disabled)) </p>
+    <p> - <mark>keepAliveTimeout</mark> = starts timeout after the server sends a response with the <mark>end()</mark> method <u style="color:yellow">to keep-alive requests</u> (Default: <mark>5000</mark> (5 seconds))</p>
+    <p> - <mark>headersTimeout</mark> = starts timeout after the server receives the first byte (Default: <mark>60000</mark> (1 minute)) </p>
+    <p style="color:yellow;"> - if there is NO <mark>timeout</mark> listener registered on the <mark>httpSrv</mark> object <u>the connection is dropped</u> </p> 
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>http</mark> module can be used as HTTP client or HTTP server, it's a low-level API which <u>only deals with streaming and message parsing</u> </p>
+    <p> - the parsed HTTP message header is represented by an object which keys are lowercased (but not modified), the original 'raw' header can be returned with the <mark>rawHeaders</mark> property </p>
+    <pre>
+    { 'host':'192.168.0.104', 'connection':'keep-alive' }                              // http module parsed message header  // -! keys are lowercased    
+    [ 'Host', '192.168.0.104', 'Connection', 'keep-alive' ]                            // raw header (low-level original header as received)   
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> parsed header object VS raw header TEST </u></h4>
+        <pre>
+    var http = require('http');
+    
+    var server = http.createServer(function(req, res){
+        console.log( req.headers );                                                    // returns the http parsed message header 
+        console.log( req.rawHeaders );                                                 // returns the original 'raw' message header 
+    
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/plain');
+        res.end('Node.js server Response!');
+    })
+    
+    server.listen(80, '192.168.0.104', function(err){
+        if (err) console.log( err );
+        console.log( 'Node.js server running!')
+    });
+        </pre>
+        <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/01 parsed header object VS raw header TEST$ sudo node srv
+        Node.js server running!
+        {                                                                              // headers 
+        host: '192.168.0.104',
+        connection: 'keep-alive',
+        'cache-control': 'max-age=0',
+        'save-data': 'on',
+        'upgrade-insecure-requests': '1',
+        'user-agent': 'Mozilla/5.0 (Linux; Android 10; SM-G965F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.117 Mobile Safari/537.36',
+        accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'accept-encoding': 'gzip, deflate',
+        'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,hu;q=0.6'
+        }
+        [                                                                              // rawHeader 
+        'Host',
+        '192.168.0.104',
+        'Connection',
+        'keep-alive',
+        'Cache-Control',
+        'max-age=0',
+        'Save-Data',
+        'on',
+        'Upgrade-Insecure-Requests',
+        '1',
+        'User-Agent',
+        'Mozilla/5.0 (Linux; Android 10; SM-G965F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.117 Mobile Safari/537.36',
+        'Accept',
+        'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Accept-Encoding',
+        'gzip, deflate',
+        'Accept-Language',
+        'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,hu;q=0.6'
+        ]
+        </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>METHODS</mark> / <mark>STATUS_CODES</mark> / <mark>maxHeaderSize</mark> Properties </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>http</strong>.METHODS                                                               // list all supported HTTP methods by the http module parser 
+            <strong>http</strong>.STATUS_CODES                                                          // lists standard HTTP response status codes   
+            
+            <strong>http</strong>.maxHeaderSize                                                         // returns the maximum allowed http header size in bytes (Default: 16384) (getter only)
+                                                                                          can be overridden with the <mark>--max-http-header-size</mark> CLI option or by a http client or server <mark>maxHeaderSize</mark> option    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// METHODS / STATUS_CODES -------------------------------------------------------------
+    http.METHODS;                                                                      // -> methods supported by the http module parser 
+    http.STATUS_CODES;                                                                 // -> standard HTTP status codes
+    
+// maxHeaderSize ----------------------------------------------------------------------
+    http.maxHeaderSize                                                                 // -> 16384      // Default value   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>METHODS</mark> / <mark>STATUS_CODES</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    console.log( http.METHODS );
+    console.log( http.STATUS_CODES );    
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/02 METHODS STATUS_CODES TEST$ node srv.js
+        [
+        'ACL',         'BIND',       'CHECKOUT',
+        'CONNECT',     'COPY',       'DELETE',
+        'GET',         'HEAD',       'LINK',
+        'LOCK',        'M-SEARCH',   'MERGE',
+        'MKACTIVITY',  'MKCALENDAR', 'MKCOL',
+        'MOVE',        'NOTIFY',     'OPTIONS',
+        'PATCH',       'POST',       'PROPFIND',
+        'PROPPATCH',   'PURGE',      'PUT',
+        'REBIND',      'REPORT',     'SEARCH',
+        'SOURCE',      'SUBSCRIBE',  'TRACE',
+        'UNBIND',      'UNLINK',     'UNLOCK',
+        'UNSUBSCRIBE'
+        ]
+        {
+        '100': 'Continue',
+        '101': 'Switching Protocols',
+        '102': 'Processing',
+        '103': 'Early Hints',
+        '200': 'OK',
+        '201': 'Created',
+        '202': 'Accepted',
+        '203': 'Non-Authoritative Information',
+        '204': 'No Content',
+        '205': 'Reset Content',
+        '206': 'Partial Content',
+        '207': 'Multi-Status',
+        '208': 'Already Reported',
+        '226': 'IM Used',
+        '300': 'Multiple Choices',
+        '301': 'Moved Permanently',
+        '302': 'Found',
+        '303': 'See Other',
+        '304': 'Not Modified',
+        '305': 'Use Proxy',
+        '307': 'Temporary Redirect',
+        '308': 'Permanent Redirect',
+        '400': 'Bad Request',
+        '401': 'Unauthorized',
+        '402': 'Payment Required',
+        '403': 'Forbidden',
+        '404': 'Not Found',
+        '405': 'Method Not Allowed',
+        '406': 'Not Acceptable',
+        '407': 'Proxy Authentication Required',
+        '408': 'Request Timeout',
+        '409': 'Conflict',
+        '410': 'Gone',
+        '411': 'Length Required',
+        '412': 'Precondition Failed',
+        '413': 'Payload Too Large',
+        '414': 'URI Too Long',
+        '415': 'Unsupported Media Type',
+        '416': 'Range Not Satisfiable',
+        '417': 'Expectation Failed',
+        '418': "I'm a Teapot",
+        '421': 'Misdirected Request',
+        '422': 'Unprocessable Entity',
+        '423': 'Locked',
+        '424': 'Failed Dependency',
+        '425': 'Too Early',
+        '426': 'Upgrade Required',
+        '428': 'Precondition Required',
+        '429': 'Too Many Requests',
+        '431': 'Request Header Fields Too Large',
+        '451': 'Unavailable For Legal Reasons',
+        '500': 'Internal Server Error',
+        '501': 'Not Implemented',
+        '502': 'Bad Gateway',
+        '503': 'Service Unavailable',
+        '504': 'Gateway Timeout',
+        '505': 'HTTP Version Not Supported',
+        '506': 'Variant Also Negotiates',
+        '507': 'Insufficient Storage',
+        '508': 'Loop Detected',
+        '509': 'Bandwidth Limit Exceeded',
+        '510': 'Not Extended',
+        '511': 'Network Authentication Required'
+        }
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/02 METHODS STATUS_CODES TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>maxHeaderSize</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    console.log( http.maxHeaderSize );    
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/03 maxHeaderSize TEST$ node srv
+        16384
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/03 maxHeaderSize TEST$ node --max-http-header-size 60000 srv.js     // started with option 
+        60000
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/03 maxHeaderSize TEST$    
+    </pre>
+</details>
+    
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST (empty) > </a></h2>
+</body>
+</html>

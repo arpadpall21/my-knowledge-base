@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> MySQL </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> MySQL (ver 4.0.0 ) </h1>
+    <p> Updated ( 2020-10-10 / 2022-01-31 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a> MySQL
+    </p>
+    <p class="subSite"><a href="Connection Flags/index.html"> Connection Flags > </a></p>
+    <p class="subSite"><a href="Type Casting/index.html"> Type Casting (JavaScript - MySQL data type conversion) and Escaping values with <mark>escape()</mark> and <mark>escapeId()</mark> > </a></p>
+<table class="table">
+<caption> 
+    Install Module and Creating Connection 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Command </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> <em>$</em> npm install mysql </td>
+        <td> - installs the mysql module (locally) (node v0.6 or higher required) </td>
+    </tr>
+    <tr class="10.01">
+        <td>  
+            <strong>mysql</strong>.createConnection(<strong class="openable">URL:str|<div>
+                <p style="font-size:1.5em;">SYNTAX: <mark><strong>protocol</strong>://<strong>user</strong>:<strong>password</strong>@<strong>host</strong><i>:port</i>/<strong>dataBase</strong><small>[?<i>option</i>&<i>val</i>:...]</small></mark> </p><br>
+                <p> - URL string which holds the same options as the option object in the query string </p>
+                <p> - Ex: <mark>mysql://pall:pass@localhost/testDB?multipleStatements=true</mark> </p>
+            </div></strong><strong class="openable">option:obj<div>
+                <p> host: <strong>str</strong> - hostname of the database to connect to (Default: <mark>'localhost</mark>') </p>
+                <p> port: <strong>nr</strong> - port number to connect to (Default: <mark>3306</mark>) </p>
+                <p> localAddress: <strong>str</strong> - source IP Address for TCP connections (Optional) </p>
+                <p> socketPath: <strong>path:str</strong> - Unix Domain Socket path (if specified <mark>host</mark> and <mark>port</mark> are ignored) </p>
+                <p> user: <strong>str</strong> - MySQL user to authenticate </p>
+                <p> password: <strong>str</strong> - MySQL user password </p>
+                <p> database: <strong>str</strong> - database name to connect to (Optional) </p>
+                <p> charset: <strong>str</strong> - charset for the connection (Default: <mark>'UTF8_GENERAL_CL'</mark>) </p>
+                <p> timezone: <strong>str</strong> - type cast server date/time values to JavaScript Date object <u style="color:orangered;">(date/time on the MySQL database server is consiedered UTC time)</u> (<mark>'local'</mark> = converts to local UTC time) (<mark>'Z'</mark> = leaves unchanged) (<mark>+|-<strong>HH</strong>:<strong>MM</strong></mark> = adjust local timezone) (Default: <mark>'local'</mark>) </p>
+                <p> connectTimeout: <strong>nr:ms</strong> - timeout before the connection is estabilised with the MySQL server. (Default: <mark>10000</mark>) </p>
+                <p> stringifyObjects: <strong>bol</strong> - stringifies objects instead of converting them to values (Default: <mark>false</mark>) <u>(ther's some issue with this)</u></p>
+                <p> insecureAuth: <strong>bol</strong> - allows (old) insecure authentication (apparently this doesn't work when connecting to MySQL v8 or above) </p>
+                <p> typeCast: <strong>bol</strong> - convert MySQL values to native JavaScript values (and vice versa) (Default: <mark>true</mark>) </p>
+                <p> queryFormat: <strong>fn</strong> - a custom function to format queries (<a href="https://www.npmjs.com/package/mysql#custom-format" target="_blank">Custom Format Query Function (npmjs.com)</a>)</p>
+                <p> supportBigNumbers: <strong>bol</strong> - big numbers (<mark>BIGINT</mark> and <mark>DECMAL</mark>) are returned in a JavaScript string <u>if they cannot be safely represented in JavaScript</u> (range between <mark>-2**53</mark> - <mark>2**53</mark>) (Default: <mark>false</mark>) </p>
+                <p> bigNumberStrings: <strong>bol</strong> - Enabling both this option and the <mark>supportBigNumbers</mark> option, big numbers (<mark>BIGINT</mark> and <mark>DECIMAL</mark>) are <u>always</u> returned in a JavaScript string (Default: <mark>false</mark>) <u>(Enabling this option alone doesn't do anything)</u> </p>
+                <p> dateStrings: <strong>bol</strong> - <mark>DATETIME</mark>, <mark>TIMESTAMP</mark> and <mark>DATE</mark> are returned in a JavaScript string insead of converting them to Date JavaScript object (Default: <mark>false</mark>) </p>
+                <p> debug: <strong>bol</strong> - prints protocol details on stdout (Default: <mark>false</mark>) </p>
+                <p> trace: <strong>bol</strong> - generates stack traces on Error (Default: <mark>true</mark>) </p>
+                <p> localInFile: <strong>bol</strong> - allows <mark>LOAD DATA INFILE</mark> to use <mark>LOCAL</mark> modified (Default: <mark>true</mark>) </p>
+                <p> multipleStatements: <strong>bol</strong> - allows multiple statement per query (Default: <mark>false</mark>) <u>(increases the risk of injection attacks)</u> </p>
+                <p> flags: <strong>flagList:str</strong> - connection flags <a href="Connection Flags/index.html" target="_blank">[link]</a></p>
+                <p> ssl: <strong>str|tls.createSecureContext()</strong> - ssl options can be passed as a string <a href="https://www.npmjs.com/package/mysql#ssl-options" target="_blank">[link]</a> or as a <mark>tls.createSecureContext()</mark> object </p>
+            </div></strong>)
+        </td>
+        <td> - creates and returns a <strong>connection</strong> object which defines a connection with the MySQL database server <u>(initiates the connection but does not connect)</u> </td>
+    </tr>
+    <tr class="25.01">
+        <td>  
+            <strong>connection</strong>.changeUser(<strong class="openable">option:obj<div>
+                <p> user: <strong>user:str</strong> - new MySQL user to authenticate (default to previous one) </p>
+                <p> password: <strong>passwd:str</strong> - new user password (default to previous one) </p>
+                <p> database: <strong>db:str</strong> - new database to connect to (default to previous one) </p>
+                <p> charset: <strong>str</strong> - connection charset (default to previous one) </p>
+            </div></strong>, <strong>fn(err)</strong>)
+        </td>
+        <td> - changes the user through the same connection (resets the connection state (variables, transactions, etc...)) </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>connection</strong>.connect(<i>fn(err)</i>) </td>
+        <td> - initiates (starts) the connection </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>connection</strong>.destroy() </td>
+        <td> 
+            - immediately terminates all (pending) connections by destroying the underlying socket <br>
+            - when used on a pool connection that connection is removed from the pool  
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>connection</strong>.end(<i>fn(err)</i>) </td>
+        <td> - gracefully ends the connection, waits untill all queries are finished and send the <mark>COM_QUIT</mark> packet to the server (callback called when the connection is ended) </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>connection</strong>.pause() </td>
+        <td> - pauses the connection (useful when streaming table rows (records)) </td>
+    </tr>
+    <tr class="35.02">
+        <td> <strong>connection</strong>.ping(<strong>fn(err)</strong>) </td>
+        <td> - sends a ping packet through the connection (callback executed when a ping response is received) </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>connection</strong>.release() </td>
+        <td> - releases the connection back to the pool <u>(used on pool connections in the <mark><strong>pool</strong>.getConnection(<strong>conn</strong>)</mark> callback)</u> </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>connection</strong>.resume() </td>
+        <td> - resumes the connection (useful when streaming table rows (records)) </td>
+    </tr>
+    <tr class="35.01">
+        <td> <strong>connection</strong>.threadId </td>
+        <td> - returns a live connection's ID as a number (<mark>null</mark> otherwise) </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Performing Queries 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>mysql|connection|pool</strong>.escape(<strong>val</strong>) </td>
+        <td>  
+            - <a href="Type Casting/index.html" target="_blank">escapes JavaScript values</a> in order to use them as safe SQL values in the query string 
+        </td>
+    </tr> 
+    <tr class="10.02">
+        <td>  
+            <strong>mysql|connection|pool</strong>.escapeId(<strong class="openable">val<div>
+                <p> - qualified indentifiers are also supported </p>
+                <p> Ex: </p>
+                <p> <mark>var sorter = 'date'</mark> </p>
+                <p> <mark>var sql = 'SELECT * FROM posts ORDER BY ' + connection.escapeId('posts.' + sorter);</mark> </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - <a href="Type Casting/index.html" target="_blank">escapes JavaScript values</a> in order to use them as safe SQL identifiers (database / table / column name)
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td>  
+            <strong>connection|pool|poolClusterNs</strong>.query(<strong class="openable">sqlQuery:str<div>
+                <p> using <mark>?</mark> - in the query string represents an SQL value placeholder referenced in the 2nd argument </p>
+                <p> using <mark>??</mark> - in the query string represents an SQL identifier placeholder referenced in the 2nd argument <u style="color:orangered;">Experimental [TESTED: 2020-10-15]</u> </p>
+            </div></strong>, <i class="openable">placeholders:arr<div>
+                <p style="font-weight:bold; font-size:1.3em; text-decoration:underline;"> Placeholders for <mark>?</mark> and <mark>??</mark> in the query string (<strong>sqlQuery</strong>) </h4>
+                <p> - values listed here are placeholders in the query string in the same sequence as listed </p>
+                <p> - <mark>?</mark> placeholder values are internally escaped by the <mark>escape()</mark> method </p>
+                <p> - <mark>??</mark> placeholder identifiers (database / table / column name) are internally escaped by the <mark>escapeId()</mark> method <u style="color:orangered;">[Experimental TESTED: 2020-10-15]</u></p>
+                <p> Ex: </p>
+                <p> <mark>query('SELECT 1 + ?', '2', fn())</mark> same as => <mark><mark>query('SELECT 1 + 2', fn())</mark> </mark> <u>(but not escaped)</u> </p>
+                <p> <mark>query('SELECT ? + ?', [1, 2], fn())</mark> same as => <mark><mark>query('SELECT 1 + 2', fn())</mark> </mark> <u>(but not escaped)</u> </p>
+                <p> <mark>query('SELECT ?? FROM testTable WHERE col1 = ?, ['col1', 'Kutyus'], fn())</mark> same as => <mark>query('SELECT col1 FROM testTable WHERE col1 = 'Kutyus', fn())</mark> <u>(but not escaped)</u> </p>
+            </div></i>, <strong class="openable">fn(err, results, fields)<div>
+                <p> <strong>err</strong> - Error during query (if any) </p>
+                <hr>
+                <p> <strong>result</strong> - query result returned in an Array (ex: <mark>[RowDataPacket{...}, RowDataPacket{...}, ...]</mark>) (every <mark>RowDataPacket</mark> object contains a table record) </p>
+                <p> <mark><strong>result</strong>.insertId</mark> - returns requested table's Id number (record number) <u style="color:orangered;">(only wokrks for tables having a PRIMARY KEY with AUTO_INCREMENT field)</u></p>
+                <p> <mark><strong>result</strong>.affectedRows</mark> - returns a number indicating the number of affected rows for an INSERT, UPDATE or DELETE operation </p>
+                <p> <mark><strong>result</strong>.changedRows</mark> - returns a number indicating the number of changed rows for an UPDATE operation </p>
+                <hr>
+                <p> <strong>field</strong> - inromation bout table fields (columns) returned in an Array (ex: <mark>[FieldPacket{...}, FieldPacket{...}, ...]</mark>) (every <mark>FieldPacket</mark> object contains informations about a table field (column)) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sends an receives the query request through the connection <br>
+            - calling on <strong>connection</strong> same as calling <mark><strong>connection</strong>.connect()</mark> -&gt; <mark><strong>connection</strong>.query()</mark> methods <br>
+            - calling on <strong>pool</strong> same as calling <mark><strong>pool</strong>.getConnection()</mark> -&gt; <mark><strong>connection</strong>.query()</mark> -&gt; <mark><strong>connection</strong>.release()</mark> methods <br>
+            - calling on <strong>poolClusterNs</strong> same as calling <mark><strong>poolClusterNs</strong>.getConnection()</mark> -&gt; <mark><strong>connection</strong>.query()</mark> methods    
+        </td>
+    </tr>
+      <tr class="05.02"><td></td><td></td></tr>
+    <tr class="05.03">
+        <td>  
+            <strong>connection|pool|poolClusterNs</strong>.query(<strong class="openable">option:obj<div>
+                <p> sql: <strong>sql:str</strong> - SQL query string </p>
+                <p> values: <strong>any|arr</strong> - SQL value placeholders (for <mark>?</mark> in the query string) </p>
+                <p> timeout: <strong>nr:ms</strong> - query timeout </p>
+                <p> nestTables: <strong>bol</strong> - list multiple tables indifidually (useful when a query response contians multiple tables with same column names like JOINS because if columns have the same name the second column is omitted this option makes sure that tables are received as they are) (Default: <mark>false</mark>) </p>
+            </div></strong>, <strong class="openable">fn(err, results, fields)<div>
+                <p> <strong>err</strong> - Error during query (if any) </p>
+                <hr>
+                <p> <strong>result</strong> - query result returned in an Array (ex: <mark>[RowDataPacket{...}, RowDataPacket{...}, ...]</mark>) (every <mark>RowDataPacket</mark> object contains a table record) </p>
+                <p> <mark><strong>result</strong>.insertId</mark> - returns requested table's Id number (record number) <u style="color:orangered;">(only wokrks for tables having a PRIMARY KEY with AUTO_INCREMENT field)</u></p>
+                <p> <mark><strong>result</strong>.affectedRows</mark> - returns a number indicating the number of affected rows for an INSERT, UPDATE or DELETE operation </p>
+                <p> <mark><strong>result</strong>.changedRows</mark> - returns a number indicating the number of changed rows for an UPDATE operation </p>
+                <hr>
+                <p> <strong>field</strong> - inromation bout table fields (columns) returned in an Array (ex: <mark>[FieldPacket{...}, FieldPacket{...}, ...]</mark>) (every <mark>FieldPacket</mark> object contains informations about a table field (column)) </p>
+            </div></strong>)
+        </td>
+        <td>  </td>
+    </tr>
+    <tr class="15.01">
+        <td>  
+            <strong>mysql</strong>.format(<strong class="openable">sqlQuery:str<div>
+                <p> using <mark>?</mark> - in the query string represents an SQL value placeholder referenced in the 2nd argument </p>
+                <p> using <mark>??</mark> - in the query string represents an SQL identifier placeholder referenced in the 2nd argument <u style="color:orangered;">Experimental [TESTED: 2020-10-15]</u> </p>
+            </div></strong>, <i class="openable">placeholders:arr<div>
+                <p style="font-weight:bold; font-size:1.3em; text-decoration:underline;"> Placeholders for <mark>?</mark> and <mark>??</mark> in the query string (<strong>sqlQuery</strong>) </h4>
+                <p> - values listed here are placeholders in the query string in the same sequence as listed </p>
+                <p> - <mark>?</mark> placeholder values are internally escaped by the <mark>escape()</mark> method </p>
+                <p> - <mark>??</mark> placeholder identifiers (database / table / column name) are internally escaped by the <mark>escapeId()</mark> method <u style="color:orangered;">[Experimental TESTED: 2020-10-15]</u></p>
+                <p> Ex: </p>
+                <p> <mark>query('SELECT 1 + ?', '2', fn())</mark> same as => <mark><mark>query('SELECT 1 + 2', fn())</mark> </mark> <u>(but not escaped)</u> </p>
+                <p> <mark>query('SELECT ? + ?', [1, 2], fn())</mark> same as => <mark><mark>query('SELECT 1 + 2', fn())</mark> </mark> <u>(but not escaped)</u> </p>
+                <p> <mark>query('SELECT ?? FROM testTable WHERE col1 = ?, ['col1', 'Kutyus'], fn())</mark> same as => <mark>query('SELECT col1 FROM testTable WHERE col1 = 'Kutyus', fn())</mark> <u>(but not escaped)</u> </p>
+            </div></i>)
+        </td>
+        <td> 
+            - prepares a query string (escapes SQL values and identifiers) so the returned string safely can be inserted into the <mark>query()</mark> method as sql string 
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td colspan="2"> Streaming Query Rows </td>
+    </tr>
+    <tr class="20.02">
+        <td> 
+            <strong>connection</strong>.query(<strong>sqlQuery:str</strong>) <br>
+                .on('error', <strong>fn(err)</strong>) <br>
+                .on('result', <strong>fn(result)</strong>) <br>
+                .on('fields', <strong>fn(fields)</strong>) <br>
+                .on('end', <strong>fn</strong>)
+        </td>
+        <td> 
+            - streams query rows by using chained events 
+        </td>
+    </tr>
+    <tr class="20.03">
+        <td>  
+            <strong>connection</strong>.query(<strong>sqlQuery:str</strong>) <br>
+            .stream(<i class="openable">option:obj<div>
+                <p> highWaterMark: <strong>nr</strong> - internal buffer size in objects (Default: <mark>16</mark>)
+            </div></i>)
+        </td>
+        <td> 
+            - creates and returns a <a href="../../Stream/Readable Streams/index.html">readable stream</a> (automatic pause/resume) (the returned stream is in object mode and cannot be changed) 
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Connection Pool (for same connection profiles) 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td>  
+            <strong>mysql</strong>.createPool(<strong class="openable">option:obj<div>
+                <p> acquireTimeout: <strong>nr:ms</strong> - timeout before the connection is acquired from the pool (timeout not start if the connection is enqueued) (Default: <mark>10000</mark>) </p>
+                <p> waitForConnections: <strong>bol</strong> - enques new connections when the connection pool has no free connection available (Default: <mark>true</mark>) </p>
+                <p> connectionLimit: <strong>nr</strong> - maximum number of connections the pool can have at the same time (Default: <mark>10</mark>) </p>
+                <p> queueLimit: <strong>nr</strong> - maximum number of connection requests the pool will queue before returning an error when the <mark>getConnection()</mark> is called (Default: <mark>0</mark> = unlimited) </p><br>
+                <p> --- the rest is the same as for the <mark>createConnection()</mark> method --------------------------------------------------------------------------------</p><br>
+<p> host: <strong>str</strong> - hostname of the database to connect to (Default: <mark>'localhost</mark>') </p>
+                <p> port: <strong>nr</strong> - port number to connect to (Default: <mark>3306</mark>) </p>
+                <p> localAddress: <strong>str</strong> - source IP Address for TCP connections (Optional) </p>
+                <p> socketPath: <strong>path:str</strong> - Unix Domain Socket path (if specified <mark>host</mark> and <mark>port</mark> are ignored) </p>
+                <p> user: <strong>str</strong> - MySQL user to authenticate </p>
+                <p> password: <strong>str</strong> - MySQL user password </p>
+                <p> database: <strong>str</strong> - database name to connect to (Optional) </p>
+                <p> charset: <strong>str</strong> - charset for the connection (Default: <mark>'UTF8_GENERAL_CL'</mark>) </p>
+                <p> timezone: <strong>str</strong> - type cast server date/time values to JavaScript Date object <u style="color:orangered;">(date/time on the MySQL database server is consiedered UTC time)</u> (<mark>'local'</mark> = converts to local UTC time) (<mark>'Z'</mark> = leaves unchanged) (<mark>+|-<strong>HH</strong>:<strong>MM</strong></mark> = adjust local timezone) (Default: <mark>'local'</mark>) </p>
+                <p> connectTimeout: <strong>nr:ms</strong> - timeout before the connection is estabilised with the MySQL server. (Default: <mark>10000</mark>) </p>
+                <p> stringifyObjects: <strong>bol</strong> - stringifies objects instead of converting them to values (Default: <mark>false</mark>) <u>(ther's some issue with this)</u></p>
+                <p> insecureAuth: <strong>bol</strong> - allows (old) insecure authentication (apparently this doesn't work when connecting to MySQL v8 or above) </p>
+                <p> typeCast: <strong>bol</strong> - convert MySQL values to native JavaScript values (and vice versa) (Default: <mark>true</mark>) </p>
+                <p> queryFormat: <strong>fn</strong> - a custom function to format queries (<a href="https://www.npmjs.com/package/mysql#custom-format" target="_blank">Custom Format Query Function (npmjs.com)</a>)</p>
+                <p> supportBigNumbers: <strong>bol</strong> - big numbers (<mark>BIGINT</mark> and <mark>DECMAL</mark>) are returned in a JavaScript string <u>if they cannot be safely represented in JavaScript</u> (range between <mark>-2**53</mark> - <mark>2**53</mark>) (Default: <mark>false</mark>) </p>
+                <p> bigNumberStrings: <strong>bol</strong> - Enabling both this option and the <mark>supportBigNumbers</mark> option, big numbers (<mark>BIGINT</mark> and <mark>DECIMAL</mark>) are <u>always</u> returned in a JavaScript string (Default: <mark>false</mark>) <u>(Enabling this option alone doesn't do anything)</u> </p>
+                <p> dateStrings: <strong>bol</strong> - <mark>DATETIME</mark>, <mark>TIMESTAMP</mark> and <mark>DATE</mark> are returned in a JavaScript string insead of converting them to Date JavaScript object (Default: <mark>false</mark>) </p>
+                <p> debug: <strong>bol</strong> - prints protocol details on stdout (Default: <mark>false</mark>) </p>
+                <p> trace: <strong>bol</strong> - generates stack traces on Error (Default: <mark>true</mark>) </p>
+                <p> localInFile: <strong>bol</strong> - allows <mark>LOAD DATA INFILE</mark> to use <mark>LOCAL</mark> modified (Default: <mark>true</mark>) </p>
+                <p> multipleStatements: <strong>bol</strong> - allows multiple statement per query (Default: <mark>false</mark>) <u>(increases the risk of injection attacks)</u> </p>
+                <p> flags: <strong>flagList:str</strong> - connection flags <a href="Connection Flags/index.html" target="_blank">[link]</a></p>
+                <p> ssl: <strong>str|tls.createSecureContext()</strong> - ssl options can be passed as a string <a href="https://www.npmjs.com/package/mysql#ssl-options" target="_blank">[link]</a> or as a <mark>tls.createSecureContext()</mark> object </p>            
+                </div></strong>)
+        </td>
+        <td>  
+            - creates a returns <strong>pool</strong> object which is a connection pool for same connection profiles to the MySQL server <br>
+            - only keeps as many live connections as needed, when we get (acquire) a connection the pool cycles from top to bottom (round-robin style) to find the first available live connection <br>
+            -                                                                                            when a connection is removed from the pool a ping packet is sent to the MySQL server to check is the connection is still good  
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>pool</strong>.end(<i>fn(err)</i>) </td>
+        <td> - gracefully ends all the pool's connections by calling the <mark>end()</mark> method on all live connections in the pool (callback called when all connections are ended) </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>pool</strong>.getConnection(<strong>fn(err, conn)</strong>) </td>
+        <td>  
+            - <u>if there's no free live connection in the pool</u> = estabilises a new connection <br>
+            - <u>if there's a free live connection in the pool</u> = acquires the connection
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td colspan="2"> Events </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>pool.listener</strong>('acquire', <strong>fn(conn)</strong>) </td>
+        <td> - emitted when an live connection is acquired from the connection pool </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>pool.listener</strong>('connection', <strong>fn(conn)</strong>) </td>
+        <td> - emitted when a new connection is estabilished with the MySQL server </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>pool.listener</strong>('enqueue', <strong>fn</strong>) </td>
+        <td> - emitted when all the pool's available connections are busy and a new connections is enqueued (waits for the first freed up connection) </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>pool.listener</strong>('release', <strong>fn(conn)</strong>) </td>
+        <td> - emitted when a connection is released back to the connection pool </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Connection Pool (for different connection profiles) 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td>  
+            <strong>mysql</strong>.createPoolCluster(<strong class="openable">option:obj<div>
+                <p> canRetry: <strong>bol</strong> - attemps to reconnect when connections fails (Default: <mark>true</mark>) </p>
+                <p> removeNodeErrorCount: <strong>nr</strong> - the connection node is removed from the poolCluster if the <mark>errorCount</mark> is greater than <mark>removeErrorCount</mark> (Default: <mark>5</mark>) (the <mark>errorCount</mark> increases every time the connection node fails) </p>
+                <p> restoreNodeTimeout: <strong>nr:ms</strong> - milliseconds before the connection node tries to reconnect after a failed connection (Default: <mark>0</mark> = immediately) </p>
+                <p> defaultSelector: <strong>str</strong> - connection selector from the poolCluster (<mark>'RR'</mark> = round-robin) (<mark>'RANDOM'</mark> = random) (<mark>'ORDER'</mark> = first connection node available unconditionally) (Default: <mark>'RR'</mark>)  </p>
+            </div></strong>)
+        </td>
+        <td> - creates and returns a <strong>poolCluster</strong> object which is a connection pool for different connection profiles to the MySQL server </td>
+    </tr>
+    <tr class="15.01">
+        <td>  
+            <strong>poolCluster</strong>.add(<i class="openable">connId:str<div>
+                <p> - Connection Node Id if omitted <mark>CLUSTER::1</mark>, <mark>CLUSTER::2</mark>, <mark>...</mark> automatically added </p>
+            </div></i>, <strong class="openable">option:obj<div>
+            <p> acquireTimeout: <strong>nr:ms</strong> - timeout before the connection is acquired from the pool (timeout not start if the connection is enqueued) (Default: <mark>10000</mark>) </p>
+            <p> waitForConnections: <strong>bol</strong> - enques new connections when the connection pool has no free connection available (Default: <mark>true</mark>) </p>
+            <p> connectionLimit: <strong>nr</strong> - maximum number of connections the pool can have at the same time (Default: <mark>10</mark>) </p>
+            <p> queueLimit: <strong>nr</strong> - maximum number of connection requests the pool will queue before returning an error when the <mark>getConnection()</mark> is called (Default: <mark>0</mark> = unlimited) </p><br>
+            <p> --- the rest is the same as for the <mark>createConnection()</mark> method --------------------------------------------------------------------------------</p><br>
+<p> host: <strong>str</strong> - hostname of the database to connect to (Default: <mark>'localhost</mark>') </p>
+                <p> port: <strong>nr</strong> - port number to connect to (Default: <mark>3306</mark>) </p>
+                <p> localAddress: <strong>str</strong> - source IP Address for TCP connections (Optional) </p>
+                <p> socketPath: <strong>path:str</strong> - Unix Domain Socket path (if specified <mark>host</mark> and <mark>port</mark> are ignored) </p>
+                <p> user: <strong>str</strong> - MySQL user to authenticate </p>
+                <p> password: <strong>str</strong> - MySQL user password </p>
+                <p> database: <strong>str</strong> - database name to connect to (Optional) </p>
+                <p> charset: <strong>str</strong> - charset for the connection (Default: <mark>'UTF8_GENERAL_CL'</mark>) </p>
+                <p> timezone: <strong>str</strong> - type cast server date/time values to JavaScript Date object <u style="color:orangered;">(date/time on the MySQL database server is consiedered UTC time)</u> (<mark>'local'</mark> = converts to local UTC time) (<mark>'Z'</mark> = leaves unchanged) (<mark>+|-<strong>HH</strong>:<strong>MM</strong></mark> = adjust local timezone) (Default: <mark>'local'</mark>) </p>
+                <p> connectTimeout: <strong>nr:ms</strong> - timeout before the connection is estabilised with the MySQL server. (Default: <mark>10000</mark>) </p>
+                <p> stringifyObjects: <strong>bol</strong> - stringifies objects instead of converting them to values (Default: <mark>false</mark>) <u>(ther's some issue with this)</u></p>
+                <p> insecureAuth: <strong>bol</strong> - allows (old) insecure authentication (apparently this doesn't work when connecting to MySQL v8 or above) </p>
+                <p> typeCast: <strong>bol</strong> - convert MySQL values to native JavaScript values (and vice versa) (Default: <mark>true</mark>) </p>
+                <p> queryFormat: <strong>fn</strong> - a custom function to format queries (<a href="https://www.npmjs.com/package/mysql#custom-format" target="_blank">Custom Format Query Function (npmjs.com)</a>)</p>
+                <p> supportBigNumbers: <strong>bol</strong> - big numbers (<mark>BIGINT</mark> and <mark>DECMAL</mark>) are returned in a JavaScript string <u>if they cannot be safely represented in JavaScript</u> (range between <mark>-2**53</mark> - <mark>2**53</mark>) (Default: <mark>false</mark>) </p>
+                <p> bigNumberStrings: <strong>bol</strong> - Enabling both this option and the <mark>supportBigNumbers</mark> option, big numbers (<mark>BIGINT</mark> and <mark>DECIMAL</mark>) are <u>always</u> returned in a JavaScript string (Default: <mark>false</mark>) <u>(Enabling this option alone doesn't do anything)</u> </p>
+                <p> dateStrings: <strong>bol</strong> - <mark>DATETIME</mark>, <mark>TIMESTAMP</mark> and <mark>DATE</mark> are returned in a JavaScript string insead of converting them to Date JavaScript object (Default: <mark>false</mark>) </p>
+                <p> debug: <strong>bol</strong> - prints protocol details on stdout (Default: <mark>false</mark>) </p>
+                <p> trace: <strong>bol</strong> - generates stack traces on Error (Default: <mark>true</mark>) </p>
+                <p> localInFile: <strong>bol</strong> - allows <mark>LOAD DATA INFILE</mark> to use <mark>LOCAL</mark> modified (Default: <mark>true</mark>) </p>
+                <p> multipleStatements: <strong>bol</strong> - allows multiple statement per query (Default: <mark>false</mark>) <u>(increases the risk of injection attacks)</u> </p>
+                <p> flags: <strong>flagList:str</strong> - connection flags <a href="Connection Flags/index.html" target="_blank">[link]</a></p>
+                <p> ssl: <strong>str|tls.createSecureContext()</strong> - ssl options can be passed as a string <a href="https://www.npmjs.com/package/mysql#ssl-options" target="_blank">[link]</a> or as a <mark>tls.createSecureContext()</mark> object </p>            
+                </div></strong>)
+        </td>
+        <td> - adds a new connection node to the poolCluster </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>poolCluster</strong>.end(<strong>fn(err)</strong>) </td>
+        <td> 
+            - gracefully ends all the poolCluster's connections by calling the <mark>end()</mark> method on all connections in the pool (callback called when all connections are ended) </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>poolCluster</strong>.getConnection(<i>connId:str|regExp</i>, <strong>fn(err, conn)</strong>) </td>
+        <td> 
+            - initiates (starts) the specified connection node from the poolCluster <br>
+            - if the <i>connId</i> is omitted the next connection node is selected from the poolCluster (according to the connection selector <mark>defaultSelector</mark> opition in the <mark>createPoolCluster()</mark> method)
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>poolClusterNs</strong>.getConnection(<strong>fn(err, conn)</strong>) </td>
+        <td> - initiates (starts) the next connection node from the poolCluster namespace </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>poolCluster</strong>._nodes </td>
+        <td> - returns an object containing the poolCluster's all connection nodes </td>
+    </tr>
+    <tr class="25.01">
+        <td>  
+            <strong>poolCluster</strong>.of(<strong>connID:str|regExp</strong>, <i class="openable">connSel:str<div>
+            <p> - Connection Selector for this namespace (Default: the poolCluster connection selector) </p>
+                <p> <mark>'RR'</mark> - round-robin </p>
+                <p> <mark>'RANDOM'</mark> - random </p>
+                <p> <mark>'ORDER'</mark> - first available connection node unconditionally </p>
+            </div></i>)
+        </td>
+        <td> 
+            - creates and returns a <strong>poolClusterNs</strong> (namespace) (group of connection nodes within the poolCluster) 
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>poolCluster</strong>.remove(<strong>connId:str|regExp</strong>) </td>
+        <td> - removes the specified connection node(s) from the poolCluster </td>
+    </tr>
+    <tr class="30.01">
+        <td colspan="2"> Events </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>poolCluster.listener</strong>('remove', <strong>fn(nodeId)</strong>) </td>
+        <td> 
+            - emitted when a connection is remove from the poolCluster <u>(connection removed withut user action not tirggered when the <mark>remove()</mark> is called [TESTED: 2020-10-14 v2.18.1])</u> 
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    node-mysql Error 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>err</strong>.code </td>
+        <td> - MySQL server Error, Node.js Error or Internal Error code </td>
+    </tr>
+    <tr>
+        <td> <strong>err</strong>.errno </td>
+        <td> - MySQL server Error number (MySQL server Error only) </td>
+    </tr>
+    <tr>
+        <td> <strong>err</strong>.fatal </td>
+        <td> - boolean indicates if the Error is terminal to the connection object </td>
+    </tr>
+    <tr>
+        <td> <strong>err</strong>.sql </td>
+        <td> - full SQL string of the failed query </td>
+    </tr>
+    <tr>
+        <td> <strong>err</strong>.sqlMessage </td>
+        <td> - MySQL Error textual description (MySQL server Error only) </td>
+    </tr>
+    
+    <tr>
+        <td> <strong>err</strong>.sqlState </td>
+        <td> - SQLSTATE 5 character value (MySQL server Error only) </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <p> Transactions are implemented at the connection level I TESTED it but it has a bizzare implementation what I don't like and I didn't find useful [TESTED: 2020-10-16] <a href="https://www.npmjs.com/package/mysql#transactions" target='_blank'>node-sql Transactions (npmjs.com)</a> </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.npmjs.com/package/mysql" target="_blank">MySQL (npmjs.com)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - the <mark>node-mysql v2.18.1</mark> module uses the old <mark>mysql_native_password</mark> authentication method but MySQL v8 (and above) uses the (new) <mark>caching_sha2_password</mark> authentication method (so I had to change the authentication method in MySQL in order to connect [TESTE: 2020-10-13]) </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>mysql</mark> module provides awesome facilities to connect and query MySQL database servers (100 % MIT licensed) </p>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> Connect <mark>createConnection()</mark> / <mark>connect()</mark> / <mark>end()</mark> / <mark>destroy()</mark> / <mark>pause()</mark> / <mark>resume()</mark> / <mark>changeUser()</mark> </u></h2>    
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({                                          // creates the connection 
+        host: 'localhost',                              
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    connection.connect(function(err){                                                  // initiates (starts) the connection  
+        if(err) console.log(err.message);                                                // error thrown if connection fails   
+    });
+    
+    connection.query('TABLE Students', function(err, res, fld){                        // query through the connection  
+        if(err) console.log(err);
+        console.log( res );                                                              // -> query result  
+    });
+    
+    connection.end(function(err){                                                      // gracefully ends the connection 
+        if(err) console.log(err);                                                        // callback executed when the connection is closed 
+    });    
+    
+// pause() / resume() -----------------------------------------------------------------
+    connection.pause();                                                                // pauses the connection 
+    
+    connection.resume();                                                               // resumes the connection  
+    
+// changeUser() -----------------------------------------------------------------------
+    connection.changeUser({                                                            // changes the user through the same connection 
+        user: 'other',
+        password: 'pass2',
+        database: 'testDB2'
+    });    
+    
+// ping() -----------------------------------------------------------------------------
+    conn.ping(function(err){  });                                                      // sends a ping packet to the server (callback fired when a ping response is received)  
+    </pre>
+    <p> - start the connection directly with the <mark>query()</mark> method </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({ 
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    connection.query('TABLE Students', function(err, res, fld){                        // the query() method can directly start the connection then sends the query   
+        if(err) console.log(err);
+        console.log( res );                                                              // -> query result  
+    });
+    
+    connection.end(function(err){ 
+        if(err) console.log(err); 
+    </pre>
+    <p> - using <mark>release()</mark> and <mark>destroy()</mark> on pool connections </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({ 
+        connectionLimit: 15,
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    pool.getConnection(function(err, connection){ 
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            res;
+            // release() --------------------------------------------------------------
+            connection.release();                                                      // releases this connection back to the pool, so this connection will be a free live connection in the pool and can be reused when the 'getConnection()' is called again    
+            // destroy() --------------------------------------------------------------
+            connection.destroy();                                                      // destroys this connection, so this connection is completely removed from the pool 
+        });
+    });
+    </pre>
+
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createConnection()</mark> / <mark>connect()</mark> / <mark>end()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({                                          // creates the connection 
+        host: 'localhost',                              
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    connection.connect(function(err){                                                  // initiates (starts) the connection  
+        if(err) console.log(err.message);
+    });
+    
+    connection.query('TABLE Students', function(err, res, fld){                        // query through the connection  
+        if(err) console.log(err);
+        console.log( res );
+        console.log( fld );
+    });
+    
+    connection.end(function(err){                                                      // gracefully ends the connection 
+        if(err) console.log(err);                                                        // callback executed when the connection is closed 
+        console.log( 'MySQL connection ended' );
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>pause()</mark> / <mark>resume()</mark> TEST </u></h4>    
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB',
+    });
+    
+    connection.connect(function(err){
+        if(err) console.log(err.message);
+    });
+    
+    connection.query('TABLE testTable', function(err, res, fld){
+        if(err) console.log(err);
+        console.log( res );
+    });
+    
+    connection.pause();                                                                // pauses the connection 
+    
+    setTimeout(function(){
+        connection.resume();                                                           // after 5 seconds resumes the connection then ends it gracefully 
+        connection.end();
+    }, 5000);
+    </pre>    
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>changeUser()</mark> TEST </u></h4>    
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB',
+    });
+    
+    connection.connect(function(err){
+        if(err) console.log(err.message);
+    });
+    
+    connection.query('SELECT USER()', function(err, res, fld){
+        if(err) console.log(err);
+        console.log( res );                                                            // -> [ RowDataPacket { 'USER()': 'pall@localhost' } ]
+    });
+    
+    setTimeout(function(){
+        connection.changeUser({                                                        // changes the user through the same connection 
+            user: 'other',
+            password: 'pass2'
+        });
+        
+        connection.query('SELECT USER()', function(err, res, fld){
+            if(err) console.log(err);
+            console.log( res );                                                        // -> [ RowDataPacket { 'USER()': 'other@localhost' } ]      // current (new) logged-in user   
+        });
+        
+        connection.end();
+    }, 5000);
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> connecting directly with the <mark>query()</mark> method TEST </u></h4>    
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    connection.query('TABLE testTable', function(err, res, fld){                       // query method can start the connection and then send the query   
+        if(err) console.log(err);
+        console.log(res);                                                              // -> query result  
+    });
+    
+    connection.end();
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>ping()</mark> method TEST </u></h4>    
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.ping(function(err){
+        if(err) console.log(err);
+        console.log( 'MySQL server responded to ping!' );
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    MySQL server responded to ping!    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> Performing Queries <mark>query()</mark> / <mark>escape()</mark> / <mark>escapeId()</mark> / <mark>format()</mark> / <mark>stream</mark></u></h2>
+    <p style="color:yellow;"> - the user provided data always must be escaped </p> 
+<details class="example">
+<summary> DEMO </summary>
+    <h4 style="color:darkblue;"><u> <mark>query()</mark> shortcut request </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+// ------------------------------------------------------------------------------------
+    connection.connect();
+    connection.query('TABLE testTable', function(err, res, fld){ });
+    
+  // does the same as the above code --------------------------------------------------
+    connection.query('TABLE testTable', function(err, res, fld){ });                   // the query() method can directly start the connection then sends the query   
+    </pre>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+// ------------------------------------------------------------------------------------
+    pool.getConnection(function(err, conn){
+        conn.query('TABLE testTable', function(err, res, fld){ });
+        conn.release();
+    });
+    
+  // does the same as the above code --------------------------------------------------
+    pool.query('TABLE testTable', function(err, res, fld){ });                         // shortcut for the above 3 method calls   
+    </pre>
+    <pre>
+    const mysql = require('mysql');
+        
+    var poolCluster = mysql.createPoolCluster();
+        
+    poolCluster.add('pall', {host:'localhost', user:'pall', password:'pass', database:'testDB'}); 
+    poolCluster.add('other_1', {host:'localhost', user:'other_1', password:'pass1', database:'testDB'});
+    poolCluster.add('other_2', {host:'localhost', user:'other_2', password:'pass2', database:'testDB'});
+        
+    var poolNs = poolCluster.of(/other*/, 'RANDOM');    
+        
+// ------------------------------------------------------------------------------------
+    poolNs.getConnection(function(err, conn){    
+        conn.query('TABLE testTable', function(err, res, fld){  });
+    });                               
+        
+  // does the same as the above code --------------------------------------------------
+    poolNs.query('TABLE testTable', function(err, res, fld){  });                      // shortcuts for above the above 2 method calls   
+    </pre>
+    <h4 style="color:darkblue;"><u> information about inserted affected or changed rows </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.query('SELECT * FROM testTable', function(err, res, fld){
+        err;                                                                           // -> null                                           // error for this query if any   
+        res;                                                                           // -> [RowDataPacket { nr:1, str:'egy' }, RowDataPacket {nr: 2, str:'ketto'}, ...]    // requested table records  
+        fld;                                                                           // -> [FieldPacket {...}, FieldPacket {...}, ...]    // information about time fields (column)  
+    });    
+    
+// insertId / affectedRows / chanedRows -----------------------------------------------
+    conn.query('INSERT INTO testTable(str) VALUES("some string");', function(err, res, fld){
+        res.insertId;                                                                  // -> 1564       // 1564th record inserted   // -! (works for INSERT operations but only if the table has a PRIMARY KEY with AUTO_INCREMENT which the 'testTable' has in this case    
+        res.affectedRows;                                                              // -> 1          // 1 record affected        // (works for INSERT, UPDATE and DELETE operations)    
+    });
+    
+    conn.query('UPDATE testTable SET str = NULL WHERE str = "some other string";', function(err, res, fld){
+        res.changedRows;                                                               // -> 9          // 9 records changed        // (works for UPDATE operations) 
+    });
+    </pre>
+    <h4 style="color:darkblue;"><u> Streaming query rows (through evens) or <mark>stream()</mark>method </u></h4>
+    <pre>
+const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'}); 
+    conn.connect();
+    
+// Streaming query rows by events -----------------------------------------------------
+    conn.query('TABLE Students')                                                       // -! this aproach does not have any automatic throtle management like streams do (we can manually regulate data flow through using 'connection.pause()' and 'connection.resume()' methods in any of the blelow events)    
+        .on('error', function(err){
+                err;                                                                   // -> Error if any for this query request  
+            })
+        .on('fields', function(fld){
+                fld;                                                                   // -> [FieldPacket{...}, FieldPacket{...}, ...]      // data about table fields (columns)   
+            })
+        .on('result', function(res){ 
+                res;                                                                   // -> [RowDataPacket{...}, RowDataPacket{...}, ...]  // table records   
+            })
+        .on('end', function(){ });                                                     // triggered when all the requested data is received   
+    
+// Convert query to a readalbe stream -------------------------------------------------
+    conn.query('TABLE Students').stream()                                              // converts the query into a readalbe stream (object mode)   
+        .on('data', function(chunk){
+            chunk;                                                                     // -> [RowDataPacket{...}, RowDataPacket{...}, ...]  // table records   
+        });
+    </pre>
+    <h4 style="color:darkblue;"><u> Escaping SQL values and identifiers (<mark>escape()</mark> / <mark>escapeId()</mark>) </u></h4>
+    <pre>
+// escape() / escapeId() --------------------------------------------------------------
+    mysql.escape( 212121 );                                                            // -> 212121                     // left numbers untuched
+    mysql.escapeId( 212121 );                                                          // -> '212121'                   // stringifies numbers
+    
+    mysql.escape( 212121n );                                                           // -> '212121'                   // stringifies bit integers (bigInt)    
+    mysql.escapeId( 212121n );                                                         // -> '212121'                   // stringifies bit integers (bigInt)    
+    
+    mysql.escape( true );                                                              // -> true                       // left booloeans untuched (true / false) 
+    mysql.escapeId( true );                                                            // -> 'true'                     // stringifies booleans   
+    
+    mysql.escape( new Date() );                                                        // -> '2020-10-16 10:30:49.023'  // convert dates to MySQL dateTime format    
+    mysql.escapeId( new Date() );                                                      // -> `Fri Oct 16 2020 10:30:49 GMT+0300 (Eastern European Summer Time)`  // converts dates to a date string   
+    
+    mysql.escape( Buffer.from('test') );                                               // -> X'74657374'                // buffers are converted to hex string  
+    mysql.escapeId( Buffer.from('test') );                                             // -> `test`                     // buffers are converted to string    
+    
+    mysql.escape( 'test' );                                                            // -> 'test'                     // strings are safely escaped    
+    mysql.escapeId( 'test' );                                                          // -> `test`                     // strings are safely escaped    
+    
+    mysql.escape( [1, 'str', false] );                                                 // -> 1, 'str', false            // Arrays are turned into list    
+    mysql.escapeId( [1, 'str', false] );                                               // ->` 1`, `str`, `false`        // Arrays are turned into list    
+    
+    mysql.escape( [1, 'str', [false, 21n]] ) );                                        // -> 1, 'str', (false, '21')    // nested Arrays are turned into grouped list   
+    mysql.escapeId( [1, 'str', [false, 21n]] ) );                                      // -> `1`, `str`, `false`, `21`  // nested Arrays are turned into list    
+    
+    mysql.escape( {p1:21, p2:'str'} );                                                 // -> `p1` = 21, `p2` = 'str'    // objects are turned into key = val pairs  
+    mysql.escapeId( {p1:21, p2:'str'} );                                               // -> `[object Object]`          // objects are stringified (.toString() called on it)    
+    
+    mysql.escape( [1, {p1n:21n}] );                                                    // -> 1, '[object Object]'       // nested object are stringified (.toString() called on it)    
+    mysql.escapeId( [1, {p1n:21n}] );                                                  // -> `1`, `[object Object]`     // nested object are stringified (.toString() called on it)    
+    
+    mysql.escape( null );                                                              // -> NULL                       // null is converted to NULL    
+    mysql.escapeId( null );                                                            // -> 'null'                     // null is stringified     
+    
+    mysql.escape( undefined );                                                         // -> NULL                       // undefined is converted to NULL    
+    mysql.escapeId( undefined );                                                       // -> 'undefined'                // undefined is stringified     
+    
+    mysql.escape( NaN );                                                               // -> NaN                        // NaN left as-is     
+    mysql.escapeId( NaN );                                                             // -> 'NaN'                      // NaN is stringified     
+    
+    mysql.escape( Infinity );                                                          // -> Infinity                   // Infinity left as-is     
+    mysql.escapeId( Infinity );                                                        // -> 'Infinity'                 // Infinity is stringified     
+    
+// escaping values and identifies in SQL string ---------------------------------------
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    var sqlVal = mysql.escape(113);                                                    // method is used convert JavaScript values into 'safe' SQL values (in order to avoid injection attacks)   
+    var sqlId = mysql.escapeId('testTable');                                           // method is used convert JavaScript values into 'safe' SQL identifies (database / table / column name) (in order to avoid injection attacks)   
+    
+    conn.query('INSERT INTO ' + sqlId + '(nr) VALUES(' + sqlVal + ');', function(err, res, fld){  });
+    
+  // SQL value and indentifier placeholders -------------------------------------------
+    conn.query('INSERT INTO ??(nr) VALUES(?)', ['testTable', 112], function(err, res, fld){  });    // the query method's optional 2nd argument holds placeholders for the query string 
+                                                                                                    // (? = SQL values / ?? = SQL placeholders // -! Experimental [node-mysql v2.18.1])
+                                                                                                    // -! placeholders internally escaped with the 'escape()' or 'escapeId()' methods  
+    conn.query('SELECT ??, ?? FROM ?? WHERE ?', 
+        ['first_name', 'last_name', 'Students', {student_id:1}],                       // placeholders are inserted in the sequence as they are passed   
+        function(err, res, fld){  }
+    );
+    
+// format() ---------------------------------------------------------------------------
+    var sqlStr = mysql.format('SELECT ?? FROM ?? WHERE ?', ['first_name', 'Students', {student_id:1}]);     // method prepares the sql string using the same escaping mechanism as the 'query()' method does   
+    
+    conn.query(sqlStr, function(err, res, fld){
+        console.log(res);
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>query()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+// simple query -----------------------------------------------------------------------
+    connection.query('TABLE testTable', function(err, res, fld){
+        if(err) console.log(err);
+        console.log( res );                                                            // -> [ RowDataPacket{...}, RowDataPacket{...}, ... ]    // table records 
+        console.log( fld );                                                            // -> [ FieldPacket{...}, FieldPacket{...}, ... ]        // field (column) informmations  
+    });
+    
+// query with SQL value placeholders --------------------------------------------------
+    connection.query('SELECT ? + ?', [10, 11], function(err, res, fld){                // 2nd argument placeholders for '?' in the query string (1st   arguemnt)
+        if(err) console.log(err);
+        console.log( res );                                                            // -> [ RowDataPacket{...}, RowDataPacket{...}, ... ]    // table records 
+        console.log( fld );                                                            // -> [ FieldPacket{...}, FieldPacket{...}, ... ]        // field (column) informmations  
+    });
+    
+    connection.query('SELECT CONCAT_WS(?, ?, ?)', [' ', 'Kicsi', 'Kutya'], function(err, res, fld){  
+        if(err) console.log(err);
+        console.log( res );                                                            // -> [ RowDataPacket{...}, RowDataPacket{...}, ... ]    // table records 
+        console.log( fld );                                                            // -> [ FieldPacket{...}, FieldPacket{...}, ... ]        // field (column) informmations  
+    });
+    
+// option object ----------------------------------------------------------------------
+    connection.query({sql:'SELECT ? + ? * ?', values:[1, 2, 10], timeout:10000}, function(err, res, fld){  
+        if(err) console.log(err);
+        console.log( res );                                                            // -> [ RowDataPacket{...}, RowDataPacket{...}, ... ]    // table records 
+        console.log( fld );                                                            // -> [ FieldPacket{...}, FieldPacket{...}, ... ]        // field (column) informmations  
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> escaping values <mark>escape()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+// date --------------------------------------------------------------------------
+    console.log( 'date conversion ----------------------------------------------------' );
+    var date = new Date();
+    console.log( mysql.escape(date) );
+    
+// buffer ------------------------------------------------------------------------
+    console.log( 'buffer conversion --------------------------------------------------' );
+    var buffer = Buffer.from('Kicsi Kutya Tarka');
+    console.log( mysql.escape(buffer) );
+    
+// object ------------------------------------------------------------------------
+    console.log( 'object conversion --------------------------------------------------' );
+    var obj = {p1:'string', p2:false, p3:32, p4:{nest1:21, nest2:'nestedString'}};              // nested object tried to stringified with '.   toString()'
+    console.log( mysql.escape(obj) );
+    
+// array -------------------------------------------------------------------------
+    console.log( 'Array conversion ---------------------------------------------------' );
+    var arr = ['string', false, 32, [21, 'nestString'], {nest1:21, nest2:'nestedString'}];      // nested array converted to (21, 'nestedString)    and the nested string is stringified with '.toString()'
+    console.log( mysql.escape(arr) );
+    
+// null / undefined --------------------------------------------------------------
+    console.log( 'null / undefined conversion ----------------------------------------' );
+    console.log( mysql.escape(null), mysql.escape(undefined) );                                 // both are converted to NULL   
+    
+// NaN / Infinity ----------------------------------------------------------------
+    console.log( 'NaN / Infinity conversion ------------------------------------------' );
+    console.log( mysql.escape(NaN), mysql.escape(Infinity) );                                   // left as they are    
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    date conversion ----------------------------------------------------
+    '2020-10-15 15:48:43.757'
+    
+    buffer conversion --------------------------------------------------
+    X'4b69637369204b75747961205461726b61'
+    
+    object conversion --------------------------------------------------
+    `p1` = 'string', `p2` = false, `p3` = 32, `p4` = '[object Object]'
+    
+    Array conversion ---------------------------------------------------
+    'string', false, 32, (21, 'nestString'), '[object Object]'
+    
+    null / undefined conversion ----------------------------------------
+    NULL NULL
+    
+    NaN / Infinity conversion ------------------------------------------
+    NaN Infinity
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> escaping values by the <mark>query()</mark> value placeholder TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+// number -----------------------------------------------------------------------------
+    pool.getConnection(function(err, conn){                                            // inserted as 324
+        conn.query('INSERT INTO testTable(nr) VALUES(?)', 324, function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res );
+        });
+        conn.release();
+    });
+    
+// bigInt -----------------------------------------------------------------------------
+    pool.getConnection(function(err, conn){                                            // inserted as '1325'
+        conn.query('INSERT INTO testTable(str) VALUES(?)', 1325n, function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res );
+        });
+        conn.release();
+    });
+    
+// boolean ----------------------------------------------------------------------------
+    pool.getConnection(function(err, conn){                                            // inserted as 1 (or true)
+        conn.query('INSERT INTO testTable(bol) VALUES(?)', true, function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res );
+        });
+        conn.release();
+    });
+    
+// date -------------------------------------------------------------------------------
+    pool.getConnection(function(err, conn){                                            // inserted as '2020-10-15 17:13:20'
+        conn.query('INSERT INTO testTable(dateTime) VALUES(?)', new Date(), function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res );
+        });
+        conn.release();
+    });
+    
+// null / undefined -------------------------------------------------------------------
+    pool.getConnection(function(err, conn){                                            // both are inserted as NULL
+        conn.query('INSERT INTO testTable(str, nr) VALUES(?, ?)', [undefined, null], function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res );
+        });
+        conn.release();
+    });
+    
+// object key = value pair used -------------------------------------------------------
+    pool.getConnection(function(err, conn){                                            // query string = SELECT * FROM Students WHERE  student_id = 1
+        conn.query('SELECT * FROM Students WHERE ?', {student_id: 1}, function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res );
+        });
+        conn.release();
+        pool.end(function(err){
+            if(err) console.log( err );        
+            console.log( 'SQL connection closed!' );
+        });
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> escaping identifiers by the <mark>escapeId()</mark> and value placeholder TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    pool.getConnection(function(err, conn){
+        conn.query('SELECT ' + pool.escapeId('student_id') + ' FROM Students', function(err, res, fld){
+            if(err) console.log(err);
+            console.log( res );
+        });
+        conn.release();
+    });
+    
+    pool.getConnection(function(err, conn){                                            // the ?? placeholder replaces SQL identifiers [apparently this is  experimental]   
+        conn.query('SELECT ??, ?? FROM Students', ['first_name', 'last_name'], function(err, res, fld){
+            if(err) console.log(err);
+            console.log( res );
+        });
+        conn.release();
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>format()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    conn.connect();
+    
+    var sql = mysql.format('SELECT ??, ?? FROM ?? WHERE ?', ['first_name', 'last_name', 'Students', {student_id:1}]);       // formats the query by safely escaping SQL identifiers '??' and SQL values '?'    
+    
+    conn.query(sql, function(err, res, fld){
+        if(err) console.log( err );
+        console.log( res );
+        conn.end();
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>insertId</mark> / <mark>affectedRows</mark> / <mark>changedRows</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    })
+    
+    conn.connect();
+    
+// insertId ---------------------------------------------------------------------------
+    for(i = 1; i &lt;= 20; i+= 1){
+        conn.query('INSERT INTO testTable(nr, str) VALUES(?, "myStr")', [i], function(err, res, fld){
+            if(err) console.log( err );
+            console.log( res.insertId );                                               // -> 1 to... 20    // -! only works when inserting records to a Table  that has a PRIMARY KEY with AUTO_INCREMENT   
+        });
+    };
+    
+// affectedRows -----------------------------------------------------------------------
+    conn.query('DELETE FROM testTable WHERE nr &lt; ?', [5], function(err, res, fld){
+        if(err) console.log( err );
+        console.log( res.affectedRows );                                               // -> 4             // number of rows affacted (4 rows are deleted)
+    });
+    
+// changedRows ------------------------------------------------------------------------
+    conn.query('UPDATE testTable SET str = NULL WHERE nr >= 15', function(err, res, fld){
+        if(err) console.log( err );
+        console.log( res.affectedRows );                                               // -> 6             // 6 records are changed   
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> Streaming query rows with <mark>error</mark> / <mark>fields</mark> / <mark>result</mark> / <mark>end</mark> events TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'}); 
+    conn.connect();
+    
+    conn.query('TABLE Students')
+    .on('error', function(err){
+            if(err) console.log(err);
+        })
+    .on('fields', function(fld){
+            console.log(fld);
+        })
+    .on('result', function(res){                                                       // we could throtle the connection here with 'conn.pause()' and 'conn.resume()'
+            console.log(res);           
+        })
+    .on('end', function(){
+        console.log( 'Row Streaming ended!' );
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    [
+    FieldPacket {
+        catalog: 'def',
+        db: 'testDB',
+        table: 'Students',
+        orgTable: 'Students',
+        name: 'student_id',
+        orgName: 'student_id',
+        charsetNr: 63,
+        length: 11,
+        type: 3,
+        flags: 4097,
+        decimals: 0,
+        default: undefined,
+        zeroFill: false,
+        protocol41: true
+    },
+    FieldPacket {
+        catalog: 'def',
+        db: 'testDB',
+        table: 'Students',
+        orgTable: 'Students',
+        name: 'first_name',
+        orgName: 'first_name',
+        charsetNr: 33,
+        length: 90,
+        type: 253,
+        flags: 0,
+        decimals: 0,
+        default: undefined,
+        zeroFill: false,
+        protocol41: true
+    },
+    FieldPacket {
+        catalog: 'def',
+        db: 'testDB',
+        table: 'Students',
+        orgTable: 'Students',
+        name: 'last_name',
+        orgName: 'last_name',
+        charsetNr: 33,
+        length: 90,
+        type: 253,
+        flags: 0,
+        decimals: 0,
+        default: undefined,
+        zeroFill: false,
+        protocol41: true
+    }
+    ]
+    RowDataPacket { student_id: 1, first_name: 'Pall', last_name: 'Arpad' }
+    RowDataPacket {
+    student_id: 3,
+    first_name: 'Gyula',
+    last_name: 'Szollosi'
+    }
+    RowDataPacket {
+    student_id: 4,
+    first_name: 'Feri',
+    last_name: 'Gaspar'
+    }
+    RowDataPacket {
+    student_id: 5,
+    first_name: 'Karsai',
+    last_name: 'Levente'
+    }
+    RowDataPacket {
+    student_id: 6,
+    first_name: 'Lukacs',
+    last_name: 'Levente'
+    }
+    RowDataPacket {
+    student_id: 7,
+    first_name: 'Szabo',
+    last_name: 'Emese'
+    }
+    RowDataPacket {
+    student_id: 8,
+    first_name: 'Karsai',
+    last_name: 'Andrea'
+    }
+    RowDataPacket {
+    student_id: 9,
+    first_name: 'Sandor',
+    last_name: 'Lorant'
+    }
+    RowDataPacket {
+    student_id: 12,
+    first_name: 'Hegy',
+    last_name: 'Edith'
+    }
+    RowDataPacket {
+    student_id: 13,
+    first_name: 'Marton',
+    last_name: 'Aron'
+    }
+    RowDataPacket {
+    student_id: 14,
+    first_name: 'Karsai',
+    last_name: 'Melinda'
+    }
+    Row Streaming ended!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> Streaming query rows with the <mark>stream()</mark> method TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.connect();
+    
+    conn.query('TABLE Students').stream()
+        .on('data', function(chunk){
+            console.log( chunk );                       // query response 
+        });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    RowDataPacket { student_id: 1, first_name: 'Pall', last_name: 'Arpad' }
+    RowDataPacket {
+    student_id: 3,
+    first_name: 'Gyula',
+    last_name: 'Szollosi'
+    }
+    RowDataPacket {
+    student_id: 4,
+    first_name: 'Feri',
+    last_name: 'Gaspar'
+    }
+    RowDataPacket {
+    student_id: 5,
+    first_name: 'Karsai',
+    last_name: 'Levente'
+    }
+    RowDataPacket {
+    student_id: 6,
+    first_name: 'Lukacs',
+    last_name: 'Levente'
+    }
+    RowDataPacket {
+    student_id: 7,
+    first_name: 'Szabo',
+    last_name: 'Emese'
+    }
+    RowDataPacket {
+    student_id: 8,
+    first_name: 'Karsai',
+    last_name: 'Andrea'
+    }
+    RowDataPacket {
+    student_id: 9,
+    first_name: 'Sandor',
+    last_name: 'Lorant'
+    }
+    RowDataPacket {
+    student_id: 12,
+    first_name: 'Hegy',
+    last_name: 'Edith'
+    }
+    RowDataPacket {
+    student_id: 13,
+    first_name: 'Marton',
+    last_name: 'Aron'
+    }
+    RowDataPacket {
+    student_id: 14,
+    first_name: 'Karsai',
+    last_name: 'Melinda'
+    }
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> JOIN query (multiple tables containing same column names) <mark>nestTables</mark> option TEST </u></h4>
+    <p> - if 2 column names are overlapping only the first column is returned in the query response </p>
+    <p> - in this example the JOIN table has two columns 'studnet_id' but only the first is returned </p>
+    <p> - enabling the <mark>nestTables</mark> option will return tables individually </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.connect();
+    
+    conn.query({
+            sql: 'SELECT * FROM Students JOIN Class ON Students.student_id = Class.student_id;'
+            // nestTables: true
+        }, function(err, res, fld){
+        if(err) console.log(err);
+        console.log( res );
+    });
+    
+    conn.end(function(err){
+        if(err) console.log(err);    
+        console.log( 'MySQL connection ended!' );
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    [
+    RowDataPacket {
+        student_id: 5,
+        first_name: 'Karsai',
+        last_name: 'Levente',
+        class_name: 'Math'
+    },
+    RowDataPacket {
+        student_id: 7,
+        first_name: 'Szabo',
+        last_name: 'Emese',
+        class_name: 'Algebra'
+    },
+    RowDataPacket {
+        student_id: 8,
+        first_name: 'Karsai',
+        last_name: 'Andrea',
+        class_name: 'CS'
+    },
+    RowDataPacket {
+        student_id: 12,
+        first_name: 'Hegy',
+        last_name: 'Edith',
+        class_name: 'Geography'
+    }
+    ]
+    MySQL connection ended!
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ 
+    </pre>
+    <p> - enabling <mark>nestTables</mark> option </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.connect();
+    
+    conn.query({
+            sql: 'SELECT * FROM Students JOIN Class ON Students.student_id = Class.student_id;',
+            nestTables: true                                                           // nestTables option enabled 
+        }, function(err, res, fld){
+        if(err) console.log(err);
+        console.log( res );
+    });
+    
+    conn.end(function(err){
+        if(err) console.log(err);    
+        console.log( 'MySQL connection ended!' );
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    [
+    RowDataPacket {
+        Students: { student_id: 5, first_name: 'Karsai', last_name: 'Levente' },
+        Class: { student_id: 5, class_name: 'Math' }
+    },
+    RowDataPacket {
+        Students: { student_id: 7, first_name: 'Szabo', last_name: 'Emese' },
+        Class: { student_id: 7, class_name: 'Algebra' }
+    },
+    RowDataPacket {
+        Students: { student_id: 8, first_name: 'Karsai', last_name: 'Andrea' },
+        Class: { student_id: 8, class_name: 'CS' }
+    },
+    RowDataPacket {
+        Students: { student_id: 12, first_name: 'Hegy', last_name: 'Edith' },
+        Class: { student_id: 12, class_name: 'Geography' }
+    }
+    ]
+    MySQL connection ended!
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ 
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Pooling </u></h2>
+    <p> - <mark>node-mysql</mark> module provides 2 pooling methods which provide effective ways to manage multiple connections </p>
+<h2 style="color:darkblue;"><u> Connection Pool (for same connection profiles) <mark>createPool()</mark> / <mark>getConnection()</mark> / <mark>end()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>connection</mark> / <mark>acquire</mark> / <mark>release</mark> / <mark>enqueue</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({                                                      // creates a connection pool (for same connection profiles)
+        connectionLimit: 15,                                                           // the connection pool can keep up to 15 live connection (additional connections will be enqueued)    
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    pool.getConnection(function(err, connection){                                      // estabilishes a new connection in the pool  
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            res;                                                                       // -> query result   
+            // release() --------------------------------------------------------------
+            connection.release();                                                      // releases this connection back to the pool, so this connection will be a free live connection in the pool and can be reused when the 'getConnection()' is called again    
+            // destroy() --------------------------------------------------------------
+            connection.destroy();                                                      // destroys this connection, so this connection is completely removed from the pool 
+        });
+    });
+    
+    pool.end();                                                                        // gracefully ends all the pool's connections (calls 'end()' on all the connections in the pool)   
+    
+// connection / acquire / release / enqueue (evnets) ----------------------------------
+    pool.on('connection', function(connection){                                        // emitted when a new conneciton is estabilished with the MySQL server
+        connection;                                                                      // the estabilished connection   
+    });
+    
+    pool.on('acquire', function(connection){                                           // emitted when a live connection is acquired from the connection pool    
+        connection;                                                                      // the acquired connection from the connection pool  
+    });
+        
+    pool.on('release', function(connection){                                           // emitted when a connection is released back to the pool   
+        connection;                                                                      // the connection which is released back to the connection pool  
+    });
+    
+    pool.on('enqueue', ()=>{});                                                        // emitted when all the connections in the pool are busy and a new connection is enqueued    
+    </pre>
+    <p> manage pool connections directly with the <mark>query()</mark> method </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({                                                      // creates a connection pool (for same connection profiles)
+        connectionLimit: 15,                                                           // the connection pool can keep up to 15 live connection (additional connections will be enqueued)    
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    pool.query('TABLE testTable', function(err, res, fld){                             // calling the query method directly on the pool is a shortcut for 3 methods (operations)   
+        if(err) console.log(err);                                                        // 1) 'getConnection()'    // estabilish a new or acquire an existing connection from the pool    
+        res;                                                                             // 2) 'query()'            // the query request itsefl    
+    });                                                                                  // 3) 'release()'          // releases the freed up connection back to the pool (so it can be reused)    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createPool()</mark> / <mark>getConnection()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({                                                      // creates a connection pool (same connection profiles)
+        connectionLimit: 5,
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    pool.getConnection(function(err, connection){
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            console.log(res);
+            connection.release();                                                      // releases the connection back to the pool once the query response is received 
+        });
+    });
+    
+    pool.getConnection(function(err, connection){
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            console.log(res);
+            connection.release();
+        });
+    });
+    
+    pool.getConnection(function(err, connection){                                      // estabilishing connections from the pool  
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            console.log(res);
+            connection.release();
+            pool.end();                                                                // gracefully ending the whole pool  
+        });
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> connecting directly with the <mark>query()</mark> method TEST </u></h4>
+    <p> - the <mark>query()</mark> is an awesome shortcut for <mark>getConnection()</mark> -> <mark>query()</mark> - <mark>release()</mark> </p>
+    <p> - so the calling the <mark>query()</mark> method on the <mark>pool</mark> will 1) estabilish a connection from the pool 2) requests and receives the receives the query respons 3) releases the estabilished connection back to the pool </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        connectionLimit: 5,
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    pool.query('TABLE testTable', function(err, res, fld){
+        if(err) console.log(err);
+        console.log(res);
+        
+    });
+    
+    pool.query('TABLE testTable', function(err, res, fld){
+        if(err) console.log(err);
+        console.log(res);
+    });
+    
+    pool.query('TABLE testTable', function(err, res, fld){                             // estabilishing 3 connections from the pool 
+        if(err) console.log(err);
+        console.log(res);
+    });
+    
+    setInterval(function(){                                                            // every 3 seconds issues a new query request  
+        pool.query('TABLE testTable', function(err, res, fld){                         // -! this does not estabilish a new connection because previous connections are released back to the pool so this just reuses an already estabilished connection    
+            if(err) console.log(err);
+            console.log(res);
+        });
+    }, 3000);
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> releasing then reusing the same connection <mark>release()</mark> TEST </u></h4>
+    <p> - there is only one connection estabilished from the pool because every time the query is performed the connection is released back to the pool with <mark>connection.release()</mark> </p>
+    <p> - so every time the <mark>getConnection()</mark> is called it gets the already estabilished connection again and again </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        connectionLimit: 5,
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    setInterval(function(){
+        pool.getConnection(function(err, connection){                                  // first estabilishes a connection with the MySQL server then every time is called reuses the already open connection   
+            connection.query('TABLE testTable', function(err, res, fld){ 
+                if(err) console.log(err);
+                console.log( res );
+            });
+            connection.release();                                                      // the connection is released back to the connection pool every time  
+        });
+    }, 3000);
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> destroy pool connection <mark>destroy()</mark> TEST </u></h4>
+    <p> the connection is destroyed and re-estabilished every time the <mark>getConnection()</mark> is called </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        connectionLimit: 5,
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    setInterval(function(){
+        pool.getConnection(function(err, connection){                                  // every time estabilishes a new connection from the pool 
+            connection.query('TABLE testTable', function(err, res, fld){
+                if(err) console.log(err);
+                console.log( res );
+                connection.destroy();                                                  // destroys the connection (removes from the pool)
+            });
+        });
+    }, 3000);
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>connection</mark> / <mark>acquire</mark> / <mark>release</mark> events TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        connectionLimit: 5,
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    setInterval(function(){
+        pool.getConnection(function(err, connection){
+            connection.query('TABLE testTable', function(err, res, fld){
+                if(err) console.log(err);
+                console.log( res );
+                connection.release();
+            });
+        });
+    }, 3000);
+    
+    pool.on('connection', function(connection){                                        // emitted when a conneciton is estabilished with the MySQL server
+        console.log( `connetion ${connection.threadId} estabilished` );
+    });
+    
+    pool.on('acquire', function(connection){                                           // emitted when a live connection is acquired from the connection pool    
+        console.log( `connetion ${connection.threadId} acquired` );
+    });
+    
+    pool.on('release', function(connection){                                           // emitted when a connection is released back to the pool   
+        console.log( `connetion ${connection.threadId} released back to the connection pool` );
+    });
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    connetion 118 estabilished                                                         // connection event emitted only once because we are releasing it to the connection pool    
+    connetion 118 acquired                                                             // the 118 connection is acquired 
+      [ RowDataPacket {nr: 21} ]
+    connetion 118 released back to the connection pool                                 // the 118 connection is released 
+    connetion 118 acquired                                                             // and so on...
+      [ RowDataPacket {nr: 21} ]
+    connetion 118 released back to the connection pool
+    connetion 118 acquired
+      [ RowDataPacket {nr: 21} ]
+    connetion 118 released back to the connection pool
+    connetion 118 acquired
+      [ RowDataPacket {nr: 21} ]
+    connetion 118 released back to the connection pool
+    connetion 118 acquired
+      [ RowDataPacket {nr: 21} ]
+    connetion 118 released back to the connection pool
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>enqueue</mark> event TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var pool = mysql.createPool({
+        connectionLimit: 2,                                                            // only 2 live connections are allowed 
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    setInterval(function(){
+        pool.getConnection(function(err, connection){
+            connection.query('TABLE testTable', function(err, res, fld){
+                if(err) console.log(err);
+                console.log( res );
+                // connection.release();                                               // connections are not released back to the pool 
+            });
+        });
+    }, 3000);
+    
+    pool.on('enqueue', function(){                                                     // when the all the connections pools connections are busy and a new connection attempted   
+        console.log( 'Pool connections are all busy' );
+    });
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+      [ RowDataPacket {nr: 21} ]
+      [ RowDataPacket {nr: 21} ]
+    Pool connections are all busy                                                       // after pool has estabilished 2 live connection a new connection atempt is made the 'enqueue' event is emitted   
+    Pool connections are all busy
+    Pool connections are all busy
+    Pool connections are all busy
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> Connection Pool (for different connection profiles) <mark>createPoolCluster()</mark> / <mark>add()</mark> / <mark>remove()</mark> / <mark>_nodes</mark> / <mark>getConnection()</mark> / <mark>end()</mark> / <mark>of()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events:  <mark>remove</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster();                                       // creating the poolCluster (conneciton poll for different connection profiles) 
+    
+    poolCluster.add('pall', {host:'localhost', user:'pall', password:'pass', database:'testDB'});       // adding 3 connection profiles (connection nodes) to the poolCluster
+    poolCluster.add('other_1', {host:'localhost', user:'other_1', password:'pass1', database:'testDB'});
+    poolCluster.add('other_2', {host:'localhost', user:'other_2', password:'pass2', database:'testDB'});
+    
+    poolCluster._nodes;                                                                // -> {pall{...}, other_1{...}, other_2{...}}    // returns an object containing the poolClusters connection nodes    
+    
+// remove() ---------------------------------------------------------------------------
+    poolCluster.remove('other_2');                                                     // removes the 'other_2' connection node from the poolCluster    
+    poolCluster._nodes;                                                                // -> {pall{...}, other_1{...}}   
+    
+// getConnection() --------------------------------------------------------------------
+    poolCluster.getConnection('pall', function(err, conn){                             // connects the 'pall' connection node from the pool
+        conn.query('TABLE testTable', function(err, res, fld){                         // query request  
+            res;                                                                         // -> query result
+        });
+    });
+    
+    poolCluster.getConnection(function(err, conn){ });                                 // (no connection node Id) connects the next connections node (according to the connection selector 'defaultSelector' settings in the 'createPoolCluster()' method)   
+    poolCluster.getConnection(function(err, conn){ });
+    
+// end() ------------------------------------------------------------------------------
+    poolCluster.end(function(err){                                                     // gracefully closes the poolCluster (waits till all the pool connecttons' finishes)  
+        if(err) console.log(err);
+    });
+    </pre>
+    <p> - poolCluster namespace </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster();                                       // creating the poolCluster (conneciton poll for different connection profiles) 
+    
+    poolCluster.add('pall', {host:'localhost', user:'pall', password:'pass', database:'testDB'});       // adding 3 connection profiles (connection nodes) to the poolCluster
+    poolCluster.add('other_1', {host:'localhost', user:'other_1', password:'pass1', database:'testDB'});
+    poolCluster.add('other_2', {host:'localhost', user:'other_2', password:'pass2', database:'testDB'});
+    
+    var poolOther = poolCluster.of(/other*/, 'RANDOM');                                // creates a namespace with 'other_1' and 'other_2' connection nodes ('RANDOM' = connection selector for the namespace)    
+    
+    poolOther.getConnection(function(err, conn){                                       // connects the next connections node in the namespace (according to the connection selector 'RANDOM')    
+        conn.query('TABLE testTable', function(err, res, fld){
+            res;                                                                         // -> query result   
+        });
+    });                               
+    
+    poolOther.query('TABLE testTable', function(err, res, fld){                        // shortcuts for above call 'getConnection()' -> 'query()'    
+        console.log( res );
+    });    
+    
+// connectin a specific connection node from the namespace is not allowed -------------
+    poolOther.getConnection('other_2', function(err, conn){ ... });                    // -! this throws an Error (calling a specific connection node from the poolCluster is not allowed for some reasons)    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createPoolCluster()</mark> TEST </u></h4>
+    <pre>    
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster();                                       // creating the poolCluster (conneciton poll for different connection profiles) 
+    
+    poolCluster.add('pall', {                                                          // adding 3 connection profiles to the poolCluster  
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_1', {
+        host: 'localhost',
+        user: 'other_1',
+        password: 'pass1',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_2', {
+        host: 'localhost',
+        user: 'other_2',
+        password: 'pass2',
+        database: 'testDB'
+    });
+    
+    poolCluster.getConnection('pall', function(err, connection){                       // connect connection nodes and issue the query request   
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            console.log( res );
+        });
+    });
+    
+    poolCluster.getConnection('other_1', function(err, connection){
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            console.log( res );
+        });
+    });
+    
+    poolCluster.getConnection('other_2', function(err, connection){
+        connection.query('TABLE testTable', function(err, res, fld){
+            if(err) console.log(err);
+            console.log( res );
+            poolCluster.end(function(err){                                             // closes the poolCluster 
+                if(err) console.log(err);
+                console.log( 'poolCluster ended!' );
+            });
+        });
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> random connection Id <mark>_nodes</mark> / <mark>remove()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster();
+    
+    poolCluster.add({                                                                  // adding connection nodes without connection ID ('CLUSTER::1' is automatically assigned to the connection node)   
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    poolCluster.add({
+        host: 'localhost',
+        user: 'other_1',
+        password: 'pass1',
+        database: 'testDB'
+    });
+    
+    poolCluster.add({
+        host: 'localhost',
+        user: 'other_2',
+        password: 'pass2',
+        database: 'testDB'
+    });
+    
+    console.log( poolCluster._nodes );                                                 // -> {'CLUSTER::1'{...}, 'CLUSTER::2'{, 'CLUSTER::3'{}}}    // list the poolClusters connection nodes  
+    
+    poolCluster.remove('CLUSTER::2');                                                  // removes the 2nd connection node
+    console.log( poolCluster._nodes );                                                 // -> {'CLUSTER::1'{...}, 'CLUSTER::3'{}}
+    
+    poolCluster.remove('CLUSTER*');                                                    // accepts regular expressions (removes all connection nodes)
+    console.log( poolCluster._nodes );                                                 // -> {}
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> connection selector => <mark>getConnection()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster({
+        defaultSelector: 'RANDOM'                                                      // random connection selector (the next connection from the poolCluster is selected randomly if not specified)    
+    });
+    
+    poolCluster.add('pall', {
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_1', {
+        host: 'localhost',
+        user: 'other_1',
+        password: 'pass1',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_2', {
+        host: 'localhost',
+        user: 'other_2',
+        password: 'pass2',
+        database: 'testDB'
+    });
+    
+// ------------------------------------------------------------------------------------
+    poolCluster.getConnection('other_1', function(err, conn){                          // starts the specified connection node from the poolCluster   
+        console.log( conn.threadId );
+    });
+    
+// ------------------------------------------------------------------------------------
+    poolCluster.getConnection(/other*/, function(err, conn){                           // regExp accepted so the next connection node is 'other_1' or  'other_2' (because of the RANDOM connection selector)    
+        console.log( conn.threadId );
+    });
+    
+// ------------------------------------------------------------------------------------
+    poolCluster.getConnection(function(err, conn){                                     // starts the next connection node from the poolCluster (according to   the connection selector 'RANDOM' in this case)   
+        console.log( conn.threadId );
+    });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> namespace within the poolCluster <mark>get()</mark> TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster();
+    
+    poolCluster.add('pall', {
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_1', {
+        host: 'localhost',
+        user: 'other_1',
+        password: 'pass1',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_2', {
+        host: 'localhost',
+        user: 'other_2',
+        password: 'pass2',
+        database: 'testDB'
+    });
+    
+    var poolOther = poolCluster.of('other*', 'RANDOM');                                // creates a connection pool namespase with 'other_1' and 'other_2' connection nodes   
+                                                                                       // 'RANDOM' is the connection selector for this namespace  
+    poolOther.getConnection(function(err, conn){
+        console.log( conn.threadId );
+    });
+    
+    poolOther.getConnection(function(err, conn){
+        console.log( conn.threadId );
+    });
+    
+    // poolOther.getConnection('other_2', function(err, conn){                         // -! for some reasons I cannot call a specific connection node from the namespace (Error thrown)  
+    //     console.log( conn.threadId );
+    // });
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> calling <mark>query()</mark> directly on the poolCluster TEST </u></h4>
+    <pre>
+    const mysql = require('mysql');
+    
+    var poolCluster = mysql.createPoolCluster();
+    
+    poolCluster.add('pall', {
+        host: 'localhost',
+        user: 'pall',
+        password: 'pass',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_1', {
+        host: 'localhost',
+        user: 'other_1',
+        password: 'pass1',
+        database: 'testDB'
+    });
+    
+    poolCluster.add('other_2', {
+        host: 'localhost',
+        user: 'other_2',
+        password: 'pass2',
+        database: 'testDB'
+    });
+    
+    // poolCluster.query('TABLE testTable', function(err, res, fld){                   // -! we can't do this 
+    //     console.log( res );
+    // });
+    
+    var poolOther = poolCluster.of(/other*/);
+    
+    poolOther.getConnection(function(err, conn){
+        conn.query('TABLE testTable', function(err, res, fld){    
+            console.log( res );
+        });
+    });
+    
+    poolOther.query('TABLE testTable', function(err, res, fld){                        // shortcut for the above connection node call  (getConnection()    -> query())
+        console.log( res );
+    });    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> node-mysql module Error Handling </u></h2>
+    <p> - if a fatal Error occurs (like failed connection) it is propagated on <u>ALL</u> pending callbacks <u>(if there's no callback at all to handle the error the stack trace is printed and the process is killed)</u> </p>
+    <p> - if a normal Error occurs (like bad SQL query) it is propagated only ont its object <u>(if its object has no callback, the stack trace is printed and the process is killed)</u> </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+// Fatal Error ------------------------------------------------------------------------
+    conn.connect(function(err){ err; });                                               // fatal error is propagated on all pending callbacks    
+    
+    conn.query('someSQL', function(err, res, fld){ err; });                            // fatal error is propagated on all pending callbacks    
+    
+// Fatal Error ------------------------------------------------------------------------
+    conn.connect();                                                                    // -! there's no callback at all to handle the fatal error = process killed    
+    
+    conn.query('someSQL',);                                                            // -! there's no callback at all to handle the fatal error = process killed    
+    
+// Normal Error -----------------------------------------------------------------------
+    conn.connect(function(err){ err; }); 
+    
+    conn.query('someBadSQL', function(err, res, fld){ err; });                         // normal error only propagated on its object    
+    
+// Normal Error -----------------------------------------------------------------------
+    conn.connect(function(err){ err; }); 
+    
+    conn.query('someBadSQL');                                                          // -! there's no callback on the object where the normal error is propagated = process killed   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> fatal Error TEST </u></h4>
+    <p> - because a fatal Error occured the Error is propagated on all callbacks </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', port:1234, user:'pall', password:'pass', database:'testDB'});  // bad port number 
+    
+    conn.connect(function(err){
+        if(err) {
+            console.log( '----- connect callback' );
+            console.log( err.code );    
+        };
+    });
+    
+    conn.query('SELECT * FROM testTable', function(err, res, fld){
+        if(err) {
+            console.log( '----- query callback' );
+            console.log( err.code );    
+        };
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    ----- connect callback
+    ECONNREFUSED
+    ----- query callback
+    ECONNREFUSED
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> fatal Error with no callback at all TEST </u></h4>
+    <p> - because there is no callback at all to handle the fatal Error the stack trace is printed and the process is killed </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', port:1234, user:'pall', password:'pass', database:'testDB'});
+    
+    conn.connect();
+    
+    conn.query('SELECT * FROM testTable'); /*, function(err, res, fld){
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    events.js:291
+        throw er; // Unhandled 'error' event
+        ^
+        
+        Error: connect ECONNREFUSED 127.0.0.1:1234
+        ...
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> normal Error TEST </u></h4>
+    <p> - because a normal Error occured it is only propagated on its object </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.connect(function(err){
+        if(err) {
+            console.log( '----- connect callback' );
+            console.log( err.code );    
+        };
+    });
+    
+    conn.query('SELECT  FROM testTable', function(err, res, fld){                      // bad SQL query 
+        if(err) {
+            console.log( '----- query callback' );
+            console.log( err.code );    
+        };
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    ----- query callback
+    ER_PARSE_ERROR
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> normal Error without callback to handle on its object TEST </u></h4>
+    <p> - because the normal Error has no callback to handle it the stack trace is printed and the process is killed </p>
+    <pre>
+    const mysql = require('mysql');
+    
+    var conn = mysql.createConnection({host:'localhost', user:'pall', password:'pass', database:'testDB'});
+    
+    conn.connect(function(err){
+        if(err) {
+            console.log( '----- connect callback' );
+            console.log( err.code );    
+        };
+    });
+    
+    conn.query('SELECT  FROM testTable');
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL$ node main
+    /home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/3rd Party Modules/MySQL/node_modules/mysql/lib/protocol/Parser.js:437
+        throw err; // Rethrow non-MySQL errors
+        ... 
+    </pre>
+    
+
+
+</details>
+    
+    <br><br>
+</body>
+</html>

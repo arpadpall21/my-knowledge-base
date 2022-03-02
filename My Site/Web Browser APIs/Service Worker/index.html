@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Service Worker </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Service Worker (ver 3.4.1) <span style="background-color:yellow;">I partially tested because this technology is mostly experimental</span></h1>
+    <p> Updated ( 2021-01-05 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html"> Web Browser APIs> </a> Service Workers 
+    </p>
+<table class="table">
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> navigator.serviceWorker </td>
+        <td>  returns a <strong>serviceWorkerContainer</strong> object which provides access to the Service Worker Interface (may not be available in private mode)
+            <span class="browserSupport" title="Updated: 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 17 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serviceWorkerContainer</strong>.register(<strong>url:str</strong>, <i class="openable">option:obj<div>
+                <p> scope: <strong>path:str</strong> - service worker registration scope (the URL range the service worker can control (ex: setting it as root directory will control pages over the whole domain)) (Default: directory where the service worker file is currently located <u>upper directories cannot be set only lower directories are allowed [TESTED: 2021-01-05]</u>) </p>
+            </div></i>)
+        </td>
+        <td> <i class="fas fa-flask"></i>
+            - registers the file as Service Worker and sets the Service Worker's scope <br>
+            - the Service Worker scope defines the pages that will be controlled by the Service Worker (<i>option</i> object) <br>
+            - can be called multiple times once the browser registers the Service Worker it won't re-register again <br>
+            - returns a promise that is resolved to a <strong>serviceWorkerRegistration</strong> object on successful registration
+            <span class="browserSupport" title="Updated: 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 27 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 17 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>    
+    <tr>
+        <td colspan="2"> in <mark>ServiceWorkerGlobalScope</mark>
+            <span class="browserSupport" title="Updated : 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 24 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> skipWaiting() </td>
+        <td> <i class="fas fa-flask"></i>
+            immediately activates <u class="openable">this Service Worker<div>
+                <p> - in situations when a new worker is available (Service Worker file is modified or replaced), the new worker waits until the old worker fully finishes </p>
+                <p> - this method immediately replaces the old Service Worker by this one </p>
+            </div></u> (does not wait for the old worker to finish, forcefully replaces it)
+            <span class="browserSupport" title="Updated : 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 24 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            onactivate = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>ExtendableEvent</mark> </p>
+                <p> ev.waitUntil(<strong>promise</strong>) - blocks this event until the promise is resolved or rejected (we can pass <mark>Cache</mark> api promises here) <u style="color:orangered;">(blocks this event from finishing BUT other tasks in the event handler function will be still continue executing but the event is not finishes until the promise is resolved or rejected)</u> </p>
+            </div></strong>
+        </td>
+        <td> <i class="fas fa-flask"></i>
+            - event property triggers when the Service Worker is activated (also works as <mark>activate</mark> event on the <mark>ServiceWorkerGlobalScope</mark> object) <br>
+            - once this event is finished <u>this Service Worker</u> is in control over pages in its scope
+            <span class="browserSupport" title="Updated : 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 24 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            onfetch = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>FetchEvent</mark> </p>
+                <p> ev.clientId - Service Worker Client Id that issued this fetch </p>
+                <p> ev.waitUntil(<strong>promise</strong>) - blocks this event until the promise is resolved or rejected (we can pass <mark>Cache</mark> api promises here) <u style="color:orangered;">(blocks this event from finishing BUT other tasks in the event handler function will be still continue executing but the event is not finishes until the promise is resolved or rejected)</u> </p>
+                <p> ev.respondWith(<strong>promise(res)</strong>) - replaces the network response, so the Service Worker client will receive this response instead of the network response (the passed Promise must resolve to a <strong>res</strong> (response) object) </p>
+            </div></strong>
+        </td>
+        <td> <i class="fas fa-flask"></i>
+            - event triggers when any of the Service Worker Client issues a request (fetches resources) <br>
+            - intercepts outgoing requests (<mark>ev.request</mark>) and can replace incomming responses (<mark>ev.respondWith()</mark>) 
+            <span class="browserSupport" title="Updated : 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 24 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            oninstall = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>InstallEvent</mark> </p>
+                <p> ev.waitUntil(<strong>promise</strong>) - blocks this event until the promise is resolved or rejected (we can pass <mark>Cache</mark> api promises here) <u style="color:orangered;">(blocks this event from finishing BUT other tasks in the event handler function will be still continue executing but the event is not finishes until the promise is resolved or rejected)</u> </p>
+            </div></strong>
+        </td>
+        <td> <i class="fas fa-flask"></i>
+            - event property triggers when the worker installed (also works as <mark>install</mark> event on the <mark>ServiceWorkerGlobalScope</mark> object) <br>
+            - also triggers when the Service Worker file is modified 
+            <span class="browserSupport" title="Updated : 2021-01-06">
+                <span><i class="fab fa-chrome"></i> 40 </span>
+                <span><i class="fab fa-firefox"></i> 44 no <span class="openable">ESR<div>
+                    <p> - Extended Suport Release (business version of the Firefox) </p>
+                </div></span> / 78 </span>
+                <span><i class="fab fa-opera"></i> 24 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>    
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <p> - <mark>Clients</mark> / <mark>Client</mark> API - Represent the Service Worker clients (pages that are controlled by the Service Worker) </p>
+        <p> - <mark>PeriodicSyncManager</mark> / <mark>PeriodicSyncRegistration</mark> - periodic background sync API </p>
+        <p> - and more... </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank"> Service Worker API (developer.mozilla.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - a Service Worker is a <u>local Proxy Server</u> that sits between the site and the server <u>(works over HTTPS or localhost)</u></p>
+    <p> - it is designed to enhance offline experience (<b>P</b>rogressive <b>W</b>eb <b>A</b>pps are based on this technology) offline content loading, backgrouns sync, push notifications, etc... </p>
+    <p><u><b> Lifecycle: </b></u></p>
+    <p> - a document 'installs' the service worker through 3 steps <u>Register</u> -&gt; <u>Install</u> -&gt; <u>Activate</u> </p>
+    <p> - once the Service Worker is activated it <u>permanently stays with the browser as local Proxy Server</u> so after this point it controls the traffic within its scope (just like a fully featured server)</p> 
+    <p> - if a new Service Worker is available (ex: sw file is modified or replaced) the new worker will wait until the old worker fully finishes then takes its place </p>
+    <p><u><b> Service Worker Scope: </b></u></p>
+    <p> - the Service Worker Scope determines the pages that the Service Worker controls (ex: if the Service Worker scope is the root it controls all pages on the origin) </p>
+    <p> - pages controlled by the Service Worker are called 'Service Worker Clients' </p>
+    <img src="Service Worker.jpg" height="250">
+    <pre class="syntax">
+SYNTAX:     navigator.serviceWorker                                                    // returns a <strong>serviceWorkerContainer</strong> object which provides access to the Service Worker Interface (may not be available in private mode)    
+                    
+                    
+            <strong>serviceWorkerContainer</strong>.register(<strong>url:str</strong>, <i class="openable">option:obj<div>
+                <p> scope: <strong>path:str</strong> - service worker registration scope (the URL range the service worker can control (ex: setting it as root directory will control pages over the whole domain)) (Default: directory where the service worker file is currently located <u>upper directories cannot be set only lower directories are allowed [TESTED: 2021-01-05]</u>) </p>
+            </div></i>)                      // registers the file as Service Worker and sets the Service Worker's scope 
+                                                                                          the Service Worker scope defines the pages that will be controlled by the Service Worker (<i>option</i> object)    
+                                                                                          can be called multiple times once the browser registers the Service Worker it won't re-register again   
+                                                                                          returns a promise that is resolved to a <strong>serviceWorkerRegistration</strong> object on successful registration     
+                                                                                         
+                    
+  <span style="color:darkgray;">// in <mark>ServiceWorkerGlobalScope</mark> ------------------------------------------------------</span>
+            skipWaiting()                                                              // immediately activates <u class="openable">this Service Worker<div>
+                <p> - in situations when a new worker is available (Service Worker file is modified or replaced), the new worker waits until the old worker fully finishes </p>
+                <p> - this method immediately replaces the old Service Worker by this one </p>
+            </div></u> (does not wait for the old worker to finish, forcefully replaces it)    
+            
+            
+            oninstall = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>InstallEvent</mark> </p>
+                <p> ev.waitUntil(<strong>promise</strong>) - blocks this event until the promise is resolved or rejected (we can pass <mark>Cache</mark> api promises here) <u style="color:orangered;">(blocks this event from finishing BUT other tasks in the event handler function will be still continue executing but the event is not finishes until the promise is resolved or rejected)</u> </p>
+            </div></strong>                                                        // event property triggers when the worker installed (also works as <mark>install</mark> event on the <mark>ServiceWorkerGlobalScope</mark> object)   
+                                                                                          also triggers when the Service Worker file is modified 
+            onactivate = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>ExtendableEvent</mark> </p>
+                <p> ev.waitUntil(<strong>promise</strong>) - blocks this event until the promise is resolved or rejected (we can pass <mark>Cache</mark> api promises here) <u style="color:orangered;">(blocks this event from finishing BUT other tasks in the event handler function will be still continue executing but the event is not finishes until the promise is resolved or rejected)</u> </p>
+            </div></strong>                                                       // event property triggers when the Service Worker is activated (also works as <mark>activate</mark> event on the <mark>ServiceWorkerGlobalScope</mark> object)    
+                                                                                          once this event is finished <u>this Service Worker</u> is in control over pages in its scope    
+            
+            
+            onfetch = <strong class="openable">fn(ev)<div>
+                <p> ev - <mark>FetchEvent</mark> </p>
+                <p> ev.clientId - Service Worker Client Id that issued this fetch </p>
+                <p> ev.waitUntil(<strong>promise</strong>) - blocks this event until the promise is resolved or rejected (we can pass <mark>Cache</mark> api promises here) <u style="color:orangered;">(blocks this event from finishing BUT other tasks in the event handler function will be still continue executing but the event is not finishes until the promise is resolved or rejected)</u> </p>
+                <p> ev.respondWith(<strong>promise(res)</strong>) - replaces the network response, so the Service Worker client will receive this response instead of the network response (the passed Promise must resolve to a <strong>res</strong> (response) object) </p>
+            </div></strong>                                                          // event triggers when any of the Service Worker Client issues a request (fetches resources)  
+                                                                                          intercepts outgoing requests (<mark>ev.request</mark>) and can replace incomming responses (<mark>ev.respondWith()</mark>)     
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})                      // registers the 'sw.js' as Service Worker, its scope is the current and all nested sites (Default)
+            .then(registration => registration)                                          // -! we can only narrow the SW scope (ex: {scope:'../'} is not allowed only nested directories (sites) relative to the SW location)    
+            .catch(err =&gt; console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>sw.js</mark> (file) the Service Worker thread </p>
+    <pre>
+// install / activate (events) --------------------------------------------------------
+    oninstall = function(ev){                                                          // event triggers when the service worker installs 
+        ev.waitUntil( somePromise )                                                      // method prevents this event from finishing until the passed promise is resolved or rejected (used to run cache API promises here)   
+        // some code ...                                                                 // -! further code still runs while 'waitUntil()' is waiting    
+    }
+    
+    onactivate = function(ev){                                                         // event triggers when the service worker is activated (after this event this service worker is in control)    
+        ev.waitUntil( somePromise )                                                      // method prevents this event from finishing until the passed promise is resolved or rejected (used to run cache API promises here)   
+        // some code ...                                                                 // -! further code still runs while 'waitUntil()' is waiting    
+    }
+    
+// fetch (event) ----------------------------------------------------------------------
+    onfetch = function(ev){                                                            // event triggers when one of the Service Worker clients (site that the service worker controls) is fetching for resources    
+        ev.clientId                                                                    // -> 1234...        // client id that issued the request  
+        
+        ev.request                                                                     // -> Request{}      // the issued request object by the SW client    
+        
+        ev.respondWith(                                                                // this method can respond to the request 
+            Promise.resolve(new Response('Replaced response'))                           // promise that resolves to a Response object  
+        )
+    }   
+    
+// skipWaiting() ----------------------------------------------------------------------
+    skipWaiting()                                                                      // this Service Worker will forcefully replaces and already running 'old' worker 
+                                                                                         // ex: when the Service Worker file is modified or replaced this worker is not waiting the old woker to finish    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> register my first service worker <mark>register()</mark> TEST </u></h4>
+    <p> - setting up a service worker means that it becomes a proxy server between the server and the page so traffic will pass through it! </p>
+    <p> - once the service worker is registered the browser will remember the registration (so we can call the <mark>register()</mark> method as many times as we want the browser won't re-register the worker) </p>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js')                                    // the 'sw.js' file is registered as service worker for this page and all pages that are nested under the current directory    
+            .then(function(registration){                                              
+                console.log('Service Worker Registered!');
+            })
+            .catch(err => console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> service worker scope TEST </u></h4>
+    <p> - service worker scope means the sites what are controlled by the service worker </p> 
+    <p> - by Default the service worker scope is where the service worke file is located and all nested sites </p>
+    <p style="color:yellow"> - we only can narrow the service worker scope, so no upper directories can be set to be controlled by the service worker! [TESTED: 2021-01-05]</p>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./underSite'})             // site in the 'underSite' directory and all it's nested sites are controlled by the service worker now 
+            .then(function(registration){                                              // -! setting the scope to '../' or higher is not allowed for some reasons
+                console.log('Service Worker Registered!');
+            })
+            .catch(err => console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>oninstall</mark> / <mark>onactivate</mark> event properties TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})
+            .then(function(registration){
+                console.log('Service Worker Registered!');
+            })
+            .catch(err =&gt; console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>sw.js</mark> (service worker file) </p>
+    <pre>
+    self.oninstall = function(ev){                                                     // fires when the SW is installed for the first time and when the SW file is modified 
+        console.log( 'sw Installed!' );                                                  // we usually do some caching here 
+    }
+    
+    self.onactivate = function(ev){                                                    // fires when this SW is activated (after this event this service worker is in control)
+        console.log( 'sw Activated!' );                                                  // we usually empty redundant caches here  
+    }
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>waitUntil()</mark> in install and activate events TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})
+            .then(function(registration){
+                console.log('Service Worker Registered!');
+            })
+            .catch(err =&gt; console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+    <p> - <mark>sw.js</mark> (service worker file) </p>
+    <pre>
+    self.oninstall = function(ev){ 
+        ev.waitUntil(                                                                  // blocks the install event until the promise is resolved or rejected (useful to use Cache API promises)    
+            new Promise(function(res, rej){
+            setTimeout(function(){
+                res('resolved');
+                console.log('waitUntil() ended in install event!');
+            }, 5000);                                                                  // after 5 seconds the promise is resolved so the 'install' event can finish   
+        })) 
+        console.log('install running');                                                // while the waitUntil() blocks the event from finishing further code in the event function body is still running, when this log it does NOT mean the end of the 'install' event!    
+    }
+    
+    self.onactivate = function(ev){ 
+        ev.waitUntil(                                                                  // same goes here 
+            new Promise(function(res, rej){
+            setTimeout(function(){
+                rej('rejected'); 
+                console.log('waitUntil() ended in activate event!');
+            }, 5000);
+        }))
+    }
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>skipWaiting()</mark> TEST </u></h4>
+    <p> - this Service Worker will immediately activate, it won't wait untill the old worker to finish </p>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})
+            .then(function(registration){
+                console.log('Service Worker Registered!');
+            })
+            .catch(err =&gt; console.log( err ));    
+    }
+&lt;/script&gt;    
+    </pre>
+    <p> - <mark>sw.js</mark> (service worker file) </p>
+    <pre>
+    skipWaiting();                                                                     // this service worker is immediately activated (replaced the old still running worker)    
+    
+    self.oninstall = function(ev){ 
+        console.log( 'sw Installed!' );
+    }
+    
+    self.addEventListener('activate', function(ev){ 
+        console.log( 'sw Activated!' );
+    });    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>onfetch</mark> event property TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})
+            .then(function(registration){
+                console.log('Service Worker Registered!');
+            })
+            .catch(err =&gt; console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+    <pre>
+    self.addEventListener('activate', function(ev){ 
+        console.log('sw activated!');
+    });
+    
+    self.onfetch = function(ev){                                                       // triggered when a SW client fetches a resource ('intercepts' the client request)   
+        console.log( ev.clientId );                                                    // -> 5ef02f85-66d3-4774-af1b-12029cb6fc16  (Service Worker clients are the sites that the Service Worker controls)    
+        console.log( ev.request);                                                      // -> Request object issued by the Service Worker Client (intercepted Request)   
+        
+        ev.respondWith(                                                                // replaces the network response (the requesting client will receive this response instead of the network response)    
+            async function resp(){                                                     // must be a promise that resolves to a Response object    
+                return new Response('new response body')
+            }()
+        )
+    }
+    </pre>    
+<hr>
+<!------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> fetch event <mark>waitUntil()</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    onload = function(){
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})
+            .then(function(registration){
+                console.log('Service Worker Registered!');
+            })
+            .catch(err =&gt; console.log( err ));    
+    }
+&lt;/script&gt;
+    </pre>
+    <pre>
+    self.addEventListener('activate', function(ev){ 
+        console.log('sw activated!');
+    });
+    
+    self.onfetch = function(ev){ 
+        ev.waitUntil(                                                                  // this does not block the event handler function from further execution only the event from finishing 
+            async function(){
+                setTimeout(function(){
+                    console.log( 'waitUntil end');
+                    return 'ok'
+                }, 5000);
+            }()
+        )
+        ev.respondWith(Promise.resolve(new Response('Replaced response!')));           // so the response is immediately sent to the Service Worker Client 
+    }
+    </pre>
+    
+    
+    
+    
+    
+    
+    
+</details>
+
+    <br><br>
+</body>
+</html>

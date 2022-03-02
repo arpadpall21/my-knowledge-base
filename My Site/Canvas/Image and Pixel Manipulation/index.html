@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Image and Pixel Manipulation </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>    
+<body>
+<h1> Image and Pixel Manipulation (ver 2.9) </h1>
+    <p> Updated ( 2018-11-05 / 2018-11-29 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>  
+        <a href="../index.html">Canvas></a> Image and Pixel Manipulation  
+    </p>
+<table class="table">
+    <tr>
+        <th> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> new ImageData(<i>Uint8ClampedArray</i>, <strong>width</strong>, <strong>height</strong>) <br>
+             new ImageData(<strong>ImageData</strong>)
+        </td>
+        <td> returns an <mark>imageData</mark> object (properties : <mark>width</mark> / <mark>height</mark> / <mark>data</mark>), the <mark>data</mark> property contains a "Uint8ClampedArray" which describles the image as imageData </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.createImageData(<strong>width</strong>, <strong>height</strong>) <br>
+            <strong>canvasCtx2D</strong>.createImageData(<strong>imageDataObj</strong>)
+        </td>
+        <td> returns an <mark>imageData</mark> object (properties : <mark>width</mark> / <mark>height</mark> / <mark>data</mark>), the <mark>data</mark> property contains a "Uint8ClampedArray" which describles the image as imageData  </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.drawImage(<strong>media</strong>, <i>xSlice</i>, <i>ySlice</i>, <i>sliceWidth</i>, <i>sliceHeight</i>, <strong>x</strong>, <strong>y</strong>, <i>width</i>, <i>height</i>) </td>
+        <td> draws (Image, Video, SVG or Canvas) onto the canvas element (can slice part of the source / increas or decrease the size) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.getImageData(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>) </td>
+        <td> returns an <mark>imageData</mark> object from the targeted <u>canvas area</u> (does not work on cross origin images) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.imageSmoothingEnabled = <strong>boolean</strong> </td>
+        <td> gets or sets the image smoothing protocol for the canvas context (default <mark>true</mark>) <span style="color:orangered;">(Experimental Technology [2018-11-18])</span> </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.putImageData(<strong>imageDataObj</strong>, <strong>x</strong>, <strong>y</strong>, <i>xSlice</i>, <i>ySlice</i>, <i>sliceWidth</i>, <i>sliceHeight</i>) </td>
+        <td> draws an <mark>imageData</mark> object onto the canvas (can slice part from it) </td>
+    </tr>
+    <tr>
+        <td> <prot>ImageData.prototype</prot>.data </td>
+        <td> returns a <mark>Uint8ClampedArray</mark> <u>typed array</u> which holds the image data (every 4 values represent a pixel (rgba)) </td>
+    </tr>
+    <tr>
+        <td> <prot>ImageData.prototype</prot>.height </td>
+        <td> returns the height of the "imageData" object </td>
+    </tr>
+    <tr>
+        <td> <prot>ImageData.prototype</prot>.width </td>
+        <td> returns the width of the "imageData" object </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p> - </p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> <mark>drawImage()</mark> / <mark>imageSmoothingEnabled</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX :    <strong>canvasCtx2D</strong>.drawImage(<strong>media</strong>, <i>xSlice</i>, <i>ySlice</i>, <i>sliceWidth</i>, <i>sliceHeight</i>, <strong>x</strong>, <strong>y</strong>, <i>width</i>, <i>height</i>)    // draws (Image, Video, SVG or Canvas) onto the canvas element (can slice part of the source / increas or decrease the size)   
+                - <strong>media</strong> : media file to use (HTMLImage / SVGImage / HTMLVideo / CanvasElement)
+                - <i>xSlice</i> / <i>ySlice</i> : slice area start coordonates (x,y = top left corner)
+                - <i>sliceWidth</i> / <i>sliceHeight</i> : slice dimensions
+                - <strong>x</strong> / <strong>y</strong> : media coordonates on the canvas
+                - <i>width</i> / <i>height</i> : media size
+                
+            <strong>canvasCtx2D</strong>.imageSmoothingEnabled = <strong>boolean</strong>                                                   // gets or sets the image smoothing protocol for the canvas context (default <mark>true</mark>) <span style="color:orange;">(Experimental Technology [2018-11-18])</span>   
+    </pre>
+    <img src="drawImage.jpg" alt="drawImage() method parameters explained">
+    <pre>
+    &lt;canvas id="demo" style="border:solid black 1px"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var ctx = document.getElementById("demo").getContext("2d");
+    var img = new Image();                                              // create image element (this is an HTMLImage element)
+    img.src = "demo.jpg";                                               // load the image source
+    
+    ctx.imageSmoothingEnabled = false;                                  // disable the image smoothing protocol of the browser (default = true)
+    
+    img.onload = function() {                                           // -! waiting till the image is fully loaded (otherwise the page is loaded faster and the image is never displayed!)
+        ctx.drawImage(img, 10, 10);                                     // image displayed as it is (takes the necessary space)
+        ctx.drawImage(img, 10, 10, 100, 100);                           // image stretched or compressed to fit with its full size into 100 X 100 pixels
+        ctx.drawImage(img, 100, 100, 50, 50, 10, 10, 100, 100);         //     100, 100 is the (top, left) start slice coordinates 
+                                                                            // 50, 50 is the slice dimensions from the source image 
+                                                                            // 10, 10, 100, 100 are the display parameters onto the canvas // -! in this situation the sliced image is increased because the slice are is 50 X 50 but we display it as 100 X 100   
+    }
+&lt;/script&gt;   
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>drawImage()</mark> TEST_1</u></h4>
+    <canvas id="drawImage_T1" style="border:solid black 1px;"></canvas>
+    <canvas id="drawImage_T2" style="border:solid black 1px;"></canvas>
+<script>
+    var drawIMG = function() {
+        var ctx = document.getElementById("drawImage_T1").getContext("2d");
+        var ctx2 = document.getElementById("drawImage_T2").getContext("2d");
+        var img = new Image();
+        img.src = "Pictures/camaro.jpg";            
+        img.addEventListener("load", () => {        // event linstener waits untill the image is fully loaded 
+            ctx.drawImage(img, 10, 10);             // image drawn as it is
+            ctx2.drawImage(img, 10, 10, 280, 130);  // image is compressed to the desired space (distorted)
+        });
+    }
+    drawIMG();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="drawImage_T1" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+    &lt;canvas id="drawImage_T2" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var drawIMG = function() {
+        var ctx = document.getElementById("drawImage_T1").getContext("2d");
+        var ctx2 = document.getElementById("drawImage_T2").getContext("2d");
+        var img = new Image();
+        img.src = "Pictures/camaro.jpg";            
+        img.addEventListener("load", () => {        // event linstener waits untill the image is fully loaded 
+            ctx.drawImage(img, 10, 10);             // image drawn as it is
+            ctx2.drawImage(img, 10, 10, 280, 130);  // image is compressed to the desired space (distorted)
+        });
+    }
+    drawIMG();
+&lt;/script&gt;     
+        </pre>
+        </details>
+<h4><u> <mark>drawImage()</mark> slice image part </u></h4>    
+    <canvas id="drawImage_T3" style="border:solid black 1px;"></canvas>
+    <canvas id="drawImage_T4" style="border:solid black 1px;"></canvas>
+<script>
+    var imgSliceTest = function() {
+        var ctx = document.getElementById("drawImage_T3").getContext("2d");
+        var ctx2 = document.getElementById("drawImage_T4").getContext("2d");
+        ctx2.font = "20px sans-serif";
+        var img = new Image();
+        img.src = "Pictures/camaro.jpg";
+        
+        img.onload = function() {                                       // wait till the imag is fully loaded
+            ctx.drawImage(img, 30, 150, 50, 50, 10, 10, 50, 50);        // slice and display the rear wheel     (both slice and display dimensions are the same = no image distortion )
+            ctx.drawImage(img, 200, 160, 50, 50, 140, 10, 50, 50);      
+            ctx2.drawImage(img, 280, 140, 50, 50, 10, 40, 280, 100);    // the sliced area stretched (sliced area dimension = 50 X 50 / displayed as 280 X 100)
+        }
+        
+        ctx2.font = "20px sans-serif";
+        ctx2.textBaseline = "top";
+        ctx2.textAlign = "center";
+        ctx2.fillText("Sliced Area Stretched", 150, 0,);
+        
+    }
+    imgSliceTest();
+</script>  
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="drawImage_T3" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var imgSliceTest = function() {
+        var ctx = document.getElementById("drawImage_T3").getContext("2d");
+        var ctx2 = document.getElementById("drawImage_T4").getContext("2d");
+        ctx2.font = "20px sans-serif";
+        var img = new Image();
+        img.src = "Pictures/camaro.jpg";
+        
+        img.onload = function() {                                       // wait till the imag is fully loaded
+            ctx.drawImage(img, 30, 150, 50, 50, 10, 10, 50, 50);        // slice and display the rear wheel     (both slice and display dimensions are the same = no image distortion )
+            ctx.drawImage(img, 200, 160, 50, 50, 140, 10, 50, 50);      
+            ctx2.drawImage(img, 280, 140, 50, 50, 10, 40, 280, 100);    // the sliced area stretched (sliced area dimension = 50 X 50 / displayed as 280 X 100)
+        }
+        
+        ctx2.font = "20px sans-serif";
+        ctx2.textBaseline = "top";
+        ctx2.textAlign = "center";
+        ctx2.fillText("Sliced Area Stretched", 150, 0,);
+        
+    }
+    imgSliceTest();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<h4><u> display canvas in canvas TEST</u></h4>    
+    <canvas id="canvasCanvas" style="border:solid black 1px;"></canvas>
+<script>
+    var canvasCanvas = function() {
+        var ctx = document.getElementById("canvasCanvas").getContext("2d");
+        var getCanvas = document.getElementById("arcCanvas");                   // get the source canvas element
+        
+        ctx.drawImage(getCanvas, 75, 0);                                        // display the source canvas 
+    }
+    canvasCanvas();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="canvasCanvas" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var canvasCanvas = function() {
+        var ctx = document.getElementById("canvasCanvas").getContext("2d");
+        var getCanvas = document.getElementById("arcCanvas");                   // get the source canvas element
+        
+        ctx.drawImage(getCanvas, 75, 0);                                        // display the source canvas 
+    }
+    canvasCanvas();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<h4><u> image smothing <mark>imageSmoothingEnabled</mark> TEST </u></h4>    
+    <canvas id="imageSmooth" style="border:solid black 1px;"></canvas>
+<script>
+    var smoothImg = function() {
+        var ctx = document.getElementById("imageSmooth").getContext("2d");
+        var img = new Image();
+        img.src = "lamp.jpg"
+        
+        ctx.drawImage(img, 10, 10, 100, 100);
+        
+        ctx.imageSmoothingEnabled = false;                  // image smoothing disabled
+        ctx.drawImage(img, 140, 10, 100, 100);
+    }
+    smoothImg();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="imageSmooth" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var smoothImg = function() {
+        var ctx = document.getElementById("imageSmooth").getContext("2d");
+        var img = new Image();
+        img.src = "lamp.jpg"
+        
+        ctx.drawImage(img, 10, 10, 100, 100);
+        
+        ctx.imageSmoothingEnabled = false;                  // image smoothing disabled
+        ctx.drawImage(img, 140, 10, 100, 100);
+    }
+    smoothImg();
+&lt;/script&gt;      
+        </pre>
+        </details>
+</details>     
+<!------------------------------------------------------------------------------------------------------------------------------>
+<hr>    
+<h2 style="color:darkblue;"><u> <mark>ImageData()</mark> <mark>createImageData()</mark> / <mark>getImageData()</mark> / <mark>putImageData()</mark> (Uint8ClampedArray)</u></h2> 
+    <p> - the "Uint8ClamptedArray" is a <u>typed array</u> (8 bit unsigned integers clamped between 0-255), as dataImage every 4 values in the sequence represent 1 pixel (rgba) on the image (default <mark>0,0,0,0</mark> black transparent) </p>
+    <pre class="syntax">
+SYNTAX :    new ImageData(<i>Uint8ClampedArray</i>, <strong>width</strong>, <strong>height</strong>)             // returns an <mark>imageData</mark> object (properties : <mark>width</mark> / <mark>height</mark> / <mark>data</mark>), the <mark>data</mark> property contains a "Uint8ClampedArray" which describles the image as imageData  
+            new ImageData(<strong>ImageData</strong>)                                <span style="color:skyblue;">// returns a <u>transparent black</u> ImageData object with the dimensions of the passed ImageData object  </span>
+            
+            <strong>canvasCtx2D</strong>.createImageData(<strong>width</strong>, <strong>height</strong>)                  // returns an <mark>imageData</mark> object (properties : <mark>width</mark> / <mark>height</mark> / <mark>data</mark>), the <mark>data</mark> property contains a "Uint8ClampedArray" which describles the image as imageData     
+            <strong>canvasCtx2D</strong>.createImageData(<strong>imageDataObj</strong>)  
+                - <strong>imageDataObj</strong> : imageData object does not copies the image data <u style="color:orange;">(only the "width" and "height" properties are copied)</u>
+            <strong>canvasCtx2D</strong>.getImageData(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>)               // returns an <mark>imageData</mark> object from the targeted <u>canvas area</u> (does not work on cross origin images)
+            <strong>canvasCtx2D</strong>.putImageData(<strong>imageDataObj</strong>, <strong>x</strong>, <strong>y</strong>, <i>xSlice</i>, <i>ySlice</i>, <i>sliceWidth</i>, <i>sliceHeight</i>)   // draws an <mark>imageData</mark> object onto the canvas (can slice part from it)
+                
+            <prot>ImageData.prototype</prot>.width                                   // returns the width of the "imageData" object
+            <prot>ImageData.prototype</prot>.height                                  // returns the height of the "imageData" object
+            <prot>ImageData.prototype</prot>.data                                    // returns a <mark>Uint8ClampedArray</mark> <u>typed array</u> which holds the image data (every 4 values represent a pixel (rgba))
+    </pre>
+    <img src="putImageData.jpg" alt="putImageData() method explained">
+    <pre>
+    &lt;canvas id="demo" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var ctx = document.getElementById("demo").getContext("2d");
+    var img = new Image();
+    img.src = "demo.jpg";
+    ctx.drawImage(img, 10, 10);                                         // draw image on canvas
+    
+    var myImageData = ctx.getImageData(0, 0, 150, 150);                 // imageData object created from the first half of the canvas area
+    ctx.putImageData(myImageData, 150, 0);                              // print the imageData object on the second half on the canvas
+    ctx.putImageData(myImageData, 200, 0, 20, 20, 50, 50);              // slice a part of the imageData image and print it on the canvas (20, 20 = slice coordinates on the imageData / 50, 50 = width and height of the sliced part)   
+    
+    var myImageData_A = ctx.createImageData(10, 10);                    // createn an empty imageData object (dimension 10 x 10, pixels are set to transparent black)
+    var myImageData_B = ctx.createImageData(myImageData);               // -! this also creates an empty imageData object (only the dimension is set (150 x 150) but the imageData is transparent black [for some strange reasons])
+    
+    myImageData                                                         // -> {data:[89999values], width:150, height:150}    // imageData object (myImageData.data.length = (150 * 150) * 4))
+&lt;/script&gt;                                                                   // data:[89999values] is an Uint8ClamptedArray representing the image (every 4 values is 1 pixel on the image (rgba))
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>createImageData()</mark> <mark>putImageData()</mark> TEST </u></h4>
+    <canvas id="imageData" style="border:solid black 1px;"></canvas>
+<script>
+    var imageDataFunc = function() {
+        var ctx = document.getElementById("imageData").getContext("2d");
+        var imgData = ctx.createImageData(100, 100);            // create imageData object
+        var imgData_length = imgData.data.length;
+        var filterAlpha = 0;                                    // I use this to make sure every 4th (alpha chanel) data in the TypedArray is opaque
+        
+        for(let i = 0; i < imgData_length; i++ ) {
+            filterAlpha++;
+            if (filterAlpha == 4) {                             // this condition makes sure that evey 4 data (alpha chanel) is fully opaque
+                imgData.data[i] = 255;
+                filterAlpha = 0;
+            } else {
+                imgData.data[i] = Math.floor(Math.random() * (255 - 0)) + 0;    // fromula returns a radom number between 0 and 255 which generates random colors
+            }
+        }
+        
+        var imgData2 = ctx.createImageData(imgData);            // the first imageData object is used to create the second one here (it only copies the dimensions NOt the image!)
+        
+        ctx.putImageData(imgData, 10, 10);                      // draw the imageData object outo the canvas
+        ctx.putImageData(imgData2, 120, 10);                    // because this is an imageData copy the image itself is not copied only the dimension (for some reason hm... ???)
+
+    }
+    imageDataFunc();
+</script>        
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="imageData" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var imageDataFunc = function() {
+        var ctx = document.getElementById("imageData").getContext("2d");
+        var imgData = ctx.createImageData(100, 100);            // create imageData object
+        var imgData_length = imgData.data.length;
+        var filterAlpha = 0;                                    // I use this to make sure every 4th (alpha chanel) data in the TypedArray is opaque
+        
+        for(let i = 0; i &lt; imgData_length; i++ ) {
+            filterAlpha++;
+            if (filterAlpha == 4) {                             // this condition makes sure that evey 4 data (alpha chanel) is fully opaque
+                imgData.data[i] = 255;
+                filterAlpha = 0;
+            } else {
+                imgData.data[i] = Math.floor(Math.random() * (255 - 0)) + 0;    // fromula returns a radom number between 0 and 255 which generates random colors
+            }
+        }
+        
+        var imgData2 = ctx.createImageData(imgData);            // the first imageData object is used to create the second one here (it only copies the dimensions NOt the image!)
+        
+        ctx.putImageData(imgData, 10, 10);                      // draw the imageData object outo the canvas
+        ctx.putImageData(imgData2, 120, 10);                    // because this is an imageData copy the image itself is not copied only the dimension (for some reason hm... ???)
+
+    }
+    imageDataFunc();
+&lt;/script&gt;     
+        </pre>
+        </details>
+<h4><u> using <mark>ImageData()</mark> constructor TEST </u></h4>    
+    <canvas id="imageDataConstructor" style="border:solid black 1px;" height="50"></canvas>
+<script>
+    var imgDataFunc = function() { 
+        var ctx = document.getElementById("imageDataConstructor").getContext("2d");
+       
+        var imageData = new ImageData(30, 10);                  // image data object created by the constructor
+            
+        for (let i = 0; i < (30 * 10) * 4; i++) {               // draw fully opaque white pixels       
+            imageData.data[i] = 255;
+        }
+        ctx.putImageData(imageData, 10, 10);                    // draw the image data onto the canvas
+    }
+    imgDataFunc();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="imageDataConstructor" style="border:solid black 1px;" height="50"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var imgDataFunc = function() { 
+        var ctx = document.getElementById("imageDataConstructor").getContext("2d");
+       
+        var imageData = new ImageData(30, 10);                  // image data object created by the constructor
+            
+        for (let i = 0; i &lt; (30 * 10) * 4; i++) {               // draw fully opaque white pixels       
+            imageData.data[i] = 255;
+        }
+        ctx.putImageData(imageData, 10, 10);                    // draw the image data onto the canvas
+    }
+    imgDataFunc();
+&lt;/script&gt;     
+        </pre>
+        </details>
+<h4><u> <mark>getImageData()</mark> / <mark>putImageData()</mark> method TEST </u></h4>    
+    <p style="color:yellow;">Tested with Edge because the <mark>getImageData()</mark> method doesn't allow to get cross origin resources and Chrome sees local sites as cross origin [2018-11-18] </p>
+    <canvas id="putImageData" style="border:solid black 1px;"></canvas>
+    <canvas id="putImageData2" style="border:solid black 1px;"></canvas>
+<script>
+    var putFn = function() {
+        var ctx = document.getElementById("putImageData").getContext("2d");
+        var img = new Image();
+        img.src = "lamp.jpg";
+        
+        ctx.fillStyle = "darkgreen";
+        ctx.fillRect(0, 0, 150, 150);
+        ctx.drawImage(img, 10, 10);                             // draw image on canvas
+        
+        var getImage_Data = ctx.getImageData(0, 0, 75, 75);     // recover the data what is painted on the canvas (as the canvas is drawn)   
+        ctx.putImageData(getImage_Data, 200, 10);               // paint the recovered imageData object on a different region
+        
+// putImageData -----------------------------------------
+        var ctx2 = document.getElementById("putImageData2").getContext("2d");
+        
+        ctx2.putImageData(getImage_Data, 10, 10, 15, 15, 40, 40);   // part of the imageData is painted (10, 10 = target coordinates / 15, 15 = coordinates from the imageData / 40, 40 = dimension on the imageData)
+    }
+    putFn();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="putImageData" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+    &lt;canvas id="putImageData2" style="border:solid black 1px;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var putFn = function() {
+        var ctx = document.getElementById("putImageData").getContext("2d");
+        var img = new Image();
+        img.src = "lamp.jpg";
+        
+        ctx.fillStyle = "darkgreen";
+        ctx.fillRect(0, 0, 150, 150);
+        ctx.drawImage(img, 10, 10);                             // draw image on canvas
+        
+        var getImage_Data = ctx.getImageData(0, 0, 75, 75);     // recover the data what is painted on the canvas (as the canvas is drawn)   
+        ctx.putImageData(getImage_Data, 200, 10);               // paint the recovered imageData object on a different region
+        
+// putImageData -----------------------------------------
+        var ctx2 = document.getElementById("putImageData2").getContext("2d");
+        
+        ctx2.putImageData(getImage_Data, 10, 10, 15, 15, 40, 40);   // part of the imageData is painted (10, 10 = target coordinates / 15, 15 = coordinates from the imageData / 40, 40 = dimension on the imageData)  
+    }
+    putFn();
+&lt;/script&gt;     
+        </pre>
+        </details>
+</details> 
+    
+    <br><br>
+</body>
+</html>

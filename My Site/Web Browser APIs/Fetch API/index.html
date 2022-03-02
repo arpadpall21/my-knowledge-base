@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Fetch API </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Fetch API (ver 3.4.1) </h1>
+    <p> Updated ( 2020-11-27 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html"> Web Browser APIs> </a> Fetch API 
+    </p>
+<table class="table">
+    <tr>
+        <th style="width:30%;"> API </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <em>window|serviceWorker</em>.fetch(<strong class="openable">url:str|req:obj<div>
+                <p> - if <strong>req</strong> (Request Object) is passed the 2nd argument (<i>option:obj</i>) overrides the Request Object's options! </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> method: <strong>str</strong> - request method (Default: <mark>'GET'</mark>) </p>
+                <p> headers: <strong>obj|headers:obj</strong> - request headers (object literal or <strong>headers</strong> object) </p>
+                <p> body: <strong>str|blob|bufferSource|formData|URLSearchParams|readableStream</strong> - request body </p>
+                <p> mode: <strong>str</strong> - CORS mode (Default: <mark>'cors'</mark>) </p>
+                <p> credentials: <mark>'same-origin'|'omit'|'include'</mark> - credentials (cookies, authorization headers, TLS certificates) are sent with the request (Default: <mark>'same-origin'</mark>) </p>
+                <p> cache: <strong>str</strong> - request cache mode (<mark>'default'</mark> - if there's a match and its fresh the resource is returned from the cache) (<mark>'no-store'</mark> - direct request) ('<mark>reload'</mark> - direct request and reloads the browser cache) (<mark>'no-cache'</mark> - if there's a fresh or slate cached version the browser makes conditional request) (<mark>'force-chache'</mark> - fresh or slate version is returned from the cache, normal request otherwise) (<mark>'only-if-cached'</mark> - fresh or slate cached version only, no request made to the server) </p>
+                <p> redirect: <mark>'follow'|'error'|'manual'</mark> (<mark>'follow'</mark> - automatically folow redirects) (<mark>'error'</mark> - aborts redirects with an error) (<mark>'manual'</mark> - manually handles redirects) (Default: <mark>'follow'</mark>) </p>
+                <p> referrer: <strong>str</strong> - rererrer of the request (same origin URL or <mark>'about:client'</mark> or <mark>''</mark> (empty string)) <p>
+                <p> referrerPolicy: <strong>str</strong> - referrer policy for the request (<mark>'no-referrer'</mark> - the <mark>Referer</mark> header omited = no referrer information is sent with the request) (<mark>'no-referrer-when-downgrade'</mark> - if the provided value is invalid the <mark>origin</mark> <mark>path</mark> <mark>querystring</mark> of the URL are sent as referrer <u>when the protocol security stays the same level or improuves but isn't sent when the protocol security downgrades (HTTPS -&gt; HTTP) </u>) (<mark>'origin'</mark> - only the origin is sent as referrer (es: <mark>https://example.com/page.html</mark> -&gt; <mark>https://example.com/</mark>) (<mark>'origin-when-cross-origin'</mark> - for cross-origin requests only the origin part is sent of the URL) (<mark>'same-origin'</mark> - for cross-origin request no referrer information is sent) (<mark>'strict-origin'</mark> - send the origin only when the security level stays the same (HTTPS -&gt; HTTPS) (<mark>'strict-origin-when-corss-origin'</mark> - for cross-origin requests send the origin only when the security level stays the same (HTTPS -&gt; HTTPS) (<mark>'unsafe-url'</mark> - send <mark>origin</mark> <mark>path</mark> <mark>querystring</mark> regardless of security) </p>
+                <p> integrity: <strong>str</strong> - contains the subresource integrity  value (ex: <mark>sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=</mark>) <a href="sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=" target="_blank">subresource integrity [link]</a> </p>
+                <p> signal: <strong>abortSignal</strong> - abort signal to send in order to abort a pending request (ex: <mark><strong>abortController</strong>.signal</mark>) </p>
+            </div></i>) <br>
+                &nbsp; &nbsp; .then(<strong>fn(res)</strong>) <br>
+                &nbsp; &nbsp; .catch(<strong>fn(err)</strong>)
+        </td>
+        <td> 
+            - asynchronously fetches resources from the network by using the Promise API (returns a Promise) <br>
+            - resolves to a (<strong>res</strong>) Response object when the response is received <br>
+            - rejected only on network error or when the request is aborted <u>(not rejected on HTTP errors)</u>
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+                <span class="openable"> more... <div>
+                    <p> - blob (experimental) </p>
+                        <span><i class="fab fa-chrome"></i> 42 </span>
+                        <span><i class="fab fa-firefox"></i> 39 </span>
+                        <span><i class="fab fa-opera"></i> 29 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                        <span><i class="fab fa-safari"></i> 10.1 </span>
+                    <p> - <mark>referrerPolicy</mark> option (experimental) </p>
+                        <span><i class="fab fa-chrome"></i> 52 </span>
+                        <span><i class="fab fa-firefox"></i> 52 </span>
+                        <span><i class="fab fa-opera"></i> 39 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                        <span><i class="fab fa-safari"></i> 11.1 </span>
+                    <p> - <mark>signal</mark> option (experimental) </p>
+                        <span><i class="fab fa-chrome"></i> 66 </span>
+                        <span><i class="fab fa-firefox"></i> 57 </span>
+                        <span><i class="fab fa-opera"></i> 53 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                        <span><i class="fab fa-safari"></i> 11.1 </span>
+                    <p> - streaming response body (experimental) </p>
+                        <span><i class="fab fa-chrome"></i> 43 </span>
+                        <span><i class="fab fa-firefox"></i> ? </span>
+                        <span><i class="fab fa-opera"></i> 29 </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                        <span><i class="fab fa-safari"></i> 10.1 </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> AbortController and AbortSignal (abort request) </caption>
+    <tr>
+        <th style="width:30%;"> Property / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2"> <mark>AbortController</mark> (aborts one or multiple Web Requests) </td>
+    </tr>
+    <tr>
+        <td> <em>new</em> AbortController() </td>
+        <td> 
+            <i class="fas fa-flask"></i> creates and returns an <strong>abortController</strong> object which is used to abort Web requests (DOM requests (fetch)) 
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 66 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 53 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 12.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>abortController</strong>.signal </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns the <strong>abortSignal</strong> object of the abort controller (this is where the abort controller will send the abort signal) 
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 66 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 53 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 12.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>abortController</strong>.abort() </td>
+        <td> 
+            <i class="fas fa-flask"></i> sends the abort signal to the <mark><strong>abortController</strong>.signal</mark> 
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 66 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 53 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 12.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> <mark>AbortSignal</mark> (represents the abort signal of the abort controller) </td>
+    </tr>
+    <tr>
+        <td> <strong>abortSignal</strong> </td>
+        <td> 
+            <i class="fas fa-flask"></i> returned by <mark><strong>abortController</strong>.signal</mark> represents the abort signal itself of the abort controller 
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 66 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 53 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>abortSignal</strong>.aborted </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>true</mark> if the abort signal is sent and the request is aborted, otherwise <mark>false</mark> 
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 66 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 53 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>abortSignal</strong>.addEventListener('abort', <strong>fn(ev)</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> event triggered when signal is sent and the request is aborted <u>(cannot be used as event property (<mark><strong>abortSignal</strong>.abort = <strong>fn(ev)</strong>)</mark>)</u> 
+            <span class="browserSupport" title="updated : 2020-11-27">
+                <span><i class="fab fa-chrome"></i> 66 </span>
+                <span><i class="fab fa-firefox"></i> 57 </span>
+                <span><i class="fab fa-opera"></i> 53 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Request and Request Body mixin </caption>
+    <tr>
+        <th style="width:30%;"> Property / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <em>new</em> Request(<strong class="openable">url:str|req:obj<div>
+                <p> - <strong>req</strong> - another Request Object is passed = copy created </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> method: <strong>str</strong> - request method (Default: <mark>'GET'</mark>) </p>
+                <p> headers: <strong>obj|headers:obj</strong> - request headers (object literal or <strong>headers</strong> object) </p>
+                <p> body: <strong>str|blob|bufferSource|formData|URLSearchParams|readableStream</strong> - request body </p>
+                <p> mode: <strong>str</strong> - CORS mode (<mark>cors</mark> / <mark>no-cors</mark> / <mark>same-origin</mark> / <mark>navigate</mark>) (Default: <mark>'cors'</mark>) </p>
+                <p> credentials: <mark>'same-origin'|'omit'|'include'</mark> - credentials (cookies, authorization headers, TLS certificates) are sent with the request (Default: <mark>'same-origin'</mark>) </p>
+                <p> cache: <strong>str</strong> - request cache mode (<mark>'default'</mark> - if there's a match and its fresh the resource is returned from the cache) (<mark>'no-store'</mark> - direct request) ('<mark>reload'</mark> - direct request and reloads the browser cache) (<mark>'no-cache'</mark> - if there's a fresh or slate cached version the browser makes conditional request) (<mark>'force-chache'</mark> - fresh or slate version is returned from the cache, normal request otherwise) (<mark>'only-if-cached'</mark> - fresh or slate cached version only, no request made to the server) </p>
+                <p> redirect: <mark>'follow'|'error'|'manual'</mark> (<mark>'follow'</mark> - automatically folow redirects) (<mark>'error'</mark> - aborts redirects with an error) (<mark>'manual'</mark> - manually handles redirects) (Default: <mark>'follow'</mark>) </p>
+                <p> referrer: <strong>str</strong> - rererrer of the request (same origin URL or <mark>'about:client'</mark> or <mark>''</mark> (empty string)) <p>
+                <p> integrity: <strong>str</strong> - contains the subresource integrity  value (ex: <mark>sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=</mark>) <a href="sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=" target="_blank">subresource integrity [link]</a> </p>
+            </div></i>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> creates and returns a <strong>req</strong> (Request) object
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.cache </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request's cache mode (ex: <mark>'default'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 62 </span>
+                <span><i class="fab fa-firefox"></i> 48 </span>
+                <span><i class="fab fa-opera"></i> 51 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.clone() </td>
+        <td> 
+            <i class="fas fa-flask"></i> - creates a copy and returns a new <strong>req</strong> (Request) object <br>
+            - if the request's body has already been used this method cannot create a new request copy (throws an error)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.credentials </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request credential mode (ex: <mark>'same-origin'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.destination </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) type of content being requested (ex: <mark>'audio'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 65 </span>
+                <span><i class="fab fa-firefox"></i> 61 </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.headers </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns a <strong>headers</strong> object containing the request headers
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.integrity </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request integrity value <a href="sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=" target="_blank">subresource integrity [link]</a>
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 46 </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.method </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request method (ex: <mark>'GET'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.mode </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request CORS mode (ex: <mark>'no-cors'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.redirect </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request redirect handle mode (ex: <mark>'follow'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 46 </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.referrer </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request referre (ex: <mark>'client'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 47 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.referrerPolicy </td>
+        <td> 
+            (getter only) returns the request referre policy (ex: <mark>'no-referrer'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 52 </span>
+                <span><i class="fab fa-firefox"></i> 52 </span>
+                <span><i class="fab fa-opera"></i> 39 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.url </td>
+        <td> 
+            <i class="fas fa-flask"></i> (getter only) returns the request URL
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Request <mark>Boby</mark> mixin methods and properties </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.arrayBuffer() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with an <strong>arrayBuffer</strong> representation of the request body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.blob() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with a <strong>blob</strong> representation of the request body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.body </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>undefined</mark> it suppose to return a <strong>readableStream</strong> of the request body <u>(apparently this mixin property only works on the <strong>res</strong> (Response) object) [TESTED: 2020-11-27])</u>
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.bodyUsed </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>true</mark> if the request body has already been used (read), <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.formData() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with a <strong>formData</strong> representation of the request body     
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 60 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 47 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 10.1 (exist but rejected) </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.json() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with JSON data representation of the request body     
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>req</strong>.text() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with text representation of the request body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+</table> 
+    <br>
+<table class="table">
+<caption> Response and Response Body mixin </caption>
+    <tr>
+        <th style="width:30%;"> Property / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <em>new</em> Response(<strong>body:str|blob| formData|bufferSource|readableStream</strong>, <i class="openable">option:obj<div>
+                <p> status: <strong>stCode:nr</strong> - response status code </p>
+                <p> statusText: <strong>msg:str</strong> - response status message </p>
+                <p> headers: <strong>obj|headers:obj</strong> - HTTP response headers passed as object literal or <strong>headers</strong> object </p>
+            </div></i>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> creates and returns a <strong>res</strong> (Response) object
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.clone() </td>
+        <td> 
+            <i class="fas fa-flask"></i> - creates a copy and returns a new <strong>res</strong> (Response) object <br>
+            -   if the response's body has already been used this method cannot create a new response copy (throws an error)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.error() </td>
+        <td> 
+            <i class="fas fa-flask"></i> creates a copy and returns a new <strong>res</strong> (Response) object associated with a network error <u>(available in serviceWorker only)</u> <u>[NOT TESTED: 2020-11-28]</u>
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.headers </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a <strong>headers</strong> object containing the response headers
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.ok </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>true</mark> if the response status code is 2**, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.redirect(<strong>url:str</strong>, <i>stCode:nr</i>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> creates a copy and returns a new <strong>res</strong> (Response) object with the set URL and status code <u>(available in serviceWorker only)</u> <u>[NOT TESTED: 2020-11-28]</u>    
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.redirected </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>true</mark> if the response is the result of a redirect (its URL list has more than one entry), otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 60 </span>
+                <span><i class="fab fa-firefox"></i> 49 </span>
+                <span><i class="fab fa-opera"></i> 47 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.status </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns the status code of the response (ex: <mark>200</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.statusText </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns the status text of the response (ex: <mark>'OK'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.trailers </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a <strong>headers</strong> object containing the response trailers
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.type </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns the response type (<mark>'basic'</mark> or <mark>'cors'</mark>)
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.url </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns the url of the response
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Response <mark>Body</mark> mixin methods and properties </td>
+    </tr>
+    
+    
+    
+    
+    <tr>
+        <td> <strong>res</strong>.arrayBuffer() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with an <strong>arrayBuffer</strong> representation of the response body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.blob() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with a <strong>blob</strong> representation of the response body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.body </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a <strong>readableStream</strong> of the response body  
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.bodyUsed </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>true</mark> if the response body has already been used (read), otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.formData() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with a <strong>formData</strong> representation of the response body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 60 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 47 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 10.1 (exist but rejected) </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.json() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with JSON data representation of the response body
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>res</strong>.text() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns a Promise that resolves with text representation of the response body 
+            <span class="browserSupport" title="updated : 2020-11-28">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+</table> 
+    <br>
+<table class="table">
+<caption> Headers </caption>
+    <tr>
+        <th style="width:30%;"> Property / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <em>new</em> Headers(<strong class="openable">obj|headers<div>
+                <p> - <strong>obj</strong> - object literal </p>
+                <p> - <strong>headers</strong> - another <strong>headers</strong> object </p>
+            </div></strong>)
+        </td>
+        <td> 
+            <i class="fas fa-flask"></i> - creates and returns a new <strong>headers</strong> object (iterable object <mark>for... of</mark> loop can be used on it) <br>
+                - header names and values accept ASCII characters only, header names are (parsed to) lowercased <br>
+                - implements <span class="openable">header guard<div>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>none</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a <mark>Headers()</mark> constructor </p>
+                <p> - any request headers can be modified (custom headers included) in the <strong>headers</strong> object </p>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>request</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a CORS <strong>req</strong> (Request) request </p>
+                <p> - any request headers can be modified (custom headers included) <u>except forbidden request headers (silently discarded)</u> in the <strong>headers</strong> object </p>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>request-no-cors</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a NO-CORS <strong>req</strong> (Request) request </p>
+                <p> - only <u>valid non-forbidden</u> request headers can be set in the <strong>headers</strong> object <u>(other headers are silently discarded)</u> </p> 
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>response</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a <strong>res</strong> (Response) object </p>
+                <p> - any response headers can be modified (custom headers included) <u>except forbidden response headers (silently discarded)</u> in the <strong>headers</strong> object </p>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>immutable</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a <strong>res</strong> (Response) object <u>which was created by  a <mark><strong>res</strong>.redirect()</mark> or a <mark><strong>res</strong>.error()</mark></u> </p>
+                <p> - all headers are immutable in the <strong>headers</strong> object <u>(TypeError is thrown if attempted to modify)</u> </p>
+            </div></span> mechanism that controlls what headers can be accessed depending how the <strong>headers</strong> object was created
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.append(<strong>headerName:str</strong>, <strong>val</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> sets a new or appends a new value to an existing header
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.delete(<strong>headerName:str</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> deletes the specified header from the <strong>headers</strong> object
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.entries() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns an iterator object which contains the <strong>headers</strong> key/value pairs
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 45 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 32 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.forEach(<strong>fn(val, key, headers)</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> runs the callback for each key/value pairs in the <strong>headers</strong> object
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> ? </span>
+                <span><i class="fab fa-firefox"></i> ? </span>
+                <span><i class="fab fa-opera"></i> ? </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> ? </span>
+                <span><i class="fab fa-safari"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.get(<strong>headerName:str</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns the value of the specified header name
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 52 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> 10.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.has(<strong>headerName:str</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns <mark>true</mark> if the specified header name exists in the <strong>headers</strong> object, <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.keys() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns an iterator object which contains the <strong>headers</strong> keys
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.set(<strong>headerName:str</strong>, <strong>val</strong>) </td>
+        <td> 
+            <i class="fas fa-flask"></i> sets a new or overwrites an existing header
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 42 </span>
+                <span><i class="fab fa-firefox"></i> 39 </span>
+                <span><i class="fab fa-opera"></i> 29 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>headers</strong>.values() </td>
+        <td> 
+            <i class="fas fa-flask"></i> returns an iterator object which contains the <strong>headers</strong> values
+            <span class="browserSupport" title="updated : 2020-11-30">
+                <span><i class="fab fa-chrome"></i> 45 </span>
+                <span><i class="fab fa-firefox"></i> 44 </span>
+                <span><i class="fab fa-opera"></i> 32 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 16 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank"> Fetch API (MDN) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the fetch API provides a Promise based interface to fetch resources from the network (more advanced version of <mark>XMLHttpRequest</mark> (AJAX)) </p>
+    <pre class="syntax">
+SYNTAX:     <em>window|serviceWorker</em>.fetch(<strong class="openable">url:str|req:obj<div>
+                <p> - if <strong>req</strong> (Request Object) is passed the 2nd argument (<i>option:obj</i>) overrides the Request Object's options! </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> method: <strong>str</strong> - request method (Default: <mark>'GET'</mark>) </p>
+                <p> headers: <strong>obj|headers:obj</strong> - request headers (object literal or <strong>headers</strong> object) </p>
+                <p> body: <strong>str|blob|bufferSource|formData|URLSearchParams|readableStream</strong> - request body </p>
+                <p> mode: <strong>str</strong> - CORS mode (Default: <mark>'cors'</mark>) </p>
+                <p> credentials: <mark>'same-origin'|'omit'|'include'</mark> - credentials (cookies, authorization headers, TLS certificates) are sent with the request (Default: <mark>'same-origin'</mark>) </p>
+                <p> cache: <strong>str</strong> - request cache mode (<mark>'default'</mark> - if there's a match and its fresh the resource is returned from the cache) (<mark>'no-store'</mark> - direct request) ('<mark>reload'</mark> - direct request and reloads the browser cache) (<mark>'no-cache'</mark> - if there's a fresh or slate cached version the browser makes conditional request) (<mark>'force-chache'</mark> - fresh or slate version is returned from the cache, normal request otherwise) (<mark>'only-if-cached'</mark> - fresh or slate cached version only, no request made to the server) </p>
+                <p> redirect: <mark>'follow'|'error'|'manual'</mark> (<mark>'follow'</mark> - automatically folow redirects) (<mark>'error'</mark> - aborts redirects with an error) (<mark>'manual'</mark> - manually handles redirects) (Default: <mark>'follow'</mark>) </p>
+                <p> referrer: <strong>str</strong> - rererrer of the request (same origin URL or <mark>'about:client'</mark> or <mark>''</mark> (empty string)) <p>
+                <p> referrerPolicy: <strong>str</strong> - referrer policy for the request (<mark>'no-referrer'</mark> - the <mark>Referer</mark> header omited = no referrer information is sent with the request) (<mark>'no-referrer-when-downgrade'</mark> - if the provided value is invalid the <mark>origin</mark> <mark>path</mark> <mark>querystring</mark> of the URL are sent as referrer <u>when the protocol security stays the same level or improuves but isn't sent when the protocol security downgrades (HTTPS -&gt; HTTP) </u>) (<mark>'origin'</mark> - only the origin is sent as referrer (es: <mark>https://example.com/page.html</mark> -&gt; <mark>https://example.com/</mark>) (<mark>'origin-when-cross-origin'</mark> - for cross-origin requests only the origin part is sent of the URL) (<mark>'same-origin'</mark> - for cross-origin request no referrer information is sent) (<mark>'strict-origin'</mark> - send the origin only when the security level stays the same (HTTPS -&gt; HTTPS) (<mark>'strict-origin-when-corss-origin'</mark> - for cross-origin requests send the origin only when the security level stays the same (HTTPS -&gt; HTTPS) (<mark>'unsafe-url'</mark> - send <mark>origin</mark> <mark>path</mark> <mark>querystring</mark> regardless of security) </p>
+                <p> integrity: <strong>str</strong> - contains the subresource integrity  value (ex: <mark>sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=</mark>) <a href="sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=" target="_blank">subresource integrity [link]</a> </p>
+                <p> signal: <strong>abortSignal</strong> - abort signal to send in order to abort a pending request (ex: <mark><strong>abortController</strong>.signal</mark>) </p>
+            </div></i>)                  // asynchronously fetches resources from the network by using the Promise API (returns a Promise)     
+                .then(<strong>fn(res)</strong>)                                                             resolves to a (<strong>res</strong>) Response object when the response is received  
+                .catch(<strong>fn(err)</strong>)                                                            rejected only on network error or when the request is aborted <u>(not rejected on HTTP errors)</u>    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+&lt;script&gt;
+    fetch('https://jsonplaceholder.typicode.com/users/1')                              // network resource URL
+        .then(res=&gt; {                                                                  // fetch Promise resolves to the response 
+            res.ok;                                                                    // -> true
+            res.json()                                                                   // reads the response as JSON (returns a Promise)
+                .then(data=&gt;console.log( data ) )                                        // resolved to the read data 
+                .catch(err=&gt;console.log(err));
+        })
+        .catch(err=&gt;console.log(err));
+&lt;/script&gt;    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> fetch simple TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    fetch('https://jsonplaceholder.typicode.com/users/1')                              // network resource URL
+        .then(res=&gt; {                                                                  // fetch Promise resolves to the response 
+            console.log( res.ok );                                                     // -> true
+            res.json()                                                                   // reads the response as JSON (returns a Promise)
+                .then(data=&gt;console.log( data ) )                                        // resolved to the read data 
+                .catch(err=&gt;console.log(err));
+        })
+        .catch(err=&gt;console.log(err));
+&lt;/script&gt;
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> fetch POST TEST </u></h4>
+    <p style="color:yellow;"> - the server is configured to respond with the <mark>Access-Control-Allow-Origin:*</mark> header in order to allow to access (CORS policy) </p>
+    <pre>
+&lt;script&gt;
+    fetch('http://localhost:1000', {method:'POST', body:'this is the request body'})   // POST request with body 
+        .then(res=> {
+            console.log( res.ok );
+            console.log( res.url );
+            res.text()
+                .then(data=>console.log( data ) )
+                .catch(err=>console.log(err));
+        })
+        .catch(err=>console.log(err));
+&lt;/script&gt;
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>AbortController</mark> and <mark>AbortSignal</mark> interfaces (abort request) </u></h2>
+    <p> - the <mark>AbortController</mark> interfaces allows to abort one ore multiple Web requests </p>
+    <p> - the <mark>AbortSignal</mark> represents an abort signal which is sent to a DOM request (Web request) in order to abort it </p>
+    <pre class='syntax'>
+SYNTAX:     <em>new</em> AbortController()                                                      // creates and returns an <strong>abortController</strong> object which is used to abort Web requests (DOM requests (fetch))    
+            
+            
+            <strong>abortController</strong>.signal                                                     // returns the <strong>abortSignal</strong> object of the abort controller (this is where the abort controller will send the abort signal)    
+            <strong>abortController</strong>.abort()                                                    // sends the abort signal to the <mark><strong>abortController</strong>.signal</mark>    
+            
+            
+  <span style="color:darkgray;">// AbortSignal ----------------------------------------------------------------------</span>
+            <strong>abortSignal</strong>                                                                // returned by <mark><strong>abortController</strong>.signal</mark> represents the abort signal itself of the abort controller    
+            
+            
+            <strong>abortSignal</strong>.aborted                                                        // returns <mark>true</mark> if the abort signal is sent and the request is aborted, otherwise <mark>false</mark>    
+            
+            
+            <strong>abortSignal</strong>.addEventListener('abort', <strong>fn(ev)</strong>)                              // event triggered when signal is sent and the request is aborted <u>(cannot be used as event property (<mark><strong>abortSignal</strong>.abort = <strong>fn(ev)</strong>)</mark>)</u>    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+&lt;script&gt;
+// AbortController (signal property) --------------------------------------------------
+    var controller = new AbortController();                                            // creates and returns an abort controller object   
+    var signal = controller.signal;                                                    // controller object's abort signal   
+    
+// AbortSignal (aborted property / aobrt event) ---------------------------------------
+    signal.addEventListener('abort', function(ev){                                     // event emitted when the signal is sent and the request is aborted    // -! this event cannot be used as event property (signal.abort = function(ev){})    
+        signal.aborted;                                                                // -> true           // signal successfully aborted the DOM request    
+    });
+    
+    fetch('http://localhost:1000', {signal})                                           // abort signal is passed (but not sent) as fetch option (ES6 syntax same as {signal:signal})    
+        .then(res=&gt; {
+            res.text()
+                .then(data=&gt;console.log( data ) )
+                .catch(err=&gt;console.log(err));
+        })
+        .catch(err=&gt;console.log(err));                                                 // fetch promise rejected (because the request is aborted)    
+        
+// AbortController (abort() method) ---------------------------------------------------
+    controller.abort();                                                                // abort controller sends its abort signal   
+&lt;/script&gt;
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>AbortController</mark> / <mark>AbortSignal</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var controller = new AbortController();                                            // creates and returns an abort controller object   
+    var signal = controller.signal;                                                    // controller object's abort signal   
+    
+    signal.addEventListener('abort', function(ev){                                     // event emitted when the signal is sent and the request is aborted    // -! this event cannot be used as event property (signal.abort = function(ev){})    
+        console.log( signal.aborted );                                                 // -> true           // signal successfully aborted the DOM request    
+    });
+    
+    fetch('http://localhost:1000', {signal})                                           // abort signal is passed to fetch option (ES6 syntax same as {signal:signal})    
+        .then(res=&gt; {
+            res.text()
+                .then(data=&gt;console.log( data ) )
+                .catch(err=&gt;console.log(err));
+        })
+        .catch(err=&gt;console.log(err));                                                 // -! fetch promise rejected (because the request is aborted)    
+    
+    controller.abort();                                                                // abort controller sends its abort signal   
+&lt;/script&gt;
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>Request</mark> interface and Request <mark>Body</mark> mixin </u></h2>
+    <p> - the <mark>Request</mark> interface represents the request of the fetch API </p>
+    <p> - the <mark>Body</mark> mixin methods and properties are available on both the <mark>Request</mark> and <mark>Response</mark> interfaces (mixin = interface which is not directly implemented but on other interfaces) </p>
+    <pre class="syntax">
+SYNTAX:     <em>new</em> Request(<strong class="openable">url:str|req:obj<div>
+                <p> - <strong>req</strong> - another Request Object is passed = copy created </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> method: <strong>str</strong> - request method (Default: <mark>'GET'</mark>) </p>
+                <p> headers: <strong>obj|headers:obj</strong> - request headers (object literal or <strong>headers</strong> object) </p>
+                <p> body: <strong>str|blob|bufferSource|formData|URLSearchParams|readableStream</strong> - request body </p>
+                <p> mode: <strong>str</strong> - CORS mode (<mark>cors</mark> / <mark>no-cors</mark> / <mark>same-origin</mark> / <mark>navigate</mark>) (Default: <mark>'cors'</mark>) </p>
+                <p> credentials: <mark>'same-origin'|'omit'|'include'</mark> - credentials (cookies, authorization headers, TLS certificates) are sent with the request (Default: <mark>'same-origin'</mark>) </p>
+                <p> cache: <strong>str</strong> - request cache mode (<mark>'default'</mark> - if there's a match and its fresh the resource is returned from the cache) (<mark>'no-store'</mark> - direct request) ('<mark>reload'</mark> - direct request and reloads the browser cache) (<mark>'no-cache'</mark> - if there's a fresh or slate cached version the browser makes conditional request) (<mark>'force-chache'</mark> - fresh or slate version is returned from the cache, normal request otherwise) (<mark>'only-if-cached'</mark> - fresh or slate cached version only, no request made to the server) </p>
+                <p> redirect: <mark>'follow'|'error'|'manual'</mark> (<mark>'follow'</mark> - automatically folow redirects) (<mark>'error'</mark> - aborts redirects with an error) (<mark>'manual'</mark> - manually handles redirects) (Default: <mark>'follow'</mark>) </p>
+                <p> referrer: <strong>str</strong> - rererrer of the request (same origin URL or <mark>'about:client'</mark> or <mark>''</mark> (empty string)) <p>
+                <p> integrity: <strong>str</strong> - contains the subresource integrity  value (ex: <mark>sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=</mark>) <a href="sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=" target="_blank">subresource integrity [link]</a> </p>
+            </div></i>)                                // creates and returns a <strong>req</strong> (Request) object 
+            
+            
+            <strong>req</strong>.clone()                                                                // creates a copy and returns a new <strong>req</strong> (Request) object    
+                                                                                          if the request's body has already been used this method cannot create a new request copy (throws an error)    
+            
+            <strong>req</strong>.method                                                                 // (getter only) returns the request method (ex: <mark>'GET'</mark>)     
+            <strong>req</strong>.headers                                                                // (getter only) returns a <strong>headers</strong> object containing the request headers    
+            <strong>req</strong>.url                                                                    // (getter only) returns the request URL    
+            
+            
+            <strong>req</strong>.credentials                                                            // (getter only) returns the request credential mode (ex: <mark>'same-origin'</mark>)    
+            <strong>req</strong>.mode                                                                   // (getter only) returns the request CORS mode (ex: <mark>'no-cors'</mark>)    
+            <strong>req</strong>.cache                                                                  // (getter only) returns the request's cache mode (ex: <mark>'default'</mark>)    
+            <strong>req</strong>.redirect                                                               // (getter only) returns the request redirect handle mode (ex: <mark>'follow'</mark>)    
+            <strong>req</strong>.referrer                                                               // (getter only) returns the request referre (ex: <mark>'client'</mark>)    
+            <strong>req</strong>.referrerPolicy                                                         // (getter only) returns the request referre policy (ex: <mark>'no-referrer'</mark>)    
+            <strong>req</strong>.integrity                                                              // (getter only) returns the request integrity value <a href="sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=" target="_blank">subresource integrity [link]</a>    
+            <strong>req</strong>.destination                                                            // (getter only) type of content being requested (ex: <mark>'audio'</mark>)  
+            
+            
+  <span style="color:darkgray;">// <mark>Body</mark> mixin properties and methods on Request object ------------------------------</span>
+            <strong>req</strong>.body                                                                   // returns <mark>undefined</mark> it suppose to return a <strong>readableStream</strong> of the request body <u>(apparently this mixin property only works on the <strong>res</strong> (Response) object) [TESTED: 2020-11-27])</u>    
+            <strong>req</strong>.bodyUsed                                                               // returns <mark>true</mark> if the request body has already been used (read), <mark>false</mark> otherwise    
+            
+            
+            <strong>req</strong>.text()                                                                 // returns a Promise that resolves with text representation of the request body     
+            <strong>req</strong>.blob()                                                                 // returns a Promise that resolves with a <strong>blob</strong> representation of the request body 
+            <strong>req</strong>.arrayBuffer()                                                          // returns a Promise that resolves with an <strong>arrayBuffer</strong> representation of the request body   
+            <strong>req</strong>.formData()                                                             // returns a Promise that resolves with a <strong>formData</strong> representation of the request body     
+            <strong>req</strong>.json()                                                                 // returns a Promise that resolves with JSON data representation of the request body    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var req = new Request('http://localhost:1000', {method:'POST', body:'this is a request body'});  // Request object created and returned
+    
+    fetch(req)                                                                         // can be directly passed as 1st fetch argument 
+        .then(res=> {
+            res.text()
+                .then(data=>console.log( data ) )
+                .catch(err=>console.log(err));
+        })
+        .catch(err=>console.log(err));
+    
+// clone() ---------------------------------------------------------------------------
+    var req_2 = req.clone();                                                          // creates and returns a copy of the req request 
+                                                                                        // useful when we want to reuse the request object (because already sent requests cannot be resent again)    
+    
+// method / headers / url ------------------------------------------------------------
+    req.method;                                                                       // -> 'POST'
+    req.headers;                                                                      // -> Headers (object)            // contains the request headers    
+    req.url;                                                                          // -> 'http://localhost:1000'
+    
+// credentials / mode / cache / redirect / referrer / referrerPolicy / integrity / destination -
+    req.credentials;                                                                  // -> 'same-origin'               // credentials (cookies, used id, TLS certificates) are sent only to the same origin server    
+    req.mode;                                                                         // -> 'cors'                      // uses CORS protocol for cross origin requests    
+    req.cache;                                                                        // -> 'default'                   // if ther's a fresh version of this request in the cache it is returned from the cache   
+    req.redirect;                                                                     // -> 'follow'                    // allows the request to be redirected    
+    req.referrer;                                                                     // -> 'about:client'              // request referrer   
+    req.referrerPolicy;                                                               // -> ''                          // request referrerPolicy    
+    req.integrity;                                                                    // -> ''                          // subresource integrity 
+    req.destination;                                                                  // -> ''                          // requested content type    
+    
+// Body mixin methods and properties available on the Request object -----------------
+// body / bodyUsed -------------------------------------------------------------------
+    req.body;                                                                         // -> undefined                   // -! suppose to return a readableSteam of the body (apparently this mixion property only works on the Response object)    
+    req.bodyUsed;                                                                     // -> false                       // request body has not yet been read (once read the request cannot be reused anymore)    
+    
+// text() ----------------------------------------------------------------------------
+    req.text()                                                                        // returns a Promise that is resolved with a string representation of the request body     
+        .then(function(data){
+            data;                                                                     // -> 'this is a request body'   
+        })
+        .catch(err => console.log(err));
+    
+// arrayBuffer() ---------------------------------------------------------------------
+    req.arrayBuffer()                                                                 // returns a Promise that is resolved with an ArrayBuffer representation of the request body     
+        .then(function(data){
+            data;                                                                     // -> ArrayBuffer
+        })
+        .catch(err => console.log(err));
+    
+// blob() ----------------------------------------------------------------------------
+    req.blob()                                                                        // returns a Promise that is resolved with a Blob representation of the request body     
+        .then(function(data){
+            data;                                                                     // -> Blob
+        })
+        .catch(err => console.log(err));
+    
+// json() ----------------------------------------------------------------------------
+    req.json()                                                                        // returns a Promise that is resolved with JSON data representation of the request body   
+        .then(function(data){ data })
+        .catch(err => console.log(err));                                              // -> SyntaxError                 // rejected because the request body cannot be represented as JSON data    
+    
+// formData() ------------------------------------------------------------------------
+    req.formData()                                                                    // returns a Promise that is resolved with a formData representation of the request body   
+        .then(function(data){ data })
+        .catch(err => console.log(err));                                              // -> TypeError                   // rejected because the request body cannot be represented as formData    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>Request()</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var req = new Request('http://localhost:1000');
+    
+    var req_2 = req.clone();    
+    console.log( req_2 );                                                              // -> Request object (copy of req)
+    
+    console.log( req.method );                                                         // -> 'GET'
+    console.log( req.headers );                                                        // -> Headers object
+    console.log( req.url );                                                            // -> 'http://localhost:1000'
+    
+    console.log( req.credentials );                                                    // -> 'same-origin'
+    console.log( req.mode );                                                           // -> 'cors'
+    console.log( req.cache );                                                          // -> 'default'
+    console.log( req.redirect );                                                       // -> 'follow'
+    console.log( req.referrer );                                                       // -> 'about:client'
+    console.log( req.referrerPolicy );                                                 // -> ''
+    console.log( req.integrity );                                                      // -> ''
+    console.log( req.destination );                                                    // -> ''
+    
+    fetch(req)
+        .then(res=&gt; {
+            res.text()
+                .then(data=&gt;console.log( data ) )
+                .catch(err=&gt;console.log(err));
+        })
+        .catch(err=&gt;console.log(err));
+    
+&lt;/script&gt;    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Request <mark>Body</mark> mixin TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var req = new Request('http://example.com', {method:'POST', body:'this is a request body'});
+    var req_2 = req.clone();                                                           // multiple request copies are made because once the body is used the request cannot be reused   
+    var req_3 = req.clone();  
+    var req_4 = new Request('http://example.com', {method:'POST', body:'{"prop1":"val1", "prop2":"val2", "nestedArr":[21, true]}'});    // the request body is a JSON object    
+    var req_5 = req_4.clone();
+    
+    console.log( req.body );                                                           // -! undefined (should return a readableStream)   // apparently this mixin property works only on the Respones object   
+    console.log( req.bodyUsed );                                                       // -&gt; false 
+
+    
+    req.arrayBuffer()                                                                  // request body read as arrayBuffer
+        .then(data =&gt; console.log(data))                                               // -> ArrayBuffer
+        .catch(err =&gt; console.log(err));
+    
+    req_2.blob()                                                                       // request body read as blob   
+        .then(data =&gt; console.log(data))                                               // -> Blob
+        .catch(err =&gt; console.log(err));
+    
+    req_3.text()                                                                       // request body read as formData   
+        .then(data =&gt; console.log(data))                                               // -> 'request body'
+        .catch(err =&gt; console.log(err));
+    
+    req_4.json()                                                                       // request body read as JSON data   
+        .then(data => console.log(data))                                               // -> {prop1:'val1', prop2:'val2', nestArr:[21, true]}
+        .catch(err => console.log(err));
+    
+    req_5.formData()                                                                   // request body read as JSON data    
+        .then(data => console.log(data)) 
+        .catch(err => console.log(err));                                               // rejected because the body cannot be represented as formData object   
+&lt;/script&gt;
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>Response</mark> interface and Request <mark>Body</mark> mixin </u></h2>
+    <p> - the <mark>Response</mark> interface represents the response of the fetch API </p>
+    <p> - the <mark>Body</mark> mixin methods and properties are available on both the <mark>Request</mark> and <mark>Response</mark> interfaces (mixin = interface which is not directly implemented but on other interfaces) </p>
+    <pre class="syntax">
+SYNTAX:     <em>new</em> Response(<strong>body:str|blob|formData|bufferSource|readableStream</strong>, <i class="openable">option:obj<div>
+                <p> status: <strong>stCode:nr</strong> - response status code </p>
+                <p> statusText: <strong>msg:str</strong> - response status message </p>
+                <p> headers: <strong>obj|headers:obj</strong> - HTTP response headers passed as object literal or <strong>headers</strong> object </p>
+            </div></i>)  // creates and returns a <strong>res</strong> (Response) object 
+            
+            
+            <strong>res</strong>.clone()                                                                // creates a copy and returns a new <strong>res</strong> (Response) object    
+                                                                                          if the response's body has already been used this method cannot create a new response copy (throws an error)    
+            <strong>res</strong>.error()                                                                // creates a copy and returns a new <strong>res</strong> (Response) object associated with a network error <u>(available in serviceWorker only)</u> <u>[NOT TESTED: 2020-11-28]</u>    
+            <strong>res</strong>.redirect(<strong>url:str</strong>, <i>stCode:nr</i>)                                           // creates a copy and returns a new <strong>res</strong> (Response) object with the set URL and status code <u>(available in serviceWorker only)</u> <u>[NOT TESTED: 2020-11-28]</u>    
+            
+            
+            <strong>res</strong>.ok                                                                     // returns <mark>true</mark> if the response status code is 2**, otherwise <mark>false</mark>    
+            <strong>res</strong>.status                                                                 // returns the status code of the response (ex: <mark>200</mark>)
+            <strong>res</strong>.statusText                                                             // returns the status text of the response (ex: <mark>'OK'</mark>)    
+            <strong>res</strong>.url                                                                    // returns the url of the response  
+            <strong>res</strong>.headers                                                                // returns a <strong>headers</strong> object containing the response headers    
+            <strong>res</strong>.trailers                                                               // returns a <strong>headers</strong> object containing the response trailers    
+            <strong>res</strong>.redirected                                                             // returns <mark>true</mark> if the response is the result of a redirect (its URL list has more than one entry), otherwise <mark>false</mark>    
+            <strong>res</strong>.type                                                                   // returns the response type (<mark>'basic'</mark> or <mark>'cors'</mark>)    
+            
+            
+  <span style="color:darkgray;">// <mark>Body</mark> mixin properties and methods on Request object ------------------------------</span>
+            <strong>res</strong>.body                                                                   // returns a <strong>readableStream</strong> of the response body    
+            <strong>res</strong>.bodyUsed                                                               // returns <mark>true</mark> if the response body has already been used (read), otherwise <mark>false</mark>    
+            
+            
+            <strong>res</strong>.text()                                                                 // returns a Promise that resolves with text representation of the response body     
+            <strong>res</strong>.blob()                                                                 // returns a Promise that resolves with a <strong>blob</strong> representation of the response body 
+            <strong>res</strong>.arrayBuffer()                                                          // returns a Promise that resolves with an <strong>arrayBuffer</strong> representation of the response body   
+            <strong>res</strong>.formData()                                                             // returns a Promise that resolves with a <strong>formData</strong> representation of the response body
+            <strong>res</strong>.json()                                                                 // returns a Promise that resolves with JSON data representation of the response body   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var res = new Response('this is a response body');                                 // creates and returns a Response object 
+    var res_2 = res.clone();                                                           // creates and returns a copy of the original request    
+    
+    fetch('http://localhost:1000', {method:'POST', body:'this is a request body'})
+        .then(function(res){                                                           // -> Response object 
+// ok / status / statusText / url / headers / trailers / redirected / type ------------
+            res.ok;                                                                    // -> true
+            res.status;                                                                // -> 200
+            res.statusText;                                                            // -> 'OK'
+            res.url;                                                                   // -> 'http://localhost:1000'
+            res.headers;                                                               // -> Headers (object) 
+            res.trailers;                                                              // -> unfedined     
+            res.redirected;                                                            // -> false    
+            res.type;                                                                  // -> 'cors'
+        
+// Body mixin methods and properties available on the Response object -----------------
+// body / bodyUsed --------------------------------------------------------------------
+            res.body                                                                   // -> ReadableStream             // readableStream of the response body 
+            res.bodyUsed                                                               // -> false                      // response body is not yet used (not yet read)    
+            
+// text() -----------------------------------------------------------------------------
+            res.text()                                                                 // returns a Promise that is resolved with text representation of the response body    
+                .then(data => console.log(data))                                       // -> 'this is a request body'
+                .catch(err => console.log(err))
+            
+// arrayBuffer() ----------------------------------------------------------------------
+            res.arrayBuffer()                                                          // returns a Promise that is resolved with an arrayBuffer representation of the response body    
+                .then(data => console.log(data))                                       // -> ArrayBuffer
+                .catch(err => console.log(err))
+            
+// blob() -----------------------------------------------------------------------------
+            res.blob()                                                                 // returns a Promise that is resolved with a blob representation of the response body    
+                .then(data => console.log(data))                                       // -> Blob  
+                .catch(err => console.log(err))
+        
+// json() -----------------------------------------------------------------------------
+            res.json()                                                                 // returns a Promise that is resolved with JSON data representation of the response body    
+                .then(data => console.log(data))
+                .catch(err => console.log(err))                                        // SyntaxError                   // Promise rejected because the response cannot be represented as JSON data    
+        
+// formData() -------------------------------------------------------------------------
+            res.formData()                                                             // returns a Promise that is resolved with a formData representation of the response body    
+                .then(data => console.log(data)) 
+                .catch(err => console.log(err))                                        // TypeError                     // Promise rejected because the response cannot be represented as formData               
+        })
+        .catch(err=>console.log(err));
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>Response()</mark> TEST </u></h4>
+    <pre>
+    var res = new Response('this is a response body');                                 // creates and returns a Response object 
+    
+    
+    var req = new Request();
+        
+    fetch(req)
+        .then(function(res){
+            console.log( res.ok );                                                     // -> true
+            console.log( res.status );                                                 // -> 200
+            console.log( res.statusText );                                             // -> 'OK'
+            console.log( res.url );                                                    // -> 'http://localhost:1000'
+            console.log( res.headers );                                                // -> Headers object 
+            console.log( res.trailers );                                               // -> unfedined    
+            console.log( res.redirected );                                             // -> false
+            console.log( res.type );                                                   // -> 'cors'
+        })
+        .catch(err=>console.log(err));
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Response <mark>Body</mark> mixin TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var req = new Request('http://localhost:1000');
+        
+    fetch(req)
+        .then(function(res){
+            var res_2 = res.clone();                                                   // copies created because the response body can be read once   
+            var res_3 = res.clone();
+            var res_4 = res.clone();
+            var res_5 = res.clone();
+            
+            console.log( res.body );                                                   // -&gt; ReadableStream    
+            console.log( res.bodyUsed );                                               // -&gt; false             // the response body is not yet read   
+            
+            res.text()                                                                 // returns a Promise that is resolved with text representing of the response body    
+                .then(data =&gt; console.log(data))                                       // -&gt; 'Hello World'
+                .catch(err =&gt; console.log(err))
+            
+            res_2.arrayBuffer()                                                        // returns a Promise that is resolved with an arrayBuffer representing of the response body    
+                .then(data =&gt; console.log(data))                                       // -&gt; ArrayBuffer
+                .catch(err =&gt; console.log(err))
+            
+            res_3.blob()                                                               // returns a Promise that is resolved with a blob representing of the response body    
+                .then(data =&gt; console.log(data))                                       // -&gt; Blob
+                .catch(err =&gt; console.log(err))
+        
+            res_4.json()                                                               // returns a Promise that is resolved with JSON data representing of the response body    
+                .then(data =&gt; console.log(data))
+                .catch(err =&gt; console.log(err))                                        // SyntaxError      // tPromise rejected ecause the response cannot be represented as JSON data    
+        
+            res_5.formData()                                                           // returns a Promise that is resolved with a formData representing of the response body    
+                .then(data =&gt; console.log(data)) 
+                .catch(err =&gt; console.log(err))                                        // TypeError        // tPromise rejected ecause the response cannot be represented as formData   
+        })
+        .catch(err=&gt;console.log(err));
+&lt;/script&gt;
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>Headers</mark> interface </u></h2>
+    <p> - the <mark>Headers</mark> interface allows us to perform various actions on HTTP request and response headers </p>
+    <pre class="syntax">
+SYNTAX:     <em>new</em> Headers(<strong class="openable">obj|headers<div>
+                <p> - <strong>obj</strong> - object literal </p>
+                <p> - <strong>headers</strong> - another <strong>headers</strong> object </p>
+            </div></strong>)                                                  // creates and returns a new <strong>headers</strong> object (iterable object <mark>for... of</mark> loop can be used on it)
+                                                                                          header names and values accept ASCII characters only, header names are (parsed to) lowercased    
+                                                                                          implements <span class="openable">header guard<div>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>none</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a <mark>Headers()</mark> constructor </p>
+                <p> - any request headers can be modified (custom headers included) in the <strong>headers</strong> object </p>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>request</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a CORS <strong>req</strong> (Request) request </p>
+                <p> - any request headers can be modified (custom headers included) <u>except forbidden request headers (silently discarded)</u> in the <strong>headers</strong> object </p>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>request-no-cors</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a NO-CORS <strong>req</strong> (Request) request </p>
+                <p> - only <u>valid non-forbidden</u> request headers can be set in the <strong>headers</strong> object <u>(other headers are silently discarded)</u> </p> 
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>response</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a <strong>res</strong> (Response) object </p>
+                <p> - any response headers can be modified (custom headers included) <u>except forbidden response headers (silently discarded)</u> in the <strong>headers</strong> object </p>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Headers guard <mark>immutable</mark> </p>
+                <p> - if the <strong>headers</strong> object is created by a <strong>res</strong> (Response) object <u>which was created by  a <mark><strong>res</strong>.redirect()</mark> or a <mark><strong>res</strong>.error()</mark></u> </p>
+                <p> - all headers are immutable in the <strong>headers</strong> object <u>(TypeError is thrown if attempted to modify)</u> </p>
+            </div></span> mechanism that controlls what headers can be accessed depending how the <strong>headers</strong> object was created    
+            
+            
+            <strong>headers</strong>.set(<strong>headerName:str</strong>, <strong>val</strong>)                                           // sets a new or overwrites an existing header   
+            <strong>headers</strong>.append(<strong>headerName:str</strong>, <strong>val</strong>)                                        // sets a new or appends a new value to an existing header   
+            
+            
+            <strong>headers</strong>.delete(<strong>headerName:str</strong>)                                             // deletes the specified header from the <strong>headers</strong> object   
+            
+            
+            <strong>headers</strong>.get(<strong>headerName:str</strong>)                                                // returns the value of the specified header name    
+            <strong>headers</strong>.has(<strong>headerName:str</strong>)                                                // returns <mark>true</mark> if the specified header name exists in the <strong>headers</strong> object, <mark>false</mark> otherwise    
+            
+            
+            <strong>headers</strong>.entries()                                                          // returns an iterator object which contains the <strong>headers</strong> key/value pairs   
+            <strong>headers</strong>.keys()                                                             // returns an iterator object which contains the <strong>headers</strong> keys    
+            <strong>headers</strong>.values()                                                           // returns an iterator object which contains the <strong>headers</strong> values    
+            
+            
+            <strong>headers</strong>.forEach(<strong>fn(val, key, headers)</strong>)                                     // runs the callback for each key/value pairs in the <strong>headers</strong> object    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+&lt;script&gt;
+    var header = new Headers({myHeader:'egy', myHeader2:'ketto', myHeader3:[1, 2, 3]}); // header object created   
+    
+// set() / append() -------------------------------------------------------------------
+    header.set('myHeader', 1)                                                          // overwrites the already existing 'myHeader' header   
+    header.append('myHeader2', 2)                                                      // appends a new value to the existing 'myHeader2' header 
+    
+    for(i of header){                                                                  // the 'for... of' loop can iterate through the headers object (iterator object)    
+        console.log(i);                                                                  // -> ['myheader', '1']             // header overwritten by 'set()'
+    }                                                                                    // -> ['myheader2', 'ketto, 2']     // new header value appended by 'append()'    
+                                                                                         // -> ['myheader3', '1,2,3']   
+// delete() ---------------------------------------------------------------------------
+    header.delete('myheader3')                                                         // deletes the 'myheader3' from the headers object   
+    
+// get() / has() ----------------------------------------------------------------------
+    header.get('myheader2');                                                             // -> 'ketto, 2'
+    header.has('myheader');                                                              // -> true
+    
+// entries() / keys() / values() / forEach() ------------------------------------------
+    var headEntries = header.entries();                                                // returns an iterable object which contains the header key/value pairs 
+        headEntries.next();                                                              // -> {done:false, value:['myheader', '1']}
+        headEntries.next();                                                              // -> {done:false, value:['myheader2', 'ketto, 2']}
+        headEntries.next();                                                              // -> {done:true, value:undefined}
+    
+    var headKeys = header.keys();                                                      // returns an iterable object which contains the header keys 
+        headKeys.next();                                                                 // -> {done:false, value:['myheader2']}
+        headKeys.next();                                                                 // -> {done:true, value:undefined}
+        headKeys.next();                                                                 // -> {done:false, value:['myheader']}
+    
+    var headValues = header.values();                                                  // returns an iterable object which contains the header values 
+        headValues.next();                                                               // -> {done:false, value:['1']}
+        headValues.next();                                                               // -> {done:false, value:['ketto, 2']}
+        headValues.next();                                                               // -> {done:true, value:undefined}
+    
+    header.forEach(function(val, key, headers){                                        // runs the callback for each key/value pair   
+        val;                                                                             // -> '1'        | 'ketto, 2'
+        key;                                                                             // -> 'myheader' | 'myheader2'
+        headers;                                                                         // -> Headers    | Headers  
+    });
+&lt;/script&gt;
+    </pre>
+    <p> - headers guard mechanism </p>
+    <pre>
+&lt;script&gt;
+// guart = none -----------------------------------------------------------------------
+    var heads = new Headers({myHeader:21});                                            // headers object created by the 'Headers()' constructor = headers can be freely modified without any restriction   
+    
+    heads.set('myHeader', [1, 2, 3]);                                                  // custom headers can be set 
+    heads.set('Accept', 'text/html');                                                  // valid non-forbidden headers can be set
+    heads.set('Accept-Charset', 'utf-8');                                              // forbidden headers can be set 
+    
+    heads.forEach(function(val, key){
+        key;                                                                           // -&gt; 'myheader' | 'header2' | 'accept-charset'
+        val;                                                                           // -&gt; '21'       | '1,2,3'   | 'utf-8'
+    })
+    
+    
+// guard = request --------------------------------------------------------------------
+    var req = new Request('http://localhost:1000');
+    var reqHeaders = req.headers;                                                      // headers object created by the a CORS request    
+    
+    reqHeaders.set('myHeader', [1, 2, 3]);                                             // custom headers can be set 
+    reqHeaders.set('Accept', 'text/html');                                             // valid non-forbidden headers can be set
+    reqHeaders.set('Accept-Charset', 'utf-8');                                         // -! forbidden headers cannot be set (silently discarded)
+    
+    reqHeaders.forEach(function(val, key){
+        key;                                                                           // -&gt; 'myheader' | 'accept'
+        val;                                                                           // -&gt; '1,2,3'    | 'text/html'
+    });
+    
+    
+// guard = request-no-cors ------------------------------------------------------------
+    var req_2 = new Request('http://localhost:1000', {mode:'no-cors'});
+    var reqHeaders_2 = req_2.headers;                                                  // headers object created by the a NO-CORS request    
+        
+    reqHeaders_2.set('myHeader', [1, 2, 3]);                                           // -! custom headers cannot be set (silently discarded)
+    reqHeaders_2.set('Accept', 'text/html');                                           // valid non-forbidden headers can be set
+    reqHeaders_2.set('Accept-Charset', 'utf-8');                                       // -! forbidden headers cannot be set (silently discarded)
+    
+    reqHeaders_2.forEach(function(val, key){
+        key;                                                                           // -&gt; 'accept'
+        val;                                                                           // -&gt; 'text/html'
+    });
+    
+    
+// guard = response -------------------------------------------------------------------
+    var res = new Response('some response');
+    var resHeaders = res.headers;                                                      // headers object created by a response 
+    
+    resHeaders.set('myHeader', [1, 2, 3]);                                             // custom headers can be set 
+    resHeaders.set('Expires', 'Sun, 29 Nov 2020 17:09:32 GMT');                        // valid non-forbidden response headers can be set
+    resHeaders.set('Set-Cookie', 'ez=az');                                             // -! forbidden response headers cannot be set (silently discarded)
+            
+    resHeaders.forEach(function(val, key){
+        key;                                                                           // -&gt; 'content-type'              | 'myheader' | 'espires'                       | 'transfer-encoding'    
+        val;                                                                           // -&gt; 'text/plain';charset=UTF-8' | '1,2,3'    | 'Sun, 29 Nov 2021 17:09:32 GMT' | 'compress'    
+    });
+    
+    
+// guard = immuatble ----------------------------------------------------------------- // !! I'm not sure why the headers guard is immutable (sometimes it's 'response' sometimes it's 'immutable' maybe there's a serviceWorker what recreates the response object with the 'redirect()' method I don't know)    
+    fetch('http://localhost:1000')
+        .then(function(res){
+            var headers = res.headers ;                                                // headers object (maybe) created by a request which was created by 'request.redirect()' method    
+            
+            headers.set('myHeader', [1, 2, 3]);                                        // has no effect because the headers guard is immutable    
+            headers.set('Expires', 'Sun, 29 Nov 2020 17:09:32 GMT');                   // has no effect because the headers guard is immutable    
+            headers.set('Set-Cookie', 'ez=az');                                        // has no effect because the headers guard is immutable    
+        })
+        .catch(err=&gt;console.log(err));                                                 // -&gt; 'TypeError       // because the headers guard is 'immutable'    
+&lt;/script&gt;
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>Headers()</mark> TEST </u></h4>
+    <pre>
+&lt;script&gt;
+    var heads = new Headers({myHeader:'egy', myHeader2:'ketto', myHeader3:[1, 2, 3]});
+    var header = new Headers(heads);
+    
+    header.set('myHeader', 1)                                                          // overwrites the already existing 'myHeader' header   
+    header.append('myHeader2', 2)                                                      // appends a new value to the existing 'myHeader2' header 
+    
+    for(i of header){
+        console.log(i);                                                                // -> ['myheader', '1']             // header overwritten by 'set()'
+    }                                                                                  // -> ['myheader2', 'ketto, 2']     // new header value appended by 'append()'                                                                                      // -> ['myheader3', '1,2,3']
+    
+    header.delete('myheader3')                                                         // deletes the 'myheader3' from the headers object   
+    
+    console.log( header.get('myheader2') );                                            // -> 'ketto, 2'
+    console.log( header.has('myheader') );                                             // -> true
+    
+    
+    var headEntries = header.entries();                                                // returns an iterable object which contains the header key/value pairs 
+        console.log( headEntries.next() );                                               // -> {done:false, value:['myheader', '1']}
+        console.log( headEntries.next() );                                               // -> {done:false, value:['myheader2', 'ketto, 2']}
+        console.log( headEntries.next() );                                               // -> {done:true, value:undefined}
+    
+    var headKeys = header.keys();                                                      // returns an iterable object which contains the header keys 
+        console.log( headKeys.next() );                                                  // -> {done:false, value:['myheader2']}
+        console.log( headKeys.next() );                                                  // -> {done:true, value:undefined}
+        console.log( headKeys.next() );                                                  // -> {done:false, value:['myheader']}
+    
+    var headValues = header.values();                                                  // returns an iterable object which contains the header values 
+        console.log( headValues.next() );                                                // -> {done:false, value:['1']}
+        console.log( headValues.next() );                                                // -> {done:false, value:['ketto, 2']}
+        console.log( headValues.next() );                                                // -> {done:true, value:undefined}
+    
+    header.forEach(function(val, key, headers){                                        // runs the callback for each key/value pair   
+        console.log( val );                                                              // -> '1'        | 'ketto, 2'
+        console.log( key );                                                              // -> 'myheader' | 'myheader2'
+        console.log( headers );                                                          // -> Headers    | Headers  
+    });
+&lt;/script&gt;
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Headers guard TEST </u></h4>    
+    <pre>
+&lt;script&gt;
+// guart = none -----------------------------------------------------------------------
+    var heads = new Headers({myHeader:21});                                            // headers object created by the 'Headers()' constructor = headers can be freely modified without any restriction   
+    
+    heads.set('myHeader', [1, 2, 3]);                                                  // custom headers can be set 
+    heads.set('Accept', 'text/html');                                                  // valid non-forbidden headers can be set
+    heads.set('Accept-Charset', 'utf-8');                                              // forbidden headers can be set 
+    
+    heads.forEach(function(val, key){
+        console.log( key );                                                            // -&gt; 'myheader' | 'header2' | 'accept-charset'
+        console.log( val );                                                            // -&gt; '21'       | '1,2,3'   | 'utf-8'
+    })
+    
+    
+// guard = request --------------------------------------------------------------------
+    var req = new Request('http://localhost:1000');
+    var reqHeaders = req.headers;                                                      // headers object created by the a CORS request    
+    
+    reqHeaders.set('myHeader', [1, 2, 3]);                                             // custom headers can be set 
+    reqHeaders.set('Accept', 'text/html');                                             // valid non-forbidden headers can be set
+    reqHeaders.set('Accept-Charset', 'utf-8');                                         // -! forbidden headers cannot be set (silently discarded)
+    
+    reqHeaders.forEach(function(val, key){
+        console.log(key);                                                              // -&gt; 'myheader' | 'accept'
+        console.log(val);                                                              // -&gt; '1,2,3'    | 'text/html'
+    });
+    
+    
+// guard = request-no-cors ------------------------------------------------------------
+    var req_2 = new Request('http://localhost:1000', {mode:'no-cors'});
+    var reqHeaders_2 = req_2.headers;                                                  // headers object created by the a NO-CORS request    
+        
+    reqHeaders_2.set('myHeader', [1, 2, 3]);                                           // -! custom headers cannot be set (silently discarded)
+    reqHeaders_2.set('Accept', 'text/html');                                           // valid non-forbidden headers can be set
+    reqHeaders_2.set('Accept-Charset', 'utf-8');                                       // -! forbidden headers cannot be set (silently discarded)
+    
+    reqHeaders_2.forEach(function(val, key){
+        console.log(key);                                                              // -&gt; 'accept'
+        console.log(val);                                                              // -&gt; 'text/html'
+    });
+    
+    
+// guard = response -------------------------------------------------------------------
+    var res = new Response('some response');
+    var resHeaders = res.headers;                                                      // headers object created by a response 
+    
+    resHeaders.set('myHeader', [1, 2, 3]);                                             // custom headers can be set 
+    resHeaders.set('Expires', 'Sun, 29 Nov 2020 17:09:32 GMT');                        // valid non-forbidden response headers can be set
+    resHeaders.set('Set-Cookie', 'ez=az');                                             // -! forbidden response headers cannot be set (silently discarded)
+            
+    resHeaders.forEach(function(val, key){
+        console.log(key);                                                              // -&gt; 'content-type'              | 'myheader' | 'espires'                       | 'transfer-encoding'    
+        console.log(val);                                                              // -&gt; 'text/plain';charset=UTF-8' | '1,2,3'    | 'Sun, 29 Nov 2021 17:09:32 GMT' | 'compress'    
+    });
+    
+    
+// guard = immuatble ----------------------------------------------------------------- // !! I'm not sure why the headers guard is immutable (sometimes it's 'response' sometimes it's 'immutable' maybe there's a serviceWorker what recreates the response object with the 'redirect()' method I don't know)    
+    fetch('http://localhost:1000')
+        .then(function(res){
+            var headers = res.headers ;                                                // headers object (maybe) created by a request which was created by 'request.redirect()' method    
+            
+            headers.set('myHeader', [1, 2, 3]);                                        // has no effect because the headers guard is immutable    
+            headers.set('Expires', 'Sun, 29 Nov 2020 17:09:32 GMT');                   // has no effect because the headers guard is immutable    
+            headers.set('Set-Cookie', 'ez=az');                                        // has no effect because the headers guard is immutable    
+        })
+        .catch(err=&gt;console.log(err));                                                 // -&gt; 'TypeError       // because the headers guard is 'immutable'    
+&lt;/script&gt;
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

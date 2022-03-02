@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Transforming Elements </title>    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Transforming Elements (ver 3.1) </h1>
+	<p> Updated ( 2017-01-06 / 2018-07-22 / 2019-05-08 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html" title="CSS">CSS></a> Transforming Elements 
+    </p>
+<table class="table">
+    <tr>
+        <th> Property </th>
+        <th> Value </th>
+        <th style="width:45%;"> Description </th>
+    </tr>
+    <tr>
+        <td> backface-visibility </td>
+        <td> 
+            visible <span style="color:blue;">(default)</span><br>
+            hidden 
+        </td>
+        <td> 
+            <i class="fab fa-css3-alt"></i> defines if the backface of the element is visible when it's facing the viewer <span style="color:orangered">[Experimental: 2019-05-13]</span> 
+            <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/12 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/10 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 9/4 -webkit- </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> perspective </td>
+        <td> 
+            none <span style="color:blue;">(default)</span><br>
+            <strong>cssLength</strong> <span style="color:blue;">(lower value means bigger perspective space)</span>
+        </td>
+        <td> 
+            <i class="fab fa-css3-alt"></i> defines the perspective depth <u>for the element's 1st level children elements</u> (1st level children elements will share and transformend on the same space) 
+            <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/12 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/10 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 9/4.0.3 -webkit- </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> perspective-origin </td>
+        <td> 
+            <strong>x:cssLength</strong> <i>y:cssLength</i> <span style="color:blue;">(default <mark>50% 50%</mark>)</span>
+        </td>
+        <td> 
+            <i class="fab fa-css3-alt"></i> defines at which angle the veiwer is looking the 3D transformed element (think as a "vanishing point" used by the <mark>perspective</mark> property) <u>(effects chidren elements not the element itself)</u>  
+            <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/12 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/10 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 9/4.0.3 -webkit- </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> transform </td>
+        <td> 
+            none <span style="color:blue;">(default)</span><br>
+            matrix(<strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>) <span style="color:blue;">(shorthand 2D transform (not intended to be written by hand [I think])</span> <span style='color:orangered;'>[NOT TESTED])</span><br>
+            matrix3d(<strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>)  <span style="color:blue;">(shorthand 3D transform (not intended to be written by hand [I think])</span> <span style='color:orangered;'>[NOT TESTED])</span><br>
+            perspective(<strong>CssLength</strong>) <span style="color:blue;">(sets the distance (creates a space) between the user and the page (plane <mark>z=0</mark>) (this makes 3D transformation visible, <u>must be set before the actual transformation</u>))</span><br>
+            rotate(<strong>nr</strong>deg) <span style="color:blue;">(rotate the element along the Z axis (same as <mark>rotateZ()</mark>))</span><br>
+            rotateX(<strong>nr</strong>deg) <span style="color:blue;">(rotate the element along the X axis)</span><br>
+            rotateY(<strong>nr</strong>deg) <span style="color:blue;">(rotate the element along the Y axis)</span><br>
+            rotateZ(<strong>nr</strong>deg) <span style="color:blue;">(rotate the element along the Z axis (same as <mark>rotate()</mark>))</span><br>
+            rotate3d(<strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>deg) <span style="color:blue;">(rotate the element along the X, Y and Z axis (creates a custom rotation axis, [unnecessarily complicated to use TESTED : 2019-05-09]))</span><br>
+            scale(<strong>x:nr</strong>, <i>y:nr</i>) <span style="color:blue;">// scales (sizes) the element along the X and Y axis)</span><br>
+            scaleX(<strong>nr</strong>) <span style="color:blue;">(scales (sizes) the element along the X axis (default <mark>1</mark>))</span><br>
+            scaleY(<strong>nr</strong>) <span style="color:blue;">(scales (sizes) the element along the Y axis (default <mark>1</mark>))</span><br>
+            scaleZ(<strong>nr</strong>) <span style="color:blue;">(scales (sizes) the element along the Z axis (between the user and the page) (default <mark>1</mark>) (since HTML element cannot have any thickness this is very situational!))</span><br>   
+            scale3d(<strong>x:nr</strong>, <strong>y:nr</strong>, <strong>z:nr</strong>) <span style="color:blue;">(scales (sizes) the element along the X, Y and Z axis (default <mark>1</mark>)</span><br>
+            skew(<strong>x:nr</strong>deg, <i>y:nr</i>deg) <span style="color:blue;">(skews the element along the X and Y axis)</span><br>
+            skewX(<strong>nr</strong>deg) <span style="color:blue;">(skews the element along the X axis )</span><br>
+            skewY(<strong>nr</strong>deg) <span style="color:blue;">(skews the element along the Y axis )</span><br>
+            translate(<strong>xCssLength</strong>, <i>yCssLength</i>) <span style="color:blue;">(translates (moves) the element along the X and Y axis)</span><br>
+            translateX(<strong>CssLength</strong>) <span style="color:blue;">(translates (moves) the element along the X axis)</span><br>
+            translateY(<strong>CssLength</strong>) <span style="color:blue;">(translates (moves) the element along the Y axis)</span><br>
+            translateZ(<strong>CssLength</strong>) <span style="color:blue;">(translates (moves) the element along the Z axis (between the user and the page, <u>lower value moves the element away from the viewer</u>))</span><br>
+            translate3d(<strong>xCssLength</strong>, <strong>yCssLength</strong>, <strong>zCssLength</strong>) <span style="color:blue;">(translates (moves) the element along the X, Y and Z axis)</span><br>
+            <strong>transformFn()</strong> <i>transformFn() ...</i> <span style="color:blue;">(multiple transform)</span>
+        </td>
+        <td> 
+            transforms in 2D or 3D an elements <br><br>
+            - in 2D <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/4 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/3.5 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- / 10.5 -o- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10/9 -ms- </span>
+                <span><i class="fab fa-safari"></i> 9/3.2 -webkit- </span>
+            </span><br><br>
+            - in 3D <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/12 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 10 </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 9/4 -webkit- </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> transform-origin </td>
+        <td> 
+            <strong>x:cssLength</strong> <i>y:cssLength</i> <i>z:cssLength</i> <span style="color:blue;">(default <mark>50% 50% 0</mark>)</span>
+        </td>
+        <td> 
+            <i class="fab fa-css3-alt"></i> determinates the central transformation point on which the element is transformed around ("hanging point") <u>(when we set the "<i>z:cssLength</i>" value the Z origin point stays in the same place but the element is moved along the Z axis, in other words this translates the element along the Z axis (does the same as the <mark>translateZ()</mark> function))</u><br>
+            - in 2D <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/4 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/3.5 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- / 10.5 -o- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10/9 -ms- </span>
+                <span><i class="fab fa-safari"></i> 9/3.2 -webkit- </span>
+            </span><br>
+            - in 3D <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/12 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/10 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit-</span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 9/4 -webkit- </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> transfrom-style </td>
+        <td> 
+            flat <span style="color:blue;">((default) 1st level children elements keep their own space and <u>rendered flat</u> in front of the current element)</span><br>
+            preserve-3d <span style="color:blue;">(1st level children elements will be rendered in the space as the current element)</span>
+        </td>
+        <td> 
+            <i class="fab fa-css3-alt"></i> defines if the element's 1st level children should be rendered in the same space as the current element <span style="color:orangered">[Experimental: 2019-05-13]</span>
+            <span id="browserSupport">
+                <span><i class="fab fa-chrome"></i> 36/12 -webkit- </span>
+                <span><i class="fab fa-firefox"></i> 16/10 -moz- </span>
+                <span><i class="fab fa-opera"></i> 23/15 -webkit- </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 11 </span>
+                <span><i class="fab fa-safari"></i> 9/4 -webkit- </span>
+            </span>
+        </td>
+    </tr>
+</table> 
+<h2 style="color:green;"><u> Notes : </u></h2>
+<details class="example" id="notes">
+<summary> Notes :</summary>
+    <p> - I didn't tested the <mark>transform-box</mark> property because it is an early experimental technology [2019-05-12], it is related to SVG, in some cases the "transform" and "transform-origin" property references the svg canvas instead of the element itself, this property apparently intended to fix this problem by setting the element itself as reference </p>
+</details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="http://www.w3schools.com/css/css3_2dtransforms.asp" target="_blank"> W3School 2D Transform </a></p>
+    <p><a href="http://www.w3schools.com/css/css3_3dtransforms.asp" target="_blank"> W3School 3D Transform </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - HTML elements cannot have any thickness </p>
+    <p> - CSS transformations do not stack (like in canvas), if you write a new CSS transform line it will completely overrides the previous transformation! (this is a normal CSS behaviour)</p>
+    <p> - in the browser the perspective is counted from the viewer towards the plain z=0, so the lower is the perspective value the bigger is the space between the user and the plain z=0 (greater is the 3D effect) </p> 
+    <p> - the <mark>translateZ()</mark> function and moving the Z origin point with the <mark>transform-origin</mark> property does the <u>same exact thing</u> with different approaches (both moves the element along the Z axis but the Z origin point is always kept in the same place (on the plane))</p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - CSS lets us transform <u>block level elements</u> in 2D or 3D such as rotate, skew, ect.. </p>
+    <p style="color:yellow;"> - HTML elements cannot have any thickness </p>
+    <p style="color:yellow;"> - each HTML element have their own transformation space, elements (with their unique space) are placed on top of each other <u>flat</u> hierarchically (think of like a stack of tiles) </p>
+    <p> - CSS transformations do not stack (like in canvas), if you write a new CSS transform line it will completely overrides the previous transformation! (this is a normal CSS behaviour)</p>
+<h2 style="color:darkblue;"><u> the <mark>transfrom</mark> property </u></h2>
+    <pre class="syntax">
+SYNTAX :    transform : none                    <span style="color:skyblue;">// (default)</span>            // transforms an element in 2D or 3D <u>(transformed element does not affect the layout)</u>                             
+                      : translate(<strong>xCssLength</strong>, <i>yCssLength</i>)  <span style="color:skyblue;">// translates (moves) the element along the X and Y axis</span>
+                      : translateX(<strong>CssLength</strong>)   <span style="color:skyblue;">// translates (moves) the element along the X axis</span>
+                      : translateY(<strong>CssLength</strong>)   <span style="color:skyblue;">// translates (moves) the element along the Y axis</span>
+                      : translateZ(<strong>CssLength</strong>)   <span style="color:skyblue;">// translates (moves) the element along the Z axis (between the user and the page, <u>lower value moves the element away from the viewer</u>)</span>
+                      : translate3d(<strong>xCssLength</strong>, <strong>yCssLength</strong>, <strong>zCssLength</strong>)   <span style="color:skyblue;">// translates (moves) the element along the X, Y and Z axis</span>
+                      : scale(<strong>x:nr</strong>, <i>y:nr</i>)       <span style="color:skyblue;">// scales (sizes) the element along the X and Y axis</span>
+                      : scaleX(<strong>nr</strong>)              <span style="color:skyblue;">// scales (sizes) the element along the X axis (default <mark>1</mark>)</span>
+                      : scaleY(<strong>nr</strong>)              <span style="color:skyblue;">// scales (sizes) the element along the Y axis (default <mark>1</mark>)</span>
+                      : scaleZ(<strong>nr</strong>)              <span style="color:skyblue;">// scales (sizes) the element along the Z axis (between the user and the page) (default <mark>1</mark>) (since HTML element cannot have any thickness this is very situational!)</span>   
+                      : scale3d(<strong>x:nr</strong>, <strong>y:nr</strong>, <strong>z:nr</strong>) <span style="color:skyblue;">// scales (sizes) the element along the X, Y and Z axis (default <mark>1</mark>)</span>
+                      : skew(<strong>x:nr</strong>deg, <i>y:nr</i>deg)  <span style="color:skyblue;">// skews the element along the X and Y axis</span>
+                      : skewX(<strong>nr</strong>deg)            <span style="color:skyblue;">// skews the element along the X axis </span>
+                      : skewY(<strong>nr</strong>deg)            <span style="color:skyblue;">// skews the element along the Y axis </span>
+                      : rotate(<strong>nr</strong>deg)           <span style="color:skyblue;">// rotate the element along the Z axis (same as <mark>rotateZ()</mark>) </span>
+                      : rotateX(<strong>nr</strong>deg)          <span style="color:skyblue;">// rotate the element along the X axis </span>
+                      : rotateY(<strong>nr</strong>deg)          <span style="color:skyblue;">// rotate the element along the Y axis </span>
+                      : rotateZ(<strong>nr</strong>deg)          <span style="color:skyblue;">// rotate the element along the Z axis (same as <mark>rotate()</mark>) </span>
+                      : rotate3d(<strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>deg) <span style="color:skyblue;">// rotate the element along the X, Y and Z axis (creates a custom rotation axis, [unnecessarily complicated to use TESTED : 2019-05-09]) </span>
+                      : perspective(<strong>CssLength</strong>)  <span style="color:skyblue;">// sets the distance (creates a space) between the user and the page (plane <mark>z=0</mark>) (this makes 3D transformation visible, <u>must be set before the actual transformation</u>)</span>   
+                      : matrix(<strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>)   <span style="color:skyblue;">// shorthand 2d transform (not intended to be written by hand [I think])</span> <span style='color:orange;'>[NOT TESTED]</span>
+                      : matrix3d(<strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>, <strong>nr</strong>)  <span style="color:skyblue;">// shorthand 3d transform (not intended to be written by hand [I think])</span> <span style='color:orange;'>[NOT TESTED]</span>
+                      : <strong>transformFn()</strong> <i>transformFn() ...</i>  <span style="color:skyblue;">// multiple transform</span> 
+    </pre>
+    <pre>
+// HTML --------------------------------------------
+    &lt;div class="testDiv"&gt;&lt;/div&gt;
+    
+// CSS ---------------------------------------------
+    .testDiv {
+    // transform / perspective ------- 
+        transform: translateX(250px);                                   // translates (moves) the element 250px left
+        transform: translateY(-25px);                                   // translates (moves) the element 25px up       // !!  at this point the element is translated along the Y axis ONLY because CSS transform do not stack (this is normal CSS behaviour)   
+        transform: perspective(500px) translateZ(-250px);               // translates (moves) the element away from the user 250px(towards the plain z=0)   // -! perspective must be set before the actual transformation     
+        // ------
+        transform: translate(250px, -25px);                             // does the same as the 2D transformation above 
+        transform: perspective(500px) translate3d(250px, -25px, -250px);// does the same as the 3D transformation above 
+    
+    // scale -------------------------
+        transform: scaleX(1.5);                                         // scales the element along the X axis (stretches one and a half of its original size)
+        transform: scaleY(.75);                                         // scales the element along the Y axis (shrinks three fourth of its original size)
+        transform: scaleZ(2);                                           // scales the element along the Z axis    // -! since in HTML elements does not have any thickness this is very situational (I don't think it worth working with)   
+        // ------
+        transform: scale(1.5, .75);                                     // does the same as the 2D scale above 
+        transform: scale3d(1.5, 0.75, 2);                               // does the same as the 3D scale above 
+        
+    // skew --------------------------
+        transform: skewX(55deg);                                        // skews the element along the X axis 
+        transform: skewY(-25deg);                                       // skews the element along the Y axis 
+        // ------
+        transform: skew(55deg, -25deg);                                 // does the same as above 
+    
+    // rotate --------------------------
+        transform: rotate(45deg);                                       // rotate the element along the Z axis    // -! same as "rotateZ()"
+        transform: rotateZ(45deg);                                      // rotate the element along the Z axis 
+        transform: rotateX(75deg);                                      // rotate the element along the X axis 
+        transform: rotateY(35deg);                                      // rotate the element along the Y axis 
+        transform: rotate3d(1, 1, 1, 45deg);                            // rotates the element along the X, Y and Z axes 45 degrees     // -! I've found this overcomplicated to use [TESTED: 2019-05-11]
+    }
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>transform:translate</mark> TEST </u></h4>
+    <p> - empty spaces are left behind becase CSS styles the element (no DOM modification) </p>
+    <div class="transform-translate1">
+        <p>This Box is moved form it's original position</p>
+    </div>
+    <div class="transform-translate2">
+        <p>This Box second box is also moved form it's original position</p>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="transform-translate1"p&gt;
+        &lt;p&gt;This Box is moved form it's original position&lt;/p&gt;
+    &lt;/divp&gt;
+    &lt;div class="transform-translate2"&gt;
+        &lt;p&gt;This Box second box is also moved form it's original position&lt;/p&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .transform-translate1{                                      .transform-translate2{
+        width: 300px;                                               width: 300px;
+        height: 100px;                                              height: 100px;
+        background: lightgreen;                                     background: lightgreen;
+        border: solid 2px black;                                    border: solid 2px black;
+        padding: 5px;                                               padding: 5px;
+        text-align: center; text-align: center;                     text-align: center;
+        -ms-transform: translate(100px, 10px);                      -ms-transform: translate(500px, -55px);
+        -webkit-transform: translate(100px, 10px);                  -webkit-transform: translate(500px, -55px);
+        transform: translate(100px, 10px);                          transform: translate(500px, -55px);
+    }                                                           }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:translateZ()</mark> TEST </u></h4>
+    <div class='transZ'></div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class='transZ'&gt;&lt;/div&gt;
+    
+-- CODE (CSS) --
+    .transZ {
+        border: 2px black solid;
+        width: 150px;
+        height: 150px;
+        background-color: yellow;
+        transform: perspective(500px) translateZ(-1000px) rotateY(45deg);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:translate3d()</mark> TEST </u></h4>
+    <div class='trans3d'></div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class='trans3d'&gt;&lt;/div&gt;
+    
+-- CODE (CSS) --
+    .trans3d {
+        border: 2px black solid;
+        width: 150px;
+        height: 150px;
+        background-color: yellow;
+        transform: perspective(500px) translate3d(135px, 45px, -700px);         // perspecitve set first 
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:scale()</mark> TEST </u></h4>
+    <p> Note that the original size value is <mark>1</mark></p>
+    <div class="transform-scale1">
+        <p> Box scaled </p>
+    </div>
+    <div class="transform-scale2">
+        <p> Box scaled </p>
+    </div>
+    <div class="transform-scale3">
+        <p> Box scaled </p>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="transform-scale1"&gt;
+        &lt;p&gt; Box scaled &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-scale2"&gt;
+        &lt;p&gt; Box scaled &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-scale3"&gt;
+        &lt;p&gt; Box scaled &lt;/p&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .transform-scale1{                                      .transform-scale2{
+        width: 250px;                                           width: 250px;
+        height: 100px;                                          height: 100px;
+        background: lightgreen;                                 background: lightgreen;
+        border: solid 2px black;                                border: solid 2px black;
+        padding: 5px;                                           padding: 5px;
+        text-align: center;                                     text-align: center;
+        -ms-transform: scale(1.3, 0.7);                         -ms-transform: scaleX(4);
+        -webkit-transform: scale(1.3, 0.7);                     -webkit-transform: scaleX(4);
+        transform: scale (1.3, 0.7);                            transform: scaleX(4);
+    }                                                       }
+    
+    .transform-scale3{
+        width: 250px;
+        height: 100px;
+        background: lightgreen;
+        border: solid 2px black;
+        padding: 5px;
+        text-align: center;
+        -ms-transform: scale3d(0.3, 0.3, 0.3);
+        -webkit-transform: scale3d(0.3, 0.3, 0.3);
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:skew()</mark> TEST </u></h4>
+    <div class="transform-skew1">
+        <p>This Box is skewed horizontaly to the left side</p>
+    </div>
+    <div class="transform-skew2">
+        <p>This Box is skewed verticaly to the right side</p>
+    </div>
+    <div class="transform-skew3">
+        <p>This Box is skewed both sides </p>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+     &lt;div class="transform-skew1"&gt;
+        &lt;p&gt;This Box is skewed horizontaly to the left side&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-skew2"&gt;
+        &lt;p&gt;This Box is skewed verticaly to the right side&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-skew3"&gt;
+        &lt;p&gt;This Box is skewed both sides &lt;/p&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .transform-skew1{                                           .transform-skew3{
+        width: 250px;                                               width: 250px;
+        height: 100px;                                              height: 100px;
+        background: lightgreen;                                     background: lightgreen;
+        border: solid 2px black;                                    border: solid 2px black;
+        padding: 5px;                                               padding: 5px;
+        text-align: center;                                         text-align: center;
+        -ms-transform: skewX(30deg);                                -ms-transform: skew(-20deg,-10deg);
+        -webkit-transform: skewX(30deg);                            -webkit-transform: skew(-20deg,-10deg);
+        transform: skewX(30deg);                                    transform: skew(-20deg,-10deg);
+    }                                                           }
+    .transform-skew2{
+        width: 250px;
+        height: 100px;
+        background: lightgreen;
+        border: solid 2px black;
+        padding: 5px;
+        text-align: center;
+        -ms-transform: skewY(20deg);
+        -webkit-transform: skewY(20deg);
+        transform: skewY(20deg);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:rotate()</mark> TEST </u></h3>
+    <div class="transform-rotate1">
+        <p> Box is rotated </p>
+    </div>
+    <div class="transform-rotate2">
+        <p> Box is rotated </p>
+    </div>
+    <div class="transform-rotate3">
+        <p> Box is rotated </p>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="transform-rotate1"&gt;
+        &lt;p&gt; Box is rotated &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-rotate2"&gt;
+        &lt;p&gt; Box is rotated &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-rotate3"&gt;
+        &lt;p&gt; Box is rotated &lt;/p&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .transform-rotate1{                                                 .transform-rotate2{
+        width: 250px;                                                       width: 250px;
+        height: 100px;                                                      height: 100px;
+        background: lightgreen;                                             background: lightgreen;
+        border: solid 2px black;                                            border: solid 2px black;
+        padding: 5px;                                                       padding: 5px;
+        text-align: center;                                                 text-align: center;
+        -ms-transform: rotate rotateY(-45deg);                              -ms-transform: rotateX(45deg);
+        -webkit-transform: rotate rotateY(-45deg);                          -webkit-transform: rotateX(45deg);
+        transform: rotateY(-45deg);                                         transform: rotateX(45deg);
+    }                                                                   }
+    
+    .transform-rotate3{
+        width: 250px;
+        height: 100px;
+        background: lightgreen;
+        border: solid 2px black;
+        padding: 5px;
+        text-align: center;
+        -ms-transform: rotateZ(25deg);
+        -webkit-transform: rotateZ(25deg);
+        transform: rotateZ(25deg);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:rotate3d()</mark> TEST </u></h3>
+    <p style="color:yellow;"> - the <mark>rotate3d()</mark> function creates a custom axis but form me it looks unnecessarily complicated [TESTED : 2019-05-09]</p>
+    <div class="rot3d_1">1</div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="rot3d_1"&gt;1&lt;/div&gt;
+    
+-- CODE (CSS) --
+    .rot3d_1 {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        border: solid 2px black;
+        background-color: yellow;
+        transform: rotate3d(1, 1, 1, 45deg);            // x, y and z axis is rotated 45degrees
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:perspective()</mark> TEST </u></h3>
+    <div class="persp pr1"> </div>
+    <div class="persp pr2"> </div>
+    <div class="persp pr3"> </div>
+        <details style="clear:left;">
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="persp pr1"&gt; &lt;/div&gt;
+    &lt;div class="persp pr2"&gt; &lt;/div&gt;
+    &lt;div class="persp pr3"&gt; &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .persp {
+        float: left;
+        width: 100px;
+        height: 100px;
+        border: 1px solid black;
+        background-color: brown;
+        margin-left: 20px;
+    }
+    .pr1 {
+        transform: perspective(100px) rotateX(35deg);
+    }
+    .pr2 {
+        transform: perspective(500px) rotateY(40deg);
+    }
+    .pr3 {
+        transform: perspective(500px) rotateX(40deg) rotateY(35deg);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4 style="color:darkblue;"><u> <mark>transform:perspective()</mark> TEST-2 </u></h3>
+    <p> - elements are moved along the Z axis (the bigger is the perspective the more space we have in 3D)</p>
+    <div class="pers1">default (no perspective set) </div>
+    <div class="pers2">perspective: 250px;</div>
+    <div class="pers3">perspective: 500px;</div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="pers1"&gt;default (no perspective set) &lt;/div&gt;
+    &lt;div class="pers2"&gt;perspective: 250px;&lt;/div&gt;
+    &lt;div class="pers3"&gt;perspective: 500px;&lt;/div&gt;
+    
+-- CODE (CSS) --
+    .pers1 {                                                 
+        display: inline-block;                               
+        vertical-align: top;                                 
+        margin-left: 15px;                                   
+        width: 100px;                                        
+        height: 100px;                                       
+        border: solid 1px black;                             
+        background-color: lightgreen;                        
+        transform: perspective(0) translateZ(-300px);       // perspective must be set otherwise the transformation is not visible 
+    }
+    .pers2 {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 15px;
+        width: 100px;
+        height: 100px;
+        border: solid 1px black;
+        background-color: lightgreen;
+        transform: perspective(250px) translateZ(-300px);
+    }
+    .pers3 {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 15px;
+        width: 100px;
+        height: 100px;
+        border: solid 1px black;
+        background-color: lightgreen;
+        transform: perspective(500px) translateZ(-300px);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4><u> Multiple Transform TEST </u></h4>
+    <div class="multiple_transform">
+        <p> This box is scaled, skewed, rotaded and translated(moved)</p>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="multiple_transform"&gt;
+        &lt;p&gt; This box is scaled, skewed, rotaded and translated(moved)&lt;/p&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .multiple_transform {
+        width: 250px;
+        height: 100px;
+        background: lightgreen;
+        border: solid 2px black;
+        padding: 5px;
+        text-align: center;
+        -ms-transform:translate(100px,25px) rotate(12deg) scale(1.2,0.8) skew(8deg);
+        -webkit-transform:translate(100px,25px) rotate(12deg) scale(1.2,0.8) skew(8deg);
+        transform:translate(100px,25px) rotate(12deg) scale(1.2,0.8) skew(8deg);
+    }
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------->    
+<h4><u> <mark>transform:scaleZ()</mark> TEST </u></h4>
+    <p style="color:yellow;"> - the <mark>scaleZ()</mark> function does NOT give thickness of the element it sort of scales closer|farther to the viewer </p>
+    <div class="scaleZ scz1">scale(0.5)</div>
+    <div class="scaleZ scz2">scale(1) (default)</div>
+    <div class="scaleZ scz3">scale(2)</div>
+    <div class="scaleZ scz4">scale(5)</div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="scaleZ scz1"&gt;scale(0.5)&lt;/div&gt;
+    &lt;div class="scaleZ scz2"&gt;scale(1) (default)&lt;/div&gt;
+    &lt;div class="scaleZ scz3"&gt;scale(2)&lt;/div&gt;
+    &lt;div class="scaleZ scz4"&gt;scale(5)&lt;/div&gt;
+    
+-- CODE (CSS) --
+    .scaleZ {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border: solid 2px black;
+        background-color: lightsalmon;
+    }
+    .scz1 { transform: perspective(500px) scaleZ(.5) rotateX(45deg); }
+    .scz2 { transform: perspective(500px) scaleZ(1) rotateX(45deg); }
+    .scz3 { transform: perspective(500px) scaleZ(2) rotateX(45deg); }
+    .scz4 { transform: perspective(500px) scaleZ(5) rotateX(45deg); }
+        </pre>
+        </details>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<hr>
+<h2 style="color:darkblue;"><u> the <mark>transform-origin</mark> property </u></h2>
+    <pre class="syntax">
+SYNTAX :    transform-origin: <strong>x:cssLength</strong> <i>y:cssLength</i> <i>z:cssLength</i>   <span style="color:skyblue;">// (default <mark>50% 50% 0</mark>)</span>    // <i class="fab fa-css3-alt"></i> determinates the central transformation point on which the element is transformed around ("hanging point") <u>(when we set the "<i>z:cssLength</i>" value the Z origin point stays in the same place but the element is moved along the Z axis, in other words this translates the element along the Z axis (does the same as the <mark>translateZ()</mark> function))</u>    
+                - <strong>x:cssLength</strong> : x axis coordinates (also can be <mark>left</mark> | <mark>center</mark> (default) | <mark>right</mark>)
+                - <i>y:cssLength</i> : y axis coordinates (also can be <mark>top</mark> | <mark>center</mark> (default) | <mark>bottom</mark>)
+                - <i>z:cssLength</i> : z axis coordinates <u style="color:orange;">(keeps the Z origin point at the same place and moves (translates) the element along the Z axis)</u> 
+    </pre>
+    <pre>
+// HTML --------------------------------------------
+    &lt;div class="demo"&gt;&lt;/div&gt;
+        
+// CSS ---------------------------------------------
+    .demo {
+        transform-origin: left top;                                     // you can think of as a "hanging point" which is moved to the top left corner here
+        transform: scale(.75, .75) rotateZ(-25deg);                     // the scale and the rotation now is happening around the top left corner 
+    }
+    
+  // transform-origin Z parameter ----------------
+    .demo {
+        transform-origin: 50% 50% -100px;                               // the Z origin point is moved 100px behind the element  // -! by doing this it acually keeps the Z origin point in the same place and moves the element forward to the viewer   
+        transform: perspective(500px);
+    }
+    .demo {
+        transform: perspective(500px) translateZ(100px);                // this does the same thing az the code above (moves the element forward to the viewer and leaves the Z origin point behind)  
+    }
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>transform-origin</mark> TEST </u></h4>
+    <p> - thes boxes have their "hanging point" changed, you an think of as a nail on the wall on what the element is hanging on </p>
+    <div class="transform-origin">
+        <p> This is the original box no <makr>transform-origin</makr> modified, it is turned 10degres to the left</p>
+    </div>
+    <div class="transform-origin2">
+        <p> This box is hanging form its top right corner and rotates arround because the <mark>transform-origin</mark> property is set to <mark>100% 0</mark></p>
+    </div>
+    <div class="transform-origin3">
+        <p> This box is hanging form its top left corner and rotates arround because the <mark>transform-origin</mark> property is set to <mark>0 100%</mark></p>
+    </div>
+        <details style="margin-top:200px;">
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="transform-origin"&gt;
+        &lt;p&gt; This is the original box no &lt;makr>transform-origin&lt;/makr&gt; modified, it is turned 10degres to the left&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-origin2"&gt;
+        &lt;p&gt; This box is hanging form its top right corner and rotates arround because the &lt;mark&gt;transform-origin&lt;/mark&gt; property is set to &lt;mark&gt;100% 0&lt;/mark&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="transform-origin3"&gt;
+        &lt;p&gt; This box is hanging form its top left corner and rotates arround because the &lt;mark&gt;transform-origin&lt;/mark&gt; property is set to &lt;mark&gt;0 100%&lt;/mark&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .transform-origin{                                          .transform-origin3{
+        float: left;                                                float: left;
+        width: 250px;                                               width: 250px;
+        height: 100px;                                              height: 100px;
+        background: lightgreen;                                     background: lightgreen;
+        border: solid 2px black;                                    border: solid 2px black;
+        padding: 5px;                                               padding: 5px;
+        text-align: center;                                         text-align: center;
+        -ms-transform: rotate(-10deg);                              -ms-transform: rotate(20deg);
+        -webkit-transform: rotate(-10deg);                          -webkit-transform: rotate(20deg);
+        transform: rotate(-10deg);                                  transform: rotate(20deg);
+    }                                                               transform-origin: 0 100%;
+    .transform-origin2{                                         }
+        float: left;
+        width: 250px;
+        height: 100px;
+        background: lightgreen;
+        border: solid 2px black;
+        padding: 5px;
+        text-align: center;
+        -ms-transform: rotate(-20deg);
+        -webkit-transform: rotate(-20deg);
+        transform: rotate(-20deg);
+        transform-origin: 100% 0;
+    }
+        </pre>
+        </details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<h4 style="color:darkblue;"><u> <mark>transform-origin</mark> testing the Z origin point </u></h4>
+    <p> - in the first example the Z origin point is moved behind the element <u style="color:yellow;">but this moves the element forward and keeps the Z origin point in the same place!</u> </p>
+    <p> - in the second example we moves the element along the Z axis forward (towards the viewer) <u style="color:yellow;">this lives the Z origin point behind its original position</u> 
+    <div class="parentTs">
+        <div class="ts_orig org1">myElement</div>
+    </div><br>
+    <div class="parentTs">
+        <div class="ts_orig org2">myElement</div>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="parentTs"&gt;
+        &lt;div class="ts_orig org1"&gt;transform-origin: center center 0 (default)&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="parentTs"&gt;
+        &lt;div class="ts_orig org2"&gt;transform-origin: center center 0 (default)&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="parentTs"&gt;
+        &lt;div class="ts_orig org3"&gt;transform-origin: center center 0 (default)&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="parentTs"&gt;
+        &lt;div class="ts_orig org4"&gt;transform-origin: center center 0 (default)&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="parentTs"&gt;
+        &lt;div class="ts_orig org5"&gt;transform-origin: center center 0 (default)&lt;/div&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .parentTs {
+        display: inline-block;
+        border: solid 2px black;
+        vertical-align: top;
+        margin-left: 250px;
+    }
+    .ts_orig {
+        width: 250px;
+        height: 150px;
+        border: 1px black solid;
+        background-color: yellowgreen;
+    }
+    .org1 {
+        transform-origin: center center -100px;
+        animation: rotatePersp 4s linear infinite;
+    }
+    .org2 {
+        animation: rotatePersp2 4s linear infinite;
+    }
+    @keyframes rotatePersp {
+        from { transform: perspective(500px) rotateY(0deg);}
+        to { transform: perspective(500px) rotateY(360deg);}
+    }
+    @keyframes rotatePersp2 {
+        from { transform: perspective(500px) rotateY(0deg) translateZ(100px);}
+        to { transform: perspective(500px) rotateY(360deg) translateZ(100px);}
+    }
+        </pre>
+        </details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<h4 style="color:darkblue;"><u> <mark>translateZ()</mark> VS <mark>transform-origin:z origin point</mark> </u></h4>
+    <p> - the black frame is the original position </p>
+    <p> - the <mark>transform-origin</mark>'s Z value moves the element along the Z axis, in other words it does the same thing as the <mark>translateZ()</mark> function</p>
+    <div class="parentTs_">
+        <div class="transZ_VS_origZ trans1">transform: translateZ(-175px)</div>
+    </div>
+    <div class="parentTs_">
+        <div class="transZ_VS_origZ trans2">transform-origin: 175px;</div>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="parentTs_"&gt;
+        &lt;div class="transZ_VS_origZ trans1"&gt;transform: translateZ(-175px)&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="parentTs_"&gt;
+        &lt;div class="transZ_VS_origZ trans2"&gt;transform-origin: 175px;&lt;/div&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .parentTs_ {
+        display: inline-block;
+        border: solid 3px black;
+        vertical-align: top;
+    }
+    .transZ_VS_origZ {
+        width: 150px;
+        height: 150px;
+        border: 1px black solid;
+        background-color: yellowgreen;
+        vertical-align: top;
+    }
+    .trans1 {
+        transform: rotateY(35deg) rotateX(-45deg) translateZ(45px);
+    }
+    .trans2 {
+        transform-origin: center center -45px;
+        transform: rotateY(35deg) rotateX(-45deg);
+    }
+        </pre>
+        </details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+</details>
+
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<hr>
+<h2 style="color:darkblue;"><u> the <mark>perspective</mark> / <mark>perspective-origin</mark> properties </u></h2>
+    <pre class="syntax">
+SYNTAX :    perspective: none                   <span style="color:skyblue;">// (default)</span>            // <i class="fab fa-css3-alt"></i> defines the perspective depth <u>for the element's 1st level children elements</u> (1st level children elements will share and transformend on the same space) 
+                       : <strong>cssLength</strong>              <span style="color:skyblue;">// lower value means bigger perspective space</span> 
+            
+            perspective-origin: <strong>x:cssLength</strong> <i>y:cssLength</i>   <span style="color:skyblue;">// (default <mark>50% 50%</mark>)</span>  // <i class="fab fa-css3-alt"></i> defines at which angle the veiwer is looking the 3D transformed element (think as a "vanishing point" used by the <mark>perspective</mark> property) <u>(effects chidren elements not the element itself)</u>   
+                - <strong>x:cssLength</strong> : also can be <mark>left</mark> | <mark>center</mark> (default) | <mark>right</mark>
+                - <i>y:cssLength</i> : also can be <mark>top</mark> | <mark>center</mark> (default) | <mark>bottom</mark>
+    </pre>
+    <pre>
+// HTML --------------------------------------------
+    &lt;div class="demo"&gt;
+        &lt;div&gt;1&lt;/div&gt;
+        &lt;div&gt;2&lt;/div&gt;
+    &lt;/div&gt;
+    
+// CSS ---------------------------------------------
+    .demo {
+        perspective: 200px;                                             // perspecitve is set for all children elements     // -! does not set any perspective for the parent itself!
+        perspective-origin: left top;                                   // children elements in perspective are shown from the top left angle  
+    }
+    .demo > div:first-child {
+        transform-origin: left;
+        transform: rotateY(45deg);                                      // we could achive the same result here by setting the "perspective()" function for the transform property  
+    }
+    .demo > div:last-child {
+        transform-origin: right;
+        transform: rotateY(-45deg);
+    }
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>transform:perspective()</mark> VS <mark>perspective</mark> TEST </u></h4>
+    <p> - in the first box we set the perspective individually on each element <u style="color:yellow;">both element have their own space</u> </p>
+    <p> - in the second box we set the "perspective" property on the parent element so all children elements are rendered in the same perspective depth (this is the purpose of this property)</p>
+    <div class="par">
+        <div class="perspTest perspCh1">my</div>
+        <div class="perspTest perspCh2">myElement</div>
+    </div>
+    <div class="par" style="perspective:100px;">
+        <div class="perspTest perspChild1">right</div>
+        <div class="perspTest perspChild2">left</div>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="par"&gt;
+        &lt;div class="perspTest perspCh1"&gt;my&lt;/div&gt;
+        &lt;div class="perspTest perspCh2"&gt;myElement&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="par" style="perspective:100px;"&gt;                  // perspective is set here on the parent element 
+        &lt;div class="perspTest perspChild1"&gt;right&lt;/div&gt;
+        &lt;div class="perspTest perspChild2"&gt;left&lt;/div&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .par {
+        display: inline-block;
+        border: solid 3px black;
+        width: calc(100px + 4px);
+        height: calc(100px + 4px);
+    }
+    .perspTest {
+        width: 100px;
+        height: 100px;
+        border: solid 2px black;
+        background-color: yellow;
+        opacity: 1;
+        position: absolute;
+    }
+    .perspCh1 {
+        transform: perspective(100px) rotateY(-65deg);            // perspecitve is set individually 
+        transform-origin: right;
+    }
+    .perspCh2 {
+        transform: perspective(100px) rotateY(65deg);             // perspecitve is set individually 
+        transform-origin: left;
+    }
+
+    .perspChild1 {
+        transform: rotateY(-65deg);
+        transform-origin: right;
+    }
+    .perspChild2 {
+        transform: rotateY(65deg);
+        transform-origin: left;
+    }
+        </pre>
+        </details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<h4 style="color:darkblue;"><u> <mark>perspective-origin</mark> TEST </u></h4>
+    <p> - the black frame is the original size and place of the element </p>
+    <div class="perspOrg per_org1">
+        <div> center center (default)</div>
+    </div>
+    <div class="perspOrg per_org2">
+        <div> left top </div>
+    </div>
+    <div class="perspOrg per_org3">
+        <div> right bottom </div>
+    </div>
+    <div class="perspOrg per_org4">
+        <div> 100% 65% </div>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="perspOrg per_org1"&gt;
+        &lt;div&gt; center center (default)&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="perspOrg per_org2"&gt;
+        &lt;div&gt; left top &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="perspOrg per_org3"&gt;
+        &lt;div&gt; right bottom &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="perspOrg per_org4"&gt;
+        &lt;div&gt; 100% 65% &lt;/div&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .perspOrg {
+        border: solid 3px black;
+        display: inline-block;
+        perspective: 130px;
+        vertical-align: top;
+    }        
+    .perspOrg div {
+        border: solid 2px black;
+        background-color: yellow;
+        width: 150px;
+        height: 150px;
+        transform: translateZ(-50px) rotateY(10deg) rotateX(10deg);
+    }
+    .per_org1 { perspective-origin: center center; }
+    .per_org2 { perspective-origin: left top; }
+    .per_org3 { perspective-origin: right bottom; }
+    .per_org4 { perspective-origin: 100% 65%; }
+        </pre>
+        </details>
+</details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<hr>
+<h2 style="color:darkblue;"><u> the <mark>transform-style</mark> / <mark>backface-visibility</mark> properties </u></h2>
+    <pre class="syntax">
+SYNTAX :    transform-style:                                            // <i class="fab fa-css3-alt"></i> defines if the element's 1st level children should be rendered in the same space as the current element <span style="color:orange">[Experimental : 2019-05-13]</span>   
+                           : flat               <span style="color:skyblue;">// (default) 1st level children elements keep their own space and <u>rendered flat</u> in front of the current element</span>
+                           : preserve-3d        <span style="color:skyblue;">// 1st level children elements will be rendered in the space as the current element</span>
+        
+            backface-visibility: visible        <span style="color:skyblue;">// (default) </span>           // <i class="fab fa-css3-alt"></i> defines if the backface of the element is visible when it's facing the viewer <span style="color:orange">[Experimental : 2019-05-13]</span>   
+                               : hidden 
+    </pre>
+    <pre>
+// HTML --------------------------------------------
+    &lt;div class="demo"&gt;
+        &lt;div&gt;&lt;/div&gt;                                                     // child element is rendered in the same space as the parent because of the "transform-style:preserve-3d;" declaration   
+    &lt;/div&gt;
+    
+// CSS ---------------------------------------------
+    .demo {
+        transform: perspective(400px) rotateY(-25deg);
+        transform-style: preserve-3d;                                   // 1st level child elements are rendered in the space of this element 
+    }
+    .demo div {
+        transform: rotateY(25deg);                                      // because this element is rendered in the same place as its parent they sort of blend together 
+        backface-visibility: hidden;                                    // the back side of this element will be hidden when it's facing the user
+    }
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>transform-style</mark> TEST </u></h4>
+    <p> - perspective is given for all "black frame" elements, however this perspective affects only one level of children elements (red elements only)</p> 
+    <p> - BOX-1: every element has its own space, so basically they are placed in front of each other <u>flat</u>, they all have the <mark>transform-style:flat;</mark> value (this is the default)</p>
+    <p> - BOX-2: the red element shares its space with its first level child (green element) by declaring the <mark>transform-style:preserve-3d</mark> property but not with the blue element, the blue element stays flat in front of its parent (green element) </p>
+    <p> - BOX-3: all 3 elements share the same space (space of the red element), this is achived by setting both for the green and blue elements the <mark>transform-style:preserve-3d;</mark></p>
+    <div class="space bx1"> 1
+        <div> Parent element
+            <div> Child 
+                <div> Grandchild element </div>
+            </div>
+        </div> 
+    </div>
+    <div class="space bx2"> 2
+        <div> Parent element
+            <div> Child
+                <div> Grandchild element </div>
+            </div>
+        </div>
+    </div>
+    <div class="space bx3"> 3
+        <div> Parent element
+            <div> Child
+                <div> Grandchild element </div>
+            </div>
+        </div>
+    </div>
+        <details style="clear:left;">
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="space bx1"&gt; 1
+        &lt;div&gt; Parent element
+            &lt;div&gt; Child 
+                &lt;div&gt; Grandchild element &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt; 
+    &lt;/div&gt;
+    &lt;div class="space bx2"&gt; 2
+        &lt;div&gt; Parent element
+            &lt;div&gt; Child
+                &lt;div&gt; Grandchild element &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="space bx3"&gt; 3
+        &lt;div&gt; Parent element
+            &lt;div&gt; Child
+                &lt;div&gt; Grandchild element &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .space{
+        float: left;
+        margin: 10px;
+        height: 300px;
+        width: 300px;
+        border: 2px solid black;
+        padding: 15px;
+        perspective: 200px;
+    }
+    .space > div {
+        position: absolute;
+        background-color:red;
+        padding: 50px;
+        border: 1px solid black;
+        transform:rotateY(-15deg);
+    }
+    .space > div > div {
+        position: absolute;
+        background-color: green;
+        padding: 50px;
+        border: 1px solid black;
+        padding: 60px;
+        transform: rotateY(25deg);
+    }
+    .space > div > div > div {
+        position: absolute;
+        background-color: lightblue;
+        padding: 50px;
+        border: 1px solid black;
+        padding: 30px;
+        transform: rotateY(-45deg);
+    }
+    .bx2 > div  {
+        transform-style: preserve-3d;
+    }
+    .bx3 > div, .bx3 > div > div  {
+        transform-style: preserve-3d;
+    }
+        </pre>
+        </details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<h4 style="color:darkblue;"><u> <mark>transform-style</mark> hide the child element behind its parent by share the same space </u></h4>
+    <p> - the green element is moved on the Z axis <u>away from the user</u> </p>
+    <p> - in the first example because of the green element has its own space it is rendered <u>in front</u> of the yellow element, so it never can be behind its parent</p>
+    <p> - in the second example the yellow element shares its space with its children (the green one), so when we move the green element on the Z axis it is placed behind its parent</p>
+    <div class="hideIt hide1">
+        <div></div>
+    </div>
+    <div class="hideIt hide2">
+        <div></div>
+    </div>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div class="hideIt hide1"&gt;
+        &lt;div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="hideIt hide2"&gt;
+        &lt;div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    
+-- CODE (CSS) --
+    .hideIt {
+        display: inline-block;
+        width: 125px;
+        height: 125px;
+        border: solid 2px black;
+        background-color: yellow;
+    }
+    .hideIt div {
+        margin: auto;
+        width: 100px;
+        height: 100px;
+        border: solid 2px black;
+        background-color: green;
+        transform: translateZ(-200px);
+    }
+    .hide1 { transform-style: flat; }
+    .hide2 { transform-style: preserve-3d; }
+        </pre>
+        </details>
+<!-----------------------------------------------------------------------------------------------------------------------> 
+<h4 style="color:darkblue;"><u> <mark>backface-visibility</mark> TEST </u></h4> 
+    <p> backface-visibility: 
+        <input type="radio" name="controlBackface" id="visible" checked> <label for="visible"> visible </label>
+        <input type="radio" name="controlBackface" id="hidden"> <label for="hidden"> hidden </label>
+    </p>
+    <div id="backfaceVis">myElement</div>
+<script>
+    var element = document.getElementById("backfaceVis");
+    
+    document.getElementById("visible").onclick = function(e) {
+        element.style.backfaceVisibility = "visible";
+    }
+    document.getElementById("hidden").onclick = function(e) {
+        element.style.backfaceVisibility = "hidden";
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div id="backfaceVis">myElement&lt;/div&gt;
+&lt;script&gt;
+    var element = document.getElementById("backfaceVis");
+    
+    document.getElementById("visible").onclick = function(e) {
+        element.style.backfaceVisibility = "visible";
+    }
+    document.getElementById("hidden").onclick = function(e) {
+        element.style.backfaceVisibility = "hidden";
+    }
+&lt;/script&gt;
+    
+-- CODE (CSS) --
+    #backfaceVis {
+        width: 250px;
+        height: 75px;
+        border: solid 2px black;
+        background-color: yellow;
+        margin: auto;
+        transform-origin: center center 100px;
+        animation: backFace 4s linear infinite;
+    }
+    @keyframes backFace {
+        from { transform: perspective(800px) rotateY(0deg); }
+        to { transform: perspective(800px) rotateY(360deg); }
+    }
+        </pre>
+        </details>
+</details>
+    
+    
+    
+    
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
+</body>
+</html>

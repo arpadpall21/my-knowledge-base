@@ -1,0 +1,2668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> File System </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> File System (ver 3.4.1) </h1>
+    <p> Updated ( 2019-09-19 / 2020-07-09 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> File System
+    </p>
+    <p class="subSite"><a href="01 File Descriptors/index.html"> File Descriptors > </a></p>
+    <p class="subSite"><a href="02 Read and Write files/index.html"> Read and Write files > </a></p>
+    <p class="subSite"><a href="03 Watching Files/index.html"> Watching Files > </a></p>
+    <p class="subSite"><a href="04 Directories/index.html"> Directories > </a></p>
+    <p class="subSite"><a href="05 File Management/index.html"> File Management (access, copy, rename, delete) > </a></p>
+    <p class="subSite"><a href="06 Hard-Link and Symbolic-Link/index.html"> Hard-Link and Symbolic-Link > </a></p>
+    <p class="subSite"><a href="07 Promise API/index.html"> (File System) Promise API (Node 10.0.0) > </a></p>
+<table class="table">
+<caption> System Flags (file descriptor permission) </caption>
+    <tr>
+        <th style="width:10%;"> Flag </th>
+        <th> Data manipulation </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> a </td>
+        <td> append </td>
+        <td> open file for appending data to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> ax </td>
+        <td> append </td>
+        <td> creates a new file and appends the passed datas to it (fails if the file exist) </td>
+    </tr>
+    <tr>
+        <td> a+ </td>
+        <td> read and append </td>
+        <td> open file for reading and appending datas to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> ax </td>
+        <td> read and append </td>
+        <td> creates a new file for reading and appending datas to it (fails if the file exist) </td>
+    </tr>
+    <tr>
+        <td> as </td>
+        <td> append (synchronous) </td>
+        <td> open file for appending data to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> as+ </td>
+        <td> read and append (synchronous) </td>
+        <td>  open file for reading and appending datas to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> r </td>
+        <td> read </td>
+        <td> open existing file for reading (fails if the file does not exist) </td>
+    </tr>
+    <tr>
+        <td> r+ </td>
+        <td> read and write </td>
+        <td> open existing file for reading and writing (fails if the file does not exist) </td>
+    </tr>
+    <tr>
+        <td> rs+ </td>
+        <td> read and write (synchronous) </td>
+        <td> open existing file for reading and writing (fails if the file does not exist) </td>
+    </tr>
+    <tr>
+        <td> w </td>
+        <td> write </td>
+        <td> open file for writing (existing file will be truncated, a new file will be crated if it does not exist) </td>
+    </tr>    
+    <tr>
+        <td> wx </td>
+        <td> write </td>
+        <td> creates a new file for writing (file content will be truncated, fails if the file exist) </td>
+    </tr>
+    <tr>
+        <td> w+ </td>
+        <td> read and write </td>
+        <td> open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> wx+ </td>
+        <td> read and write </td>
+        <td> creates a new file for reading and writing (file content will be truncated, fails if the file exist) </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> File Descriptors </caption>
+    <tr>
+        <th> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.open(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                    <p> Default: <mark>r</mark> </p>
+                    <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                    <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                    <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                    <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                    <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                    <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                    <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                    <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                    <p> <mark>wx+</mark> - read and write (creates a new file for reading and writing (file content will be truncated, fails if the file exist))</p>
+                </div></i>, <i class="openable">mode:nr<div>
+                    <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                    <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                    <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+                    <p> <mark>7</mark> - read, write, and execute </p>
+                    <p> <mark>6</mark> - read and write </p>
+                    <p> <mark>5</mark> - read and execute </p>
+                    <p> <mark>4</mark> - read only </p>
+                    <p> <mark>3</mark> - write and execute </p>
+                    <p> <mark>2</mark> - write only </p>
+                    <p> <mark>1</mark> - execute only </p>
+                    <p> <mark>0</mark> - no permission </p>
+                </div></i>, <strong>fn(err, fd)</strong>)        
+        </td>
+        <td> 
+            - asynchronously allocates a new file descriptor (<i>mode</i> argument <u>works only when a new file is created</u>) (LINUX <mark>open()</mark>) <br>
+            - the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved on Windows
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span><i class="fab fa-node-js"></i> 11.1.0 <i>flag:str|nr</i> optional (default 'r') </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.openSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                <p> Default: <mark>r</mark> </p>
+                <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx+</mark> - read and write </p>
+            </div></i>, <i class="openable">mode:nr<div>
+                <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - synchronously allocates and returns a new file descriptor (<i>mode</i> argument <u>works only when a new file is created</u>) (LINUX <mark>open()</mark>) <br>
+            - the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved in Windows
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span><i class="fab fa-node-js"></i> 11.1.0 <i>flag:str|nr</i> optional (default 'r') </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.close(<strong>fd:nr</strong>, <strong>fn(err)</strong>) </td>
+        <td> asynchronously closes the passed file descriptor (LINUX <mark>close()</mark>)
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span><i class="fab fa-node-js"></i> 7.0.0 <strong>fn(err)</strong> required </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.closeSync(<strong>fd:nr</strong>) </td>
+        <td> synchronously closes the passed file descriptor (LINUX <mark>close()</mark>)
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Read and Write files </caption>
+    <tr>
+        <th style="width:30%"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>fs</strong>.appendFile(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>a</mark> append-data / read-write) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>utf-8</mark>) </p>
+                <p> mode: <strong>nr</strong> - (Default: <mark>0o666</mark>) </p>
+            </div></i>, <strong>fn(err)</strong>)
+        </td>
+        <td> asynchronously appends the data to the passed file's content (creates a new file if it doesn't exist)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 5.0.0 - <strong>path</strong> can be a file descriptor </p>
+                    <p> - 7.0.0 - callback required </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.appendFileSync(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>a</mark> append-data / read-write) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>utf-8</mark>) </p>
+                <p> mode: <strong>nr</strong> - (Default: <mark>0o666</mark>) </p>
+            </div></i>)
+        </td>
+        <td> synchronously appends the data to the passed file's content (creates a new file if it doesn't exist)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 5.0.0 - <strong>path</strong> can be a file descriptor </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td> 
+            <strong>fs</strong>.createReadStream(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> flags: <strong>str</strong> - describes the file operations (Default: <mark>r</mark>) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>null</mark>) </p>
+                <p> fd: <strong>nr</strong> - file descriptor <u>if set this is used instead of the 1st argument (path)</u> (Default: <mark>null</mark>) </p>
+                <p> mode: <strong>nr</strong> - file acces modes <u>only if the file is created</u> (Default: <mark>0o666</mark> read-write) </p> 
+                <p> autoClose: <strong>bol</strong> - closes the file descriptor on <mark>end</mark> and <mark>error</mark> events (Default: <mark>true</mark>) </p>
+                <p> emitClose: <strong>bol</strong> - emits the <mark>close</mark> <u>when the file descriptor is closed</u> (event is also emitted by the stream when it is closed) (Default: <mark>false</mark>) </p>
+                <p> start: <strong>nr</strong> - file content start reading position (icluded) (in bytes) </p>
+                <p> end: <strong>nr</strong> - file content end reading position (included) (Default: <mark>Infinity</mark>) (in bytes) </p>
+                <p> highWaterMark: <strong>nr</strong> - stream buffer size (Default: <mark>64 * 1024</mark>) </p>
+                <p> fs: <strong>obj|null</strong> - overrides the corresponding <mark>fs</mark> implementation of <mark>open</mark> <mark>read</mark> and <mark>close</mark> </p>
+            </div></i><i>|encode:str</i>)
+        </td>
+        <td> creates and returns a readable stream which is used to read the targeted file (file descriptor automatically handled)
+            <span id="browserSupport" title="updated : 2020-06-27">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 2.3.0 - <i>option</i> argument can be a string </p>
+                    <p> - 7.6.0 - <strong>path</strong> can be WHATWG URL object </p>
+                    <p> - 12.10.0 - <mark>emitClose</mark> option </p>
+                    <p> - 13.6.0 - <mark>fs</mark> option
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>fs</strong>.createWriteStream(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> flags: <strong>str</strong> - describes the file operations (Default: <mark>w</mark> write-only file (re)created) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>'utf-8'</mark>) </p>
+                <p> fd: <strong>nr</strong> - file descriptor <u>if set this is used instead of the 1st argument (path)</u> (Default: <mark>null</mark>) </p>
+                <p> mode: <strong>nr</strong> - file acces modes <u>only if the file is created</u> (Default: <mark>0o666</mark> read-write) </p>
+                <p> autoClose: <strong>bol</strong> - closes the file descriptor on <mark>finish</mark> and <mark>error</mark> events (Default: <mark>true</mark>) </p>
+                <p> emitClose: <strong>bol</strong> - emits the <mark>close</mark> <u>when the file descriptor is closed</u> (event is also emitted by the stream when it is closed) (Default: <mark>false</mark>) </p>
+                <p> start: <strong>nr</strong> - file content start writing position </p>
+                <p> fs: <strong>obj|null</strong> - overrides the corresponding <mark>fs</mark> implementation of <mark>open</mark> <mark>read</mark> and <mark>close</mark> </p>
+            </div></i><i>|encode:str</i>)
+        </td>
+        <td> creates and returns a writable stream which is used to read the target file (file descriptor automatically handled)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 2.3.0 - <i>option</i> can be string </p>
+                    <p> - 5.5.0 - <mark>autoClose</mark> option </p>
+                    <p> - 7.6.0 - <strong>path</strong> can be WHATWG URL object </p>
+                    <p> - 12.10.0 - <mark>emitClose</mark> option </p>
+                    <p> - 13.6.0 - <mark>fs</mark> option
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.ftruncate(<strong>fd:nr</strong>, <i class="openable">length:nr<div>
+                <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>, <strong>fn(err)</strong>)
+        </td>
+        <td> asynchronously truncates the file descriptor's content <u>as bytes</u> (LINUX <mark>ftruncate()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.8.6 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.ftruncateSync(<strong>fd:nr</strong>, <i class="openable">length:nr<div>
+                <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>)
+        </td>
+        <td> synchronously truncates the file descriptor's content <u>as bytes</u> (LINUX <mark>ftruncate()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.8.6 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.read(<strong class="openable">fd:nr, buf:obj, stBuf:nr, length:nr, pos:nr<div>
+                <p> <strong>fd</strong> - file descriptor to read the data from </p>
+                <p> <strong>buf</strong> - buffer object to write the data to (can be <strong>Buffer</strong> / <mark>TypedArray</mark> / <mark>DataView</mark>) </p>
+                <p> <strong>stBuf</strong> - offset position to write the data to in the passed buffer (<strong>buf</strong>) </p>
+                <p> <strong>length</strong> - number of bytes to read from the file descriptor </p>
+                <p> <strong>pos</strong> - offset position where to start reading the data from the passed file descriptor (if <mark>null</mark> the data is read from the current position of the file descriptor) </p>
+            </div></strong>, <strong class="openable">fr(err, read, buf)<div>
+                <p> <strong>read</strong> - number of bytes read from the file descriptor </p>
+                <p> <strong>buf</strong> - the passed buffer (<strong>buf</strong>) to store te data to </p>
+            </div></strong>) <br>
+            <strong>fd</strong>.read(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+                    <p> buffer: <strong>buf|TypedArray|DataView</strong> (Default: <mark>Buffer.alloc(16384)</mark>) </p>
+                    <p> offset: <strong>nr</strong> - offset position where to start writing the data to the passed buffer (<strong>buf</strong>) (Default: <mark>0</mark>) </p>
+                    <p> length: <strong>nr</strong> - number of bytes to read from the file descriptor (Default: <mark>buffer.length</mark>) </p>
+                    <p> position: <strong>nr</strong> - offset position where to start reading the data from the passed file descriptor (if <mark>null</mark> the data is read from the current position of the file descriptor) (Defatu: <mark>null</mark>)
+                </div></i>, <strong class="openable">fr(err, read, buf)<div>
+                    <p> <strong>read</strong> - number of bytes read from the file descriptor </p>
+                    <p> <strong>buf</strong> - the passed buffer (<strong>buf</strong>) to store te data to </p>
+            </div></strong>)
+        </td>
+        <td> asynchronously reads data from the passed <u>file descriptor</u> writes it to the passed buffer (<strong>buf:obj</strong>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.4.0 - <strong>buf</strong> can be <mark>Uint8Array</mark> </p>
+                    <p> - 10.10.0 - <strong>buf</strong> can be <mark>TypedArray</mark> and <mark>DataView</mark> </p>
+                    <p> - 13.11.0 - method with <i>opition</i> syntax support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.readFile(<strong>path:str|buf|urlObj|fd</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default <mark>r</mark> ready-only existing file) </p>
+                <p> encoding: <strong>str</strong> </p>
+            </div></i>, <strong>fn(err, data)</strong>)
+        </td>
+        <td> asynchronously reads the full content of the passed file or file descriptor and returns the data in the callback function (if file descriptor used it won't be closed)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 5.0.0 - <strong>path</strong> can be a file descriptor </p>
+                    <p> - 7.0.0 - <strong>fn(err, data)</strong> callback is required </p>
+                    <p> - 7.6.0 - <strong>path</strong> can be WHATWG URL object </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.readFileSync(<strong>path:str|buf|urlObj|fd</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default <mark>r</mark> ready-only existing file) </p>
+                <p> encoding: <strong>str</strong> </p>
+            </div></i>)
+        </td>
+        <td> synchronously reads the full content of the passed file or file descriptor and returns the data (if file descriptor used it won't be closed)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.8 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 5.0.0 - <strong>path</strong> can be file descriptor </p>
+                    <p> - 7.6.0 - <strong>path</strong> can be WHATWG URL object </p>
+                </div></span></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.readSync(<strong class="openable">fd:nr, buf:obj, stBuf:nr, length:nr, pos:nr<div>
+                <p> <strong>fd</strong> - file descriptor to read the data from </p>
+                <p> <strong>buf</strong> - buffer object to write the data to (can be <strong>Buffer</strong> / <mark>TypedArray</mark> / <mark>DataView</mark>) </p>
+                <p> <strong>stBuf</strong> - offset position to write the data to in the passed buffer (<strong>buf</strong>) </p>
+                <p> <strong>lengt</strong> - number of bytes to read from the file descriptor </p>
+                <p> <strong>pos</strong> - offset position where to start reading the data from the passed file descriptor (if <mark>null</mark> the data is read from the current position of the file descriptor) </p>
+            </div></strong>) <br>
+            <strong>fs</strong>.readSync(<strong>fd:nr</strong>, <strong class="openable">buf:obj<div>
+                    <p> - buffer object to write the data to (can be <strong>Buffer</strong> / <mark>TypedArray</mark> / <mark>DataView</mark>) </p>
+                </div></strong>, <i class="openable">option:obj<div>
+                    <p> offset: <strong>nr</strong> - offset position to write the data to in the passed buffer (<strong>buf</strong>) (Default: <mark>0</mark>) </p>
+                    <p> length: <strong>nr</strong> - number of bytes to read from the file descriptor (Default: <mark>buffer.length</mark>) </p>
+                    <p> position: <strong>nr</strong> - offset position where to start reading the data from the passed file descriptor (if <mark>null</mark> the data is read from the current position of the file descriptor) (Default: <mark>null</mark>) </p>
+                </div></i>)
+        </td>
+        <td> synchronously reads data from the passed <u>file descriptor</u> and writes it to the passed buffer (<strong>buf:obj</strong>) and returns the number of bytes read
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 10.10.0 - <strong>buf</strong> can be <strong>TypedArray</strong> or <mark>DataView</mark> </p>
+                    <p> - 14.0.0 - method with <i>option</i> syntax support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td> 
+            <strong>fs</strong>.readv(<strong class="openable">fd:nr, buf:obj, pos:nr<div>
+                <p> <strong>fd</strong> - file descriptor to read the data from </p>
+                <p> <strong>buf</strong> - any TypedArray (ex: <mark>Uint16Array</mark> etc..) or <mark>DataView</mark> </p>
+                <p> <strong>pos</strong> - offset position where to start reading the data from the passed file descriptor (if <mark>null</mark> the data is read from the current position of the file descriptor) </p>
+            </div></strong>, <strong class="openable">fr(err, read, buf)<div>
+                <p> <strong>read</strong> - number of bytes read from the file descriptor </p>
+                <p> <strong>buf</strong> - the passed buffer (<strong>buf</strong>) to store te data to </p>
+            </div></strong>) 
+        </td>
+        <td> 
+            - asynchronously reads data from the passed <u>file descriptor</u> writes it to the passed buffer (<strong>buf:obj</strong>) <br>
+            - does the same as <mark>read()</mark> but the <strong>buf</strong> argument can be any <mark>ArrayBuffer</mark> view (ex: <mark>DataView</mark> / <mark>Uint16Array</mark> etc...)  
+            <span id="browserSupport" title="updated : 2020-07-11">
+                <span><i class="fab fa-node-js"></i> 14.0.0 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.readvSync(<strong class="openable">fd:nr, buf:obj, pos:nr<div>
+                <p> <strong>fd</strong> - file descriptor to read the data from </p>
+                <p> <strong>buf</strong> - any TypedArray (ex: <mark>Uint16Array</mark> etc..) or <mark>DataView</mark> </p>
+                <p> <strong>pos</strong> - offset position where to start reading the data from the passed file descriptor (if <mark>null</mark> the data is read from the current position of the file descriptor) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - synchronously reads data from the passed <u>file descriptor</u> and writes it to the passed buffer (<strong>buf:obj</strong>) and returns the number of bytes read <br>
+            - does the same as <mark>readSync()</mark> but the <strong>buf</strong> argument can be any <mark>ArrayBuffer</mark> view (ex: <mark>DataView</mark> / <mark>Uint16Array</mark> etc...)  
+            <span id="browserSupport" title="updated : 2020-07-11">
+                <span><i class="fab fa-node-js"></i> 14.0.0 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.truncate(<strong>path:str|buf|urlObj</strong>, <i class="openable">length:nr<div>
+                <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>, <strong>fn(err)</strong>)
+        </td>
+        <td> asynchronously truncates the file's content <u>as bytes</u> (LINUX <mark>truncate()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.8.6 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.truncateSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">length:nr<div>
+                <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>)
+        </td>
+        <td> synchronously truncates the file's content <u>as bytes</u> (LINUX <mark>truncate()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.8.6 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.write(<span class="openable"><strong>fd:nr</strong>, <strong>buf:obj</strong>, <i>stBuf:nr</i>, <i>length:nr</i>, <i>pos:nr</i><div>
+                <p> <strong>fd</strong> - file descriptor to write the data to </p>
+                <p> <strong>buf</strong> - buffer to read the data from (can be <strong>Buffer</strong> / <mark>TypedArray</mark> / <mark>DataView</mark>) </p>
+                <p> <i>stBuf</i> - offset position to read the data from the passed buffer (<strong>buf</strong>) </p>
+                <p> <i>length</i> - number of bytes to write (<strong>buf</strong>) </p>
+                <p> <i>pos</i> - offset position where to start writing the file </p>                 
+            </div></span>, <strong class="openable">fn(err, written, buf)<div>
+                <p> <strong>written</strong> - number of bytes written from the buffer </p>
+                <p> <strong>buf</strong> - the passed buffer (<strong>buf</strong>) to read the data from </p>
+            </div></strong>) <br>
+            <strong>fs</strong>.write(<span class="openable"><strong>fd:nr</strong>, <strong>str</strong>, <i>pos:nr</i>, <i>encode:str</i><div>
+                    <p> <strong>fd</strong> - file descriptor to write the data to </p>
+                    <p> <strong>str</strong> - string tho read the data from </p>
+                    <p> <i>pos</i> - offsete position where to start writing the file </p>
+                    <p> <i>encode</i> - string encoding (Default <mark>utf-8</mark>) </p>
+                </div></span>, <strong class="openable">fn(err, written, str)<div>
+                <p> <strong>written</strong> - number of characters (not bytes) written from the string </p>
+                <p> <strong>str</strong> - the passed string (<strong>str</strong>) to read the data from </p>
+            </div></strong>)
+        </td>
+        <td> asynchronously writes the passed buffer|string (<strong>buf|str</strong>) to the file descriptor (<strong>fd</strong>) (re-write exsiting content)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.2.0 - <i>stBuf</i> and <i>length</i> optional </p>
+                    <p> - 7.4.0 - <strong>buf</strong> can be <mark>Uint8Array</mark> </p>
+                    <p> - 10.10.0 - <strong>buf</strong> can be <mark>TypedArray</mark> od <mark>DataView</mark> </p>
+                    <p> - 14.0.0 - <strong>data</strong> won't coerce unsupported input ot string anymore </p>                
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.writeFile(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>w</mark> read-write re-create file) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>utf-8</mark>) </p>
+                <p> mode: <strong>nr</strong> - (Default: <mark>0o666</mark>) </p>
+            </div></i>, <strong>fn(err)</strong>)
+        </td>
+        <td> asynchronously creates (replaces) a file with the passed data (<strong>data</strong>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 5.0.0 - <strong>path</strong> can be a file descriptor </p>
+                    <p> - 7.0.0 - callback is required </p>
+                    <p> - 7.4.0 - <strong>data</strong> can be <mark>Uint8Array</mark> </p>
+                    <p> - 10.10.0 - <strong>data</strong> can be <mark>TypedArray</mark> or <mark>DataView</mark> </p>
+                    <p> - 14.0.0 - <strong>data</strong> won't coerce unsupported input ot string anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.writeFileSync(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>w</mark> read-write re-create file) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>utf-8</mark>) </p>
+                <p> mode: <strong>nr</strong> - (Default: <mark>0o666</mark>) </p>
+            </div></i>)
+        </td>
+        <td> synchronously creates (replaces) a file with the passed data
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 5.0.0 - <strong>path</strong> can be a file descriptor </p>
+                    <p> - 7.4.0 - <strong>data</strong> can be <mark>Uint8Array</mark> </p>
+                    <p> - 10.10.0 - <strong>data</strong> can be <mark>TypedArray</mark> or <mark>DataView</mark> </p>
+                    <p> - 14.0.0 - <strong>data</strong> won't coerce unsupported input ot string anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.writeSync(<span class="openable"><strong>fd:nr</strong>, <strong>buf:obj</strong>, <i>stBuf:nr</i>, <i>length:nr</i>, <i>pos:nr</i><div>
+                <p> <strong>fd</strong> - file descriptor to write the data to </p>
+                <p> <strong>buf</strong> - buffer to read the data from (can be <strong>Buffer</strong> / <mark>TypedArray</mark> / <mark>DataView</mark>) </p>
+                <p> <i>stBuf</i> - offset position to read the data from the passed buffer (<strong>buf</strong>) </p>
+                <p> <i>length</i> - number of bytes to write (<strong>buf</strong>) </p>
+                <p> <i>pos</i> - offset position where to start writing the file </p>                 
+            </div></span>) <br>
+            <strong>fs</strong>.writeSync(<span class="openable"><strong>fd:nr</strong>, <strong>str</strong>, <i>pos:nr</i>, <i>encode:str</i><div>
+                    <p> <strong>fd</strong> - file descriptor to write the data to </p>
+                    <p> <strong>str</strong> - string tho read the data from </p>
+                    <p> <i>pos</i> - offsete position where to start writing the file </p>
+                    <p> <i>encode</i> - string encoding (Default <mark>utf-8</mark>) </p>
+                </div></span>)
+        </td>
+        <td> synchronously writes the passed buffer|string (<strong>buf|str</strong>) to the file descriptor (<strong>fd</strong>) and returns the number of bytes written (re-write exsiting content)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.2.0 - <i>stBuf</i> and <i>length</i> optional </p>
+                    <p> - 7.4.0 - <strong>buf</strong> can be <mark>Uint8Array</mark> </p>
+                    <p> - 10.10.0 - <strong>buf</strong> can be <mark>TypedArray</mark> od <mark>DataView</mark> </p>
+                    <p> - 14.0.0 - <strong>data</strong> won't coerce unsupported input ot string anymore </p>                
+                </div></span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.writev(<span class="openable"><strong>fd:nr</strong>, <strong>buf:obj</strong>, <i>pos:nr</i><div>
+                <p> <strong>fd</strong> - file descriptor to write the data to </p>
+                <p> <strong>buf</strong> - any TypedArray (ex: <mark>Uint16Array</mark> etc..) or <mark>DataView</mark> </p>
+                <p> <i>pos</i> - offset position where to start writing the file </p>                 
+            </div></span>, <strong class="openable">fn(err, written, buf)<div>
+                <p> <strong>written</strong> - number of bytes written from the buffer </p>
+                <p> <strong>buf</strong> - the passed buffer (<strong>buf</strong>) to read the data from </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - asynchronously writes the passed buffer view to the file descriptor (<strong>fd</strong>) (re-write exsiting content) <br>
+            - does the same as <mark>write()</mark> but the <strong>buf</strong> argument can be any <mark>ArrayBuffer</mark> view (ex: <mark>DataView</mark> / <mark>Uint16Array</mark> etc..)
+            <span id="browserSupport" title="updated : 2020-07-11">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr>
+        <td>  
+            <strong>fs</strong>.writevSync(<span class="openable"><strong>fd:nr</strong>, <strong>buf:obj</strong>, <i>pos:nr</i><div>
+                <p> <strong>fd</strong> - file descriptor to write the data to </p>
+                <p> <strong>buf</strong> - any TypedArray (ex: <mark>Uint16Array</mark> etc..) or <mark>DataView</mark> </p>
+                <p> <i>pos</i> - offset position where to start writing the file </p>                 
+            </div></span>)
+        </td>
+        <td> 
+            - synchronously writes the passed buffer view to the file descriptor (<strong>fd</strong>) and returns the number of bytes written (re-write exsiting content) <br>
+            - does the same as <mark>writeSync()</mark> but the <strong>buf</strong> argument can be any <mark>ArrayBuffer</mark> view (ex: <mark>DataView</mark> / <mark>Uint16Array</mark> etc..)
+            <span id="browserSupport" title="updated : 2020-07-11">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>  
+</table>
+    <br>
+<table class="table">
+<caption> Watching Files </caption>
+    <tr>
+        <th style="width:30%">  Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.fstat(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, statsObj)</strong>) 
+        </td>
+        <td> asynchronously returns a <mark>Stats</mark> object in the callback function which holds the stats of the passed <u>file descriptor</u> (LINUX <mark>fstat()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.1.95 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 10.5.0 - <mark>bigint</mark> option object </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.fstatSync(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> synchronously returns a <mark>Stats</mark> object which holds the stats of the passed <u>file descriptor</u> (LINUX <mark>fstat()</mark>)    
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.1.95 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 10.5.0 - <mark>bigint</mark> option object </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.futimes(<strong>fd:nr</strong>, <strong class="openable">atime:nr|str|Date, mtime:nr|str|Date<div>
+                <p> <strong>atime</strong> - last access time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+                <p> <strong>mtime</strong> - last modified time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+            </div></strong>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously modifies the last access time and the last modified time of the passed <u>file descriptor</u>
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.4.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 4.1.0 - <mark>NaN</mark> and <mark>Infinity</mark> allowed to specifying the time </p>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 8.0.0 - <mark>NaN</mark> <mark>Infinity</mark> NOT allowed to specifying the time anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.futimesSync(<strong>fd:nr</strong>, <strong class="openable">atime:nr|str|Date, mtime:nr|str|Date<div>
+                <p> <strong>atime</strong> - last access time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+                <p> <strong>mtime</strong> - last modified time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+            </div></strong>) 
+        </td>
+        <td> synchronously modifies the last access time and the last modified time of the passed <u>file descriptor</u>
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.4.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 4.1.0 - <mark>NaN</mark> and <mark>Infinity</mark> allowed to specifying the time </p>
+                    <p> - 8.0.0 - <mark>NaN</mark> <mark>Infinity</mark> NOT allowed to specifying the time anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.lstat(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, statsObj)</strong>) 
+        </td>
+        <td> 
+            - asynchronously returns a <mark>Stats</mark> object in the callback function which holds the stats of the passed file (LINUX <mark>lstat()</mark>)<br>
+            - does the same as the <mark>stat()</mark> but this method points to the symbolic-link itself instead of the file) 
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.1.3 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj allowed </p>
+                    <p> - 10.5.0 - <mark>bigint</mark> option object </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.lstatSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - synchronously returns a <mark>Stats</mark> object which holds the stats of the passed file (LINUX <mark>lstat()</mark>) <br>
+            - does the same as <mark>statSync()</mark> but this method points to the symbolic-link itself instead of the file)
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.1.30 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG - <mark>URL</mark> obj allowed </p>
+                    <p> - 10.5.0 - <mark>bigint</mark> option object </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.lutimes(<strong>path:str|buf|urlObj</strong>, <strong class="openable">atime:nr|str|Date, mtime:nr|str|Date<div>
+                <p> <strong>atime</strong> - last access time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+                <p> <strong>mtime</strong> - last modified time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+            </div></strong>, <strong>fn(err)</strong>) 
+        </td>
+        <td> 
+            - asynchronously modifies the last access time and the last modified time of the passed file <br>
+            - does the same as <mark>utimes()</mark> but if a symbolic-link is targeted modifies the times of the symbolic-link itself <span class="openable">[TESTED: 2020-07-11 not working]<div>
+                <p> - attempts to change the time of the symbolic-link itself but it doesn't work, does not changes the original file's time either </p>
+            </div></span>
+            <span id="browserSupport" title="updated : 2020-07-11">
+                <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>fs</strong>.lutimesSync(<strong>path:str|buf|urlObj</strong>, <strong class="openable">atime:nr|str|Date, mtime:nr|str|Date<div>
+                <p> <strong>atime</strong> - last access time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+                <p> <strong>mtime</strong> - last modified time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - synchronously modifies the last access time and the last modified time of the passed file <br>
+            - does the same as <mark>utimesSync()</mark> but if a symbolic-link is targeted   modifies the times of the symbolic-link itself <span class="openable">[TESTED: 2020-07-11 not working]<div>
+                <p> - attempts to change the time of the symbolic-link itself but it doesn't work, does not changes the original file's time either </p>
+            </div></span>    
+            <span id="browserSupport" title="updated : 2020-07-11">
+                <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.stat(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, statsObj)</strong>) 
+        </td>
+        <td> asynchronously returns a <mark>Stats</mark> object in the callback function which holds the stats of the passed file (LINUX <mark>stat()</mark>)  
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj support </p>
+                    <p> - 10.5.0 - <mark>bigint</mark> option object </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.statSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> synchronously returns a <mark>Stats</mark> object which holds the stats of the passed file (LINUX <mark>stat()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 WHATWG <mark>URL</mark> obj support </p>
+                    <p> - 10.5.0 <mark>bigint</mark> option object </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+        <td> 
+            <strong>fs</strong>.unwatchFile(<strong>path:str|buf|urlObj</strong>, <i class="openable">fn:toRemove <div>
+                <p> - removes the specified listener only <u>(must be a referenced function)</u>) </p>
+            </div></i>) 
+        </td>
+        <td> stop watching for changes on the passed file  
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.utimes(<strong>path:str|buf|urlObj</strong>, <strong class="openable">atime:nr|str|Date, mtime:nr|str|Date<div>
+                <p> <strong>atime</strong> - last access time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+                <p> <strong>mtime</strong> - last modified time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+            </div></strong>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously modifies the last access time and the last modified time of the passed file
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.4.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 4.1.0 - <mark>NaN</mark> and <mark>Infinity</mark> allowed to specifying the time </p>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj allowed </p>
+                    <p> - 8.0.0 - <mark>NaN</mark> <mark>Infinity</mark> NOT allowed to specifying the time anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.utimesSync(<strong>path:str|bufObj|urlObj</strong>, <strong class="openable">atime:nr|str|Date, mtime:nr|str|Date<div>
+                <p> <strong>atime</strong> - last access time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+                <p> <strong>mtime</strong> - last modified time (POSIX Epoch time / numeric string (JS converts to Epoch time) / Date object) </p>
+            </div></strong>) 
+        </td>
+        <td> synchronously modifies the last access time and the last modified time of the passed file
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.4.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 4.1.0 - <mark>NaN</mark> and <mark>Infinity</mark> allowed to specifying the time </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj allowed </p>
+                    <p> - 8.0.0 - <mark>NaN</mark> <mark>Infinity</mark> NOT allowed to specifying the time anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.watch(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> persistent: <strong>bol</strong> - keeps the process alive while the file is watched (Default: <mark>true</mark>) </p>
+                <p> recursive: <strong>bol</strong> - also watches subdirectories (Default: <mark>false</mark>) (macOS and Windows only) </p>
+                <p> encode: <strong>str</strong> - encoding for the filename (Default: <mark>utf-8</mark>) </p>
+            </div></i>, <i>fn(evType, filename)</i>) 
+        </td>
+        <td> returns the <mark>fsWatcher</mark> object which watches the passed file or directory <u>(not 100% consistent across platforms)</u>
+            <span id="browserSupport" title="updated : 2020-06-29   ">
+                <span><i class="fab fa-node-js"></i> 0.5.10 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> obj support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.watchFile(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the returned parameters are in bigints instead of numbers </p>
+                <p> persistend: <strong>bol</strong> - keeps the process alive while the file is watched (Default: <mark>true</mark>) </p>
+                <p> interval: <strong>nr</strong> -  how often check for changes in milliseconds (Default: <mark>5007</mark>) </p>
+            </div></i>, <strong class="openable">fn(curSt, prevSt)<div>
+                <p> - <strong>curSt</strong> - current Stats object </p>
+                <p> - <strong>prevSt</strong> - previous Stats object </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - watches for changes in the passed file, callback function invoked every time the file is accessed <br>
+            - returns a <strong>statWatcher</strong> object which represents a file watch  
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj support </p>
+                    <p> - 10.5.0 - <mark>bigint</mark> option support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Directories </caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.mkdir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - overrides existing directories and can create subdirectories (Default: <mark>false</mark>) </p>
+                <p> mode: <strong>nr</strong> - directory access mode, <u>not supported on Windows</u> (Default: <mark>0o777</mark>) (ex: <mark>744</mark> LINUX access permissions) </p>
+            </div></i>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously creates a directory (cannot override existing directories by default) (LINUX <mark>mkdir()</mark>)  
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.8 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> object support </p>
+                    <p> - 10.12.0 - <i>option</i> object support </p>
+                    <p> - 13.11.0 - in recursive mode (<mark>recursive</mark> option) the callback receives the first created path as argument </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.mkdirSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - overrides existing directories and can create subdirectories (Default: <mark>false</mark>) </p>
+                <p> mode: <strong>nr</strong> - directory access mode, <u>not supported on Windows</u> (Default: <mark>0o777</mark>) (ex: <mark>744</mark> LINUX access permissions) </p>
+            </div></i>) 
+        </td>
+        <td> synchronously creates a directory (cannot override existing directories by default) (LINUX <mark>mkdir()</mark>)   
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> object support </p>
+                    <p> - 10.12.0 - <i>option</i> object support </p>
+                    <p> - 13.11.0 - in recursive mode (<mark>recursive</mark> option) the callback receives the first created path as argument </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.mkdtemp(<strong>path:str</strong>, <small>{encoding:<strong>str</strong>}</small><i>|encode:str</i>, <strong>fn(err, folder)</strong>) 
+        </td>
+        <td> asynchronously creates a unique temporary directory by appending 6 random characters to the passed path (the created path is returned in the callback function)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 5.10.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 6.2.1 - callback is optional </p>
+                    <p> - 7.0.0 - callback is NOT optional </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.mkdtempSync(<strong>path:str</strong>, <small>{encoding:<strong>str</strong>}</small><i>|encode:str</i>) </td>
+        <td> synchronously creates a unique temporary directory by appending 6 random characters to the passed path and returns the created path
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 5.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.opendir(<strong>path:str|buf|urlObj</strong>, <i>encode:str</i>, <strong>fs(err, Dir)</strong>) </td>
+        <td> asynchronously opens a <u>directory stream</u>, returns the <mark>Dir</mark> object in the callback function (which represents the directory stream)
+            <span id="browserSupport" title="updated : 2019-10-17">
+                <span><i class="fab fa-node-js"></i> 12.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.opendirSync(<strong>path:str|buf|urlObj</strong>, <i>encode:str</i>) </td>
+        <td> synchronously opens a directory stream and returns the <mark>Dir</mark> object (which represents the directory stream)
+            <span id="browserSupport" title="updated : 2019-10-17">
+                <span><i class="fab fa-node-js"></i> 12.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.readdir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> encoding: <strong>str</strong> </p>
+                <p> withFileTypes: <strong>bol</strong> - returns items as <mark>fs.Dirent</mark> </p>
+            </div></i>, <strong>fn(err, items)</strong>) 
+        </td>
+        <td> asynchronously returns the directory items (item names) in an Array in the callback function   
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 0.1.8 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> ojbect allowed </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>withFileTypes</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.readdirSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> encoding: <strong>str</strong> </p>
+                <p> withFileTypes: <strong>bol</strong> - returns items as <mark>fs.Dirent</mark> </p>
+            </div></i>) 
+        </td>
+        <td> synchronously returns the directory items (item names) in an Array
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> ojbect allowed </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>withFileTypes</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.rmdir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - removes files and subdirectories as well <u style="color:orangered">experimental but works fine on version 12.10.0 [TESTED: 2019-10-03])</u> </p>
+                <p> maxRetries: <strong>nr</strong> - if an error encountered durring retrieval this specifies how many times the operation should be retried (Default: <mark>0</mark>) </p>
+                <p> retryDelay: <strong>nr:ms</strong> - delays between retries (milliseconds) (Default: <mark>100</mark>)
+            </div></i> , <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously removes the targeted directory <u>(cannot remove files, only empty directories can be removed)</u> (LINUX <mark>rmdir()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback is NOT optional </p> 
+                    <p> - 7.6.0 - 7.6.0 WHATWG <mark>URL</mark> ojbect support </p>
+                    <p> - 12.10.0 - <mark>option</mark> object (recursive) support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.rmdirSync(<strong>path:str|buffer|URLObj</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - removes files and subdirectories as well <u style="color:orangered">experimental but works fine on version 12.10.0 [TESTED: 2019-10-03])</u> </p>
+                <p> maxRetries: <strong>nr</strong> - if an error encountered durring retrieval this specifies how many times the operation should be retried (Default: <mark>0</mark>) </p>
+                <p> retryDelay: <strong>nr:ms</strong> - delays between retries (milliseconds) (Default: <mark>100</mark>)
+            </div></i>) 
+        </td>
+        <td> synchronously removes the targeted directory <u>(cannot remove files, only empty directories can be removed)</u> (LINUX <mark>rmdir()</mark>)  
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - 7.6.0 WHATWG <mark>URL</mark> ojbect support </p>
+                    <p> - 12.10.0 - <mark>option</mark> object (recursive) support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> File Management </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.access(<strong>path:str|buf|urlObj</strong>, <i class="openable">access:nr<div>
+                <p> <mark>0</mark> = visible (Default) </p>
+                <p> <mark>1</mark> = executable (on Windows falls back to <mark>0</mark>) </p>
+                <p> <mark>2</mark> = writable </p>
+                <p> <mark>4</mark> = readable </p>
+                <p> - values can be grouped ex: <mark>2|4</mark> </p>
+                <p> - <a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_file_access_constants" target="_blank">Node.js File Access Constants [link]</a> </p>
+            </div></i>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously tests the specified access of the passed item, on fail error thrown in the callback
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> obj allowed </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.accessSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">access:nr<div>
+                <p> <mark>0</mark> = visible (Default) </p>
+                <p> <mark>1</mark> = executable (on Windows falls back to <mark>0</mark>) </p>
+                <p> <mark>2</mark> = writable </p>
+                <p> <mark>4</mark> = readable </p>
+                <p> - values can be grouped ex: <mark>2|4</mark> </p>
+                <p> - <a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_file_access_constants" target="_blank">Node.js File Access Constants [link]</a> </p>
+            </div></i>) 
+        </td>
+        <td> 
+            synchronously tests the the specified acces of the passed item, on faile error is trown on success returns <mark>undefined</mark>    
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> obj allowed </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.chmod(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+                <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+                <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously changes the item access mode (LINUX <mark>chmod()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-20">
+                <span><i class="fab fa-node-js"></i> 0.1.3 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj allowed </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.chmodSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+                <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+                <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>) 
+        </td>
+        <td> synchronously changes the item access mode (LINUX <mark>chmod()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.6.7 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> obj allowed </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.chown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <strong>fn(err)</strong>) </td>
+        <td> asynchronously changes the owner and the group of the passed file (LINUX <mark>chdown()</mark>)
+            <span id="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-node-js"></i> 0.1.97 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG URL support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.chownSync(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>) </td>
+        <td> synchronously changes the owner and the group of the passed file (LINUX <mark>chdown()</mark>)
+            <span id="browserSupport" title="updated : 2020-07-20">
+                <span><i class="fab fa-node-js"></i> 0.1.97 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG URL support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.constants </td>
+        <td> returns an object containing os specific file system constants  <a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_fs_constants_1" target="_blank">Node.js FS constants [link]</a>
+            <span id="browserSupport" title="updated : 2019-10-04">
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.copyFile(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
+                <p> <mark>0</mark> = overwrites existing (Default) </p>
+                <p> <mark>1</mark> = error if destination exist </p>
+                <p> <mark>2</mark> = copy-on-write (default if COW not supported) </p>
+                <p> <mark>4</mark> = copy-on-write (error if COW not suported) </p>
+                <p> - values can be grouped ex: <mark>2|4</mark> </p>
+            </div></i>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously creates and renames a copy of the specified file <u>(cannot copy directories)</u>
+            <span id="browserSupport" title="updated : 2020-06-20">
+                <span><i class="fab fa-node-js"></i> 8.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.copyFileSync(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
+                <p> <mark>0</mark> = overwrites existing (Default) </p>
+                <p> <mark>1</mark> = error if destination exist </p>
+                <p> <mark>2</mark> = copy-on-write (default if COW not supported) </p>
+                <p> <mark>4</mark> = copy-on-write (error if COW not suported) </p>
+                <p> - values can be grouped ex: <mark>2|4</mark> </p>
+            </div></i>) 
+        </td>
+        <td> synchronously creates and renames a copy of the specified file <u>(cannot copy directories)</u>
+            <span id="browserSupport" title="updated : 2020-06-20">
+                <span><i class="fab fa-node-js"></i> 8.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.existsSync(<strong>path:str|buf|urlObj</strong>) </td>
+        <td> synchronously checks if the path exists and returns a boolean accordingly (<mark>exists()</mark> asynchronous version is deprecated [2019-10-04])
+            <span id="browserSupport" title="updated : 2019-10-04">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> obj allowed </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.fchmod(<strong>fd:nr</strong>, <i class="openable">mode:str|nr<div>
+                <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+                <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err)</strong>) 
+        </td>
+        <td> asynchronously changes the file descriptor access mode (LINUX <mark>chmod()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.4.7 </span>
+                <span><i class="fab fa-node-js"></i> 7.0.0 callback required </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.fchmodSync(<strong>fd:nr</strong>, <i class="openable">mode:str|nr<div>
+                <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+                <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err)</strong>) 
+        </td>
+        <td> synchronously changes the file descriptor access mode (LINUX <mark>chmod()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.4.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.fchown(<strong>fd:nr</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <strong>fn(err)</strong>) </td>
+        <td> asynchronously changes the owner and the group of the passed file descriptor (LINUX <mark>chdown()</mark>)  
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 0.4.7 </span>
+                <span><i class="fab fa-node-js"></i> 7.0.0 callback required </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.fchownSync(<strong>fd:nr</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>) </td>
+        <td> synchronously changes the owner and the group of the passed file descriptor(LINUX <mark>chdown()</mark>)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 0.4.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.realpath(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>, <strong>fn(err, resPath)</strong>) </td>
+        <td> asynchronously resolves the given path (resolves <mark>..</mark> and <mark>.</mark>, <u>symbolic-links are resolved to their original file path</u>) and returns the absolute path in the callback function (UTF-8 convertable paths only) (LINUX <mark>realpath()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 6.0.0 - <mark>cache</mark> option removed </p>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj allowed </p>
+                    <p> - 8.0.0 - Pipe/Socket resolve support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.realpath.native(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>, <strong>fn(err, resPath)</strong>) </td>
+        <td> asynchronously resolves the given path (resolves <mark>..</mark> and <mark>.</mark>, <u>symbolic-links are resolved to their original file path</u>) and returns the absolute path in the callback function (UTF-8 convertable paths only) (LINUX <mark>realpath()</mark>) <u>(does the same as the <mark>realpath()</mark> method but faster [TESTED!])</u>
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 9.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.realpathSync(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>) </td>
+        <td> synchronously resolves the given path (resolves <mark>..</mark> and <mark>.</mark>, <u>symbolic-links are resolved to their original file path</u>) and returns the absolute path (UTF-8 convertable paths only) (LINUX <mark>realpath()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 6.0.0 - <mark>cache</mark> option removed </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj allowed </p>
+                    <p> - 8.0.0 - Pipe/Socket resolve support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.realpathSync.native(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>) </td>
+        <td> synchronously resolves the given path (resolves <mark>..</mark> and <mark>.</mark>, <u>symbolic-links are resolved to their original file path</u>) and returns the absolute path (UTF-8 convertable paths only) (LINUX <mark>realpath()</mark>) <u>(does the same as the <mark>realpathSync()</mark> method but faster [TESTED!])</u>
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 9.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.rename(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>, <strong>fs(err)</strong>)</td>
+        <td> asynchronously renames <u>and moves</u> a file (overwrites the file at destination) (LINUX <mark>rename()</mark>) 
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj support </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.renameSync(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>) </td>
+        <td> synchronously renames <u>and moves</u> a file (overwrites the file at destination) (LINUX <mark>rename()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-20">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span><i class="fab fa-node-js"></i> 7.6.0 WHATWG <mark>URL</mark> obj support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.unlink(<strong>srcPath:str|buf|urlObj</strong>, <strong>fn(err)</strong>) </td>
+        <td> asynchronously removes (deletes) a file or a symbolic-link (cannot remove directories) (LINUX <mark>unlink()</mark>)
+            <span id="browserSupport" title="updated : 2020-06-20">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.unlinkSync(<strong>srcPath:str|buf|urlObj</strong>) </td>
+        <td> synchronously removes (deletes) a file or a symbolic-link (cannot remove directories) (LINUX <mark>unlink()</mark>)    
+            <span id="browserSupport" title="updated : 2020-06-20">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> obj support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Symbolic-Link and Hard-Link </caption>
+    <tr>
+        <th style="width:30%;"> Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.link(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>, <strong>fn(err)</strong>) </td>
+        <td> asynchronoulsy creates a hard-link of the original file (directory hard-links are not allowed)   
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.linkSync(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>) </td>
+        <td> synchronously creates a hard-link of the original file (directory hard-links are not allowed)
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.readlink(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>, <strong>fs(err, link)</strong>) </td>
+        <td> asynchronously returns the path where the symbolic-link is pointing to (in the callback)
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.0.0 - callback required </p>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.readlinkSync(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>) </td>
+        <td> synchronously returns the path where the symbolic-link is pointing to
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> support </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.symlink(<strong>targPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>, <i class="openable">type:str<div>
+                <p> <mark>'file'</mark> <mark>'dir'</mark> <mark>'junction'</mark>, if not set 'file' or 'dir' automatically detected / 'junction' = will resolve the <strong>targPath</strong> to absolute path (directory only) <u>(Windows only!)</u> </p>
+            </div></i>, <strong>fs(err)</strong>) 
+        </td>
+        <td> 
+            asynchronously creates a symbolic-link to a file or directory <u>(the target path (<strong>targPath</strong>) must be relative to the symbolic-link)</u>
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> support </p>
+                    <p> - 12.0.0 - auto detect <i>type</i> argument ('file' of 'dir') </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>   
+            <strong>fs</strong>.symlinkSync(<strong>targPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>, <i class="openable">type:str<div>
+                <p> <mark>'file'</mark> <mark>'dir'</mark> <mark>'junction'</mark>, if not set 'file' or 'dir' automatically detected / 'junction' = will resolve the <strong>targPath</strong> to absolute path (directory only) <u>(Windows only!)</u> </p>
+            </div></i>) 
+        </td>
+        <td> synchronously creates a symbolic-link to a file or directory <u>(the target path (<strong>targPath</strong>) must be relative to the symbolic-link)</u>  
+            <span id="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.31 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.6.0 - WHATWG <mark>URL</mark> support </p>
+                    <p> - 12.0.0 - auto detect <i>type</i> argument ('file' of 'dir') </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Readable Stream returned by the <mark>createReadStream()</mark> method </caption>
+    <tr>
+        <th style="width:30%"> Property / Event  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2"> Properties </td>
+    </tr>
+    <tr>
+        <td> <strong>readStream</strong>.bytesRead </td>
+        <td> returns a number indicating how many bytes have been read from the underlying system so far
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 6.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>readStream</strong>.path </td>
+        <td> returns the 1st argument of the <mark>createReadStream()</mark> method which created this stream
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.1.93 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>readStream</strong>.pending </td>
+        <td> returns <mark>true</mark> if the file descriptor is NOT allocated, <mark>false</mark> if the file descriptor is allocated
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 11.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Events </td>
+    </tr>
+    <tr>
+        <td> <strong>readStream.listener</strong>('open', <strong>fn(fd)</strong>) </td>
+        <td> emitted when the file descriptor has been opened (<strong>fd</strong> = file descriptor)
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.1.93 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>readStream.listener</strong>('ready', <strong>fn</strong>) </td>
+        <td> emitted immediately after the <mark>open</mark> event
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 9.11.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>readStream.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the file descriptor is closed (if set), (this is also a standard readable stream event so it is <u>also emitted when the stream is closed</u>)
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.1.93 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Writable Stream returned by the <mark>createWriteStream()</mark> method </caption>
+    <tr>
+        <th style="width:30%"> Property / Event  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2"> Properties </td>
+    </tr>
+    <tr>
+        <td> <strong>writeStream</strong>.bytesWritten </td>
+        <td> returns a number indicating how many bytes have been written to the underlying system so far
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.4.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writeStream</strong>.path </td>
+        <td> returns the 1st argument of the <mark>createWriteStream()</mark> method which created this stream
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.1.93 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writeStream</strong>.pending </td>
+        <td> returns <mark>true</mark> if the file descriptor is NOT allocated, <mark>false</mark> if the file descriptor is allocated
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 11.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Events </td>
+    </tr>
+    <tr>
+        <td> <strong>writeStream.listener</strong>('open', <strong>fn(fd)</strong>) </td>
+        <td> emitted when the underlying file descriptor has been opened (<strong>fd</strong> = file descriptor)
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.1.93 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writeStream.listener</strong>('ready', <strong>fn</strong>) </td>
+        <td> emitted immediately after the <mark>open</mark> event
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 9.11.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>writeStream.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the file descriptor is closed (if set), (this is also a standard writable stream event so it is <u>also emitted when the stream is closed</u>)
+            <span id="browserSupport" title="updated : 2019-09-27">
+                <span><i class="fab fa-node-js"></i> 0.1.93 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> <mark>FSWatcher</mark> object returned by the <mark>watch()</mark> method </caption>
+    <tr>
+        <th style="width:30%"> Event / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr> 
+        <td> <strong>fsWatcher</strong> </td>
+        <td> object watches the file what it describes (by emitting events)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.5.8 </span>
+            </span>
+        </td>
+    <tr>
+        <td> <strong>fsWatcher</strong>.close() </td>
+        <td> closes the watching
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.5.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr> 
+        <td> <strong>fsWatcher</strong>.ref() </td>
+        <td> (re)attaches this <strong>fsWatcher</strong> object in the event loop, so this <strong>fsWatcher</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)    
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 14.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr> 
+        <td> <strong>fsWatcher</strong>.unref() </td>
+        <td> removes this <strong>fsWatcher</strong> object from the event loop, so this <strong>fsWatcher</strong> does not prevent the process from closing
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 14.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+    <tr>
+        <td colspan="2"> Events </td>
+    </tr>
+    <tr>
+        <td> <strong>fsWatcher.listener</strong>('change', <strong>fn(eventType, filename)</strong>) </td>
+        <td> emitted when something changes in the watched file or directory
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.5.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsWatcher.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> emitted when an error occurs while watching the file
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.5.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsWatcher.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the watcher object stops watching for changes
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> <mark>StatWatcher</mark> object returned by <mark>watchFile()</mark> methods </caption>
+    <tr>
+        <th style="width:30%"> Property / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>statWatcher</strong> </td>
+        <td> represents the watching of a file, extends <mark>EventEmitter</mark>
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 14.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statWatcher</strong>.ref() </td>
+        <td> (re)attaches this <strong>statWatcher</strong> object in the event loop, so this <strong>statWatcher</strong> does not prevent the process from closing (opposite of <mark>unref()</mark>)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 14.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statWatcher</strong>.unref() </td>
+        <td> removes this <strong>statWatcher</strong> object from the event loop, so this <strong>statWatcher</strong> object not prevents the process from closing
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 14.3.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> <mark>Stats</mark> object returned by <mark>stats()</mark> / <mark>lstats()</mark> / <mark>watchFile()</mark> methods </caption>
+    <tr>
+        <th style="width:30%"> Property / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong> </td>
+        <td> holds the current stats of the item (file, directory, ect..) (if it was called by the <mark>bigint</mark> option the returned values will be expressed in BigInt (big integer) <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt" target="_blanc">MDN BigInt [link]</a>) 
+            <span id="browserSupport" title="updated : 2019-09-30">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.atime </td>
+        <td> returns the last time the file was accessed in a Date object
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.atimeMs </td>
+        <td> returns the last time the file was accessed in milliseconds since the POSIX Epoch time
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.atimeNs </td>
+        <td> returns the last time the file was accessed in nanoseconds since the POSIX Epoch time (<mark>bigint</mark> option only)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 12.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.birthtime </td>
+        <td> returns the creation time of the file in a Date object
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.birthtimeMs </td>
+        <td> returns the creation time of the file in milliseconds since the POSIX Epoch time
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.birthtimeNs </td>
+        <td> returns the creation time of the file in nanoseconds since the POSIX Epoch time (<mark>bigint</mark> option only)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 12.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.blksize </td>
+        <td> returns the file system block size (in bytes) for I/O operations
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.blocks </td>
+        <td> returns the number of file system blocks allocated for this file
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.ctime </td>
+        <td> returns the last time the file's status was modified in a Date object
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.ctimeMs </td>
+        <td> returns the last time the file's satus was modified in milliseconds since POSIX Epoch time
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.ctimeNs </td>
+        <td> returns the last time the status of the file was modified in nanoseconds since the POSIX Epoch time (<mark>bigint</mark> option only)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 12.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.dev </td>
+        <td> returns the numeric identifier of the device containing this file
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.gid </td>
+        <td> returns the group id that owns this file (POSIX on windows = <mark>0</mark>)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.ino </td>
+        <td> returns the system specific <u>inode number</u> of the file
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isBlockDevice() </td>
+        <td> returns <mark>true</mark> if the stats object describes a block device, otherwise returns <mark>false</mark> (block device = some kind of POSIX file [NOT TESTED : 2019-09-30])
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isCharacterDevice() </td>
+        <td> returns <mark>true</mark> if the stats object describes a character device, otherwise returns <mark>false</mark> (character device = some kind of POSIX file [NOT TESTED : 2019-09-30])
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isDirectory() </td>
+        <td> returns <mark>true</mark> if the stats object describes a file system directory, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isFIFO() </td>
+        <td> returns <mark>true</mark> if the stat object describes a first-in-first-out pipe, otherwise returns <mark>false</mark> (FIFO pipe = some kind of POSIX file [NOT TESTED : 2019-09-30])
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isFile() </td>
+        <td> returns <mark>true</mark> if the stats object describes a regular file, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-09-30">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isSocket() </td>
+        <td> returns <mark>true</mark> if the stats object decribes a socket, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.isSymbolicLink() </td>
+        <td> returns <mark>true</mark> if the stats object describes a symbolik-link, otherwise returns <mark>false</mark> <u>(works only with the <mark>lstat()</mark> method!)</u>
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.nlink </td>
+        <td> returns the number of hard-links for this file <u>(including this file)</u>
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.mode </td>
+        <td> returns a number which represents a bit-filed describing the file type and mode (no idea what is this)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.mtime </td>
+        <td> returns the last time the file was modified in a Date object
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.mtimeMs </td>
+        <td> returns the last time the file was modified in milliseconds since the POSIX Epoch time
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.mtimeNs </td>
+        <td> returns the last time the file was modified in nanoseconds since the POSIX Epoch time (<mark>bigint</mark> option only)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 12.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.rdev </td>
+        <td> returns a numeric device id <u>if the file is special</u> (no idea what is this)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.size </td>
+        <td> returns the file's size in bytes
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>statsObj</strong>.uid </td>
+        <td> returns the user id that owns this file (POSIX on windows = <mark>0</mark>)
+            <span id="browserSupport" title="updated : 2019-10-01">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> <mark>Dir</mark> object returned by the <mark>opendir()</mark> method </caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>dir</strong> </td>
+        <td> directory handler represents a directory stream, (handle directory's content) (implements the <mark>Symbol.asyncIterator</mark> mechanics, order defined by the underlying OS)
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dir</strong>.close(<i>fn(err)</i>) </td>
+        <td> - no callback provided = asynchronously closes the directory stream by using the Promise API (rejected promise = error) <br>
+             - callback provided = asynchronously closes the directory stream
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dir</strong>.closeSync() </td>
+        <td> synchronously closes the directory stream
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dir</strong>.path </td>
+        <td> returns the directory path (argument passed in the <mark>opendir()</mark> method)
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dir</strong>.read(<i>fn(err, Dirent)</i>) </td>
+        <td> - no callback provided = asynchronously reads the next directory entry by using the Promise API (resolved promise = next entry <mark>Dirent</mark> object / rejected promise = error) <br>
+             - callback provided = asynchronously read the next entry in the directory stream and returns it as <mark>Dirent</mark> object in the callback function
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dir</strong>.readSync() </td>
+        <td> synchronously returns the next entry of the directory stream as <mark>Dirent</mark> object
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>    
+    <br>
+<table class="table">
+<caption> <mark>Dirent</mark> object returned by the <mark>readdir()</mark> method </caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong> </td>
+        <td> holds the item type what it describes 
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isBlockDevice() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a block device, otherwise returns <mark>false</mark> (block device = some kind of POSIX file [NOT TESTED : 2019-10-03])
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isCharacterDevice() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a character device, otherwise returns <mark>false</mark> (character device = some kind of POSIX file [NOT TESTED : 2019-10-03])
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isDirectory() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a directory, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isFIFO() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a first-in-first-out pipe, otherwise returns <mark>false</mark> (FIFO pipe = some kind of POSIX file [NOT TESTED : 2019-10-03])
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isFile() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a regular file, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isSocket() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a socket, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.isSymbolicLink() </td>
+        <td> returns <mark>true</mark> if the dirent object describes a symbolic-link, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>dirent</strong>.name </td>
+        <td> returns the name of the file the dirent object is refering to
+            <span id="browserSupport" title="updated : 2019-10-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>    
+    <br>
+<table class="table">
+<caption> File System Promise API </caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.promises </td>
+        <td> provides access to the File System Promise API
+            <span id="browserSupport" title="updated : 2019-10-11">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> File Descriptor </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.open(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                    <p> Default: <mark>r</mark> </p>
+                    <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                    <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                    <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                    <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                    <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                    <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                    <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                    <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                    <p> <mark>wx+</mark> - read and write (creates a new file for reading and writing (file content will be truncated, fails if the file exist))</p>
+                </div></i>, <i class="openable">mode:nr<div>
+                    <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                    <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                    <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                    <p> <mark>7</mark> - read, write, and execute </p>
+                    <p> <mark>6</mark> - read and write </p>
+                    <p> <mark>5</mark> - read and execute </p>
+                    <p> <mark>4</mark> - read only </p>
+                    <p> <mark>3</mark> - write and execute </p>
+                    <p> <mark>2</mark> - write only </p>
+                    <p> <mark>1</mark> - execute only </p>
+                    <p> <mark>0</mark> - no permission </p>
+                </div></i>) 
+        </td>
+        <td> 
+            - returns a Promise which allocates a new file descriptor to the passed file <br>
+            - the Promise resolves into a <mark>FileHandle</mark> object which is a file descriptor wrapper object (rejected Promise = error) <br>
+            - the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved in Windows 
+    </pre>
+            <span id="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span><i class="fab fa-node-js"></i> 11.0.0 <i>flag</i> optional and default <mark>r</mark></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Read and Write files </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.appendFile(<strong>path:str|buf|urlObj|fileHandle</strong>, <strong>data:str|buf</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>a</mark> = append data / read-write) </p>
+                <p> mode: <strong>str</strong> - (Default: <mark>0o666</mark> = readable writable when a new file is created) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>'utf-8'</mark>) </p> 
+            </div></i>)
+        </td>
+        <td> returns a Promise which appends the data to the passed file's content (creates a new file if it doesn't exist) (rejected Promise = error)
+            <span id="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.readFile(<strong>path:str|buf|urlObj|fileHandle</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default <mark>r</mark> read-only existing file) </p>
+                <p> encoding: <strong>str</strong>
+            </div></i>)
+        </td>
+        <td> 
+            - returns a Promise which reads the entire content of the passed file of File Handle <br>
+            - the Promise resolves into the read data (rejected Promise = error)  
+            <span id="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.truncate(<strong>path:str|buf|urlObj</strong>, <i>length:nr</i>) 
+        </td>
+        <td> 
+            - returns a Promise which truncates the file's content <u>(truncates as bytes)</u> (rejected promise = err or) (LINUX <mark>truncate()</mark>) <br>
+            - if <i>length:nr</i> is bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) 
+            <span id="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.writeFile(<strong>path:str|buf|urlObj|fileHandle</strong>, <strong>data:str|buf|Uint8Array</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>w</mark> = (re)creates the file for wirting) </p>
+                <p> mode: <strong>str</strong> - (Default: <mark>0o666</mark> = readable writable when a new file is created) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>'utf-8'</mark>) </p> 
+            </div></i>)
+        </td>
+        <td> returns a Promise which (re)creates a file with the passed data (rejected promise = error)
+            <span id="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 14.0.0 - <strong>data</strong> is not coerced into string if an unsupported type is passed </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Watching Files </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.lstat(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - stats are returned as BigInt value (ex: <mark>21n</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - returns a Promise which resolves to a <mark>Stats</mark> object (holds the stats of the passed file or symbolic-link) (rejected promise = error) (LINUX <mark>lstat()</mark>) <br>
+            - does the same as <mark>stat()</mark> but this method points to the symbolic-link itself instead of the file)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.5.0 bigint option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>fsPromises</strong>.stat(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - stats are returned as BigInt value (ex: <mark>21n</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which resolves to a <mark>Stats</mark> object (holds the stats of the passed file) (rejected promise = error) (LINUX <mark>stat()</mark>)   
+            <span id="browserSupport" title="updated : 2020-07-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.5.0 bigint option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.utimes(<strong>path:str|buf|urlObj</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>) </td>
+        <td> returns a Promise which modifies the last access time and the last modified time of the passed file (rejected Promise = error)    
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Directories </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.mkdir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - overrides existing directories and can create subdirectories (Default: <mark>false</mark>) </p>
+                <p> mode: <strong>str</strong> - not supported on Windows (Default: <mark>0o777</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which creates a directory (by default cannot overirde existing directories) (rejected Promise = error) (LINUX <mark>mkdir()</mark>)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.mkdtemp(<strong>path:str</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - overrides existing directories and can create subdirectories (Default: <mark>false</mark>) </p>
+                <p> mode: <strong>str</strong> - not supported on Windows (Default: <mark>0o777</mark>) </p>
+            </div></i>)) 
+        </td>
+        <td> 
+            - returns a Promise which creates a temporary directory (by default cannot overirde existing directories) (rejected Promise = error) (LINUX <mark>mkdir()</mark>) <br>
+            - unique temporary directory is created by appending 6 random characters to the passed path  
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.opendir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> encoding: <strong>str</strong> </p>
+                <p> bufferSize: <strong>nr</strong> - number of directory entries to be buffered (Default: <mark>32</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - returns a Promise which opens a directory stream of the passed directory <br>
+            - the Promise resoves into a <mark>Dir</mark> object which is the directory stream (rejected Promise = error) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 12.12.0 </span>
+                <span><i class="fab fa-node-js"></i> 12.16.0 / 13.1.0 <mark>bufferSize</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.readdir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> encoding: <strong>str</strong> </p>
+                <p> withFileTypes: <strong>bol</strong> - the Array contains <mark>fs.Dirent</mark> objects </p>
+            </div></i>) 
+        </td>
+        <td> - returns a Promise which reads the passed directory content <br>
+            - the Promise resolves into an Array which contains directory item names (rejected Promise = error) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.11.0 <mark>withFileTypes</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.rmdir(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> recursive: <strong>bol</strong> - also removes files, subdirectories and subfiles (Default: <mark>false</mark>) <u style="color:orangered;">(Experimental but works fine on version 12.10.0 [TESTED: 2019-10-03])</u> </p>
+                <p> maxRetries: <strong>nr</strong> - number of tries (retries) if an error is encountered (when <mark>recurssive: true</mark>) (Default: <mark>0</mark>) </p>
+                <p> retryDelay: <strong>nr</strong> - time (milliseconds) between retries (when <mark>recurssive: true</mark>) (Default: <mark>100</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which removes the targeted directory (by Default empty directories only) (rejceted Promise = error) (LINUX <mark>rmdir()</mark>)  
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 12.10.0 - <mark>recursive</mark> / <mark>maxBusyTries</mark> / <mark>emfileWait</mark> options </p>
+                    <p> - 12.16.0 / 13.3.0 - (<mark>maxBusyTries</mark> option renamed to <mark>maxRetries</mark> and default <mark>0</mark>) (<mark>emfileWait</mark> option removed) (<mark>retryDelay</mark> option support) </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> File Management </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.access(<strong>path:str|buf|urlObj</strong>, <i>access:nr</i>) </td>
+        <td> 
+            - returns a Promise what tests the file or directory access permission <br>
+            - the Promise resolves into a number which indicates the access permission (rejected Promise = error) <br>
+            - (<mark>0</mark> = visible (Default)) (<mark>1</mark> = executable (on Windows falls back to <mark>0</mark>)) (<mark>2</mark> = writable) (<mark>4</mark> = readable) <u>(values can be grouped ex: <mark>2|4</mark>)</u> 
+            <span id="browserSupport" title="updated : 2019-10-11">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.chmod(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+                <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+                <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which changes the access permissions of the passed item (rejected Promise = error) (LINUX <mark>chmod()</mark>)    
+            <span id="browserSupport" title="updated : 2019-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.chown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>) </td>
+        <td> returns a Promise which changes the owner and the group of the passed file (LINUX <mark>chdown()</mark>) (rejected Promise = error)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.copyFile(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
+                <p><b> - values can be grouped ex: <mark>2|4</mark> </b></p>
+                <p> - <mark>0</mark> = overwrites existing (Default) </p>
+                <p> - <mark>1</mark> = error if destination exist </p>
+                <p> - <mark>2</mark> = copy-on-write (default if COW not supported) </p> 
+                <p> - <mark>4</mark> = copy-on-write (error if COW not suported) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which copies <u>and renames</u> the source file (cannot copy directories) (rejected Promise = error  
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fsPromises</strong>.realpath(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+                <p> encoding: <strong>str</strong> (Default: <mark>utf-8</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - returns a Promise which resolves the passed path to a real path (LINUX <mark>realpath()</mark>) <br>
+            - the Promise resolves into the resolved path (rejected Promise = error) <br>
+            - resolves <mark>..</mark> and <mark>.</mark>, <u>symbolic-links are resolved to their original file path</u> (uses the <mark>fs.realpath.native()</mark> semantics) (UTF-8 convertable paths only)   
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.rename(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>) </td>
+        <td> returns a Promise which <u>moves and renames</u> the passed item (cannot override existing items) (rejected Promise = error) (LINUX <mark>rename()</mark>)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.unlink(<strong>path:str|buf|urlObj</strong>) </td>
+        <td> returns a Promise which removes (deletes) a file or symbolic-link (cannot remove directories) (rejected Promise = error) (LINUX <mark>unlink()</mark>)   
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Hard-Link and Symbolic-Link </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.link(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>) </td>
+        <td> returns a Promise which creates a hard-link of the original file (directory hard-links are not allowed) (rejected Promise = error)   
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.symlink(<strong>targetPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>) </td>
+        <td> 
+            - returns a Promise which creates a symbolic-link to the passed file or directory (rejceted Promise = error) <br>
+            - <strong>targetPath</strong> = path used by the symbolic-link to reference the file <u>(relative path = relative from the created symbolic-link)</u>
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fsPromises</strong>.readlink(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>) </td>
+        <td>
+            - returns a Promise which resolves the path where the symbolic-link is pointing to <br>
+            - the Promise resolves into the pointing path (rejected Promise = error) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>    
+</table>
+    <br>
+<table class="table">
+<caption> <mark>FileHandle</mark> object returned by the <mark>fsPromises.open()</mark> method </caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>fileHandle</strong> </td>
+        <td> file descriptor wrapper object for Promise based file system methods  
+            <span id="browserSupport" title="updated : 2019-10-11">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.appendFile(<strong>data:str|buf</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>a</mark> append-data / read-write) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>utf-8</mark>) </p>
+                <p> mode: <strong>nr</strong> - (Default: <mark>0o666</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which appends the data to the fileHandle (rejected Promise = error)  
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.chmod(<i class="openable">mode:str|nr<div>
+                <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+                <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which changes the access permissions of the fileHandle (rejected Promise = error)   
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.chown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>) </td>
+        <td> returns a Promise which changes the owner and the group of the fileHandle (LINUX <mark>chdown()</mark>) (rejected Promise = error)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.close() </td>
+        <td> returns a Promise which closes the underlying file descriptor (rejecte Promise = error)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.fd </td>
+        <td> returns the file descriptor wrapped by the filehandle
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.lutimes(<strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>) </td>
+        <td> 
+            - returns a Promise which sets the access and modified times of the fileHandle (rejected Promise = error) <br>
+            - does the same as <mark>utimes()</mark> but if a symbolic-link is targeted modifies the times of the symbolic-link itself <span class="openable">[TESTED: 2020-07-11 no really working]<div>
+                <p> - attempts to change the time of the symbolic-link itself but it doesn't work, does not changes the original file's time either </p>
+            </div></span>    
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.read(<strong class="openable">buf:buf|Uint8Array, stBuf:nr, length:nr, pos:nr<div>
+                <p> - <strong>buf</strong> - the buffer object where to stored the read data </p>
+                <p> - <strong>stBuf</strong> - offset position where to write the data in to the passed buffer </p>
+                <p> - <strong>length</strong> - number of bytes to read from the source </p>
+                <p> - <strong>pos</strong> - offeste position where to start reading the data from the source (if <mark>null</mark> the data is read from the current position) </p>
+            </div></strong>) 
+        </td>
+        <td> 
+            - returns a Promise which reads a content protion of the fileHandle and writes it to the passed buffer (<strong>buf:buf|Uint8Array</strong>) <br>
+            - the Promise is resolved into an object <mark>{bytesRead:nr, buffer:buffer}</mark> (rejected Promise = error) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 13.11.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>filehandle</strong>.readv(<strong class="openable">buf:view<div>
+                <p> - <strong>buf</strong> - any TypedArray (ex: <mark>Uint16Array</mark>) or <mark>DavaView</mark> </p>
+            </div></strong>, <i class="openable">pos:nr<div>
+                <p> - offset position where to start reading the data from the source filehandle </p>
+            </div></i>)
+        </td>
+        <td> 
+            - returns a Promise which reads a content protion of the fileHandle and writes it to the passed buffer view <br>
+            - the Promise is resolved into an object <mark>{bytesRead:nr, buffer:buffer}</mark> (rejected Promise = error) <br>
+            - does the same as <mark>read()</mark> but the <strong>buf</strong> argument can be any ArrayBuffer view (ex: <mark>DataView</mark> / <mark>Uint16Array</mark> etc...)
+            <span id="browserSupport" title="updated : 2020-07-12">
+                <span><i class="fab fa-node-js"></i> 14.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.readFile(<i class="openable">option:obj<div>
+                <p> encoding: <strong>str</strong> </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - returns a Promise which read the entire content of the fileHandle <br>
+            - the Promise is resolved into the read data (rejected Promise = error)
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.stat(<i class="openable">option:obj<div>
+                <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented as bigint values indtead of number (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which resolves into a <mark>Stats</mark> object (holds the stats of the item) (rejected Promise = error)   
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.5.0 <mark>bigint</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.truncate(<i>length:nr</i>) </td>
+        <td> 
+            - returns a Promise which truncates the fileHandle <u>(truncates as bytes)</u> (rejected Promise = error) <br>
+            - if <i>length:nr</i> is bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>   
+    </tr>
+    <tr>
+        <td> <strong>filehandle</strong>.utimes(<strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>) </td>
+        <td> returns a Promise which sets the access and modified times of the fileHandle (rejected Promise = error)   
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.write(<strong>buf:buf|Uint8Array</strong>, <i class="openable">stBuf:nr, length:nr, pos:nr<div>
+                <p> - <i>stBuf</i> - index where to start reading the passed buffer </p>
+                <p> - <i>length</i> - how many bytes to read from the buffer </p>
+                <p> - <i>pos</i> - where to start writting the fileHandle </p>
+            </div></i>) <br>
+            <strong>filehandle</strong>.write(<strong>data:str</strong>, <i>pos:nr</i>, <i>encode:str</i>) 
+        </td>
+        <td> 
+            - returns a Promise which writes the passed buffer|string to the fileHandle (re-write existing content) <br>
+            - the Promise resolves into an object <mark>{bitesWritten:nr, buffer:buffer}</mark> (rejected Promise = error) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 14.0.0 - <strong>buf</strong> argument won't coerce unsupported input to buffers anymore </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.writev(<strong class="openable">buf:view<div>
+                <p> - <strong>buf</strong> - any TypedArray (ex: <mark>Uint16Array</mark>) or <mark>DavaView</mark> </p>
+            </div></strong>, <i class="openable">pos:nr<div>
+                <p> - offset position where to start writing the data from the source filehandle </p>
+            </div></i>)
+        </td>
+        <td> 
+            - returns a Promise which writes the passed ArrayBuffer view to the file handle (re-write existing content) <br>
+            - the Promise resolves into an object <mark>{bitesWritten:nr, buffer:buffer}</mark> (rejected Promise = error) <br>
+            - does the same as <mark>write()</mark> but the <strong>buf</strong> argument can be any ArrayBuffer view type (ex: <mark>DataView</mark> / <mark>Uint8Array</mark> etc... )
+            <span id="browserSupport" title="updated : 2020-07-12">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>filehandle</strong>.writeFile(<strong>data:str|buf|Uint8Array</strong>, <i class="openable">option:obj<div>
+                <p> flag: <strong>str</strong> - (Default: <mark>w</mark> read-write re-create file) </p>
+                <p> encoding: <strong>str</strong> - (Default: <mark>utf-8</mark>) </p>
+                <p> mode: <strong>nr</strong> - (Default: <mark>0o666</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> returns a Promise which replaces the entire content of fileHandle (rejected Promise = error) 
+            <span id="browserSupport" title="updated : 2020-07-10">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 14.0.0 - the <strong>data</strong> argument is not coerced to string if it is not one of the supported type </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <p> - <mark>datasync()</mark> / <mark>datasyncSync()</mark> / <mark>fsync()</mark> / <mark>fsyncSync()</mark> / <mark>filehandle.datasync</mark> / <mark>filehandle.sync</mark>- synchronizes the file with the storage [NOT TESTED 2020-07-10] (because I have no idea how this can be used) </p>
+        <p> - <mark>lchmod()</mark> and <mark>lchmodSync()</mark> does the same as <mark>chmod()</mark> and <mark>chmodSync()</mark> but they are available only on macOS </p>
+        <p> - <mark>lchown()</mark> and <mark>lchownSync()</mark> does the same as <mark>chown()</mark> and <mark>chownSync()</mark> they were deprecated before v10.6.0 but after are no longer deprecated [2020-07-10] </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html" target="_blank"> Node.js File System </a></p>    
+    <p><a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_fs_constants_1" target="_blank"> Node.js File System Constants </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - Epoch time (UNIX Epoch time, POSIX time) = <u>time in seconds</u> elapsed since <u>00:00:00 UTC on 1 January 1970 </u></p>
+    <p> - Node.js uses 'libuv' which is a library handling asynchronous operations, 'libuv' uses threadpool to handle asynchronous tasks, this can have negative effects on the performance, the solution is to increase libuv's threadpool size (Default: <mark>4</mark>) <a href="https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_uv_threadpool_size_size" target="_blanc">[UV_THREADPOOL_SIZE=size link]</a></p>
+    <p style="color:yellow"> - all <mark>v</mark> methods (ex: <mark>readv()</mark>, <mark>writev()</mark> etc..) does not work as specified BUG maybe [TESTED: 2020-07-12] </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the Node.js file system API let us interact with files, the <mark>fs</mark> is closely modeled around standard POSIX functions (which is not helpful for me because I'm testing this on windows [TESTED : 2019-09-23]) </p>
+    <p> - string file paths are interpreted as UTF-8 character sequences and resolved as absolute paths, (WHATWG) URL object as file paths must have fileURLs </p>
+    <p> - all <mark>fs</mark> methods are synchronous and asynchronous as well </p>
+    <p> - exceptions are immediately thrown on synchronous operations, which can be handled by using the <mark>try...catch</mark> statement</p> 
+    <p> - exceptions on asynchronous operations are returned by the method's callback function as first argument (Node.js error first policy) </p>
+    <pre>
+// asynchronous exception handling ----------------------------------------------------
+    fs.unlink('nonExistingFile', (err) => {
+        console.log( err );                                                            // -> thrown exception returned here       
+    });
+    
+// synchronous exception handling -----------------------------------------------------
+    try { 
+        fs.unlinkSync('nonExistingFile');                                              // if exception thrown the 'try' statement handles it (just like any other JS synchronous operations)   
+    } catch(err) {
+        err;                                                                           // -> thrown exception returned here 
+    }
+    </pre>
+    <p style="color:yellow;"> - the order is not garanteed when using asynchronous methods (this is normal asynchronous behaviour) so carefuly plan using asynchronous operations </p>
+    <pre>
+// asynchronous racing conditions -----------------------------------------------------
+    fs.rename('oldName', 'newName', (err) => console.log(err) );                       // -! asynchronous rename method is NOT garanteed to be executed first 
+    
+    fs.readdir('./', function(err, files){                                             // -! asynchronous read directory method is NOT garanteed to be executed second 
+        files;                                                                         // -> ['oldName', ...]         // !! we may have misleading informations here because of the asynchronous behaviour     
+    })
+    
+// way to use asynchronous operations -------------------------------------------------
+    fs.rename('oldName', 'newName', function(err){                                     // this way the call order is garanteed 
+        if (err) throw err; 
+        fs.readdir('./', function(err, files){
+            console.log( files );                                                      // -> ['newName', ...]         // reliable informations 
+        });
+    });
+    </pre>
+<br><br>
+</body>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Redux </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../Assets/stylesPages.css"> 
+    <script src="../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Redux (ver 4.0.0) </h1>
+    <p> Updated ( 2020-11-08 )</p>
+    <p class="sitenav"> <a href="../index.html" title="home">MySite></a> Redux </p>
+<table class="table">
+<caption> 
+    Redux 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Command / Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td colspan="2"> CLI </td>
+    </tr>
+    <tr class="05.02">
+        <td> <em>$</em> npm install redux </td>
+        <td> - installs redux locally </td>
+    </tr>
+    <tr class="10.01">
+        <td colspan="2"> In Module </td>
+    </tr>
+    <tr class="10.02">
+        <td> import {createStore, combineReducers} from 'redux' </td>
+        <td> 
+            - imports the Redux store creation and the reducer combiner methods to the current module    
+        </td>
+    </tr>
+    <tr class="11.01">
+        <td>  
+            createStore(<strong class="openable">reducer:fn<div>
+                <p> - reducer function takes 2 arguments <mark>state</mark> and <mark>action</mark>, it must return an object which represents the next state of the store (object spread used to return the previous state <mark>...state</mark>) </p>
+                <p> - the <mark>state</mark> argument can be set as default store state, so the store can be initiated with this default state </p>
+                <p> - the <mark>action</mark> argument is received by the <mark>store.dispatch()</mark> method </p>
+            </div></strong>, <i class="openable">reduxDevTools<div>
+                <p> - adding <mark>window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()</mark> as 2nd argument allows <u>Redux DevTools (browser extension)</u> to monitor this Redux store (which is an awesome tool) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - creates and returns a Redux <strong>store</strong> 
+        </td>
+    </tr>
+    <tr class="11.02">
+        <td> <strong>store</strong>.getState() </td>
+        <td> 
+            - returns the current state of the store 
+        </td>
+    </tr>
+    <tr class="12.01">
+        <td> var <strong>subscrbId</strong> = <strong>store</strong>.subscribe(<strong>fn</strong>) </td>
+        <td> 
+            - (subscribing to the store) the callback is fired every time there's a change in the Store <br>
+            - mainly designed to update the UI once the Store changes <br>
+            - returns a unique subscriber Id (<strong>subscrbId</strong>) which can be used to unsubscribe the subscriber from the store 
+        </td>
+    </tr>
+    <tr class="12.02">
+        <td> <strong>subscrbId</strong>() </td>
+        <td> 
+            - unsubscribes the specified subscriber from the store (<mark>subscribe()</mark> callback won't fire anymore) 
+        </td>
+    </tr>
+    <tr class="13.01">
+        <td> <strong>store</strong>.dispatch(<strong>action:obj</strong>) </td>
+        <td> dispatches a Redux action (JS object) to the store </td>
+    </tr>
+    <tr class="14.01">
+        <td> combineReducers({<strong>reducerId</strong>:<strong>reducer:fn</strong>, <i>...</i>}) </td>
+        <td>  
+            - combines multiple reducers and returns an object <br>
+            - the returned object can be passed in the <mark>createStore()</mark> method so the store will be created with all the passed reducers  
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    React-Redux 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Command / Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td colspan="2"> CLI </td>
+    </tr>
+    <tr class="05.02">
+        <td> <em>$</em> npm install react-redux </td>
+        <td> 
+            - installs React-Redux locally 
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td colspan="2"> In Module </td>
+    </tr>
+    <tr class="10.02">
+        <td> import {Provider, connect} from 'react-redux' </td>
+        <td> 
+            - imports the Redux store provider in the current module <br>
+            - imports the connect method which connects the React Component to the Redux store 
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://redux.js.org/" target="blank_"> Redux.js (redux.js.org) </a></p>
+    <p><a href="https://react-redux.js.org/" target="blank_"> React Redux (react-redux.js.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Redux is a state manager library for JavaScript applications (React, Angular, Vue, Vanilla JavaScript, etc...) </p>   
+    <p> - Redux maintains a centralized state (Store) for the whole application </p>
+    <p> - <span style="font-size:1.2em; font-weight:bold; text-decoration:underline;">Action</span> - a plain JavaScript object what describes what we want to change in the current state <u>(must contain a <mark>type</mark> property!)</u> </p>
+    <p> - <span style="font-size:1.2em; font-weight:bold; text-decoration:underline;">Store</span> - this is where the application state is stored (the Store does not delete old states instead archives them!) </p>
+    <p> - <span style="font-size:1.2em; font-weight:bold; text-decoration:underline;">Reducer</span> - computes and returns to the Store the new application state based on the passed action </p>
+    <p> - The Store is not directly changed! Instead we dispatch actions to it then the Store calls the reducer(s) which then process the action and returns the new state which is stored by the Store </p>
+<img src="Redux.jpg" height="250">
+<details class="example">
+<summary> DEMO </summary>
+    <p> - in real life all the below Redux parts are split into modules </p>
+    <pre>
+    import {createStore} from 'redux';
+    
+// Reducer ----------------------------------------------------------------------------
+    var initialState = {
+        mark: 'Audi',
+        type: 'A4',
+        year: 2010
+    }
+    
+    function reducer(state = initialState, action){                                    // creates the initial state and returns the new state based on the passed action 
+        switch(action.type){
+            case 'changeMark':
+                return {...state, mark: action.payload.mark};                          // the spread operator spreads the previous state properties into the new state object   
+            case 'changeType':
+                return {...state, type: action.payload.type};
+            case 'changeYear':
+                return {...state, year: action.payload.year};
+            default :
+                return state;                                                          // if the reducer happens to no perfrom any action it must return the previous state to the store    
+        }
+    }
+    
+// Store ------------------------------------------------------------------------------
+    var myStore = createStore(reducer,                                                 // creates the initial Store
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());   // this optional 2nd argument allows us to monitor the store from Redux devTools (browser extension)    
+    
+    myStore.getState();                                                                // -> {mark:'Audi', type:'A4', year:2010}    // current state of the Store   
+    
+  // Subscribing/Unsubscribing to/from the Store ---------------------------
+    var subscribe = myStore.subscribe(function(){ });                                  // (subscribing to the store) every time there's a change in the store the callback is executed 
+    subscribe();                                                                       // (unsubscribing from the store) 'subscribe' callback does not fired when there's a change in the store anymore    
+    
+// Dispatching actions to the Store ---------------------------------------------------
+  // Action creator --------------------------------------------------------
+    var createAction = function(){                                                     // an action creator is basically a function which returns a Redux acction object    
+        return {type:'changeYear', payload:{year:2011}}                                // 'type' property required in the action object
+    }
+    
+    myStore.dispatch(createAction())                                                   // dispatches the new action to the Store   
+        
+    myStore.getState();                                                                // -> {mark:'Audi', type:'A4', year:2011}    // current state of the Store   
+    </pre>
+<h4 style="color:darkblue;"><u> Using multiple reducers </u></h4>
+    <pre>
+    import {createStore, combineReducers} from 'redux';
+    
+// reducers ---------------------------------------------------------------------------
+    function isLogged(store = {loggedIn:false}, action){                               // login state
+        if(action.loggIn) {
+            return {loggedIn:true};
+        } else {
+            return {loggedIn:false};
+        }
+    }
+    
+    function darkMode(store = {darkMode:false}, action){                               // dark mode state
+        if(action.darkMode) {
+            return {darkMode:true};
+        } else {
+            return {darkMode:false};
+        }
+    }
+    
+    function counter(store = {counter:-1}, action){                                    // counts the number of changes in the store 
+        var store_ = {...store};
+        store_.counter ++;
+        return store_;
+    }
+    
+// combining reducers and creating the store ------------------------------------------
+    var allReducers = combineReducers({isLogged, darkMode, counter});                  // combines all reducers 
+    
+    var store = createStore(allReducers);                                              // the store will use all 3 reducers 
+    
+// dispatching actions ----------------------------------------------------------------
+        console.log( store.getState() );                                               // -> {counter:{counter: 0}, darkMode:{darkMode:false}, isLogged:{loggedIn:false}}   
+    
+    store.dispatch({type:'any'});                                                      // dispatching actions to the store 
+    store.dispatch({type:'any', darkMode:true, loggIn:true});
+        console.log( store.getState() );                                               // -> {counter:{counter:2}, darkMode:{darkMode:true}, isLogged:{loggedIn:true}}    
+    
+    store.dispatch({type:'any', darkMode:true, loggIn:false});
+        console.log( store.getState() );                                               // -> {counter:{counter:3}, darkMode:{darkMode: true}, isLogged:{loggedIn:false}}   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> TEST-1 </u></h4>
+    <p> - index.js (file) </p>
+    <pre>
+    import store from './store';
+    import {add, remove, modify} from './actionCreators';
+    
+// add mashine -----------------------------------------------------
+    store.dispatch(add('Wirlpool', 'x500', '15Kg', true));          // adding new mashines to the store  
+    store.dispatch(add('Zanussi', '5series', '13Kg', true));
+    store.dispatch(add('YoGer', 41, '17Kg', false));
+    store.dispatch(add('Werter', 'x105', '10Kg', false));
+    store.dispatch(add('Squeezy', 'ii2', '9Kg', true));
+    
+    console.log( store.getState() );                                // -> {Squeezy:{name:"Squeezy", type:"ii2", capacity:"9Kg", home:true}, Werter:{name:"Werter", type:"x105", capacity:"10Kg", home:false}, Wirlpool:{name:"Wirlpool", type:"x500", capacity:"15Kg", home:true}, YoGer:{name:"YoGer", type:41, capacity:"17Kg", home:false}, Zanussi:{name:"Zanussi", type:"5series", capacity:"13Kg", home:true}}    
+    
+// modify mashine --------------------------------------------------
+    store.dispatch(modify('Werter', 'x100', '11Kg', false));        // modifying existing mashines in the store 
+    store.dispatch(modify('Zanussi', '5series', '14Kg', true));
+    
+    console.log( store.getState() );                                // -> {Squeezy:{name:"Squeezy", type:"ii2", capacity:"9Kg", home:true} Werter:{name:"Werter", type:"x100", capacity:"11Kg", home:false} Wirlpool:{name:"Wirlpool", type:"x500", capacity:"15Kg", home:true} YoGer:{name:"YoGer", type:41, capacity:"17Kg", home:false} Zanussi:{name:"Zanussi", type:"5series", capacity:"14Kg", home:true}}    
+    
+// remove mashine --------------------------------------------------
+    store.dispatch(remove('Werter'));                               // deletes mashines from the store 
+    store.dispatch(remove('Zanussi'));
+    
+    console.log( store.getState() );                                // -> {Squeezy:{name:"Squeezy", type:"ii2", capacity:"9Kg", home:true} Wirlpool:{name:"Wirlpool", type:"x500", capacity:"15Kg", home:true} YoGer:{name:"YoGer", type:41, capacity:"17Kg", home:false}}    
+    </pre>
+    <p> - store.js (file) </p>
+    <pre>
+    import {createStore} from 'redux';
+    import reducer from './reducer';                                // importing the reducer    
+    
+    var store = createStore(reducer);                               // store created and initiated with the reducer  
+    
+    export default store;
+    </pre>
+    <p> - reducer.js (file) </p>
+    <pre>
+    function reducer(state = {}, action){
+        switch(action.type){
+            case 'add':                                             // add new mashines 
+                return {...state, [action.payload.name]:action.payload};
+            case 'modify':                                          // modify existing mashines in the store 
+                return {...state, [action.payload.name]:action.payload};
+            case 'remove':                                          // removes a mashine from the store 
+                let state_ = {...state};
+                delete state_[action.payload.name];
+                return state_;
+            default: 
+                return state;
+        }
+    }
+    
+    export default reducer;    
+    </pre>
+    <p> - actionCreators.js (file) </p>
+    <pre>
+    function add(name, type, capacity, home){
+        return {
+            type:'add',
+            payload:{name, type, capacity, home}
+        }
+    }
+    
+    function modify(name, type, capacity, home){
+        return {
+            type:'modify',
+            payload:{name, type, capacity, home}
+        }
+    }
+    
+    function remove(name){
+        return {
+            type:'remove',
+            payload:{name}
+        }
+    }
+    
+    export {add, modify, remove}     
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Multiple reducers TEST </u></h4>
+    <pre>
+    import {createStore, combineReducers} from 'redux';
+    
+// reducers ---------------------------------------------------------------------------
+    function isLogged(store = {loggedIn:false}, action){                               // login state
+        if(action.loggIn) {
+            return {loggedIn:true};
+        } else {
+            return {loggedIn:false};
+        }
+    }
+    
+    function darkMode(store = {darkMode:false}, action){                               // dark mode state
+        if(action.darkMode) {
+            return {darkMode:true};
+        } else {
+            return {darkMode:false};
+        }
+    }
+    
+    function counter(store = {counter:-1}, action){                                    // counts the number of changes in the store 
+        var store_ = {...store};
+        store_.counter ++;
+        return store_;
+    }
+    
+// combining reducers and creating the store ------------------------------------------
+    var allReducers = combineReducers({isLogged, darkMode, counter});                  // combines all reducers 
+    
+    var store = createStore(allReducers);                                              // the store will use all 3 reducers 
+    
+// dispatching actions ----------------------------------------------------------------
+        console.log( store.getState() );                                               // -> {counter:{counter: 0}, darkMode:{darkMode:false}, isLogged:{loggedIn:false}}   
+    
+    store.dispatch({type:'any'});                                                      // dispatching actions to the store 
+    store.dispatch({type:'any', darkMode:true, loggIn:true});
+        console.log( store.getState() );                                               // -> {counter:{counter:2}, darkMode:{darkMode:true}, isLogged:{loggedIn:true}}    
+    
+    store.dispatch({type:'any', darkMode:true, loggIn:false});
+        console.log( store.getState() );                                               // -> {counter:{counter:3}, darkMode:{darkMode: true}, isLogged:{loggedIn:false}}   
+    </pre>
+</details>
+<hr>
+<!---------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> React-Redux </u></h2>    
+    <p> - the <mark>react-redux</mark> API allows React Components to use the Redux store (for centralized application state) </p>
+    <pre class="syntax">
+SYNTAX:     import {Provider} from 'react-redux';                                      // imports the Redux store provider in the current module   
+            
+            <em>ReactDOM.render(</em>
+                &lt;Provider store={<strong>store</strong>}&gt;                                               // the Provider wraps the root Component to make the Redux store available for the whole application
+                    <strong>App</strong>                                                                  // the <strong>store</strong> is the Redux store 
+                &lt;Provider /&gt;
+                <em>,document.getElementById(<strong>targetHTMLElement</strong>))</em>
+                
+                
+  <span style="color:darkgray;">// Component file -------------------------------------------------------------------</span>
+            import {connect} from 'react-redux';                                       // imports the connect method which connects the React Component to the Redux store       
+            
+            <em>class <strong>Component</strong> extends React.Component{</em>
+                <strong>compMethod</strong> = () =>{
+                    this.props                                                         // the Component receives through props the mapped Redux store data and the passed action creators 
+                    this.props.<strong>actionCreator</strong>();                                        // calling an action creator will dispatch its action to the Redux store    
+                }
+            <em>}</em>
+            
+            
+            function mapStateToProps(<strong class="openable">store, ownProps<div>
+                <p> - <strong>store</strong> = Redux store </p>
+                <p> - <strong>ownProps</strong> = the target Component's own props </p>
+            </div></strong>) {                               // maps Redux store data to the target Component props (this is how the component recievies the Redux store data)    
+                return <strong>obj</strong>                                                               // the returned object is received in the Component props (this is where we map store data to props)   
+            }
+            
+            var mapDispatchToProps = {<strong>actionCreator</strong><i>, ...</i>}                              // listing <span class="openable">action creators<div>
+                <p> - an action creator is function which returns a Redux action object (ex: <mark>{type:'reduxAction'}</mark>)</p>
+            </div></span> (without calling them) what will be passed as props in the Component  
+            
+            export default connect(mapStateToProps, mapDispatchToProps)(<strong>Component</strong>)     // exports and connects the component <u>(passing <mark>mapStateToProps</mark> and <mark>mapDispatchToProps</mark> are optional)</u>    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - index.js (file) </p>
+    <pre>
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import {Provider} from 'react-redux';                                              // importing the redux Provider
+    
+    import store from './store';                                                       // importing the store
+    import App from './App'
+    
+    ReactDOM.render(
+        &lt;Provider store={store}&gt;                                                       // the redux Provider wraps the application root Component and the store is passed as props value (makes the redux store available for the whole React application)    
+            &lt;App /&gt;
+        &lt;/Provider&gt;
+        , document.getElementById('testElement')
+    )
+    </pre>
+    <p> - App.js (file) </p>
+    <pre>
+    import React from 'react';
+    import {connect} from 'react-redux';                                               // importing the react-redux connection method 
+    import {increase, decrease} from './store';                                        // imporing the action creators   
+    
+    class App extends React.Component{
+        render(){
+            return(
+                &lt;div&gt;
+                    &lt;h1&gt; Counter ({this.props.counter}) &lt;/h1&gt;                          // the component receives the store data through props  
+                    &lt;button onClick={()=&gt;this.props.increase()}&gt;add&lt;/button&gt;           // the component receives action creators through props 
+                    &lt;button onClick={()=&gt;this.props.decrease()}&gt;remove&lt;/button&gt;          // -! action creators when called dispatch their action to the redux-store  
+                &lt;/div&gt;
+            )
+        }
+    }
+    
+    function mapStateToProps(state, ownProps){                                         // maps the redux store data to the component props 
+        return {counter: state}                                                          // the returned object is redeived in the component props    
+    }
+    
+    var mapDispatchToProps = {increase, decrease};                                     // lists action creators what we want to pass to the component props  
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(App);                  // exports and connects the component to the redux-store
+                                                                                         // passing 'mapStateToProps' and 'mapDispatchToProps' are optional   
+    </pre>
+    <p> - store.js (file) </p>
+    <pre>
+    import {createStore} from 'redux';
+    
+// reducer ----------------------------------------------------------------------------
+    function reducer(store = 0, action){
+        switch(action.type){
+            case 'increase':
+                return ++store;
+            case 'decrease':
+                return --store;
+            default:
+                return store
+        }
+    }
+    
+// store ------------------------------------------------------------------------------
+    var store = createStore(reducer);
+    
+// action creators --------------------------------------------------------------------
+    function increase(){
+        return {type:'increase'}
+    }
+    function decrease(){
+        return {type:'decrease'}
+    }
+    
+    export default store;
+    export {increase, decrease};    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> React-Redux TEST-1 </u></h4>
+    <p> index.js (file) </p>
+    <pre>
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import {Provider} from 'react-redux';                                              // the Provider makes available the Redux store to the React application 
+    
+    import App from './App';
+    import store from './store';
+    
+    ReactDOM.render(
+        &lt;Provider store={store}&gt;                                                       // this makes available the Redux store for the whole React application (store passed as props value)    
+            &lt;App /&gt;
+        &lt;/Provider&gt;
+        , document.getElementById('testElement'));    
+    </pre>
+    <p> - actionCreators.js (file) </p>
+    <pre>
+    function add(){
+        return {type:'add'}
+    }
+    
+    function remove(){
+        return {type:'remove'}
+    }
+    
+    export {add, remove};                                                              // action creators are exported so they are available for the whole application    
+    </pre>
+    <p> - store.js (file) </p>
+    <pre>
+    import {createStore} from 'redux';
+    
+    function reducer(store = {counter:0}, action){                                     
+        switch(action.type){
+            case 'add':
+                return {counter: ++store.counter}
+            case 'remove':
+                return {counter: --store.counter}
+            default:
+                return store;
+        }
+    }
+    
+    var store = createStore(reducer);
+    
+    export default store;                                                              // the Redux store with its reducer 
+    </pre>
+    <p> App.js (file) </p>
+    <pre>
+    import React from 'react';
+    import {connect} from 'react-redux';                                               // allows to connect the React component to the Redux store    
+    
+    import {add, remove} from './actionCreators';                                      // importing action creators   
+    
+    class App extends React.Component{
+        render(){
+            return(
+                &lt;div&gt;
+                    &lt;h1&gt; Count = {this.props.counter}&lt;/h1&gt;                             // the Redux store state is received through props 
+                    &lt;button onClick={()=&gt;this.props.add()}&gt;+&lt;/button&gt;                  // action creators are received through props and can be called to dispatch actions to the store    
+                    &lt;button onClick={()=&gt;this.props.remove()}&gt;-&lt;/button&gt;
+                &lt;/div&gt;
+            )
+        }
+    }
+    
+    const mapStateToProps = (state, ownProps) => {                                      // maps the Redux store state to the Component props 
+        return {counter: state.counter}
+    }
+    
+    const mapDispatchToProps = {add, remove}                                            // maps action creators to the Component props 
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(App);                   // connects the component to the Redux store (maps the Redux store and action creators to the component props)     
+    </pre>
+<!---------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> React-Redux TEST-2 </u></h2>    
+    <p> - 3 different components get the color value from the Redux store and rendered accordingly </p>
+    <p> index.js (file) </p>
+    <pre>
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import {Provider} from 'react-redux';
+    import store from './store'
+    
+    import ColorSelector from './colorSelector';
+    import ColorName from './colorName';
+    import ColorNameHU from './colorNameHU';
+    
+    ReactDOM.render(
+        &lt;Provider store={store}&gt;                                                       // Redux Provider wraps the React application (Redux store available for the whole application)
+            &lt;div&gt;
+                &lt;ColorSelector /&gt;
+                &lt;ColorName /&gt;
+                &lt;ColorNameHU /&gt;
+            &lt;/div&gt;
+        &lt;/Provider&gt;
+    , document.getElementById('testElement'));
+    </pre>
+    <p> - colorSelector.js (file) </p>
+    <pre>
+    import React, {Component} from 'react';
+    import {connect} from 'react-redux';
+    import {blue, red, green, yellow, orange, black, purple} from './actionCreators';  // importing action creators 
+    
+    class ColorSelector extends Component{
+        selectHandler = (ev) => {                                                      // listener triggers when the 'select' element value changes     
+            this.props[ev.target.value]();                                             // -! the action creator is called here when there's a change, it dispatches an action to the Redux store    
+        }
+        
+        render(){
+            return(
+                &lt;select className='select_' style={{width:'150px', backgroundColor:this.props.color}} onChange={this.selectHandler} value={this.props.color}&gt;
+                    &lt;option value='blue' style={{backgroundColor:'blue'}}&gt; &lt;/option&gt;
+                    &lt;option value='red' style={{backgroundColor:'red'}}&gt; &lt;/option&gt;
+                    &lt;option value='green' style={{backgroundColor:'green'}}&gt; &lt;/option&gt;
+                    &lt;option value='yellow' style={{backgroundColor:'yellow'}}&gt; &lt;/option&gt;
+                    &lt;option value='orange' style={{backgroundColor:'orange'}}&gt; &lt;/option&gt;
+                    &lt;option value='black' style={{backgroundColor:'black'}}&gt; &lt;/option&gt;
+                    &lt;option value='purple' style={{backgroundColor:'purple'}}&gt; &lt;/option&gt;
+                &lt;/select&gt;
+            )
+        }
+    }
+    
+    function mapStateToProps(state, ownProps){                                         // maps Redux store properties to the component's props  
+        return {color: state}                                                            // the returned object is received in props of the Component 
+    }
+    
+    var mapDispatchToProps = {blue, red, green, yellow, orange, black, purple};        // action creators are passed as component props (once they called they dispatch their action to the Redux store)   
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(ColorSelector);        // connecting all together    
+    </pre>
+    <p> colorName.js (file) </p>
+    <pre>
+    import React, {Component} from 'react';
+    import {connect} from 'react-redux';
+    
+    class ColorName extends Component{
+        render(){
+            return(
+                &lt;h2 style={{color:this.props.color}}&gt; {this.props.color} &lt;/h2&gt;
+            )
+        }
+    }
+    
+    function mapStateToProps(state, ownProps){                                         // maps Redux store properties to the component's props  
+        return {color: state}                                                            // the returned object is received in props of the Component 
+    }
+    
+    export default connect(mapStateToProps)(ColorName);                                // we only need to receive data from the store   
+    </pre>
+    <p> - colorNameHU.js (file) </p>
+    <pre>
+    import React, {Component} from 'react';
+    import {connect} from 'react-redux';
+    
+    var colorTraduct = {blue:'kék', red:'piros', green:'zöld', yellow:'sárga', orange:'narancs', black:'fekete', purple:'lila'};
+    
+    class ColorName extends Component{
+        render(){
+            return(
+                &lt;h2 style={{color:this.props.color}}&gt; {colorTraduct[this.props.color]} &lt;/h2&gt;
+            )
+        }
+    }
+    
+    function mapStateToProps(state, ownProps){
+        return {color: state}
+    };
+    
+    export default connect(mapStateToProps)(ColorName);                                // we only need to receive data from the store   
+    </pre>
+    <p> - store.js (file) </p>
+    <pre>
+    import {createStore} from 'redux';
+    
+    function reducer(state = 'blue', action){
+        switch(action.type){
+            case 'blue':
+                return state = 'blue';
+            case 'red':
+                return state = 'red';
+            case 'green':
+                return state = 'green';
+            case 'yellow':
+                return state = 'yellow';
+            case 'orange':
+                return state = 'orange';
+            case 'black':
+                return state = 'black';
+            case 'purple':
+                return state = 'purple';
+            default:
+                return state;
+        }
+    }
+    
+    var store = createStore(reducer);
+    
+    export default store;    
+    </pre>
+    <p> - actionCreators.js (file) </p>
+    <pre>
+    function blue(){
+        return {type:'blue'}
+    }
+    
+    function red(){
+        return {type:'red'}
+    }
+    
+    function green(){
+        return {type:'green'}
+    }
+    
+    function yellow(){
+        return {type:'yellow'}
+    }
+    
+    function orange(){
+        return {type:'orange'}
+    }
+    
+    function black(){
+        return {type:'black'}
+    }
+    
+    function purple(){
+        return {type:'purple'}
+    }
+    
+    export {blue, red, green, yellow, orange, black, purple};    
+    </pre>
+</details>
+    <br><br>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Basics and CLI </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Basics and CLI (ver 4.0.0) </h1>
+    <p> Updated ( 2019-06-02 / 2020-01-18 / 2020-04-28)</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Basics and CLI
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> CLI </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> <em>$ node</em> <i>[options]</i> <i>[V8options]</i> <i>[nodeFile]</i> <i>[arguments, ...]</i> </td>
+        <td> - node.js command line Syntax  </td>
+    </tr>
+    <tr class="06.01">
+        <td> <em>$ node</em> <strong>nodeFile</strong> </td>
+        <td> - runs the passed file in Node.js </td>
+    </tr>
+    <tr class="06.02">
+        <td> <em>$ node</em> </td>
+        <td> - launches REPL (JavaScript on the command line) </td>
+    </tr>
+    <tr class="10.01">
+        <td colspan="2"> Command Line Options </td>
+    </tr>
+    <tr class="11.03">
+        <td> --check | -c <strong>nodeFile.js</strong> </td>
+        <td> - checks for <u>Syntax errors only!</u> in the passed file (without executing it)
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 4.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="13.01">
+        <td> --disallow-code-generation-from-strings <strong>nodeFile.js</strong> </td>
+        <td> - code cannot be generated from strings, throws an exception (ex: <mark>eval()</mark>, <mark>new Function()</mark>)
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 9.8.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11.02">
+        <td> --eval | -e <strong>jsExpression</strong> </td>
+        <td> - evaluates the following argument as JavaScript expression (does not print the result, throw error if any)
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 0.5.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.01">
+        <td> --max-http-header-size=<strong>nr</strong> <strong>nodeFile.js</strong> </td>
+        <td> - sets the maximum allowed http hader size (in bytes) (Default: 16382) 
+            <span class="browserSupport" title="updated : 2020-04-28">
+                <span><i class="fab fa-node-js"></i> 11.6.0 | 13.13.0 size increased from 8KB to 16 KB </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> --no-deprecation <strong>nodeFile.js</strong> </td>
+        <td> - silences deprecation warnings 
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 0.8.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> --no-warnings <strong>nodeFile.js</strong> </td>
+        <td> - silences all warnings (including deprecation warnings)
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11.01">
+        <td> --print | -p <strong>jsExpression</strong> </td>
+        <td> - evaluates the following argument as JavaScript expression and prints the result (throws error if any)
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 0.6.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> --help | -h </td>
+        <td> - print the available node command line options and Environment Variables
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 0.1.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.02">
+        <td> --insecure-http-parser <strong>nodeFile.js</strong> </td>
+        <td> - accepts invalid HTTP headers <u>(Security risk!)</u> <u style="color:orangered">[TESTED: 2020-04-29] Not working custom HTTP headers accepted anyways!</u> 
+            <span class="browserSupport" title="updated : 2020-04-29">
+                <span><i class="fab fa-node-js"></i> 13.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="18.01">
+        <td> 
+            --secure-heap=<strong class="openable">nr<div>
+            <p> - the passed value must be a power of <mark>2</mark> </p>
+        </div></strong> 
+        </td>
+        <td> 
+            - initializes an <span class="openable">OpenSSL secure heap<div>
+                <p> OpenSSL's secure heap prevents sensitive data from leaking due to pointer overruns or underruns </p>
+            </div></span> of the specified size (in bytes) <u>(must be at least <mark>2</mark>)</u> <br>
+            - fixed size and cannot be resized at runtime <br>
+            - the OpenSSL secure heap is disabled by default 
+            <span class="browserSupport" title="updated : 2021-03-11">
+                <span><i class="fab fa-node-js"></i> 15.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="18.02">
+        <td> 
+            --secure-heap-min=<strong class="openable">nr<div>
+            <p> - the passed value must be a power of <mark>2</mark> </p>
+        </div></strong> 
+        </td>
+        <td> 
+            - (when <mark>--secure-heap</mark> used) specifies the minimum allocation from the secure OpenSSL secure heap
+            <span class="browserSupport" title="updated : 2021-03-11">
+                <span><i class="fab fa-node-js"></i> 15.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="12.01">
+        <td> --title=<strong>titleName</strong> <strong>nodeFile.js</strong> </td>
+        <td> - sets the <mark>process.title</mark> on startup
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 10.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="17.01">
+        <td> --tls-cipher-list="<strong>cipherSuite</strong><small>:</small><i>...</i>" <strong>nodeFile.js</strong> </td>
+        <td> - specifies an alternative default TLS cipher suite list (overrides the default node cipher suite list)
+            <span class="browserSupport" title="updated : 2020-06-18">
+                <span><i class="fab fa-node-js"></i> 4.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> --v8-options </td>
+        <td> - prints the available V8 command line options
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 0.1.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> --version | -v </td>
+        <td> - returns the node.js version number
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 0.1.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="14.01">
+        <td> --zero-fill-buffers <strong>nodeFile.js</strong> </td>
+        <td> - zero fills newly allocated buffers <a href="../Buffer and String Decoder/index.html">[TESTED -> link]</a>
+            <span class="browserSupport" title="updated : 2020-01-18">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/en/" target="_blank"> Node.js.com </a></p>
+    <p><a href="https://www.javatpoint.com/what-is-nodejs" target="_blank"> javatpoint.com Node.js </a></p>
+    <p><a href="https://nodejs.org/dist/latest-v13.x/docs/api/cli.html" target="_blank">Node.js Command Line Options </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - for my biggest surpires ES6 module system is not supported natively by node yet :(, so I didn't tested [2019-06-04] </p>
+    <p> - global object's properties can be called without calling the <mark>global</mark> object (just like the <mark>window</mark> object in the browser) <u>but we call module specific objects and local variables the same way too (like <mark>__dirname</mark>)</u></p>
+    <p> - Node.js core modules (<mark>fs</mark>, <mark>dns</mark>, etc...) are executables on the system, so we cannot find them like installed modules </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Node.js is basically program (written in C++) which runs and executes JavaScript (designed for server environment) </p>
+    <p> - JavaScript powers Node.js (JavaScript designed for server environment) </p> 
+    <pre style="margin-bottom:1px;">
+// test.js (node.js file) -------------------------------------------------------------
+    var test = "Hello Word";
+    console.log(test);    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    D:\WebSite\> node demo.js                                                          // execute node.js file 
+        Hello Word                                                                     // message printend in console 
+    D:\WebSite\> node                                                                  // launch REPL
+        >                                                                              // REPL running  
+    </pre>
+<details class="example">
+<summary> Example </summary>
+<h4 style="color:darkblue;"><u> first Node.js TEST </u></h4>
+    <pre>
+// nodeJs.js (file) ------------------------------
+    var firstMessage = "Hello Word";
+    
+    console.log(firstMessage);    
+    </pre>
+    <pre class="cmd">
+    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Basics\Node -1> node -v
+    v10.9.0                                                                // Node.js version number 
+    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Basics\Node -1> node nodeJs.js
+    Hello Word                                                             // returned message 
+    </pre>
+<h4 style="color:darkblue;"><u> run Node.js on command line TEST </u></h4>
+    <pre class="cmd">
+    PS D:\> node                                                           // run Node on command line
+    > 'myText'.toUpperCase();                                              // executed an expression 
+    'MYTEXT'
+    > process.exit(0);                                                     // exit node
+    PS D:\>
+    </pre>
+<!------------------------------------------------------------------------------------------------------>
+<hr>
+<h4 style="color:darkblue;"><u> Command Line Options TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+// (file) test1.js -------------------------------------------------------------------
+    refErr;                                                                           // refference Error 
+    
+// (file) test2.js -------------------------------------------------------------------
+    eval('var2 = 2');                                                                 // tries to generate code from the passed string   
+    console.log( var2 );    
+    
+// (file) test3.js -------------------------------------------------------------------
+    new Buffer(16);                                                                   // deprecated! 
+    
+// (file) test4.js -------------------------------------------------------------------
+    process.emitWarning('custom warning emitted!');                                   // emits a warning 
+    
+// (file) test5.js -------------------------------------------------------------------
+    console.log( process.title );    
+    </pre>
+    <pre class="cmd">
+// --version | -v --------------------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --version
+        v13.6.0
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node -v
+        v13.6.0
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>        
+// --help | -h -----------------------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --help
+        Usage: node [options] [ script.js ] [arguments]
+        node inspect [options] [ script.js | host:port ] [arguments]
+        
+        Options:    
+        ... 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node -h
+        Usage: node [options] [ script.js ] [arguments]
+        node inspect [options] [ script.js | host:port ] [arguments]
+        
+        Options:    
+        ... 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> 
+// --v8-options ----------------------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --v8-options
+        SSE3=1 SSSE3=1 SSE4_1=1 SSE4_2=1 SAHF=1 AVX=1 FMA3=1 BMI1=1 BMI2=1 LZCNT=1 POPCNT=1 ATOM=0
+        Synopsis:
+        ...
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>
+// --check | -c ----------------------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node test1.js -check
+        D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST\test1.js:1
+        refErr;                                         // refference Error
+        ^    
+        ...
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node test1.js -
+        D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST\test1.js:1
+        refErr;                                         // refference Error
+        ^    
+        ...
+// --eval | e | --print | -p ---------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --eval 2**5        // no return value printed 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node -e 4sd             // error thrown
+        [eval]:1
+        4sd
+        ^
+        
+        SyntaxError: Invalid or unexpected token
+        ...
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --print 2**5
+        32                                                                                                                                  // return value printed 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node -p 4sd             // error thrown
+        [eval]:1
+        4sd
+        ^
+    
+        SyntaxError: Invalid or unexpected token
+        ...
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>    
+// --disallow-code-generation-from-strings -------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --disallow-code-generation-from-strings test2.js
+        D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST\test2.js:1
+        eval('var2 = 2');
+        ^
+
+        EvalError: Code generation from strings disallowed for this context
+        ... 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>    
+    
+// --no-deprecation ------------------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --no-deprecation test3.js  // deprecation warning silenced 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>    
+    
+// --no-warnings ---------------------------------------------------------------------------------------------------------------------------    
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --no-warnings test3.js     // deprecation warning silenced   
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>    
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --no-warnings test4.js     // warning silenced 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>    
+    
+// --title=title ---------------------------------------------------------------------------------------------------------------------------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST> node --title='myTitle' test5.js
+        myTitle
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\Node.js Basics\04 - Command Line Options TEST>    
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------>
+<hr>
+<h2 class="headerExtra"><u> Node.js program structure </u></h2>
+    <p> - in Node.js the global scope is not designed to run tasks on it, instead we use modules what have their own scopes and can communicate with each other if we want to </p>
+    <p> - when we run a .js file we are in that scope (module) </p>
+    <p> - the <mark>require()</mark> method which basically links other modules to the same global scope we are running </p>
+    <p> - the <mark>global</mark> object is the global object (conviniently), it is available from anywhere </p> 
+    <img src="Node Structure.jpg" alt="Node.js Program Structure" height="350">
+    <p> - module structure (each module looks like this) </p> 
+    <pre class="syntax">
+SYNTAX :    global                                                                     // references the global object (scope), accessible anywhere in Node.js (contains all JavaScript constructors)   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre style="margin-bottom:1px;">
+// main.js (file) ------------------------------------------------------------------------------------------------------------------
+    // access global object's default properties --------------------------------------
+    this                                                                               // -> {}                    // does not references the global scope because we are in the 'main.js' module here 
+    global.Object;                                                                     // -> [Function: Object]    // we can reference any properties form the global object 
+    Object;                                                                            // -> [Function: Object]    // we don't have to call the 'object' object if we want to access a property of the global object 
+    
+    // module's object ----------------------------------------------------------------
+    __filename;                                                                        // -> (path and file name)  // object belongs to this module 
+    global.__filename;                                                                 // -> undefined             // not a global object 
+    
+    // declare properties in the global scope -----------------------------------------
+    require('./module1.js');                                                           // the 'module1.js' module will have the same global object (scope) as this module 
+    
+    global.var1 = 'value1';                                                            // declare a global property (not a recommended practice)
+    var2 = 'value2';                                                                   // this does the same       // -! in strict mode this is not allowed
+    var localVar = 'locale value';                                                     // local variable 
+    
+    // call global properties ---------------------------------------------------------
+    global.var1;                                                                       // -> 'value1'              // global object property 
+    global.var2;                                                                       // -> 'value2'              // same as 'global.var2'
+    global.var3;                                                                       // -> 'value3'              // global object property declared in 'module1.js' 
+    global.var4;                                                                       // -> RefferenceError       // -! because we did not called the 'required()' method on the 'module2.js' so it does not have the same global object    
+    
+    var1;                                                                              // -> 'value1'              // same as 'global.var1'
+    localVar;                                                                          // -> 'locale value'        // !! local properties are called the same way as the global properties can be called careful! 
+    globa.localVar;                                                                    // -> undefined 
+    
+// module1.js (file) ---------------------------------------------------------------------------------------------------------------
+    global.var3 = 'value3';                                                            // global property declared 
+    
+// module2.js (file) ---------------------------------------------------------------------------------------------------------------
+    global.var4 = 'value4';                                                            // global property declared 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    D:\WebSite\node main.js                                                            // we run this file only 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> access to the <mark>global</mark> object TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+// main.js ---------------------------------------------------------
+    console.log( global );                                                             // global object available from anywhere 
+    console.log( Object.getOwnPropertyNames(global) );                                 // get the global object's properties 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\01 - access to the global object TEST>node main.js
+        Object [global] {
+            global: [Circular],
+            clearInterval: [Function: clearInterval],
+            clearTimeout: [Function: clearTimeout],
+            setInterval: [Function: setInterval],
+            setTimeout: [Function: setTimeout] { [Symbol(util.promisify.custom)]: [Function] },
+            queueMicrotask: [Function: queueMicrotask],
+            clearImmediate: [Function: clearImmediate],
+            setImmediate: [Function: setImmediate] {
+                [Symbol(util.promisify.custom)]: [Function]
+            }
+        }
+        [                                                           // lists all the global object's native properties 
+                'Object',           'Function',              'Array',
+                'Number',         'parseFloat',           'parseInt',
+                'Infinity',                'NaN',          'undefined',
+                'Boolean',             'String',             'Symbol',
+                    'Date',            'Promise',             'RegExp',
+                'Error',          'EvalError',         'RangeError',
+        'ReferenceError',        'SyntaxError',          'TypeError',
+                'URIError',               'JSON',               'Math',
+                'console',               'Intl',        'ArrayBuffer',
+            'Uint8Array',          'Int8Array',        'Uint16Array',
+            'Int16Array',        'Uint32Array',         'Int32Array',
+            'Float32Array',       'Float64Array',  'Uint8ClampedArray',
+        'BigUint64Array',      'BigInt64Array',           'DataView',
+                    'Map',             'BigInt',                'Set',
+                'WeakMap',            'WeakSet',              'Proxy',
+                'Reflect',          'decodeURI', 'decodeURIComponent',
+            'encodeURI', 'encodeURIComponent',             'escape',
+                'unescape',               'eval',           'isFinite',
+                'isNaN',  'SharedArrayBuffer',            'Atomics',
+            'globalThis',        'WebAssembly',             'global',
+                'process',             'GLOBAL',               'root',
+                'Buffer',                'URL',    'URLSearchParams',
+            'TextEncoder',        'TextDecoder',      'clearInterval',
+            'clearTimeout',        'setInterval',         'setTimeout',
+        'queueMicrotask',     'clearImmediate',       'setImmediate'
+        ]    
+    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\01 - access to the global object TEST>
+    </pre>
+<!----------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> multiple module same <mark>global</mark> object TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+// main.js ------------------------------------------------------------------------------------------------------------------------
+    require('./module1.js');                                        // we required the first module (this way 'module1.js' have the same global object at this module)
+    
+    global.mainVar1 = "main variable one";                          // variable declared on the global scope
+    mainVar2 = "main varialbe two";                                 // this is a global varialbe (not recommended and in strict mode it will fail)
+        
+    var localVar = 'local variable';                                // local varialbe accessbile anywhere from this module 
+        
+    // global variables declared in modules ----------
+      // global variables declared in this module ----
+        console.log( global.mainVar1 );                             // -> "main variable one"
+        console.log( global.mainVar2 );                             // -> "main varialbe two"
+    
+      // global variables declared in module1.js -----
+        console.log( global.module1Var1 );                          // -> "module1 varialbe first value"
+        console.log( global.module1Var2 );                          // -> "module1 varialbe second value"
+        
+      // global variables delcared in module2.js -----              // -! because we did not call the require() method on 'module2.js' variables declared on it are not declared ont this global object!
+        console.log( global.module2Var1 );                          // -> undefined
+        console.log( global.module2Var2 );                          // -> undefined
+    
+// module1.js ---------------------------------------------------------------------------------------------------------------------
+    global.module1Var1 = "module1 varialbe first value";
+    module1Var2 = "module1 varialbe second value "    
+    
+// module2.js ---------------------------------------------------------------------------------------------------------------------    
+    global.module2Var1 = "module1 varialbe first value";
+    module2Var2 = "module1 varialbe second value "    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\02 - multiple module same global object TEST> node main.js
+        main variable one
+        main varialbe two
+        module1 varialbe first value
+        module1 varialbe second value
+        undefined
+        undefined
+    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\02 - multiple module same global object TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>global</mark> object properties VS module objects confusion TEST </u></h4>
+    <p> - because we can call global object's properties without calling the actual <mark>global</mark> object and we also call the modul's objects the same way this can be confusing </p>
+    <pre style="margin-bottom:1px;">
+// main.js ---------------------------------------------------------
+    // global object properties ---------
+        console.log( global.setTimeout );                           // -> [Function: setTimeout]
+        console.log( setTimeout );                                  // -> [Function: setTimeout]    // we can call the global object's properties without calling 'globlal'
+    
+    // module objects --------------------
+        console.log( global.__dirname);                             // -> undefined                 // object is NOT a property of the global object 
+        console.log( __dirname );                                   // "D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\03 - global object properties VS module object confusion TEST"   
+                                                                    // we call module a specific object here 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\03 - global object properties VS module object confusion TEST> node main.js
+        [Function: setTimeout] { [Symbol(util.promisify.custom)]: [Function] }
+        [Function: setTimeout] { [Symbol(util.promisify.custom)]: [Function] }
+        D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\03 - global object properties VS module object confusion TEST
+        undefined
+    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Node.js Program Structure\03 - global object properties VS module object confusion TEST>    
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

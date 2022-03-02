@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> Ready Elements </title>    
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<h1> Ready Elements  </h1>
+	<p class="sitenav"> <a href="../index.html">back></a>
+    </p>
+<h2><u> Stick Animations (2017-12-28) </u></h2>
+<p> &nbsp; <span class="blink">|</span></p>
+        <details>
+        <summary> CODE : </summary>
+<pre>
+        -- HTML --
+        
+        &lt;p&gt; &nbsp; &lt;span class="blink"&gt;|&lt;/span&gt;&lt;/p&gt;
+
+        -- CSS --
+    .blink {
+        font-weight: bold;
+        font-size: 2em;
+        opacity: 1;
+        animation-name: blink;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: steps(2, start);
+    }
+
+    @keyframes blink {
+        to {visibility: hidden;}
+    }
+</pre>
+        </details>
+<hr>
+    <p> &nbsp;&nbsp;&nbsp; 
+        <span class="rotate">|</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="rotate-top">|</span>
+    </p>
+        <details>
+        <summary> CODE : </summary>
+<pre>
+        -- HTML --
+    &lt;p&gt; &nbsp;&nbsp;&nbsp; 
+        &lt;span class="rotate"&gt;|&lt;/span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &lt;span class="rotate-top"&gt;|&lt;/span&gt;
+    &lt;/p&gt;
+        
+        -- CSS --
+    .rotate {
+        display: inline-block;
+        font-weight: bold;
+        transform: rotate(0deg) scale(3) ;
+        animation: rotate 1s linear infinite;
+        transform-origin: 50% 55%;              /*-- middle hanging point correction --*/
+    }
+
+    @keyframes rotate {
+        to {transform: rotate(360deg) scale(3);
+            -webkit-transform: rotate(360deg) scale(3);          
+            -ms-transform: rotate(360deg) scale(3);
+            }
+    }
+
+    @keyframes rotate {
+        to {transform: rotate(360deg) scale(3);
+            -webkit-transform: rotate(360deg) scale(3);          
+            -ms-transform: rotate(360deg) scale(3);
+            }
+    }
+
+    /*-- rotate hanging point form the top --*/
+
+    .rotate-top {
+        display: inline-block;
+        font-weight: bold;
+        transform: rotate(0deg) scale(1.5);
+        animation: rotateTop 1s infinite linear;
+        transform-origin: 50% 17%;
+    }
+
+    @keyframes rotateTop {
+        to {transform: rotate(360deg) scale(1.5);
+            -webkit-transform: rotate(360deg) scale(1.5);          
+            -ms-transform: rotate(360deg) scale(1.5);
+            }
+    }
+</pre>
+        </details>
+<hr>
+<h2><u> Slider Animation (2018-01-01) </u></h2>
+<div class="slide">
+    Test text..............
+    <div id="slide-anim"></div>
+</div><br>
+    <button onclick="slider()"> Animation </button>
+    <button id="anim-restart"> Restart Animation </button>
+<script>
+    var animElement = document.getElementById('slide-anim');
+    document.getElementById('anim-restart').addEventListener("mouseup", restart_slider);
+    
+    function slider() {
+        animElement.style.animationName = "slider";             // other animation properties are specified in CSS
+    }
+    function restart_slider() {
+        animElement.style.animation = "slider-restart";         
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+<pre>
+-- HTML --
+    
+    &lt;div class="slide"&gt;
+        Test text..............
+    &lt;div id="slide-anim"&gt;&lt;/div&gt;
+    &lt;/div&gt;&lt;br&gt;
+        &lt;button onclick="slider()"> Animation &lt;/button&gt;
+        &lt;button id="anim-restart"> Restart Animation &lt;/button&gt;
+    &lt;script&gt;
+        var animElement = document.getElementById('slide-anim');
+        document.getElementById('anim-restart').addEventListener("mouseup", restart_slider);
+
+        function slider() {
+            animElement.style.animationName = "slider";             // other animation properties are specified in CSS
+        }
+        function restart_slider() {
+            animElement.style.animation = "slider-restart";         
+        }
+    &lt;/script&gt;
+
+-- CSS --
+    
+    .slide {
+        position: relative;
+        border: 3px black inset;
+        padding: 3px;
+        width: auto;
+        overflow: hidden;
+    }
+    .slide div:first-child {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: url(wood.jpg) repeat-x;
+        left: 0%;
+        top: 0%;            
+        animation-duration: 2s;
+        animation-delay: 250ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(.33,.99,1,1); 
+    }
+
+    @keyframes slider {
+        to {left: 100%;}
+    }
+
+    @keyframes slider-restart {
+        to {left: 0%;}
+    }
+</pre>
+        </details>
+<hr>
+<h2><u> Multiple sliders result additioned (2018-01-11)</u></h2>
+<fieldset>    
+<form target="_blank" oninput="testOut()" id="multiF">
+    <input type="range" max="10" value="0" name="slide_1" oninput="slide_1_Out.value=slide_1.value">
+        <output name="slide_1_Out">0</output><br>
+    <input type="range" max="10" value="0" name="slide_2" oninput="silde_2_Out.value=slide_2.value">
+        <output name="silde_2_Out">0</output><br>
+    <spna>Sliders value = </spna><output name="main_Out" style="color:white; font-weight:bold;"> 0 </output><br>
+    <input type="submit" value="Submit">
+</form>
+</fieldset>
+<script>
+    function testOut() {
+            // main_Out.value=parseInt(slide_1.value)+parseInt(slide_2.value);          // this can be passed in the event handler to replace 
+                                                                                        // the reason why you fire a function is to pass multiple operations in a same event handler
+
+        var Val_1 = document.forms.multiF.slide_1.value;                                // different object-property accessing methods
+        var Val_2 = document.forms["multiF"]["slide_2"].value;
+        multiSum = 0;
+        var multiSum = parseInt(Val_1) + parseInt(Val_2);
+        document.forms["multiF"]["main_Out"].innerHTML = multiSum;
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+<pre>
+&lt;fieldset&gt;    
+&lt;form target="_blank" oninput="testOut()" id="multiF"&gt;
+    &lt;input type="range" max="10" value="0" name="slide_1" oninput="slide_1_Out.value=slide_1.value"&gt;
+        &lt;output name="slide_1_Out"&gt;0&lt;/output&gt;&lt;br&gt;
+    &lt;input type="range" max="10" value="0" name="slide_2" oninput="silde_2_Out.value=slide_2.value"&gt;
+        &lt;output name="silde_2_Out"&gt;0&lt;/output&gt;&lt;br&gt;
+    &lt;spna>Sliders value = &lt;/spna>&lt;output name="main_Out" style="color:white; font-weight:bold;"&gt; 0 &lt;/output&gt;&lt;br&gt;
+    &lt;input type="submit" value="Submit"&gt;
+&lt;/form&gt;
+&lt;/fieldset&gt;
+&lt;script&gt;
+    function testOut() {
+            // main_Out.value=parseInt(slide_1.value)+parseInt(slide_2.value);          // this can be passed in the event handler to replace 
+                                                                                        // the reason why you fire a function is to pass multiple operations in a same event handler
+
+        var Val_1 = document.forms.multiF.slide_1.value;                                // different object-property accessing methods
+        var Val_2 = document.forms["multiF"]["slide_2"].value;
+        multiSum = 0;
+        var multiSum = parseInt(Val_1) + parseInt(Val_2);
+        document.forms["multiF"]["main_Out"].innerHTML = multiSum;
+    }
+&lt;/script&gt;    
+</pre>
+        </details>
+<hr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</body>
+</html>

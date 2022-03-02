@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> TEST </title>    
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script> 
+</head>
+<body>
+<h1> TEST </h1>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+    
+<h4><ins>Fancy Animation</ins></h4>
+<h3> - 1) Name Plate Turn</h3>
+    <p> - NOTE: that all porperties must be specified at each step!</p>
+    <div class="fancy">
+        Fancy Pall
+    </div>
+	<details>
+	<summary> CODE : </summary>
+    <pre>
+    -- CODE (HTML) --
+    &lt;div class="fancy"&gt;
+        Fancy Pall
+    &lt;/div&gt;
+    
+    -- CODE (CSS) --
+    .fancy{                                             @keyframes fancy{
+        padding: 15px;                                      0%   {top:0; left:0; transform:rotateZ(0) rotateY(0) scale(1);}
+        width: 100px;                                       25%  {top:0; left:700px; transform:rotateZ(360deg) rotateY(0) scale(1);}
+        position: relative;                                 50%  {top:50px; left:0; transform:rotateZ(0) rotateY(0) scale(1);}
+        right: 0;                                           75%  {top:50px; left:700px; transform:rotateZ(0) rotateY(-360deg) scale(1);}
+        background-color: darkorange;                       100% {top:25px; left:250px; transform:rotateZ(0) rotateY(0) scale(2);}
+        font-weight: bold;                              }
+        border: solid darkgreen 3px;
+        border-radius: 7px;
+        animation: fancy 10s forwards;
+    }
+    </pre>
+	</details>
+<!------------------------------------------------------------------------------------------------------------------>    
+<hr>
+<h4> - 2) Fancy Rubin Animation</h4>
+    <p> - I used a fancy nested nechnique for that </p>
+    <div class="rubin">
+        <div></div>
+    </div>
+	<details>
+	<summary> CODE : </summary>
+    <pre>
+    -- CODE (HTML) --
+    &lt;div class="rubin"&gt;
+        &lt;div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    
+    -- CODE (CSS) --
+    .rubin > div{                                       .rubin{
+        width: 30px;                                        animation: rubin 2s linear infinite;
+        height: 30px;                                       width: 40px;
+        background-color:blueviolet;                        margin-left: 70px;
+        border: solid darkblue 5px;                     }
+        transform: rotateZ(45deg);                      @keyframes rubin{
+    }                                                       from {transform:rotateY(0);}
+                                                            to {transform:rotateY(360deg);}
+                                                        }
+    </pre>
+	</details>
+<!------------------------------------------------------------------------------------------------------------------>
+<hr>
+<h2><u> Fancy Animation with JavaScript <mark>setInterval()</mark> / <mark>clearInterval()</mark> technique </u></h2>
+<h4><u> Animation technique with JS Test </u></h4>
+    <button onclick="myMove()">Click Me</button> 
+    <div id ="myContainer">
+        <div id ="myAnimation"></div>
+    </div>
+<script>
+    function myMove() {
+        var elem = document.getElementById("myAnimation"); 
+        var pos = 0;
+        var animSystem = setInterval(frame, 10);                // "frame" function fires every "10" milliseconds  
+        function frame() {
+            if (pos == 170) {
+                clearInterval(animSystem);                      // this stops the animation
+            } else {
+                pos++; 
+                elem.style.top = pos + 'px';                    // variable combined with a string
+                elem.style.left = pos + 'px'; 
+            }
+        }
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    -- CODE (HTML) --
+    
+    &lt;button onclick="myMove()"&gt;Click Me&lt;/button&gt; 
+    &lt;div id ="myContainer"&gt;
+        &lt;div id ="myAnimation"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;script&gt;
+    function myMove() {
+        var elem = document.getElementById("myAnimation"); 
+        var pos = 0;
+        var animSystem = setInterval(frame, 10);                // "frame" function fires every "10" milliseconds  
+        function frame() {
+            if (pos == 170) {
+                clearInterval(animSystem);                      // this stops the animation
+            } else {
+                pos++; 
+                elem.style.top = pos + 'px';                    // variable combined with a string
+                elem.style.left = pos + 'px'; 
+            }
+        }
+    }
+&lt;/script&gt;
+
+    -- CODE (CSS) --
+    
+        #myContainer {                          #myAnimation {
+        width: 200px;                               width: 30px;
+        height: 200px;                              height: 30px;
+        position: relative;                         position: absolute;
+        background: yellow;                         background: red;
+    }                                           }
+        </pre>
+        </details>
+<!------------------------------------------------------------------------------------------------------------------>
+<hr>
+<h2><u> solving the restart animation problem when the animation is cotroled by javaScript </u></h2>
+    <p> - CSS can run an animation only once! so the solution make an infinite replacement script which replaces the old element that has ran the animation already by a new one </p>
+    <button onclick="animSt()">start animation</button>
+    <div id="animProblem"></div>
+<script>
+    var clone;
+    
+    var animSt = function() {
+        var elm = document.getElementById('animProblem');
+        clone = elm.cloneNode();
+        
+        elm.parentNode.replaceChild(clone, elm);
+        clone.style.animation = 'animProb 2s ease-out forwards';        
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    -- CODE (HTML) --
+    &lt;button onclick="animSt()"&gt;start animation&lt;/button&gt;
+    &lt;div id="animProblem"&gt;&lt;/div&gt;
+&lt;script&gt;
+    var clone;
+    
+    var animSt = function() {
+        var elm = document.getElementById('animProblem');
+        clone = elm.cloneNode();
+        
+        elm.parentNode.replaceChild(clone, elm);
+        clone.style.animation = 'animProb 2s ease-out forwards';        
+    }
+&lt;/script&gt;
+    
+    -- CODE (CSS) --
+    #animProblem {
+        width: 50px;
+        height: 50px;
+        background-color: mediumspringgreen;
+        border: solid 2px black;
+    }
+    @keyframes animProb {
+        100% { 
+            width: 250px;
+            height: 250px; 
+            transform: rotateZ(1440deg)
+        }
+    }        
+        </pre>
+        </details>
+    
+    
+    
+    
+    
+
+</body>
+</html>

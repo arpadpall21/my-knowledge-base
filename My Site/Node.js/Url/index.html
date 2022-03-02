@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> URL </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> URL (ver 4.0.0) </h1>
+    <p> Updated ( 2019-09-09 / 2019-10-13 / 2020-11-21 / 2020-11-21 / 2022-02-12 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> URL 
+    </p>
+    <pre class="syntax">
+        <span style="color:deepskyblue;">┌────────────────────────────────────────────────────────────────────────────────────────────────┐</span>
+        <span style="color:deepskyblue;">│                                              href                                              │</span>
+        <span style="color:deepskyblue;">├──────────┬──┬─────────────────────┬────────────────────────┬───────────────────────────┬───────┤</span>
+        <span style="color:deepskyblue;">│ protocol │  │        auth         │          host          │           path            │ hash  │</span>
+        <span style="color:deepskyblue;">│          │  │                     ├─────────────────┬──────┼──────────┬────────────────┤       │</span>
+        <span style="color:deepskyblue;">│          │  │                     │    hostname     │ port │ pathname │     search     │       │</span>
+        <span style="color:deepskyblue;">│          │  │                     │                 │      │          ├─┬──────────────┤       │</span>
+        <span style="color:deepskyblue;">│          │  │                     │                 │      │          │ │    query     │       │</span>
+        "  https:   //    user   :   pass   @ sub.example.com : 8080   /p/a/t/h  ?  query=string   #hash "
+        <span style="color:deepskyblue;">│          │  │          │          │    hostname     │ port │          │                │       │</span>
+        <span style="color:deepskyblue;">│          │  │          │          ├─────────────────┴──────┤          │                │       │</span>
+        <span style="color:deepskyblue;">│ protocol │  │ username │ password │          host          │          │                │       │</span>
+        <span style="color:deepskyblue;">├──────────┴──┼──────────┴──────────┼────────────────────────┤          │                │       │</span>
+        <span style="color:deepskyblue;">│  origin     .                     .         origin         │ pathname │     search     │ hash  │</span>
+        <span style="color:deepskyblue;">└─────────────┴─────────────────────┴────────────────────────┴──────────┴────────────────┴───────┘</span>
+    </pre>
+    <br>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>url</strong>.fileURLToPath(<strong>fileUrl:str|obj</strong>) </td>
+        <td> 
+            - converts the passed fileURL to a <u>platform specific fully resolved path</u> and returns it as a string (decodes percent-encoded characters) (fileURL = <mark>file:///D:/Safe/...</mark>)
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            <strong>url</strong>.format(<strong>urlObj</strong>, <i class="openable">option:obj<div>
+                <p> auth: <strong>bol</strong> - include username and password parts (Default: <mark>true</mark>) </p>
+                <p> fragment: <strong>bol</strong> - include hash part (fragment) (Default: <mark>true</mark>) </p>
+                <p> search: <strong>bol</strong> - include querystring part (Default: <mark>true</mark>) </p>
+                <p> unicode: <strong>bol</strong> - host part will be Unicode encoded (not punycode ASCII encoded) (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - serializes and returns the passed <strong>urlObj</strong> (does the same as the <mark>URLObj.href</mark> or <mark>URLObj.toString()</mark> methods but the returned result can be customized by the 2nd argument)
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 7.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>url</strong>.domainToASCII(<strong>hostname:str</strong>) </td>
+        <td> 
+            - converts a Unicode encoded hostname to a punycode ASCII encoded hostname and returns it as a string
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> <strong>url</strong>.domainToUnicode(<strong>hostname:str</strong>) </td>
+        <td> 
+            - converts a punycode ASCII encoded hostname to a Unicode encoded hostname and returns it as a string
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>url</strong>.pathToFileURL(<strong>path:str</strong>) </td>
+        <td> 
+            - converts the passed path to fileURL and returns it as a URL object (non URL valid characters will be percent-encoded) (fileURL = <mark>file:///D:/Safe/...</mark>)
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    WHATWG URL API 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            new <strong>url</strong>.URL(<strong>inputUrl:str</strong>, <i>baseUrl:str|urlObj</i>) <br><br>
+            new URL(<strong>inputUrl:str</strong>, <i>baseUrl:str|urlObj</i>)
+        </td>
+        <td> 
+            - returns a <strong>urlObj</strong> object instance which implements the WHATWG URL Standards <br>
+            - the <mark>delete</mark> keyword cannot delete properties of this object <u>however it returns <mark>true</mark></u> <br>
+            - this class is also available in the global object (from Node.js 10.0.0) <br>
+            - if the <strong>inputUrl:str</strong> is a relative URL then the <i>baseUrl:str|urlObj</i> is required, if the <strong>inputUrl:str</strong> is an absolute URL then the <i>baseUrl:str|urlObj</i> is ignored <br>
+            - non-ASCII charaters in the <mark>hostname</mark> will be automatically converted to ASCII using the <u>Punycode algorithm</u> (if ICU (International Components for Unicode) enabled) <br>
+            - invalid URL characters will be converted to percent-encoded characters in <mark>username</mark> <mark>password</mark> <mark>pathname</mark> <mark>search</mark> <mark>hash</mark> URL parts <br>
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 part of the global object </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.04">
+        <td> <strong>urlObj</strong>.hash </td>
+        <td> 
+            - gets or sets the hash (document fragment) portion of the URL (non URL valid characters will be percent-encoded when set)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>urlObj</strong>.host </td>
+        <td> 
+            - gets or set the host portion of the URL (host = hostname + port) (invalid host values are ignored)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>urlObj</strong>.hostname </td>
+        <td> 
+            - gets or set the hostname portion of the URL (invalid hostname values are ignored)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>urlObj</strong>.href </td>
+        <td> 
+            - gets or sets the serialized value of the full URL, setting this property is equivalent of creating a new URL object
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>urlObj</strong>.origin </td>
+        <td> 
+            - gets the origin portion of the URL (origin = protocol + hostname + port) (getter only)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>urlObj</strong>.password </td>
+        <td> 
+            - gets or sets the password portion of the URL (non URL valid characters will be percent-encoded when set)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>urlObj</strong>.pathname </td>
+        <td> 
+            - gets or sets the path protion of the URL (non URL valid characters will be percent-encoded when set)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <strong>urlObj</strong>.port </td>
+        <td> 
+            - gets or set the port protion of the URL <u>(string or number)</u> (valid values are <mark>0</mark>-<mark>65535</mark>(inclusive)) <br>
+            - value is parsed from left-to-right, leftmost valid numbers will be taken like the <mark>parseInt()</mark> number method does
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>urlObj</strong>.protocol </td>
+        <td> 
+            - gets or sets the protocol portion of the URL (special protocols : <mark>ftp</mark> <mark>gopher</mark> <mark>http</mark> <mark>https</mark> <mark>ws</mark> and <mark>wss</mark>) <br>
+            - special protocols can be changed to another sepcial one and non-special protocols can be changed to another non-sepcial only! 
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>urlObj</strong>.search </td>
+        <td> 
+            - gets or sets the querystring portion of the URL (non URL valid characters will be percent-encoded when set)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.03">
+        <td> <strong>urlObj</strong>.serachParams </td>
+        <td> 
+            - returns the <mark>URLSearchParams</mark> object which is an API for the querystring portion of the URL (getter property only)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>urlObj</strong>.toJSON() </td>
+        <td> 
+            - gets the serialized value of the full URL (same as <mark>href</mark> and <mark>toString()</mark>)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>urlObj</strong>.toString() </td>
+        <td> 
+            - gets the serialized value of the full URL (same as <mark>href</mark> and <mark>toJSON()</mark>)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>urlObj</strong>.username </td>
+        <td> 
+            - gets or sets the username portion of the URL (non URL valid characters will be percent-encoded when set)
+            <span id="browserSupport" title="updated : 2019-09-14">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    URLSearchParams (query string API of URL) 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td>  
+            <strong>urlObj</strong>.serachParams 
+        </td>
+        <td> 
+            - returns the <strong>urlSrcParObj</strong> of the <strong>urlObj</strong> object            
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            new URLSearchParams(<i class="openable">querystring:str|obj|iterableObj<div>
+                <p> <i>str</i> - querystring (leading <mark>&</mark> ignored) </p>
+                <p> <i>obj</i> - object key value pairs used in querystring <u>(duplicate keys are ignored)</u> </p>
+                <p> <i>iterableObj</i> - iterable object whose items are key-value pairs <u>(duplicate keys are allowed)</u> (ex: <mark>[['key1', 'val1'], ['key2', 'val2']]</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - creates and return an <strong>urlSrcParObj</strong> object which can be used as standalone API 
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 part of the global object  </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.04">
+        <td> <strong>urlSrcParObj</strong>.append(<strong>key:str</strong>, <strong>val:str</strong>) </td>
+        <td> 
+            - appends a new key-value pair to the querystring
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.05">
+        <td> <strong>urlSrcParObj</strong>.delete(<strong>key:str</strong>) </td>
+        <td> 
+            - removes all key-value pairs whose key is <strong>key:str</strong>
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>urlSrcParObj</strong>.entries() </td>
+        <td> 
+            - returns an ES6 iterable object containing all the key-value pairs of the querystring (each item contains a key-value pair array)
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>urlSrcParObj</strong>.forEach(<strong>fn(val, key, searchParamsObj)</strong>, <i>thisVal:obj</i>) </td>
+        <td> 
+            - runs a function for each key-value pair in the querystring
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>urlSrcParObj</strong>.get(<strong>key:str</strong>) </td>
+        <td> 
+            - returns the value of the <u>first</u> key-value pair whose key is <strong>key:str</strong>
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>urlSrcParObj</strong>.getAll(<strong>key:str</strong>) </td>
+        <td> 
+            - returns the values in an Array of <u>all key-value pairs</u> whose key is <strong>key:str</strong>
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>urlSrcParObj</strong>.has(<strong>key:str</strong>) </td>
+        <td> 
+            - returns <mark>true</mark> if there is at least one <strong>key:str</strong> in the querystring, otherwise returns <mark>false</mark> 
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>urlSrcParObj</strong>.keys() </td>
+        <td> 
+            - retruns an ES6 iterable object containing all the keys of the querystring
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>urlSrcParObj</strong>.set(<strong>key:str</strong>, <strong>val:str</strong>) </td>
+        <td> 
+            - sets a the key-value pair (appends a new if the key does not exist, replaces <u>all existing keys</u> by this single key-value pair)
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <strong>urlSrcParObj</strong>.sort() </td>
+        <td> 
+            - sort key-value pairs alphabetically by using the 'stable sort algorithm' (same elements are grouped together in the order they appear in the input)
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>urlSrcParObj</strong>.toString() </td>
+        <td> 
+            - returns the serialized value of the object
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.03">
+        <td> <strong>urlSrcParObj</strong>.value() </td>
+        <td> 
+            - returns an ES6 iterable object containing all the values of the querystirng 
+            <span id="browserSupport" title="updated : 2019-09-16">
+                <span><i class="fab fa-node-js"></i> 6.13.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v17.x/docs/api/url.html" target="_blanc"> URL (node.js.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Node.js provides two URL APIs </p>
+    <p> &nbsp; &nbsp; * the <u>WHATWG URL API</u> that implements the WHATWG URL Standards </p>
+    <p> &nbsp; &nbsp; * the <u>Legacy Node.js URL API</u> which is deprecated from node v11.0.0 but kept for backward compatibility <u style="color:yellow;">NOT TESTED [2019-09-13]</u></p> 
+    <pre class="syntax">
+SYNTAX:     new <strong>url</strong>.URL(<strong>url:str</strong>)                                                       // WHATWG API returns a URL object 
+            new URL(<strong>url:str</strong>)
+            
+            <strong>url</strong>.parse(<strong>url:str</strong>)                                                         // Legacy Url API (returns a Url object) <u style="color:orange;">[NOT TESTED => Deprecated node v11.0.0]</u>   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const url = require('url');
+    
+// WHATWG URL API ---------------------------------------------------------------------
+    new url.URL('https://user:pass@sub.example.com:8080/p/a/t/h?query=string#hash');   // returns a URL object 
+    new URL('https://user:pass@sub.example.com:8080/p/a/t/h?query=string#hash');       // -! available in the global object form Node 10.0.0
+    
+// Legacy URL API ---------------------------------------------------------------------
+    url.parse('https://user:pass@sub.example.com:8080/p/a/t/h?query=string#hash');     // returns a URL object 
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>domainToASCII()</mark> / <mark>domainToUnicode()</mark> / <mark>pathToFileURL()</mark> / <mark>fileURLToPath()</mark> / <mark>format()</mark>  methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const url = require('url');
+        
+// domainToASCII() / domainToUnicode() ------------------------------------------------
+    url.domainToASCII('légion-étrangère.fr');                                          // -> 'xn--lgion-trangre-6gbef.fr'         // Unicode encoded domain converted to punycode encoded one     
+    url.domainToUnicode('xn--lgion-trangre-6gbef.fr');                                 // -> 'légion-étrangère.fr'                // Punycode encoded domain converted to Unicode encoded one    
+        
+// pathToFileURL() / fileURLToPath() --------------------------------------------------
+    url.pathToFileURL('C:\\server\\demo page\\index.html');                            // -> URL {href:'file:///C:/server/demo%20page/index.html', ...}   // path converted to a fileURL and returned as a URL object   
+    url.fileURLToPath('file:///C:/server/demo%20page/index.html');                     // -> 'C:\server\demo page\index.html'                             // fileURL converted to a (platform specific) path and returned   
+    
+// format() ---------------------------------------------------------------------------
+    var myURL = new URL('http://pall:myCode@mySíte.hu/main/index.html?car1=a7&car2=t_roadster#id2');
+    
+    url.format(myURL, {unicode:false, auth:true, search:true, fragment:true});         // -> 'http://pall:myCode@xn--myste-1sa.hu/main/index.html?car1=a7&car2=t_roadster#id2'    // default values (same as 'href' or 'toString()' or 'toJSON()')   
+    url.format(myURL, {auth:false, search:false, fragment:false});                     // -> 'http://xn--myste-1sa.hu/main/index.html'                                            // (user | password | search | hash) fields are removed    
+    url.format(myURL, {unicode:true});                                                 // -> 'http://pall:myCode@mysíte.hu/main/index.html?car1=a7&car2=t_roadster#id2'           // host part Unicode encoded (not punycode)
+    </pre>
+</details>
+<details class="example">
+<summary> Example </summary>
+<h4 style="color:darkblue;"><u> <mark>domainToASCII()</mark> / <mark>domainToUnicode()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+    console.log( url.domainToASCII('súb.myszájt.hu') );                          // converts to punycode ASCII 
+    console.log( url.domainToUnicode('xn--sb-rka.xn--myszjt-sta.hu') );          // converts to Unicode 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\11 domainToASCII() domainToUnicode() TEST> node main
+        xn--sb-rka.xn--myszjt-sta.hu                                             // -! url.domainToASCII('súb.myszájt.hu');             
+        súb.myszájt.hu                                                           // -! url.domainToUnicode('xn--sb-rka.xn--myszjt-sta.hu');
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\11 domainToASCII() domainToUnicode() TEST>    
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>pathToFileURL()</mark> / <mark>fileURLToPath()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+    console.log( url.pathToFileURL(__filename) );           // current path converted to a fileURL and returned in a URL object 
+    console.log( url.fileURLToPath('file:///D:/Safe/CODE%20+/My%20Site/03%20Improuve/Learn%20Webdesign/04%20Node.js/Url%20-%20Query%20String/index.html') );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\12 pathToFileURL() fileURLToPath() TEST> node main
+// pathToFileURL() --------------------------------------------------------------
+        URL {                                                                    // -! url.pathToFileURL(__filename)
+        href: 'file:///D:/safe/code%20+/my%20site/03%20improuve/learn%20webdesign/04%20node.js/url%20-%20query%20string/12%20pathToFileURL()%20fileURLToPath()%20TEST/main.js',
+        origin: 'null',
+        protocol: 'file:',
+        username: '',
+        password: '',
+        host: '',
+        hostname: '',
+        port: '',
+        pathname: '/D:/safe/code%20+/my%20site/03%20improuve/learn%20webdesign/04%20node.js/url%20-%20query%20string/12%20pathToFileURL()%20fileURLToPath()%20TEST/main.js',
+        search: '',
+        searchParams: URLSearchParams {},
+        hash: ''
+        }
+// fileURLToPath() --------------------------------------------------------------
+        D:\Safe\CODE +\My Site\03 Improuve\Learn Webdesign\04 Node.js\Url - Query String\index.html     // -! url.fileURLToPath('file:///D:/Safe/CODE%20+/My%20Site/03%20Improuve/Learn%20Webdesign/04%20Node.js/Url%20-%20Query%20String/index.html');   
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\12 pathToFileURL() fileURLToPath() TEST>    
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>format()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+    var myUrl = new url.URL('http://me:mypass@mysíte.com/main/sub/index.html?key1=11&key2=12#fragId23');
+    
+    console.log( url.format(myUrl) );                                               // default (same as the 'href', 'toString()' and 'toJSON()' methods)
+    console.log( url.format(myUrl, {auth:false, search:false, fragment:false}) );   // user password search hash parts are removed 
+    console.log( url.format(myUrl, {unicode:true}) );                               // hostname Unicode encoded as opposed to punycode encoded    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\13 format() TEST> node main
+        http://me:mypass@xn--myste-1sa.com/main/sub/index.html?key1=11&key2=12#fragId23     // -! url.format(myUrl) );                                               // default (same as the 'href', 'toString()' and 'toJSON()' methods)    
+        http://xn--myste-1sa.com/main/sub/index.html                                        // -! url.format(myUrl, {auth:false, search:false, fragment:false}) );   // user password search hash parts are removed     
+        http://me:mypass@mysíte.com/main/sub/index.html?key1=11&key2=12#fragId23            // -! url.format(myUrl, {unicode:true}) );                               // hostname Unicode encoded as opposed to punycode encoded     
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\13 format() TEST>    
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The WHATWG URL API <mark>href</mark> / <mark>origin</mark> / <mark>protocol</mark> / <mark>host</mark> / <mark>hostname</mark> / <mark>port</mark> / <mark>pathname</mark> / <mark>search</mark> / <mark>searchParams</mark> / <mark>hash</mark> / <mark>username</mark> / <mark>password</mark> / <mark>toString()</mark> / <mark>toJSON()</mark> methods </u></h2>
+    <p> - the WHATWG URL Standard uses a selective 'fine grained' algorithm to percent encode different URL parts than the Legacy API <a href="https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_whatwg_api" target="_blanc"> WHATWG URL percent encoding </a></p>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - <mark>URL</mark> object </p>
+    <pre>
+    const url = require('url');
+    
+// URL() Class ------------------------------------------------------------------
+    new url.URL('http://mySite.com/page1/index.html');                                 // -> URL {href:'http://mysite.com/page1/index.html', ...}     // returns a URL object    
+    new URL('http://mySite.com/page1/index.html');                                     // -> URL {href:'http://mysite.com/page1/index.html', ...}     // -! from Node.js 10.0.0 the "URL" class is built-in the global object    
+    
+    new URL('http://mySite.com/page1/index.html', 'http://yourSite/index.html');       // -> URL {href:'http://mysite.com/page1/index.html', ...}     // first argument is an absolute URL = second argument is ignored   
+    new URL('/page1/index.html', 'http://yourSite.com/');                              // -> URL {href:'http://yoursite.com/page1/index.html', ...}   // first argument is a relative URL = second argument is used as base for the URL   
+    
+    new URL('/header/index.html', new URL('http://mySite.com/page1/'));                // -> URL {href:'http://mysite.com/header/index.html', ...}    // 2nd argument can be a URL object 
+    new URL(new URL('http://mySite.com/page1/index.html'));                            // -> URL {href:'http://mysite.com/page1/index.html', ...}     // URL object can be passed alone 
+    
+  // delete keyword cannot delete URL properties -------------------------
+    var myUrl =  new url.URL('http://mySite.com/page1/index.html');
+    
+    delete myUrl.pathname;                                                             // -> true                                                      // !! returns true but does NOT delete the property   
+    myUrl.pathname;                                                                    // -> '/page1/index.html'                                       // property is NOT deleted   
+    
+  // non-ASCII characters in hostname are converted by punycode ----------
+    new URL('http://இഋ/page1/index.html');                                            // -> URL {href:'http://xn--xkc09e/page1/index.html', ...}      // in the hostname non-ASCII characters are converted to ASCII characters by the punycode algorithm   
+    </pre>
+    <p> - <mark>URL</mark> object methods and properties </p>
+    <pre>
+    const url = require('url');
+    var myUrl = new url.URL('https://PityiPalko:fahaz@nagymese.ro:266/main/title1/index.html?color=red&shape=circle#frg33');
+    
+// href / toString / toJSON -----------------------------------------------------------
+    myUrl.href;                                                                        // -> 'https://PityiPalko:fahaz@nagymese.ro:266/main/title1/index.html?color=red&shape=circle#frg33'             // all 3 methods return the serialized value of the URL object   
+    myUrl.toString();                                                                  // -> 'https://PityiPalko:fahaz@nagymese.ro:266/main/title1/index.html?color=red&shape=circle#frg33'
+    myUrl.toJSON();                                                                    // -> 'https://PityiPalko:fahaz@nagymese.ro:266/main/title1/index.html?color=red&shape=circle#frg33'
+    
+    myUrl.href = 'http://otthon.hu';                                                   // setting this property recreates the whole URL object 
+    
+// protocol / origin ------------------------------------------------------------------
+    myUrl.protocol;                                                                    // -> 'https:'
+    myUrl.protocol = 'http';                                                           // this works because a special protocol is changed to another special one  
+    myUrl.protocol = 'someProtocol';                                                   // -! this does NOT work because a special protocol cannot be changed to a non-special one   
+    
+    myUrl.origin;                                                                      // -> 'https://nagymese.ro:266'
+    myUrl.origin = 'http://facebook.com';                                              // this does not work because this property is a getter only
+    
+// username / password ----------------------------------------------------------------
+    myUrl.username;                                                                    // -> 'PityiPalko'
+    myUrl.username = 'Pity Palko';                                                     // URL-unsafe characters will be serialized when set ('Pity%20Palko')
+    
+    myUrl.password;                                                                    // -> 'fahaz'
+    myUrl.password = 'fa haz';                                                         // URL-unsafe characters will be serialized when set ('fa%20haz')
+    
+// host / hostname / port -------------------------------------------------------------
+    myUrl.host;                                                                        // -> 'nagymese.ro:266'
+    myUrl.host = 'kicsim ese.ro:8080';                                                 // -! this is ignored because it's not a valid host value 
+    myUrl.host = 'kicsimese.ro:8080';                                                  // property set 
+    
+    myUrl.hostname;                                                                    // -> 'nagymese.ro'
+    myUrl.hostname = 'kicsi mese.ro';                                                  // -! this is ignored because it's not a valid host value 
+    myUrl.hostname = 'kicsimese.ro';                                                   // property set 
+    
+    myUrl.port;                                                                        // -> '266'
+    myUrl.port = 447;
+    myUrl.port = '448';                                                                // we can use a string or a number 
+    myUrl.port = 21.44;                                                                // port value set to '21' (first integers are taken)        
+    myUrl.port = '548 kutya';                                                          // port value set to '548' (first integers are taken from the string)
+    myUrl.port = 548799;                                                               // -! this is ignored because this value is out of a valid port value range  
+    
+// pathname / search / searchParams / hash --------------------------------------------
+    myUrl.pathname;                                                                    // -> '/secondary%20Directory/subTitle/index.html'
+    myUrl.pathname = '/secondary Directory/subTitle/index.html';                       // URL-unsafe characters will be serialized when set ('/secondary%20Directory/subTitle/index.html')
+    
+    myUrl.search;                                                                      // -> '?color=red&shape=circle'
+    myUrl.search = myUrl.search +'&size=32px®'                                         // URL-unsafe characters will be serialized when set ('?color=red&shape=circle&size=32px%C2%AE')
+    
+    myUrl.searchParams;                                                                // -> URLSearchParams {}                 // URLSearchParams object returned (getter only property)   
+    
+    myUrl.hash;                                                                        // -> '#frg33'
+    myUrl.hash = 'doc144 ';                                                            // URL-unsafe characters will be serialized when set ('#doc144%20') 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>URL()</mark> Class TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+    console.log( new URL('https://nodejs.org/dist/latest-v12.x/docs/api/url.html') );
+    console.log( new URL('/dist/latest-v12.x/docs/api/url.html', 'https://nodejs.org') );           // relative url = base url is used 
+    console.log( new URL('https://nodejs.org/dist/latest-v12.x', 'http://someDomain.co.uk') );      // absolute url = base url is ignored 
+    console.log( new URL(new URL('https://nodejs.org/dist/latest-v12.x/docs/api/url.html')) );      // urlObject can be passed alone 
+    console.log( new URL(new URL('api/url.html'), 'https://nodejs.org/dist/latest-v12.x/docs/') );  // inputUrl and urlObject 
+    
+// delete keyword TEST -----------------------------------------------------------------------------
+    var url1 = new url.URL('/dist/latest-v12.x/docs/api/url.html', 'https://nodejs.org');
+    
+    console.log( delete url1.pathname );                                                            // -> true      // properties cannot be deleted by the 'delete' keyword (but it returns true)
+    console.log( url1.pathname );                                                                   // property NOT deleted!!!  
+    
+// punycode algorithm TEST -------------------------------------------------------------------------
+    console.log( new url.URL('http://測試.jp/someFolder/AnotherFoldter/index.html') );              // non-ASCII characters in the hostname will be automatically converted by usint the Punycode algorithm
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\03 URL() Class TEST> node main             
+        URL {                                                                    // -! new URL('https://nodejs.org/dist/latest-v12.x/docs/api/url.html');
+            href: 'https://nodejs.org/dist/latest-v12.x/docs/api/url.html',
+            origin: 'https://nodejs.org',
+            protocol: 'https:',
+            username: '',
+            password: '',
+            host: 'nodejs.org',
+            hostname: 'nodejs.org',
+            port: '',
+            pathname: '/dist/latest-v12.x/docs/api/url.html',
+            search: '',
+            searchParams: URLSearchParams {},
+            hash: ''
+        }
+        URL {                                                                    // -! new URL('/dist/latest-v12.x/docs/api/url.html', 'https://nodejs.org');       // relative url = base url is used   
+            href: 'https://nodejs.org/dist/latest-v12.x/docs/api/url.html',
+            origin: 'https://nodejs.org',
+            protocol: 'https:',
+            username: '',
+            password: '',
+            host: 'nodejs.org',
+            hostname: 'nodejs.org',
+            port: '',
+            pathname: '/dist/latest-v12.x/docs/api/url.html',
+            search: '',
+            searchParams: URLSearchParams {},
+            hash: ''
+        }
+        URL {                                                                    // -! new URL('https://nodejs.org/dist/latest-v12.x', 'http://someDomain.co.uk');  // absolute url = base url is ignored
+            href: 'https://nodejs.org/dist/latest-v12.x',
+            origin: 'https://nodejs.org',
+            protocol: 'https:',
+            username: '',
+            password: '',
+            host: 'nodejs.org',
+            hostname: 'nodejs.org',
+            port: '',
+            pathname: '/dist/latest-v12.x',
+            search: '',
+            searchParams: URLSearchParams {},
+            hash: ''
+        }
+        URL {                                                                    // -! new URL(new URL('https://nodejs.org/dist/latest-v12.x/docs/api/url.html'));  // urlObject can be passed alone 
+            href: 'https://nodejs.org/dist/latest-v12.x/docs/api/url.html',
+            origin: 'https://nodejs.org',
+            protocol: 'https:',
+            username: '',
+            password: '',
+            host: 'nodejs.org',
+            hostname: 'nodejs.org',
+            port: '',
+            pathname: '/dist/latest-v12.x/docs/api/url.html',
+            search: '',
+            searchParams: URLSearchParams {},
+            hash: ''
+        }
+        URL {                                                                    // -! new URL(new URL('api/url.html'), 'https://nodejs.org/dist/latest-v12.x/docs/');  // inputUrl and urlObject 
+            href: 'https://nodejs.org/dist/latest-v12.x/docs/api/url.html',
+            origin: 'https://nodejs.org',
+            protocol: 'https:',
+            username: '',
+            password: '',
+            host: 'nodejs.org',
+            hostname: 'nodejs.org',
+            port: '',
+            pathname: '/dist/latest-v12.x/docs/api/url.html',
+            search: '',
+            searchParams: URLSearchParams {},
+            hash: ''
+        }        
+// delete keyword TEST ----------------------------------------------------------
+        true                                                                     // -! delete url1.pathname                      
+        /dist/latest-v12.x/docs/api/url.html                                     // -! url1.pathname                // !! property NOT deleted
+// punycode algorithm TEST ------------------------------------------------------
+        URL {                                                                    // -! new url.URL('http://測試.jp/someFolder/AnotherFoldter/index.html');  // non-ASCII characters in the hostname will be automatically converted by using the Punycode algorithm
+            href: 'http://xn--g6w251d.jp/someFolder/AnotherFoldter/index.html',
+            origin: 'http://xn--g6w251d.jp',
+            protocol: 'http:',
+            username: '',
+            password: '',
+            host: 'xn--g6w251d.jp',
+            hostname: 'xn--g6w251d.jp',
+            port: '',
+            pathname: '/someFolder/AnotherFoldter/index.html',
+            search: '',
+            searchParams: URLSearchParams {},
+            hash: ''
+        }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\03 URL() Class TEST>     
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>href</mark> / <mark>toString()</mark> / <mark>toJSON()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+    var myURL = new url.URL('https://github.com/nodejs/node/tree/master/tools/icu');
+    
+// href ------------------------------------------------------------------------------------
+    console.log( PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\04 href toString() toJSON() TEST> node main                                                                                                   https://github.com/nodejs/node/tree/master/tools/icu
+https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href
+https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href
+https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href
+PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\04 href toString() toJSON() TEST> );
+    
+    myURL.href = 'https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href';     // this entierly recreates the URL object 
+    console.log( myURL.href );
+    
+// toString() ------------------------------------------------------------------------------
+    console.log( myURL.toString() );
+    
+// toJSON() --------------------------------------------------------------------------------
+    console.log( myURL.toJSON() );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\04 href toString() toJSON() TEST> node main    
+// href ------------------------------------------------------------------------
+        https://github.com/nodejs/node/tree/master/tools/icu                    // -! myUrl.href    
+        https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href     // -! myUrl.href            // after setting the 'href' property  
+// toString() ------------------------------------------------------------------
+        https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href     // -! myUrl.toString()
+// toJSON() --------------------------------------------------------------------
+        https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_url_href     // -! myUrl.toJSON()
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\04 href toString() toJSON() TEST>
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>protocol</mark> / <mark>origin</mark> / <mark>username</mark> / <mark>password</mark> / <mark>host</mark> / <mark>port</mark> / <mark>hostname</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+        const url = require('url'); 
+    
+    let myUrl = new url.URL( 'https://sanyi:someCode@SanyiSite.com:8080/main/page1/index.html' );
+    let myUrl2 = new url.URL( 'gyurka://someSite.com' );
+    
+// protocol --------------------------------------------------------------------
+    console.log( myUrl.protocol );                                              // special to special URL changing works 
+    myUrl.protocol = 'http';
+    console.log( myUrl.protocol );
+    
+    console.log( myUrl2.protocol );                                             // non-special to non-special URL changing works 
+    myUrl2.protocol = 'pista';
+    console.log( myUrl2.protocol );
+    
+    console.log( myUrl.protocol );                                              // special to non-special (and vice versa) does NOT work 
+    myUrl.protocol = 'pista';
+    console.log( myUrl.protocol );
+    
+// origin ----------------------------------------------------------------------
+    console.log( myUrl.origin );
+    myUrl.origin = 'https://botiSite.com:244';                                  // property cannot be set (getter only)
+    console.log( myUrl.origin );                                                
+    
+// username / password ---------------------------------------------------------
+    console.log( myUrl.username );
+    console.log( myUrl.password );
+    
+    myUrl.username = 'Biro Sandor'                                              // invalid URL characters will be percent encoded (the space here )
+    myUrl.password = 'kicsi kutya'                                              // invalid URL characters will be percent encoded (the space here )
+    
+    console.log( myUrl.username );
+    console.log( myUrl.password );
+    
+// host / hostname / port ------------------------------------------------------
+    console.log( myUrl.host );
+        myUrl.host = 'gyuri site.fr:80';                                        // this is entirely ignored because it is not a valid host 
+        myUrl.host = 'gyuri_site.fr:244';
+    console.log( myUrl.host );
+    
+    console.log( myUrl.hostname );
+        myUrl.hostname = 'kati site.uk';                                        // this is entirely ignored because it is not a valid host 
+        myUrl.hostname = 'kati-site.uk';
+    console.log( myUrl.hostname );
+    
+    console.log( myUrl.port );
+        myUrl.port = 'abs';                                                     // ignored beause it is not a valid port number 
+        myUrl.port = '12he';                                                    // value is parse from left-to-righ, leading numbers will be taken until possible 
+    console.log( myUrl.port );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\05 protocol origin username password host port hostname TEST> node main 
+// protocol --------------------------------------------------------------------
+        https:                                                                  // -! myUrl.protocol
+        http:                                                                   // -! myUrl.protocol            // after setting
+        gyurka:                                                                 // -! myUrl.protocol
+        pista:                                                                  // -! myUrl.protocol            // after setting
+        http:                                                                   // -! myUrl.protocol
+        http:                                                                   // -! myUrl.protocol            // after setting
+// origin ----------------------------------------------------------------------
+        http://sanyisite.com:8080                                               // -! myUrl.origin
+        http://sanyisite.com:8080                                               // -! myUrl.origin              // after setting (getter-only property)
+// user / password -------------------------------------------------------------
+        sanyi                                                                   // -! myUrl.username
+        someCode                                                                // -! myUrl.password 
+        Biro%20Sandor                                                           // -! myUrl.username            // after setting this property (non URL-valid characers are percent encoded)   
+        kicsi%20kutya                                                           // -! myUrl.password            // after setting this property (non URL-valid characers are percent encoded)   
+// host / hostname / port ------------------------------------------------------
+        sanyisite.com:8080                                                      // -! myUrl.host
+        gyuri_site.fr:244                                                       // -! myUrl.host                // after setting 
+        gyuri_site.fr                                                           // -! myUrl.hostname
+        kati-site.uk                                                            // -! myUrl.hostname            // after setting 
+        244                                                                     // -! myUrl.port
+        12                                                                      // -! myUrl.port                // after setting 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\05 protocol origin username password host port hostname TEST>    
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>pathname</mark> / <mark>search</mark> / <mark>searchParams</mark> / <mark>hash</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+    var myUrl = new URL('https://SanyiSite.com:8080/main/page1/index.html?book1=oz&book2=mega man#marker23');
+    
+// pathname --------------------------------------------------------------------
+    console.log( myUrl.pathname );
+        myUrl.pathname = '/main2/subPage/index.html';
+    console.log( myUrl.pathname );
+
+// serach / serachParams -------------------------------------------------------
+    console.log( myUrl.search );
+        myUrl.search = myUrl.search + '&book3=JonyȆMary';                       // non URL-valid characters are encoded to percent-encoded characters 
+    console.log( myUrl.search );
+    
+    console.log( myUrl.searchParams );                                          // returns the URLSearchParams object which is a querystring specialized API  
+    
+// hash ------------------------------------------------------------------------
+    console.log( myUrl.hash );
+        myUrl.hash = 'marker24 32';                                             // non URL-valid characters are encoded to percent-encoded characters
+    console.log( myUrl.hash );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\06 pathname search serachParams hash TEST> node main  
+// pathname --------------------------------------------------------------------
+        /main/page1/index.html                                                  // -! myUrl.pathname
+        /main2/subPage/index.html                                               // -! myUrl.pathname            // after setting 
+// search / searchParams -------------------------------------------------------
+        ?book1=oz&book2=mega%20man                                              // -! myUrl.search
+        ?book1=oz&book2=mega%20man&book3=Jony%C8%86Mary                         // -! myUrl.search              // after setting 
+        URLSearchParams { 'book1' => 'oz', 'book2' => 'mega man', 'book3' => 'JonyȆMary' }                      // -! myUrl.searchParams 
+// hash ------------------------------------------------------------------------
+        #marker23                                                               // -! myUrl.hash
+        #marker24%2032                                                          // -! myUrl.hash                // after setting 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\Url - Query String\06 pathname search serachParams hash TEST>     
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>URLSearchParams</mark> API </u> (Query String part of <mark>URL</mark>) </h2>
+<h3 style="color:darkblue;"><u> The <mark>toString()</mark> / <mark>get()</mark> / <mark>getAll()</mark> / <mark>set()</mark> / <mark>append()</mark> / <mark>delete()</mark> / <mark>entries()</mark> / <mark>keys()</mark> / <mark>values()</mark> / <mark>has()</mark> / <mark>forEach()</mark> / <mark>sort()</mark>  methods </u></h3>
+    <p> - the <mark>URLSearchParams</mark> object is part of the <mark>URL</mark> object, which deals with the query string part of the url </p>
+    <p> - the <mark>URLSearchParams</mark> is also a standalone API (can be separately) </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// controls the querystring throug the URL object -------------------------------------
+    var myUrl = new URL('http://mySite.com/main.html?key1=21&key2=22');
+    myUrl.searchParams.append('key3', 23);                                             // URLSearchParams can directly control the querystring part in an URL object (this append a new key-value pair to the querystring for instance)    
+    
+// sandalone API ----------------------------------------------------------------------
+    new URLSearchParams();                                                             // -> URLSearchParams {}                                       // empty URLSearchParams object 
+    new URLSearchParams('key1=21&key2=22');                                            // -> URLSearchParams {'key1' => '21', 'key2' => '22'}         // URLSearchParams object created from a querystring   
+    
+    new URLSearchParams({key1:21, key2:22, key2:23});                                  // -> URLSearchParams {'key1' => '21', 'key2' => '23'}         // URLSearchParams object created from an object                        // !! duplicate keys are ignored   
+    new URLSearchParams([['key1', 21], ['key2', 22], ['key2', 23]]);                   // -> URLSearchParams {'key1' => '21', 'key2' => '22', 'key2' => '23'}   // URLSearchParams object created from an iterable object     // -! duplicate keys are allowed   
+    new URLSearchParams(['key1', 21, 'key2', 22, 'key2', 23]);                         // -! TypeError (iteralbe object items must be key-value pairs)  
+    
+    myUrl.searchParams = new URLSearchParams([['key11', 21], ['key12', 22], ['key13', 23]]);   // !! for some reason the new object is NOT assigned (so the original object is not replaced by the new URLSearchParams object)   
+    myUrl.toJSON;                                                                      // ->  'http://mysite.com/main.html?key1=21&key2=22&key3=23'   // original URL's querystring is NOT modified       
+    </pre>
+    <pre>
+    var myQuerystring = new URLSearchParams([['key2', 2], ['key3', 3], ['key1', 1], ['key3', 3.1], ['key1', 1.1], ['key2', 2.2], ['key1', 1.2]]);
+    
+// get() / getAll() / set() / append() / delete() -------------------------------------
+    myQuerystring.get('key1');                                                         // -> '1'                              // returns the first value of the passed key 
+    myQuerystring.getAll('key1');                                                      // -> ['1', '1.1', '1.2']              // retunrs all values in an Array of the passed key
+    
+    myQuerystring.set('key3', 3);                                                      // removes all 'key3' key-value pairs and appends this sigle one   // -> {'key2':'2', 'key3':'3', 'key1':'1', 'key1':'1.1', 'key2':'2.1', 'key1':'1.2'}   
+    myQuerystring.set('key4', 4);                                                      // appends this new key-value pair to the querystirng              // -> {'key2':'2', 'key3':'3', 'key1':'1', 'key1':'1.1', 'key2':'2.1', 'key1':'1.2', 'key4':'4'}    
+    
+    myQuerystring.append('key5', 5);                                                   // appends this new key-value (creates a new pair)                 // -> {'key2':'2', 'key3':'3', 'key1':'1', 'key1':'1.1', 'key2':'2.1', 'key1':'1.2', 'key4':'4', 'key2','2.2'}    
+    
+    myQuerystring.delete('key1');                                                      // deleted all 'key1' key-value pairs                              // -> {'key2':'2', 'key3':'3', 'key2':'2.1', 'key4':'4', 'key2','2.2'}    
+    
+// entries() / keys() / values() ------------------------------------------------------
+    myQuerystring.entries();                                                           // -> {['key2', '2'], ['key3', '3'], ['key1', '1'], ['key3', '3.1'], ['key1', '1.1'], ['key2', '2.1'], ['key1', '1.2']}  // ES6 iterable object containing key-value pairs   
+    myQuerystring.keys();                                                              // -> {'key2', 'key3', 'key1', 'key3', 'key1', 'key2', 'key1'}     // ES6 iterable object containing querystirng keys   
+    myQuerystring.values();                                                            // -> {'2', '3', '1', '3.1', '1.1', '2.1', '1.2'}                  // ES6 iteralbe object containing querystring values    
+    
+// has() / forEach() / sort() ---------------------------------------------------------
+    myQuerystring.has('key3');                                                         // -> true 
+    myQuerystring.has('key4');                                                         // -> false  
+    
+    myQuerystring.forEach(function(val, key, obj){                                     // function invoked at each key-value pairs   
+        val;                                                                           // -> '2'    |  '3'   |  '1'   |  '3.1' |  '1.1' |  '2.1' |  '1.2'
+        key;                                                                           // -> 'key2' | 'key3' | 'key1' | 'key3' | 'key1' | 'key2' | 'key1'
+        obj;                                                                           // -> this URLSearchParams object itself 
+        this;                                                                          // -> {prop1:21}   // object set as this value 
+    }, {prop1:21})
+    
+    myQuerystring.sort();                                                              // sort key-value pairs in alphabetical order using the 'stable sort algorithm' (same elements are sorted in the input order)   
+    myQuerystring;                                                                     // -> {'key1'=>'1', 'key1'=>'1.1', 'key1'=>'1.2', 'key2'=>'2', 'key2'=>'2.1', 'key3'=>'3', 'key3'=>'3.1'}  
+                                                                                       // key-value pairs are sorted alphabetically but within same gropus they are sorted in the input order    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>URLSearchParams</mark> Class TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const url = require('url');
+    
+// URLSearchParams through the url module ---------------------------------------
+    var myUrl = new url.URL('http://mySite.ro/main.html?book1=oz&book2=kicsi_kacsa');
+    
+    console.log( myUrl.searchParams.toString() );                                       
+    
+    myUrl.searchParams.append('book3', 'pityi_palko');                           // we have direct control over the querystring 
+    console.log( myUrl.search );
+    
+// URLSearchParams as standalone Api --------------------------------------------
+    console.log( new URLSearchParams() );
+    
+    console.log( new URLSearchParams(
+        'color1=red&color2=yellow&color3=blue') );                               // using querystring 
+    
+    console.log( new URLSearchParams(
+        {color1:'red', color2:'yellow', color3:'green', color3:'blue'}) );       // using object (duplicate keys are NOT allowed!)  
+        
+    console.log( new URLSearchParams(
+        [['color1', 'red'], ['color2', 'yellow'], ['color3', 'blue'], ['color3', 'blue']]) );  // using iterable object (with array key value pairs) (duplicate keys are allowed!)
+    
+    console.log( new URLSearchParams(
+        new URLSearchParams('ke1=22&key2=23')) );                                // any iterable object can be used that means even a URLSearchParams object)   
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\07 URLSearchParams class TEST> node main             
+// querystring control through the 'URL' object ---------------------------------
+        book1=oz&book2=kicsi_kacsa                                               // -! myUrl.searchParams.toString()
+        ?book1=oz&book2=kicsi_kacsa&book3=pityi_palko                            // -! myUrl.search                         // after setting the URLSearchParams API   
+// URLSearchParams class --------------------------------------------------------
+        URLSearchParams {}                                                                                                  // -! new URLSearchParams()
+        URLSearchParams { 'color1' => 'red', 'color2' => 'yellow', 'color3' => 'blue' }                                     // -! new URLSearchParams('color1=red&color2=yellow&color3=blue')
+        URLSearchParams { 'color1' => 'red', 'color2' => 'yellow', 'color3' => 'blue' }                                     // -! new URLSearchParams({color1:'red', color2:'yellow', color3:'green', color3:'blue'})   
+        URLSearchParams { 'color1' => 'red', 'color2' => 'yellow', 'color3' => 'blue', 'color3' => 'blue' }                 // -! new URLSearchParams([['color1', 'red'], ['color2', 'yellow'], ['color3', 'blue'], ['color3', 'blue']])   
+        URLSearchParams { 'ke1' => '22', 'key2' => '23' }                                                                   // -! new URLSearchParams(new URLSearchParams('ke1=22&key2=23'))
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\07 URLSearchParams class TEST>                  
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>get()</mark> / <mark>getAll()</mark> / <mark>set()</mark> / <mark>append()</mark> / <mark>delete()</mark>  TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var searchObj = new URLSearchParams([['book1', 'oz'], ['book2', 'dark'], ['book3', 'js'], ['book3', 'css'], ['book3', 'html']]);
+    
+// get() ------------------------------------------------------------------------
+    console.log( searchObj.get('book3') );                                       // only the first key-value pair's value is returned 
+    
+// getAll() ---------------------------------------------------------------------
+    console.log( searchObj.getAll('book3') );                                    // all the values are returned in an Array whose key is 'book3'
+    
+// set() ------------------------------------------------------------------------
+    searchObj.set('book3', 'web_developement');                                  // all existing 'book3' key-value pairs are removed and replaced by this single one 
+    searchObj.set('book4', 'web_design');                                        // sets a new key-value pair
+    console.log( searchObj );
+    
+// append() ---------------------------------------------------------------------
+    searchObj.append('book4', 'web UI');                                         // appends a new key-value pair 
+    searchObj.append('book4', 'web UX');
+    console.log( searchObj );
+    
+// delete() ---------------------------------------------------------------------
+    searchObj.delete('book4');                                                   // all 'book4' entires are removed 
+    console.log( searchObj );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\08 get() getAll() set() append() delete() TEST> node main   
+// get() ------------------------------------------------------------------------
+        js                                                                       // -! searchObj.get('book3');
+// getAll() ---------------------------------------------------------------------
+        [ 'js', 'css', 'html' ]                                                  // -! searchObj.getAll('book3');
+// set() ------------------------------------------------------------------------
+        URLSearchParams { 'book1' => 'oz', 'book2' => 'dark', 'book3' => 'web_developement', 'book4' => 'web_design' }                                              // -! searchObj; 
+// append() ---------------------------------------------------------------------
+        URLSearchParams { 'book1' => 'oz', 'book2' => 'dark', 'book3' => 'web_developement', 'book4' => 'web_design', 'book4' => 'web UI', 'book4' => 'web UX' }    // -! searchObj;
+// delete() ---------------------------------------------------------------------                                                                    
+        URLSearchParams { 'book1' => 'oz', 'book2' => 'dark', 'book3' => 'web_developement' }                                                                       // -! searchObj;               
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\08 get() getAll() set() append() delete() TEST>     
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>entries()</mark> / <mark>keys()</mark> / <mark>values()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var myQuerystring = new URLSearchParams({mark1:'chapter2', mark2:'chapter4', mark3:'chapter6'});
+    
+    console.log( myQuerystring.entries() );
+    console.log( myQuerystring.keys() );
+    console.log( myQuerystring.values() );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\09 entries() keys() values() TEST> node main       
+        URLSearchParams Iterator {[ 'mark1', 'chapter2' ], [ 'mark2', 'chapter4' ], [ 'mark3', 'chapter6' ] }       // -! myQuerystring.entries();
+        URLSearchParams Iterator { 'mark1', 'mark2', 'mark3' }                                                      // -! myQuerystring.keys();
+        URLSearchParams Iterator { 'chapter2', 'chapter4', 'chapter6' }                                             // -! myQuerystring.values();
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\09 entries() keys() values() TEST> 
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>has()</mark> / <mark>forEach()</mark> / <mark>sort()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var myQuerystring = new URLSearchParams([
+        ['mark1', 'chapter2'],
+        ['mark2', 'chapter4'], 
+        ['mark3', 'chapter6'], 
+        ['mark1', 'chapter2.3']]);
+    
+    var myQuerystring2 = new URLSearchParams([
+        ['mark1', 'chapter2'],
+        ['mark2', 'chapter4'], 
+        ['mark3', 'chapter6'], 
+        ['mark2', 'chapter5'],
+        ['mark3', 'chapter11'],
+        ['mark1', 'chapter2.3']]);
+    
+// has() ------------------------------------------------------------------------
+    console.log( myQuerystring.has('mark2') );
+    console.log( myQuerystring.has('mark4') );
+    
+// forEach() --------------------------------------------------------------------
+    myQuerystring.forEach(function(val, key, searchPar){
+        console.log(`current value = ${val} | current key = ${key}`);
+        console.log( this );
+    }, {testProp:'value'});
+    
+// sort() -----------------------------------------------------------------------
+    myQuerystring.sort();                                                        // sort querystring key-value paris by using the stable sort algorithm (same elements will be grouped together by the order they appear)   
+    console.log( myQuerystring.toString() );    
+    
+    myQuerystring2.sort();
+    console.log( myQuerystring2.toString() );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\10 has() forEach() sort() TEST> node main        
+// has() ------------------------------------------------------------------------
+        true                                                                     // -! myQuerystring.has('mark2')
+        false                                                                    // -! myQuerystring.has('mark4')
+// forEach() --------------------------------------------------------------------
+        current value = chapter2 | current key = mark1                           // iterating throug each key-value pairs  
+        { testProp: 'value' }                                                    // this is the 'this' value what we have assigned   
+        current value = chapter4 | current key = mark2
+        { testProp: 'value' }
+        current value = chapter6 | current key = mark3
+        { testProp: 'value' }
+        current value = chapter2.3 | current key = mark1
+        { testProp: 'value' }
+// sort() -----------------------------------------------------------------------
+        mark1=chapter2&mark1=chapter2.3&mark2=chapter4&mark3=chapter6            // stable sorting algorithm sorting (the 2 'mark1' keys are grouped together in the order they appear in the input)    
+        mark1=chapter2&mark1=chapter2.3&mark2=chapter4&mark2=chapter5&mark3=chapter6&mark3=chapter11        // same keys are soterted togehter in the order they appear in the input   
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\url - query string\10 has() forEach() sort() TEST>      
+    </pre>
+</details>
+    
+    
+    <br><br>
+</body>
+</html>

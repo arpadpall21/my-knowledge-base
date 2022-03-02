@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> VM (Virtual Machine) </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> VM (Virtual Machine) (ver 4.0.0) </h1>
+    <p> Updated ( 2020-12-05 / 2022-02-12 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> VM (Virtual Machine)  
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            <strong>vm</strong>.compileFunction(<strong>fnBody:str</strong>, <i>arg:arr[str]</i>, <i class="openable">option:str|obj<div>
+                <p> filename: <strong>str</strong> - filename displayed in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;'</mark>) </p>
+                <p> lineOffset: <strong>nr</strong> - line number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> columnOffset: <strong>nr</strong> - column number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be executed instead of the 1st argument (which is ignored in this case) </p>
+                <p> parsingContext: <strong>vmContext:obj</strong> - parsing context in which the function will be compiled in (Default: <mark>global</mark> context) </p>
+                <p> contextExtensions: <strong>arr[obj]</strong> - we can pass additional objects which properties extends the parsing context (Default: <mark>[]</mark>) </p> 
+            </div></i>)
+        </td>
+        <td> 
+            - compiles the passed data into a function (by default compiled in the current <mark>global</mark> context but the context can be changed in options) <u>(only compiles does not execute in the context)</u> <br>
+            - the compiled function is returned which then can be called when needed
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td>  
+            <strong>vm</strong>.createContext(<i class="openable">obj<div>
+                <p> - if omitted or <mark>undefined</mark> passed a new empty contextified object is returned </p>   
+            </div></i>, <i class="openable">option:obj<div>
+                <p> name: <strong>str</strong> - context name (Default: <mark>VM Context <strong>index</strong></mark>) </p>
+                <p> origin: <strong>str</strong> - context origin for dispaly purposes (should be formated like URL) (Default: <mark>''</mark>) </p>
+                <p> codeGeneration: <mark>{strings:<strong>bol</strong>, wasm:<strong>bol</strong>}</mark> - (<mark>strings: <strong>bol</strong></mark> - if false any <mark>eval</mark> of function constructors (<mark>Function</mark>, <mark>GeneratorFunction</mark>, etc...) will throw an EvalError (Default: <mark>true</mark>)) (<mark>wasm:<strong>bol</strong></mark> - if false any WebAssembly module will throw a <mark>WebAssembly.CompileError</mark> (Default: <mark>true</mark>)) </p>
+                <p> microtaskMode: <strong>str</strong> - if <mark>'afterEvaluate'</mark> is passed asynchronous tasks (Promise and async functions) are included in VM context <mark>timeout</mark> (vm context asynchronous tasks might run after the context times out, this option makes sure that asynchronous tasks are included in the context timeout timer) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - contextifies and returns the passed <i>obj</i> so it can be used in <mark><strong>vm|script</strong>.runInContext()</mark> as V8 Virtual Machine context
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>codeGeneration</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 14.6.0 <mark>microtaskMode</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            <strong>vm</strong>.isContext(<strong>obj</strong>)
+        </td>
+        <td> 
+            - returns <mark>true</mark> if the passed object is a V8 Virtual Machine context, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.11.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            <strong>vm</strong>.runInContext(<strong>jsCode:str</strong>, <strong>vmContext:obj</strong>, <i class="openable">option:str|obj<div>
+                <p style="font-weight:bold; font-size:1.2em;"> String </p>
+                <p> - filename used in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;') </mark>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Object </p>
+                <p> filename: <strong>str</strong> - filename displayed in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;'</mark>) </p>
+                <p> lineOffset: <strong>nr</strong> - line number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> columnOffset: <strong>nr</strong> - column number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                
+                <p> displayErrors: <strong>bol</strong> - if an Error occurs while compiling the line causing the Error is attached to the stack trace (Default: <mark>true</mark>) </p>
+                <p> timeout: <strong>nr</strong> - number of milliseconds after the code execution finishes (this alone does not ends asynchronous task executions see <mark>microtaskMode</mark> option in <mark><strong>vm</strong>.createContext()</mark>) </p>
+                <p> breakOnSigint: <strong>bol</strong> - if <mark>true</mark>, receiving <mark>SIGINT</mark> (Ctrl + C) will terminate execution and throws and Error (Default: <mark>false</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be executed instead of the 1st argument (which is ignored in this case) <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u> </p>
+                <p> produceCachedData: <strong>bol</strong> - <b>[Deprecated in favor of <mark><strong>script</strong>.createCachedData()</mark>]</b> create a code cache (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - compiles and runs JavaScript code (<strong>jsCode</strong>) in the V8 Virtual Machine context (<strong>vmContext</strong>)
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakOnSigint</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> 
+            <strong>vm</strong>.runInNewContext(<strong>jsCode:str</strong>, <i>obj</i>, <i class="openable">option:str|obj<div>
+                <p style="font-weight:bold; font-size:1.2em;"> String </p>
+                <p> - filename used in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;') </mark>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Object </p>
+                <p> filename: <strong>str</strong> - filename displayed in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;'</mark>) </p>
+                <p> lineOffset: <strong>nr</strong> - line number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> columnOffset: <strong>nr</strong> - column number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                
+                <p> displayErrors: <strong>bol</strong> - if an Error occurs while compiling the line causing the Error is attached to the stack trace (Default: <mark>true</mark>) </p>
+                <p> timeout: <strong>nr</strong> - number of milliseconds after the code execution finishes (this alone does not ends asynchronous task executions see <mark>microtaskMode</mark> option in <mark><strong>vm</strong>.createContext()</mark>) </p>
+                <p> breakOnSigint: <strong>bol</strong> - if <mark>true</mark>, receiving <mark>SIGINT</mark> (Ctrl + C) will terminate execution and throws and Error (Default: <mark>false</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be executed instead of the 1st argument (which is ignored in this case) <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u></p>
+                <p> produceCachedData: <strong>bol</strong> - <b>[Deprecated in favor of <mark><strong>script</strong>.createCachedData()</mark>]</b> create a code cache (Default: <mark>false</mark>) </p>
+                <p> contextName: <strong>str</strong> - context name (Default: <mark>VM Context <strong>index</strong></mark>) </p>
+                <p> contextOrigin: <strong>str</strong> - context origin for dispaly purposes (should be formated like URL) (Default: <mark>''</mark>) </p>
+                <p> contextCodeGeneration: <mark>{strings:<strong>bol</strong>, wasm:<strong>bol</strong>}</mark> - (<mark>strings: <strong>bol</strong></mark> - if false any <mark>eval</mark> of function constructors (<mark>Function</mark>, <mark>GeneratorFunction</mark>, etc...) will throw an EvalError (Default: <mark>true</mark>)) (<mark>wasm:<strong>bol</strong></mark> - if false any WebAssembly module will throw a <mark>WebAssembly.CompileError</mark> (Default: <mark>true</mark>)) </p>
+                <p> microtaskMode: <strong>str</strong> - if <mark>'afterEvaluate'</mark> is passed asynchronous tasks (Promise and async functions) are included in VM context <mark>timeout</mark> (vm context asynchronous tasks might run after the context times out, this option makes sure that asynchronous tasks are included in the context timeout timer) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - first contextifies the passed object (<i>obj</i>), if omitted a new contextified object is created <br>
+            - then compiles and runs the JavaScript code (<strong>jsCode</strong>) in the newly contextified object
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakOnSigint</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>contextCodeGeneration</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 14.6.0 <mark>microtaskMode</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> 
+            <strong>vm</strong>.runInThisContext(<strong>jsCode:str</strong>, <i class="openable">option:str|obj<div>
+                <p style="font-weight:bold; font-size:1.2em;"> String </p>
+                <p> - filename used in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;') </mark>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Object </p>
+                <p> filename: <strong>str</strong> - filename displayed in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;'</mark>) </p>
+                <p> lineOffset: <strong>nr</strong> - line number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> columnOffset: <strong>nr</strong> - column number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> displayErrors: <strong>bol</strong> - if an Error occurs while compiling the line causing the Error is attached to the stack trace (Default: <mark>true</mark>) </p>
+                <p> timeout: <strong>nr</strong> - number of milliseconds after the code execution finishes (this alone does not ends asynchronous task executions see <mark>microtaskMode</mark> option in <mark><strong>vm</strong>.createContext()</mark>) </p>
+                <p> breakOnSigint: <strong>bol</strong> - if <mark>true</mark>, receiving <mark>SIGINT</mark> (Ctrl + C) will terminate execution and throws and Error (Default: <mark>false</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be executed instead of the 1st argument (which is ignored in this case) <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u> </p>
+                <p> produceCachedData: <strong>bol</strong> - <b>[Deprecated in favor of <mark><strong>script</strong>.createCachedData()</mark>]</b> create a code cache (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - compiles and runs the JavaScript code (<strong>jsCode</strong>) in the current <mark>global</mark> context <br>
+            - the passed JavaScript code (<strong>jsCode</strong>) has access to the <mark>global</mark> object but not to the current local scope which is the current module
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakOnSigint</mark> option </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    Script
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            <em>new</em> <strong>vm</strong>.Script(<strong>jsCode:str</strong>, <i class="openable">option:str|obj<div>
+                <p style="font-weight:bold; font-size:1.2em;"> String </p>
+                <p> - filename used in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;') </mark>
+                    <hr>
+                <p style="font-weight:bold; font-size:1.2em;"> Object </p>
+                <p> filename: <strong>str</strong> - filename displayed in stack traces produced by this script (Default: <mark>'evalmachine.&lt;anonymus&gt;'</mark>) </p>
+                <p> lineOffset: <strong>nr</strong> - line number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> columnOffset: <strong>nr</strong> - column number offset displayed in stack traces produced by this script (Default: <mark>0</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be compiled <u>instead of the 1st argument (which is ignored in this case)</u> <u>(if this option is supplied the returned <strong>script</strong> will have the <mark>cachedDataRejected</mark> property set true or false depending (<mark>true</mark> = cached data rejected) (<mark>false</mark> = cached data accepted))</u> <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u></p>
+                <p> produceCachedData: <strong>bol</strong> - <b>[Deprecated in favor of <mark><strong>script</strong>.createCachedData()</mark>]</b> create a code cache (Default: <mark>false</mark>) </p>
+            </div></i>)
+        </td>
+        <td> 
+            creates and returns a precompiled script (<strong>script</strong>) that can be executed in <span class="openable">a specific context<div>
+                    <p> - <mark><strong>script</strong>.runInContext()</mark> </p>
+                    <p> - <mark><strong>script</strong>.runInNewContext()</mark> </p>
+                    <p> - <mark><strong>script</strong>.runInThisContext()</mark> </p>
+                </div></span>
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 5.7.0 <mark>cachedData</mark> and <mark>produceCachedData</mark> options </span>
+                <span><i class="fab fa-node-js"></i> 10.6.0 <mark>produceCachedData</mark> options Deprecated </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            <strong>script</strong>.createCachedData()
+        </td>
+        <td> 
+            - caches the <strong>script</strong> and returns it in a <strong>buf</strong> <br>
+            - the returned caches scirpt <strong>buf</strong> can be passes in the <mark>cachedData</mark> option in (<mark>Script()</mark> class / <mark><strong>vm</strong>.compileFunction()</mark> / <mark><strong>vm</strong>.runInContext()</mark> / <mark><strong>vm</strong>.runInNewContext()</mark> / <mark><strong>vm</strong>.runInThisContext()</mark>)
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 10.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            <strong>script</strong>.runInContext(<strong>vmContext:obj</strong>, <i class="openable">option:str|obj<div>
+                <p> displayErrors: <strong>bol</strong> - if an Error occurs while compiling the line causing the Error is attached to the stack trace (Default: <mark>true</mark>) </p>
+                <p> timeout: <strong>nr</strong> - number of milliseconds after the code execution finishes (this alone does not ends asynchronous task executions see <mark>microtaskMode</mark> option in <mark><strong>vm</strong>.createContext()</mark>) </p>
+                <p> breakOnSigint: <strong>bol</strong> - if <mark>true</mark>, receiving <mark>SIGINT</mark> (Ctrl + C) will terminate execution and throws and Error (Default: <mark>false</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be compiled <u>instead of the 1st argument (which is ignored in this case)</u> <u>(if this option is supplied the returned <strong>script</strong> will have the <mark>cachedDataRejected</mark> property set true or false depending (<mark>true</mark> = cached data rejected) (<mark>false</mark> = cached data accepted))</u> <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u></p>
+            </div></i>)
+        </td>
+        <td> 
+            runs the precompiled script (<strong>script</strong>) in the specified V8 Virtual Machine context (<strong>vmContext</strong>)
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakOnSigint</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> 
+            <strong>script</strong>.runInNewContext(<i>vmContext:obj</i>, <i class="openable">option:str|obj<div>
+                <p> displayErrors: <strong>bol</strong> - if an Error occurs while compiling the line causing the Error is attached to the stack trace (Default: <mark>true</mark>) </p>
+                <p> timeout: <strong>nr</strong> - number of milliseconds after the code execution finishes (this alone does not ends asynchronous task executions see <mark>microtaskMode</mark> option in <mark><strong>vm</strong>.createContext()</mark>) </p>
+                <p> breakOnSigint: <strong>bol</strong> - if <mark>true</mark>, receiving <mark>SIGINT</mark> (Ctrl + C) will terminate execution and throws and Error (Default: <mark>false</mark>) </p>
+                <p> contextName: <strong>str</strong> - context name (Default: <mark>VM Context <strong>index</strong></mark>) </p>
+                <p> contextOrigin: <strong>str</strong> - context origin for dispaly purposes (should be formated like URL) (Default: <mark>''</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be compiled <u>instead of the 1st argument (which is ignored in this case)</u> <u>(if this option is supplied the returned <strong>script</strong> will have the <mark>cachedDataRejected</mark> property set true or false depending (<mark>true</mark> = cached data rejected) (<mark>false</mark> = cached data accepted))</u> <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u></p>
+            </div></i>)
+        </td>
+        <td> 
+            - first contextifies the passed object (<i>obj</i>), if omitted a new contextified object is created <br>
+            - then runs the precompiled script (<strong>script</strong>)compiles in the newly contextified object
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakOnSigint</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>contextCodeGeneration</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 14.6.0 <mark>microtaskMode</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> 
+            <strong>script</strong>.runInThisContext(<i class="openable">option:str|obj<div>
+                <p> displayErrors: <strong>bol</strong> - if an Error occurs while compiling the line causing the Error is attached to the stack trace (Default: <mark>true</mark>) </p>
+                <p> timeout: <strong>nr</strong> - number of milliseconds after the code execution finishes (this alone does not ends asynchronous task executions see <mark>microtaskMode</mark> option in <mark><strong>vm</strong>.createContext()</mark>) </p>
+                <p> breakOnSigint: <strong>bol</strong> - if <mark>true</mark>, receiving <mark>SIGINT</mark> (Ctrl + C) will terminate execution and throws and Error (Default: <mark>false</mark>) </p>
+                <p> cachedData: <strong>buf|typedArray|dataView</strong> - we can pass a precompiled code cache (typically created by <mark><strong>script</strong>.createCachedData()</mark>) if a valid code cache is passed it will be compiled <u>instead of the 1st argument (which is ignored in this case)</u> <u>(if this option is supplied the returned <strong>script</strong> will have the <mark>cachedDataRejected</mark> property set true or false depending (<mark>true</mark> = cached data rejected) (<mark>false</mark> = cached data accepted))</u> <u style="color:orangered;">([TESTED: 2020-12-15] very inconsistent sometimes it accepts the cache sometimes it doesn't I have no clue why)</u></p>
+            </div></i>)
+        </td>
+        <td> 
+            - runs the precompiled script (<strong>script</strong>) in the current <mark>global</mark> context <br>
+            - the passed precompiled script (<strong>script</strong>) has access to the <mark>global</mark> object but not to the current local scope which is the current module
+            <span class="browserSupport" title="updated : 2020-12-10">
+                <span><i class="fab fa-node-js"></i> 0.3.1 </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakOnSigint</mark> option </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <h4><u> Experimental technology [2020-12-16] </u></h4>
+        <p> - <mark>vm.measuerMemory()</mark> - measuers the memory known to V8 and used by all contexts </p>
+        <p> - <mark>vm.Module</mark> - low-level interface for using ECMAScript modules in VM contexts </p>
+        <p> - <mark>vm.SourceTextModule</mark> </p>
+        <p> - <mark>vm.SyntheticModule</mark> </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v17.x/docs/api/vm.html" target="_blanc">VM (Virtual Machine) (nodejs.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>vm</mark> module allows us to compile and run JS code in a different V8 context, <u>(Not a security mechanism, do not run untrusted code in vm context!)</u> </p> 
+    <p> - a V8 context is a separate execution environment, (separate unrelated JS application running in a single instance of V8) <u>(runs in the same process)</u></p> 
+    <p> - for example the current context is <u>this <mark>global</mark> context</u>, the <mark>vm</mark> module can create completely separated contexts by <u>contextifying objects</u> (contextified objects are V8 Virtual Machine contexts) </p>
+    <p> - Virtual Machine contexts run JavaScript runtime environment, that also means that <u><mark>global</mark> object properties (like <mark>Buffer</mark>, <mark>setTimeout</mark>, etc...) are NOT available in them </u></p>
+    <p> - in simple words we can put the JavaScript runtime envrionment in any V8 contexts (like emulating a <mark>window</mark> browser object or any custom context) </p>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - V8 Virtual Machine (VM) context </p>
+    <pre>
+    var vm = require('vm');
+    
+// this (global) context --------------------------------------------------------------
+    a = 21;                                                                            // assigns a new property to this 'global' context (same as 'global.a = 21')    
+    global.a;                                                                          // -> 21         // the 'global' object is this context   
+        
+// virtual machine context ------------------------------------------------------------
+    var ctx = {};
+    vm.createContext(ctx);                                                             // contextifies the object (Virtual Machine context)
+        
+    vm.runInContext('a = 31', ctx);                                                    // the 'a = 31' script runs in the 'ctx' virtual machine context   
+    ctx;                                                                               // -> {a:31}    
+    
+    vm.runInContext('Buffer', ctx);                                                    // -> ReferenceError        // the 'Buffer' is part of the 'global' object but not present in JavaScript runtime environment    
+                                                                                       // all JavaScript tools (like: String, RegExp, etc...) are available in the virtual machine but not 'global' properties (because it's a different context = JavaScrit runtime is put in 'ctx' context)    
+    </pre>
+    <pre>
+    var vm = require('vm');
+    
+// createContext() / isContext() ------------------------------------------------------
+    var ctx_1 = {p1:'someString', p2:'someOtherString', nest:{x:21, y:22}};
+    vm.createContext(ctx_1);                                                           // contextifies the 'ctx_1' object (creates a V8 Virtual Machine context)   
+    
+    vm.isContext(ctx_1);                                                               // -> true                       // the 'ctx_1' is a V8 Virtual Machine context  
+    vm.isContext(global);                                                              // -> false                      // the 'global' object is a context but not V8 Virtual Machine context    
+    
+// runInContext() ---------------------------------------------------------------------
+    vm.runInContext(
+        'p1 = "otherString", delete p2;',                                              // this string will be compiled and run in 'ctx_1' V8 VM context    
+        ctx_1);
+    
+    ctx_1;                                                                             // -> {p1:'otherString', nest:{x:21, y:22}}    // context after the script is executed on it    
+    
+// runInNewContext() ------------------------------------------------------------------
+    var ctx_2 = {x:21, y:22}
+    vm.runInNewContext('var result = x + y', ctx_2);                                   // contextifies the 'ctx_2' object then compiles and runs the JS code in it   
+    
+    vm.isContext(ctx_2);                                                               // -> true                       // object contextified  
+    ctx_2;                                                                             // -> {x:21, y:22, result:43}    // context after the script is executed on it    
+    
+    vm.runInNewContext('var x = 21');                                                  // if no object provided or 'undefined' is passed this method creates an empty context in which the JS code will be compiled and run    
+    
+// runInThisContext() -----------------------------------------------------------------
+    glob = 21;                                                                         // creates a new global property (global.glob)
+    var local = 22;                                                                    // creates a new local variable   
+    
+    vm.runInThisContext('glob += 1');                                                  // runs the scritp on this 'global' context    
+    global.glob;                                                                       // -> 22    
+    
+    vm.runInThisContext('local += 1');                                                 // -! RefferencError             // local variables are not reachable by this method (only properties ane methods on the 'global' object)    
+    
+// compileFunction() ------------------------------------------------------------------
+    x = 11;                                                                            // global property 
+    
+    var ctx_1 = {x:21};
+    vm.createContext(ctx_1);                                                           // VM context 
+    
+    var fn1 = vm.compileFunction('return x + a', ['a']);                               // the returned function is compiled in this 'global' context    
+    var fn2 = vm.compileFunction('return x + a + y', ['a'],                            
+        {parsingContext:ctx_1, contextExtensions:[{y:10}]});                           // the returned function is compiled in 'ctx_1' VM context (extended by the passed object '{y:10}')    
+    
+    fn1(5);                                                                            // -> 26    
+    fn2(5);                                                                            // -> 36    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Available Classes in V8 Virtual Machine </u></h4>
+    <pre>
+    var vm = require('vm');
+    
+// properties in this (global) context ------------------------------------------------
+    String                                                                             // the String class is available in ANY JavaScript runtime environment 
+    Buffer                                                                             // the 'Buffer' belongs to the 'global' object (this global context) (not part of JS runtime environment)  
+    
+    
+// properties in Virtual Machine ------------------------------------------------------
+    var ctx = {};
+    vm.createContext(ctx);                                                             // Virtual Machine context   
+        
+    vm.runInContext('String', ctx);                                                    // the String class is available in ANY JavaScript runtime environment 
+    vm.runInContext('Buffer', ctx);                                                    // -> ReferenceError        // the 'Buffer' is part of the 'global' object but not present in JavaScript runtime environment    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>microtaskMode</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    function loop(){
+        console.log('entering loop');
+        while(true){ console.log(Date.now()) }
+    }
+    
+    vm.runInNewContext(
+        'Promise.resolve().then(() => loop())',                                        // the loop keeps executing asynchronously   
+        {loop, console},
+        {timeout: 5000, microtaskMode:'afterEvaluate'}                                 // after 5 seconds the context times out its asynchronous tasks included (the promise loop in this case)    
+    );
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>createContext()</mark> / <mark>isContext()</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    var context = {p1:21};
+    var noContext = {p2:22};
+    
+    vm.createContext(context, {name:'myContext'});                                     // V8 Virtual Machine context created 
+    
+    console.log( vm.isContext(context) );                                              // -> true
+    console.log( vm.isContext(noContext) );                                            // -> false     // object is not a V8 Virtual Machine context  
+    console.log( vm.isContext(global) );                                               // -> false     // the 'global' object is still a V8 context but not a Virtual Machine    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>runInContext()</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    var context = {x:22, y:23};
+    vm.createContext(context); 
+    
+    vm.runInContext('var result = x + y', context);                                    // script is executed in the passed V8 VM context 
+    
+    console.log( context );                                                            // -> {x:22, y:23, result:45}
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>cachedData</mark> option TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    var context = {x:21};
+    vm.createContext(context, {name:'myContext'}); 
+    
+    var script = new vm.Script('var x = 22');
+    var cache_1 = script.createCachedData()                                            // caches the script (returns the cache in a Buffer)
+    
+    vm.runInContext('var x = 20', context, {cachedData:cache_1});                      // valid script cache passed the 1st argument is ignored!
+    
+    console.log( context );                                                            // -> {x:22}
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>runInNewContext()</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    var context = {x:22, y:23};
+    vm.runInNewContext('var result = x + y', context);                                 // 'context' contextified and the script is executed in it    
+    
+    console.log( vm.isContext(context) );                                              // -> true      // object contextified 
+    console.log( context );                                                            // -> {x:22, y:23, result:45}
+    
+// no object passed -------------------------------------------------------------------
+        vm.runInNewContext('while(true){ Date.now()} ');                               // the JavaScript code is compiled and run in a newly created contextified object (the process is not exiting this proves that the while run is keep running in the Virtual Machine context)    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>runInThisContext()</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+    
+    a = 21;                                                                            // global property
+    console.log(global.a);                                                             // -> 21
+    
+    var b = 31;                                                                        // local variable 
+    console.log(b);                                                                    // -> 31
+    
+    vm.runInThisContext('a++');                                                        // the compiled code is running on the global context (same as 'global.a++)
+    console.log(global.a);                                                             // -> 22
+    
+    vm.runInThisContext('b++');                                                        // -> ReferenceError: b is not defined    // this method has no access to the current local scope (which is the current module)    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>compileFunction()</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    x = 9, y = 12;
+    
+    var myFn = vm.compileFunction('return x + y');                                     // uses this (global) context to compile the function in  
+    
+    console.log( myFn() );                                                             // -> 21
+    
+// passing a context in which the function will be compiled ---------------------------
+    var context_1 = {x:22, y:23};
+    vm.createContext(context_1);
+    
+    var myFn_2 = vm.compileFunction('return x + y', undefined, {parsingContext:context_1});  // the function is compiled in 'context_1' VM context    
+    
+    console.log( myFn_2() );                                                           // -> 45
+    
+// passing arguments ------------------------------------------------------------------
+    var myFn_2 = vm.compileFunction('return x + y - a', ['a'], {parsingContext:context_1});
+    
+    console.log( myFn_2(5) );                                                          // -> 40     
+        
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>compileFunction()</mark> with additional <mark>contextExtension</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    x = 9, y = 12;
+    var ext = {a:1, b:2};
+    
+    var myFn = vm.compileFunction(
+        'return x + y + a + b', 
+        undefined, 
+        {contextExtensions:[ext]});                                                    // the global context is extended by 'ext' object's properties (for this compilation)    
+    
+    console.log( myFn() );                                                             // -> 24
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>Script</mark> class (<mark>createCachedData()</mark> / <mark>runIncContext()</mark> / <mark>runInNewContext()</mark> / <mark>runInThisContext()</mark>) </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var vm = require('vm');
+        
+    var myScript = new vm.Script('var result = x + y');                                // precompiled JS script created  
+    
+// runInContext() ---------------------------------------------------------------------
+    var ctx_1 = vm.createContext({x:10, y:15});                                        // contextified object 
+    
+    myScript.runInContext(ctx_1);                                                      // runs the script in 'ctx_1' context   
+    ctx_1;                                                                             // -> {x:10, y:15, result:25}  
+    
+// runInNewContext() ------------------------------------------------------------------
+    var ctx_2 = {x:20, y:25}; 
+    
+    myScript.runInNewContext(ctx_2);                                                   // contextifies the 'ctx_2' object then runs the script in it    
+    ctx_2;                                                                             // -> {x:20, y:25, result:45}  
+    
+    myScript.runInNewContext();                                                        // -! error thrown because the newly created context is empty (ReferenceError: x is not defined)    
+    
+// runInThisContext() -----------------------------------------------------------------
+    x = 30, y = 35;                                                                    // global properties
+    
+    myScript.runInThisContext();                                                       // runs the script in this 'global' context   
+    global.result;                                                                     // -> 65    
+    </pre>
+    <p style="color:yellow;"> - the cached script in some cases accepted and in some cases rejected by <mark>Script()</mark> / <mark>vm.runInContext()</mark> / <mark>vm.runInNewContext()</mark> / <mark>runInThisContext()</mark> (I don't know why [TESTED:2020-12-16]) </p>
+    <pre>
+    var vm = require('vm');
+        
+    var myScript = new vm.Script('var x = 21');
+    var cache_ = myScript.createCachedData();                                          // creates and returns the cache data of the script  
+    
+// using in Script --------------------------------------------------------------------
+    var myScript_2 = new vm.Script('var x = 22', {cachedData:cache_});                 // the 1st argument is ignored because the passed cache is accepted by the script    
+    myScript_2.cachedDataRejected;                                                     // -> false         // the cached data is accepted by the 'myScript_2' script    
+    
+    myScript_2.runInThisContext();
+    global.x;                                                                          // -> 21            // the script runs the accepted cached data in the this 'global' context    
+    
+    
+    var myScript_3 = new vm.Script('var y = 1', {cachedData:cache_});
+    myScript_3.cachedDataRejected;                                                     // -> true          // the cached data is rejected by the 'myScript_3' script    
+    
+    myScript_3.runInThisContext();
+    global.y;                                                                          // -> 1             // the script does not run the rejected cached data in this 'global' context 
+    
+// vm.runInContext() ------------------------------------------------------------------
+    var myScript_a = new vm.Script('var x = 21');
+    var cache_a = myScript_a.createCachedData(); 
+    
+    var ctx_1 = {};
+    vm.createContext(ctx_1);
+    
+    vm.runInContext('var x = 9', ctx_1, {cachedData:cache_a});                         // the passed cached script is rejected (I don't know why!)    
+    ctx_1;                                                                             // -> {x:9}
+    
+    vm.runInContext('var x = 32', ctx_1, {cachedData:cache_a});                        // the passed cached script is accepted (I don't know why!)    
+    ctx_1;                                                                             // -> {x:10}
+    
+// vm.runInNewContext() ---------------------------------------------------------------
+    var myScript_b = new vm.Script('var x = 21');
+    var cache_b = myScript_b.createCachedData(); 
+    
+    var ctx_2 = {};
+    
+    vm.runInNewContext('var x = 9', ctx_2, {cachedData:cache_a});                      // the passed cached script is rejected (I don't know why!)    
+    ctx_2;                                                                             // -> {x:9}
+    
+    vm.runInNewContext('var x = 32', ctx_2, {cachedData:cache_a});                     // the passed cached script is accepted (I don't know why!)    
+    ctx_2;                                                                             // -> {x:10}
+    
+// vm.runInThisContext() --------------------------------------------------------------
+    var myScript_c = new vm.Script('var a = 21');
+    var cache_c = myScript_c.createCachedData(); 
+    
+    vm.runInThisContext('var a = 9', ctx_2, {cachedData:cache_c});                     // the passed cached script is rejected (I don't know why!)    
+    global.a;                                                                          // -> 9
+    
+    vm.runInThisContext('var a = 21', ctx_2, {cachedData:cache_c});                    // the passed cached script is accepted (I don't know why!)    
+    global.a;                                                                          // -> 21
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>Script()</mark> / <mark>script.runInContext()</mark> / <mark>script.runInThisContext()</mark> / <mark>script.runInNewContext()</mark> TEST </u></h4>
+    <pre>
+    var vm = require('vm');
+        
+    var myScript = new vm.Script('var result = x + y');                                // precompiled JS script created  
+    
+// runInContext() ---------------------------------------------------------------------
+    var ctx_1 = vm.createContext({x:10, y:15});                                        // contextified object 
+    
+    myScript.runInContext(ctx_1);                                                      // runs the script in 'ctx_1' context   
+    console.log(ctx_1);                                                                // -> {x:10, y:15, result:25}  
+    
+// runInNewContext() ------------------------------------------------------------------
+    var ctx_2 = {x:20, y:25}; 
+    
+    myScript.runInNewContext(ctx_2);                                                   // contextifies the 'ctx_2' object then runs the script in it    
+    console.log(ctx_2);                                                                // -> {x:20, y:25, result:45}  
+    
+    try{
+        myScript.runInNewContext();                                                    // error thrown because the newly created context is empty   
+    }catch(err) {
+        console.log(err.message);                                                      // x is not defined
+    }
+    
+// runInThisContext() -----------------------------------------------------------------
+    x = 30, y = 35;                                                                    // assign new global properties
+    
+    myScript.runInThisContext();                                                       // runs the script in this 'global' context   
+    console.log(global.result);                                                        // -> 65    
+    </pre>
+<hr>
+<!-------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>createCachedData()</mark> TEST </u></h4>
+    <p style="background-color:yellow;"> - the passed cached data sometimes is rejected and sometimes is accepted BUT I HAVE NO IDEA WHY (so I document this behaviour inconsistent) </p>
+    <p> - I tried to change to order but still it does the same inconsistent result </p>
+    <pre>
+    var vm = require('vm');
+        
+    var myScript = new vm.Script('var x = 21');
+    var cache_ = myScript.createCachedData();                                          // creates and returns the cache data of the script  
+    
+// using in Script --------------------------------------------------------------------
+    var myScript_2 = new vm.Script('var x = 22', {cachedData:cache_});                 // -! the 1st argument is ignored because the passed cache is   accepted by the script   
+    console.log( myScript_2.cachedDataRejected );                                      // -> false         // the passed cached data is accepted by the 'myScript_2' script   
+    
+    myScript_2.runInThisContext();
+    console.log( global.x );                                                           // -> 21            
+    
+    
+    var myScript_3 = new vm.Script('var y = 1', {cachedData:cache_});
+    console.log( myScript_3.cachedDataRejected );                                      // -> true          // the passed cached data is rejected by the 'myScript_3' script (I have no idea what the fuck is going on)    
+    
+    myScript_3.runInThisContext();
+    console.log( global.y );                                                           // -> 1
+    
+// vm.runInContext() ------------------------------------------------------------------
+    var myScript_a = new vm.Script('var x = 21');
+    var cache_a = myScript_a.createCachedData(); 
+    
+    var ctx_1 = {};
+    vm.createContext(ctx_1);
+    
+    vm.runInContext('var x = 9', ctx_1, {cachedData:cache_a});                         // the passed cached script is rejected (I don't know why!)    
+    console.log( ctx_1 );                                                              // -> {x:9}
+    
+    vm.runInContext('var x = 32', ctx_1, {cachedData:cache_a});                        // the passed cached script is accepted (I don't know why!)    
+    console.log( ctx_1 );                                                              // -> {x:10}
+    
+// vm.runInNewContext() ---------------------------------------------------------------
+    var myScript_b = new vm.Script('var x = 21');
+    var cache_b = myScript_b.createCachedData(); 
+    
+    var ctx_2 = {};
+    
+    vm.runInNewContext('var x = 9', ctx_2, {cachedData:cache_a});                      // the passed cached script is rejected (I don't know why!)    
+    console.log( ctx_2 );                                                              // -> {x:9}
+    
+    vm.runInNewContext('var x = 32', ctx_2, {cachedData:cache_a});                     // the passed cached script is accepted (I don't know why!)    
+    console.log( ctx_2 );                                                              // -> {x:10}
+    
+// vm.runInThisContext() --------------------------------------------------------------
+    var myScript_c = new vm.Script('var a = 21');
+    var cache_c = myScript_c.createCachedData(); 
+    
+    console.log( myScript_c );
+    
+    vm.runInThisContext('var a = 9', ctx_2, {cachedData:cache_c});                     // the passed cached script is rejected (I don't know why!)    
+    console.log( global.a );                                                           // -> 9
+    
+    vm.runInThisContext('var a = 21', ctx_2, {cachedData:cache_c});                    // the passed cached script is accepted (I don't know why!)    
+    console.log( global.a );                                                           // -> 21
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

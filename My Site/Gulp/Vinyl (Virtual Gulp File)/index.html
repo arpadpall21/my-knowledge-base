@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Vinyl (Gulp Virtual File) </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Vinyl (Gulp Virtual File) (ver 3.2) </h1>
+    <p> Updated ( 2020-01-04 )</p>
+    <p class="sitenav"> <a href="../../index.html" >MySite></a>
+        <a href="../index.html">Gulp></a> Vinyl   
+    </p>
+<table class="table">
+<caption> Vinyl object </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> new Vinyl(<i>option:obj</i>) </td>
+        <td> creates a new vinyl file [NOT TESTED: 2020-01-05] <a href="https://gulpjs.com/docs/en/api/vinyl" target="_blank">gulp new Vinyl file [link]</a> </td>
+    </tr>
+    <tr>
+        <td> Vinyl.isVinyl(<strong>arg</strong>) </td>
+        <td> returns <mark>true</mark> if the passed argument is a Vinyl file, otherwise returns <mark>false</mark> </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.base </td>
+        <td> - gets and sets a base directory for the vinyl file (falls back to <mark>cwd</mark> property value if set to null or undefined) <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.basename </td>
+        <td> gets and sets the virtual filename (extension included) </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.clone(<small>{contents:<i>bol</i>}</small>) </td>
+        <td> clones a new instance of the virtual file (the new clone has its own content by default) </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.contents </td>
+        <td> gets or sets the content of the virtual file </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.cwd </td>
+        <td> - gets and sets the current working directory of the virtual file as a string <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform 
+             </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.dirname </td>
+        <td> - gets and sets the absolute directory path of the vinyl file <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform </td>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.extname </td>
+        <td> gets and sets the virtual file's extension </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.history </td>
+        <td> returns an Array of all added path values (the first value is the original path, the last is the current path) </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.inspect() </td>
+        <td> - returns a string representation of the virtual file <br>
+             - automatically called internally when we print vinyls with <mark>console.log</mark>     
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isBuffer() </td>
+        <td> returns <mark>true</mark> if the <mark>contents</mark> property value is a buffer </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isDirectory() </td>
+        <td> returns <mark>true</mark> if the virtual file represents a directory </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isNull() </td>
+        <td> returns <mark>true</mark> if the <mark>contents</mark> property value is null </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isStream() </td>
+        <td> returns <mark>true</mark> if the <mark>contents</mark> property value is a stream </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isSymbolic() </td>
+        <td> returns <mark>true</mark> if the virtual file represents a symbolic link <span style="color:orangered;">[NOT WORKING returns <mark>false</mark> for a symbolic link TESTED: 2020-01-06]</span> </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.path </td>
+        <td> - gets and sets the absolute file path of the vinyl file <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform <u>(appends the set path to the <mark>history</mark> property)</u> 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.relative </td>
+        <td> returns the relative path between the <mark>base</mark> and the <mark>path</mark> values </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.stat </td>
+        <td> gets or sets an <mark>fs.Stats</mark> instance of the virtual file </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.stem </td>
+        <td> gets and sets the virtual filename <u>(without extension)</u> </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.symlink </td>
+        <td> gets and sets the relative path between the symbolic link and its linked file <span style="color:orangered">[NOT WORKING! TESTED: [2020-01-06] becuase vinyls do not recognize symbolic links in the first place (always returns <mark>null</mark>) </span> </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    <p> - <mark>Vinyl.isCustomProp()</mark> : determines if a property is internally managed by Vinyl [NOT TESTED: 2020-01-05] (I don't see why should I use this method) </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://gulpjs.com/docs/en/api/vinyl" target="_blank">Gulp Vinyl</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - [TESTED: 2020-01-06] vinyls do not recognize symbolic links, symbolik liks are treated as normal files when transformed to vinyls (bug?) </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Vinyl is a virtual file format (exist in memory), it is created by the <mark>src()</mark> method or by the <mark>Vinyl</mark> constructor </p>
+    <p> - gulp plugins basically transform these virtual files according the plugin (like the SASS plugin) </p>
+    <p> - Vinyls can be persisted (written) to the file system by the <mark>dest()</mark> method </p>
+    <pre class="syntax">
+SYNTAX :    new Vinyl(<i>option:obj</i>)                                                      // creates a new vinyl file [NOT TESTED: 2020-01-05] <a href="https://gulpjs.com/docs/en/api/vinyl" target="_blank">gulp new Vinyl file [link]</a>    
+            
+            Vinyl.isVinyl(<strong>arg</strong>)                                                         // returns <mark>true</mark> if the passed argument is a Vinyl file, otherwise returns <mark>false</mark>    
+    </pre>
+    <pre>
+    const Vinyl = require('vinyl')                                                     // require the vinyl module    
+    
+    function testTask(cb){
+        var myVinyl = new Vinyl();                                                     // creates a new vinyl file [NOT FULLY TESTED: 2020-01-05]    
+        Vinyl.isVinyl(myVinyl)                                                         // -> true       // object is a vinyl file   
+        
+        var getAllCurrentDir = src('*');                                               // returns a transform stream which contains all items in the current directory transformed to vinyls    
+        getAllCurrentDir.on('data', function(chunk){                                   // runs the callback for each vinyls 
+            chunk;                                                                     // vinyl file representing the current item 
+            Vinyl.isVinyl(chunk);                                                      // -> true | ...   
+        });
+        
+        cb();
+    }
+    
+    exports.default = testTask;    
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Vinyl TEST-1 </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    const Vinyl = require('vinyl');
+    
+    function taskDefault(cb){
+    // vinyl file created by the Vinyl constructor -----------------
+        var myVinyl = new Vinyl();                                  // creates a vinyl file 
+        console.log( Vinyl.isVinyl(myVinyl) );                      // -> true 
+        
+    // vinyl files created by the src() method ---------------------
+        var getVinyl = src('testFile.txt');                         // returns a transform stream containing the vinyl file which represents the 'testFile.txt' file    
+        getVinyl.on('data', function(chunk){                        // read the transform stream 
+            console.log( chunk );                                   // -> 'testFile.txt' vinyl file   
+            console.log( Vinyl.isVinyl(chunk) );                    // -> true 
+        });
+        
+        var getVinyls = src('*');                                   // gets all items in the curent directory and transforms them to vinyls 
+        getVinyls.on('data', function(chunk){                       // runs for each vinyls in the transform stream    
+            console.log( chunk );                                   // -> 'testFile.txt' and 'gulpfile.js' vinyl files    
+            console.log( Vinyl.isVinyl(chunk) );                    // -> true | true 
+        });
+        
+        cb();
+    }
+    
+    exports.default = taskDefault;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\Vinyl (virtual gulp file)\01 vinyl test-1> gulp
+        [17:19:35] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\Vinyl (virtual gulp file)\01 vinyl test-1\gulpfile.js
+        [17:19:35] Starting 'default'...
+        true                                                        // console.log( Vinyl.isVinyl(myVinyl) );
+        [17:19:35] Finished 'default' after 12 ms
+    // 'testFile.txt' targeted only --------------------------------
+        &lt;File "testFile.txt" &lt;Buffer 61 64 64 20 74 68 69 73 20 63 6f 6e 74 65 6e 74 20 74 6f 20 74 68 65 20 66 69 6c 65 0d 0a&gt;&gt;
+        true                                                         
+    // all files targeted in the current directory -----------------
+        &lt;File "gulpfile.js" &lt;Buffer 63 6f 6e 73 74 20 7b 73 72 63 7d 20 3d 20 72 65 71 75 69 72 65 28 27 67 75 6c 70 27 29 3b 0d 0a 63 6f 6e 73 74 20 56 69 6e 79 6c 20 3d 20 72 65 71 75 ... 1326 more bytes&gt;&gt;
+        true
+        &lt;File "testFile.txt" &lt;Buffer 61 64 64 20 74 68 69 73 20 63 6f 6e 74 65 6e 74 20 74 6f 20 74 68 65 20 66 69 6c 65 0d 0a&gt;&gt;
+        true
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\Vinyl (virtual gulp file)\01 vinyl test-1>    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> Properties and Methods </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>contents</mark> / <mark>stat</mark> / <mark>isBuffer()</mark> / <mark>isStream()</mark> / <mark>isNull()</mark> / <mark>isDirectory()</mark> / <mark>isSymbolic()</mark> properties and methods </u></h2>
+    <pre class="syntax">
+SYNTAX :    <strong>vinyl</strong>.contents                                                             // gets or sets the content of the virtual file 
+            <strong>vinyl</strong>.stat                                                                 // gets or sets an <mark>fs.Stats</mark> instance of the virtual file  
+            
+            <strong>vinyl</strong>.isBuffer()                                                           // returns <mark>true</mark> if the <mark>contents</mark> property value is a buffer    
+            <strong>vinyl</strong>.isStream()                                                           // returns <mark>true</mark> if the <mark>contents</mark> property value is a stream
+            <strong>vinyl</strong>.isNull()                                                             // returns <mark>true</mark> if the <mark>contents</mark> property value is null   
+            
+            <strong>vinyl</strong>.isDirectory()                                                        // returns <mark>true</mark> if the virtual file represents a directory  
+            <strong>vinyl</strong>.isSymbolic()                                                         // returns <mark>true</mark> if the virtual file represents a symbolic link <span style="color:orange;">[NOT WORKING returns <mark>false</mark> for a symbolic link TESTED: 2020-01-06]</span>    
+    </pre>
+    <pre>
+const {src} = require('gulp');
+    
+    function testTask(cb){
+        src('styles.css').on('data', function(vinyl){
+            vinyl.contents;                                                            // -> &lt;Buffer ... &gt;       // content of the file 
+            vinyl.stat;                                                                // -> Stats {...}         // fs.Stats instance stats of the file   
+            
+            vinyl.isBuffer();                                                          // -> true                // the contents property value is a buffer 
+            vinyl.isStream();                                                          // -> false               // the contents property value is not a stream   
+            vinyl.isNull();                                                            // -> false               // the contents property value is not null   
+            
+            vinyl.isDirectory();                                                       // -> false               // vinyl object does not represent a directory   
+            vinyl.isSymbolic();                                                        // -> false               // !! should recognize symbolic links but it is NOT reliable (returns false even if the virtual file represents a symbolic link)    
+        });
+        cb();
+    }
+    
+    exports.default = testTask;
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>contents</mark> / <mark>stat</mark> / <mark>isBuffer()</mark> / <mark>isStream()</mark> / <mark>isNull()</mark> / <mark>isDirectory()</mark> / <mark>isSymbolic()</mark> TEST </u></h4>
+    <p style="color:yellow;"> - the <mark>isSymbolic()</mark> falsly returns <mark>false</mark> for a symbolic link </p>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+        var allCurentItems = src('*');
+        allCurentItems.on('data', function(vinyl){
+            console.log( '----------------------------------------------------------------------' );
+            console.log( vinyl.basename );
+            console.log( vinyl.contents );                          // content of the vinyl 
+            console.log( vinyl.stat.size );                         // file size returned throught the fs.Stats instance    
+            
+            console.log( vinyl.isBuffer() );                        // true if the contents property value is a buffer  
+            console.log( vinyl.isStream() );                        // true if the contents property value is a stream  
+            console.log( vinyl.isNull() );                          // true if the contents property value is null  
+            
+            console.log( vinyl.isDirectory() );                     // true if the vinyl represents a directory   
+            console.log( vinyl.isSymbolic() );                      // true if the vinyl represents a symbolic link   // !! false negative (returns false for a symbolic link)  
+        });
+        cb();
+    }
+    
+    exports.default = testTask;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\02 contents stat isBuffer() isStream() isNull() isDirectory() isSymbolic() test> gulp
+        [08:47:46] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\02 contents stat isBuffer() isStream() isNull() isDirectory() isSymbolic() test\gulpfile.js
+        [08:47:46] Starting 'default'...
+        [08:47:46] Finished 'default' after 8.84 ms
+        ----------------------------------------------------------------------
+        gulpfile.js                                                           // vinyl.basename  
+        &lt;Buffer 63 6f 6e 73 74 20 7b 73 72 63 7d 20 3d 20 72 65 71 75 69 72 65 28 27 67 75 6c 70 27 29 3b 0d 0a 63 6f 6e 73 74 20 7b 44 75 70 6c 65 78 7d 20 3d 20 72 ... 1189 more bytes&gt;    // vinyl.contents   
+        1239                                                                  // vinyl.stat.size
+        true                                                                  // vinyl.isBuffer()
+        false                                                                 // vinyl.isStream()
+        false                                                                 // vinyl.is.Null()
+        false                                                                 // vinyl.isDirectory()
+        false                                                                 // vinyl.isSymbolic()
+        ----------------------------------------------------------------------
+        testDir                                                               // viny.basename 
+        null                                                                  // viny.contents 
+        0                                                                     // vinyl.stat.size
+        false                                                                 // vinyl.isBuffer()
+        false                                                                 // vinyl.isStream()
+        true                                                                  // vinyl.is.Null()
+        true                                                                  // vinyl.isDirectory()
+        false                                                                 // vinyl.isSymbolic()
+        ----------------------------------------------------------------------
+        testFile-SymLink                                                      // viny.basename 
+        &lt;Buffer &gt;                                                             // viny.contents 
+        0                                                                     // vinyl.stat.size
+        true                                                                  // vinyl.isBuffer()
+        false                                                                 // vinyl.isStream()
+        false                                                                 // vinyl.is.Null()
+        false                                                                 // vinyl.isDirectory()
+        false                                                                 // vinyl.isSymbolic()     // !! falsly returns false (this is a symbolic link)   
+        ----------------------------------------------------------------------
+        testFile.txt                                                          // viny.basename
+        &lt;Buffer 61 64 64 65 64 20 63 6f 6e 74 65 6e 74 20 74 6f 20 74 68 65 20 74 65 73 74 20 66 69 6c 65 21 0d 0a&gt;   // viny.contents
+        33                                                                    // vinyl.stat.size
+        true                                                                  // vinyl.isBuffer()
+        false                                                                 // vinyl.isStream()
+        false                                                                 // vinyl.is.Null()
+        false                                                                 // vinyl.isDirectory()
+        false                                                                 // vinyl.isSymbolic()
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\02 contents stat isBuffer() isStream() isNull() isDirectory() isSymbolic() test>    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>isSymbolic()</mark> TEST </u></h4>    
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+        src('indexSymLink').on('data', function(vinyl){                                // symbolic link targeted 
+            console.log( vinyl.basename );
+            console.log( vinyl.isSymbolic() );
+        })
+        
+        cb();
+    }
+    
+    exports.default = testTask;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\03 isSymbolic() TEST> gulp
+        [09:11:57] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\03 isSymbolic() TEST\gulpfile.js
+        [09:11:57] Starting 'default'...
+        [09:11:57] Finished 'default' after 10 ms
+        indexSymLink                                                                   // vinyl.basename
+        false                                                                          // vinyl.isSymbolic()        // !! should return true  
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\03 isSymbolic() TEST>    
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>cwd</mark> / <mark>base</mark> / <mark>path</mark> / <mark>history</mark> / <mark>relative</mark> / <mark>dirname</mark> / <mark>stem</mark> / <mark>extname</mark> / <mark>basename</mark> / <mark>symlink</mark> properties </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>vinyl</strong>.cwd                                                                  // gets and sets the current working directory of the virtual file as a string 
+                                                                                          when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform    
+            
+            <strong>vinyl</strong>.base                                                                 // gets and sets a base directory for the vinyl file (falls back to <mark>cwd</mark> property value if set to null or undefined) 
+                                                                                          when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform    
+            <strong>vinyl</strong>.dirname                                                              // gets and sets the absolute directory path of the vinyl file 
+                                                                                          when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform    
+            <strong>vinyl</strong>.path                                                                 // gets and sets the absolute file path of the vinyl file 
+                                                                                          when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform <u>(appends the set path to the <mark>history</mark> property)</u>    
+            
+            <strong>vinyl</strong>.history                                                              // returns an Array of all added path values (the first value is the original path, the last is the current path)    
+            <strong>vinyl</strong>.relative                                                             // returns the relative path between the <mark>base</mark> and the <mark>path</mark> values    
+            
+            <strong>vinyl</strong>.basename                                                             // gets and sets the virtual filename (extension included)    
+            <strong>vinyl</strong>.stem                                                                 // gets and sets the virtual filename <u>(without extension)</u>    
+            <strong>vinyl</strong>.extname                                                              // gets and sets the virtual file's extension   
+            
+            <strong>vinyl</strong>.symlink                                                              // gets and sets the relative path between the symbolic link and its linked file <span style="color:orange">[NOT WORKING! TESTED: [2020-01-06] becuase vinyls do not recognize symbolic links in the first place (always returns <mark>null</mark>) </span>    
+    </pre>
+    <pre>
+    const {src} = require('gulp');
+        
+    function testTask(cb){
+        src('testFile.txt').on('data', function(vinyl){
+            vinyl.cwd;                                                                 // -> 'D:\\myDir'                        // curent working directory    
+            
+            vinyl.basename;                                                            // -> 'testFile.txt'                     // filename with extension 
+            vinyl.stem;                                                                // -> 'testFile'                         // filename 
+            vinyl.extname;                                                             // -> '.txt'                             // file extension   
+            
+            vinyl.path;                                                                // -> 'D:\\myDir\\testFile.txt'          // file path 
+            vinyl.dirname;                                                             // -> 'D:\\myDir'                        // directory path 
+            vinyl.base;                                                                // -> 'D:\\myDir'                        // base directory path value (falls back to cwd property if undefined or null)    
+            vinyl.relative;                                                            // -> 'testFile.txt'                     // path between base and path property values    
+            vinyl.history;                                                             // -> ['D:\\myDir\\testFile.txt']        // path history (first = original path | last = current path)    
+        });
+        
+        src('symbolic-Link').on('data', function(vinyl){                               // symbolic link targeted    
+            vinyl.symbolik;                                                            // -> undefined                          // !! should return the relative path between this symbolic link and its linked file (but vinyls don't recognize symbolic links in the first place)    
+        });
+        
+        cb();
+    }
+        
+    exports.default = testTask;
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>cwd</mark> / <mark>base</mark> / <mark>path</mark> / <mark>history</mark> / <mark>relative</mark> / <mark>dirname</mark> / <mark>stem</mark> / <mark>extname</mark> / <mark>basename</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+        src('testFile.txt').on('data', function(vinyl){
+            console.log( vinyl.cwd );                                                  // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename symlink TEST' 
+    
+            console.log( vinyl.basename );                                             // -> 'testFile.txt'
+            console.log( vinyl.stem );                                                 // -> 'testFile'
+            console.log( vinyl.extname );                                              // -> '.txt'
+    
+            console.log( vinyl.base );                                                 // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename symlink TEST'  
+            console.log( vinyl.dirname );                                              // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename symlink TEST'    
+            console.log( vinyl.path );                                                 // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename symlink TEST\testFile.txt'
+            console.log( vinyl.relative );                                             // -> 'testFile.txt'
+                vinyl.path = 'D:\\';                                                   // new path added
+            console.log( vinyl.history );                                              // -> ['D:\\safe\\code +\\my site\\03 improuve\\learn webdesign\\03.7 gulp\\vinyl (virtual gulp file)\\04 cwd base path history relative dirname stem extname basename symlink TEST\\testFile.txt', 'D:']    
+        });
+    
+        cb();
+    }
+    
+    exports.default = testTask;    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST> gulp
+        [11:07:55] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST\gulpfile.js
+        [11:07:55] Starting 'default'...
+        [11:07:55] Finished 'default' after 8.79 ms
+    // vinyl.cwd -----------------------------------
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST
+    // vinyl.basename ------------------------------
+        testFile.txt
+    // vinyl.stem ----------------------------------
+        testFile
+    // vinyl.extname -------------------------------
+        .txt
+    // vinyl.base ----------------------------------
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST
+    // vinyl.dirname -------------------------------
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST
+    // vinyl.path ----------------------------------
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST\testFile.txt
+    // vinyl.relative ------------------------------
+        testFile.txt
+    // vinyl.history  ------------------------------
+        [
+          'D:\\safe\\code +\\my site\\03 improuve\\learn webdesign\\03.7 gulp\\vinyl (virtual gulp file)\\04 cwd base path history relative dirname stem extname basename TEST\\testFile.txt',
+          'D:'
+        ]
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\04 cwd base path history relative dirname stem extname basename TEST>    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>symlink</mark> TEST </u></h4>
+    <p style="color:yellow;"> - the <mark>symlink</mark> property should return the relative path between the targeted symbolic link and its linked file but vinyls do not recognize symbolic links in the first place [TESTED: 2020-01-06] so this propety always returns <mark>null</mark>  </p>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+        src('testFile-SymLink').on('data', function(vinyl){                            // symbolic link targeted
+            console.log( vinyl.basename );                                             // -> 'testFilet-SymLink'
+            console.log( vinyl.isSymbolic() );                                         // -> false         // !! shold be true 
+            console.log( vinyl.symlink );                                              // -> null          // !! this suppose to return the relative path between the symbolic link and the linked file    
+        });
+        
+        cb();
+    }
+    
+    exports.default = testTask;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05 symlink test> gulp
+        [11:31:21] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05 symlink test\gulpfile.js
+        [11:31:21] Starting 'default'...
+        [11:31:21] Finished 'default' after 9.19 ms
+        testFile-SymLink                                                               // vinyl.basename
+        false                                                                          // vinyl.isSymbolic()        // !! should be true
+        null                                                                           // vinyl.symbolik            // !! sholud return the relative path between the symbolic link and its linked file    
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05 symlink test>
+    </pre>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> path normalization TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function myTask(cb){
+        src('testFile.txt').on('data', function(vinyl){
+            console.log( vinyl.path );                      // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST\testFile.txt'    
+            vinyl.path = "D:/myServer/gulp project/";
+            console.log( vinyl.path );                      // -> 'D:\myServer\gulp project'            // path normalized for the current platform 
+            
+            console.log( vinyl.cwd );                       // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST'
+            vinyl.cwd = "d:/"
+            console.log( vinyl.cwd );                       // -> 'D:'                                  // path normalized for the current platform 
+        });
+        cb();
+    }
+    
+    exports.default = myTask;    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST> gulp
+        [17:43:04] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST\gulpfile.js
+        [17:43:04] Starting 'default'...
+        [17:43:04] Finished 'default' after 9.2 ms
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST\testFile.txt
+        D:\myServer\gulp project
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST
+        d:
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\05.1 path normalization TEST>    
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>clone()</mark> / <mark>inspect()</mark> methods </u></h2>
+    <pre class="syntax">
+SYNTAX :    <strong>vinyl</strong>.clone(<small>{contents:<i>bol</i>}</small>)                                                // clones a new instance of the virtual file (the new clone has its own content by default)    
+                - <small>{contents:<i>bol</i>}</small>    - <mark>true</mark> (Default) = the new cloned vinyl instance has its own content  
+                                    - <mark>false</mark> = the new cloned vinyl instance shares the same content as the original vinyl
+            
+            <strong>vinyl</strong>.inspect()                                                            // returns a string representation of the virtual file 
+                                                                                          automatically called internally when we print vinyls with <mark>console.log</mark>    
+    </pre>
+    <pre>
+    const {src} = require('gulp');
+        
+    function testTask(cb){
+        src('testFile.txt').on('data', function(vinyl){
+            vinyl.inspect();                                                           // -> &lt;File "testFile.txt" &lt;Buffer ... &gt;&gt;        // string representation of the virtual file   
+            
+            var newVinyl = vinyl.clone({contents:false});                              // -> new vinyl instance (content shared with the original)
+        });
+        
+        cb();
+    }
+        
+    exports.default = testTask;
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>inspect()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+        src('testFile.txt').on('data', function(vinyl){
+            console.log( vinyl.inspect() );                                            // -> &lt;File 'testFile.txt' &tl;Buffer ... &gt;&gt;
+            console.log( typeof vinyl.inspect() );                                     // -> string
+        });
+        
+        cb();
+    }
+    
+    exports.default = testTask;    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\06 inspect() test> gulp
+        [15:42:38] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\06 inspect() test\gulpfile.js
+        [15:42:38] Starting 'default'...
+        [15:42:38] Finished 'default' after 9.32 ms
+        &lt;File "testFile.txt" &lt;Buffer 74 65 73 74 20 63 6f 6e 74 65 6e 74 20 61 64 64 65 64 20 74 6f 20 74 68 65 20 74 65 73 74 20 66 69 6c 65 0d 0a&gt;&gt;
+        string
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\06 inspect() test>    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>clone()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+        src('t*').on('data', function(vinyl){
+            var original = vinyl;
+            var clonedVinyl = original.clone();
+            
+            original.contents = null;                                                  // original vinyl content modified  
+            console.log( original.contents );                                          // -> null
+            console.log( clonedVinyl.contents );                                       // -> &lt;Buffer ..&gt;             // the cloned instance has its own content 
+            
+        // new vinyl instance shares the same content as the original -----------------
+            var original2 = vinyl;
+            var clonedVinyl2 = original2.clone({contents:false});
+            
+            original2.contents = null;                                                 // original vinyl content modified
+            console.log( original2.contents );                                         // -> null                          
+            console.log( clonedVinyl2.contents );                                      // -> null                    // the cloned instance shares the same content as the original  
+        });
+        
+        cb();
+    }
+    
+    exports.default = testTask;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\07 clone() TEST> gulp
+        [16:28:28] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\07 clone() TEST\gulpfile.js
+        [16:28:28] Starting 'default'...
+        [16:28:28] Finished 'default' after 8.97 ms
+        null
+        &lt;Buffer 61 64 64 65 64 20 63 6f 6e 74 65 6e 74 20 74 6f 20 74 68 65 20 74 65 73 74 20 66 69 6c 65 0d 0a&gt;
+        null
+        null
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\vinyl (virtual gulp file)\07 clone() TEST>    
+    </pre>
+</details>
+    
+    
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST (empty) > </a></h2>
+</body>
+</html>

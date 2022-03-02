@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Buffer </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Buffer (ver 3.2) </h1>
+    <p> Updated ( 2019-10-18 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Buffer  
+    </p>
+    <p class="subSite"><a href="Get Set Buffers as Numerical Values/index.html"> Get Set buffers as Numerical values > </a></p>
+<table class="table">
+    <tr>
+        <th style="width:30%;"> Method / Property / Command </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> $ <em>node</em> --zero-fill-buffers <i>nodeFile</i> </td>
+        <td> this command line option starts Node.js in a way that all new buffers will be garanteed to be zero filled (secure but has significant impact on the performance)
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 5.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.alloc(<strong>size:nr</strong>, <i>fill:str|buf|Uint8Array|nr</i>, <i>encode</i>) </td>
+        <td> allocates and returns a fixed sized buffer <u>(Slow but the allocated bytes are garanteed to be zero filled)</u>, if data is passed (2nd and 3rd arguments) the buffer is initialized by calling the <mark>fill()</mark> method internally
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 5.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.allocUnsafe(<strong>size:nr</strong>) </td>
+        <td> allocates and returns a fixed sized buffer which is not initialized, it uses the Pre-Allocated Buffer Pool for faster allocation <u>if the buffer is half or less the size of the Pre-Allocated Buffer Pool</u>, the allocated memory is <u>NOT garanteed to be empty</u>
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i>  </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.allocUnsafeSlow(<strong>size:nr</strong>) </td>
+        <td> allocates and returns a fixed sized buffer which is not initialized, (never uses the Pre-Allocated Buffer Pool), the allocated memory is <u>NOT garanteed to be empty</u> 
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 5.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.byteLength(<strong>str|buf|TypedArray|DataView|<wbr>ArrayBuffer</strong>, <i>encode</i>) </td>
+        <td> returns the passed items's length <u>in bytes</u>
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 5.10.0 TypedArray / DataView / ArrayBuffer supported </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.compare(<strong>buf1|Uint8Array1</strong>, <strong>buf2|Uint8Array2</strong>) </td>
+        <td> - returns a number indicating the relation order between the two buffers according to the Unicode Table <br>
+             - <mark>-1</mark> = <strong>buf2</strong> comes after <strong>buf1</strong> | <mark>0</mark> = <strong>buf2</strong> same as <strong>buf1</strong> | <mark>1</mark> = <strong>buf2</strong> comes before <strong>buf1</strong>
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array supported </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.concat([<strong>buf|Uint8Array</strong>, <i>...</i>], <i>totalLength:nr</i>) </td>
+        <td> concatenates the passed buffers and returns a new buffer of the concatenates bytes (calculate the <i>totalLength</i> explicitly is faster)    
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 0.7.11 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:inherit; padding:0; font-size:inherit" >
+        <table class="embededTable">
+            <tr style="background-color:inherit;">
+                <td>  </td>
+                <td> - allocates a fixed sized buffer an initializes it with the subsequent items, it uses the Pre-Allocated Buffer Pool for faster allocation <u>if the buffer is half or less the size of the Pre-Allocated Buffer Pool</u>  
+                    <span id="browserSupport" title="updated : 2019-11-06">
+                        <span><i class="fab fa-node-js"> 5.10.0 </i>  
+                    </span>
+                </td>
+            </tr>
+            <tr style="background-color:inherit;">
+                <td style="width:30%;"> <em>Buffer</em>.from(<strong>arr</strong>) </td>
+                <td> - returns a new buffer by interpreting each Array Items as 8bit Unsigned Integer value (<mark>0</mark> to <mark>255</mark>) (non-number items are ignored, out of range values are coerced into the range <u>but as unpredictable values</u>)  </td>
+            </tr>
+            <tr style="background-color:inherit;">
+                <td> <em>Buffer</em>.from(<strong>str</strong>, <i>encode</i>) </td>
+                <td> - encodes the passed string (default encoding <mark>'utf8'</mark>) and returns it in a new buffer  </td>
+            </tr>
+            <tr style="background-color:inherit;">
+                <td> <em>Buffer</em>.from(<strong>obj</strong>, <i>offset|encode</i>, <i>bufferLength</i>) </td>
+                <td> - the passed object must support either the <mark>valueOf()</mark> method or the <mark>toPrimitive</mark> Symbol and must return either a string or an Array when called as a primitive value, this string or Array is used to create a new buffer accordingly 
+                    <span id="browserSupport" title="updated : 2019-11-06">
+                        <span><i class="fab fa-node-js"> 8.2.0 </i>  
+                    </span>
+                </td>
+            </tr>
+            <tr style="background-color:inherit;">
+                <td> <em>Buffer</em>.from(<strong>buf</strong>) </td>
+                <td> - returns a new copy of the passed buffer </td>
+            </tr>
+            <tr style="background-color:inherit;">
+                <td> <em>Buffer</em>.from(<strong>ArrayBuffer</strong>, <i>byteOffset</i>, <i>bufferLength</i>) </td>
+                <td> - creates a <u>view</u> of the underlying ArrayBuffer <u>(the underlying ArrayBuffer is shared no new buffer is created!)</u> </td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.isBuffer(<strong>obj</strong>) </td>
+        <td> returns <mark>true</mark> if the passed object is a Node.js buffer object, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 0.1.101 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.isEncoding(<strong>encode:str</strong>) </td>
+        <td> - returns <mark>true</mark> if the passed encoding format is supported by Node.js, otherwise returns <mark>false</mark> <br>
+             - supported encoding formats in Node.js: <mark>ascii</mark> / <mark>latin1</mark> or <mark>binary</mark> / <mark>utf8</mark> / <mark>utf16le</mark> or <mark>ucs2</mark> / <mark>base64</mark> / <mark>hex</mark>
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 0.9.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <em>Buffer</em>.poolSize </td>
+        <td> gets or sets the Pre-Allocated Buffer Pool's size
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.buffer </td>
+        <td> returns the underlying binary data (ArrayBuffer object)
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.byteOffset </td>
+        <td> returns the byteOffset of this buffer relative to the underlying ArrayBuffer (position where this buffer sees its underlying ArrayBuffer)
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.compare(<strong>targ:buf|Uint8Array</strong>, <i>targSt(inc):index</i>, <i>targEnd(exc):index</i>, <i>bufSt(inc):index</i>, <i>bufEnd(exc):index</i>) </td>
+        <td> - returns a number indicating the relation order between the two buffers according to the Unicode Table (optionally we can target specific slices in each buffer for comparing) <br>
+             - <mark>-1</mark> = <strong>targetBuffer</strong> comes after <strong>buf</strong> | <mark>0</mark> = <strong>targetBuffer</strong> same as <strong>buf</strong> | <mark>1</mark> = <strong>targetBuffer</strong> comes before <strong>buf</strong>
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array supported </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.copy(<strong>targ:buf|Uint8Array</strong>, <i>targSt(inc):index</i>, <i>bufSt(inc):index</i>, <i>bufEnd(exc):index</i>) </td>
+        <td> copies a region from the buffer to the targeted buffer's region, returns the number of bytes copied 
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.entries() </td>
+        <td> returns the index byte pairs in an Iterable Object of each byte in the buffer
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 1.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.equals(<strong>buf|Uint8Array</strong>) </td>
+        <td> returns <mark>true</mark> if the passed buffer has the same bytes, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array supported </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.fill(<strong>str|buf|Uint8Array|nr</strong>, <i>offset:nr</i>, <i>endIndex(exc):nr</i>, <i>encode</i>) </td>
+        <td> fills the buffer with the specified values (recurseively if the <i>end:nr</i> is not specified), returns the buffer itself
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+                <span><i class="fab fa-node-js"></i> 5.7.0 <i>encode</i> support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.indexOf(<strong>val:str|buf|Uint8Array|nr</strong>, <i>byteOffset:nr</i>, <i>encode</i>) </td>
+        <td> returns the index of the <u>first found</u> value (string interpreted according to the encoding, number interpreted as 8bit Unsigned Integer value) (if the <i>byteOffset</i> is set the buffer part <u>after</u> the offset value is checked, negative offset value is counted from the end) (<mark>-1</mark> = no match)
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 1.5.0 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.includes(<strong>val:str|buf|Uint8Array|nr</strong>, <i>byteOffset:nr</i>, <i>encode</i>) </td>
+        <td> returns <mark>true</mark> if the value is found in the buffer, otherwise returns <mark>false</mark> (if the <i>byteOffset</i> is set the buffer part <u>after</u> the offset value is checked, negative offset value is counted from the end) (<mark>-1</mark> = no match)
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 5.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.keys() </td>
+        <td> returns the indexes in an Iterable Object of each byte in the buffer
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 1.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.lastIndexOf(<strong>val:str|buf|Uint8Array|nr</strong>, <i>byteOffset:nr</i>, <i>encode</i>) </td>
+        <td> returns the index of the <u>last found</u> value (string interpreted according to the encoding, number interpreted as 8bit Unsigned Integer value) (if the <i>byteOffset</i> is set the buffer part <u>before</u> the offset value is checked, negative offset value is counted from the end) (<mark>-1</mark> = no match)
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.length </td>
+        <td> returns the size of the buffer in bytes
+            <span id="browserSupport" title="updated : 2019-11-08">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.slice(<i>start(inc):index</i>, <i>end(exc):index</i>) </td>
+        <td> returns a view (of the targeted region) in a buffer (does not create a new buffer) (same as <mark>subarray()</mark>)   
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.subarray(<i>start(inc):index</i>, <i>end(exc):index</i>) </td>
+        <td> returns a view (of the targeted region) in a buffer (does not create a new buffer) (same as <mark>slice()</mark>)   
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 3.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.toJSON() </td>
+        <td> returns a JSON object from the buffer <u>(does not stringify the buffer!)</u> (the <mark>JSON.stringify()</mark> method internally calls this method to serialize a buffer) 
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 0.9.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.toString(<i>encode:str</i>, <i>st(inc):index</i>, <i>end(exc):index</i>) </td>
+        <td> decodes the buffer (or a region from it) into a string according to the encode format (Default: <mark>'utf8'</mark>) and returns it    
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.values() </td>
+        <td> returns the bytes in an Iterable Object of the buffer
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-node-js"></i> 1.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.write(<strong>str</strong>, <i>offset:nr</i>, <i>length:nr</i>, <i>encode</i>) </td>
+        <td> writes the binary encoded string at the specified position to the buffer (passed string is written once NOT recursive write), returns the number of bytes written 
+            <span id="browserSupport" title="updated : 2019-11-06">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> buffer module must be required </td>
+    </tr>
+    <tr>
+        <td> <strong>buffer</strong>.constants </td>
+        <td> returns an object which contains the buffer module's constants
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 8.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buffer</strong>.INSPECT_MAX_BYTES </td>
+        <td> gets or sets for the buffer module how many bytes are displayed when printing a buffer on the command line  
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buffer</strong>.kMaxLength </td>
+        <td> returns a number indicating the allowed largest buffer size in bytes
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 3.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buffer</strong>.transcode(<strong>buf|Uint8Array</strong>, <strong>encodeFrom</strong>, <strong>encodeTo</strong>) </td>
+        <td> - re-encodes the passed buffer from one character encoding to another character encoding and returns the result in a new buffer (if a character is unknown for the targeted encoding format it will be encoded to <mark>3f</mark> = <mark>?</mark>) <br>
+              - supported character encodings are <mark>'utf8'</mark> | <mark>'utf16le'</mark> or <mark>'ucs2'</mark> | <mark>'latin1'</mark> or <mark>'binary'</mark>
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 7.1.0 </span>
+                <span><i class="fab fa-node-js"></i> 8.0.0 Uint8Array support </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Get Set buffes as Numerical Values </caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2"> endianness format swapping </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.swap16() </td>
+        <td> interprets the buffer as array of 16bit values and swaps the endianness format in place (buffer size must be multiple of 2)
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 5.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.swap32() </td>
+        <td> interprets the buffer as array of 32bit values and swaps the endianness format in place (buffer size must be multiple of 4)
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 5.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.swap64() </td>
+        <td> interprets the buffer as array of 64bit values and swaps the endianness format in place (buffer size must be multiple of 8)
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 6.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> 8 / 16 / 24 / 32 / 40 / 48bit </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readIntBE(<strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> gets 8, 16, 24, 32, 40 or 48bits of binary data from the specified position and interprets it as 8, 16, 24, 32, 40 or 48bits Signed Integer Big Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeIntBE(<strong>int:nr</strong>, <strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> - sets 8, 16, 24, 32, 40 or 48bits of binary data at the specified position as a 8, 16, 24, 32, 40 or 48bits Signed Integer Big Endianness value <br>
+             - <span style="color:orangered;">(no range error thrown at 48bit upper range excess [Bug version 13.1.0 / TESTED: 2019-11-13])</span>
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readIntLE(<strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> gets 8, 16, 24, 32, 40 or 48bits of binary data from the specified position and interprets it as 8, 16, 24, 32, 40 or 48bits Signed Integer Little Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeIntLE(<strong>int:nr</strong>, <strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> sets 8, 16, 24, 32, 40 or 48bits of binary data at the specified position as a 8, 16, 24, 32, 40 or 48bits Signed Integer Little Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUIntBE(<strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> gets 8, 16, 24, 32, 40 or 48bits of binary data from the specified position and interprets it as 8, 16, 24, 32, 40 or 48bits Unsigned Integer Big Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUIntBE(<strong>uint:nr</strong>, <strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> sets 8, 16, 24, 32, 40 or 48bits of binary data at the specified position as a 8, 16, 24, 32, 40 or 48bits Unsigned Integer Big Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUIntLE(<strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> gets 8, 16, 24, 32, 40 or 48bits of binary data from the specified position and interprets it as 8, 16, 24, 32, 40 or 48bits Unsigned Integer Little Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUIntLE(<strong>uint:nr</strong>, <strong>byteOffset:index</strong>, <strong>byteLength:nr(1-6)</strong>) </td>
+        <td> sets 8, 16, 24, 32, 40 or 48bits of binary data at the specified position as a 8, 16, 24, 32, 40 or 48bits Unsigned Integer Little Endianness value
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> 8bit </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readInt8(<i>byteOffset:index</i>) </td>
+        <td> gets 8 bits of binray data from the specified position and interprets it as 8bit Signed Integer value (<mark>-128</mark> to <mark>127</mark>)  
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeInt8(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 8 bits of binary data at the specified position as an 8bit Signed Integer value (<mark>-128</mark> to <mark>127</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUInt8(<i>byteOffset:index</i>) </td>
+        <td> gets 8 bits of binray data from the specified position and interprets it as 8bit Unigned Integer value (<mark>0</mark> to <mark>255</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUInt8(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 8 bits of binary data at the specified position as an 8bit Unigned Integer value (<mark>0</mark> to <mark>255</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> 16bit </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readInt16BE(<i>byteOffset:index</i>) </td>
+        <td> gets 16bits of binary data from the specified position and interprets it as 16bit Signed Integer Big Endianness value (<mark>-32768</mark> to <mark>32767</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeInt16BE(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 16bits of binary data at the specified position as a 16bits Signed Integer Big Endianness value (<mark>-32768</mark> to <mark>32767</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readInt16LE(<i>byteOffset:index</i>) </td>
+        <td> gets 16bits of binary data from the specified position and interprets it as 16bit Signed Integer Little Endianness value (<mark>-32768</mark> to <mark>32767</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeInt16LE(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 16bits of binary data at the specified position as a 16bits Signed Integer Little Endianness value (<mark>-32768</mark> to <mark>32767</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUInt16BE(<i>byteOffset:index</i>) </td>
+        <td> gets 16bits of binary data from the specified position and interprets it as 16bit Unsigned Integer Big Endianness value (<mark>0</mark> to <mark>65535</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUInt16BE(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 16bits of binary data at the specified position as a 16bits Unsigned Integer Big Endianness value (<mark>0</mark> to <mark>65535</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUInt16LE(<i>byteOffset:index</i>) </td>
+        <td> gets 16bits of binary data from the specified position and interprets it as 16bit Unsigned Integer Little Endianness value (<mark>0</mark> to <mark>65535</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUInt16LE(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 16bits of binary data at the specified position as a 16bits Unsigned Integer Little Endianness value (<mark>0</mark> to <mark>65535</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> 32bit </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readInt32BE(<i>byteOffset:index</i>) </td>
+        <td> gets 32bits of binary data from the specified position and interprets it as 32bit Signed Integer Big Endianness value (<mark>-2147483648</mark> to <mark>2147483647</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeInt32BE(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 32bits of binary data at the specified position as a 32bits Signed Integer Big Endianness value (<mark>-2147483648</mark> to <mark>2147483647</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readInt32LE(<i>byteOffset:index</i>) </td>
+        <td> gets 32bits of binary data from the specified position and interprets it as 32bit Signed Integer Little Endianness value (<mark>-2147483648</mark> to <mark>2147483647</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeInt32LE(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 32bits of binary data at the specified position as a 32bits Signed Integer Little Endianness value (<mark>-2147483648</mark> to <mark>2147483647</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUInt32BE(<i>byteOffset:index</i>) </td>
+        <td> gets 32bits of binary data from the specified position and interprets it as 32bit Unsigned Integer Big Endianness value (<mark>0</mark> to <mark>4294967295</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUInt32BE(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 32bits of binary data at the specified position as a 32bits Unsigned Integer Big Endianness value (<mark>0</mark> to <mark>4294967295</mark>) 
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readUInt32LE(<i>byteOffset:index</i>) </td>
+        <td> gets 32bits of binary data from the specified position and interprets it as 32bit Unsigned Integer Little Endianness value (<mark>0</mark> to <mark>4294967295</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeUInt32LE(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 32bits of binary data at the specified position as a 32bits Unsigned Integer Little Endianness value (<mark>0</mark> to <mark>4294967295</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.5.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readFloatBE(<i>byteOffset:index</i>) </td>
+        <td> gets 32bits of binary data from the specified position and interprets it as 32bit Floating Point Big Endianness value (<mark>1.2*10**-38</mark> to <mark>3.4*10**38</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeFloatBE(<strong>float:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 32bits of binary data at the specified position as a 32bits Floating Point Big Endianness value (<mark>1.2*10**-38</mark> to <mark>3.4*10**38</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readFloatLE(<i>byteOffset:index</i>) </td>
+        <td> gets 32bits of binary data from the specified position and interprets it as 32bit Floating Point Little Endianness value (<mark>1.2*10**-38</mark> to <mark>3.4*10**38</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeFloatLE(<strong>float:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 32bits of binary data at the specified position as a 32bits Floating Point Little Endianness value (<mark>1.2*10**-38</mark> to <mark>3.4*10**38</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> 64bit </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readBigInt64BE(<i>byteOffset:index</i>) </td>
+        <td> gets 64bits of binary data from the specified position and interprets it as 64bit Signed BigInteger Big Endianness value (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark>)    
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeBigInt64BE(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 64bits of binary data at the specified position as a 64bits Signed BigInteger Big Endianness value (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark>)    
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readBigInt64LE(<i>byteOffset:index</i>) </td>
+        <td> gets 64bits of binary data from the specified position and interprets it as 64bit Signed BigInteger Little Endianness value (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeBigInt64LE(<strong>int:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 64bits of binary data at the specified position as a 64bits Signed BigInteger Little Endianness value (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readBigUInt64BE(<i>byteOffset:index</i>) </td>
+        <td> gets 64bits of binary data from the specified position and interprets it as 64bit Unsigned BigInteger Big Endianness value (<mark>0</mark> to <mark>18446744073709551615n</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeBigUInt64BE(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 64bits of binary data at the specified position as a 64bits Unsigned BigInteger Big Endianness value (<mark>0</mark> to <mark>18446744073709551615n</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readBigUInt64LE(<i>byteOffset:index</i>) </td>
+        <td> gets 64bits of binary data from the specified position and interprets it as 64bit Unsigned BigInteger Little Endianness value (<mark>0</mark> to <mark>18446744073709551615n</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeBigUInt64LE(<strong>uint:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 64bits of binary data at the specified position as a 64bits Unsigned BigInteger Little Endianness value (<mark>0</mark> to <mark>18446744073709551615n</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 12.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readDoubleBE(<i>byteOffset:index</i>) </td>
+        <td> gets 64bits of binary data from the specified position and interprets it as 64bit Floating Point Big Endianness value (<mark>5*10**-324</mark> to <mark>1.8*10**308</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeDoubleBE(<strong>float:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 64bits of binary data at the specified position as a 64bits Floating Point Big Endianness value (<mark>5*10**-324</mark> to <mark>1.8*10**308</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.readDoubleLE(<i>byteOffset:index</i>) </td>
+        <td> gets 64bits of binary data from the specified position and interprets it as 64bit Floating Point Little Endianness value (<mark>5*10**-324</mark> to <mark>1.8*10**308</mark>)
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>buf</strong>.writeDoubleLE(<strong>float:nr</strong>, <i>byteOffset:index</i>) </td>
+        <td> sets 64bits of binary data at the specified position as a 64bits Floating Point Little Endianness value (<mark>5*10**-324</mark> to <mark>1.8*10**308</mark>) 
+            <span id="browserSupport" title="updated : 2019-11-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v13.x/docs/api/buffer.html" target="_blank">Node.js Buffer module</a></p>
+    <p><a href="https://nodejs.org/dist/latest-v13.x/docs/api/querystring.html" target="_blank">Node.js Query String module</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Node.js buffers are fixed-sized raw memory allocation outside the V8 heap (their size cannot be changed once estabilished) </p>
+    <p> - They are implemented as Uint8Arrays <u>with some differences</u> (each byte corresponds a value of <mark>0</mark> to <mark>255</mark> (values outside this range will be coerced to this range)) </p> 
+    <p> - the Buffer class is available in the global scope, we only need to require the <mark>'buffer'</mark> module if we want to use certain methods </p> 
+    <p> - Supported character encodings are : </p>
+    <ul class="encode"> 
+        <li> <mark>'ascii'</mark> - characters are encoded in 7 bits but in 8bit blocks (1byte), this is why this character encoding is compatible with 'utf8'  </li>
+        <li> <mark>'latin1'</mark> (ISO-8859-1) same as <mark>'binary'</mark> <span id="browserSupport" title="updated : 2019-11-04"> <span><i class="fab fa-node-js">6.4.0 'latin1'</i> </span> </span>
+        <li> <mark>'utf8'</mark> - multibyte encoded Unicode characters </li>
+        <li> <mark>'utf16le'</mark> same as <mark>'ucs2'</mark> - 2 or 4 bytes little endianness Unicode encoded characters </li>
+        <li> <mark>'base64'</mark> - characters are encoded in 6 bits </li>
+        <li> <mark>'hex'</mark> - 2 hexadecimal characters are encoded in 1 byte </li>
+    </ul>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Node.js encode support formats TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log( '------------------------------- utf8' );
+    var utf8 = Buffer.from('bla Bla Ԫ Ɨ ć', 'utf8');
+        console.log( utf8 );
+        console.log( utf8.toString() );
+        
+console.log( '------------------------------- utf16le' );
+    var utf16le = Buffer.from('bla Bla Ԫ Ɨ ć', 'utf16le');
+        console.log( utf16le );
+        console.log( utf16le.toString('utf16le') );
+console.log( '------------------------------- ucs2 (same as utf16le)' );
+    var ucs2 = Buffer.from('bla Bla Ԫ Ɨ ć', 'ucs2');
+        console.log( ucs2 );
+        console.log( ucs2.toString('ucs2') );
+        
+console.log( '------------------------------- ASCII' );
+    var ascii = Buffer.from('bla Bla 123', 'ascii');                  // the last character is not supported by ASCII encoding 
+        console.log( ascii );
+        console.log( ascii.toString('ascii') );
+        
+console.log( '------------------------------- latin1' );
+    var latin1 = Buffer.from('bla Bla éñ', 'latin1');
+        console.log( latin1 );
+        console.log( latin1.toString('latin1') );
+console.log( '------------------------------- binary (same as latin1)' );
+    var binary = Buffer.from('bla Bla éñ', 'binary');
+        console.log( binary );
+        console.log( binary.toString('binary') );
+        
+console.log( '------------------------------- base64' );
+    var base64 = Buffer.from('sdfewpqj1655-', 'base64');
+        console.log( base64 );
+        console.log( base64.toString('base64') );
+        
+console.log( '------------------------------- hex' );
+    var hex = Buffer.from('0123456789abcdef', 'hex');
+        console.log( hex );
+        console.log( hex.toString('hex') );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\01 Node.js encode supported format TEST> node main     
+------------------------------- utf8
+&lt;Buffer 62 6c 61 20 42 6c 61 20 d4 aa 20 c6 97 20 c4 87&gt;
+bla Bla Ԫ Ɨ ć
+------------------------------- utf16le
+&lt;Buffer 62 00 6c 00 61 00 20 00 42 00 6c 00 61 00 20 00 2a 05 20 00 97 01 20 00 07 01&gt;
+bla Bla Ԫ Ɨ ć
+------------------------------- ucs2 (same as utf16le)
+&lt;Buffer 62 00 6c 00 61 00 20 00 42 00 6c 00 61 00 20 00 2a 05 20 00 97 01 20 00 07 01&gt;
+bla Bla Ԫ Ɨ ć
+------------------------------- ASCII
+&lt;Buffer 62 6c 61 20 42 6c 61 20 31 32 33&gt;
+bla Bla 123
+------------------------------- latin1
+&lt;Buffer 62 6c 61 20 42 6c 61 20 e9 f1&gt;
+bla Bla éñ
+------------------------------- binary (same as latin1)
+&lt;Buffer 62 6c 61 20 42 6c 61 20 e9 f1&gt;
+bla Bla éñ
+------------------------------- base64
+&lt;Buffer b1 d7 de c2 9a a3 d7 ae 79&gt;
+sdfewpqj1655
+------------------------------- hex
+&lt;Buffer 01 23 45 67 89 ab cd ef&gt;
+0123456789abcdef
+PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\01 Node.js encode supported format TEST>      
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> ASCII encode 7bit TEST </u></h4>
+    <p> - ASCII characters are encoded in 7 bits but they use 8bit blocks (1byte) because we can read ascii encoded characters by using utf-8 encoding </p>
+    <pre style="margin-bottom:1px;">
+    var buf = Buffer.allocUnsafe(10);
+    buf.fill('abcd 01234', 'ascii');                                                   // write the buffer by using 'ASCII' encoding
+    
+    console.log( buf.toString('utf8') );                                               // read the buffer by using 'utf-8' encoding is compatible 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\02 ASCII encode 7bit TEST> node main   
+        abcd 01234
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\02 ASCII encode 7bit TEST>    
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Memory Allocation <mark>from()</mark> / <mark>alloc()</mark> / <mark>allocUnsafe()</mark> / <mark>allocUnsafeSlow()</mark> / <mark>byteOffset</mark> / <mark>fill()</mark> / <mark>write()</mark> / <mark>--zero-fill-buffers</mark> / <mark>poolSize</mark> </u></h2>    
+    <p> - Node.js buffer module pre-allocates a buffer instance for faster memory allocation, I call this here as <u>Pre-Allocated Buffer Pool</u> </p>
+    <p> - this Pre-Allocated Buffer Pool is a memory pool used for fast <u>but unsafe</u> memory allocation (memory inside the pool might not empty and potentially contains sensitive data so careful!)</p>
+    <pre class="syntax">
+SYNTAX :                                                                               // allocates a fixed sized buffer an initializes it with the subsequent items, it uses the Pre-Allocated Buffer Pool for faster allocation <u>if the buffer is half or less the size of the Pre-Allocated Buffer Pool</u>    
+            <em>Buffer</em>.from(<strong>arr</strong>)                                                           // returns a new buffer by interpreting each Array Items as 8bit Unsigned Integer value (<mark>0</mark> to <mark>255</mark>) (non-number items are ignored, out of range values are coerced into the range <u>but as unpredictable values</u>)    
+            <em>Buffer</em>.from(<strong>str</strong>, <i>encode</i>)                                                   // encodes the passed string (default encoding <mark>'utf8'</mark>) and returns it in a new buffer   
+            <em>Buffer</em>.from(<strong>obj</strong>, <i>offset|encode</i>, <i>bufferLength</i>)                              // the passed object must support either the <mark>valueOf()</mark> method or the <mark>toPrimitive</mark> Symbol and must return either a string or an Array when called as a primitive value, this string or Array is used to create a new buffer accordingly   
+            <em>Buffer</em>.from(<strong>buf</strong>)                                                           // returns a new copy of the passed buffer 
+            <em>Buffer</em>.from(<strong>ArrayBuffer</strong>, <i>byteOffset</i>, <i>bufferLength</i>)                         // creates a <u>view</u> of the underlying ArrayBuffer <u>(the underlying ArrayBuffer is shared no new buffer is created!)</u>
+            
+            <em>Buffer</em>.alloc(<strong>size:nr</strong>, <i>fill:str|buf|Uint8Array|nr</i>, <i>encode</i>)                  // allocates and returns a fixed sized buffer <u>(Slow but the allocated bytes are garanteed to be zero filled)</u>, if data is passed (2nd and 3rd arguments) the buffer is initialized by calling the <mark>fill()</mark> method internally    
+            <em>Buffer</em>.allocUnsafe(<strong>size:nr</strong>)                                                // allocates and returns a fixed sized buffer which is not initialized, it uses the Pre-Allocated Buffer Pool for faster allocation <u>if the buffer is half or less the size of the Pre-Allocated Buffer Pool</u>, the allocated memory is <u>NOT garanteed to be empty</u>    
+            <em>Buffer</em>.allocUnsafeSlow(<strong>size:nr</strong>)                                            // allocates and returns a fixed sized buffer which is not initialized, (never uses the Pre-Allocated Buffer Pool), the allocated memory is <u>NOT garanteed to be empty</u> 
+            
+            <em>Buffer</em>.poolSize                                                            // gets or sets the Pre-Allocated Buffer Pool's size 
+            
+            $ <em>node</em> --zero-fill-buffers <i>nodeFile</i>                                        // this command line option starts Node.js in a way that all new buffers will be garanteed to be zero filled (secure but has significant impact on the performance)    
+            
+            <strong>buf</strong>.fill(<strong>str|buf|Uint8Array|nr</strong>, <i>offset:nr</i>, <i>endIndex(exc):nr</i>, <i>encode</i>)       // fills the buffer with the specified values (recurseively if the <i>end:nr</i> is not specified), returns the buffer itself    
+            <strong>buf</strong>.write(<strong>str</strong>, <i>offset:nr</i>, <i>length:nr</i>, <i>encode</i>)                               // writes the binary encoded string at the specified position to the buffer (passed string is written once NOT recursive write), returns the number of bytes written    
+            <strong>buf</strong>.byteOffset                                                             // returns the byteOffset of this buffer relative to the underlying ArrayBuffer (position where this buffer sees its underlying ArrayBuffer)    
+            
+<span style="color:orange;">// Deprecated Technology mostly for security issues (updated: 2019-11-13) -------------</span>
+            new Buffer(<strong>arr</strong>)                                                            // Deprecated from version 6.0.0, use <mark>Buffer.from(arr)</mark> instead  
+            new Buffer(<strong>ArrayBuffer</strong>, <i>byteOffset</i>, <i>bufferLength</i>)                          // Deprecated from version 6.0.0, use <mark>Buffer.from(ArrayBuffer, byteOffset, bufferLength)</mark> instead  
+            new Buffer(<strong>buffer</strong>)                                                         // Deprecated from version 6.0.0, use <mark>Buffer.from(buffer)</mark> instead 
+            new Buffer(<strong>size:nr</strong>)                                                        // Deprecated from version 6.0.0, use <mark>Buffer.from(size:nr)</mark> instead  
+            new Buffer(<strong>str</strong>, <i>encode</i>)                                                    // Deprecated from version 6.0.0, use <mark>Buffer.from(str, encode)</mark> instead  
+            
+            new SlowBuffer(<strong>size:nr</strong>)                                                    // Deprecated from version 6.0.0, use <mark>Buffer.allocUnsafeSlow(size:nr</mark> instead  
+            
+            <strong>buf</strong>.parent                                                                 // Deprecated from version 8.0.0, use <mark>buf.buffer</mark> instead   
+    </pre>
+    <pre>
+// from() / poolSize ------------------------------------------------------------------
+    Buffer.from([0x00, 0xff, 0x4c, 0x99]);                                             // -> &lt;Buffer 00 ff 4c 00&gt;         // new buffer returned by writing the buffer bytes as 8bit Unsigned Integer values  
+    Buffer.from('abc', 'ucs2');                                                        // -> &lt;Buffer 61 00 62 00 63 00&gt;   // string encoded as UTF16 little endianness and written to the buffer (2|4 bytes per character)    
+    Buffer.from(new String('abc'));                                                    // -> &lt;Buffer 61 62 63&gt;            // object interpreted as primitive value (string) because it has the 'valueOf()' implementation    
+    
+    Buffer.from(Buffer.from([1, 2, 3]));                                               // -> &lt;Buffer 01 02 03&gt;            // returns a new copy of the passed buffer    
+    Buffer.from(new ArrayBuffer(8), 2, 4);                                             // -> &lt;Buffer 00 00 00 00&gt;         // -! creates a view NOT a copy of the passed ArrayBuffer (2 byte offset, 4 byte size buffer view)    
+    
+    Buffer.poolSize;                                                                   // -> 8192                         // returns the Pre-Allocated Buffer Pool's size in bytes    
+    
+    Buffer.from([1, 2, 3]).buffer;                                                     // -> ArrayBuffer{... 8192}        // this is the Pre-Allocated Buffer Pool (this method uses it, if the buffer size is half of less of the pool's size )    
+    
+// alloc() / allocUnsafe() / allocUnsafeSlow() ----------------------------------------
+    Buffer.alloc(64);                                                                  // -> &lt;Buffer 00 00 00 00 ...&gt;     // allocates 64 bytes and returns the corresponding buffer  // -! slow memory allocation but no sensitive data will be visible inside this buffer garanteed    
+    Buffer.alloc(64, 'ab', 'ascii');                                                   // -> &lt;Buffer 61 62 61 62 ...&gt;     // allocates and fills 64 bytes, method internally calls the "fill('aa', 'ascii')" method to initialize the buffer  
+    Buffer.alloc(64, 15);                                                              // -> &lt;Buffer 0f 0f 0f 0f ...&gt;     // allocates and fills 64 bytes with the value of 15 each byte
+    
+    Buffer.allocUnsafe(64);                                                            // -> &lt;Buffer 00 7b 00 15 ...&gt;     // allocates 64 bytes and returns the corresponding buffer // -! fast but unsafe memory allocation sensitive data might be visible here (this method uses the Pre-Allocated Buffer Pool)    
+    Buffer.allocUnsafeSlow(64);                                                        // -> &lt;Buffer a9 32 4c 00 ...&gt;     // allocates 64 bytes and returns the corresponding buffer // -! fast but unsafe memory allocation sensitive data might be visible here (never uses the Pre-Allocated Buffer Pool)  
+    
+    // Pre-Allocated Buffer Pool usage ------------------------
+    Buffer.alloc(8).buffer;                                                            // -> ArrayBuffer{... 8}           // underlying ArrayBuffer safely allocated (no sensitive data is visible here)    
+    Buffer.allocUnsafe(8).buffer;                                                      // -> ArrayBuffer{... 8192}        // this is the Pre-Allocated Buffer Pool (this method uses it for faster allocation)  
+    Buffer.allocUnsafeSlow(8).buffer;                                                  // -> ArrayBuffer{... 8}           // underlying ArrayBuffer unsafely allocated outside the Pre-Allocated Buffer Pool (sensitive data might be visible here)    
+    
+// fill() / write() -------------------------------------------------------------------
+    Buffer.alloc(10).fill(10);                                                         // -> &lt;Buffer 01 01 01 01 01 01 01 01 01 01&gt;   // recursively fills the whole buffer with the passed number   
+    Buffer.alloc(10).fill('abc', 2, 'utf8');                                           // -> &lt;Buffer 00 00 61 62 63 61 62 63 61 62&gt;   // recursively fills the whole buffer with the encoded string after the 2nd byte  
+    Buffer.alloc(10).fill(new Uint8Array([255, 255, 255, 255, 255]), 0, 3);            // -> &lt;Buffer ff fe fd 00 00 00 00 00 00 00&gt;   // passed data (TypedArray) cannot be fully written because the end argument 
+    
+    Buffer.alloc(10).write('abc');                                                     // -> 3      // bytes written returned         // (&lt;Buffer 61 62 63 00 00 00 00 00 00 00&gt;) the encodes string is written at the begining of the buffer
+    Buffer.alloc(10).write('abc', 2, 2);                                               // -> 2                                        // (&lt;Buffer 00 00 61 62 00 00 00 00 00 00&gt;) encoded string is written after the 2nd byte and can be 2 bytes long 
+    Buffer.alloc(10).write('abc', 2, 4, 'ucs2');                                       // -> 4                                        // (&lt;Buffer 00 00 00 61 00 62 00 00 00 00&gt;) encoded string (in utf16) is written after the 3rd byte and can be 4 bytes long    
+    
+// byteOffset -------------------------------------------------------------------------
+    var buf = Buffer.from(new ArrayBuffer(64), 2, 8);
+    buf.byteOffset;                                                                    // -> 2      // this buffer basically sees its underlying ArrayBuffer after the 2nd byte     
+    </pre>
+    <pre>
+    $ node --zero-fill-buffers node.js                                                 // starting Node.js with the '--zero-fill-buffers' command line option   
+// main.js (file) ---------------------------------------------------------------------
+    Buffer.allocUnsafe(100);                                                           // -> &lt;Buffer 00 00 00 00 00 00 00 00 00 ...&gt;  // unsafe buffer is garanteed to be empty because the Node was started with the '--zero-fill-buffers' command line option    
+    Buffer.allocUnsafeSlow(100);                                                       // -> &lt;Buffer 00 00 00 00 00 00 00 00 00 ...&gt;  // unsafe buffer is garanteed to be empty because the Node was started with the '--zero-fill-buffers' command line option    
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>Buffer.from()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log( '// from(arr) ---------------------------------------------------------------------' );
+    console.log( Buffer.from([0, 65, 145, 255]) );                      // new buffer returned bytes are stored as Uint8 values 
+    console.log( Buffer.from([145785], false, 'some string', 41) );     // 1st value is coerced into range (as some random in-range value), and the remaining items are completely ignored 
+    
+console.log( '// from(arrayBuffer, byteOffset, length) -----------------------------------------' );
+    var arrayBuffer = new ArrayBuffer(8);                               // ArrayBuffer (raw binary data)
+    var dataView = new DataView(arrayBuffer);
+    dataView.setBigInt64(0, 4787894144157994647n);                      // write some data to the underlying ArrayBuffer 
+    
+    console.log( Buffer.from(arrayBuffer) );                            // this buffer is a view of the 'arrayBuffer' NOT a copy!
+    console.log( Buffer.from(arrayBuffer, 2, 4) );                      // this view sees 4 bytes from the 2nd index (included);
+    console.log( Buffer.from(arrayBuffer, 3) );                         // this view sees all remaining bytes from the 3rd index   
+    
+console.log( '// from(buffer) ------------------------------------------------------------------' );
+    console.log( Buffer.from(Buffer.alloc(10)) );                       // returns a new copy of the passed buffer 
+    console.log( Buffer.from(Buffer.from([32, 54, 103, 244,])) );
+    
+console.log( '// from(obj, offset|encode, bufferLength) ----------------------------------------' );
+    var obj1 = new String('kicsi kutya');                               // object supports the 'valueOf()' method
+    var obj2 = {[Symbol.toPrimitive](){ return 'kicsi kutya'}}          // object supports the 'toPrimitive' symbol (returns a string when called as primitive data)
+    var obj3 = {[Symbol.toPrimitive](){ return [0, 255]}}               // object supports the 'toPrimitive' symbol (returns an array when called as primitive data)
+    
+    console.log( Buffer.from(obj1) );    
+    console.log( Buffer.from(obj2) );    
+    console.log( Buffer.from(obj3) );    
+    
+console.log( '// from(str, encode) -------------------------------------------------------------' );
+    console.log( Buffer.from('kicsi kutya') );                          // encoded string returned in a buffer  
+    console.log( Buffer.from('kicsi kutya', 'utf16le') );               // utf16 little endianness encoding used here     
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\03 Buffer.from() TEST> node main           
+        // from(arr) ---------------------------------------------------------------------
+        &lt;Buffer 00 41 91 ff&gt;
+        &lt;Buffer 79&gt;
+        // from(arrayBuffer, byteOffset, length) -----------------------------------------
+        &lt;Buffer 42 72 04 5b 54 b5 ce 97&gt;
+        &lt;Buffer 04 5b 54 b5&gt;
+        &lt;Buffer 5b 54 b5 ce 97&gt;
+        // from(buffer) ------------------------------------------------------------------
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00&gt;
+        &lt;Buffer 20 36 67 f4&gt;
+        // from(obj, offset|encode, bufferLength) ----------------------------------------
+        &lt;Buffer 6b 69 63 73 69 20 6b 75 74 79 61&gt;
+        &lt;Buffer 6b 69 63 73 69 20 6b 75 74 79 61&gt;
+        &lt;Buffer 00 ff&gt;
+        // from(str, encode) -------------------------------------------------------------
+        &lt;Buffer 6b 69 63 73 69 20 6b 75 74 79 61&gt;
+        &lt;Buffer 6b 00 69 00 63 00 73 00 69 00 20 00 6b 00 75 00 74 00 79 00 61 00&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\03 Buffer.from() TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>alloc()</mark> / <mark>allocUnsafe()</mark> / <mark>allocUnsafeSlow()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log( '// alloc() -----------------------------------------------------------------------------' );
+    console.log( Buffer.alloc(100) );                                               // safely allocating 100 bytes (bytes garanteed to be empty)
+    console.log( Buffer.alloc(100, 'kicsi kutya', 'ucs2') );                        // fill the created safe buffer with an encoded string        
+    console.log( Buffer.alloc(100, Buffer.from([1, 2, 3])) );                       // fill the created safe buffer with another buffer's data 
+    console.log( Buffer.alloc(100, new Uint8Array([1, 2, 3])) );                    // fill the created safe buffer with Uint8Array items 
+    console.log( Buffer.alloc(100, 15) );                                           // fill the created safe buffer with one number  
+    
+console.log( '// allocUnsafe() -----------------------------------------------------------------------' );
+    console.log( Buffer.allocUnsafe(100) );                                         // allocates 100 bytes (uses the Pre-Allocated Buffer Pool which potentially can contain sensitive data)  
+    
+console.log( '// allocUnsafeSlow() -------------------------------------------------------------------' );
+    console.log( Buffer.allocUnsafeSlow(100) );                                     // allocates 100 bytes (outside the Pre-Allocated Buffer Pool) this also could potentially contain sensitive data       
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\04 alloc() allocUnsafe() allocUnsafeSlow() TEST> node main      
+        // alloc() -----------------------------------------------------------------------------
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ... 50 more bytes&gt;
+        &lt;Buffer 6b 00 69 00 63 00 73 00 69 00 20 00 6b 00 75 00 74 00 79 00 61 00 6b 00 69 00 63 00 73 00 69 00 20 00 6b 00 75 00 74 00 79 00 61 00 6b 00 69 00 63 00 ... 50 more bytes&gt;
+        &lt;Buffer 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 ... 50 more bytes&gt;
+        &lt;Buffer 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 03 01 02 ... 50 more bytes&gt;
+        &lt;Buffer 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f ... 50 more bytes&gt;
+        // allocUnsafe() -----------------------------------------------------------------------
+        &lt;Buffer f8 74 73 6a dc 02 00 00 28 74 73 6a dc 02 00 00 28 74 73 6a dc 02 00 00 78 72 73 6a dc 02 00 00 f8 ea 6e 6a dc 02 00 00 00 00 00 00 00 00 00 00 00 00 ... 50 more bytes&gt;
+        // allocUnsafeSlow() -------------------------------------------------------------------
+        &lt;Buffer b2 df 0d 0c 85 03 00 00 18 e5 6e 6a dc 02 00 00 01 00 00 00 00 00 00 00 b7 f7 6d 2f be 00 00 00 d8 e7 6e 6a dc 02 00 00 01 00 00 00 00 00 00 00 37 64 ... 50 more bytes&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\04 alloc() allocUnsafe() allocUnsafeSlow() TEST>      
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>--zero-fill-buffers</mark> command line TEST </u></h4>
+    <p> - all new Buffer instances are garanteed to be zero filled (slow performance) </p>
+    <pre style="margin-bottom:1px;">
+    const buffer = require('buffer');
+    buffer.INSPECT_MAX_BYTES = 100;
+    
+    console.log( Buffer.alloc(100) );
+    console.log( Buffer.allocUnsafe(100) );
+    console.log( Buffer.allocUnsafeSlow(100) );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\05 --zero-fill-buffers command line TEST> node --zero-fill-buffers main.js                                                                             
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&gt;
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&gt;
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\05 --zero-fill-buffers command line TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Pre-Allocated Buffer Pool TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+Buffer.poolSize = 20;                                                       // Pre-Allocated Buffer Pool size set 
+    
+console.log( '// allocUnsafe() / from() -----------------------------------------------------');
+    console.log( Buffer.allocUnsafe(5).buffer );                                // the returned ArrayBuffer is the Pre-Allocated Buffer Pool basically
+    console.log( Buffer.allocUnsafe(11).buffer );                               // the returned ArrayBuffer is NOT the Pre-Allocated Buffer Pool because the buffer we want to allocate is greater than half size of the Buffer Pool 
+    
+    console.log( Buffer.from([1, 2, 3]).buffer );                               // the from method also uses the Pre-Allocated Buffer Pool (just like the allocUnsafe() method)
+    console.log( Buffer.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]).buffer );     // Buffer Pool not used (size is larger than the half size of the pool);
+    
+console.log( '// alloc() / allocUnsafeSlow() ------------------------------------------------');
+    console.log( Buffer.alloc(5).buffer );                                      // these methods never use the Pre-Allocated Buffer Pool
+    console.log( Buffer.allocUnsafeSlow(5).buffer );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\06 Pre-Allocated Buffer Pool TEST> node main     
+        // allocUnsafe() / from() -----------------------------------------------------
+        ArrayBuffer {
+        [Uint8Contents]: &lt;42 75 66 66 65 72 2e 70 6f 6f 6c 53 69 7a 65 20 3d 20 32 30 3b 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 2f 2f 20 50 72 65 2d 41 6c 6c 6f 63 61 74 65 64 20 42 75 66 66 65 72 20 ... 8092 more bytes&gt;,
+        byteLength: 8192
+        }
+        ArrayBuffer {
+        [Uint8Contents]: &lt;00 00 00 00 00 00 00 00 00 00 00&gt;,
+        byteLength: 11
+        }
+        ArrayBuffer {
+        [Uint8Contents]: &lt;42 75 66 66 65 72 2e 70 6f 6f 6c 53 69 7a 65 20 3d 20 32 30 3b 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 2f 2f 20 50 72 65 2d 41 6c 6c 6f 63 61 74 65 64 20 42 75 66 66 65 72 20 ... 8092 more bytes&gt;,
+        byteLength: 8192
+        }
+        ArrayBuffer {
+        [Uint8Contents]: &lt;01 02 03 04 05 06 07 08 09 0a 0b&gt;,
+        byteLength: 11
+        }
+        // alloc() / allocUnsafeSlow() ------------------------------------------------
+        ArrayBuffer { [Uint8Contents]: &lt;00 00 00 00 00&gt;, byteLength: 5 }
+        ArrayBuffer { [Uint8Contents]: &lt;00 00 00 00 00&gt;, byteLength: 5 }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\06 Pre-Allocated Buffer Pool TEST>         
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>fill()</mark> / <mark>write()</mark> / <mark>byteOffset</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log( '// fill() --------------------------------------------------------------------------' );
+    var buf1 = Buffer.alloc(10);
+    console.log( buf1.fill('string') );                             // fill the whole buffer with this string recursively 
+    
+    var buf2 = Buffer.alloc(20);
+    console.log(buf2.fill('string', 2, 14, 'ucs2') );               // fills the from offset 2 to 14th index (included), encodes the passed string as utf16 little endianness
+    
+    var buf3 = Buffer.alloc(20);
+    console.log( buf3.fill(buf2) );                                 // fills the buffer with another buffer's data 
+    
+    var buf4 = Buffer.alloc(20);
+    console.log( buf4.fill(new Uint8Array([1, 15, 11]), 9, 15) );   // buffer filled from 9th index (inclusive) to 15th index (excluded)  
+    
+    var buf5 = Buffer.alloc(20);
+    console.log( buf5.fill(15, 2, 18) );                            // buffer filled with a number from 2nd index (inclusive) to 18th index (excluded)   
+    
+    console.log( Buffer.allocUnsafe(64).fill(0) );                  // fast allocate 64 bytes than fills them with 0 
+    
+console.log( '// write() -------------------------------------------------------------------------' );
+    var buf6 = Buffer.alloc(10);
+    console.log( buf6.write('string') );                            // -> 6         // writes the string into the buffer at the set position (not recursively)
+    console.log( buf6 );                                                
+    
+    var buf7 = Buffer.alloc(20);
+    console.log( buf7.write('123456789', 5, 5) )                    // -> 5         // first 5 bytes are not written (offset), writtes 5 byte length of data into the buffer   
+    console.log( buf7 );
+    
+    var buf8 = Buffer.alloc(10);
+    console.log( buf8.write('a', 2, 'ucs2') );                      // -> 2         // 2 bytes are written because of the encoding format 
+    console.log( buf8 );
+    
+console.log( '// byteOffset ----------------------------------------------------------------------' );
+    var arrayBuffer = new ArrayBuffer(16);
+    var buf9 = Buffer.from(arrayBuffer, 2);
+    
+    console.log( buf9.byteOffset );                                 // -> 2         // this buffer sees the underlying ArrayBuffer from the 2nd index      
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\07 fill() write() byteOffset TEST> node main          
+        // fill() --------------------------------------------------------------------------
+        &lt;Buffer 73 74 72 69 6e 67 73 74 72 69&gt;
+        &lt;Buffer 00 00 73 00 74 00 72 00 69 00 6e 00 67 00 00 00 00 00 00 00&gt;
+        &lt;Buffer 00 00 73 00 74 00 72 00 69 00 6e 00 67 00 00 00 00 00 00 00&gt;
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 01 0f 0b 01 0f 0b 00 00 00 00 00&gt;
+        &lt;Buffer 00 00 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 0f 00 00&gt;
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ... 14 more bytes&gt;
+        // write() -------------------------------------------------------------------------
+        6
+        &lt;Buffer 73 74 72 69 6e 67 00 00 00 00&gt;
+        5
+        &lt;Buffer 00 00 00 00 00 31 32 33 34 35 00 00 00 00 00 00 00 00 00 00&gt;
+        2
+        &lt;Buffer 00 00 61 00 00 00 00 00 00 00&gt;
+        // byteOffset ----------------------------------------------------------------------
+        2
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\07 fill() write() byteOffset TEST>     
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>isBuffer()</mark> / <mark>isEncoding()</mark> methods </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <em>Buffer</em>.isBuffer(<strong>obj</strong>)                                                       // returns <mark>true</mark> if the passed object is a Node.js buffer object, otherwise returns <mark>false</mark>   
+            <em>Buffer</em>.isEncoding(<strong>encode:str</strong>)                                              // returns <mark>true</mark> if the passed encoding format is supported by Node.js, otherwise returns <mark>false</mark>   
+                                                                                          supported encoding formats in Node.js: <mark>ascii</mark> / <mark>latin1</mark> or <mark>binary</mark> / <mark>utf8</mark> / <mark>utf16le</mark> or <mark>ucs2</mark> / <mark>base64</mark> / <mark>hex</mark>
+    </pre>
+    <pre>
+    Buffer.isBuffer( Buffer.from([1, 2, 3]) );                                         // -> true   // object is a Node.js buffer
+    Buffer.isBuffer( new ArrayBuffer(64) );                                            // -> false  // not a buffer   
+    Buffer.isBuffer( new Uint16Array([145, 78]) );                                     // -> false  // not a buffer 
+    
+    Buffer.isEncoding('binary');                                                       // -> true   // supported encoding format by Node.js
+    Buffer.isEncoding('utf16le');                                                      // -> true   // supported  
+    Buffer.isEncoding('utf16');                                                        // -> false  // not supported 
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>isBuffer()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var test1 = Buffer.from([255, 255, 255, 255]);
+        console.log( Buffer.isBuffer(test1) );                  // -> true (Node.js buffer)
+        
+    var test2 = new ArrayBuffer(8);
+        console.log( Buffer.isBuffer(test2) );                  // -> false (byte array)
+        
+    var test3 = new Int32Array([48756, 4785]);
+        console.log( Buffer.isBuffer(test3) );                  // -> false (TypeArray)
+        
+    var test4 = new DataView(new ArrayBuffer(8));
+        console.log( Buffer.isBuffer(test4) );                  // -> false (DataView object)
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\08 isBuffer() TEST> node main
+        true
+        false
+        false
+        false
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\08 isBuffer() TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>isEncoding()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    console.log( Buffer.isEncoding('utf8') );                   // -> true 
+    console.log( Buffer.isEncoding('latin1') );                 // -> true
+    console.log( Buffer.isEncoding('ISO-8859-1') );             // -> false (encoding format is supported but only under the name of 'latin1')
+    console.log( Buffer.isEncoding('utf16') );                  // -> false (the utf-16 encoding format is supported but as little endiannes format )
+    console.log( Buffer.isEncoding('utf16le') );                // -> true
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\09 isEncoding() TEST> node main
+        true
+        true
+        false
+        false
+        true
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\09 isEncoding() TEST>    
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>byteLength()</mark> / <mark>length</mark> / <mark>compare()</mark> / <mark>equal()</mark> / <mark>includes()</mark> / <mark>indexOf()</mark> / <mark>lastIndexOf()</mark> methods and property </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <em>Buffer</em>.byteLength(<strong>str|buf|TypedArray|DataView|ArrayBuffer</strong>, <i>encode</i>)         // returns the passed items's length <u>in bytes</u>    
+            <strong>buf</strong>.length                                                                 // returns the size of the buffer in bytes    
+            
+            <em>Buffer</em>.compare(<strong>buf1|Uint8Array1</strong>, <strong>buf2|Uint8Array2</strong>)                         // returns a number indicating the relation order between the two buffers according to the Unicode Table 
+                                                                                          <mark>-1</mark> = <strong>buf2</strong> comes after <strong>buf1</strong> | <mark>0</mark> = <strong>buf2</strong> same as <strong>buf1</strong> | <mark>1</mark> = <strong>buf2</strong> comes before <strong>buf1</strong>
+            <strong>buf</strong>.compare(<strong>targ:buf|Uint8Array</strong>, <i>targSt(inc):index</i>, <i>targEnd(exc):index</i>, <i>bufSt(inc):index</i>, <i>bufEnd(exc):index</i>)    // returns a number indicating the relation order between the two buffers according to the Unicode Table (optionally we can target specific slices in each buffer for comparing)    
+                                                                                                                               <mark>-1</mark> = <strong>targetBuffer</strong> comes after <strong>buf</strong> | <mark>0</mark> = <strong>targetBuffer</strong> same as <strong>buf</strong> | <mark>1</mark> = <strong>targetBuffer</strong> comes before <strong>buf</strong>  
+            <strong>buf</strong>.equals(<strong>buf|Uint8Array</strong>)                                                 // returns <mark>true</mark> if the passed buffer has the same bytes, otherwise returns <mark>false</mark>    
+            
+            <strong>buf</strong>.indexOf(<strong>val:str|buf|Uint8Array|nr</strong>, <i>byteOffset:nr</i>, <i>encode</i>)              // returns the index of the <u>first found</u> value (string interpreted according to the encoding, number interpreted as 8bit Unsigned Integer value) (if the <i>byteOffset</i> is set the buffer part <u>after</u> the offset value is checked, negative offset value is counted from the end) (<mark>-1</mark> = no match)
+            <strong>buf</strong>.lastIndexOf(<strong>val:str|buf|Uint8Array|nr</strong>, <i>byteOffset:nr</i>, <i>encode</i>)          // returns the index of the <u>last found</u> value (string interpreted according to the encoding, number interpreted as 8bit Unsigned Integer value) (if the <i>byteOffset</i> is set the buffer part <u>before</u> the offset value is checked, negative offset value is counted from the end) (<mark>-1</mark> = no match)    
+            <strong>buf</strong>.includes(<strong>val:str|buf|Uint8Array|nr</strong>, <i>byteOffset:nr</i>, <i>encode</i>)             // returns <mark>true</mark> if the value is found in the buffer, otherwise returns <mark>false</mark> (if the <i>byteOffset</i> is set the buffer part <u>after</u> the offset value is checked, negative offset value is counted from the end) (<mark>-1</mark> = no match)
+    </pre>
+    <pre>
+// byteLength() / length --------------------------------------------------------------
+    Buffer.byteLength('abc', 'ucs2');                                                  // -> 6          // string is 6 bytes long 
+    Buffer.byteLength( new Float64Array(2) );                                          // -> 16         // TypedArray is 16 bytes long 
+    
+    Buffer.allocUnsafe(64).length;                                                     // -> 64         // buffer is 64 bytes long 
+    Buffer.from('abė').length;                                                         // -> 4          // buffer is 4 bytes long ('ė' takes 2 bytes to encode)   
+    
+// compare() / compare() / equals() ---------------------------------------------------
+    var buf1 = Buffer.from('abc');
+    var buf2 = Buffer.from('abc');
+    var buf3 = Buffer.from('012 abc');
+    var buf4 = Buffer.from([0x61, 0x62, 0x63]);
+    
+    Buffer.compare(buf1, buf2);                                                        // -> 0          // buf1 has the same bytes as buf2
+    Buffer.compare(buf1, buf3);                                                        // -> 1          // buf3 comes before buf1   
+    Buffer.compare(buf1, buf4);                                                        // -> 0          // buf1 has the same bytes as buf4
+    
+    buf1.compare(buf2);                                                                // -> 0          // does the same as above  
+    buf1.compare(buf3);                                                                // -> 1          // buf3 comes before buf1   
+    buf1.compare(buf4);                                                                // -> 0          // buf1 has the same bytes as buf4
+    
+    buf1.compare(buf3, 5, 7, 1, 3);                                                    // -> 0          // buf1 is compared as 'bc' and buf2 is compared as 'bc'
+    buf1.compare(buf3, 4, 5, 1, 3);                                                    // -> 1          // buf1 is compared as 'bc' and buf2 is compared as 'a' (buf3 comes before buf1)   
+    
+    buf1.equals(buf2);                                                                 // -> true       // buf1 has the same bytes as buf2
+    buf1.equals(buf3);                                                                 // -> false      // buf1 has not the same bytes as buf3   
+    buf1.equals(buf4);                                                                 // -> true       // buf1 has the same bytes as buf4
+    
+// indexOf() / lastIndexOf() / includes() ---------------------------------------------
+    var buf = Buffer.from('kicsi kutya tarka');
+        
+    buf.indexOf(' ');                                                                  // -> 5          // first found match 
+    buf.indexOf(0x20);                                                                 // -> 5          // number is interpreted as 8bit unsigned integer value   
+    
+    buf.lastIndexOf(' ');                                                              // -> 11         // last found value 
+    buf.lastIndexOf(' ', 3);                                                           // -> -1         // -! the buffer part before the offset value is checked NOT the part after ('kics')  
+    buf.lastIndexOf(' ', 8);                                                           // -> 5          // -! the part 'kicsi kut' is searched in this case  
+    
+    buf.includes(' ');                                                                 // -> true       // value is present in the buffer 
+    buf.includes(new Uint8Array(['0x20']), 12);                                        // -> false      // no '0x20' value after the 12th index
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>byteLength()</mark> / <mark>length</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log( '// byteLength() -----------------------------------------------------------------------------');
+    console.log( Buffer.byteLength('abc') );                    // -> 3 
+    console.log( Buffer.byteLength('abc', 'ucs2') );            // -> 6 
+    console.log( Buffer.byteLength('abc', 'base64') )           // -> 2     (1 character takes 6 bits, 3 characters = 18 bits (2 bytes))
+    
+console.log( '// length -----------------------------------------------------------------------------------');
+    var buf1 = Buffer.from([1, 2, 3]);
+        console.log( buf1.length );                             // -> 3
+    
+    var buf2 = Buffer.from('ᓺᓗᗑ', 'utf8');
+        console.log( buf2.length );                             // -> 9 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\10 byteLength length TEST> node main
+        // byteLength() -----------------------------------------------------------------------------
+        3
+        6
+        2
+        // length -----------------------------------------------------------------------------------
+        3
+        9
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\10 byteLength length TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>compare()</mark> / <mark>compare()</mark> / <mark>equals()</mark>  TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var buf1 = Buffer.from('937');
+    var buf2 = Buffer.from('ᓺᓗᗑ');
+    var buf3 = Buffer.from('abc');
+    var buf4 = Buffer.from('ᓺᓗᗑ');
+
+    console.log( Buffer.compare(buf1, buf2) );                  // -> -1        // buf2 comes after buf1
+    console.log( buf1.compare(buf2) );                          // -> -1
+
+    console.log( Buffer.compare(buf2, buf3) );                  // -> 1         // buf3 comes before buf1 
+    console.log( buf2.compare(buf3) );                          // -> 1
+
+    console.log( Buffer.compare(buf2, buf4) );                  // -> 0         // buf2 same as buf4
+    console.log( buf2.compare(buf4) );                          // -> 0
+    
+console.log('// buf.compare() comparing specific slices -----------------------------------------------------------------' );
+    var buf11 = Buffer.from('0123abcd01');
+    var buf12 = Buffer.from('0123abcd01');
+    
+    console.log( buf11.compare(buf12) );                        // -> 0         // buffers are the same  
+    console.log( buf11.compare(buf12, 0, 4, 5, 10) );           // -> 1         // buf11 compared as (abcd) and buf12 compared as (0123)
+    console.log( buf11.compare(buf12, 0, 1, 8, 9) );            // -> 0         // buf11 compared as (0) and buf12 compared as (0)
+    console.log( buf11.compare(buf12, 0, 2, 8, 10) );           // -> 0         // buf11 compared as (01) anc buf12 compared as (01)  
+    
+console.log('// equals() ------------------------------------------------------------------------------------------------' );   
+    console.log( buf2.equals(buf4) );                           // -> true      // buffers are equals (have the equal bytes)
+    console.log( buf2.equals(buf3) );                           // -> false     // not equals     
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\11 compare() compare() equals() TEST> node main       
+        -1
+        -1
+        1
+        1
+        0
+        0
+        // buf.compare() comparing specific slices -----------------------------------------------------------------
+        0
+        1
+        0
+        0
+        // equals() ------------------------------------------------------------------------------------------------
+        true
+        false
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\11 compare() compare() equals() TEST>
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>indexOf()</mark> / <mark>lastIndexOf()</mark> / <mark>includes()</mark>  TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var buf1 = Buffer.from('this is a test buffer');
+    
+console.log('// string (interpreted according to ist encoding -----------------------------------' );
+    console.log( buf1.indexOf('i') );                                               // -> 2             // first found value 
+    console.log( buf1.lastIndexOf('i') );                                           // -> 5             // last found value 
+    console.log( buf1.includes('i') );                                              // -> true          // character found
+    console.log( buf1.includes('i', 'ucs2') );                                      // -> false         // not found because of the different character encoding
+    
+console.log('// buffer / Uint8Array -------------------------------------------------------------' );
+    console.log( buf1.indexOf(Buffer.from([0x61, 0x20])) );                         // -> 8             // buffer content corresponds the 'a ' encoded characters 
+    console.log( buf1.indexOf(new Uint8Array([0x66, 0x66])) );                      // -> 17            // TypedArray content corresponds the 'ff' encoded 
+    console.log( buf1.includes(Buffer.from([0x68])) );                              // -> true          // buffer content corresponds the 'h' encoded 
+    console.log( buf1.includes(Buffer.from([0x68]), 3) );                           // -> false         // be run the test after the 3rd incex (included)
+    
+console.log('// number (interpreted as 8bit Unsigned Integer value ) ----------------------------' );
+    console.log( buf1.indexOf(0x61) );                                              // -> 8             // first found value 
+    console.log( buf1.lastIndexOf(0x66) );                                          // -> 18            // last found value 
+    console.log( buf1.includes(0x68) );                                             // -> true 
+    console.log( buf1.includes(0x68, 3) );                                          // -> false 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\12 indexOf() lastIndexOf() includes() TEST> node main     
+        // string (interpreted according to ist encoding -----------------------------------
+        2
+        5
+        true
+        false
+        // buffer / Uint8Array -------------------------------------------------------------
+        8
+        17
+        true
+        false
+        // number (interpreted as 8bit Unsigned Integer value ) ----------------------------
+        8
+        18
+        true
+        false
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\12 indexOf() lastIndexOf() includes() TEST>     
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>concat()</mark> / <mark>copy()</mark> / <mark>subarray()</mark> / <mark>slice()</mark> methods </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <em>Buffer</em>.concat([<strong>buf|Uint8Array</strong>, <i>...</i>], <i>totalLength:nr</i>)                       // concatenates the passed buffers and returns a new buffer of the concatenates bytes (calculate the <i>totalLength</i> explicitly is faster)    
+            <strong>buf</strong>.copy(<strong>targ:buf|Uint8Array</strong>, <i>targSt(inc):index</i>, <i>bufSt(inc):index</i>, <i>bufEnd(exc):index</i>)    // copies a region from the buffer to the targeted buffer's region, returns the number of bytes copied    
+            
+            <strong>buf</strong>.subarray(<i>start(inc):index</i>, <i>end(exc):index</i>)                             // returns a view (of the targeted region) in a buffer (does not create a new buffer)    
+            <strong>buf</strong>.slice(<i>start(inc):index</i>, <i>end(exc):index</i>)                                // returns a view (of the targeted region) in a buffer (does not create a new buffer)    
+    </pre>
+    <pre>
+// concat() ---------------------------------------------------------------------------
+    var buf1 = Buffer.from('Node.js');
+    var buf2 = Buffer.from(' is awesome!');
+    
+    var bufLength = buf1.length + buf2.length;                                         // explicitly calculating the total length is faster (method doesn't have to loop over)    
+    Buffer.concat([buf1, buf2], bufLength).toString();                                 // -> 'Node.js is awesome!'      // new buffer returned 
+    
+// copy() -----------------------------------------------------------------------------
+    var buf1 = Buffer.from('Kicsi kutya tarka');
+    var buf2 = Buffer.from('se fule se farka!');
+    
+    buf2.copy(buf1, 12, 11, 16);                                                       // copy from buf2 to buf1 (12 = targeted region in buf1 (start index)) (11 and 16 indexes = region to copy from buf2)    
+    buf1.toString();                                                                   // -> 'Kicsi kutya farka'        // result 
+    
+    buf2.copy(buf2, 12, 3, 7)                                                          // we can use this method to copy within the buffer   
+    buf2.toString();                                                                   // -> 'se fule se ffule!'        // result 
+    
+// subarray() / slice() ---------------------------------------------------------------
+var buf = Buffer.from('abcdef');
+    
+    var view1 = buf.subarray(0, 3);                                                    // creates a view of the targeted region 
+    view1.toString();                                                                  // -> 'abc'                      // created view 
+    view1.write('012');                                                                // we are writing the 'buf' (original buffer) through this view basically   
+    
+    var view2 = buf.slice(3, 6);                                                       // the slice() method does the same 
+    view2.toString();                                                                  // -> 'def'
+    view2.write('345');
+    
+    buf.toString();                                                                    // -> '012345'                   // -! original buffer is modified   
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>concat()</mark> / <mark>copy()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log('// concat() --------------------------------------------------------------------------------------' );
+    var buf1 = Buffer.from('Kicsi kutya tarka');
+    var buf2 = Buffer.from(' se fule se farka');
+
+    console.log( Buffer.concat([buf1, buf2]).toString() );              // -> 'Kicsi kutya tarka se fule se farka'
+    
+    // ------------------------------------
+    var tArray = new Uint8Array([0x4b, 0x69, 0x63, 0x73, 0x69, 0x20, 0x6b, 0x75, 0x74, 0x79, 0x61, 0x20, 0x74, 0x61, 0x72, 0x6b, 0x61]);
+    var tArray2 = new Uint8Array([0x20,0x73, 0x65, 0x20, 0x66, 0x75, 0x6c, 0x65, 0x20, 0x73, 0x65, 0x20, 0x66, 0x61, 0x72, 0x6b, 0x61]);
+    
+    console.log( Buffer.concat([tArray, tArray2]).toString() );         // -> 'Kicsi kutya tarka se fule se farka' 
+    
+    // combine ---------------------------
+    console.log( Buffer.concat([buf1]).toString() );                    // -> 'Kicsi kutya tarka'           // passing one buffer only 
+    console.log( Buffer.concat([buf1, tArray2, new Uint8Array([0x20]), tArray, buf2]).toString() );         // -> 'Kicsi kutya tarka se fule se farka Kicsi kutya tarka se fule se farka'    
+    
+    // calculating totalLength explicitly ------------
+    var totalLength = buf1.length + buf2.length;                        // explicitly calculating the total length (according to Node.js specification this is faster because the method does not have to calculate it)
+    
+    console.log( Buffer.concat([buf1, buf2], totalLength).toString() );
+    
+    // create a empty buffer with totalLength --------
+    console.log( Buffer.concat([Buffer.allocUnsafe(1)], 500) );         // we are doing a sort of memory allocation here (first byte unsafe!)  
+    
+console.log('// copy() ----------------------------------------------------------------------------------------' );
+    var buf11 = Buffer.allocUnsafe(20).fill('!');
+    var buf12 = Buffer.from(' Node ');
+    
+    console.log( buf12.copy(buf11, 7) );                                // -> 6 (bytes copied)  // copy the source buffer into the target buffer's specific position 
+        console.log( buf11.toString() );                                // -> '!!!!!!! Node !!!!!!!'
+        
+    console.log( buf12.copy(buf11, 1, 1, 5) );                          // -> 4 (bytes copied)  // copy the source buffer's specific region to the targeted buffer's specific region 
+        console.log( buf11.toString() );                                // -> '!Node!! Node !!!!!!!'        (buffer has already been modified previously)
+    
+    console.log( buf11.copy(buf11, 15, 1, 5) );                         // -> 4 (bytes copied)  // we can use this method to copy within the same buffer 
+        console.log( buf11.toString() );                                // -> '!Node!! Node !!Node!'
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\13 concat() copy() TEST> node main         
+        // concat() --------------------------------------------------------------------------------------
+        Kicsi kutya tarka se fule se farka
+        Kicsi kutya tarka se fule se farka
+        Kicsi kutya tarka
+        Kicsi kutya tarka se fule se farka Kicsi kutya tarka se fule se farka
+        Kicsi kutya tarka se fule se farka
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ... 450 more bytes&gt;
+        // copy() ----------------------------------------------------------------------------------------
+        6
+        !!!!!!! Node !!!!!!!
+        4
+        !Node!! Node !!!!!!!
+        4
+        !Node!! Node !!Node!
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\13 concat() copy() TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>subarray()</mark> / <mark>slice()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+console.log( '// subarray() --------------------------------------------------------------------' );
+    var buf = Buffer.from('Kicsi kutya tarka');
+    
+    var newBuf = buf.subarray(6, 11);                   // a view of the specified region is returned 
+        console.log( newBuf.toString() );
+        
+    newBuf.fill('\0');
+        console.log( newBuf );                          // view zero filled 
+        console.log( buf );                             // original buffer is modified!   
+        
+console.log( '// slice() -----------------------------------------------------------------------' );
+    var buf2 = Buffer.from('Kicsi kutya tarka');
+    
+    var newBuf2 = buf2.slice(6, 11);                    // this method does the same basically 
+        console.log( newBuf2.toString() );
+    
+    newBuf2.fill('\0');
+        console.log( newBuf2 );                         // view zero filled buffer 
+        console.log( buf2 );                            // original buffer is modified!   
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\14 subarray() slice() TEST> node main      
+        // subarray() --------------------------------------------------------------------
+        kutya
+        &lt;Buffer 00 00 00 00 00&gt;
+        &lt;Buffer 4b 69 63 73 69 20 00 00 00 00 00 20 74 61 72 6b 61&gt;
+        // slice() -----------------------------------------------------------------------
+        kutya
+        &lt;Buffer 00 00 00 00 00&gt;
+        &lt;Buffer 4b 69 63 73 69 20 00 00 00 00 00 20 74 61 72 6b 61&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\14 subarray() slice() TEST>    
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>entries()</mark> / <mark>keys()</mark> / <mark>values()</mark> methods </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>buf</strong>.entries()                                                              // returns the index byte pairs in an Iterable Object of each byte in the buffer    
+            <strong>buf</strong>.keys()                                                                 // returns the indexes in an Iterable Object of each byte in the buffer   
+            <strong>buf</strong>.values()                                                               // returns the bytes in an Iterable Object of the buffer    
+    </pre>
+    <pre>
+    var buf = Buffer.from('abc');
+    
+// entries() --------------------------------------------------------------------------
+    var entries = buf.entries();                                                       // iterable object containing the buffer's keys value paris 
+    entries.next();                                                                    // -> {value:[0, 97], done:false}
+    entries.next();                                                                    // -> {value:[1, 98], done:false}
+    entries.next();                                                                    // -> {value:[2, 99], done:false}
+    entries.next();                                                                    // -> {value:undefined, done:true}    
+    
+// keys() -----------------------------------------------------------------------------
+    var keys = buf.keys();                                                             // iterable object containing the buffer's keys (indexes)
+    keys.next();                                                                       // -> {value:0, done:false}
+    keys.next();                                                                       // -> {value:1, done:false}
+    keys.next();                                                                       // -> {value:2, done:false}
+    keys.next();                                                                       // -> {value:undefined, done:true}    
+    
+// values() ---------------------------------------------------------------------------
+    var values = buf.values();                                                         // iterable object containing the buffer's values (bytes)
+    values.next();                                                                     // -> {value:97, done:false}
+    values.next();                                                                     // -> {value:98, done:false}
+    values.next();                                                                     // -> {value:99, done:false}
+    values.next();                                                                     // -> {value:undefined, done:true}
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>entries()</mark> / <mark>keys()</mark> / <mark>values()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var buf = Buffer.from('JavaScript');
+    
+    var entries = buf.entries();                // iteralbe object of key value pairs 
+    var keys = buf.keys();                      // iterable object keys
+    var values = buf.values();                  // iterable object values (bytes)
+    
+console.log( '// entries() -----------------------------------------------------------------------' );
+    for(i = -1; i &lt; buf.length; i++) {
+        console.log( entries.next() );
+    }
+    
+console.log( '// keys() --------------------------------------------------------------------------' );
+    for(i = -1; i &lt; buf.length; i++){
+        console.log( keys.next() )
+    }
+    
+console.log( '// values() ------------------------------------------------------------------------' );
+    for(i = -1; i &lt; buf.length; i++){
+        console.log( values.next() )
+    }
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\15 entries() keys() values() TEST> node main      
+        // entries() -----------------------------------------------------------------------
+        { value: [ 0, 74 ], done: false }
+        { value: [ 1, 97 ], done: false }
+        { value: [ 2, 118 ], done: false }
+        { value: [ 3, 97 ], done: false }
+        { value: [ 4, 83 ], done: false }
+        { value: [ 5, 99 ], done: false }
+        { value: [ 6, 114 ], done: false }
+        { value: [ 7, 105 ], done: false }
+        { value: [ 8, 112 ], done: false }
+        { value: [ 9, 116 ], done: false }
+        { value: undefined, done: true }
+        // keys() --------------------------------------------------------------------------
+        { value: 0, done: false }
+        { value: 1, done: false }
+        { value: 2, done: false }
+        { value: 3, done: false }
+        { value: 4, done: false }
+        { value: 5, done: false }
+        { value: 6, done: false }
+        { value: 7, done: false }
+        { value: 8, done: false }
+        { value: 9, done: false }
+        { value: undefined, done: true }
+        // values() ------------------------------------------------------------------------
+        { value: 74, done: false }
+        { value: 97, done: false }
+        { value: 118, done: false }
+        { value: 97, done: false }
+        { value: 83, done: false }
+        { value: 99, done: false }
+        { value: 114, done: false }
+        { value: 105, done: false }
+        { value: 112, done: false }
+        { value: 116, done: false }
+        { value: undefined, done: true }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\15 entries() keys() values() TEST>         
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>buffer()</mark> / <mark>toJSON()</mark> / <mark>toString()</mark> methods </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>buf</strong>.buffer                                                                 // returns the underlying binary data (ArrayBuffer object)
+            <strong>buf</strong>.toString(<i>encode:str</i>, <i>st(inc):index</i>, <i>end(exc):index</i>)                    // decodes the buffer (or a region from it) into a string according to the encode format (Default: <mark>'utf8'</mark>) and returns it    
+            <strong>buf</strong>.toJSON()                                                               // returns a JSON object from the buffer <u>(does not stringify the buffer!)</u> (the <mark>JSON.stringify()</mark> method internally calls this method to serialize a buffer)    
+    </pre>
+    <pre>
+    var buf = Buffer.from([0x4e, 0x6f, 0x64, 0x65, 0x2e, 0x6a, 0x73]);
+    
+// buffer / toString() ----------------------------------------------------------------
+    buf.buffer;                                                                        // -> ArrayBuffer {...}      // underlying binary data 
+    
+    buf.toString('ascii');                                                             // -> 'Node.js'              // binary data decoded by using the 'ascii' encode format    
+    buf.toString('binary', 0, 4);                                                      // -> 'Node'                 // decoding a buffer region    
+    
+// toJSON() ---------------------------------------------------------------------------
+    buf.toJSON();                                                                      // -> {type:'Buffer', data:[78, 111, 100, 101,  46, 106, 115]}   // JSON object 
+    JSON.stringify(buf);                                                               // -> {"type":"Buffer", "data":[78,111,100,101,46,106,115]}      // internally uses the above method    
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>buffer</mark> / <mark>toString()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var buf = Buffer.from([0x4a, 0x61, 0x76, 0x61, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74]);
+    
+    console.log( buf.buffer );                              // -> ArrayBuffer {...}         // underlying ArrayBuffer returned 
+    
+console.log( '// toString() ---------------------------------------------------------------------------------' );
+    console.log( buf.toString('ascii') );                   // all these encoding formats are compatible with each other 
+    console.log( buf.toString('latin1') );
+    console.log( buf.toString() );                          // default encoding is 'utf8'
+    console.log( buf.toString('binary', 0, 4) );            // decoding a region from the buffer 
+    console.log( buf.toString('binary', 4, buf.length) );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\16 buffer toString() TEST> node main       
+        ArrayBuffer {
+        [Uint8Contents]: &lt;20 20 20 20 76 61 72 20 62 75 66 20 3d 20 42 75 66 66 65 72 2e 66 72 6f 6d 28 5b 30 78 34 61 2c 20 30 78 36 31 2c 20 30 78 37 36 2c 20 30 78 36 31 2c 20 30 78 35 33 2c 20 30 78 36 33 2c 20 30 78 37 32 2c 20 30 78 36 39 2c 20 30 78 37 30 2c 20 30 78 37 34 5d 29 3b 0d 0a 20 20 20 20 0d 0a 20 20 20 20 ... 8092 more bytes&gt;,   
+        byteLength: 8192
+        }
+        // toString() ---------------------------------------------------------------------------------
+        JavaScript
+        JavaScript
+        JavaScript
+        Java
+        Script
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\16 buffer toString() TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>toJSON()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    var buf = Buffer.from('Kicsi kutya tarka');
+        
+    console.log( buf.toJSON() );                        // {type:'Buffer', data:[...]}          // JSON object returned 
+        
+    var stringify = JSON.stringify(buf);
+    console.log( stringify );                           // the JSON.stringify() method internally calls the above method to serialize the data 
+        
+    console.log( JSON.parse(stringify) );               // the stringified data is converted back to a buffer JSON object
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\17 toJSON() TEST> node main   
+        {
+        type: 'Buffer',
+        data: [
+            75, 105,  99, 115, 105, 32,
+            107, 117, 116, 121,  97, 32,
+            116,  97, 114, 107,  97
+        ]
+        }
+        {"type":"Buffer","data":[75,105,99,115,105,32,107,117,116,121,97,32,116,97,114,107,97]}
+        {
+        type: 'Buffer',
+        data: [
+            75, 105,  99, 115, 105, 32,
+            107, 117, 116, 121,  97, 32,
+            116,  97, 114, 107,  97
+        ]
+        }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\17 toJSON() TEST>    
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>INSPECT_MAX_BYTES</mark> / <mark>kMaxLength</mark> / <mark>constants</mark> / <mark>transcode()</mark> properties and method </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>buffer</strong>.constants                                                           // returns an object which contains the buffer module's constants   
+            <strong>buffer</strong>.kMaxLength                                                          // returns a number indicating the allowed largest buffer size in bytes   
+            <strong>buffer</strong>.INSPECT_MAX_BYTES                                                   // gets or sets for the buffer module how many bytes are displayed when printing a buffer on the command line 
+            
+            <strong>buffer</strong>.transcode(<strong>buf|Uint8Array</strong>, <strong>encodeFrom</strong>, <strong>encodeTo</strong>)                     // re-encodes the passed buffer from one character encoding to another character encoding and returns the result in a new buffer (if a character is unknown for the targeted encoding format it will be encoded to <mark>3f</mark> = <mark>?</mark>)    
+                                                                                          supported character encodings are <mark>'utf8'</mark> | <mark>'utf16le'</mark> or <mark>'ucs2'</mark> | <mark>'latin1'</mark> or <mark>'binary'</mark>  
+    </pre>
+    <pre>
+    const buffer = require('buffer');                                                  // the buffer module must be required for these methods 
+    
+// constants / kMaxLength / INSPECT_MAX_BYTES -----------------------------------------
+    buffer.constants;                                                                  // -> { MAX_LENGTH: 2147483647, MAX_STRING_LENGTH: 1073741799 }  // buffer module constants  
+    buffer.kMaxLength;                                                                 // -> 2147483647                                                 // allowed largest buffer size by this module in bytes   
+    buffer.INSPECT_MAX_BYTES;                                                          // -> 50                                                         // buffer module displays 50 buffer characters on the command line when buffers are printed    
+    buffer.INSPECT_MAX_BYTES = 100;                                                    // value can be set  
+    
+// transcode() ------------------------------------------------------------------------
+    var buf = Buffer.from('€ euro');                                                   // default encoding is 'utf8'
+    buf;                                                                               // -> &lt;Buffer e2 82 ac 20 65 75 72 6f&gt;                           // original buffer    
+    
+    buffer.transcode(buf, 'utf8', 'ucs2');                                             // -> &lt;Buffer ac 20 20 00 65 00 75 00 72 00 6f 00&gt;               // new buffer returned encoded in 'ucs2' ('utf16le')    
+    buffer.transcode(buf, 'utf8', 'ascii');                                            // -> &lt;Buffer 3f 20 65 75 72 6f&gt;                                 // the 1st character is encoded to 'f3' ('?' sign) because it is unknown for the 'ascii' encoding format    
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>INSPECT_MAX_BYTES</mark> / <mark>kMaxLength</mark> / <mark>constants</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const buffer = require('buffer');
+    
+console.log( '// constants ------------------------------------------------------------------------' );
+    console.log( buffer.constants );
+    
+console.log( '// kMaxLength -----------------------------------------------------------------------' );
+    console.log( buffer.kMaxLength );
+    
+console.log( '// INSPECT_MAX_BYTES ----------------------------------------------------------------' );
+    console.log( buffer.INSPECT_MAX_BYTES );                // -> 50        // default value 
+    buffer.INSPECT_MAX_BYTES = 100;                         // up to 100 buffer bytes will be displayed on the command line 
+    
+    console.log( Buffer.allocUnsafe(100).fill([0x00]) );    // all 100 byte will be displayed on the command line     
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\18 INSPECT_MAX_BYTES kMaxLength constants TEST> node main   
+        // constants ------------------------------------------------------------------------
+        { MAX_LENGTH: 2147483647, MAX_STRING_LENGTH: 1073741799 }
+        // kMaxLength -----------------------------------------------------------------------
+        2147483647
+        // INSPECT_MAX_BYTES ----------------------------------------------------------------
+        50
+        &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\18 INSPECT_MAX_BYTES kMaxLength constants TEST>    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>transcode()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const buffer = require('buffer');
+        
+    var buf = Buffer.from('Páll ۩ࠉ', 'utf8');                  // default encoding 
+        console.log( buf );
+        
+console.log( '// transcode to ucs2 -----------------------------------------------------------------------' );
+    var buf2 = buffer.transcode(buf, 'utf8', 'ucs2');           // changes the encoding format and returns the result in a new buffer 
+        console.log( buf2 );                                    // new transcoded buffer 
+        console.log( buf );                                     // original buffer is not modified 
+        
+console.log( '// transcode to unsupported characters ------------------------------------------------------' );
+    var buf3 = buffer.transcode(buf2, 'ucs2', 'ascii');    
+        console.log( buf3 );                                    // unsupported characters are transcoded to '3f' = '?' (3 unsupported characters here)
+    
+    var buf4 = buffer.transcode(buf2, 'ucs2', 'latin1');        
+        console.log( buf4 );                                    // (2 unsupported characters here)
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\19 transcode() TEST> node main          
+        &lt;Buffer 50 c3 a1 6c 6c 20 db a9 e0 a0 89&gt;
+        // transcode to ucs2 -----------------------------------------------------------------------
+        &lt;Buffer 50 00 e1 00 6c 00 6c 00 20 00 e9 06 09 08&gt;
+        &lt;Buffer 50 c3 a1 6c 6c 20 db a9 e0 a0 89&gt;
+        // transcode to unsupported characters ------------------------------------------------------
+        &lt;Buffer 50 3f 6c 6c 20 3f 3f&gt;
+        &lt;Buffer 50 e1 6c 6c 20 3f 3f&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\19 transcode() TEST>    
+    </pre>
+</details>
+    
+    
+    <br><br>
+</body>
+</html>

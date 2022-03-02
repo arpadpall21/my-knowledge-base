@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Big O (time complexity) </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Big O (time complexity) </h1>
+    <p> Updated ( 2021-04-28 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html" title="CSS">Computer Science></a> Big O (time complexity)
+    </p>
+    
+    
+    
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Notation </th>
+        <th> Description </th>
+    </tr>
+<tr class="05.01">
+<td> 
+            O(1)
+</td>
+<td> 
+            <u>- Constant time|space</u> <br>
+            - algorithm runs the same amount of time (or needs the same amout of memor) regardless of the input size 
+</td>
+</tr>
+<tr class="05.02">
+<td> 
+            O(log n)
+</td>
+<td> 
+            <u>- Logarithmic time|space</u> <br>
+            - algorithm runs according to the <mark>log</mark> formula <u>(if there's no number after the <mark>log</mark> we assume that is <mark>log2</mark> = log base 2)</u>
+</td>
+</tr>
+<tr class="05.03">
+<td> 
+            O(n)
+</td>
+<td> 
+            <u>- Constant time|space</u> <br>
+            - algorithm runs the same amount of time (or need the same amount of memory) as the input size is  
+</td>
+</tr>
+<tr class="05.04">
+<td> 
+            O(n log n)
+</td>
+<td> 
+            <u>- Loglinear / Quasilinear time|space </u> <br>
+            - algorithm runs constant + logarithmic 
+</td>
+</tr>
+<tr class="05.05">
+<td> 
+            O(n^c)
+</td>
+<td> 
+            <u>- Polynomial time|space </u> <br>
+            - algorithm runs <mark>n</mark> (input size) to the power of <mark>c</mark> (constant) 
+</td>
+</tr>
+<tr class="05.05">
+<td> 
+            O(c^n)
+</td>
+<td> 
+            <u>- Exponential time|space </u> <br>
+            - algorithm runs <mark>c</mark> (constant) to the power of <mark>n</mark> (input size) 
+</td>
+</tr>
+<tr class="05.06">
+<td> 
+            O(n!)
+</td>
+<td> 
+            <u>- Factorial time|space </u> <br>
+            - algorithm runs factorial times  
+</td>
+</tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.bigocheatsheet.com/" target="_blank">bigocheatsheet.com</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - for recursive complexity analysis the best way is to visualize the recursion tree </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the Big O notation <mark>O()</mark> measures the time and space needed by an algorithm (time and space complexity) </p>
+    <p> - it tells us how much time (operation) and space (memory) the algorithm needs <u>relative to the passed input</u> (which is <mark>n</mark> usually) </p>
+<img src="Big O.png" height="450">
+<h2 style="color:darkblue;"><u> Big O simplification rules </u></h2>
+    <p> - the Big O notation gives us an aproximation measure, this is because algorithms have a carp ton of operations, so describing the exact number of operations would result in a massive terms which would be useless because computers are soo fast that we only interested in the most task heavy operations anyways </p>
+    <p> - for this reason we use 2 simplification rules: 
+    <p style="text-indent: 40px;"> - 1) we drop every constant (or turn it to <mark>O(1)</mark>) </p>
+    <p style="text-indent: 40px;"> - 2) we only keep the largest term </p>
+    <pre>
+    O(74568)                ->          O(1)                                           // single constant is always just '1'  
+    O(512 * n)              ->          O(n)                                           // we drop constants 
+    O(n/3)                  ->          O(n)
+    O(5 * n * n)            ->          O(n^2)
+    
+    O(n + 1000)             ->          O(n)                                           // we keep only the largest term    
+    O(n + n^2)              ->          O(n^2)
+    O(n + 500 + n^3 + n^2)  ->          O(n^3)
+    O(5n^2 + 100n + 17)     ->          O(n^2)
+    O((n/3)^3 + 10n)        ->          O(n^3)
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - time complexity </p>
+    <pre>
+// ------------------------------------------------------------------------------------
+    function foo(n){
+        for(let a = 0; a &lt; n / 2; a++){                                                // n/2
+            console.log(a);
+        } 
+        
+        for (let b = 0; b &lt; n; b++){                                                   // n * n
+            for(let c = 0; c &lt; n; c++){
+                console.log( b + ',' + 'c');
+            }
+        }
+    }
+    
+    // O(n/2 + n * n)       ->      O(n^2)                                             // time complexity    
+    
+// ------------------------------------------------------------------------------------
+    function bar(n){  
+        for (let i = 0; b &lt; 3; i++){                                                   // 3 + n
+            for(let j = 0; j &lt; n; j++){
+                console.log( j );
+            }
+        }
+        
+        for (let k = 0; k &lt; 10000; k++){                                               // 1000
+            console.log( k );
+        }
+    }
+    
+    // O(3 + n + 100)       ->      O(n)                                               // time complexity    
+    </pre>
+    <p> - space complexity </p>
+    <pre>
+// ------------------------------------------------------------------------------------
+    function calculateAverage(numbers){
+        let sum = 0;                                                                   //  1
+        
+        for (let i = 0; i &lt; numbers.length; i++){                                      //  1 
+            let number = number[i];                                                    //  1 
+            sum += number;
+        }
+        
+        return sum / numbers.length;
+    }
+    
+    // O(1 + 1 + 1)         ->      O(1)                                               // space complexity    
+    
+// ------------------------------------------------------------------------------------
+    function doubler(items){
+        let newArray = [];
+        
+        for(let i = 0; i &lt; items.length; i++){
+            newArray.push(items[i]);                                                   // n 
+            newArray.push(items[i]);                                                   // n 
+        }
+        
+        return newArray;
+    }
+    
+    // O(n + n)             ->      O(n)                                               // space complexity    
+    
+// ------------------------------------------------------------------------------------
+    function zoo(n){                                                                   // in case of recursion each stack frame will take up 1 space (so a recursion is at least O(n) space complexity)    
+        if (n == 0){
+            console.log( 'liftoff!' );
+            return
+        }
+        
+        console.log(n);
+        zoom(n - 1);
+    }
+    
+    // O(n)                                                                            // space complexity    
+    
+// ------------------------------------------------------------------------------------
+    function zap(n){
+        if (n &lt 1){
+            console.log( 'blastoff!' );
+            return;
+        }
+        
+        console.log(n);
+        zap(n - 2);
+    }
+    
+    // O(n/2)               ->      O(n)                                               // space complexity    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> analysis-1 </u></h4>
+    <pre>
+    function unique(array){
+        let newArray = [];
+        
+        for (let i = 0; i &lt; array.length; i++){                                        // called 'n' times 
+            const ele = array[i];
+            if (!newArray.includes(ele)){                                              // the 'includes()' method calls 'n' times as well 
+                newArray.push(ele);
+            }
+        }
+        
+        return newArray;
+    }
+    
+    unique(['cat', 'dog', 'rat', 'dog', 'cat', 'bird']);                               // -> ['cat', 'dog', 'rat', 'bird']
+    
+    // time complexity = O(n^2)    
+    // space complexity = O(n)    
+    
+// make it better ---------------------------------------------------------------------
+    function unique(array){
+        let uniques = new Set();
+        
+        for (let i = 0; i &lt; array.length; i++){                                        // called 'n' times 
+            const ele = array[i];
+            uniques.add(ele)                                                           // called '1' time 
+        }
+        
+        return Array.from(uniques);
+    }
+    
+    unique(['cat', 'dog', 'rat', 'dog', 'cat', 'bird']);                               // -> ['cat', 'dog', 'rat', 'bird']
+    
+    // time complexity = O(n^2)    
+    // space complexity = O(n)    
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-2 </u></h4>
+    <pre>
+    function fun(n){
+        while(n > 1){
+            console.log(n);
+            n /= 2;                                                                    // each time divided by 2 
+        }
+        console.log( 'done' );
+    }
+    
+    // time complexity = O(log n) 
+    // space complexity = O(1)
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-3 </u></h4>
+    <pre>
+    function foo(n){
+        if(n &lt;= n){
+            console.log('end');
+            return;
+        }
+        
+        console.log( n );
+        foo(n/2);                                                                      // recursively calls divided by 2  
+    }
+    
+    // time complexity = O(log n) 
+    // space complexity = O(1)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-3 </u></h4>
+    <pre>
+    function bar(str){
+        console.log(str);
+        
+        if(str.length &lt;= 1) return;
+        const midIdx = Math.floor(str.length / 2);  
+        bar(str.slice(0, midIdx));                                                     // slice runs 'n' times and the recursion runs 'log n' times   
+    }
+    
+    bar('abcefghijklmnopqrstuvwxyz');                                                  // -> abcefghijklmnopqrstuvwxyz
+                                                                                       // -> abcefghijklm
+                                                                                       // -> abcefg
+                                                                                       // -> abc
+                                                                                       // -> a
+    // time complexity = O(n log n) 
+    // space complexity = O(1)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-4 </u></h4>
+    <pre>
+    function foo(array){
+        let str = '';
+        
+        for(let i = 0; i &lt; array.length; i++){
+            str += array[i];
+        }
+        
+        console.log(str);
+        console.log('-----');
+        
+        if(array.length &lt;= 1) return;
+        
+        const midIdx = Math.floor(array.learn / 2);
+        const left = array.slice(0, midIdx);
+        const right = array.slice(midIdx);
+        
+        foo(left);
+        for(right);
+    }
+    
+    foo(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+    
+    // time complexity = O(n log n) 
+    // space complexity = O(log n)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-5 </u></h4>
+    <pre>
+    function bar(n){
+        for(let q = 0; q &lt; n; q++){
+            for(let r = 0; r &lt; n; r++){
+                console.log( q, r);
+            }
+        }
+    }
+    
+    // time complexity = O(n^2)                                                        // polynomial time  
+    // space complexity = O(1)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-6 </u></h4>
+    <pre>
+    function bar(n){
+        for(let q = 0; q &lt; n; q++){
+            for(let r = 0; r &lt; n; r++){
+                for(let s = 0; s &lt; n; s++){
+                    console.log( q, r, s);
+                }
+            }
+        }
+    }
+    
+    // time complexity = O(n^3)                                                        // polynomial time  
+    // space complexity = O(1)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-7 </u></h4>    
+    <pre>
+    function foo(n){
+        console.log( n );
+        if (n === 1) return;
+        foo(n - 1);
+        foo(n - 1);
+    }
+    
+    // time complexity = O(2^n)                                                        // exponential time 
+    // space complexity = O(1)  
+    
+    function bar(n){
+        console.log( n );
+        if (n === 1) return;
+        foo(n - 1);
+        foo(n - 1);
+        foo(n - 1);
+    }
+    
+    // time complexity = O(3^n)                                                        // exponential time 
+    // space complexity = O(n)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-7 </u></h4>    
+    <pre>
+    function foo(n){
+        if(n === 1) return;
+        
+        for(let i = 0; i &lt; n; i++){
+            foo(n - 1);
+        }
+    }
+    
+    // time complexity = O(n!) 
+    // space complexity = O(1)  
+    </pre>
+<!-------------------------------------------------------------------------------------------------------->
+<hr> 
+<h4 style="color:darkblue;"><u> analysis-8 </u></h4>    
+    <pre>
+    function printLongest(str1, str2){
+        if (str1.length > str2.length){
+            for(let i = 0; i &lt; str1.length; i++){
+                console.log( str1[i] );
+            }
+        } else {
+            for(let i = 0; i &lt; str2.length; i++){
+                console.log( str2[i] );
+            }
+        }
+    }
+    
+    // time complexity = O(max(m, n)) 
+    // space complexity = O(1)  
+    </pre>
+</details>
+
+    <br><br>
+</body>
+</html>

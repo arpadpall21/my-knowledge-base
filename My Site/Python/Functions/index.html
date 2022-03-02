@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Functions </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets//scriptPages.js"></script>
+</head>
+<body>
+<h1> Functions (ver 4.0.0) </h1>
+    <p> Updated ( 2022-02-26 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Python></a> Functions  
+    </p>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Python supports recursions and closures </p>
+    <pre class="syntax">
+    def <strong>fnName</strong>(<i>arg, ...</i>):
+        <i>docString:str</i>                                                                  // document string (docstirng) is readable by <mark><strong>nfName</strong>.__doc__</mark> (used to document the function)
+        <span style="color:darkgray;">// function body... </span>
+        return <i>exp</i>
+        
+    <strong>fnName</strong>.__doc__                                                                     // returns the function's docstring (<i>docString</i>)
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    def testFn(a):
+        'some function documentation'                                                  // docstring   
+        return a
+    
+    testFn('test')                                                                     // -> 'test'
+    testFn.__doc__                                                                     // -> 'some function documentation'         // returns the docstring 
+    
+// recursion --------------------------------------------------------------------------
+    def fib(fibCollect = []):
+        print(1)
+        if len(fibCollect) &gt;= 10:
+            return fibCollect
+        
+        if len(fibCollect) &lt; 2:
+            fibCollect = [1, 1]
+        
+        nextFib = fibCollect[len(fibCollect) - 1] + fibCollect[len(fibCollect) - 2]
+        fibCollect.append(nextFib)
+        return fib(fibCollect)
+    
+    fib()                                                                              // -> [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]     // fibonacci sequence with recursion 
+    
+// closuer ----------------------------------------------------------------------------
+    def module1():
+        x = 1
+        y = 2
+        
+        def inner():
+            return x, y
+        
+        return inner
+    
+    someModule = module1()
+    someModule()                                                                       // -> (1, 2)
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> Functions Arguments </h2>
+    <pre class="syntax">
+<span style="color:darkgray;">// number of arguments ----------------------------------------------------------------</span>
+    def someFunc(<strong>arg</strong><i>, ...</i>):
+        <span style="color:darkgray;">// function body... </span>
+    
+    someFunc(<strong>val:any</strong><i>, ...</i>)                                                             // the function must be called with the correct number of arguments <u>otherwise raises a TypeError</u>
+    
+    
+<span style="color:darkgray;">// default argument -------------------------------------------------------------------</span>
+    def someFunc(<strong>arg</strong> = <strong>val:any</strong>)                                                        // sets a default value for the argument (used when no such argument is passed)
+        <span style="color:darkgray;">// function body... </span>
+    
+    
+<span style="color:darkgray;">// argument call order ----------------------------------------------------------------</span>
+    def someFunc(<strong>arg1</strong>, <strong>arg2</strong>):
+        <span style="color:darkgray;">// function body... </span>
+    
+    someFunc(<strong>val1:any</strong>, <strong>val2:any</strong>)                                                       // passed values are assigned to function arguments in the call order    
+    someFunc(<strong>arg2</strong> = <strong>val:any</strong>, <strong>arg1</strong> = <strong>val:any</strong>)                                           // we can directly call arguments and assign values to each, <u>in this case the call order does not matter</u>    
+    
+    
+<span style="color:darkgray;">// arbitrary arguments <mark>*</mark><strong>args</strong> ----------------------------------------------------------</span>
+    def someFunc(*<strong>args</strong>)                                                                // <mark>*</mark><strong>args</strong> recevies all call values in a tuple 
+        <strong>args</strong>                                                                           // -> (<strong>callVal</strong><i>, ...</i>)      // tuple holding all values that the function was called with 
+    
+    someFunc(<strong>val:any</strong><i>, ...</i>)                                                             // function can be called with arbitrary arguments <u>(raises a TypeError if called with keyword arguments)</u>
+    
+    
+<span style="color:darkgray;">// keyword arguments <mark>**</mark><strong>args</strong> -----------------------------------------------------------</span>
+    def someFunc(**<strong>args</strong>)                                                               // <mark>**</mark><strong>args</strong> recevies all call argument/value pairs in a dictionary    
+        <strong>args</strong>                                                                           // -> {<strong>arg</strong>:<strong>val</strong><i>, ...</i>}      // dictionary holding all argument/values paris that the function was called with 
+        
+        
+    someFunc(<strong>arg</strong> = <strong>val:any</strong><i>, ...</i>)                                                       // function can be called with keyword arguments <u>(raises a TypeError if called with arbitrary arguments)</u>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// number of arguments ----------------------------------------------------------------
+    def someFunc(a, b):
+        reutn a + b
+    
+    someFunc(1, 2)                                                                     // function must be called with the exact number of argumenst   
+    someFunc(1, 2, 3)                                                                  // -! raises a TypeError (function expects only 2 argumenst)
+    
+    
+// default arguments ------------------------------------------------------------------
+    def someFunc(a = 1, b = 2):                                                        // default argumenst 
+        return a + b
+    
+    someFunc()                                                                         // -> 3                              // default argumens used 
+    someFunc(2)                                                                        // -> 4                              // 1st argument value passed, 2nd argument default value used 
+    
+    
+// argument call order ----------------------------------------------------------------
+    def someFunc(a, b):
+        a                                                                              // -> 2
+        b                                                                              // -> 4
+    
+    someFunc(b = 4, a = 2)                                                             // we can assign values to argumenst, in this case the arugment call order does not matter 
+    
+    
+// arbitrary <mark>*</mark> argument ---------------------------------------------------------------
+    def someFunc1(*args):
+        args                                                                           // -> ('one', 'two')                 // arbitrary argument values are recevied in a tuple    
+    
+    someFunc1('one', 'two')
+    someFunc1(arg1='one', arg2='two')                                                  // -! raises a TypeError because the function expects arbitrary arguments  
+    
+    
+// keyword <mark>**</mark> argument ----------------------------------------------------------------
+    def someFunc2(**args):
+        args                                                                           // -> {'arg1':'one', 'arg2':'two'}   // keyword arguments are received in a dictionary as argument/value pair  
+    
+    someFunc2(arg1='one', arg2='two')
+    someFunc2('one', 'two')                                                            // -! raises a TypeError because the function expects keyword arguments   
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> The <mark>lambda</mark> function </h2>
+    <p> - the <mark>lambda</mark> function is a small anonymus function, it can have only one expression </p>
+    <pre class="syntax">
+    lambda <strong>arg</strong><i>, ...</i> : <strong>exp</strong>                                                              // returns a function (the <strong>exp</strong> result is returned automatically)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    someLambda = lambda a, b : a + b
+    
+    someLambda(1, 5)                                                                   // -> 6
+    
+    
+    someLambda1 = lambda *ar : ar
+    someLambda2 = lambda **ar : ar
+    
+    someLambda1(1, 5)                                                                  // -> (1, 5)
+    someLambda2(a=1, b=2)                                                              // -> {'a':1, 'b':2}
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> The Generator (function) </h2>
+    <pre class="syntax">
+    def genFunc():                                                                     // function having the <mark>yield</mark> keyword becomes a generator function 
+        yield <strong>exp</strong>                                                                      // calling the <mark>next()</mark> method on the <strong>genObj</strong> object will return the value after the <mark>yield</mark> keyword <u>then pauses the execution of the generator function body until the <mark>next()</mark> is called again</u>    
+        <i>...</i>                                                                            // the last <mark>yield</mark> value is the last item in the generation (no the <mark>return</mark> value)
+        
+        return <strong>val</strong>                                                                     // the <mark>return</mark> value is raised as <mark>StopIteration</mark> error value if the <strong>genObj</strong> is overcalled 
+    
+    
+    <strong>genObj</strong> = genFunc()                                                                 // the generator function creates and return a generator object   
+    
+<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
+                                                                                          <span id="browserSupport" style="color:yellow;" title="Updated: 2022-02-20"><span><i class="fab fa-python"></i> 3.x </span></span>
+    <strong>genObj</strong>.__next__()                                                                  // returns the next <mark>yield</mark> value from the <strong>genObj</strong> (raises a <mark>StopIteration</mark> error if overcalls the <strong>genObj</strong>)
+                                                                                          <span id="browserSupport" style="color:yellow;" title="Updated: 2022-02-20"><span><i class="fab fa-python"></i> 2.x </span></span>
+    <strong>genObj</strong>.next()                                                                      // returns the next <mark>yield</mark> value from the <strong>genObj</strong> (raises a <mark>StopIteration</mark> error if overcalls the <strong>genObj</strong>)
+    
+                                                                                          <span id="browserSupport" style="color:yellow;" title="Updated: 2022-02-20"><span><i class="fab fa-python"></i> 2.6 </span></span>
+    next(<strong>genObj</strong>, <i>defVal:any</i>)                                                           // returns the next <mark>yield</mark> value from the <strong>genObj</strong> (raises a <mark>StopIteration</mark> error if overcalls the <strong>genObj</strong>)
+                                                                                       // returns the default value (<i>defVal</i>) instead of raising a <mark>StopIteration</mark> error (when <strong>genObj</strong> is overcalled)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    def genFn():
+        yield 'one'
+        yield 'two'
+        return 'three'                                                                 // the return value is not part of the generated values   
+    
+    genObj = genFn()                                                                   // returns a generator object    
+    
+// looping through the generator object -----------------------------------------------
+    for i in genObj:
+        i                                                                              // -> 'one'  |  'two'
+    
+// .next() ----------------------------------------------------------------------------
+    genObj.__next__()                                                                  // -> 'one'
+    genObj.__next__()                                                                  // -> 'two'
+    genObj.__next__()                                                                  // -! raises <mark>StopIteration: three</mark> error (the generator function return value is the error value here)    
+    
+// next() -----------------------------------------------------------------------------
+    next(genObj, 'defVal')                                                             // -> 'one'
+    next(genObj, 'defVal')                                                             // -> 'two'
+    next(genObj, 'defVal')                                                             // -> 'defVal'     // return the default value instead of raising the StopIteration error   
+    </pre>
+</details>
+    
+    
+    <br><br>
+</body>
+</html>

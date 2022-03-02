@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> String Decoder </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> String Decoder (ver 4.0.0) </h1>
+    <p> Updated ( 2021-09-07 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> String Decoder  
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> new StringDecoder(<i class="openable">encode:str<div>
+          <p> - default <mark>utf-8</mark> </p>
+        </div></i>) </td>
+        <td> - returns a <strong>stringDecoder</strong> object which is used to decode buffers into string <br>
+             - undecodable trailing bytes will be stored in an internal buffer
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.1.99 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>stringDecoder</strong>.end(<i>buf|TypedArray|DataView</i>) </td>
+        <td> - calling without argument = returns the content of the internal buffer in a string (trailing binary data what cannot be decoded by the <mark>write()</mark> method) <br>
+             - calling with argument = executes the <mark>write()</mark> method internally then returns the remaining undecodable trailing bytes in one string    
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.9.3 </span>
+                <span class="openable">more...<div>
+                  <p> <mark>8.0.0</mark> - each invalid character is now replaced by a single replacement character instead of one for each individual byte </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>stringDecoder</strong>.write(<strong>buf|TypedArray|DataView</strong>) </td>
+        <td> - decodes the passed buffer types into a string and returns it (according to the stringDecoder object's encoding format) <br>
+             - does not return undecodable <u>trailing bytes</u>, stores these bytes in the internal buffer of the string decoder
+            <span id="browserSupport" title="updated : 2019-11-13">
+                <span><i class="fab fa-node-js"></i> 0.1.99 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v16.x/docs/api/string_decoder.html" target="_blank">String Decoder (nodejs.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <p> - the String Decoder module provides an API for decoding <mark>Buffer</mark> objects into strings </p>
+<h2 style="color:darkblue;"><u> The <mark>StringDecoder()</mark> / <mark>write()</mark> / <mark>end()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const { StringDecoder } = require('string_decoder');
+    var decoder = new StringDecoder('utf8');                                           // decoder object (decodes a buffer in 'utf8' string)
+        
+    var buf = Buffer.from([0x4a, 0x61, 0x76, 0x61, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0xcf]);      // the last byte '0xcf' is not decodable in 'utf8' 
+    
+    decoder.write(buf);                                                                // -> 'JavaScript'          // buffer decoded except the last byte because it cannot be decoded in 'utf8'    
+    
+    decoder.end();                                                                     // -> '�'                   // returns the remaining trailing byte from the decoder internal buffer                    
+    decoder.end(buf);                                                                  // -> 'JavaScript�'         // this is basically calling the 'write()' method first then the 'end()' method (argument passed)     
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> String Decoder TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const { StringDecoder } = require('string_decoder');
+        
+    var dc_utf8 = new StringDecoder('utf8');
+    var dc_hex = new StringDecoder('hex');
+        
+console.log( '// decode utf8 --------------------------------------------------------------------------------------------' );
+    var buf = Buffer.from([0x4d, 0x6f, 0x72, 0x67, 0x6f, 0xc5]);    // the '0xc5' cannot be decoded in utf8 encoding 
+        
+    var utf8 = dc_utf8.write(buf);                                  // decodes the buffer (except the last byte '0xc5')
+        console.log( utf8 );                                        // -> 'Morgo'
+        
+    var utf8_rem = dc_utf8.end();                                   // returns an tries to decode the remaining byte '0xc5' in a string
+        console.log( utf8_rem );                                    // -> '�';          // replacement character
+        
+    var utf8_again = dc_utf8.end(buf);                              // this is basically calling the 'write()' method first then the 'end()' method without argument 
+        console.log( utf8_again );                                  // -> 'Morgo�'
+        
+console.log( '// decode hex ---------------------------------------------------------------------------------------------' );
+    console.log( dc_hex.write(buf) );                               // decoded as hexadecimal values 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\20 String Decoder TEST> node main        
+        // decode utf8 --------------------------------------------------------------------------------------------
+        Morgo
+        �
+        Morgo�
+        // decode hex ---------------------------------------------------------------------------------------------
+        4d6f72676fc5
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\buffer and string decoder\20 String Decoder TEST>    
+    </pre>
+</details>
+    
+    
+    <br><br>
+</body>
+</html>

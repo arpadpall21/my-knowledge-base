@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Events </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Events (ver 4.0.0) </h1>
+    <p> Updated ( 2019-07-30 / 2021-05-28 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Events
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> new EventEmiter() </td>
+        <td> creates and returns a new event emitter object  
+            <span id="browserSupport" title="updated : 2019-07-31">
+                <span><i class="fab fa-node-js"></i> 0.1.26 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <em>EventEmiter</em>.defaultMaxListeners </td>
+        <td> - gets or sets the maximum listener function limit for ALL emitter objects of the module<br>
+             - the <mark>setMaxListeners()</mark> method has precedence over this one<br>
+             - not a hard limit, if more listeners are registered Node.js will simply warn you 
+            <span id="browserSupport" title="updated : 2019-08-05">
+                <span><i class="fab fa-node-js"></i> 0.11.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <em>events</em>.once(<strong>emitter:obj</strong>, <strong>event:str</strong>) </td>
+        <td> 
+            - returns a resolved promise if the <strong>emitter</strong> object emits the passed <strong>event</strong> (emitted arguments = resolved promise data Array)<br>
+            - returns a rejected promise if the <strong>emitter</strong> object emits an <mark>error</mark> event (error argument = rejected promise data) <u>(handles the thrown error)</u>
+            <span id="browserSupport" title="updated : 2019-08-06">
+                <span><i class="fab fa-node-js"></i> 11.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.05">
+        <td> <strong>emitter</strong>.emit(<strong>eventName:str</strong><i>, arg, ...</i>) </td>
+        <td> - synchronoulsy emits the specified event<br>
+             - listener functions registered to the specified event will be called in the listener Array order (synchronous)<br>
+             - returns <mark>true</mark> if the specified event has any listener functions registerd otherwise returns <mark>false</mark>  
+            <span id="browserSupport" title="updated : 2019-08-01">
+                <span><i class="fab fa-node-js"></i> 0.1.26 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>emitter</strong>.eventNames() </td>
+        <td> 
+            - returns the event names of the emitter object in an Array which have listeners registered on them 
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>emitter</strong>.getMaxListeners() </td>
+        <td> - returns a number indicating the maximum allowed listeners what can be registered on the <strong>emitter</strong> object <br>
+             - not a hard limit, if more listeners are registered Node.js will simply warn you
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 1.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>emitter</strong>.listenerCount(<strong>eventName:str</strong>) </td>
+        <td> 
+            - returns the number of listener functions registered on the passed event
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 3.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.03">
+        <td> <strong>emitter</strong>.listeners(<strong>eventName:str</strong>) </td>
+        <td> 
+            - returns the listener functions collected in an Array which are registered on the passed event
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 0.1.26 </span>
+                <span><i class="fab fa-node-js"></i> 7.0.0 returns the original listener attached by <mark>once()</mark> not the wrapper </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> 
+            <strong>emitter</strong>.off(<strong>eventName:str</strong>, <strong>listener:fn</strong>) <br>
+            <strong>emitter</strong>.removeListener(<strong>eventName:str</strong>, <strong>listener:fn</strong>)
+        </td>
+        <td> - removes one targeted listener function <u>(which must be referenced)</u> from the listener Array of the passed event<br>
+             - if the <mark>emit()</mark> method is in progress for the specified event this method will wait till the <mark>emit()</mark> method finishes<br>
+             - returns the emitter object
+            <span id="browserSupport" title="updated : 2019-08-01">
+                <span><i class="fab fa-node-js"></i> 0.1.26 <mark>removeListener()</mark></span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>off()</mark></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            <strong>emitter</strong>.on(<strong>eventName:str</strong>, <strong>listener:fn</strong>)<br>
+            <strong>emitter</strong>.addListener(<strong>eventName:str</strong>, <strong>listener:fn</strong>)
+        </td>
+        <td> - adds a listener function at the end of the listener Array queue of the passed event<br>
+             - no same checks are made so the same listener function can be added<br>
+             - returns the emitter object
+            <span id="browserSupport" title="updated : 2019-08-01">
+                <span><i class="fab fa-node-js"></i> 0.1.101 <mark>on() </span>
+                <span><i class="fab fa-node-js"></i> 0.1.26 <mark>addListener() </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>emitter</strong>.once(<strong>eventName:str</strong>, <strong>listener:fn</strong>) </td>
+        <td> - adds <u>a one-call listener function</u> at the end of the listener Array queue of the passed event <br>
+             - when called first it removes the listener function from the listener Array than invokes it (event can be emitted once)<br>
+             - returns the emitter object
+            <span id="browserSupport" title="updated : 2019-08-01">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>emitter</strong>.prependListener(<strong>eventName:str</strong>, <strong>listener:fn</strong>) </td>
+        <td> - adds a listener function at the beginning of the listener Array queue of the passed event<br>
+             - no same checks are made so the same listener function can be added<br>
+             - returns the emitter object
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>emitter</strong>.prependOnceListener(<strong>eventName:str</strong>, <strong>listener:fn</strong>) </td>
+        <td> - adds a <u>one-call listener function</u> at the beginning of the listener Array queue of the passed event<br>
+             - when called first it removes the listener function from the listener Array than invokes it<br>
+             - returns the emitter object
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 6.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.04">
+        <td> <strong>emitter</strong>.rawListeners(<strong>eventName:str</strong>) </td>
+        <td> 
+            - returns the listener functions collected in an Array which are registered on the passed event <u>(including wrapper functions like the one is created by <mark>once()</mark>)</u>
+            <span id="browserSupport" title="updated : 2019-08-02">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> <strong>emitter</strong>.removeAllListeners(<i>eventName:str</i>) </td>
+        <td> - removes all listener functions of the specified event (if the event name is specified)<br>
+             - removes all listener functions of the emitter object (if no event name is specified)<br>
+             - returns the emitter object
+            <span id="browserSupport" title="updated : 2019-08-01">
+                <span><i class="fab fa-node-js"></i> 0.1.26 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>emitter</strong>.setMaxListeners(<strong>nr</strong>) </td>
+        <td> - sets the maximum listener function limit of the object <br>
+             - not a hard limit, if more listeners are registered Node.js will simply warn you <br>
+             - returns the emiter object  
+            <span id="browserSupport" title="updated : 2019-08-05">
+                <span><i class="fab fa-node-js"></i> 0.3.5 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.01">
+        <td colspan="2"> events on the emiter object </td>
+    </tr>
+    <tr class="40.02">
+        <td> <strong>emitter.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> 
+            - event emitted <u>(and handled by the callback listener)</u> when an error occurs within the EventEmitter instance
+            <span id="browserSupport" title="updated : 2019-07-31">
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="45.01">
+        <td> 
+            <strong>emitter.listener</strong>('newListener', <strong class="openable">fn(ev, listenerFn)<div>
+                <p> <strong>ev</strong> - the event to which the listener is added </p>
+                <p> <strong>listenerFn</strong> - the newly registered listener function </p>
+            </div></strong>) 
+        </td>
+        <td> 
+            - event emitted <u>before</u> a new listener function is registered to the <strong>emitter</strong> object
+            <span id="browserSupport" title="updated : 2019-07-31">
+                <span><i class="fab fa-node-js"></i> 0.1.26 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="45.02">
+        <td> 
+            <strong>emitter.listener</strong>('removeListener', <strong class="openable">fn(ev, listenerFn)<div>
+                <p> <strong>ev</strong> - the event from which the listener is removed </p>
+                <p> <strong>listenerFn</strong> - the removed listener function </p>
+            </div></strong>) 
+        </td>
+        <td> 
+            - event emitted <u>after</u> an <u>existing</u> listener function is removed from the <strong>emitter</strong> object
+            <span id="browserSupport" title="updated : 2019-07-31">
+                <span><i class="fab fa-node-js"></i> 0.9.3 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v16.x/docs/api/events.html" target="_blanc"> Node.js Events </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - if there is no <mark>error</mark> listener registered on an event emitter and an error occurs the error is thrown and the Node.js process exits </p> 
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Node.js is built around an asynchronous event driven architecture, this means that Node.js core events are emitted asynchronously </p>
+    <p> - objects emit (called <b>Emitter</b>) named events that causes function (called <b>Listener</b>) to be called (all emitter objects are instances of the <mark>EventEmitter</mark> class)</p>
+    <p> - Node.js core events are emitted asynchronously but if <u>we emit an event (by using the <mark>emit()</mark> method) it is emitted synchronously</u></p>
+    <p> - each event of the emitter object has an <u>Array of listeners</u> which maintains the registered order of the listener callbacks (default size 10)</p>
+    <img src="Node.js event architecture.jpg" alt="Node.js event architecture" width="1000" height="200">
+    <pre>
+    const {EventEmitter} = require('events');
+    const fs = require('fs');
+    
+    var writeStream = fs.createWriteStream('write.txt');
+    
+    EventEmitter.prototype.isPrototypeOf(writeStream);                           // -> true             // the EventEmiter class is on the prototype chain of the writeStream object    
+    
+// ------------------------------------------------------------------------------
+    writeStream.on('finish', function(){                                         // registered listener 
+        // setImmediate(()=>{});                                                     // we colud embed the function's content here in order to execute it asynchronously   
+        this;                                                                    // -> WriteStream {}   // refers to the emitter object's direct constructor    // -! does not work in fat arrow functions  
+    });
+    
+    writeStream.emit('finish');                                                  // we manually emit the 'finish' event here    // -! the 'finish' listener callback synchronously called here! 
+    
+    writeStream.write('some data');
+    writeStream.end();                                                           // Node.js emits the 'finish' event here       // -! the 'finish' listener callback is asynchronously called in this situation!   
+    
+// ------------------------------------------------------------------------------
+    var myEvent = new EventEmiter();                                             // the EventEmiter class creates a new event emitter object 
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> asynchronous VS synchronous TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    console.log( EventEmitter.prototype.isPrototypeOf(process) );               // -> true              // the EventEmitter is in the prototype chain of the process object 
+    
+    process.on('exit', code => console.log(code));                              // listener registered on the 'exit' event 
+    
+    process.emit('exit', 15);                                                   // -! manually emitted event invokes the listener function synchronously 
+    
+    console.log( 'end of module' );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\01 asynchronous VS synchronous TEST> node main
+        true                                                                    // the EventEmitter is in the prototype chain of the process object  
+        15                                                                      // -! manually emitted event is synchronous
+        end of module                                                           // this is where the module ends 
+        0                                                                       // the 'exit' event also emitted by Node once the process exits     // -! this is asynchronous however
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\01 asynchronous VS synchronous TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> synchronous to asynchronous TEST </u></h4>
+    <p> - emited events are synchronous but we can execute the callback functions' content asynchronously </p>
+    <pre style="margin-bottom:1px;">
+    const event = require('events');
+    
+    var customEvent = new event.EventEmitter();
+    
+    customEvent.on('testEvent', function(){
+        setImmediate(function(){                                                // we simply execute the event callback's content asynchronously
+            console.log( 'testEvent executed!' );
+        });
+    });
+    
+    customEvent.emit('testEvent');
+    
+    
+    console.log( 'end of module!' );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\02 synchronous to asynchronous TEST> node main
+        end of module!
+        testEvent executed!                                                     // event executed asynchronously
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\02 synchronous to asynchronous TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Methods and Properties </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>addListener()</mark> / <mark>on()</mark> / <mark>once()</mark> / <mark>removeListener()</mark> / <mark>off()</mark> / <mark>removeAllListeners()</mark> / <mark>emit()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+// on() / addListener() / emit() ------------------------------------------------
+    function listener1(a) { a };                                                 // a = 21 (the passed argument by 'emit()') 
+    function listener2(a) { a };                                                 // a = 22 (the passed argument by 'emit()')
+    
+    myEvent.on('ev1', listener1);                                                // we add 'listener1' listener function to 'ev1' event's listener Array 
+    myEvent.addListener('ev2', listener2);                                       // we add 'listener2' listener function to 'ev2' event's listener Array 
+    
+    myEvent.emit('ev1', 21);                                                     // -! synchronous call (listener1 is invoked here)
+    myEvent.emit('ev2', 22);                                                     // -! synchronous call (listener2 is invoked here)
+    
+// off() / removeListener() -----------------------------------------------------
+    myEvent.off('ev1', listener1);                                               // removes 'listener1' listener function from 'ev1' event's listener Array   // !! listener function must be referenced 'listener1'   
+    myEvent.removeListener('ev2', listener2);                                    // removes 'listener2' listener function from 'ev2' event's listener Array   // !! listener function must be referenced 'listener2'   
+    
+    myEvent.emit('ev1', 21);                                                     // does not have effect (event emitted but no listener function to invoke)
+    myEvent.emit('ev2', 22);                                                     // does not have effect (event emitted but no listener function to invoke)
+    
+// removeAllListeners() ---------------------------------------------------------
+    myEvent.removeAllListeners('ev1');                                           // removes ALL listener functions form 'ev1' event 
+    myEvent.emit('ev1', 21);                                                        // does not have effect since all listeners are removed from this event 
+    myEvent.emit('ev2', 22);                                                        // 'listener2' listener function executed here 
+    
+    myEvent.removeAllListeners();                                                // removes ALL listener functions form All events of 'myEvent' object   
+    myEvent.emit('ev1', 21);                                                        // none of the two emitted events have any more listeners to invoke  
+    myEvent.emit('ev2', 22);                                                      
+    
+// once() -----------------------------------------------------------------------
+    myEvent.once('ev3', ()=>{} );                                                // add a one-time listener on 'ev3' event 
+    
+    myEvent.emit('ev3');                                                         // listener of 'ev3' event is removed and invoked here 
+    myEvent.emit('ev3');                                                            // this and any further call has no effect   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>on()</mark> / <mark>addListener()</mark> / <mark>off()</mark> / <mark>removeListener()</mark> / <mark>emit()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    const myEvent = new EventEmitter();
+    
+// listener callback-1 ---------------------------------------------------------
+        function callBack1() { console.log('event-1 fired!') };
+    
+// listener callback-2 ---------------------------------------------------------
+        function callBack2() { console.log('event-1 fired!') };
+        
+// listener callback-3 ---------------------------------------------------------
+        function callBack3(arg1, arg2) { console.log( 'callback3 passed arguments are = ' + arg1 + ' and = ' + arg2 ) };
+    
+// listener callback-4 ---------------------------------------------------------
+        function callBack4(arg1, arg2) { console.log( 'callback4 passed arguments are = ' + arg1 + ' and = ' + arg2 ) };
+        
+// adding event listener functions ---------------------------------------------
+        myEvent.addListener('event-1', callBack1);                              // 'addListener()' and 'on()' do the same 
+        myEvent.on('event-1', callBack2);
+        myEvent.on('event-1', callBack3);
+        myEvent.on('event-1', callBack4);
+    
+// removing event listener functions -------------------------------------------
+        myEvent.off('event-1', callBack1);                                      // 'removeListener()' and 'off()' do the same 
+        myEvent.removeListener('event-1', callBack2 )
+    
+// emit the event --------------------------------------------------------------
+        myEvent.emit('event-1', 21, 22);                                        // -! this is a synchronous call
+    
+    console.log( 'end of module' );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\05 on() addListener() of() removeListener() emit() TEST> node main
+        callback3 passed arguments are = 21 and = 22                            // the first 2 listener functions are removed 
+        callback4 passed arguments are = 21 and = 22
+        end of module                                                           // the 'emit()' calls the listener functions synchronoulsy
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\05 on() addListener() of() removeListener() emit() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>once()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+// listener registered once that removed ---------------------------------------
+    myEvent.once('event-1', function(a){
+        console.log( 'event-1 emitted with the passed argument = ' + a);
+    });
+        
+// the 'removeListener' event emited right after the 'once()' listener used ----
+    myEvent.on('removeListener', function(ev, callback){                        // the 'removeListener' event listener proves that the 'once()' method removes the listener function 
+        console.log( 'removeListener event listener fired!');
+        console.log( 'the ' + callback + ' listener callack is removed from the ' + ev + ' event');
+    });
+    
+    myEvent.emit('event-1', true);
+    myEvent.emit('event-1', true);                                              // these have no effect any more because the listener funciton is removed after one call   
+    myEvent.emit('event-1', true);
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\06 once() TEST> node main
+        removeListener event listener fired!                                    // 'removeListener' event listener fired 
+        the function(a){                                                        // -! the 'once()' method removes first the listener function than invokes it   
+            console.log( 'event-1 emitted with the passed argument = ' + a);
+        } listener callack is removed from the event-1 event
+        event-1 emitted with the passed argument = true                         // listener function invoked by 'once()'  
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\06 once() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>removeAllListeners()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    let {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+// registering 2 listener funstions to 'event-1' -------------------
+    myEvent.on('event-1', ()=>{ console.log('event-1 / listener-1 fired!') });
+    myEvent.on('event-1', ()=>{ console.log('event-1 / listener-2 fired!') });
+    
+// registering 2 listener funstions to 'event-2' -------------------
+    myEvent.on('event-2', ()=>{ console.log('event-2 / listener-1 fired!') });
+    myEvent.on('event-2', ()=>{ console.log('event-2 / listener-2 fired!') });
+    
+// registering 2 listener funstions to 'event-3' -------------------
+    myEvent.on('event-3', ()=>{ console.log('event-3 / listener-1 fired!') });
+    myEvent.on('event-3', ()=>{ console.log('event-3 / listener-2 fired!') });
+    
+// emit all events -----------------------------------------------------------------------------
+    console.log( '--- emit all events -------------------------------------------');
+    myEvent.emit('event-1');
+    myEvent.emit('event-2');
+    myEvent.emit('event-3');
+    
+// remove listeners from the targeted event than emit all events -------------------------------
+    console.log( '--- remove listeners from "event-2" ---------------------------');
+    myEvent.removeAllListeners('event-2');                                      // removes all listener functions of 'event-2'
+    myEvent.emit('event-1');
+    myEvent.emit('event-2');
+    myEvent.emit('event-3');
+    
+// remove all listener functions of the emitter object -----------------------------------------
+    console.log( '--- remove all listener functions of the emitter object  ------');
+    myEvent.removeAllListeners();                                               // removes all listener functions of the emitter object   
+    myEvent.emit('event-1');
+    myEvent.emit('event-2');
+    myEvent.emit('event-3');
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\07 removeAllListeners() TEST> node main
+        --- emit all events -------------------------------------------
+        event-1 / listener-1 fired!
+        event-1 / listener-2 fired!
+        event-2 / listener-1 fired!
+        event-2 / listener-2 fired!
+        event-3 / listener-1 fired!
+        event-3 / listener-2 fired!
+        --- remove listeners from "event-2" ---------------------------
+        event-1 / listener-1 fired!
+        event-1 / listener-2 fired!
+        event-3 / listener-1 fired!
+        event-3 / listener-2 fired!
+        --- remove all listener functions of the emitter object  ------
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\07 removeAllListeners() TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> The <mark>prependListener()</mark> / <mark>prependOnceListener()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+    myEvent.on('ev', ()=>{ console.log('listener1') });
+    myEvent.on('ev', ()=>{ console.log('listener2') });
+    
+// prependListener() ------------------------------------------------------------
+    myEvent.prependListener('ev', ()=>{ console.log('listener3') });             // listener added at the beginning of the listener Array of the 'ev' event   
+    
+    myEvent.emit('ev');                                                          // emitted event will trigger   // -> 'listener3' 'listener1' 'listener2'
+    myEvent.emit('ev');                                                          // emitted event will trigger   // -> 'listener3' 'listener1' 'listener2'
+    
+// prependListener() ------------------------------------------------------------
+    myEvent.prependOnceListener('ev', ()=>{ console.log('listener3') });         // ont-time call listener added at the beginning of the listener Array of the 'ev' event    
+    
+    myEvent.emit('ev');                                                          // emitted event will trigger   // -> 'listener3' 'listener1' 'listener2'
+    myEvent.emit('ev');                                                          // emitted event will trigger   // -> 'listener1' 'listener2'              // -! prepended listener is removed after the first call   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>prependListener()</mark> / <mark>prependOnceListener()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+// prependListener() ------------------------------------------------------------
+        console.log(' ---------- prependListener() ---------------------')
+    myEvent.on('ev1', ()=>{ console.log('ev1 / listener1 fired!') });
+    myEvent.on('ev1', ()=>{ console.log('ev1 / listener2 fired!') });
+    myEvent.prependListener('ev1', ()=>{ console.log('ev1 / listener3 fired!') });          // listener added at the beginning of the listener Array 
+    
+    myEvent.emit('ev1');
+    myEvent.emit('ev1');
+    
+// prependOnceListener() --------------------------------------------------------
+        console.log(' ---------- prependOnceListener() ------------------')
+    myEvent.on('ev2', ()=>{ console.log('ev2 / listener1 fired!') });
+    myEvent.on('ev2', ()=>{ console.log('ev2 / listener2 fired!') });
+    myEvent.prependOnceListener('ev2', ()=>{ console.log('ev2 / listener3 fired!') });      // one-call listener added at the beginning of the listener Array
+    
+    myEvent.emit('ev2');
+    myEvent.emit('ev2');    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\08 prependListener() prependOnceListener() TEST> node main
+        ---------- prependListener() ---------------------
+        ev1 / listener3 fired!                                                   // prepended listener added at the beginning of the listener Array 
+        ev1 / listener1 fired!
+        ev1 / listener2 fired!
+        ev1 / listener3 fired!                                                   // prepended listener added at the beginning of the listener Array
+        ev1 / listener1 fired!
+        ev1 / listener2 fired!
+        ---------- prependOnceListener() ------------------
+        ev2 / listener3 fired!                                                   // prepended a one-time listener added at the beginning of the listener Array
+        ev2 / listener1 fired!
+        ev2 / listener2 fired!
+        ev2 / listener1 fired!                                                   // one-time listener is removed after the first call  
+        ev2 / listener2 fired!
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\08 prependListener() prependOnceListener() TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> The <mark>eventNames()</mark> / <mark>listeners()</mark> / <mark>listenerCount()</mark> / <mark>rawListeners()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+    myEvent.on('ev1', ()=>{ console.log('ev1 / listener1') });
+    
+    myEvent.on('ev2', ()=>{ console.log('ev2 / listener1') });
+    myEvent.once('ev2', ()=>{ console.log('ev2 / listener2') });
+    
+// eventNames() -----------------------------------------------------------------
+    myEvent.eventNames();                                                        // -> ['ev1', 'ev2']           // event names what have registered listeners 
+            
+// listenerCount() --------------------------------------------------------------
+    myEvent.listenerCount('ev1');                                                // -> 1                        // 'ev1' event have 1 listener registered 
+    myEvent.listenerCount('ev2');                                                // -> 2                        // 'ev2' event have 2 listeners registered 
+        
+// listeners() / raWListeners() -------------------------------------------------
+    myEvent.listeners('ev2');                                                    // -> [ [Function], [Function] ]
+    myEvent.rawListeners('ev2');                                                 // -> [ [Function], [Function: bound onceWrapper] { listener: [Function] } ]   // -! even the wrapper function is returned 
+                                                                                     // the '[Function: bound onceWrapper] { listener: [Function] } ]' wraps the listener attached by the 'once()' method   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>eventNames()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const { EventEmitter } = require('events');
+    var myEvent = new EventEmitter();
+    
+    myEvent.on('ev1', ()=>{});                                                  // registered listeners on different events   
+    myEvent.addListener('ev2', ()=>{});
+    myEvent.once('ev3', ()=>{});
+    
+    console.log( myEvent.eventNames() );
+    
+    console.log( process.eventNames() );                                        // process event names with registered listener functions  
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\09 eventNames() TEST> node main
+        [ 'ev1', 'ev2', 'ev3' ]                                                 // 'myEvent' object 
+        [ 'warning', 'newListener', 'removeListener', 'SIGWINCH' ]              // 'process' object  
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\09 eventNames() TEST>        
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>listeners()</mark> / <mark>listenerCount()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const { EventEmitter } = require('events');
+    var myEvent = new EventEmitter();
+    
+    myEvent.on('ev', ()=>{ console.log('listener1') });                         // registering listeners on the 'ev' event   
+    myEvent.on('ev', ()=>{ console.log('listener2') });
+    myEvent.on('ev', ()=>{ console.log('listener3') });
+    
+    console.log( myEvent.listenerCount('ev') );
+    console.log( myEvent.listeners('ev') );
+    
+// process object --------------------------------------------------------------
+    console.log( process.listenerCount('warning') );
+    console.log( process.listeners('warning') );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\10 listeners() listenerCount() TEST> node main
+        3                                                                       // -! myEvent.listenerCount()
+        [ [Function], [Function], [Function] ]                                  // -! myEvent.listeners()
+        1                                                                       // -! process.listenerCount()
+        [ [Function: onWarning] ]                                               // -! process.listeners()
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\10 listeners() listenerCount() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>listeners()</mark> VS <mark>rawListeners()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    
+    myEvent.on('ev', ()=>{ console.log('listener1') });
+    myEvent.once('ev', ()=>{ console.log('listener2') });                       // -! the 'once()' method basically wraps the listener function in order to remove after the first call   
+    
+    console.log( myEvent.listeners('ev') );
+    console.log( myEvent.rawListeners('ev') );                                  // also returns the wrapper function in which the 'once()' listener is wrapped   
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\11 listeners() VS rawListeners() TEST> node main
+        [ [Function], [Function] ]
+        [ [Function], [Function: bound onceWrapper] { listener: [Function] } ]  // the '[Function: bound onceWrapper] { listener: [Function] }' function is basically wraps the original listener added by the 'once()' method   
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\11 listeners() VS rawListeners() TEST>    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> The <mark>getMaxListeners()</mark> / <mark>setMaxListeners()</mark> / <mark>defaultMaxListeners</mark> methods and property </u></h2>
+    <p> - by default the listener function limit per event is 10, however <u>this is not a hard limit</u>, Node.js will emit a warning message if we register more event listener functions than the set limit </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const {EventEmitter} = require('events');
+    var myEvent1 = new EventEmitter();
+    var myEvent2 = new EventEmitter();
+    
+    EventEmitter.defaultMaxListeners;                                            // -> 10               // default limit 
+    EventEmitter.defaultMaxListeners = 15;                                       // setting the listener limit for ALL emitter object 
+    
+    myEvent1.getMaxListeners();                                                  // -> 15               // listener limit of this object (limit set by 'defaultMaxListeners')   
+    for( let i = 0; i < 14; i++) {
+        myEvent1.on('ev', ()=>{});                                               // registering 14 listeners no problem 
+    }
+        
+    myEvent2.setMaxListeners(20);                                                // set the listener limit for the 'myEvent2' object only (overriding the 'defaultMaxListeners')   
+    myEvent2.getMaxListeners();                                                  // -> 20               // listener limit of this object 
+        for( let i = 0; i < 20; i++) {
+        myEvent2.on('ev', ()=>{});                                               // registering 20 listeners no problem 
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>getMaxListeners()</mark> / <mark>setMaxListeners()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    var myEvent = new EventEmitter();
+    var myEvent2 = new EventEmitter();
+    
+    console.log( myEvent.getMaxListeners() );                                    // -> 10           // default limit 
+    
+    for(let i = 0; i &lt; 11; i++) {
+        myEvent.on('ev', ()=&gt;{});                                                // we register 11 listeners on the object Node.js will print a warning message 
+    }
+    
+    myEvent2.setMaxListeners(12);                                                // set listeners limit to 12 
+    for(let i = 0; i &lt; 12; i++) {
+        myEvent2.on('ev', ()=&gt;{});                                               // registering 12 listeners no problem 
+    }
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\12 getMaxListeners() setMaxListeners() TEST> node main
+        10                                                                       // -! myEvent.getMaxListeners()
+        (node:15236) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 ev listeners added to [EventEmitter]. Use emitter.setMaxListeners() to increase limit      // -! warning message 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\12 getMaxListeners() setMaxListeners() TEST>    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h4 style="color:darkblue;"><u> <mark>defaultMaxListeners</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    var myEvent1 = new EventEmitter();
+    var myEvent2 = new EventEmitter();
+    var myEvent3 = new EventEmitter();
+    
+    console.log( EventEmitter.defaultMaxListeners );
+    EventEmitter.defaultMaxListeners = 16;                                       // sets the listener limit for all objects 
+    
+    for(let i = 0; i &lt; 15; i++) {
+        myEvent1.on('ev', ()=>{});
+    }
+    
+    for(let i = 0; i &lt; 14; i++) {
+        myEvent2.on('ev', ()=>{});
+    }
+    
+    myEvent3.setMaxListeners(5);                                                 // this overrides the 'defaultMaxListeners' property 
+    for(let i = 0; i &lt; 14; i++) {                                    
+        myEvent3.on('ev', ()=>{});                                               // a message warnign will be emitted (more listeners than allowed) 
+    }
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\13 defaultMaxListeners TEST> node main
+        10                                                                       // -! EventEmitter.defaultMaxListeners
+        (node:3412) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 6 ev listeners added to [EventEmitter]. Use emitter.setMaxListeners() to increase limit
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\13 defaultMaxListeners TEST>    
+    </pre>
+</details>   
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h2 style="color:darkblue;"><u> The <mark>events.once()</mark> method </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const {EventEmitter, once} = require('events');
+    var myEvent1 = new EventEmitter();
+    var myEvent2 = new EventEmitter();
+    var myEvent3 = new EventEmitter();
+    
+    once(myEvent1, 'ev').then(res => console.log(res) );                         // promise resolved (res = [5, 4, 98])         // 'ev' event emitted on 'myEvent1' object   
+    once(myEvent2, 'ev').catch(rej => console.log(rej) );                        // promise rejected (rej = 'someError')        // 'error' event is emitted on 'myEvent2' object   
+    once(myEvent3, 'ev').then(res => console.log(rej) );                         // promise pending                             // no event emitted on 'myEvent3' object   
+    
+    myEvent1.emit('ev', 5, 4, 98);
+    myEvent2.emit('error', 'someError');
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>events.once()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter, once} = require('events');
+    var myEvent1 = new EventEmitter();
+    var myEvent2 = new EventEmitter();
+    var myEvent3 = new EventEmitter();
+    
+    once(myEvent1, 'ev').then(res => console.log(res), rej => console.log(rej));
+    once(myEvent2, 'ev').then(res => console.log(res), rej => console.log(rej));
+    once(myEvent3, 'ev').then(res => console.log(res), rej => console.log(rej)); // promise is never returned because the 'myEvent3' object never emits the 'ev' event   
+    
+    myEvent1.emit('ev', 21, 22, 23);                                             // emit event with some arguments 
+    myEvent2.emit('error', 'some error');                                        // emit an error 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\14 events.once() TEST> node main
+        [ 21, 22, 23 ]                                                           // handled resolved promise data (emitted event arguments)
+        some error                                                               // handled rejected promise data (emitted error argument)
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\14 events.once() TEST>    
+    </pre>
+</details>    
+<hr>
+<!------------------------------------------------------------------------------------------------------>
+<h2 class="headerExtra"><u> Events on the emitter object itself <mark>error</mark> / <mark>newListener</mark> / <mark>removeListener</mark> </u></h2>
+    <p> - these events are standard built-in events in every event emitter object, they are emitted when the specified event is happening </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const fs = require('fs');
+    const writeStream = fs.createWriteStream('write.txt');
+    
+// error ------------------------------------------------------------------------
+    writeStream.on('error', function(err){                                       // error listener will handle any event error (event errors only)
+        err;                                                                     // -> TypeError {}                     // thrown error is handled here    
+    });
+    
+    writeStream.write(22);                                                       // -! if we wouldn't have an 'error' listener the process would exit because of the unhandled error 
+    
+// newListener ------------------------------------------------------------------
+    writeStream.on('newListener', function(errName, func){                       // listener tirggers when a new event listener is registered 
+        errName;                                                                 // -> 'finish'                         // registered event name 
+        func;                                                                    // -> function finishCallback() {}     // listener callback 
+    });
+    
+    function finishCallback() {};
+    writeStream.on('finish', finishCallback);                                    // adding a new listener 
+    
+// removeListener ---------------------------------------------------------------
+    writeStream.on('removeListener', function(errName, func){                    // listener tirggers when an existing listener callback is removed  
+        errName;                                                                 // -> 'finish'                         // registered event name 
+        func;                                                                    // -> function finishCallback() {}     // listener callback 
+    });
+    
+    writeStream.off('finish', finishCallback);                                   // remove previously added event       // !! callback function must be references in order to remove it
+    writeStream.off('close', closeCallback);                                     // -! this does not trigger the 'removeListener' event because ther is no such event and callback is registered on the emitter   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>error</mark> event TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const fs = require('fs');
+    
+    var writeStream = fs.createWriteStream('write.txt');
+    
+    writeStream.on('error', function(err){                                       // 'error' listenere is registered on the 'writeStream' emitter 
+        console.log( err.name );                                                 // print the occured error 
+    });
+    
+    writeStream.write(32);    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\03 error event TEST> node main
+        TypeError
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\03 error event TEST>    
+    </pre>
+<h4 style="color:darkblue;"><u> <mark>newListener</mark> / <mark>removeListener</mark> events TEST </u></h4>
+    <p> - it's a little bit tricky to demonstarte both listeners in one demo because the <mark>removeListener</mark> is also counted as an added event so it is returned by the <mark>newListener</mark> first </p>
+    <pre style="margin-bottom:1px;">
+    const {EventEmitter} = require('events');
+    
+    const myEvent = new EventEmitter();
+    
+    myEvent.on('newListener', function(name, func){
+        console.log( '----- added event parameters -------------------------------------------' );
+        console.log( 'added event name = ' + name );
+        console.log( 'added callback = ' + func );
+    });
+    
+    myEvent.on('removeListener', function(name, func){
+        console.log( '----- removed event parameters -----------------------------------------' );
+        console.log( 'removed event name = ' + name );
+        console.log( 'removed callback = ' + func );
+    });
+    
+// add remove event -----------------------------------------------
+    var listenerCallback = function() { console.log( 'listener callback fired!'); }
+    
+    myEvent.on('myEvent', listenerCallback);
+    myEvent.off('myEvent', listenerCallback);
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\04 newListener removeListener events TEST> node main
+        ----- added event parameters ------------------------------------------- // -! 1st call of 'newListener' listener returns the 'removeListener' because it is also an added callback   
+        added event name = removeListener
+        added callback = function(name, func){
+            console.log( '----- removed event parameters -------------------------------------------' );
+            console.log( 'removed event name = ' + name );
+            console.log( 'removed callback = ' + func );
+        }
+        ----- added event parameters ------------------------------------------- // -! 2nd call of 'newListener' listener return the 'myEvent' 
+        added event name = myEvent
+        added callback = function() { console.log( 'listener callback fired!'); }
+        ----- removed event parameters ----------------------------------------- // -! call 'removeListener'   
+        removed event name = myEvent
+        removed callback = function() { console.log( 'listener callback fired!'); }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\events\04 newListener removeListener events TEST>    
+    </pre>    
+</details>
+    
+    <br><br>
+</body>
+</html>

@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Session </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Session (ver 3.4.1) </h1>
+    <p> Updated ( 2020-06-04 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">HTTP/2></a> Session   
+    </p>
+<table class="table">
+<caption> HTTP/2 Session </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>session</strong> </td>
+        <td> 
+            - represents an active communication betweent he client and the server (used on both client and server side) extends the <mark>EventEmitter</mark> class <br>
+            - bound with one socket (<mark>net.Server</mark> or <mark>tls.Server</mark>) when created 
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.alpnProtocol </td>
+        <td> returns the connected TLS socket's <mark>alpn</mark> value, returns <mark>'h2c'</mark> if connected to a <u>none</u> TLS socket, (<mark>undefined</mark> = not connected) 
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.close(<i class="openable">fn<div>
+                <p> - <mark>close</mark> listener callback </p>
+            </div></i>) </td>
+        <td> 
+            - gracefully closes the session, prevents new <strong>stream</strong> creation but existing streams can complete on their own <br>
+            - called when all streams are closed and the session is destroyed
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.closed </td>
+        <td> returns <mark>ture</mark> when the session is closed, <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.connecting </td>
+        <td> returns <mark>true</mark> if the session is still connecting (set to <mark>false</mark> right before emitting the <mark>connect</mark> event)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.destroy(<i class="openable">err<div>
+                <p> - error thrown when the socket is destroyed </p>
+            </div></i>, <i class="openable">errCode<div>
+                <p> - error code to send in the final <mark>GOAWAY</mark> frame </p>
+            </div></i>)
+        </td>
+        <td> immediately destroys the session and the associated socket (once the session destroyed the <mark>close</mark> event is emitted)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.destroyed  </td>
+        <td> returns <mark>true</mark> if the session is destoryed, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.encryped </td>
+        <td> returns <mark>true</mark> if the session is connected to a TLS socket, <mark>false</mark> if the session is connected to to any other kind of socket or stream (<mark>undefined</mark> = not connected)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.goaway(<i class="openable">errCode:nr, lastStreamId:nr, data:buf|tArr|dataW<div>
+                <p> <mark>errCode</mark> - <strong>nr</strong> - HTTP/2 Error code </p>
+                <p> <mark>lastStreamId</mark> - <strong>nr</strong> - ID of the last processed stream </p>
+                <p> <mark>data</mark> - <strong>buffer | typedArray | dataview</strong> - data to send with the <mark>GOAWAY</mark> frame </p>
+            </div></i>) 
+        </td>
+        <td> sends a <mark>GOAWAY</mark> frame to the connected peer without shutting down the session
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.localSettings </td>
+        <td> returns the local settings of this session in a <strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong> (prototype-less object)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.originSet </td>
+        <td> (TLS connection only) returns an Array of origins (URL) for which this session may be considered authoritative (URL of the connected peer)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.pendingSettingsAck </td>
+        <td> returns <mark>true</mark> when the session is waiting for an acknowledgement to an already sent <mark>SETTINGS</mark> frame, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.ping(<i class="openable">data:buf|tArr|dataW<div>
+                <p> 8 bytes of data can be sent as payload </p>
+            </div></i>, <strong class="openable">fn(err, duration, data)<div>
+                <p> <mark>duration</mark> - milliseconds elapsed since the ping was sent and an acknowledgement was received </p>
+                <p> <mark>data</mark> -the ping payload </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sends a <mark>PING</mark> frame to the connected HTTP/2 peer <br>
+            - returns <mark>true</mark> if the <mark>PING</mark> was sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.9.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.ref() </td>
+        <td> calls <mark>ref()</mark> on the underlying <mark>net.Socket</mark>
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.remoteSettings </td>
+        <td> returns the settings of the connected remote peer session in a <strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong> (prototype-less object)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>session</strong>.setTimeout(<strong>nr:ms</strong>, <strong class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></strong>) 
+        </td>
+        <td> 
+            - sets a counter (timeout) on the session (<mark>0</mark> = infinity) <br>
+            - the counter starts when the connection estabilished and restarts at every received data <br>
+            - once the timer expires the timeout event is emitted (connection not dropped regardless the <mark>timeout</mark> event is registered or not) <br>
+            - returns the server object itself 
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.settings(<i class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(err, settings:obj, durration)<div>
+                <p> - callback called when the session is connected (or right away) </p>
+                <p> - <mark>settings:obj</mark> - the updated settings object </p>
+            </div></i>)
+        </td>
+        <td> 
+            - updates the local settings <u>for this session</u> and sends a <mark>SETTINGS</mark> frame to the connected HTTP/2 peer <br>
+            - new settings active once the settings acknowledgement is received and the <mark>localSettings</mark> event is emitted
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>    
+    <tr>
+        <td> <strong>session</strong>.socket </td>
+        <td> 
+            returns an object that acts as a <mark>net.Socket</mark> or <mark>tls.Socket</mark> <span class="openable">but with limited socket functionalities<div>
+                <p> - <mark>destroy</mark> / <mark>emit</mark> / <mark>end</mark> / <mark>pause</mark> / <mark>read</mark> / <mark>resume</mark> / <mark>write</mark> - throws an error  </p>
+                <p> - <mark>setTimeout()</mark> - called on this session </p>
+                <p> - all other interactions will be routed to the socket </p>
+            </div></span>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.state </td>
+        <td> 
+            returns an <span class="openable">object containing miscellaneous informations about the current session state<div>
+                    <p> localWindowSize: <strong>nr</strong> -he number of bytes the connected peer may send for this Http2Stream without receiving a WINDOW_UPDATE </p>
+                    <p> state: <strong>nr</strong> - flag indicating the low-level current state of the Http2Stream as determined by nghttp2 </p>
+                    <p> localClose: <strong>nr</strong> - <mark>1</mark> if this Http2Stream has been closed locally </p>                    
+                    <p> remoteClose: <strong>nr</strong> - <mark>1</mark> if this Http2Stream has been closed remotely </p>
+                    <p> sumDependencyWeight: <strong>nr</strong> - the sum weight of all Http2Stream instances that depend on this Http2Stream as specified using PRIORITY frames </p>
+                    <p> weight: <strong>nr</strong> - the priority weight of this Http2Stream </p>
+                </div></span>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.type </td>
+        <td> if returns <mark>1</mark> = session client side, if returns <mark>0</mark> = session server side
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.unref() </td>
+        <td> calls <mark>unref()</mark> on the underlying <mark>net.Socket</mark>
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the <strong>session</strong> is destroyed
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('connect', <strong>fn(session, socket)</strong>) </td>
+        <td> emitted when the session is successfully connected to the remote pair
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> emitted when an error occurs during processing the session
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session.listener</strong>('frameError', <strong class="openable">fn(type, errCode, streamId)<div>
+                <p> - <mark>type</mark> - <strong>nr</strong> - frame type </p>
+                <p> - <mark>streamId</mark> - <strong>nr</strong> - stream ID (<mark>0</mark> if the frame is no associated with a stream) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - emitted when an error occurs while attempting to send a frame <br>
+            - attempts to emit this event on the associated stream, if the attempt fails this session after this event will be closed  
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>session.listener</strong>('goaway', <strong class="openable">fn(errCode, lastStreamId, data<div>
+                <p> <mark>errCode</mark> - <strong>nr</strong> - HTTP/2 Error code </p>
+                <p> <mark>lastStreamId</mark> - <strong>nr</strong> - ID of the last processed stream </p>
+                <p> <mark>data</mark> - <strong>buffer | typedArray | dataview</strong> - data to send with the <mark>GOAWAY</mark> frame </p>
+            </div>)</strong>) 
+        </td>
+        <td> emitted when a <mark>GOAWAY</mark> frame is received (closes the session)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('localSettings', <strong class="openable">fn(http2Settings:obj)<div>
+                <p> - <strong>http2Settings:obj</strong> - copy of the <mark>SETTINGS</mark> frame received </p>
+            </div></strong>) 
+        </td>
+        <td> emitted when an acknowledgement is received (from the connected peer) to a sent <mark>SETTINGS</mark> frame (after this event new local settings are active)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('ping', <strong>fn(data)</strong>) </td>
+        <td> emitted when a <mark>PING</mark> frame is received from the connected peer
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>session.listener</strong>('remoteSettings', <strong class="openable">fn(http2Settings:obj)<div>
+                <p> - <strong>http2Settings:obj</strong> - copy of the <mark>SETTINGS</mark> frame received </p>
+            </div></strong>) 
+        </td>
+        <td> emitted when a new <mark>SETTINGS</mark> frame is received from the connected peer
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session.listener</strong>('stream', <strong class="openable">fn(stream, headers:obj, flag, rawHeaders<div>
+                <p> <mark>flag</mark> - <strong>nr</strong> - frame type </p>
+            </div></strong>)
+        </td>
+        <td> emitted when a new stream is created
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('timeout', <strong>fn</strong>) </td>
+        <td> emitted when the session's timeout expires (see <mark>setTimeout()</mark>)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ClientSession</td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>clientSession</strong> </td>
+        <td> represents an active communication between the client and the server <u>(client side)</u> (extends <strong>session</strong>)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>clientSession</strong>.request(<strong class="openable">h2Headers:obj<div>
+                <p> default <mark>{':method':'GET', ':path':='/'}</mark> if not specified otherwise </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> endStream: <strong>bol</strong> - streams writable side should be closed initially </p>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and parent identifies a parent Stream, the created stream is made the sole direct dependency of the parent, with all other existing dependents made a dependent of the newly created stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - stream Id on which the newly created stream is depending on </p>
+                <p> weight: <strong>nr</strong> - specifies the relative dependency of a stream in relation to other streams with the same parent. (<mark>1</mark> - <mark>256</mark>) </p> 
+                <p> waitForTrailers: <strong>bol</strong> - emits the <mark>wantTrailers</mark> event after the last <mark>DATA</mark> frame has been sent </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends an HTTP/2 request to the connected peer <br>
+            - synchronously returns a <strong>clientStream</strong> object (which is not yet connected), on successfull connection returns the connected <strong>clientStream</strong> again
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>clientSession.listener</strong>('altsvc' <strong class="openable">fn(alt, origin, streamId)<div>
+                <p> - <mark>alt</mark> received alternative service identifier (ex: <mark>h2</mark> = HTTP/2 over TLS) </p>
+                <p> - <mark>origin</mark> received origin(s) (urls) </p>
+                <p> - <mark>streamId</mark> received stream id </p>
+            </div></strong>)
+        </td>
+        <td> emitted when an <mark>ATLSVC</mark> frame is received from the server
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientSession.listener</strong>('origin' <strong>fn(origins)</strong>) </td>
+        <td> emitted when an <mark>ORIGIN</mark> frame is received from the server
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ServerSession</td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>serverSession</strong> </td>
+        <td> represents an active communication between the server and the clinent <u>(server side)</u> (extends <strong>session</strong>)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverSession</strong>.altsvc(<strong class="openable">alt:str<div>
+                <p> <u>Alternative Service Description</u> </p>
+                <p> SYNTAX: '<strong>serviceProtocol</strong>="<strong>origin</strong>"' (ex: <mark>'h2=":8000"'</mark>) <u>(NOT validated by Node.js)</u> </p>
+                <p> - multiple alternative services can be specified (ex <mark>'h2="example.org:81", h2=":82"'</mark>) </p>
+                <p> - (<mark>http/1.0</mark> = HTTP/1.0) (<mark>http/1.1</mark> = HTTP/1.1) (<mark>h2c</mark> = HTTP/2 over TCP) (<mark>h2</mark> = HTTP/2 over TLS) </p>
+            </div></strong>, <strong class="openable">origin<div>
+                <p> - <strong>nr</strong> | <strong>str</strong> | <strong>urlObj</strong> | <strong>obj</strong> (with na <mark>origin</mark> property) </p>
+                <p> - alternative origins (urls) or an active <strong>stream</strong> targeted by its id <mark><strong>stream</strong>.id</mark></p>
+                <p> - <mark>clear</mark> = clears all previously sent alternative services </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sends an <mark>ALTSVC</mark> frame to the client <br>
+            - notifying the client that the content is available in other server(s) (which the client should connect to)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverSession</strong>.origin(<strong class="openable">url:str|urlObj|obj<div>
+                <p> - <strong>obj</strong> with an <mark>origin</mark> property </p>
+            </div></strong>, <i>...</i>)
+        </td>
+        <td> 
+            - sends an <mark>ORIGIN</mark> frame to the client <br>
+            - notifying the client for which the server is capable providing authoritative responses 
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - an <mark>http2.Http2Session</mark> represents an active communication session between the client and the server </p>
+    <p> - the <mark>http2.Http2Session</mark> object has (almost) the same methods on both client and server side (this object is not intended to be constructed directly) </p>
+    <p> - the <mark>http2.Http2Session</mark> is associated with <u>one</u> socket (<mark>net.Socket</mark> or <mark>tls.Socket</mark>), it's not recommended to handle the underlying socket directly </p>
+    <p> - internally created when the client connects with the <mark>connect()</mark> method or when the server receives a connection </p> 
+<h2 style="color:darkblue;"><u> HTTP/2 Session <mark>close()</mark> / <mark>closed</mark> / <mark>destroy()</mark> / <mark>destroyed</mark> / <mark>alpnProtocol</mark> / <mark>encrypted</mark> / <mark>socket</mark> / <mark>state</mark> / <mark>type</mark> / <mark>connecting</mark> / <mark>originSet</mark> / <mark>goaway()</mark> / <mark>ping()</mark> / <mark>settings()</mark> / <mark>pindingSettingsAck</mark> / <mark>localSettings</mark> / <mark>remoteSettings</mark> / <mark>setTimeout()</mark> / <mark>unref()</mark> / <mark>ref()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>close</mark> / <mark>goaway</mark> / <mark>ping</mark> / <mark>localSettings</mark> / <mark>remoteSettings</mark> / <mark>connect</mark> / <mark>stream</mark> / <mark>error</mark> / <mark>frameError</mark> / <mark>timeout</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>session</strong>                                                                    // represents an active communication betweent he client and the server (used on both client and server side) extends the <mark>EventEmitter</mark> class    
+                                                                                          bound with one socket (<mark>net.Server</mark> or <mark>tls.Server</mark>) when created 
+            
+            <strong>session</strong>.close(<i class="openable">fn<div>
+                <p> - <mark>close</mark> listener callback </p>
+            </div></i>)                                                         // gracefully closes the session, prevents new <strong>stream</strong> creation but existing streams can complete on their own    
+                                                                                          called when all streams are closed and the session is destroyed
+            <strong>session</strong>.closed                                                             // returns <mark>ture</mark> when the session is closed, <mark>false</mark> otherwise 
+            
+            <strong>session</strong>.destroy(<i class="openable">err<div>
+                <p> - error thrown when the socket is destroyed </p>
+            </div></i>, <i class="openable">errCode<div>
+                <p> - error code to send in the final <mark>GOAWAY</mark> frame </p>
+            </div></i>)                                            // immediately destroys the session and the associated socket (once the session destroyed the <mark>close</mark> event is emitted)   
+            <strong>session</strong>.destroyed                                                          // returns <mark>true</mark> if the session is destoryed, otherwise returns <mark>false</mark>   
+            
+            <strong>session</strong>.alpnProtocol                                                       // returns the connected TLS socket's <mark>alpn</mark> value, returns <mark>'h2c'</mark> if connected to a <u>none</u> TLS socket, (<mark>undefined</mark> = not connected)    
+            <strong>session</strong>.encryped                                                           // returns <mark>true</mark> if the session is connected to a TLS socket, <mark>false</mark> if the session is connected to to any other kind of socket or stream (<mark>undefined</mark> = not connected)    
+            <strong>session</strong>.socket                                                             // returns an object that acts as a <mark>net.Socket</mark> or <mark>tls.Socket</mark> <span class="openable">but with limited socket functionalities<div>
+                <p> - <mark>destroy</mark> / <mark>emit</mark> / <mark>end</mark> / <mark>pause</mark> / <mark>read</mark> / <mark>resume</mark> / <mark>write</mark> - throws an error  </p>
+                <p> - <mark>setTimeout()</mark> - called on this session </p>
+                <p> - all other interactions will be routed to the socket </p>
+            </div></span>
+                
+            <strong>session</strong>.state                                                              // returns an <span class="openable">object containing miscellaneous informations about the current session state<div>
+                    <p> localWindowSize: <strong>nr</strong> -he number of bytes the connected peer may send for this Http2Stream without receiving a WINDOW_UPDATE </p>
+                    <p> state: <strong>nr</strong> - flag indicating the low-level current state of the Http2Stream as determined by nghttp2 </p>
+                    <p> localClose: <strong>nr</strong> - <mark>1</mark> if this Http2Stream has been closed locally </p>                    
+                    <p> remoteClose: <strong>nr</strong> - <mark>1</mark> if this Http2Stream has been closed remotely </p>
+                    <p> sumDependencyWeight: <strong>nr</strong> - the sum weight of all Http2Stream instances that depend on this Http2Stream as specified using PRIORITY frames </p>
+                    <p> weight: <strong>nr</strong> - the priority weight of this Http2Stream </p>
+                </div></span>   
+            <strong>session</strong>.type                                                               // if returns <mark>1</mark> = session client side, if returns <mark>0</mark> = session server side
+                
+            <strong>session</strong>.connecting                                                         // returns <mark>true</mark> if the session is still connecting (set to <mark>false</mark> right before emitting the <mark>connect</mark> event)   
+                
+            <strong>session</strong>.originSet                                                          // (TLS connection only) returns an Array of origins (URL) for which this session may be considered authoritative (URL of the connected peer)    
+                
+            <strong>session</strong>.goaway(<i class="openable">errCode:nr, lastStreamId:nr, data:buf|tArr|dataW<div>
+                <p> <mark>errCode</mark> - <strong>nr</strong> - HTTP/2 Error code </p>
+                <p> <mark>lastStreamId</mark> - <strong>nr</strong> - ID of the last processed stream </p>
+                <p> <mark>data</mark> - <strong>buffer | typedArray | dataview</strong> - data to send with the <mark>GOAWAY</mark> frame </p>
+            </div></i>)          // sends a <mark>GOAWAY</mark> frame to the connected peer without shutting down the session 
+            <strong>session</strong>.ping(<i class="openable">data:buf|tArr|dataW<div>
+                <p> 8 bytes of data can be sent as payload </p>
+            </div></i>, <strong class="openable">fn(err, duration, data)<div>
+                <p> <mark>duration</mark> - milliseconds elapsed since the ping was sent and an acknowledgement was received </p>
+                <p> <mark>data</mark> -the ping payload </p>
+            </div></strong>)               // sends a <mark>PING</mark> frame to the connected HTTP/2 peer 
+                                                                                          returns <mark>true</mark> if the <mark>PING</mark> was sent, otherwise returns <mark>false</mark>
+                
+            <strong>session</strong>.settings(<i class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(err, settings:obj, durration)<div>
+                <p> - callback called when the session is connected (or right away) </p>
+                <p> - <mark>settings:obj</mark> - the updated settings object </p>
+            </div></i>)     // updates the local settings <u>for this session</u> and sends a <mark>SETTINGS</mark> frame to the connected HTTP/2 peer 
+                                                                                           new settings active once the settings acknowledgement is received and the <mark>localSettings</mark> event is emitted 
+            <strong>session</strong>.pendingSettingsAck                                                 // returns <mark>true</mark> when the session is waiting for an acknowledgement to an already sent <mark>SETTINGS</mark> frame, otherwise <mark>false</mark>
+            <strong>session</strong>.localSettings                                                      // returns the local settings of this session in a <strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong> (prototype-less object)  
+            <strong>session</strong>.remoteSettings                                                     // returns the settings of the connected remote peer session in a <strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong> (prototype-less object)  
+                
+            <strong>session</strong>.setTimeout(<strong>nr:ms</strong>, <strong class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></strong>)                                             // sets a counter (timeout) on the session (<mark>0</mark> = infinity)
+                                                                                          the counter starts when the connection estabilished and restarts at every received data  
+                                                                                          once the timer expires the timeout event is emitted (connection not dropped regardless the <mark>timeout</mark> event is registered or not)    
+                                                                                          returns the server object itself 
+                
+            <strong>session</strong>.unref()                                                            // calls <mark>unref()</mark> on the underlying <mark>net.Socket</mark>   
+            <strong>session</strong>.ref()                                                              // calls <mark>ref()</mark> on the underlying <mark>net.Socket</mark> 
+            
+            
+    <span style="color:darkgray">// Events -------------------------------------------------------------------------</span>
+            <strong>session.listener</strong>('close', <strong>fn</strong>)                                              // emitted when the <strong>session</strong> is destroyed  
+            
+            <strong>session.listener</strong>('goaway', <strong class="openable">fn(errCode, lastStreamId, data<div>
+                <p> <mark>errCode</mark> - <strong>nr</strong> - HTTP/2 Error code </p>
+                <p> <mark>lastStreamId</mark> - <strong>nr</strong> - ID of the last processed stream </p>
+                <p> <mark>data</mark> - <strong>buffer | typedArray | dataview</strong> - data to send with the <mark>GOAWAY</mark> frame </p>
+            </div>)</strong>)               // emitted when a <mark>GOAWAY</mark> frame is received (closes the session)   
+            <strong>session.listener</strong>('ping', <strong>fn(data)</strong>)                                         // emitted when a <mark>PING</mark> frame is received from the connected peer 
+            
+            <strong>session.listener</strong>('localSettings', <strong class="openable">fn(http2Settings:obj)<div>
+                <p> - <strong>http2Settings:obj</strong> - copy of the <mark>SETTINGS</mark> frame received </p>
+            </div></strong>)                  // emitted when an acknowledgement is received (from the connected peer) to a sent <mark>SETTINGS</mark> frame (after this event new local settings are active)    
+            <strong>session.listener</strong>('remoteSettings', <strong class="openable">fn(http2Settings:obj)<div>
+                <p> - <strong>http2Settings:obj</strong> - copy of the <mark>SETTINGS</mark> frame received </p>
+            </div></strong>)                 // emitted when a new <mark>SETTINGS</mark> frame is received from the connected peer 
+            
+            <strong>session.listener</strong>('connect', <strong>fn(session, socket)</strong>)                           // emitted when the session is successfully connected to the remote pair 
+            <strong>session.listener</strong>('stream', <strong class="openable">fn(stream, headers:obj, flag, rawHeaders<div>
+                <p> <mark>flag</mark> - <strong>nr</strong> - frame type </p>
+            </div></strong>)      // emitted when a new stream is created 
+            
+            <strong>session.listener</strong>('error', <strong>fn(err)</strong>)                                         // emitted when an error occurs during processing the session 
+            <strong>session.listener</strong>('frameError', <strong class="openable">fn(type, errCode, streamId)<div>
+                <p> - <mark>type</mark> - <strong>nr</strong> - frame type </p>
+                <p> - <mark>streamId</mark> - <strong>nr</strong> - stream ID (<mark>0</mark> if the frame is no associated with a stream) </p>
+            </div></strong>)               // emitted when an error occurs while attempting to send a frame 
+                                                                                          attempts to emit this event on the associated stream, if the attempt fails this session after this event will be closed  
+            
+            <strong>session.listener</strong>('timeout', <strong>fn</strong>)                                            // emitted when the session's timeout expires (see <mark>setTimeout()</mark>)
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+// !! demo on client side but works on both client and server side --------------------
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000');                               // clientSession object returned 
+    var req = client.request({':method':'GET'});                                       // request stream 
+    
+// close() / closed -------------------------------------------------------------------
+    client.close();                                                                    // gracefully closes the session (session streams can close on their own)   
+    client.closed;                                                                     // -> true           // session closed 
+    
+// destroy() / destroyed --------------------------------------------------------------
+    client.destroy();                                                                  // immediately destroys the stream 
+    client.destroyed;                                                                  // -> true           // session destroyed 
+    
+// alpnProtocol / encrypted / socket --------------------------------------------------
+    client.alpnProtocol;                                                               // -> 'h2c'          // session is connected to a non TLS socket 
+    client.encrypted;                                                                  // -> false          // session is connected to a non TLS socket 
+    client.socket;                                                                     // -> proxy object representing the underlying socket with limited functionalities   
+    
+// state / type -----------------------------------------------------------------------
+    client.type;                                                                       // -> 1              // client session
+    client.state;                                                                      // -> session state returned in an object 
+    
+// connecting -------------------------------------------------------------------------
+    client.connecting;                                                                 // -> false          // sesison is connected 
+    
+// originSet --------------------------------------------------------------------------
+    client.originSet;                                                                  // -> undefined      // not an TLS connection (wolud return the connected peer's urls)
+    
+// goaway() / ping()  -----------------------------------------------------------------
+    client.goaway();                                                                   // sends a GOAWAY frame to the connected peer without shutting down the session 
+    
+    client.ping(function(err, duration, data){                                         // sends a PING frame to the connected peer
+        duration;                                                                      // -> milliseconds between the ping was sent and the acknowledgement is received   
+    });                                                                      
+    
+// settings() / pendingSettingsAck / localSettings / remoteSettings -------------------
+    cleint.settings({maxFrameSize:8000});                                              // sends a SETTINGS frame to the connected peer with new settings  
+    client.pendingSettingsAck;                                                         // -> true               // SETTINGS frame sent but the acknowledgement is not yet received    
+    
+    client.localSettings                                                               // -> { settings object} // local settings 
+    client.remoteSettings                                                              // -> { settings object} // remote peer settings 
+    
+// setTimeout() -----------------------------------------------------------------------
+    client.setTimeout(5000);                                                           // session emits the 'timeout' event (counted from the last received data)
+    
+// close (event) ----------------------------------------------------------------------
+    client.on('close', ()=>{});                                                        // emitted when the session is destroyed 
+    
+// goaway / ping (events) -------------------------------------------------------------
+    client.on('goaway', function(errCode, lastStId, data){                             // emitted when a GOAWAY frame is received
+        errCode;                                                                         // -> HTTP/2 error code 
+        lastStId;                                                                        // -> last stream ID
+        data;                                                                            // -> data with the GOAWAY frame 
+    });
+    client.on('ping', function(data){                                                  // emitted when a PING frame is received   
+        data;                                                                            // -> data with the PING frame 
+    })
+    
+// localSettings / remoteSettings (events) --------------------------------------------
+    client.on('localSettings', function(settings){                                     // emitted when an SETTINGS acknowledgement is received 
+        settings;                                                                        // -> http2 settings object 
+    });
+    client.on('remoteSettings', function(settings){                                    // emitted when a SETTINGS frame is received  
+        settings;                                                                        // -> http2 settings object 
+    });
+    
+// connect / stream (events) ----------------------------------------------------------
+    client.on('connect', function(session, socket){                                    // emitted when the session is successfully connected to the remote peer   
+        session;                                                                         // -> this session object 
+        socket;                                                                          // -> the underlying net or tls socket 
+    });
+    client.on('stream', function(stream, headers, flag, rawHeaders){                   // emitted when a new stream is created 
+        stream;                                                                          // -> the create stream 
+    })
+    
+// frameError (events) ----------------------------------------------------------------
+    client.on('frameError', function(type, errCode, streamId){                         // emitted when 
+        type;                                                                            // -> fram type 
+        streamId;                                                                        // -> stream ID which emits the error 
+    })
+    
+// timeout (event) --------------------------------------------------------------------
+    client.on('timeout', ()=>{});                                                      // emitted when the session times out ('setTimeout()')
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>close()</mark> / <mark>close</mark> / <mark>close</mark> (event) TEST </u></h4>
+    <p><u>client and server tested independently </u></p>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000');
+    var req = client.request({':method':'POST'});
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    setTimeout(function(){
+        client.close(function(){                                                       // gracefully closing the session after 1 second 
+            console.log( 'close event emitted-1');
+        });
+    }, 1000);
+    
+    client.on('close', function(){
+        console.log( 'close event emitted-2');
+        console.log( client.closed );                                                  // -> true          // session closed 
+    });
+    
+    setTimeout(function(){
+        req.end();                                                                     // the stream is closed after 5 seconds 
+    }, 5000);
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer();                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){                  
+        stream.end('server response');                                   
+        stream.on('data', (chunk)=>console.log(chunk.toString()));         
+    });
+    
+    server.on('session', function(session){
+        setTimeout(function(){
+            console.log( session.closed );                                             // -> false         // session not yet closed 
+            session.close()                                                            // closing the session after 10 seconds 
+        }, 3000);
+        
+        session.on('close', function(){
+            console.log( 'session closed!' );
+            console.log( session.closed );                                             // -> true          // session closed 
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>destroy()</mark> / <mark>destroyed</mark> TEST </u></h4>
+    <p><u>client and server tested independently </u></p>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000');
+    var req = client.request({':method':'POST'});
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    setTimeout(function(){
+        client.destroy();                                                              // destroys the session after 5 seconds 
+        console.log( client.destroyed );                                               // -> true          // session destroyed 
+    }, 5000);
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer();                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){                  
+        stream.end('server response');                                   
+        stream.on('data', (chunk)=>console.log(chunk.toString()));         
+    });
+    
+    server.on('session', function(session){
+        setTimeout(function(){
+            console.log( session.destroyed );                                          // -> false         // session is not destroyed 
+            session.destroy();                                                         // destroys the session after 6 seconds 
+            console.log( session.destroyed );                                          // -> true          // session destroyed   
+        }, 6000);
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>alpn</mark> / <mark>encrypted</mark> / <mark>socket</mark> / <mark>state</mark> / <mark>type</mark> TEST </u></h4>
+    <p><u>client and server tested independently </u></p>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    client.on('connect', function(){
+// alpnProtocol -----------------------------------------------------------------------
+        console.log( client.alpnProtocol );                                            // -> 'h2'        // the underlying TLS socket's alpn value 
+    
+// encrypted --------------------------------------------------------------------------
+        console.log( client.encrypted );                                               // -> true        // encrypted connection 
+    
+// socket -----------------------------------------------------------------------------
+        console.log( client.socket );                                                  // -> proxy object = socket but with limited functionalities 
+    
+// state- -----------------------------------------------------------------------------
+        console.log( client.state );                                                   // -> state object 
+    
+// state- -----------------------------------------------------------------------------
+        console.log( client.type);                                                     // -> 1           // client side  
+    });    
+    </pre>
+    <pre class="cmd">
+    pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP2/TEST$ node client
+    h2                                                                                 // session.alpn
+    true                                                                               // session.encrypted
+    Http2Session {                                                                     // session.socket 
+    type: undefined,
+    closed: undefined,
+    destroyed: false,
+    state: undefined,
+    localSettings: undefined,
+    remoteSettings: undefined
+    }
+    {                                                                                  // session.state 
+    effectiveLocalWindowSize: 65535,
+    effectiveRecvDataLength: 0,
+    nextStreamID: 3,
+    localWindowSize: 65535,
+    lastProcStreamID: 0,
+    remoteWindowSize: 65535,
+    outboundQueueSize: 2,
+    deflateDynamicTableSize: 0,
+    inflateDynamicTableSize: 0
+    }
+    1                                                                                  // session.type 
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+// alpnProtocol -----------------------------------------------------------------------
+        console.log( session.alpnProtocol );                                           // -> 'h2'        // underlying TLS socket's alpn value 
+    
+// encrypted --------------------------------------------------------------------------
+        console.log( session.encrypted );                                              // -> true        // encrypted connection 
+    
+// socket -----------------------------------------------------------------------------
+        console.log( session.socket );                                                 // -> proxy object = socket but with limited functionalities 
+    
+// state- -----------------------------------------------------------------------------
+        console.log( session.state );                                                  // -> state object 
+    
+// state- -----------------------------------------------------------------------------
+        console.log( session.type);                                                    // -> 0           // server side 
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP2/TEST$ sudo node srv
+    erver listening!
+    h2                                                                                 // session.alpnProtocol
+    true                                                                               // session.encrypted
+    Http2Session {                                                                     // session.socket 
+    type: undefined,
+    closed: undefined,
+    destroyed: false,
+    state: undefined,
+    localSettings: undefined,
+    remoteSettings: undefined
+    }
+    {                                                                                  // session.state 
+    effectiveLocalWindowSize: 65535,
+    effectiveRecvDataLength: 0,
+    nextStreamID: 2,
+    localWindowSize: 65535,
+    lastProcStreamID: 0,
+    remoteWindowSize: 65535,
+    outboundQueueSize: 1,
+    deflateDynamicTableSize: 0,
+    inflateDynamicTableSize: 0
+    }
+    0                                                                                  // session.type 
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>connecting</mark> TEST </u></h4>
+    <p><u>client and server tested independently </u></p>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    console.log( client.connecting );                                                  // -> true          // still connecting 
+    
+    client.on('connect', function(){
+        console.log( client.connecting );                                              // -> false         // connected 
+    });    
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+
+    server.on('session', function(session){
+        console.log( session.connecting );                                             // -> false         // session connected  
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>originSet</mark> TEST </u></h4>
+    <p><u>client and server tested independently </u></p>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    client.on('connect', function(){
+        console.log( client.originSet );                                               // -> ['https://localhost:1000']
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        console.log( session.originSet );                                              // -> ['https://localhost:49882'] 
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>goaway</mark> / <mark>goaway</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.end();    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    setTimeout(function(){
+        client.goaway();                                                               // sends a GOAWAY frame to the connected peer 
+    }, 3000);    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.on('goaway', function(){                                               // GOAWAY freame received (the GOAWAY closes the session)
+            console.log( 'goaway event emitted!' );
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>ping</mark> / <mark>ping</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.end();    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    setTimeout(function(){
+        var buf = Buffer.from('abcdefgh', 'ascii');                                    // 8 byte data 
+        
+        console.log(                                            
+            client.ping(buf, function(err, duration, data){                            // -> true                                  // ping sent 
+                console.log(duration)                                                  // -> 1.030012                              // ping duration 
+                console.log(data)                                                      // -> &lt;Buffer 61 62 63 64 65 66 67 68&gt;      // the sent payload
+            })
+        );
+    }, 3000);    
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.on('ping', function(data){ 
+            console.log( data );                                                       // -> &lt;Buffer 61 62 63 64 65 66 67 68&gt;      // the received payload
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setting()</mark> / <mark>localSettings</mark> / <mark>remoteSettings</mark> / <mark>pendingSettingsAck</mark> / <mark>localSettings</mark> (event) / <mark>remoteSettings</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.end();    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    setTimeout(function(){
+        client.settings({enablePush:false});                                           // new settings after 5 seconds 
+    }, 5000);
+    
+    client.on('localSettings', function(settings){                                     // emitted upon connection and when an acknowledgemetn is received after senting settings with the 'settings()' method   
+        console.log( '----- localSettings event emitted -----' );
+        console.log( settings );                            
+    });
+    
+    client.on('remoteSettings', function(settings){
+        console.log( '----- remoteSettings event emitted -----' );
+        console.log( settings );                                                       // emitted upon connection 
+    })    
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.on('remoteSettings', function(settings){                               // emitted when the session connects and when new settings are received   
+            console.log( session.localSettings );
+            console.log( session.remoteSettings );
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>connect</mark> / <mark>stream</mark> (events) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.end('some data');    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    client.on('connect', function(session, socket){
+        console.log( 'connect event emitted!' );
+        console.log( session );                                                        // -> this session
+        console.log( socket );                                                         // -> tls socket 
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.on('stream', function(stream, headers, flags, rawHeaders){             // emitted when the new stream is created 
+            console.log( 'stream event emitted!' );
+            console.log( stream );                                                     // -> the created stream 
+            console.log( headers );                                                    // -> http2 headers object 
+            console.log( flags );                                                      // -> frame type
+            console.log( rawHeaders );                                                 // -> raw headers (as received)
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setTimeout()</mark> / <mark>timeout</mark> (event) TEST </u></h4>
+    <p><u>client and server tested independently </u></p>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    var req = client.request({':method':'POST'});
+    
+    req.end();    
+    req.on('data', (chunk)=>console.log(chunk.toString()));
+    
+    client.setTimeout(5000, function(){                                                // session times out after 5 seconds (emits the 'timeout' event)
+        console.log( 'timeout event emitted! (1)' );    
+    });
+    
+    client.on('timeout', function(){                                                   // emitted on session timeout 
+        console.log( 'timeout event emitted! (2)' );
+    });    
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.setTimeout(5000, function(){                                           // session times out after 5 seconds (emits the 'timeout' event)
+            console.log( 'timeout event emitted! (1)');
+        });
+        
+        session.on('timeout', function(){                                              // emitted on session timeout
+            console.log( 'timeout event emitted! (2)');
+        });
+    });
+    </pre>
+    
+    
+    
+    
+    
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTP/2 Client Session <mark>request()</mark> </u></h2>    
+<h3 style="color:darkblue;"><u> Events: <mark>altsvc</mark> / <mark>origin</mark> </u></h3>    
+    <pre class="syntax">
+SYNTAX:     <strong>clientSession</strong>                                                              // represents an active communication between the client and the server <u>(client side)</u> (extends <strong>session</strong>)    
+            
+            <strong>clientSession</strong>.request(<strong class="openable">h2Headers:obj<div>
+                <p> default <mark>{':method':'GET', ':path':='/'}</mark> if not specified otherwise </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> endStream: <strong>bol</strong> - streams writable side should be closed initially </p>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and parent identifies a parent Stream, the created stream is made the sole direct dependency of the parent, with all other existing dependents made a dependent of the newly created stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - stream Id on which the newly created stream is depending on </p>
+                <p> weight: <strong>nr</strong> - specifies the relative dependency of a stream in relation to other streams with the same parent. (<mark>1</mark> - <mark>256</mark>) </p> 
+                <p> waitForTrailers: <strong>bol</strong> - emits the <mark>wantTrailers</mark> event after the last <mark>DATA</mark> frame has been sent </p>
+            </div></i>)                        // sends an HTTP/2 request to the connected peer 
+                                                                                          synchronously returns a <strong>clientStream</strong> object (which is not yet connected), on successfull connection returns the connected <strong>clientStream</strong> again    
+            
+    <span style="color:darkgray">// Events -------------------------------------------------------------------------</span>
+            <strong>clientSession.listener</strong>('altsvc' <strong class="openable">fn(alt, origin, streamId)<div>
+                <p> - <mark>alt</mark> received alternative service identifier (ex: <mark>h2</mark> = HTTP/2 over TLS) </p>
+                <p> - <mark>origin</mark> received origin(s) (urls) </p>
+                <p> - <mark>streamId</mark> received stream id </p>
+            </div></strong>)                // emitted when an <mark>ATLSVC</mark> frame is received from the server
+            
+            <strong>clientSession.listener</strong>('origin' <strong>fn(origins)</strong>)                               // emitted when an <mark>ORIGIN</mark> frame is received from the server
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000');
+    
+// request() --------------------------------------------------------------------------
+    var req = client.request({':method':'GET'});                                       // issues a GET request to the server (returns a clientStream) 
+    req;                                                                               // stream to read/write 
+    
+// altsvc / origin (events) -----------------------------------------------------------
+    client.on('altsvc', function(alt, origin, strId){                                  // emitted when an ALTSVC frame is received 
+        alt;                                                                             // -> 'h2=":1001"'                 // alternative service 
+        origin;                                                                          // -> 'http://localhost:1001'      // origins 
+    });
+    
+    client.on('origin', function(origins){                                             // emitted when an ORIGIN frame is received  
+        origins;                                                                         // -> ['https://localhost:1000', 'https://localhost:1001', 'https://localhost:1002']  
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>request()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST'});                                      // issues a request 
+    req.end('some data')                                                               // write data to the stream
+    req.on('data', (chunk)=>console.log(chunk.toString()));                            // read data from the stream 
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>altsvc()</mark> / <mark>altsvc</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    client.on('altsvc', function(alt, origin, strId){
+        console.log( 'altsvc event emitted!' );
+        console.log( alt );                                                            // -> 'h2=":1001"'
+        console.log( origin );                                                         // -> 'http://localhost:1001'
+        console.log( strId );                                                          // -> 0                         // no stream id received 
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.altsvc('h2=":1001"', 'http://localhost:1001');                         // alternative service sent
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>origin()</mark> / <mark>origin</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    client.on('origin', function(origins){
+        console.log( 'origin event emitted!' );
+        console.log( origins );                                                        // -> ['https://localhost:1000', 'https://localhost:1001', 'https://localhost:1002']  
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.origin('https://localhost:1000', 'https://localhost:1001', {origin:'https://localhost:1002'});  
+    });
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTP/2 Server Session <mark>alt()</mark> / <mark>origin()</mark> </u></h2>    
+    <pre class="syntax">
+SYNTAX:     <strong>serverSession</strong>                                                              // represents an active communication between the server and the clinent <u>(server side)</u> (extends <strong>session</strong>)    
+            
+            <strong>serverSession</strong>.altsvc(<strong class="openable">alt:str<div>
+                <p> <u>Alternative Service Description</u> </p>
+                <p> SYNTAX: '<strong>serviceProtocol</strong>="<strong>origin</strong>"' (ex: <mark>'h2=":8000"'</mark>) <u>(NOT validated by Node.js)</u> </p>
+                <p> - multiple alternative services can be specified (ex <mark>'h2="example.org:81", h2=":82"'</mark>) </p>
+                <p> - (<mark>http/1.0</mark> = HTTP/1.0) (<mark>http/1.1</mark> = HTTP/1.1) (<mark>h2c</mark> = HTTP/2 over TCP) (<mark>h2</mark> = HTTP/2 over TLS) </p>
+            </div></strong>, <strong class="openable">origin<div>
+                <p> - <strong>nr</strong> | <strong>str</strong> | <strong>urlObj</strong> | <strong>obj</strong> (with na <mark>origin</mark> property) </p>
+                <p> - alternative origins (urls) or an active <strong>stream</strong> targeted by its id <mark><strong>stream</strong>.id</mark></p>
+                <p> - <mark>clear</mark> = clears all previously sent alternative services </p>
+            </div></strong>)                                   // sends an <mark>ALTSVC</mark> frame to the client 
+                                                                                          notifying the client that the content is available in other server(s) (which the client should connect to)   
+            
+            <strong>serverSession</strong>.origin(<strong class="openable">url:str|urlObj|obj<div>
+                <p> - <strong>obj</strong> with an <mark>origin</mark> property </p>
+            </div></strong>, <i>...</i>)                             // sends an <mark>ORIGIN</mark> frame to the client   
+                                                                                          notifying the client for which the server is capable providing authoritative responses 
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer();                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+        
+    server.on('session', function(session){
+// altsvc() ---------------------------------------------------------------------------
+        session.altsvc('h2=":1001"', 'http://localhost:1001');                         // sens an ALTSVC frame to the client 
+        
+// origin() ---------------------------------------------------------------------------
+        session.origin('https://localhost:1000', 'https://localhost:1001');            // sends an ORIGIN frame to the client   
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u>  TEST </u></h4>
+<h4 style="color:darkblue;"><u> <mark>altsvc()</mark> / <mark>altsvc</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    client.on('altsvc', function(alt, origin, strId){
+        console.log( 'altsvc event emitted!' );
+        console.log( alt );                                                            // -> 'h2=":1001"'
+        console.log( origin );                                                         // -> 'http://localhost:1001'
+        console.log( strId );                                                          // -> 0                         // no stream id received 
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.altsvc('h2=":1001"', 'http://localhost:1001');                         // alternative service sent
+    });
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>origin()</mark> / <mark>origin</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    client.on('origin', function(origins){
+        console.log( 'origin event emitted!' );
+        console.log( origins );                                                        // -> ['https://localhost:1000', 'https://localhost:1001', 'https://localhost:1002']  
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.end('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+    });
+    
+    server.on('session', function(session){
+        session.origin('https://localhost:1000', 'https://localhost:1001', {origin:'https://localhost:1002'});  
+    });
+    </pre>
+</details>
+    
+<br><br>
+</body>
+</html>

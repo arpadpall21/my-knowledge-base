@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> HTTP/2 </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> HTTP/2 (ver 3.4.1) </h1>
+    <p> Updated ( 2020-06-02 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> HTTP/2
+    </p>
+    <pre class="syntax">
+    <span style="color:deepskyblue;">------- incomming traffic -------> </span>
+    
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> http2.Session <span style="color:deepskyblue;">-></span> http2.ClientSession <span style="color:deepskyblue;">-></span> http2.Stream <span style="color:deepskyblue;">-></span> http2.ClientStream 
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> net.Server <span style="color:deepskyblue;">-></span> http2.Http2Server <span style="color:deepskyblue;">-></span> http2.Session <span style="color:deepskyblue;">-></span> http2.ServerSession <span style="color:deepskyblue;">-></span> http2.Stream <span style="color:deepskyblue;">-></span> http2.ServerStream 
+      
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> tls.Socket <span style="color:deepskyblue;">-></span> http2.Session <span style="color:deepskyblue;">-></span> http2.ClientSession <span style="color:deepskyblue;">-></span> http2.Stream <span style="color:deepskyblue;">-></span> http2.ClientStream 
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> tls.Socket <span style="color:deepskyblue;">-></span> net.Server <span style="color:deepskyblue;">-></span> tls.Server <span style="color:deepskyblue;">-></span> http2.Http2SecureServer <span style="color:deepskyblue;">-></span> http2.Session <span style="color:deepskyblue;">-></span> http2.ServerSession <span style="color:deepskyblue;">-></span> http2.Stream <span style="color:deepskyblue;">-></span> http2.ServerStream 
+    </pre>
+    <p class="subSite"><a href="Session/index.html"> Session (Http2Session / ClientHttp2Session / ServerHttp2Session) > </a></p>
+    <p class="subSite"><a href="Stream/index.html"> Stream (Http2Stream / ClientHttp2Stream / ServerHttp2Stream)> </a></p>
+    <p class="subSite"><a href="Compatibility API/index.html"> Compatibility API (backward compatibility)> </a></p>
+    <p class="subSite"><a href="Extended Connect Protocol/index.html"> Extended CONNECT protocol> </a></p>
+<table class="table">
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>http2</strong>.constants </td>
+        <td> returns an object containing error codes for <mark>RST_STREAM</mark> and <mark>GOAWAY</mark>
+            <span class="browserSupport" title="updated : 2020-06-03">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2</strong>.getDefaultSettings() </td>
+        <td> returns a new <mark>http2Settings</mark> object containing default settings for a <mark>Http2Session</mark> instance 
+            <span class="browserSupport" title="updated : 2020-06-03">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http2</strong>.getPackedSettings(<strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> serializes and returns the passed <mark>http2Settings</mark> object into a buffer
+            <span class="browserSupport" title="updated : 2020-06-03">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2</strong>.getUnpackedSettings(<strong>buf</strong>) </td>
+        <td> deserializes and returns the passed buffer into a <mark>http2Settings</mark> object
+            <span class="browserSupport" title="updated : 2020-06-03">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> HTTP/2 Client </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http2</strong>.connect(<strong class="openable">url:str|urlObj<div>
+                <p> - user Id, password, path, querystring and fragment are ignored in the passed url </p>
+            </div></strong>, <i class="openable">options:obj<div>
+                <p> maxDeflateDynamicTableSize: <strong>nr</strong> - maximum dynamic table size for deflating header fields (Default: <mark>4000</mark>) </p>
+                <p> maxSettings: <strong>nr</strong> - sets the maximum settings entries per <mark>SETTINGS</mark> frame (min <mark>1</mark>) (Default: <mark>32</mark>)  </p>
+                <p> maxSessionMemory: <strng>nr</strng> - maximum memory (in megabytes) that the <strong>session</strong> can use (Default: <mark>10</mark>) </p>
+                <p> maxHederListPairs: <strong>nr</strong> - maximum number of header entries (Default: <mark>128</mark>) </p>
+                <p> maxOutsandingPings: <strong>nr</strong> - maximum unacknowledged pings (Default: <mark>10</mark>) </p>
+                <p> maxResevedRemoteStreams: <strong>nr</strong> - maximum reserved push streams the client accept at any time (Default: <mark>200</mark>) </p>
+                <p> maxSendHeaderBlockLength: <strong>nr</strong> - max serialized compressed block headers size </p>
+                <p> paddingStrategy: <strong>nr</strong> - determine the amount of padding for <mark>HEADERS</mark> and <mark>DATA</mark> frames (Default: <mark>0</mark>) </p>
+                <p> peerMaxConcurrentStreams: <strong>nr</strong> - sets the maximum number of concurrent streams for the remote peer (Default: <mark>100</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to connect with (if not set in the <strong>url:str|rulObj</strong> argument) (Default: <mark>https</mark>) </p>
+                <p> settings: <strong>settings:obj</strong> - settings to send to the remote peer </p>
+                <p> createConnection: <strong>fn</strong> - custom function what returns a <mark>Duplex</mark> stream that is used as the connection session </p>
+                <p> any <mark>net.connect()</mark> of <mark>tls.connect()</mark> options can be used </p>
+            </div></i>, <i class="openable">fn(session, socket)<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - synchronously returns a <strong>clientSession</strong> object then initiates the connection <br>
+            - on successful connection returns the connected <strong>clientSession</strong> object again 
+            <span class="browserSupport" title="updated : 2020-06-06">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">   
+<caption> HTTP/2 Server </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http2</strong>.createServer(<strong class="openable">option:obj<div>
+                <p> maxDeflateDynamicTableSize: <strong>nr</strong> - maximum dynamic table size for deflating header fields (Default: <mark>4000</mark>) </p>
+                <p> maxSettings: <strong>nr</strong> - sets the maximum settings entries per <mark>SETTINGS</mark> frame (min <mark>1</mark>) (Default: <mark>32</mark>)  </p>
+                <p> maxSessionMemory: <strng>nr</strng> - maximum memory (in megabytes) that the <strong>session</strong> can use (Default: <mark>10</mark>) </p>
+                <p> maxHederListPairs: <strong>nr</strong> - maximum number of header entries (Default: <mark>128</mark>) </p>
+                <p> maxOutsandingPings: <strong>nr</strong> - maximum unacknowledged pings (Default: <mark>10</mark>) </p>
+                <p> maxSendHeaderBlockLength: <strong>nr</strong> - max serialized compressed block headers size </p>
+                <p> paddingStrategy: <strong>nr</strong> - determine the amount of padding for <mark>HEADERS</mark> and <mark>DATA</mark> frames (Default: <mark>0</mark>) </p>
+                <p> peerMaxConcurrentStreams: <strong>nr</strong> - sets the maximum number of concurrent streams for the remote peer (Default: <mark>100</mark>) </p>
+                <p> maxSessionInvalidFrames: <strong>nr</strong> - maximum invalid that will be tolerated before the session closes (Default: <mark>1000</mark>) </p>
+                <p> maxSessionRejectedStreams: <strong>nr</strong> - maximum rejected streams (upon creation) that will be tolerated before the session closes (Default: <mark>100</mark>) </p>
+                <p> settings: <strong>settings:obj</strong> - settings to send to the remote peer </p>
+                <p> Http1IncomingMessage: <strong>http.IncomingMessage</strong> - sepecifies the <strong>IncomingMessage</strong> class to use for HTTP/1 fallback (useful to extend the original class) (Default: <strong>http.IncomingMessage</strong>) </p>
+                <p> Http1ServerResponse: <strong>http.ServerResponse</strong> - sepecifies the <strong>ServerResponse</strong> class to use for HTTP/1 fallback (useful to extend the original class) (Default: <strong>http.ServerResponse</strong>) </p>
+                <p> Http2ServerRequest: <strong>http2.Http2ServerRequest</strong> - specifies the <strong>Http2ServerRequest</strong> class to use (useful to extend the original class) (Default: <strong>Http2ServerRequest</strong>) </p>
+                <p> Http2ServerResponse: <strong>http2.ServerResponse</strong> - specifies the <strong>Http2ServerResponse</strong> class to use (Default: <strong>Http2ServerResponse</strong>) </p>
+                <p> any <mark>net.createServer()</mark> options can be used </p>
+            </div></strong>, <i class="openable">fn(srvReq, srvResp)<div>
+                <p> - <mark>request</mark> event's listener callback (Compatibility API) </p>
+            </div></i>)
+        </td>
+        <td> creates and returns a <strong>http2Srv</strong> object which extends the <mark>net.Server</mark> class
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 8.9.3 - <mark>maxHeaderListPair</mark> added with default <mark>128</mark> header paris </p>
+                    <p> - 8.9.3 - <mark>maxOutstandingPings</mark> added with default <mark>10</mark> </p>
+                    <p> - 9.6.0 - added the <mark>Http1IncomingMessage</mark> and <mark>Http1ServerResponse</mark> option </p>
+                    <p> - 12.4.0 - the options parameter now supports <mark>net.createServer()</mark> options </p>
+                    <p> - 13.3.0, 12.16.0 - added <mark>maxSessionInvalidFrames</mark> option with a default of <mark>1000</mark> </p>
+                    <p> - 13.3.0, 12.16.0 - added <mark>maxSessionRejectedStreams</mark> option with a default of <mark>100</mark> </p>
+                    <p> - 14.4.0 - added <mark>maxSettings</mark> option with a default of <mark>32</mark> </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http2</strong>.createSecureServer(<strong class="openable">option:obj<div>
+                <p> allowHTTP1: <strong>bol</strong> - server support HTTP/1.* connections (Default: <mark>false</mark>) </p>
+                <p> maxDeflateDynamicTableSize: <strong>nr</strong> - maximum dynamic table size for deflating header fields (Default: <mark>4000</mark>) </p>
+                <p> maxSettings: <strong>nr</strong> - sets the maximum settings entries per <mark>SETTINGS</mark> frame (min <mark>1</mark>) (Default: <mark>32</mark>)  </p>
+                <p> maxSessionMemory: <strng>nr</strng> - maximum memory (in megabytes) that the <strong>session</strong> can use (Default: <mark>10</mark>) </p>
+                <p> maxHederListPairs: <strong>nr</strong> - maximum number of header entries (Default: <mark>128</mark>) </p>
+                <p> maxOutsandingPings: <strong>nr</strong> - maximum unacknowledged pings (Default: <mark>10</mark>) </p>
+                <p> maxSendHeaderBlockLength: <strong>nr</strong> - max serialized compressed block headers size </p>
+                <p> paddingStrategy: <strong>nr</strong> - determine the amount of padding for <mark>HEADERS</mark> and <mark>DATA</mark> frames (Default: <mark>0</mark>) </p>
+                <p> peerMaxConcurrentStreams: <strong>nr</strong> - sets the maximum number of concurrent streams for the remote peer (Default: <mark>100</mark>) </p>
+                <p> maxSessionInvalidFrames: <strong>nr</strong> - maximum invalid that will be tolerated before the session closes (Default: <mark>1000</mark>) </p>
+                <p> maxSessionRejectedStreams: <strong>nr</strong> - maximum rejected streams (upon creation) that will be tolerated before the session closes (Default: <mark>100</mark>) </p>
+                <p> settings: <strong>settings:obj</strong> - settings to send to the remote peer </p>
+                <p> any <mark>tls.createServer()</mark> options can be provided <u>(the <mark>key</mark> <mark>cert</mark> or <mark>pfx</mark> options are required)</u> </p>
+            </div></strong>, <i class="openable">fn(srvReq, srvResp)<div>
+                <p> - <mark>request</mark> event's listener callback (Compatibility API) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - creates and returns a <strong>http2SecureSrv</strong> object which extends the <mark>tls.Server</mark> class <br>
+            - can also serve HTTP/1.* clients (see Compatibility API) 
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 8.9.3 - <mark>maxHeaderListPair</mark> added with default <mark>128</mark> header paris </p>
+                    <p> - 8.9.3 - <mark>maxOutstandingPings</mark> added with default <mark>10</mark> </p>
+                    <p> - 10.12.0 - added the origins option to automatically send an <mark>ORIGIN</mark> frame on Http2Session startup </p>
+                    <p> - 13.3.0, 12.16.0 - added <mark>maxSessionInvalidFrames</mark> option with a default of <mark>1000</mark> </p>
+                    <p> - 13.3.0, 12.16.0 - added <mark>maxSessionRejectedStreams</mark> option with a default of <mark>100</mark> </p>
+                    <p> - 14.4.0 - added <mark>maxSettings</mark> option with a default of <mark>32</mark> </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv</strong>.close(<i>fn</i>) </td>
+        <td> 
+            - stops the server estabilishing new sessions <u>(but does not stop estabilishing new streams within existing sessions because of the http2 protocol nature)</u> <br>
+            - once the server is fully closed the callback is called (to gracefully close the server call <mark><strong>http2session</strong>.close()</mark> on all active session) 
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http2Srv|http2SecureSrv</strong>.setTimeout(<i class="openable">nr:ms<div>
+                <p> - Default for <strong>http2Server</strong> = <mark>0</mark> </p>
+                <p> - Default for <strong>http2SecureServer</strong> = <mark>12000</mark> </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a counter (timeout) on the server (<mark>0</mark> = infinity) <br>
+            - the counter starts when the connection estabilished and restarts at every client request <br>
+            - once the timer expires the <mark>timeout</mark> event is emitted (if the <mark>timeout</mark> event (or 2nd argument) is not listened the server the closes the connection <br>
+            - returns the server object itself
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv</strong>.timeout </td>
+        <td> returns the timeout value of the server (<mark>0</mark> = infinity) (Default: <mark>0</mark> for both servers)
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 13.0.0 default timeout <mark>0</mark> (was <mark>12000</mark>) </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv.listener</strong>('checkContinue', <strong>fn(srvReq, srvResp)</strong>) </td>
+        <td> 
+            - emitted when the server receives a message with the <mark>Expect: 100-continue</mark> header <u>(<mark>request</mark> listener must be registered on the <strong>http2Srv</strong> object)</u> <br>
+            - to respond to this request use the <mark><strong>srvResp</strong>.writeContinue()</mark> method or generate a <mark>400 Bad Request</mark> response <br>
+            - if this event is not listened the server automatically responds with a <mark>417 Expectation Failed</mark> message <br>
+            - if this emitted and handled the <mark>request</mark> event is not emitted   
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv.listener</strong>('request' <strong>fn(srvReq, srvResp)</strong>) </td>
+        <td> emitted each time ther's a request (may be multiple per session) (Compatibility API)
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv.listener</strong>('session' <strong>fn(session)</strong>) </td>
+        <td> emitted each time the server creates a new <strong>session</strong>   
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv.listener</strong>('sessionError' <strong>fn</strong>) </td>
+        <td> emitted when a <strong>session</strong> associated with the server emits the <mark>error</mark> event
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http2Srv|http2SecureSrv.listener</strong>('stream', <strong class="openable">fn(h2Stream, headers, flags)<div>
+                <p> - <mark>stream</mark> - <strong>stream</strong> (<mark>Http2Stream</mark>) object (bidirectional communication stream between the client and the server) </p>
+                <p> - <mark>headers</mark> - headers object (object containing <mark>http2</mark> headers format) </p>
+                <p> - <mark>flag</mark> - frame type (expressed as number) </p>
+            </div></strong>)
+        </td>
+        <td> emitted when the <strong>session</strong> associated with the server emits the <mark>stream</mark> event (when request is received)
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2Srv|http2SecureSrv.listener</strong>('timeout' <strong>fn(session)</strong>) </td>
+        <td> 
+            - emitted when the server's timeout expires (see <mark>setTimeout()</mark>) <br>
+            - if this event is not listened the server drops the keep-alive connection <br>
+            - if this event is listened the server does not closes the keep-alive connection 
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http2SecureSrv.listener</strong>('unknownProtocol' <strong>fn(socket)</strong>) </td>
+        <td> emitted when the server is configured not to server HTTP/1.* connections but receives an HTTP/1.* request (ALPN negotiation in callback)
+            <span class="browserSupport" title="updated : 2020-06-08">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> HTTP/2 Session </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>session</strong> </td>
+        <td> 
+            - represents an active communication betweent he client and the server (used on both client and server side) extends the <mark>EventEmitter</mark> class <br>
+            - bound with one socket (<mark>net.Server</mark> or <mark>tls.Server</mark>) when created 
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.alpnProtocol </td>
+        <td> returns the connected TLS socket's <mark>alpn</mark> value, returns <mark>'h2c'</mark> if connected to a <u>none</u> TLS socket, (<mark>undefined</mark> = not connected) 
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.close(<i class="openable">fn<div>
+                <p> - <mark>close</mark> listener callback </p>
+            </div></i>) </td>
+        <td> 
+            - gracefully closes the session, prevents new <strong>stream</strong> creation but existing streams can complete on their own <br>
+            - called when all streams are closed and the session is destroyed
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.closed </td>
+        <td> returns <mark>ture</mark> when the session is closed, <mark>false</mark> otherwise
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.connecting </td>
+        <td> returns <mark>true</mark> if the session is still connecting (set to <mark>false</mark> right before emitting the <mark>connect</mark> event)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.destroy(<i class="openable">err<div>
+                <p> - error thrown when the socket is destroyed </p>
+            </div></i>, <i class="openable">errCode<div>
+                <p> - error code to send in the final <mark>GOAWAY</mark> frame </p>
+            </div></i>)
+        </td>
+        <td> immediately destroys the session and the associated socket (once the session destroyed the <mark>close</mark> event is emitted)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.destroyed  </td>
+        <td> returns <mark>true</mark> if the session is destoryed, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.encryped </td>
+        <td> returns <mark>true</mark> if the session is connected to a TLS socket, <mark>false</mark> if the session is connected to to any other kind of socket or stream (<mark>undefined</mark> = not connected)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.goaway(<i class="openable">errCode:nr, lastStreamId:nr, data:buf|tArr|dataW<div>
+                <p> <mark>errCode</mark> - <strong>nr</strong> - HTTP/2 Error code </p>
+                <p> <mark>lastStreamId</mark> - <strong>nr</strong> - ID of the last processed stream </p>
+                <p> <mark>data</mark> - <strong>buffer | typedArray | dataview</strong> - data to send with the <mark>GOAWAY</mark> frame </p>
+            </div></i>) 
+        </td>
+        <td> sends a <mark>GOAWAY</mark> frame to the connected peer without shutting down the session
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.localSettings </td>
+        <td> returns the local settings of this session in a <strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong> (prototype-less object)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.originSet </td>
+        <td> (TLS connection only) returns an Array of origins (URL) for which this session may be considered authoritative (URL of the connected peer)
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.pendingSettingsAck </td>
+        <td> returns <mark>true</mark> when the session is waiting for an acknowledgement to an already sent <mark>SETTINGS</mark> frame, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.ping(<i class="openable">data:buf|tArr|dataW<div>
+                <p> 8 bytes of data can be sent as payload </p>
+            </div></i>, <strong class="openable">fn(err, duration, data)<div>
+                <p> <mark>duration</mark> - milliseconds elapsed since the ping was sent and an acknowledgement was received </p>
+                <p> <mark>data</mark> -the ping payload </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sends a <mark>PING</mark> frame to the connected HTTP/2 peer <br>
+            - returns <mark>true</mark> if the <mark>PING</mark> was sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.9.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.ref() </td>
+        <td> calls <mark>ref()</mark> on the underlying <mark>net.Socket</mark>
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.remoteSettings </td>
+        <td> returns the settings of the connected remote peer session in a <strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong> (prototype-less object)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>session</strong>.setTimeout(<strong>nr:ms</strong>, <strong class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></strong>) 
+        </td>
+        <td> 
+            - sets a counter (timeout) on the session (<mark>0</mark> = infinity) <br>
+            - the counter starts when the connection estabilished and restarts at every received data <br>
+            - once the timer expires the timeout event is emitted (connection not dropped regardless the <mark>timeout</mark> event is registered or not) <br>
+            - returns the server object itself 
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session</strong>.settings(<i class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(err, settings:obj, durration)<div>
+                <p> - callback called when the session is connected (or right away) </p>
+                <p> - <mark>settings:obj</mark> - the updated settings object </p>
+            </div></i>)
+        </td>
+        <td> 
+            - updates the local settings <u>for this session</u> and sends a <mark>SETTINGS</mark> frame to the connected HTTP/2 peer <br>
+            - new settings active once the settings acknowledgement is received and the <mark>localSettings</mark> event is emitted
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>    
+    <tr>
+        <td> <strong>session</strong>.socket </td>
+        <td> 
+            returns an object that acts as a <mark>net.Socket</mark> or <mark>tls.Socket</mark> <span class="openable">but with limited socket functionalities<div>
+                <p> - <mark>destroy</mark> / <mark>emit</mark> / <mark>end</mark> / <mark>pause</mark> / <mark>read</mark> / <mark>resume</mark> / <mark>write</mark> - throws an error  </p>
+                <p> - <mark>setTimeout()</mark> - called on this session </p>
+                <p> - all other interactions will be routed to the socket </p>
+            </div></span>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.state </td>
+        <td> 
+            returns an <span class="openable">object containing miscellaneous informations about the current session state<div>
+                    <p> localWindowSize: <strong>nr</strong> -he number of bytes the connected peer may send for this Http2Stream without receiving a WINDOW_UPDATE </p>
+                    <p> state: <strong>nr</strong> - flag indicating the low-level current state of the Http2Stream as determined by nghttp2 </p>
+                    <p> localClose: <strong>nr</strong> - <mark>1</mark> if this Http2Stream has been closed locally </p>                    
+                    <p> remoteClose: <strong>nr</strong> - <mark>1</mark> if this Http2Stream has been closed remotely </p>
+                    <p> sumDependencyWeight: <strong>nr</strong> - the sum weight of all Http2Stream instances that depend on this Http2Stream as specified using PRIORITY frames </p>
+                    <p> weight: <strong>nr</strong> - the priority weight of this Http2Stream </p>
+                </div></span>
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.type </td>
+        <td> if returns <mark>1</mark> = session client side, if returns <mark>0</mark> = session server side
+            <span class="browserSupport" title="updated : 2020-06-09">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session</strong>.unref() </td>
+        <td> calls <mark>unref()</mark> on the underlying <mark>net.Socket</mark>
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the <strong>session</strong> is destroyed
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('connect', <strong>fn(session, socket)</strong>) </td>
+        <td> emitted when the session is successfully connected to the remote pair
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> emitted when an error occurs during processing the session
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session.listener</strong>('frameError', <strong class="openable">fn(type, errCode, streamId)<div>
+                <p> - <mark>type</mark> - <strong>nr</strong> - frame type </p>
+                <p> - <mark>streamId</mark> - <strong>nr</strong> - stream ID (<mark>0</mark> if the frame is no associated with a stream) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - emitted when an error occurs while attempting to send a frame <br>
+            - attempts to emit this event on the associated stream, if the attempt fails this session after this event will be closed  
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>session.listener</strong>('goaway', <strong class="openable">fn(errCode, lastStreamId, data<div>
+                <p> <mark>errCode</mark> - <strong>nr</strong> - HTTP/2 Error code </p>
+                <p> <mark>lastStreamId</mark> - <strong>nr</strong> - ID of the last processed stream </p>
+                <p> <mark>data</mark> - <strong>buffer | typedArray | dataview</strong> - data to send with the <mark>GOAWAY</mark> frame </p>
+            </div>)</strong>) 
+        </td>
+        <td> emitted when a <mark>GOAWAY</mark> frame is received (closes the session)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('localSettings', <strong class="openable">fn(http2Settings:obj)<div>
+                <p> - <strong>http2Settings:obj</strong> - copy of the <mark>SETTINGS</mark> frame received </p>
+            </div></strong>) 
+        </td>
+        <td> emitted when an acknowledgement is received (from the connected peer) to a sent <mark>SETTINGS</mark> frame (after this event new local settings are active)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('ping', <strong>fn(data)</strong>) </td>
+        <td> emitted when a <mark>PING</mark> frame is received from the connected peer
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>session.listener</strong>('remoteSettings', <strong class="openable">fn(http2Settings:obj)<div>
+                <p> - <strong>http2Settings:obj</strong> - copy of the <mark>SETTINGS</mark> frame received </p>
+            </div></strong>) 
+        </td>
+        <td> emitted when a new <mark>SETTINGS</mark> frame is received from the connected peer
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>session.listener</strong>('stream', <strong class="openable">fn(stream, headers:obj, flag, rawHeaders<div>
+                <p> <mark>flag</mark> - <strong>nr</strong> - frame type </p>
+            </div></strong>)
+        </td>
+        <td> emitted when a new stream is created
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>session.listener</strong>('timeout', <strong>fn</strong>) </td>
+        <td> emitted when the session's timeout expires (see <mark>setTimeout()</mark>)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ClientSession</td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>clientSession</strong> </td>
+        <td> represents an active communication between the client and the server <u>(client side)</u> (extends <strong>session</strong>)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>clientSession</strong>.request(<strong class="openable">h2Headers:obj<div>
+                <p> default <mark>{':method':'GET', ':path':='/'}</mark> if not specified otherwise </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> endStream: <strong>bol</strong> - streams writable side should be closed initially </p>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and parent identifies a parent Stream, the created stream is made the sole direct dependency of the parent, with all other existing dependents made a dependent of the newly created stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - stream Id on which the newly created stream is depending on </p>
+                <p> weight: <strong>nr</strong> - specifies the relative dependency of a stream in relation to other streams with the same parent. (<mark>1</mark> - <mark>256</mark>) </p> 
+                <p> waitForTrailers: <strong>bol</strong> - emits the <mark>wantTrailers</mark> event after the last <mark>DATA</mark> frame has been sent </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends an HTTP/2 request to the connected peer <br>
+            - synchronously returns a <strong>clientStream</strong> object (which is not yet connected), on successfull connection returns the connected <strong>clientStream</strong> again
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>clientSession.listener</strong>('altsvc' <strong class="openable">fn(alt, origin, streamId)<div>
+                <p> - <mark>alt</mark> received alternative service identifier (ex: <mark>h2</mark> = HTTP/2 over TLS) </p>
+                <p> - <mark>origin</mark> received origin(s) (urls) </p>
+                <p> - <mark>streamId</mark> received stream id </p>
+            </div></strong>)
+        </td>
+        <td> emitted when an <mark>ATLSVC</mark> frame is received from the server
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientSession.listener</strong>('origin' <strong>fn(origins)</strong>) </td>
+        <td> emitted when an <mark>ORIGIN</mark> frame is received from the server
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ServerSession</td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>serverSession</strong> </td>
+        <td> represents an active communication between the server and the clinent <u>(server side)</u> (extends <strong>session</strong>)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverSession</strong>.altsvc(<strong class="openable">alt:str<div>
+                <p> <u>Alternative Service Description</u> </p>
+                <p> SYNTAX: '<strong>serviceProtocol</strong>="<strong>origin</strong>"' (ex: <mark>'h2=":8000"'</mark>) <u>(NOT validated by Node.js)</u> </p>
+                <p> - multiple alternative services can be specified (ex <mark>'h2="example.org:81", h2=":82"'</mark>) </p>
+                <p> - (<mark>http/1.0</mark> = HTTP/1.0) (<mark>http/1.1</mark> = HTTP/1.1) (<mark>h2c</mark> = HTTP/2 over TCP) (<mark>h2</mark> = HTTP/2 over TLS) </p>
+            </div></strong>, <strong class="openable">origin<div>
+                <p> - <strong>nr</strong> | <strong>str</strong> | <strong>urlObj</strong> | <strong>obj</strong> (with na <mark>origin</mark> property) </p>
+                <p> - alternative origins (urls) or an active <strong>stream</strong> targeted by its id <mark><strong>stream</strong>.id</mark></p>
+                <p> - <mark>clear</mark> = clears all previously sent alternative services </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sends an <mark>ALTSVC</mark> frame to the client <br>
+            - notifying the client that the content is available in other server(s) (which the client should connect to)
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverSession</strong>.origin(<strong class="openable">url:str|urlObj|obj<div>
+                <p> - <strong>obj</strong> with an <mark>origin</mark> property </p>
+            </div></strong>, <i>...</i>)
+        </td>
+        <td> 
+            - sends an <mark>ORIGIN</mark> frame to the client <br>
+            - notifying the client for which the server is capable providing authoritative responses 
+            <span class="browserSupport" title="updated : 2020-06-10">
+                <span><i class="fab fa-node-js"></i> 10.12.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> HTTP/2 Stream </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong> </td>
+        <td> represents a bidirectional HTTP/2 communication stream over a <strong>session</strong> (used on both client and server side), extends the <mark>stream.Duplex</mark> class
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.aborted </td>
+        <td> returns <mark>true</mark> when the stream is abnormally aborted in mid-communication (when the <mark>aborted</mark> event is emitted), otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.bufferSize </td>
+        <td> returns how many <u>characters (not bytes)</u> are queued up in the (writable) internal memory buffer
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream</strong>.close(<strong class="openable">errCode<div>
+                <p> - <mark>errCode</mark> - <strong>nr</strong> - 32bit integer error code (Default: <mark>0</mark>) </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>close</mark> event's listener callback </p>
+            </div></i>)
+        </td>
+        <td> closes the stream by sending an <mark>RST_STREAM</mark> frame to the connected peer  
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.closed </td>
+        <td> returns <mark>true</mark> if the stream has been closed, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.destroy(<i class="openable">err<div>
+                <p> - once destroyed the stream emits the <mark>error</mark> event with the passed error (<mark>close</mark> event not emitted in this case) </p>
+            </div></i>) </td>
+        <td> immediately destroys the stream (once the stream is destoryed the stream emits the <mark>close</mark> event) 
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.destroyed </td>
+        <td> returns <mark>true</mark> if the stream has been destroyed, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.endAfterHeaders </td>
+        <td> returns <mark>true</mark> if the received <mark>HEADERS</mark> frame has the <mark>END_STREAM</mark> flag set (no additional data should be sent after the header and the  writable side should be closed), otherwiser returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.11.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.id </td>
+        <td> returns the stream identifier (<mark>undefined</mark> = id not yet assigned)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.pending </td>
+        <td> returns <mark>ture</mark> if the <strong>stream</strong> has not yet been assigned an identifier 
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream</strong>.priority(<strong class="openable">option:obj<div>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and the <mark>parent</mark> property identifies a parent stream, this stream is going to be the sole dependency of the specified parent stream, all other streams are made dependent on this stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - makes the identified stream as parent of this stream </p>
+                <p> weight: <strong>nr</strong> - relative dependency of a stream in relation to other stream with the same parent (min <mark>1</mark> | max <mark>256</mark>) </p>
+                <p> silent: <strong>bol</strong> - changes the priority locally only (without sending a <mark>PRIORITY</mark> frame to the connected peer) (Default: <mark>false</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> updates the priority for this stream (relative to other streams)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.rstCode </td>
+        <td> 
+            - returns the RST error code in the received <mark>RST_STREAM</mark> frame from the connected peer (when the peer stream calls the <mark>close()</mark> method) (<mark>undefined</mark> = stream not closed) <br>
+            - if its value is anything other than <mark>0</mark> the <mark>error</mark> event is emitted
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sendTrailers(<strong>h2Headers:obj</strong>) </td>
+        <td> 
+            - send a trailing <mark>HEADERS</mark> frame to the connected peer and immediately closes the stream <br>
+            - must be called after the <mark>wantTrailers</mark> event is emitted <br>
+            - in order to send trailers to the server the <mark>waitForTrailers</mark> option must be set in the <mark>request()</mark> method    
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sentHeaders </td>
+        <td> returns the sent headers in a <strong>h2Headers:obj</strong>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sentInfoHeaders </td>
+        <td> returns the sent informational headers (a header with status code <mark>1**</mark>) in a <strong>h2Headers:obj</strong>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sentTrailers </td>
+        <td> returns the sent trailers in a <strong>h2Headers:obj</strong>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.session </td>
+        <td> references the <mark>session</mark> that owns this stream (<mark>undefined</mark> = stream is destroeyed)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>stream</strong>.setTimeout(<strong>nr:ms</strong>, <strong class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sets a counter (timeout) on the stream (<mark>0</mark> = infinity) <br>
+            - the counter starts when the connection is estabilished and restarts at every received data <br>
+            - once the timer expires the <mark>timeout</mark> event is emitted (connection not dropped regardless the <mark>timeout</mark> events is registered or not)   
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.state </td>
+        <td> 
+            returns an <span class="openable">object containing miscellaneous informations about the current stream state<div>
+                    <p> localWindowSize: <number> - the number of bytes the connected peer may send for this <strong>stream</strong> without receiving a WINDOW_UPDATE </number>
+                    <p> state:<number> - a flag indicating the low-level current state of the <strong>stream</strong> as determined by nghttp2 </number>
+                    <p> localClose:<strong>nr</strong> - <mark>1</mark> if this <strong>stream</strong> has been closed locally </p>
+                    <p> remoteClose: <strong>nr</strong> - <mark>1</mark> if this <strong>stream</strong> has been closed remotely </p>
+                    <p> sumDependencyWeight: <strong>nr</strong> - the sum weight of all <strong>stream</strong> instances that depend on this <strong>stream</strong> as specified using PRIORITY frames </p>
+                    <p> weight: <strong>nr</strong> - the priority weight of this Http2Stream </p>
+                </div></span>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('aborted' <strong>fn</strong>) </td>
+        <td> emitted when the stream is abnormally aborted in mid-communication
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('close' <strong>fn</strong>) </td>
+        <td> emitted when the stream is destroyed
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('error' <strong>fn(err)</strong>) </td>
+        <td> emitted when an error occurs during the stream processing
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream.listener</strong>('frameError' <strong class="openable">fn(type, errCode, streamId)<div>
+                <p> - <mark>type</mark> - <strong>nr</strong> - frame type </p>
+                <p> - <mark>streamId</mark> - <strong>nr</strong> - frame Id (if <mark>0</mark> the frame is not associated with a stream) </p>
+            </div></strong>)
+        </td>
+        <td> emitted when an error occures while attempting to send a frame, this <strong>stream</strong> will be closed after emitting this event
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('timeout' <strong>fn</strong>) </td>
+        <td> emitted when the stream's timeout expires (see <mark>setTimeout()</mark>)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream.listener</strong>('trailers' <strong class="openable">fn(h2Headers:obj, flags<div>
+                <p> <mark>flags</mark> - frame type </p>
+            </div></strong>)
+        </td>
+        <td> emitted when trailing headers are received
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('wantTrailers' <strong>fn</strong>) </td>
+        <td> 
+            - emited when the final <mark>DATA</mark> frame is sent and the stream is ready to send trailing headers <br>
+            - when the <mark>waitForTrailers</mark> option is set in the <mark><strong>clientSession</strong>.request()</mark> method and the <mark>end()</mark> is called 
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ClientStream </td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>clientStream</strong> </td>
+        <td> represents a bidirectional HTTP/2 communication stream over a <mark>session</mark> <u>(client side)</u> (extends <mark>session</mark>)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('continue', <strong>fn</strong>) </td>
+        <td> emitted when a <mark>100 Continue</mark> status received (usually because the request contains an <mark>Expect: 100-continue</mark> header field)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('headers', <strong>fn(h2Headers:obj, flags</strong>) </td>
+        <td> 
+            - emitted when an informational header (with status code <mark>1**</mark>) is received from the server <br>
+            - not emitted when a non informational header is received (status code other than <mark>1**</mark>) 
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('push', <strong>fn(h2Headers:obj, flags)</strong>) </td>
+        <td> emitted when this <strong>clientStream</strong> receives a server push header
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('response', <strong>fn(h2Headers:obj, flags</strong>) </td>
+        <td> 
+            - emitted when a response <mark>HEADER</mark> frame has been received from the connected HTTP/2 server <br>
+            - not emitted when an informational header (with status code <mark>1**</mark>) is received
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ServerStream </td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong> </td>
+        <td> represents a bidirectional HTTP/2 communication stream over a <mark>session</mark> <u>(server side)</u> (extends <mark>session</mark>)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong>.additionalHeaders(<strong>h2Headers:obj</strong>) </td>
+        <td> sends an informational header (with status code <mark>1**</mark>) to the client <u>(informational header only!)</u>
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong>.headersSent </td>
+        <td> returns <mark>true</mark> if the headers were sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong>.pushAllowed </td>
+        <td> returns <mark>true</mark> if the remote client accepts push streams, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.pushStream(<strong class="openable">h2Headers:obj<div>
+                <p> - header passed as 3rd argument to the callback </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and the <mark>parent</mark> property identifies a parent stream, this stream is going to be the sole dependency of the specified parent stream, all other streams are made dependent on this stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - makes the identified stream as parent of this stream </p>
+            </div></i>, <strong class="openable">fn(err, pushStream, h2Headers)<div>
+                <p> - called once the <strong>pushStream</strong> has been initialted </p>
+                <p> - <mark>pushStream</mark> - the newly created stream (pushStream) </p>
+                <p> - <mark>h2Headers</mark> - <strong>h2Headers</strong> the push stream initiated with (1st argument of this method) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            creates a "push" stream in order to push data to the client (sends unrequested data to the client)
+                                                                                                         callback invoked when the <span class="openable">new <strong>pushStream</strong> is created<div>
+                <p> - setting the <mark>weight</mark> to the push stream it's not allowed in the <mark>HEADERS</mark> frame </p>
+                <p> - in order to set the priority to the push stream use the <mark>priority()</mark> method with the <mark>silent</mark> option (this way priority settings are not sent to the client) </p>
+                <p> - sending push stream within push stream is not allowed </p>
+            </div></span> 
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.respond(<i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> endStream: <strong>bol</strong> - if <mark>true</mark> the response does not include payload data </p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a response header (the messabe body (if any) will be sent by using the stream interface (<mark>write()</mark> / <mark>end()</mark>)) <br>
+            - cannot send informational header (<mark>1**</mark>)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.respondWithFD(<strong>fd:nr</strong>, <i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> statCheck: <strong>fn</strong> - if specified can set additional content headers based on the <mark>fs.Stat</mark> details, an automatic <mark>fs.fstat()</mark> check is performed </p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+                <p> offset: <strong>nr</strong> - position at which to begin reading the file descriptor content </p>
+                <p> length: <strong>nr</strong> - how much data to read from the file descriptor </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a response whose data is read from the <span class="openable">specified file descriptor<div>
+                    <p> - Node.js does not perform validation check on the passed file descriptor, if an error occurs the stream will be closed </p>
+                    <p style="color:orangered"> - the specified file descriptor is NOT closed by this method after using it (consider closing it to save up system resoruces) </p>
+                    <p> - the same file descriptor cannot be used for multiple streams at the same time, however it can be used sequentially (one stream finishe reading then other starts reading it again) </p>
+                                                                                          this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+                </div></span> <u>(cannot send informational header (<mark>1**</mark>))</u> <br>
+            - this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 any file descriptor </span>
+                <span><i class="fab fa-node-js"></i> 12.12.0 <mark>FileHandle</mark> support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.respondWithFile(<strong>filePath:str|buf|urlObj</strong>, <i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> statCheck: <strong>fn</strong> - if specified can set additional content headers based on the <mark>fs.Stat</mark> details, an automatic <mark>fs.fstat()</mark> check is performed </p>
+                <p> onError: <strong>fn</strong> - if specified handles the thrown error without closing the stream</p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+                <p> offset: <strong>nr</strong> - position at which to begin reading the file descriptor content </p>
+                <p> length: <strong>nr</strong> - how much data to read from the file descriptor </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a regular file as response <u>(cannot send informational header (<mark>1**</mark>))</u> <br>
+            - this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 any readable file </span>
+            </span>
+        </td>
+    </tr>
+</table>    
+    <br>
+<table class="table">
+<caption> Http2ServerRequest (Compatibility API) </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong> </td>
+        <td> represents a received request (operates on top of a <strong>stream</strong>), extends the <mark>stream.Readable</mark> class
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.aborted </td>
+        <td> returns <mark>true</mark> if the request is aborted, otherwise returns <mark>false</mark> 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.authority </td>
+        <td> returns the request authority pseudo header filed (same as <mark><strong>h2SrvReq</strong>.headers[':authority']</mark>)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.complete </td>
+        <td> returns <mark>true</mark> if the request has been completed, aborted or destroyed, otherwise returns <mark>false</mark>   
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 12.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.connection </td>
+        <td> <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> returns the underlying socket 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>h2SrvReq</strong>.destroy(<i class="openable">err<div>
+                <p> - once underlying strem is destroyed it emits the <mark>error</mark> event with the passed error (<mark>close</mark> event not emitted in this case) </p>
+            </div></i>) 
+        </td>
+        <td> immediately destroys the underlying <strong>stream</strong> (once the stream is destoryed it emits the <mark>close</mark> event)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.headers </td>
+        <td> returns the received headers in a <strong>h2Headers</strong> object
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.httpVersion </td>
+        <td> returns the request http protocol version in a string
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.method </td>
+        <td> returns the request method in a string
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.rawHeaders </td>
+        <td> returns the received raw headers (exactly as the message header was received) in an Array
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.rawTrailers </td>
+        <td> returns the received raw trailers (exactly as the message header was received) in an Array <u>(populated only in the <mark>end</mark> event)</u>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.scheme </td>
+        <td> returns the request scheme pseudo header filed (same as <mark><strong>h2SrvReq</strong>.headers[':scheme']</mark>)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>h2SrvReq</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback on this <strong>stream</strong> </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a counter (timeout) on the underlying <strong>stream</strong> (<mark>0</mark> = Infinity) <br>
+            - the counter starts when the connection estabilished and restarts at every data trafic <br>
+            - once the timer expires the <mark>timeout</mark> event is <span class="openable">emitted on the underlying socket<div> 
+                <p> - the set <mark>timeout</mark> event can be listened on the underlying <strong>stream</strong> or <strong>h2SrvResp</strong> or <strong>h2SrvReq</strong> object </p>
+            </div></span> (session not destoryed regardless the timeout event is listened or not) <br>
+            - returns this <strong>h2SrvReq</strong> object 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.socket </td>
+        <td> 
+            returns an object that acts as a <mark>net.Socket</mark> or <mark>tls.Socket</mark> <span class="openable">but with limited socket functionalities<div>
+                <p> - <mark>destroyed</mark> / <mark>readable</mark> / <mark>writable</mark> are retrieved from <mark><strong>h2SrvReq</strong>.stream</mark> </p>
+                <p> - <mark>destroy</mark> / <mark>emit</mark> / <mark>end</mark> / <mark>on</mark> / <mark>once</mark> called on <mark><strong>h2SrvReq</strong>.stream</mark> </p>
+                <p> - <mark>setTimeout</mark> called on <mark><strong>h2SrvReq</strong>.stream.session</mark> </p>
+                <p> - <mark>pause</mark> / <mark>read</mark> / <mark>resume</mark> / <mark>write</mark> throws an error </p>
+                <p> - all other interactions will be routed to the socket </p>
+            </div></span>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.stream </td>
+        <td> returns the underlying <strong>stream</strong> which backs the request
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.trailers </td>
+        <td> returns the received trailers in an object (not a <strong>h2Headers</strong> object) <u>(populated only in the <mark>end</mark> event)</u>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq</strong>.url </td>
+        <td> returns the request url in a string
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq.listener</strong>('aborted', <strong>fn</strong>) </td>
+        <td> emitted when the request is abnormally aborted in mid-communication
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvReq.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the underlying <strong>stream</strong> is destroyed
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Http2ServerResponse (Compatibility API) </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong> </td>
+        <td> represents the server response (operates on top o a <strong>stream</strong>), extends the <mark>Stream</mark> class   
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>h2SrvResp</strong>.addTrailers(<strong class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1':'val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - adds http trailers to the message (headers but at the end of the message) (trailers are supported only by chunked http protocols <mark>HTTP/1.1</mark> and <mark>HTTP/2</mark>) <br>
+            - must be sent after the message body (otherwise it's silently discarded) 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.connection </td>
+        <td> <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> returns the underlying socket 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.createPushResponse(<strong>h2Headers:obj</strong>, <strong>fn(err, h2SrvSersp)</strong>) </td>
+        <td> 
+            - creates a new "push" stream in order to push data to the client (sends unrequested data to a HTTP/2 client (HTTP/1.* does not support server push)) <br>
+            - the newly created push stream is returned in the callback and wrapped in a <u>new <strong>h2SrvResp</strong></u> object (which is used to send (push) data to the client) 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.end(<i>chunk:str|buf|uint8Arr, encode:str, fn(err)</i>) </td>
+        <td> 
+            - finishes sending the response (optionally sends a last data chunk to the message body) <a href="../Stream/index.html#endR" target="_blank">(Stream method)</a> <br>
+            - callback called when the response stream is finished <br>
+            - returns this <strong>h2srvResp</strong> object
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 returns <strong>h2srvResp</strong> </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.finished </td>
+        <td> <u>[Deprecated since node v.12.16.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.getHeader(<strong>headerName:str</strong>) </td>
+        <td> returns the specified response header value
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.getHeaderNames() </td>
+        <td> returns an array which contains all outgoing header keys (lowercased)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2srvResp</strong>.getHeaders() </td>
+        <td> returns an object which contains a shallow copy of the outgoing headers (key, value) (object has no prototype)   
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.hasHeader(<strong>headerName:str</strong>) </td>
+        <td> returns <mark>ture</mark> if the specified header key exist in the outgoing header, otherwise returns <mark>false</mark> (case-insensitive)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.headersSent </td>
+        <td> returns <mark>true</mark> if the headers are sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.removeHeader(<strong>headerName:str</strong>) </td>
+        <td> removes the specified header from the outgoing message header (case-insensitive)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.sendDate </td>
+        <td> automatically sets the date header in the response (Default: <mark>true</mark>)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>h2SrvResp</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string</u></p>
+                <p> - if the header has multiple values we can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'langugage=javascript']</mark>) </p>
+            </div></strong>) 
+        </td>
+        <td> sets a response header (if the header already exist its value will be reset)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>h2SrvResp</strong>.setTimeout(<strong>nr:ms</strong>, <i class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback on this <strong>stream</strong> </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sets a counter (timeout) on the underlying <strong>stream</strong> (<mark>0</mark> = Infinity) <br>
+            - the counter starts when the connection estabilished and restarts at every data trafic <br>
+            - once the timer expires the <mark>timeout</mark> event is <span class="openable">emitted on the underlying socket<div>
+                <p> - the set <mark>timeout</mark> event can be listened on the underlying <strong>stream</strong> or <strong>h2SrvResp</strong> or <strong>h2SrvReq</strong> object </p>
+            </div></span> (session not destoryed regardless the timeout event is listened or not) <br>
+            - returns this <strong>h2SrvResp</strong> object  
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.socket </td>
+        <td> 
+            returns an object that acts as a <mark>net.Socket</mark> or <mark>tls.Socket</mark> <span class="openable">but with limited socket functionalities<div>
+                <p> - <mark>destroyed</mark> / <mark>readable</mark> / <mark>writable</mark> are retrieved from <mark><strong>h2SrvReq</strong>.stream</mark> </p>
+                <p> - <mark>destroy</mark> / <mark>emit</mark> / <mark>end</mark> / <mark>on</mark> / <mark>once</mark> called on <mark><strong>h2SrvReq</strong>.stream</mark> </p>
+                <p> - <mark>setTimeout</mark> called on <mark><strong>h2SrvReq</strong>.stream.session</mark> </p>
+                <p> - <mark>pause</mark> / <mark>read</mark> / <mark>resume</mark> / <mark>write</mark> throws an error </p>
+                <p> - all other interactions will be routed to the socket </p>
+            </div></span>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.statusCode </td>
+        <td> gets or sets the response status code
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.statusMessage </td>
+        <td> gets or sets the response status message <u>(not supported when HTTP/2 protocol is used, returns an empty string and emits a Warning)</u>
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.stream </td>
+        <td> returns the underlying <strong>stream</strong> which backs the response 
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.writableEnded </td>
+        <td> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>    
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.write(<strong>chunk:str|buf|uint8Arr</strong>, <i>encode:str, fn(err)</i>) </td>
+        <td> 
+            - streams a data chunk to the response message body <a href="../Stream/index.html#write" target="_blank">(Stream method)</a> <br>
+            - returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again) <br>
+            - callback called when the data chunk is successfully flushed to the kernel buffer
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp</strong>.writeContinue() </td>
+        <td> sends a <mark>100 Continue</mark> status message to the client (indicates that the client should send the body) (used in with the server object <mark>checkContinue</mark> event)
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>h2srvResp</strong>.writeHead(<strong>stCode:nr</strong>, <i class="openable">stMsg:str<div>
+                <p> - not supported when HTTP/2 protocol is used, returns an empty string and emits a Warning </p>
+            </div></i>, <i class="openable">headers:obj<div>
+                <p> ex: <mark>{'header1': val1', 'header2':21}</mark> (keys are lowercased) </p>
+            </div></i>) </td>
+        <td> 
+            - sets the message header <u>and sends</u> it to the remote client (header cannon be modified after this) (must be called before the <mark>write()</mark> and <mark>end()</mark> methods) <br>
+            - returns this <strong>h2SrvResp</strong> object
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.17.0 returns <strong>h2SrvResp</strong> </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp.listener</strong>('close' <strong>fn</strong>) </td>
+        <td> emitted when the underlying <strong>stream</strong> is destroyed
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>h2SrvResp.listener</strong>('finish' <strong>fn</strong>) </td>
+        <td> emitted when all response data is flushed to the underlying system
+            <span class="browserSupport" title="updated : 2020-06-15">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <a href="https://nodejs.org/dist/latest-v14.x/docs/api/http2.html" target="_blank">HTTP/2 module (Node.js) </a>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - http2 pseudo-headers are prefixed with a colon (request <mark>:method</mark> <mark>:scheme</mark> <mark>:path</mark> <mark>:authority</mark>) (response <mark>:status</mark>) </p>
+    <p> - by default the <mark>http2Srv</mark> and <mark>htt2SecureSrv</mark> do not time out their connections (timeout value is set to <mark>0</mark>) </p>
+    <p> - when timeout value set and there is NO <mark>timeout</mark> listener registered on the server object the connection is dropped </p>
+    <p> - only the server returned by the <mark>createSecureServer()</mark> method can serve both HTTP/2 and HTTP/1.* clients <u>(over TLS connection)</u>, the none TLS version can only serve HTTP/2 clients (<mark>createServer()</mark>) </p>
+    <p> - browsers do not accept HTTP/2 protocol without TLS, so serving browsers with <mark>http2.createServer()</mark> servers is not possible </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>http2</mark> module provides a low-level API which is not designed to be compatible with the <mark>http</mark> protocol </p>
+    <p> - designed to be symetric between the client and the server ((almost) the same events and methods can be used on both sides) </p>
+    <img src="http2 module abstraction.jpg" height='230'>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Headers Object </u></h2>
+    <p> - the <mark>http2</mark> module's HTTP header is represented by a prototypeless object which keys are lowercased (but not modified) <u>(same as <mark>http</mark> module)</u> </p>
+    <p> - the request line (request) and the status line (response) are represented by h2 pseudo-header keys which are pre-fixed by a colon </p>
+    <pre class="syntax">
+    <span style="color:darkgray">// Request pseudo-header key/value ------------------------------------------------</span>
+                ':method':<strong>method:str</strong>
+                ':authority':<strong>hosname:port:str</strong>
+                ':scheme':<strong>protocol:str</strong>
+                ':path':<strong>path:str</strong>
+                
+                
+    <span style="color:darkgray">// Response pseudo-header key/value -----------------------------------------------</span>
+                ':status':<strong>statusCode:nr</strong>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// Request Object ---------------------------------------------------------------------
+    {
+        ':method':'GET',
+        ':authority':'localhost:1000',
+        ':protocol':'https',
+        ':path':'/'
+        cache-control:'no-cache',
+        accept-encoding:'gzip, deflate, br',
+        accept-language: 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7,hu;q=0.6,pt;q=0.5',
+        custom-header: ['has', 'more', 'than', 'one', 'value']                          // multiple values are represented in an array 
+    }
+// Response Object --------------------------------------------------------------------
+    {
+        ':status':200,
+        some-more-headers:'value'
+    }
+    </pre>
+</details>    
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>constants</mark> / <mark>getDefaultSettings()</mark> / <mark>getPackedSettings()</mark> / <mark>getUnpackedSettings()</mark> property and methods </u></h2>
+<h3 style="color:darkblue;"><u> The <mark>settings</mark> object </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>http2</strong>.constants                                                            // returns an object containing error codes for <mark>RST_STREAM</mark> and <mark>GOAWAY</mark>   
+            
+            <strong>http2</strong>.getDefaultSettings()                                                 // returns a new <mark>http2Settings</mark> object containing default settings for a <mark>Http2Session</mark> instance 
+            <strong>http2</strong>.getPackedSettings(<strong class="openable">http2Settins:obj<div>
+                <p> headerTableSize: <strong>nr</strong> - defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>) </p>
+                <p> enablePush: <strong>bol</strong> - enable HTTP/2 Push Streams (Default: <mark>true</mark>) </p>
+                <p>initialWindowSize: <strong>nr</strong> - senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> maxFrameSize: <strong>nr</strong> - largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>) </p>
+                <p> maxConcurrentStream: <strong>nr</strong> -  maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>) </p>
+                <p> maxHeaderListSize: <strong>nr</strong> - maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>) </p>
+                <p> enableConnectProtocol: <strong>bol</strong> - <mark>true</mark> if the 'Extended Connect Protocol' is enabled (Default: <mark>false</mark>) </p>
+            </div></strong>)                                 // serializes and returns the passed <mark>http2Settings</mark> object into a buffer 
+            <strong>http2</strong>.getUnpackedSettings(<strong>buf</strong>)                                             // deserializes and returns the passed buffer into a <mark>http2Settings</mark> object 
+                        
+                        
+    <span style="color:darkgray;">// http2Settings object (defines the configuration settings for a session (for the <mark>Http2Session</mark> object))------------</span>
+            { 
+              headerTableSize: <strong>nr</strong>                                                      // defines the maximum size for the header compression (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4096</mark>)    
+              enablePush: <strong>bol</strong>                                                          // enable HTTP/2 Push Streams (Default: <mark>true</mark>)    
+              initialWindowSize: <strong>nr</strong>                                                    // senders initial windows size for stream-level flow control (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>)     
+              maxFrameSize: <strong>nr</strong>                                                         // largest allowed frame payload (min <mark>16384</mark> | max <mark>2**24-1</mark>) (Default: <mark>16384</mark>)    
+              maxConcurrentStream: <strong>nr</strong>                                                  // maximum concurrent streams on one session (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>4294967295</mark>)    
+              maxHeaderListSize: <strong>nr</strong>                                                    // maximum <u>uncrompressed</u> header size (min <mark>0</mark> | max <mark>2**32-1</mark>) (Default: <mark>65535</mark>)   
+              enableConnectProtocol: <strong>bol</strong>                                               // <mark>true</mark> if the 'Extended Connect Protocol' is enabled (server used as tunneling proxy) (Default: <mark>false</mark>)    
+            }
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var http2 = require('http2');
+    
+// constants --------------------------------------------------------------------------
+    http2.constants;                                                                   // -> { NGHTTP2_ERR_FRAME_SIZE_ERROR:-522, ... }
+    
+// getDefaultSettings() / getPackedSettings() / getUnpackedSettings() -----------------
+    var http2Settings = http2.getDefaultSettings();                                    // -> {headerTableSize:4096, ...}        // http2Settings object   
+    
+    var packSet = http2.getPackedSettings(http2Settings);                              // -> &lt;Buffer ... &gt;                      // serializes http2Settings object into a buffer 
+    
+    http2.getUnpackedSettings(packSet);                                                // -> -> {headerTableSize:4096, ...}     // deserializes e buffer into a http2Settings object 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>getDefaultSettings()</mark> / <mark>getPackedSettings()</mark> / <mark>getUnpackedSettings()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    
+// defaultSettings() ------------------------------------------------------------------
+    var http2Settings = http2.getDefaultSettings();
+    
+    console.log( http2Settings );                                                      // { http2Settings:obj }
+    
+// getPackedSettings() ----------------------------------------------------------------
+    var packedHttp2Settings = http2.getPackedSettings(http2Settings);
+    
+    console.log( packedHttp2Settings );                                                // &lt;Buffer ... &gt;
+    
+// getUnpackedSettings() --------------------------------------------------------------
+    var unpackedHttp2Settings = http2.getUnpackedSettings(packedHttp2Settings);
+    
+    console.log( unpackedHttp2Settings );                                              // { http2Settings:obj }    
+    </pre>
+    <pre class="cmd">
+all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP2/01 getDefaultSettings() getPackedSettings() getUnpackedSettings() TEST$ node client.js
+// defaultSettings() ------------------------------------------------------------------
+    [Object: null prototype] {
+    headerTableSize: 4096,
+    enablePush: true,
+    initialWindowSize: 65535,
+    maxFrameSize: 16384,
+    maxConcurrentStreams: 4294967295,
+    maxHeaderListSize: 65535,
+    enableConnectProtocol: false
+    }
+// getPackedSettings() ----------------------------------------------------------------
+    &lt;Buffer 00 01 00 00 10 00 00 02 00 00 00 01 00 03 ff ff ff ff 00 04 00 00 ff ff 00 05 00 00 40 00 00 06 00 00 ff ff 00 08 00 00 00 00&gt;
+// getUnpackedSettings() --------------------------------------------------------------
+    {
+    headerTableSize: 4096,
+    enablePush: true,
+    maxConcurrentStreams: 4294967295,
+    initialWindowSize: 65535,
+    maxFrameSize: 16384,
+    maxHeaderListSize: 65535,
+    enableConnectProtocol: false
+    }
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP2/01 getDefaultSettings() getPackedSettings() getUnpackedSettings() TEST$     
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>constants</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    
+    console.log( http2.constants );
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP2/TEST$ node client.js
+    {
+    NGHTTP2_ERR_FRAME_SIZE_ERROR: -522,
+    NGHTTP2_SESSION_SERVER: 0,
+    NGHTTP2_SESSION_CLIENT: 1,
+    NGHTTP2_STREAM_STATE_IDLE: 1,
+    NGHTTP2_STREAM_STATE_OPEN: 2,
+    NGHTTP2_STREAM_STATE_RESERVED_LOCAL: 3,
+    NGHTTP2_STREAM_STATE_RESERVED_REMOTE: 4,
+    NGHTTP2_STREAM_STATE_HALF_CLOSED_LOCAL: 5,
+    NGHTTP2_STREAM_STATE_HALF_CLOSED_REMOTE: 6,
+    NGHTTP2_STREAM_STATE_CLOSED: 7,
+    NGHTTP2_FLAG_NONE: 0,
+    NGHTTP2_FLAG_END_STREAM: 1,
+    NGHTTP2_FLAG_END_HEADERS: 4,
+    NGHTTP2_FLAG_ACK: 1,
+    NGHTTP2_FLAG_PADDED: 8,
+    NGHTTP2_FLAG_PRIORITY: 32,
+    DEFAULT_SETTINGS_HEADER_TABLE_SIZE: 4096,
+    DEFAULT_SETTINGS_ENABLE_PUSH: 1,
+    DEFAULT_SETTINGS_MAX_CONCURRENT_STREAMS: 4294967295,
+    DEFAULT_SETTINGS_INITIAL_WINDOW_SIZE: 65535,
+    DEFAULT_SETTINGS_MAX_FRAME_SIZE: 16384,
+    DEFAULT_SETTINGS_MAX_HEADER_LIST_SIZE: 65535,
+    DEFAULT_SETTINGS_ENABLE_CONNECT_PROTOCOL: 0,
+    MAX_MAX_FRAME_SIZE: 16777215,
+    MIN_MAX_FRAME_SIZE: 16384,
+    MAX_INITIAL_WINDOW_SIZE: 2147483647,
+    NGHTTP2_SETTINGS_HEADER_TABLE_SIZE: 1,
+    NGHTTP2_SETTINGS_ENABLE_PUSH: 2,
+    NGHTTP2_SETTINGS_MAX_CONCURRENT_STREAMS: 3,
+    NGHTTP2_SETTINGS_INITIAL_WINDOW_SIZE: 4,
+    NGHTTP2_SETTINGS_MAX_FRAME_SIZE: 5,
+    NGHTTP2_SETTINGS_MAX_HEADER_LIST_SIZE: 6,
+    NGHTTP2_SETTINGS_ENABLE_CONNECT_PROTOCOL: 8,
+    PADDING_STRATEGY_NONE: 0,
+    PADDING_STRATEGY_ALIGNED: 1,
+    PADDING_STRATEGY_MAX: 2,
+    PADDING_STRATEGY_CALLBACK: 1,
+    NGHTTP2_NO_ERROR: 0,
+    NGHTTP2_PROTOCOL_ERROR: 1,
+    NGHTTP2_INTERNAL_ERROR: 2,
+    NGHTTP2_FLOW_CONTROL_ERROR: 3,
+    NGHTTP2_SETTINGS_TIMEOUT: 4,
+    NGHTTP2_STREAM_CLOSED: 5,
+    NGHTTP2_FRAME_SIZE_ERROR: 6,
+    NGHTTP2_REFUSED_STREAM: 7,
+    NGHTTP2_CANCEL: 8,
+    NGHTTP2_COMPRESSION_ERROR: 9,
+    NGHTTP2_CONNECT_ERROR: 10,
+    NGHTTP2_ENHANCE_YOUR_CALM: 11,
+    NGHTTP2_INADEQUATE_SECURITY: 12,
+    NGHTTP2_HTTP_1_1_REQUIRED: 13,
+    NGHTTP2_DEFAULT_WEIGHT: 16,
+    HTTP2_HEADER_STATUS: ':status',
+    HTTP2_HEADER_METHOD: ':method',
+    HTTP2_HEADER_AUTHORITY: ':authority',
+    HTTP2_HEADER_SCHEME: ':scheme',
+    HTTP2_HEADER_PATH: ':path',
+    HTTP2_HEADER_PROTOCOL: ':protocol',
+    HTTP2_HEADER_ACCEPT_ENCODING: 'accept-encoding',
+    HTTP2_HEADER_ACCEPT_LANGUAGE: 'accept-language',
+    HTTP2_HEADER_ACCEPT_RANGES: 'accept-ranges',
+    HTTP2_HEADER_ACCEPT: 'accept',
+    HTTP2_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS: 'access-control-allow-credentials',
+    HTTP2_HEADER_ACCESS_CONTROL_ALLOW_HEADERS: 'access-control-allow-headers',
+    HTTP2_HEADER_ACCESS_CONTROL_ALLOW_METHODS: 'access-control-allow-methods',
+    HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN: 'access-control-allow-origin',
+    HTTP2_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS: 'access-control-expose-headers',
+    HTTP2_HEADER_ACCESS_CONTROL_REQUEST_HEADERS: 'access-control-request-headers',
+    HTTP2_HEADER_ACCESS_CONTROL_REQUEST_METHOD: 'access-control-request-method',
+    HTTP2_HEADER_AGE: 'age',
+    HTTP2_HEADER_AUTHORIZATION: 'authorization',
+    HTTP2_HEADER_CACHE_CONTROL: 'cache-control',
+    HTTP2_HEADER_CONNECTION: 'connection',
+    HTTP2_HEADER_CONTENT_DISPOSITION: 'content-disposition',
+    HTTP2_HEADER_CONTENT_ENCODING: 'content-encoding',
+    HTTP2_HEADER_CONTENT_LENGTH: 'content-length',
+    HTTP2_HEADER_CONTENT_TYPE: 'content-type',
+    HTTP2_HEADER_COOKIE: 'cookie',
+    HTTP2_HEADER_DATE: 'date',
+    HTTP2_HEADER_ETAG: 'etag',
+    HTTP2_HEADER_FORWARDED: 'forwarded',
+    HTTP2_HEADER_HOST: 'host',
+    HTTP2_HEADER_IF_MODIFIED_SINCE: 'if-modified-since',
+    HTTP2_HEADER_IF_NONE_MATCH: 'if-none-match',
+    HTTP2_HEADER_IF_RANGE: 'if-range',
+    HTTP2_HEADER_LAST_MODIFIED: 'last-modified',
+    HTTP2_HEADER_LINK: 'link',
+    HTTP2_HEADER_LOCATION: 'location',
+    HTTP2_HEADER_RANGE: 'range',
+    HTTP2_HEADER_REFERER: 'referer',
+    HTTP2_HEADER_SERVER: 'server',
+    HTTP2_HEADER_SET_COOKIE: 'set-cookie',
+    HTTP2_HEADER_STRICT_TRANSPORT_SECURITY: 'strict-transport-security',
+    HTTP2_HEADER_TRANSFER_ENCODING: 'transfer-encoding',
+    HTTP2_HEADER_TE: 'te',
+    HTTP2_HEADER_UPGRADE_INSECURE_REQUESTS: 'upgrade-insecure-requests',
+    HTTP2_HEADER_UPGRADE: 'upgrade',
+    HTTP2_HEADER_USER_AGENT: 'user-agent',
+    HTTP2_HEADER_VARY: 'vary',
+    HTTP2_HEADER_X_CONTENT_TYPE_OPTIONS: 'x-content-type-options',
+    HTTP2_HEADER_X_FRAME_OPTIONS: 'x-frame-options',
+    HTTP2_HEADER_KEEP_ALIVE: 'keep-alive',
+    HTTP2_HEADER_PROXY_CONNECTION: 'proxy-connection',
+    HTTP2_HEADER_X_XSS_PROTECTION: 'x-xss-protection',
+    HTTP2_HEADER_ALT_SVC: 'alt-svc',
+    HTTP2_HEADER_CONTENT_SECURITY_POLICY: 'content-security-policy',
+    HTTP2_HEADER_EARLY_DATA: 'early-data',
+    HTTP2_HEADER_EXPECT_CT: 'expect-ct',
+    HTTP2_HEADER_ORIGIN: 'origin',
+    HTTP2_HEADER_PURPOSE: 'purpose',
+    HTTP2_HEADER_TIMING_ALLOW_ORIGIN: 'timing-allow-origin',
+    HTTP2_HEADER_X_FORWARDED_FOR: 'x-forwarded-for',
+    HTTP2_HEADER_ACCEPT_CHARSET: 'accept-charset',
+    HTTP2_HEADER_ACCESS_CONTROL_MAX_AGE: 'access-control-max-age',
+    HTTP2_HEADER_ALLOW: 'allow',
+    HTTP2_HEADER_CONTENT_LANGUAGE: 'content-language',
+    HTTP2_HEADER_CONTENT_LOCATION: 'content-location',
+    HTTP2_HEADER_CONTENT_MD5: 'content-md5',
+    HTTP2_HEADER_CONTENT_RANGE: 'content-range',
+    HTTP2_HEADER_DNT: 'dnt',
+    HTTP2_HEADER_EXPECT: 'expect',
+    HTTP2_HEADER_EXPIRES: 'expires',
+    HTTP2_HEADER_FROM: 'from',
+    HTTP2_HEADER_IF_MATCH: 'if-match',
+    HTTP2_HEADER_IF_UNMODIFIED_SINCE: 'if-unmodified-since',
+    HTTP2_HEADER_MAX_FORWARDS: 'max-forwards',
+    HTTP2_HEADER_PREFER: 'prefer',
+    HTTP2_HEADER_PROXY_AUTHENTICATE: 'proxy-authenticate',
+    HTTP2_HEADER_PROXY_AUTHORIZATION: 'proxy-authorization',
+    HTTP2_HEADER_REFRESH: 'refresh',
+    HTTP2_HEADER_RETRY_AFTER: 'retry-after',
+    HTTP2_HEADER_TRAILER: 'trailer',
+    HTTP2_HEADER_TK: 'tk',
+    HTTP2_HEADER_VIA: 'via',
+    HTTP2_HEADER_WARNING: 'warning',
+    HTTP2_HEADER_WWW_AUTHENTICATE: 'www-authenticate',
+    HTTP2_HEADER_HTTP2_SETTINGS: 'http2-settings',
+    HTTP2_METHOD_ACL: 'ACL',
+    HTTP2_METHOD_BASELINE_CONTROL: 'BASELINE-CONTROL',
+    HTTP2_METHOD_BIND: 'BIND',
+    HTTP2_METHOD_CHECKIN: 'CHECKIN',
+    HTTP2_METHOD_CHECKOUT: 'CHECKOUT',
+    HTTP2_METHOD_CONNECT: 'CONNECT',
+    HTTP2_METHOD_COPY: 'COPY',
+    HTTP2_METHOD_DELETE: 'DELETE',
+    HTTP2_METHOD_GET: 'GET',
+    HTTP2_METHOD_HEAD: 'HEAD',
+    HTTP2_METHOD_LABEL: 'LABEL',
+    HTTP2_METHOD_LINK: 'LINK',
+    HTTP2_METHOD_LOCK: 'LOCK',
+    HTTP2_METHOD_MERGE: 'MERGE',
+    HTTP2_METHOD_MKACTIVITY: 'MKACTIVITY',
+    HTTP2_METHOD_MKCALENDAR: 'MKCALENDAR',
+    HTTP2_METHOD_MKCOL: 'MKCOL',
+    HTTP2_METHOD_MKREDIRECTREF: 'MKREDIRECTREF',
+    HTTP2_METHOD_MKWORKSPACE: 'MKWORKSPACE',
+    HTTP2_METHOD_MOVE: 'MOVE',
+    HTTP2_METHOD_OPTIONS: 'OPTIONS',
+    HTTP2_METHOD_ORDERPATCH: 'ORDERPATCH',
+    HTTP2_METHOD_PATCH: 'PATCH',
+    HTTP2_METHOD_POST: 'POST',
+    HTTP2_METHOD_PRI: 'PRI',
+    HTTP2_METHOD_PROPFIND: 'PROPFIND',
+    HTTP2_METHOD_PROPPATCH: 'PROPPATCH',
+    HTTP2_METHOD_PUT: 'PUT',
+    HTTP2_METHOD_REBIND: 'REBIND',
+    HTTP2_METHOD_REPORT: 'REPORT',
+    HTTP2_METHOD_SEARCH: 'SEARCH',
+    HTTP2_METHOD_TRACE: 'TRACE',
+    HTTP2_METHOD_UNBIND: 'UNBIND',
+    HTTP2_METHOD_UNCHECKOUT: 'UNCHECKOUT',
+    HTTP2_METHOD_UNLINK: 'UNLINK',
+    HTTP2_METHOD_UNLOCK: 'UNLOCK',
+    HTTP2_METHOD_UPDATE: 'UPDATE',
+    HTTP2_METHOD_UPDATEREDIRECTREF: 'UPDATEREDIRECTREF',
+    HTTP2_METHOD_VERSION_CONTROL: 'VERSION-CONTROL',
+    HTTP_STATUS_CONTINUE: 100,
+    HTTP_STATUS_SWITCHING_PROTOCOLS: 101,
+    HTTP_STATUS_PROCESSING: 102,
+    HTTP_STATUS_EARLY_HINTS: 103,
+    HTTP_STATUS_OK: 200,
+    HTTP_STATUS_CREATED: 201,
+    HTTP_STATUS_ACCEPTED: 202,
+    HTTP_STATUS_NON_AUTHORITATIVE_INFORMATION: 203,
+    HTTP_STATUS_NO_CONTENT: 204,
+    HTTP_STATUS_RESET_CONTENT: 205,
+    HTTP_STATUS_PARTIAL_CONTENT: 206,
+    HTTP_STATUS_MULTI_STATUS: 207,
+    HTTP_STATUS_ALREADY_REPORTED: 208,
+    HTTP_STATUS_IM_USED: 226,
+    HTTP_STATUS_MULTIPLE_CHOICES: 300,
+    HTTP_STATUS_MOVED_PERMANENTLY: 301,
+    HTTP_STATUS_FOUND: 302,
+    HTTP_STATUS_SEE_OTHER: 303,
+    HTTP_STATUS_NOT_MODIFIED: 304,
+    HTTP_STATUS_USE_PROXY: 305,
+    HTTP_STATUS_TEMPORARY_REDIRECT: 307,
+    HTTP_STATUS_PERMANENT_REDIRECT: 308,
+    HTTP_STATUS_BAD_REQUEST: 400,
+    HTTP_STATUS_UNAUTHORIZED: 401,
+    HTTP_STATUS_PAYMENT_REQUIRED: 402,
+    HTTP_STATUS_FORBIDDEN: 403,
+    HTTP_STATUS_NOT_FOUND: 404,
+    HTTP_STATUS_METHOD_NOT_ALLOWED: 405,
+    HTTP_STATUS_NOT_ACCEPTABLE: 406,
+    HTTP_STATUS_PROXY_AUTHENTICATION_REQUIRED: 407,
+    HTTP_STATUS_REQUEST_TIMEOUT: 408,
+    HTTP_STATUS_CONFLICT: 409,
+    HTTP_STATUS_GONE: 410,
+    HTTP_STATUS_LENGTH_REQUIRED: 411,
+    HTTP_STATUS_PRECONDITION_FAILED: 412,
+    HTTP_STATUS_PAYLOAD_TOO_LARGE: 413,
+    HTTP_STATUS_URI_TOO_LONG: 414,
+    HTTP_STATUS_UNSUPPORTED_MEDIA_TYPE: 415,
+    HTTP_STATUS_RANGE_NOT_SATISFIABLE: 416,
+    HTTP_STATUS_EXPECTATION_FAILED: 417,
+    HTTP_STATUS_TEAPOT: 418,
+    HTTP_STATUS_MISDIRECTED_REQUEST: 421,
+    HTTP_STATUS_UNPROCESSABLE_ENTITY: 422,
+    HTTP_STATUS_LOCKED: 423,
+    HTTP_STATUS_FAILED_DEPENDENCY: 424,
+    HTTP_STATUS_TOO_EARLY: 425,
+    HTTP_STATUS_UPGRADE_REQUIRED: 426,
+    HTTP_STATUS_PRECONDITION_REQUIRED: 428,
+    HTTP_STATUS_TOO_MANY_REQUESTS: 429,
+    HTTP_STATUS_REQUEST_HEADER_FIELDS_TOO_LARGE: 431,
+    HTTP_STATUS_UNAVAILABLE_FOR_LEGAL_REASONS: 451,
+    HTTP_STATUS_INTERNAL_SERVER_ERROR: 500,
+    HTTP_STATUS_NOT_IMPLEMENTED: 501,
+    HTTP_STATUS_BAD_GATEWAY: 502,
+    HTTP_STATUS_SERVICE_UNAVAILABLE: 503,
+    HTTP_STATUS_GATEWAY_TIMEOUT: 504,
+    HTTP_STATUS_HTTP_VERSION_NOT_SUPPORTED: 505,
+    HTTP_STATUS_VARIANT_ALSO_NEGOTIATES: 506,
+    HTTP_STATUS_INSUFFICIENT_STORAGE: 507,
+    HTTP_STATUS_LOOP_DETECTED: 508,
+    HTTP_STATUS_BANDWIDTH_LIMIT_EXCEEDED: 509,
+    HTTP_STATUS_NOT_EXTENDED: 510,
+    HTTP_STATUS_NETWORK_AUTHENTICATION_REQUIRED: 511
+    }
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP2/TEST$     
+    </pre>
+</details>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTP/2 Client <mark>connect()</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>http2</strong>.connect(<strong class="openable">url:str|urlObj<div>
+                <p> - user Id, password, path, querystring and fragment are ignored in the passed url </p>
+            </div></strong>, <i class="openable">options:obj<div>
+                <p> maxDeflateDynamicTableSize: <strong>nr</strong> - maximum dynamic table size for deflating header fields (Default: <mark>4000</mark>) </p>
+                <p> maxSettings: <strong>nr</strong> - sets the maximum settings entries per <mark>SETTINGS</mark> frame (min <mark>1</mark>) (Default: <mark>32</mark>)  </p>
+                <p> maxSessionMemory: <strng>nr</strng> - maximum memory (in megabytes) that the <strong>session</strong> can use (Default: <mark>10</mark>) </p>
+                <p> maxHederListPairs: <strong>nr</strong> - maximum number of header entries (Default: <mark>128</mark>) </p>
+                <p> maxOutsandingPings: <strong>nr</strong> - maximum unacknowledged pings (Default: <mark>10</mark>) </p>
+                <p> maxResevedRemoteStreams: <strong>nr</strong> - maximum reserved push streams the client accept at any time (Default: <mark>200</mark>) </p>
+                <p> maxSendHeaderBlockLength: <strong>nr</strong> - max serialized compressed block headers size </p>
+                <p> paddingStrategy: <strong>nr</strong> - determine the amount of padding for <mark>HEADERS</mark> and <mark>DATA</mark> frames (Default: <mark>0</mark>) </p>
+                <p> peerMaxConcurrentStreams: <strong>nr</strong> - sets the maximum number of concurrent streams for the remote peer (Default: <mark>100</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to connect with (if not set in the <strong>url:str|rulObj</strong> argument) (Default: <mark>https</mark>) </p>
+                <p> settings: <strong>settings:obj</strong> - settings to send to the remote peer </p>
+                
+                
+                
+                <p> createConnection: <strong>fn</strong> - custom function what returns a <mark>Duplex</mark> stream that is used as the connection session </p>
+                <p> any <mark>net.connect()</mark> of <mark>tls.connect()</mark> options can be used </p>
+            </div></i>, <i class="openable">fn(session, socket)<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)        // synchronously returns a <strong>clientSession</strong> object then initiates the connection
+                                                                                          on successful connection returns the connected <strong>clientSession</strong> object again 
+                                                                                          
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('https://localhost:1000');                              // clientSession object returned 
+    
+    var req = client.request({});                                                      // clientStream object returned 
+    
+    req.on('response', function(head, flag){                                           // listen to server response 
+        console.log( head );
+        console.log( flag );
+    });
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));                            // reading incomming data 
+    req.end();                                                                         // -! required to issue the request 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>connect()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};                               // client refuses self-sigend certificates = that's the way around for testing
+    
+    var client = http2.connect('https://localhost:1000', options);                     // clientSession object returned 
+    
+    var req = client.request({});                                                      // clientStream object returned 
+    
+    req.on('response', function(head, flag){
+        console.log( head );
+        console.log( flag );
+    });
+    
+    req.on('data', (chunk)=>console.log(chunk.toString()));                            // reading incomming data 
+    req.end();                                                                         // -! required to issue the request 
+    </pre>
+</details>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTP/2 Server <mark>createServer()</mark> / <mark>createSecureServer()</mark> / <mark>close()</mark> / <mark>timeout</mark> / <mark>setTimeout()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>session</mark> / <mark>stream</mark> / <mark>request</mark> / <mark>checkContinue</mark> / <mark>sessionError</mark> / <mark>timeout</mark> / <mark>unknownProtocol</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>http2</strong>.createServer(<strong class="openable">option:obj<div>
+                <p> maxDeflateDynamicTableSize: <strong>nr</strong> - maximum dynamic table size for deflating header fields (Default: <mark>4000</mark>) </p>
+                <p> maxSettings: <strong>nr</strong> - sets the maximum settings entries per <mark>SETTINGS</mark> frame (min <mark>1</mark>) (Default: <mark>32</mark>)  </p>
+                <p> maxSessionMemory: <strng>nr</strng> - maximum memory (in megabytes) that the <strong>session</strong> can use (Default: <mark>10</mark>) </p>
+                <p> maxHederListPairs: <strong>nr</strong> - maximum number of header entries (Default: <mark>128</mark>) </p>
+                <p> maxOutsandingPings: <strong>nr</strong> - maximum unacknowledged pings (Default: <mark>10</mark>) </p>
+                <p> maxSendHeaderBlockLength: <strong>nr</strong> - max serialized compressed block headers size </p>
+                <p> paddingStrategy: <strong>nr</strong> - determine the amount of padding for <mark>HEADERS</mark> and <mark>DATA</mark> frames (Default: <mark>0</mark>) </p>
+                <p> peerMaxConcurrentStreams: <strong>nr</strong> - sets the maximum number of concurrent streams for the remote peer (Default: <mark>100</mark>) </p>
+                <p> maxSessionInvalidFrames: <strong>nr</strong> - maximum invalid that will be tolerated before the session closes (Default: <mark>1000</mark>) </p>
+                <p> maxSessionRejectedStreams: <strong>nr</strong> - maximum rejected streams (upon creation) that will be tolerated before the session closes (Default: <mark>100</mark>) </p>
+                <p> settings: <strong>settings:obj</strong> - settings to send to the remote peer </p>
+                <p> Http1IncomingMessage: <strong>http.IncomingMessage</strong> - sepecifies the <strong>IncomingMessage</strong> class to use for HTTP/1 fallback (useful to extend the original class) (Default: <strong>http.IncomingMessage</strong>) </p>
+                <p> Http1ServerResponse: <strong>http.ServerResponse</strong> - sepecifies the <strong>ServerResponse</strong> class to use for HTTP/1 fallback (useful to extend the original class) (Default: <strong>http.ServerResponse</strong>) </p>
+                <p> Http2ServerRequest: <strong>http2.Http2ServerRequest</strong> - specifies the <strong>Http2ServerRequest</strong> class to use (useful to extend the original class) (Default: <strong>Http2ServerRequest</strong>) </p>
+                <p> Http2ServerResponse: <strong>http2.ServerResponse</strong> - specifies the <strong>Http2ServerResponse</strong> class to use (Default: <strong>Http2ServerResponse</strong>) </p>
+                <p> any <mark>net.createServer()</mark> options can be used </p>
+            </div></strong>, <i class="openable">fn(srvReq, srvResp)<div>
+                <p> - <mark>request</mark> event's listener callback (Compatibility API) </p>
+            </div></i>)                     // creates and returns a <strong>http2Srv</strong> object which extends the <mark>net.Server</mark> class  
+            
+            <strong>http2</strong>.createSecureServer(<strong class="openable">option:obj<div>
+                <p> allowHTTP1: <strong>bol</strong> - server support HTTP/1.* connections (Default: <mark>false</mark>) </p>
+                <p> maxDeflateDynamicTableSize: <strong>nr</strong> - maximum dynamic table size for deflating header fields (Default: <mark>4000</mark>) </p>
+                <p> maxSettings: <strong>nr</strong> - sets the maximum settings entries per <mark>SETTINGS</mark> frame (min <mark>1</mark>) (Default: <mark>32</mark>)  </p>
+                <p> maxSessionMemory: <strng>nr</strng> - maximum memory (in megabytes) that the <strong>session</strong> can use (Default: <mark>10</mark>) </p>
+                <p> maxHederListPairs: <strong>nr</strong> - maximum number of header entries (Default: <mark>128</mark>) </p>
+                <p> maxOutsandingPings: <strong>nr</strong> - maximum unacknowledged pings (Default: <mark>10</mark>) </p>
+                <p> maxSendHeaderBlockLength: <strong>nr</strong> - max serialized compressed block headers size </p>
+                <p> paddingStrategy: <strong>nr</strong> - determine the amount of padding for <mark>HEADERS</mark> and <mark>DATA</mark> frames (Default: <mark>0</mark>) </p>
+                <p> peerMaxConcurrentStreams: <strong>nr</strong> - sets the maximum number of concurrent streams for the remote peer (Default: <mark>100</mark>) </p>
+                <p> maxSessionInvalidFrames: <strong>nr</strong> - maximum invalid that will be tolerated before the session closes (Default: <mark>1000</mark>) </p>
+                <p> maxSessionRejectedStreams: <strong>nr</strong> - maximum rejected streams (upon creation) that will be tolerated before the session closes (Default: <mark>100</mark>) </p>
+                <p> settings: <strong>settings:obj</strong> - settings to send to the remote peer </p>
+                <p> any <mark>tls.createServer()</mark> options can be provided <u>(the <mark>key</mark> <mark>cert</mark> or <mark>pfx</mark> options are required)</u> </p>
+            </div></strong>, <i class="openable">fn(srvReq, srvResp)<div>
+                <p> - <mark>request</mark> event's listener callback (Compatibility API) </p>
+            </div></i>)               // creates and returns a <strong>http2SecureSrv</strong> object which extends the <mark>tls.Server</mark> class  
+                                                                                          can also serve HTTP/1.* clients (see Compatibility API)
+                                                                                            
+            <strong>http2Srv|http2SecureSrv</strong>.close(<i>fn</i>)                                          // stops the server estabilishing new sessions <u>(but does not stop estabilishing new streams within existing sessions because of the http2 protocol nature)</u>    
+                                                                                          once the server is fully closed the callback is called (to gracefully close the server call <mark><strong>http2session</strong>.close()</mark> on all active session)    
+            
+            <strong>http2Srv|http2SecureSrv</strong>.timeout                                            // returns the timeout value of the server (<mark>0</mark> = infinity) (Default: <mark>0</mark> for both servers)     
+            <strong>http2Srv|http2SecureSrv</strong>.setTimeout(<i class="openable">nr:ms<div>
+                <p> - Default for <strong>http2Server</strong> = <mark>0</mark> </p>
+                <p> - Default for <strong>http2SecureServer</strong> = <mark>12000</mark> </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></i>)                           // sets a counter (timeout) on the server (<mark>0</mark> = infinity) 
+                                                                                          the counter starts when the connection estabilished and restarts at every client request 
+                                                                                          once the timer expires the <mark>timeout</mark> event is emitted (if the <mark>timeout</mark> event (or 2nd argument) is not listened the server the closes the connection    
+                                                                                          returns the server object itself  
+            
+    <span style="color:darkgray">// Events -------------------------------------------------------------------------</span>
+            <strong>http2Srv|http2SecureSrv.listener</strong>('session' <strong>fn(session)</strong>)                    // emitted each time the server creates a new <strong>session</strong>   
+            <strong>http2Srv|http2SecureSrv.listener</strong>('stream', <strong class="openable">fn(h2Stream, headers, flags)<div>
+                <p> - <mark>stream</mark> - <strong>stream</strong> (<mark>Http2Stream</mark>) object (bidirectional communication stream between the client and the server) </p>
+                <p> - <mark>headers</mark> - headers object (object containing <mark>http2</mark> headers format) </p>
+                <p> - <mark>flag</mark> - frame type (expressed as number) </p>
+            </div></strong>)  // emitted when the <strong>session</strong> associated with the server emits the <mark>stream</mark> event (when request is received)   
+            
+            <strong>http2Srv|http2SecureSrv.listener</strong>('request' <strong>fn(srvReq, srvResp)</strong>)            // emitted each time ther's a request (may be multiple per session) (Compatibility API)    
+            
+            <strong>http2Srv|http2SecureSrv.listener</strong>('checkContinue', <strong>fn(srvReq, srvResp)</strong>)     // emitted when the server receives a message with the <mark>Expect: 100-continue</mark> header <u>(<mark>request</mark> listener must be registered on the <strong>http2Srv</strong> object)</u>     
+                                                                                          to respond to this request use the <mark><strong>srvResp</strong>.writeContinue()</mark> method or generate a <mark>400 Bad Request</mark> response   
+                                                                                          if this event is not listened the server automatically responds with a <mark>417 Expectation Failed</mark> message 
+                                                                                          if this emitted and handled the <mark>request</mark> event is not emitted   
+            
+            <strong>http2Srv|http2SecureSrv.listener</strong>('sessionError' <strong>fn</strong>)                        // emitted when a <strong>session</strong> associated with the server emits the <mark>error</mark> event  
+            
+            <strong>http2Srv|http2SecureSrv.listener</strong>('timeout' <strong>fn(session)</strong>)                    // emitted when the server's timeout expires (see <mark>setTimeout()</mark>)    
+                                                                                          if this event is not listened the server drops the keep-alive connection 
+                                                                                          if this event is listened the server does not closes the keep-alive connection 
+            
+            <strong>http2SecureSrv.listener</strong>('unknownProtocol' <strong>fn(socket)</strong>)                      // emitted when the server is configured not to server HTTP/1.* connections but receives an HTTP/1.* request (ALPN negotiation in callback)     
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {
+        key:fs.readFileSync('cert/privkey.pem'),                                       // providing certificate and key to the secure server 
+        cert:fs.readFileSync('cert/cert.pem')};     
+    
+    var secServer = http2.createSecureServer(options);                                 // creates a http2 secure server (extension of tls.Server)   
+    var server = http2.createServer();                                                 // creates a http2 server (extension of net.Server)   
+    
+    secServer.listen(1000, 'localhost');                                               // server starts listening 
+    server.listen(1000, 'localhost',);                                                 // server starts listening 
+    
+// close() ----------------------------------------------------------------------------
+    secServer.close(()=>{});                                                           // gracefully closes all the server's sessions (connected session still can create communication streams)    
+                                                                                         // callback fired once all sessions are closed 
+    
+// timeout / setTimeout() -------------------------------------------------------------
+    secServer.timeout;                                                                 // -> 0          // server timeout value 
+    
+    secServer.setTimeout(10000);                                                       // sets a counter (timeout) on connected sessions (timer starts when client connects and restarts when the server recieves some data from the client)   
+    
+// session / stream (events) ----------------------------------------------------------
+    secServer.on('session', function(session){                                         // emitted when a new session is created 
+        session;                                                                         // -> the newly connected session object 
+    });
+    
+    secServer.on('stream', function(stream, headers, flags){                           // emitted when the connected session emits the 'stream' (on request)   
+        stream;                                                                          // -> communication stream within the session 
+        headers;                                                                         // -> {':method':'GET', ...}       // received headers object 
+        flags;                                                                           // -> 4                            // recieved frame type 
+    });
+    
+// request (event) --------------------------------------------------------------------
+    secServer.on('request', function(srvReq, srvResp){                                 // emitted when the server receives a request (used by the Compatibiliti API)
+        srvReq;                                                                          // -> http2.Http2ServerRequest object
+        srvResp;                                                                         // -> http2.Http2ServerResponse object 
+    }); 
+    
+// checkContinue (event) --------------------------------------------------------------
+    secServer.on('checkContinue', function(srvReq, srvResp){                           // emitted when a request with the 'Expect: 100-continue' header is received
+        srvReq;                                                                          // -> http2.Http2ServerRequest object
+        srvResp;                                                                         // -> http2.Http2ServerResponse object 
+        srvResp.writeContinue();                                                         // -! responds with a '100 Continue' status ([TESTED 2020-06-08] but I cannot confirm this)   
+    }); 
+    
+// sessionError (event) ---------------------------------------------------------------
+    secServer.on('sessionError', ()=>{});                                              // emitted when the connected session emits the 'error' event 
+    
+// timeout (event) --------------------------------------------------------------------
+    secServer.on('timeout', function(session){                                         // -! if this listener is registered the connection which emits the 'timeout' event is NOT closed   
+        session;                                                                         // -> session which times out 
+    });                                                   
+    
+// unknownProtocol (event) ------------------------------------------------------------
+    secServer.on(unknownProtocol, function(socket){                                    // emitted when the client is on HTTP/1.* (over TLS) but the server is configured to server only HTTP/2 request    
+        socket;                                                                        // -> TLS socket         
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createServer()</mark> / <mark>stream</mark> (event) TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer();                                                 // creates and returns a http2Srv object 
+    server.listen(1000, 'localhost', ()=>console.log('server listening!'));            // server starts listening 
+    
+    server.on('stream', function(stream, headers, flags){                              // emitted when request recieved 
+        console.log( headers );
+        console.log( flags );
+        stream.end('server response');                                                 // write the stream 
+    });
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>createSecureServer()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem')};     // certificate and key provided to the server 
+    
+    var server = http2.createSecureServer(options);                                    // creates and returns a http2SecureSrv object 
+    server.listen(1000, 'localhost', ()=>console.log('server listening!'));            // server starts listening 
+    
+    server.on('stream', function(stream, headers, flags){                              // emitted when request recieved 
+        console.log( headers );
+        console.log( flags );
+        stream.end('server response');                                                 // write the stream 
+    });
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>checkContinue</mark> (event) TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem')};
+    
+    var server = http2.createSecureServer(options);                         
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('request', function(srvReq, srvResp){                                    // the 'request' listener is required in order to emit the 'checkContinue' event BUT not emitted when the 'checkContinue' event is emitted   
+        console.log( 'request event emitted!' );
+    });
+
+    server.on('checkContinue', function(srvReq, srvResp){                              // emitted when a request with 'Expect: 100-continue' header is received
+        console.log( 'checkContinue event emitted');
+        srvResp.writeContinue();                                                       // -! writes a '100 Continue' response (but I coludn't properly TEST this)   
+    })    
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>close()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem')};
+    
+    var server = http2.createSecureServer(options);                                    // creates and returns a http2SecureSrv object 
+    server.listen(1000, 'localhost', ()=>console.log('server listening!'));            // server starts listening 
+    
+    server.on('stream', function(stream, headers, flags){                              // emitted when request recieved 
+        console.log( headers );
+        console.log( flags );
+        stream.write('server response');                                               // write the stream 
+    });
+    
+    setTimeout(function(){                                                             // after 20 seconds server close initiated
+        console.log('close initiated!');
+        server.close(function(){ console.log('server closed!') });                     // feedback all sessions are closed 
+    }, 20000);
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>request</mark> / <mark>session</mark> (event) TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem')};
+    
+    var server = http2.createSecureServer(options);                                    // creates and returns a http2SecureSrv object 
+    server.listen(1000, 'localhost', ()=>console.log('server listening!'));            // server starts listening 
+    
+    server.on('request', function(srvReq, srvResp){
+        srvReq.on('data', (chunk)=>console.log(chunk.toString()));                     // responde to the connected peer 
+    });    
+    
+    server.on('session', function(session){
+        console.log( session );                                                        // the created session is returned  
+    });
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>sessionError</mark> (event) TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem')};
+    
+    var server = http2.createSecureServer(options);                                    // creates and returns a http2SecureSrv object 
+    server.listen(1000, 'localhost', ()=>console.log('server listening!'));            // server starts listening 
+    
+    server.on('session', function(session){
+        session.emit('error');                                                         // emit error on the session 
+    });
+    
+    server.on('sessionError', function(){                                              // tirggered if a session associated with the server emits the 'error' event 
+        console.log( 'sessionError emitted!' );
+        console.log( argument[0] );                                                    // -> undefined          // the thrown error is not forwarded here for some reasons 
+    });    
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>timeout</mark> (event) for Http2SecureServer TEST </u></h4>
+    <p> - the server does not drop the connection because the <mark>timeout</mark> event is listened </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem')};
+    
+    var server = http2.createSecureServer(options);                                    // creates and returns a http2SecureSrv object 
+    server.listen(1000, 'localhost', ()=>console.log('server listening!'));            // server starts listening 
+    
+    server.on('stream', function(stream, headers, flags){                              // emitted when request recieved 
+        stream.end('server response');                                                 // write the stream 
+        stream.on('data', (chunk)=>console.log(chunk.toString()));         
+    });
+    
+    console.log( server.timeout );                                                     // -> 0         // default value for http2SecureServer
+    
+    server.setTimeout(5000, function(){                                                // new timeout value set 
+        console.log('timeout event emitted 1!');                                       // emitted on timeout (1st)         // prevents the connection from closing
+    });
+    
+    console.log( server.timeout );                                                     // -> 5000
+    
+    server.on('timeout', function(){
+        console.log('timeout event emitted 2!');                                       // emitted on timeout (2nd)         // prevents the connection from closing
+    });    
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>timeout</mark> (event) for Http2Server TEST </u></h4>
+    <p> - the server does not drop the connection because the <mark>timeout</mark> event is listened </p>
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer();                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){                  
+        stream.end('server response');                                   
+        stream.on('data', (chunk)=>console.log(chunk.toString()));         
+    });
+    
+    console.log( server.timeout );                                                     // -> 0         // default value for http2Server
+    
+    server.setTimeout(5000, function(){                                                // new timeout value set 
+        console.log('timeout event emitted 1!');                                       // emitted on timeout (1st)         // prevents the connection from closing
+    });
+    
+    console.log( server.timeout );                                                     // -> 5000
+    
+    server.on('timeout', function(){
+        console.log('timeout event emitted 2!');                                       // emitted on timeout (2nd)         // prevents the connection from closing
+    });    
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>unknownProtocol</mark> TEST with Http2SecureServer </u></h4>
+    <p> - client connects through an HTTP/1.1 over TLS protocol </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {key:fs.readFileSync('cert/privkey.pem'), cert:fs.readFileSync('cert/cert.pem'), allowHTTP1:false};   // server not allows HTTP/1.* connections  (default)  
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('unknownProtocol', function(socket){                                     // event emitted because the connecting client is on HTTP/1.1
+        console.log( 'unknowProtocol event emitted' );
+        console.log( socket );                                                         // -> TLSSocket { ... }          // the underlying TLS socket   
+    });
+    </pre>
+</details>
+    
+<br><br>
+</body>
+</html>

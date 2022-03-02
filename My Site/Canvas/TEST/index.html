@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> TEST </title>    
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script> 
+</head>
+<body>
+<h1> TEST </h1>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+<h4><u> Solar System </u></h4>    
+    <canvas id="solarSys" height="300"></canvas>
+<script>
+    var sun = new Image();
+    var moon = new Image();
+    var earth = new Image();
+    function init() {
+        sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png';
+        moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
+        earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
+        window.requestAnimationFrame(drawIt);
+    }
+
+function drawIt() {
+        var ctx = document.getElementById('solarSys').getContext('2d');
+
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.clearRect(0, 0, 300, 300);                          // clear canvas
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
+        ctx.save();
+        ctx.translate(150, 150);
+// Earth
+        var time = new Date();
+        ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+        ctx.translate(105, 0);                                      // this is genius!! (because the matrix entierly is rotated we move the translate point on the ALREADY rotated matrix)
+        ctx.fillRect(0, -12, 40, 24);                           // Shadow
+        ctx.drawImage(earth, -12, -12);
+// Moon     (the moon is drawn around the earty (matrix is already moved in the center of the eart))
+        ctx.save();
+        ctx.rotate(((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds());
+        ctx.translate(0, 28.5);
+        ctx.drawImage(moon, -3.5, -3.5);
+        ctx.restore();
+
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.arc(150, 150, 105, 0, Math.PI * 2, false);          // Earth orbit
+        ctx.stroke();
+
+        ctx.drawImage(sun, 0, 0, 300, 300);
+
+        window.requestAnimationFrame(drawIt);
+    }
+init();
+</script>   
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="solarSys" height="300"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var sun = new Image();
+    var moon = new Image();
+    var earth = new Image();
+    function init() {
+        sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png';
+        moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
+        earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
+        window.requestAnimationFrame(draw);
+    }
+
+function draw() {
+        var ctx = document.getElementById('solarSys').getContext('2d');
+
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.clearRect(0, 0, 300, 300);                          // clear canvas
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
+        ctx.save();
+        ctx.translate(150, 150);
+// Earth
+        var time = new Date();
+        ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+        ctx.translate(105, 0);                                      // this is genius!! (because the matrix entierly is rotated we move the translate point on the ALREADY rotated matrix)
+        ctx.fillRect(0, -12, 40, 24);                           // Shadow
+        ctx.drawImage(earth, -12, -12);
+// Moon     (the moon is drawn around the earty (matrix is already moved in the center of the eart))
+        ctx.save();
+        ctx.rotate(((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds());
+        ctx.translate(0, 28.5);
+        ctx.drawImage(moon, -3.5, -3.5);
+        ctx.restore();
+
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.arc(150, 150, 105, 0, Math.PI * 2, false);          // Earth orbit
+        ctx.stroke();
+
+        ctx.drawImage(sun, 0, 0, 300, 300);
+
+        window.requestAnimationFrame(draw);
+    }
+init();
+&lt;/script&gt;     
+        </pre>
+        </details>
+<hr>    
+<!------------------------------------------------------------------------------------------------------------------------->    
+<h4><u> myClock </u></h4>    
+    <canvas id="myClock" style="border:black 7px double; margin:auto; display:block;" width="500" height="500"></canvas>
+<script>
+    var myClock = function() {
+        var ctx = document.getElementById("myClock").getContext("2d");
+// these shapes does not need to be redrawn (because they do not ovelap with moving parts)      
+        ctx.globalCompositeOperation = "destination-over";
+        
+    // clock frame   
+        ctx.beginPath();
+        var radGrad = ctx.createRadialGradient(250, 250, 225, 255, 255, 258);
+        radGrad.addColorStop(0, "#1a2f86");
+        radGrad.addColorStop(.5, "#535353");
+        radGrad.addColorStop(1, "gray");
+        ctx.strokeStyle = radGrad;
+        ctx.lineWidth = 15;
+        ctx.arc(250, 250, 230, 0, Math.PI * 2);
+        ctx.stroke();
+        
+    // background arround the clock's frame
+        var img = new Image();                          // I noticed a problem while using "globalCompositeOperation" here, because the "onload" even is asynchronous this event function will use the last value of the "globalCompositeOperation"!
+        img.src = "Metal.jpg";
+        img.onload = function() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+            ctx.fillRect(0, 0, 500, 500);
+            ctx.drawImage(img, 0, 0, 500, 500);
+            ctx.globalCompositeOperation = "source-over";
+            drawClockFace();                            // I've forced to call this function here otherwise I cannot change the globalCompositeOperation value without affecting this image (mentioned above why)
+        }        
+        
+    // background clock
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.arc(250, 250, 230, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    function drawClockFace() {
+        var ctx = document.getElementById("myClock").getContext("2d"); 
+        var time = new Date();
+        ctx.save();
+        ctx.translate(250, 250);
+        ctx.beginPath();
+        ctx.arc(0, 0, 200, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        
+    // draw numbers    
+        ctx.font = "bold 70px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#2f2088";
+        
+        var rotation = Math.PI * 2 / 12;
+        for(let i = 1; i <= 12; i++) {
+            ctx.rotate(Math.PI * 2 / 12);
+            ctx.save();
+                ctx.fillStyle = "darkgreen";
+                ctx.translate(0, -180);
+                ctx.rotate(-rotation);
+                ctx.fillText(i, 0, 0);
+            ctx.restore();
+            ctx.save();
+                ctx.fillStyle = "darkgreen";
+                ctx.font = "30px sans-serif";
+                ctx.fillStyle = "darkorange";
+                ctx.translate(0, -120);
+                ctx.rotate(-rotation);
+                var _24hPrint;
+                if(i + 12 == 24) {                              // this makes possible to turn 24 to 0
+                    _24hPrint = 0;
+                } else {
+                    _24hPrint = 12 + i;
+                }
+                ctx.fillText(_24hPrint, 0, 0);
+            ctx.restore();
+            rotation = rotation + (Math.PI * 2 / 12);           // counter rotation of the face numbers
+        }
+        
+    // draw hour hand
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 17;
+        if(time.getHours() > 12) {                              // this fancy stuff change the color of the hour hand when it shows the hour above 12 hours
+            ctx.strokeStyle = "darkorange";
+        } else {
+            ctx.strokeStyle = "darkgreen";
+        }    
+        ctx.lineCap = "round";
+        ctx.rotate( ((Math.PI * 2 / 12) * time.getHours()) + (((Math.PI * 2 / 12) / 60) * time.getMinutes()) );   
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -90);
+        ctx.stroke();
+        ctx.restore();    
+            
+    // draw minute hand                                         // save the context to prevent the additional rotation to other hands
+        ctx.save(); 
+        ctx.beginPath();
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = "black";
+        ctx.lineCap = "round";
+        ctx.rotate( (Math.PI * 2 / 60) * time.getMinutes() );  
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -150);
+        ctx.stroke();
+        ctx.restore();
+        
+    // draw second hand
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "red";
+        ctx.lineCap = "round";
+        ctx.rotate( (Math.PI * 2 / 60) * time.getSeconds() );   // this is where the (magic) seconds are drawn
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -185);
+        ctx.stroke();
+       
+    // middle red dot
+        ctx.beginPath();
+        ctx.shadowColor = "black";
+        ctx.shadowBlur = 5;
+        ctx.fillStyle = "red";
+        ctx.arc(0, 0, 20, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.restore();
+        window.setTimeout(drawClockFace, 1000);
+    }
+    
+    myClock();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="myClock" style="border:black 7px double; margin:auto; display:block;" width="500" height="500"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var myClock = function() {
+        var ctx = document.getElementById("myClock").getContext("2d");
+// these shapes does not need to be redrawn (because they do not ovelap with moving parts)      
+        ctx.globalCompositeOperation = "destination-over";
+        
+    // clock frame   
+        ctx.beginPath();
+        var radGrad = ctx.createRadialGradient(250, 250, 225, 255, 255, 258);
+        radGrad.addColorStop(0, "#1a2f86");
+        radGrad.addColorStop(.5, "#535353");
+        radGrad.addColorStop(1, "gray");
+        ctx.strokeStyle = radGrad;
+        ctx.lineWidth = 15;
+        ctx.arc(250, 250, 230, 0, Math.PI * 2);
+        ctx.stroke();
+        
+    // background arround the clock's frame
+        var img = new Image();                          // I noticed a problem while using "globalCompositeOperation" here, because the "onload" even is asynchronous this event function will use the last value of the "globalCompositeOperation"!
+        img.src = "Metal.jpg";
+        img.onload = function() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+            ctx.fillRect(0, 0, 500, 500);
+            ctx.drawImage(img, 0, 0, 500, 500);
+            ctx.globalCompositeOperation = "source-over";
+            drawClockFace();                            // I've forced to call this function here otherwise I cannot change the globalCompositeOperation value without affecting this image (mentioned above why)
+        }        
+        
+    // background clock
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.arc(250, 250, 230, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    function drawClockFace() {
+        var ctx = document.getElementById("myClock").getContext("2d"); 
+        var time = new Date();
+        ctx.save();
+        ctx.translate(250, 250);
+        ctx.beginPath();
+        ctx.arc(0, 0, 200, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        
+    // draw numbers    
+        ctx.font = "bold 70px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#2f2088";
+        
+        var rotation = Math.PI * 2 / 12;
+        for(let i = 1; i &lt;= 12; i++) {
+            ctx.rotate(Math.PI * 2 / 12);
+            ctx.save();
+                ctx.fillStyle = "darkgreen";
+                ctx.translate(0, -180);
+                ctx.rotate(-rotation);
+                ctx.fillText(i, 0, 0);
+            ctx.restore();
+            ctx.save();
+                ctx.fillStyle = "darkgreen";
+                ctx.font = "30px sans-serif";
+                ctx.fillStyle = "darkorange";
+                ctx.translate(0, -120);
+                ctx.rotate(-rotation);
+                var _24hPrint;
+                if(i + 12 == 24) {                              // this makes possible to turn 24 to 0
+                    _24hPrint = 0;
+                } else {
+                    _24hPrint = 12 + i;
+                }
+                ctx.fillText(_24hPrint, 0, 0);
+            ctx.restore();
+            rotation = rotation + (Math.PI * 2 / 12);           // counter rotation of the face numbers
+        }
+        
+    // draw hour hand
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 17;
+        if(time.getHours() > 12) {                              // this fancy stuff change the color of the hour hand when it shows the hour above 12 hours
+            ctx.strokeStyle = "darkorange";
+        } else {
+            ctx.strokeStyle = "darkgreen";
+        }    
+        ctx.lineCap = "round";
+        ctx.rotate( ((Math.PI * 2 / 12) * time.getHours()) + (((Math.PI * 2 / 12) / 60) * time.getMinutes()) );   
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -90);
+        ctx.stroke();
+        ctx.restore();    
+            
+    // draw minute hand                                         // save the context to prevent the additional rotation to other hands
+        ctx.save(); 
+        ctx.beginPath();
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = "black";
+        ctx.lineCap = "round";
+        ctx.rotate( (Math.PI * 2 / 60) * time.getMinutes() );  
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -150);
+        ctx.stroke();
+        ctx.restore();
+        
+    // draw second hand
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "red";
+        ctx.lineCap = "round";
+        ctx.rotate( (Math.PI * 2 / 60) * time.getSeconds() );   // this is where the (magic) seconds are drawn
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -185);
+        ctx.stroke();
+       
+    // middle red dot
+        ctx.beginPath();
+        ctx.shadowColor = "black";
+        ctx.shadowBlur = 5;
+        ctx.fillStyle = "red";
+        ctx.arc(0, 0, 20, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.restore();
+        window.setTimeout(drawClockFace, 1000);
+    }
+    
+    myClock();
+&lt;/script&gt;        
+        </pre>
+        </details>
+<hr>    
+<!------------------------------------------------------------------------------------------------------------------------->    
+<h4><u> Looping Panorama </u></h4>
+    <canvas width="800" height="200" id="panorama"></canvas>
+<script>
+    var img = new Image();
+
+// User Variables - customize these to change the image being scrolled, its
+// direction, and the speed.
+
+img.src = 'https://mdn.mozillademos.org/files/4553/Capitan_Meadows,_Yosemite_National_Park.jpg';
+var CanvasXSize = 800;
+var CanvasYSize = 200;
+var speed = 20;                                     // lower is faster
+var scale = 1.05;
+var y = -4.5;                                       // vertical offset
+
+// Main program
+var dx = 0.75;                                      // pixel moved per frame
+var imgW;
+var imgH;
+var x = 0;                                          // canvas VS image width difference (if image is smaller than canvas it stays 0)
+var clearX;                                         // dinamic length to be able to clear the canvas
+var clearY;
+var ctx;
+
+img.onload = function() {
+    imgW = img.width * scale;
+    imgH = img.height * scale;
+    
+    if (imgW > CanvasXSize) {                       // image larger than canvas
+        x = CanvasXSize - imgW;                     // difference canvas and image width
+        clearX = imgW;                  
+    } else {                             
+        clearX = CanvasXSize;                       // we need to know the dimension before clearing the canvas
+    }
+    if (imgH > CanvasYSize) {                       // get the referenced crearing size information
+        clearY = imgH;
+    } else {
+        clearY = CanvasYSize;
+    }
+    
+    ctx = document.getElementById('panorama').getContext('2d');
+    return setInterval(draw, speed);
+}
+
+function draw() {
+    ctx.clearRect(0, 0, clearX, clearY);            // clear the canvas with the given dimension
+    
+    if (imgW <= CanvasXSize) {                      // reset, start from beginning
+        if (x > CanvasXSize) {
+            x = -imgW + x;
+        }
+        if (x > 0) {                                // draw additional image1
+            ctx.drawImage(img, -imgW + x, y, imgW, imgH);
+        }
+        if (x - imgW > 0) {                         // draw additional image2
+            ctx.drawImage(img, -imgW * 2 + x, y, imgW, imgH);
+        }
+    }
+    
+    else {
+        if (x > (CanvasXSize)) {
+            x = CanvasXSize - imgW;
+        }   
+        if (x > (CanvasXSize-imgW)) {               // draw aditional image
+            ctx.drawImage(img, x - imgW + 1, y, imgW, imgH);
+        }
+    }
+    ctx.drawImage(img, x, y, imgW, imgH);
+    x += dx;                                        // amount to move
+}
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas width="800" height="200" id="panorama"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var img = new Image();
+
+// User Variables - customize these to change the image being scrolled, its
+// direction, and the speed.
+
+img.src = 'https://mdn.mozillademos.org/files/4553/Capitan_Meadows,_Yosemite_National_Park.jpg';
+var CanvasXSize = 800;
+var CanvasYSize = 200;
+var speed = 20;                                     // lower is faster
+var scale = 1.05;
+var y = -4.5;                                       // vertical offset
+
+// Main program
+var dx = 0.75;                                      // pixel moved per frame
+var imgW;
+var imgH;
+var x = 0;                                          // canvas VS image width difference (if image is smaller than canvas it stays 0)
+var clearX;                                         // dinamic length to be able to clear the canvas
+var clearY;
+var ctx;
+
+img.onload = function() {
+    imgW = img.width * scale;
+    imgH = img.height * scale;
+    
+    if (imgW &gt; CanvasXSize) {                       // image larger than canvas
+        x = CanvasXSize - imgW;                     // difference canvas and image width
+        clearX = imgW;                  
+    } else {                             
+        clearX = CanvasXSize;                       // we need to know the dimension before clearing the canvas
+    }
+    if (imgH &gt; CanvasYSize) {                       // get the referenced crearing size information
+        clearY = imgH;
+    } else {
+        clearY = CanvasYSize;
+    }
+    
+    ctx = document.getElementById('panorama').getContext('2d');
+    return setInterval(draw, speed);
+}
+
+function draw() {
+    ctx.clearRect(0, 0, clearX, clearY);            // clear the canvas with the given dimension
+    
+    if (imgW &lt;= CanvasXSize) {                      // reset, start from beginning
+        if (x &gt; CanvasXSize) {
+            x = -imgW + x;
+        }
+        if (x > 0) {                                // draw additional image1
+            ctx.drawImage(img, -imgW + x, y, imgW, imgH);
+        }
+        if (x - imgW > 0) {                         // draw additional image2
+            ctx.drawImage(img, -imgW * 2 + x, y, imgW, imgH);
+        }
+    }
+    
+    else {
+        if (x &gt; (CanvasXSize)) {
+            x = CanvasXSize - imgW;
+        }   
+        if (x &gt; (CanvasXSize-imgW)) {               // draw aditional image
+            ctx.drawImage(img, x - imgW + 1, y, imgW, imgH);
+        }
+    }
+    ctx.drawImage(img, x, y, imgW, imgH);
+    x += dx;                                        // amount to move
+}
+&lt;/script&gt;        
+        </pre>
+        </details>
+<hr>    
+<!------------------------------------------------------------------------------------------------------------------------->    
+<h4><u> Ball Physics </u></h4>  
+    <p> - move over the canvas and click to release the ball </p>
+    <canvas id="ballPhysics" width="600" height="300" style="border:solid black 1px; background-color:white;"></canvas>
+<script>
+    (function() {
+        var canvas = document.getElementById("ballPhysics");
+        var ctx = canvas.getContext("2d");
+        var raf;                                                                // control animation
+        var running = false;
+        
+        var ball = {x:100, y:100, vx:4, vy:1, radius:25, color:"blue", 
+                        draw: function() {
+                            ctx.beginPath();
+                            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                            ctx.closePath();
+                            ctx.fillStyle = this.color;
+                            ctx.fill(); 
+                        }
+                   };
+    
+    function clear() {
+        ctx.fillStyle = "rgba(255, 255, 255, .35)";                              // this simple opacity fill creates trailing effect
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }    
+        
+    function draw() {
+        clear();
+        ball.draw();
+        ball.x += ball.vx;                                                      // velocity value controls movement
+        ball.y += ball.vy;
+        ball.vy *= .99;                                                         // by dinamically modifying the horizontal velocity we simulate the gravitaion 
+        ball.vy += .25;
+        
+        if(ball.y + ball.vy > canvas.height || ball.y + ball.vy < 0) {          // these beauties makes sure that the ball never gets out the frame
+            ball.vy = -ball.vy;                                                 // velocity value flipped when collision happens
+        }
+        if(ball.x + ball.vx > canvas.width || ball.x + ball.vx < 0) {
+            ball.vx = -ball.vx;
+        }
+        
+        raf = window.requestAnimationFrame(draw);
+    }
+        
+    canvas.addEventListener("mousemove", function(e) {
+        if (!running) {
+            clear();
+            ball.x = e.offsetX;
+            ball.y = e.offsetY;
+            ball.draw();
+        }
+    });
+    canvas.addEventListener("click", function(e) {
+        if (!running) {
+            raf = window.requestAnimationFrame(draw);
+            running = true;
+        }
+    });    
+    canvas.addEventListener("mouseout", function(e) {                           // if the mouse leaves the canvas area the animation stops 
+        window.cancelAnimationFrame(raf);
+        running = false;
+    });     
+    })();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="ballPhysics" width="600" height="300" style="border:solid black 1px; background-color:white;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    (function() {
+        var canvas = document.getElementById("ballPhysics");
+        var ctx = canvas.getContext("2d");
+        var raf;                                                                // control animation
+        var running = false;
+        
+        var ball = {x:100, y:100, vx:4, vy:1, radius:25, color:"blue", 
+                        draw: function() {
+                            ctx.beginPath();
+                            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                            ctx.closePath();
+                            ctx.fillStyle = this.color;
+                            ctx.fill(); 
+                        }
+                   };
+    
+    function clear() {
+        ctx.fillStyle = "rgba(255, 255, 255, .35)";                              // this simple opacity fill creates trailing effect
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }    
+        
+    function draw() {
+        clear();
+        ball.draw();
+        ball.x += ball.vx;                                                      // velocity value controls movement
+        ball.y += ball.vy;
+        ball.vy *= .99;                                                         // by dinamically modifying the horizontal velocity we simulate the gravitaion 
+        ball.vy += .25;
+        
+        if(ball.y + ball.vy &gt; canvas.height || ball.y + ball.vy &lt; 0) {          // these beauties makes sure that the ball never gets out the frame
+            ball.vy = -ball.vy;                                                 // velocity value flipped when collision happens
+        }
+        if(ball.x + ball.vx &gt; canvas.width || ball.x + ball.vx &lt; 0) {
+            ball.vx = -ball.vx;
+        }
+        raf = window.requestAnimationFrame(draw);
+    }
+        
+    canvas.addEventListener("mousemove", function(e) {
+        if (!running) {
+            clear();
+            ball.x = e.offsetX;
+            ball.y = e.offsetY;
+            ball.draw();
+        }
+    });
+    canvas.addEventListener("click", function(e) {
+        if (!running) {
+            raf = window.requestAnimationFrame(draw);
+            running = true;
+        }
+    });    
+    canvas.addEventListener("mouseout", function(e) {                           // if the mouse leaves the canvas area the animation stops 
+        window.cancelAnimationFrame(raf);
+        running = false;
+    });     
+    })();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<hr>    
+<!------------------------------------------------------------------------------------------------------------------------->      
+<h4><u> Pie Chart </u></h4>    
+    <canvas id="pieChart" style="border:white 2px dashed; margin:auto; display:block;" width="300" height="300"></canvas>
+<script>
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    (function(){
+        var canvas = document.getElementById('pieChart').getContext("2d");
+        var total = results.reduce((sum, {count}) => sum + count, 0);
+        var currentAngle = -0.5 * Math.PI;                              // a half PI is 1/4th of the full circle, counted from the start point in a negative value places it at the TOP of the circle  
+        for (let result of results) {
+            var sliceAngle = (result.count / total) * 2 * Math.PI;      // this returns the radian value for the current pie slice  
+            canvas.beginPath();
+            canvas.arc(150, 150, 150, currentAngle, currentAngle + sliceAngle);
+            currentAngle += sliceAngle;
+            canvas.lineTo(150, 150);
+            canvas.fillStyle = result.color;
+            canvas.fill();
+            canvas.stroke();
+        }
+    })();
+</script>   
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="pieChart" style="border:white 2px dashed; margin:auto; display:block;" width="300" height="300"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    const results = [
+        {name: "Satisfied", count: 1043, color: "lightblue"},
+        {name: "Neutral", count: 563, color: "lightgreen"},
+        {name: "Unsatisfied", count: 510, color: "pink"},
+        {name: "No comment", count: 175, color: "silver"}
+    ];
+    (function(){
+        var canvas = document.getElementById('pieChart').getContext("2d");
+        var total = results.reduce((sum, {count}) => sum + count, 0);
+        var currentAngle = -0.5 * Math.PI;                              // a half PI is 1/4th of the full circle, counted from the start point in a negative value places it at the TOP of the circle  
+        for (let result of results) {
+            var sliceAngle = (result.count / total) * 2 * Math.PI;      // this returns the radian value for the current pie slice  
+            canvas.beginPath();
+            canvas.arc(150, 150, 150, currentAngle, currentAngle + sliceAngle);
+            currentAngle += sliceAngle;
+            canvas.lineTo(150, 150);
+            canvas.fillStyle = result.color;
+            canvas.fill();
+            canvas.stroke();
+        }
+    })();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<hr>    
+<!------------------------------------------------------------------------------------------------------------------------->      
+<h4><u> My Proportional Chart </u></h4>    
+    <p> - enter quantitys and the names to calculate the percentage between values </p>
+    <div id="infoPanel" style="display:flex; width:700px; border:1px solid gray; border-radius:%; background-color:gray; margin:auto; margin-bottom:10px;">
+        <div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;">
+            <input type="number" placeholder="quantity">
+            <input type="text" placeholder="name">
+            <input type="submit" value="submit 1" style="background-color:#86cd56;">
+        </div>
+        <div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;">
+            <input type="number" placeholder="quantity">
+            <input type="text" placeholder="name">
+            <input type="submit" value="submit 2" style="background-color:#ddb478">
+        </div>
+        <div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;">
+            <input type="number" placeholder="quantity">
+            <input type="text" placeholder="name">
+            <input type="submit" value="submit 3" style="background-color:#78d7dd">
+        </div>
+        <div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;">
+            <input type="number" placeholder="quantity">
+            <input type="text" placeholder="name">
+            <input type="submit" value="submit 4" style="background-color:#c891df">
+        </div>
+    </div>
+    <canvas id="percentChart" style="border:double 3px black; margin:auto; display:block;" width="1000" height="500"></canvas>
+    
+<script>
+    (function() {
+    // get user data
+        var infoPanel = document.getElementById('infoPanel');
+        infoPanel.firstElementChild.querySelector("[type='submit']").addEventListener("mouseup", userData);
+        infoPanel.children[1].querySelector("[type='submit']").addEventListener("mouseup", userData);
+        infoPanel.children[2].querySelector("[type='submit']").addEventListener("mouseup", userData);
+        infoPanel.children[3].querySelector("[type='submit']").addEventListener("mouseup", userData);
+        
+        function userData() {
+            var nr1 = Number(infoPanel.firstElementChild.firstElementChild.value);
+            var name1 = infoPanel.firstElementChild.children[1].value;
+            var nr2 = Number(infoPanel.children[1].firstElementChild.value);
+            var name2 = infoPanel.children[1].children[1].value;
+            var nr3 = Number(infoPanel.children[2].firstElementChild.value);
+            var name3 = infoPanel.children[2].children[1].value;
+            var nr4 = Number(infoPanel.children[3].firstElementChild.value);
+            var name4 = infoPanel.children[3].children[1].value;
+            
+            var userData = {
+                nr1:nr1, name1:name1, 
+                nr2:nr2, name2:name2, 
+                nr3:nr3, name3:name3, 
+                nr4:nr4, name4:name4, 
+            }
+            
+            drawCanvas(userData);
+        }
+        
+        var drawCanvas = function(userData) {
+        // draw canvas 
+            var canvas = document.getElementById('percentChart');
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, 1000, 500);
+            ctx.save();
+            ctx.fillStyle = "#646464";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          // draw scale background 
+            ctx.beginPath();
+            ctx.fillStyle = "#80a3b1";
+            ctx.fillRect(50, 50, 900, 400);
+            ctx.strokeStyle = "#373737";
+            ctx.lineWidth = "2";
+            ctx.moveTo(50, 50);
+            ctx.lineTo(950, 50);
+            ctx.moveTo(50, 250);
+            ctx.lineTo(950, 250);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = "4";
+            ctx.moveTo(50, 450);
+            ctx.lineTo(950, 450);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.lineWidth = "1";
+            ctx.setLineDash([10, 7]);
+            ctx.moveTo(50, 150);
+            ctx.lineTo(950, 150);
+            ctx.moveTo(50, 350);
+            ctx.lineTo(950, 350);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.fillStyle = "black";
+            ctx.font = "20px  Arial"
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "end";
+            ctx.fillText("100%", 50, 50);
+            ctx.fillText("75%", 50, 150);
+            ctx.fillText("50%", 50, 250);
+            ctx.fillText("25%", 50, 350);
+            ctx.fillText("0%", 50, 450);
+
+          // draw the entered names by the user under the columns
+            if (userData == undefined) {            // at the first call the userData object is not passed, this makes sure it is not undefined for the first call
+                userData = {
+                    nr1:0, name1:"", 
+                    nr2:0, name2:"", 
+                    nr3:0, name3:"", 
+                    nr4:0, name4:"", 
+                }
+                total = 0;                      
+            } else {                                
+                var total = userData.nr1 +  userData.nr2 +  userData.nr3 +  userData.nr4;   // get the total sum when userData object is passed
+            } 
+            
+            ctx.textBaseline = "hanging";
+            ctx.textAlign = "center";
+            ctx.font = "25px Arial";
+                // if ther's no value (empty string) this makes sure ther will be line on the place of the text
+            ctx.fillText(userData.name1 == "" ? "-" : userData.name1, 220, 460);
+            ctx.fillText(userData.name2 == "" ? "-" : userData.name2, 410, 460);
+            ctx.fillText(userData.name3 == "" ? "-" : userData.name3, 590, 460);
+            ctx.fillText(userData.name4 == "" ? "-" : userData.name4, 770, 460);
+            ctx.restore();
+        
+          // draw percent measure column
+            function drawColumn(x, y, bgColor, val, total) {
+                ctx.save();
+                var percent = (val / total) * 100;
+                if (!percent) percent = 0;
+                var columnPercent = (400 / 100) * percent;
+                var columnStart = 50 + (400 - columnPercent);
+                
+                ctx.shadowColor = "black";
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = -1;
+                ctx.shadowBlur = 5;
+                
+                ctx.beginPath();
+                ctx.fillStyle = bgColor;
+                ctx.rect(x - 70, columnStart + 1, 140, columnPercent - 3);
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+                
+                ctx.fillStyle = "white";
+                ctx.font = "bold 20px  Arial"
+                ctx.textAlign = "center";
+                ctx.fillText(percent.toFixed(2) + "%", x, columnStart - 5)
+            }
+            
+            drawColumn(220, 460, "#86cd56", userData.nr1, total);
+            drawColumn(410, 460, "#ddb478", userData.nr2, total);
+            drawColumn(590, 460, "#78d7dd", userData.nr3, total);
+            drawColumn(770, 460, "#c891df", userData.nr4, total);
+        }
+        drawCanvas();
+    })();
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+-- CODE (HTML) --
+    &lt;div id="infoPanel" style="display:flex; width:700px; border:1px solid gray; border-radius:%; background-color:gray; margin:auto; margin-bottom:10px;"&gt;
+        &lt;div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;"&gt;
+            &lt;input type="number" placeholder="quantity"&gt;
+            &lt;input type="text" placeholder="name"&gt;
+            &lt;input type="submit" value="submit 1" style="background-color:#86cd56;"&gt;
+        &lt;/div&gt;
+        &lt;div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;"&gt;
+            &lt;input type="number" placeholder="quantity"&gt;
+            &lt;input type="text" placeholder="name"&gt;
+            &lt;input type="submit" value="submit 2" style="background-color:#ddb478"&gt;
+        &lt;/div&gt;
+        &lt;div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;"&gt;
+            &lt;input type="number" placeholder="quantity"&gt;
+            &lt;input type="text" placeholder="name"&gt;
+            &lt;input type="submit" value="submit 3" style="background-color:#78d7dd"&gt;
+        &lt;/div&gt;
+        &lt;div style="display:flex; flex-direction:column; border-radius:3%; width:24%; margin:3px;"&gt;
+            &lt;input type="number" placeholder="quantity"&gt;
+            &lt;input type="text" placeholder="name"&gt;
+            &lt;input type="submit" value="submit 4" style="background-color:#c891df"&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;canvas id="percentChart" style="border:double 3px black; margin:auto; display:block;" width="1000" height="500"&gt;&lt;/canvas&gt;
+    
+    &lt;script&gt;
+    (function() {
+    // get user data
+        var infoPanel = document.getElementById('infoPanel');
+        infoPanel.firstElementChild.querySelector("[type='submit']").addEventListener("mouseup", userData);
+        infoPanel.children[1].querySelector("[type='submit']").addEventListener("mouseup", userData);
+        infoPanel.children[2].querySelector("[type='submit']").addEventListener("mouseup", userData);
+        infoPanel.children[3].querySelector("[type='submit']").addEventListener("mouseup", userData);
+        
+        function userData() {
+            var nr1 = Number(infoPanel.firstElementChild.firstElementChild.value);
+            var name1 = infoPanel.firstElementChild.children[1].value;
+            var nr2 = Number(infoPanel.children[1].firstElementChild.value);
+            var name2 = infoPanel.children[1].children[1].value;
+            var nr3 = Number(infoPanel.children[2].firstElementChild.value);
+            var name3 = infoPanel.children[2].children[1].value;
+            var nr4 = Number(infoPanel.children[3].firstElementChild.value);
+            var name4 = infoPanel.children[3].children[1].value;
+            
+            var userData = {
+                nr1:nr1, name1:name1, 
+                nr2:nr2, name2:name2, 
+                nr3:nr3, name3:name3, 
+                nr4:nr4, name4:name4, 
+            }
+            
+            drawCanvas(userData);
+        }
+        
+        var drawCanvas = function(userData) {
+        // draw canvas 
+            var canvas = document.getElementById('percentChart');
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, 1000, 500);
+            ctx.save();
+            ctx.fillStyle = "#646464";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          // draw scale background 
+            ctx.beginPath();
+            ctx.fillStyle = "#80a3b1";
+            ctx.fillRect(50, 50, 900, 400);
+            ctx.strokeStyle = "#373737";
+            ctx.lineWidth = "2";
+            ctx.moveTo(50, 50);
+            ctx.lineTo(950, 50);
+            ctx.moveTo(50, 250);
+            ctx.lineTo(950, 250);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = "4";
+            ctx.moveTo(50, 450);
+            ctx.lineTo(950, 450);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.lineWidth = "1";
+            ctx.setLineDash([10, 7]);
+            ctx.moveTo(50, 150);
+            ctx.lineTo(950, 150);
+            ctx.moveTo(50, 350);
+            ctx.lineTo(950, 350);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.fillStyle = "black";
+            ctx.font = "20px  Arial"
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "end";
+            ctx.fillText("100%", 50, 50);
+            ctx.fillText("75%", 50, 150);
+            ctx.fillText("50%", 50, 250);
+            ctx.fillText("25%", 50, 350);
+            ctx.fillText("0%", 50, 450);
+
+          // draw the entered names by the user under the columns
+            if (userData == undefined) {            // at the first call the userData object is not passed, this makes sure it is not undefined for the first call
+                userData = {
+                    nr1:0, name1:"", 
+                    nr2:0, name2:"", 
+                    nr3:0, name3:"", 
+                    nr4:0, name4:"", 
+                }
+                total = 0;                      
+            } else {                                
+                var total = userData.nr1 +  userData.nr2 +  userData.nr3 +  userData.nr4;   // get the total sum when userData object is passed
+            } 
+            
+            ctx.textBaseline = "hanging";
+            ctx.textAlign = "center";
+            ctx.font = "25px Arial";
+                // if ther's no value (empty string) this makes sure ther will be line on the place of the text
+            ctx.fillText(userData.name1 == "" ? "-" : userData.name1, 220, 460);
+            ctx.fillText(userData.name2 == "" ? "-" : userData.name2, 410, 460);
+            ctx.fillText(userData.name3 == "" ? "-" : userData.name3, 590, 460);
+            ctx.fillText(userData.name4 == "" ? "-" : userData.name4, 770, 460);
+            ctx.restore();
+        
+          // draw percent measure column
+            function drawColumn(x, y, bgColor, val, total) {
+                ctx.save();
+                var percent = (val / total) * 100;
+                if (!percent) percent = 0;
+                var columnPercent = (400 / 100) * percent;
+                var columnStart = 50 + (400 - columnPercent);
+                
+                ctx.shadowColor = "black";
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = -1;
+                ctx.shadowBlur = 5;
+                
+                ctx.beginPath();
+                ctx.fillStyle = bgColor;
+                ctx.rect(x - 70, columnStart + 1, 140, columnPercent - 3);
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+                
+                ctx.fillStyle = "white";
+                ctx.font = "bold 20px  Arial"
+                ctx.textAlign = "center";
+                ctx.fillText(percent.toFixed(2) + "%", x, columnStart - 5)
+            }
+            
+            drawColumn(220, 460, "#86cd56", userData.nr1, total);
+            drawColumn(410, 460, "#ddb478", userData.nr2, total);
+            drawColumn(590, 460, "#78d7dd", userData.nr3, total);
+            drawColumn(770, 460, "#c891df", userData.nr4, total);
+        }
+        drawCanvas();
+    })();
+    &lt;/script&gt;
+    
+        </pre>
+        </details>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<hr>    
+<!------------------------------------------------------------------------------------------------------------------------->      
+<h4><u> Walking Man </u></h4>
+    <canvas id="walkingMan" style="border:solid 3px white; display:block; margin:auto;"></canvas>
+<script>
+    (function() {
+        var ctx = document.getElementById("walkingMan").getContext("2d");
+        var img = new Image();
+        img.src = "player_big.png";
+        var spriteW = 48;
+        var spriteH = 60;
+        img.addEventListener("load", (e) => {
+            var cycle = 0;
+            setInterval(() => {
+                ctx.clearRect(0, 0, spriteW, spriteH);
+                ctx.drawImage(img, cycle * spriteW, 0, spriteW, spriteH, 0, 0, spriteW, spriteH);
+                cycle = (cycle + 1) % 8;            // 8 sprites only the 9th and the 10th sprites are not shown
+            }, 120);
+        });
+    })();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="walkingMan" style="border:solid 3px white; display:block; margin:auto;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    (function() {
+        var ctx = document.getElementById("walkingMan").getContext("2d");
+        var img = new Image();
+        img.src = "player_big.png";
+        var spriteW = 48;
+        var spriteH = 60;
+        img.addEventListener("load", (e) =&lt; {
+            var cycle = 0;
+            setInterval(() =&lt; {
+                ctx.clearRect(0, 0, spriteW, spriteH);
+                ctx.drawImage(img, cycle * spriteW, 0, spriteW, spriteH, 0, 0, spriteW, spriteH);
+                cycle = (cycle + 1) % 8;            // 8 sprites only the 9th and the 10th sprites are not shown
+            }, 120);
+        });
+    })();
+&lt;/script&gt;     
+        </pre>
+        </details>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<br><br><br><br><br><br><br><br>   
+
+</body>
+</html>

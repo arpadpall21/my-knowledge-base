@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> File Descriptors </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> File Descriptors (ver 3.4.1) </h1>
+    <p> Updated ( 2019-09-24 / 2020-06-27)</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">File System></a> File Descriptors  
+    </p>
+<table class="table">
+<caption> System Flags (file descriptor permission) </caption>
+    <tr>
+        <th style="width:10%;"> Flag </th>
+        <th> Data manipulation </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> a </td>
+        <td> append </td>
+        <td> open file for appending data to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> ax </td>
+        <td> append </td>
+        <td> creates a new file and appends the passed datas to it (fails if the file exist) </td>
+    </tr>
+    <tr>
+        <td> a+ </td>
+        <td> read and append </td>
+        <td> open file for reading and appending datas to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> ax </td>
+        <td> read and append </td>
+        <td> creates a new file for reading and appending datas to it (fails if the file exist) </td>
+    </tr>
+    <tr>
+        <td> as </td>
+        <td> append (synchronous) </td>
+        <td> open file for appending data to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> as+ </td>
+        <td> read and append (synchronous) </td>
+        <td>  open file for reading and appending datas to its content (creates a new file if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> r </td>
+        <td> read </td>
+        <td> open existing file for reading (fails if the file does not exist) </td>
+    </tr>
+    <tr>
+        <td> r+ </td>
+        <td> read and write </td>
+        <td> open existing file for reading and writing (fails if the file does not exist) </td>
+    </tr>
+    <tr>
+        <td> rs+ </td>
+        <td> read and write (synchronous) </td>
+        <td> open existing file for reading and writing (fails if the file does not exist) </td>
+    </tr>
+    <tr>
+        <td> w </td>
+        <td> write </td>
+        <td> open file for writing (existing file will be truncated, a new file will be crated if it does not exist) </td>
+    </tr>    
+    <tr>
+        <td> wx </td>
+        <td> write </td>
+        <td> creates a new file for writing (file content will be truncated, fails if the file exist) </td>
+    </tr>
+    <tr>
+        <td> w+ </td>
+        <td> read and write </td>
+        <td> open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist) </td>
+    </tr>
+    <tr>
+        <td> wx+ </td>
+        <td> read and write </td>
+        <td> creates a new file for reading and writing (file content will be truncated, fails if the file exist) </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> File Descriptors </caption>
+    <tr>
+        <th> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.open(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                    <p> Default: <mark>r</mark> </p>
+                    <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                    <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                    <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                    <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                    <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                    <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                    <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                    <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                    <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                    <p> <mark>wx+</mark> - read and write (creates a new file for reading and writing (file content will be truncated, fails if the file exist))</p>
+                </div></i>, <i class="openable">mode:nr<div>
+                    <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                    <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                    <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                    <p> <mark>7</mark> - read, write, and execute </p>
+                    <p> <mark>6</mark> - read and write </p>
+                    <p> <mark>5</mark> - read and execute </p>
+                    <p> <mark>4</mark> - read only </p>
+                    <p> <mark>3</mark> - write and execute </p>
+                    <p> <mark>2</mark> - write only </p>
+                    <p> <mark>1</mark> - execute only </p>
+                    <p> <mark>0</mark> - no permission </p>
+                </div></i>, <strong>fn(err, fd)</strong>)        
+        </td>
+        <td> 
+            - asynchronously allocates a new file descriptor (<i>mode</i> argument <u>works only when a new file is created</u>) (LINUX <mark>open()</mark>) <br>
+            - the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved on Windows
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span><i class="fab fa-node-js"></i> 11.1.0 <i>flag:str|nr</i> optional (default 'r') </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>fs</strong>.openSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                <p> Default: <mark>r</mark> </p>
+                <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx+</mark> - read and write </p>
+            </div></i>, <i class="openable">mode:nr<div>
+                <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - synchronously allocates and returns a new file descriptor (<i>mode</i> argument <u>works only when a new file is created</u>) (LINUX <mark>open()</mark>) <br>
+            - the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved in Windows
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+                <span><i class="fab fa-node-js"></i> 11.1.0 <i>flag:str|nr</i> optional (default 'r') </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.close(<strong>fd:nr</strong>, <strong>fn(err)</strong>) </td>
+        <td> asynchronously closes the passed file descriptor (LINUX <mark>close()</mark>)
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.0.2 </span>
+                <span><i class="fab fa-node-js"></i> 7.0.0 <strong>fn(err)</strong> required </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>fs</strong>.closeSync(<strong>fd:nr</strong>) </td>
+        <td> synchronously closes the passed file descriptor (LINUX <mark>close()</mark>)
+            <span id="browserSupport" title="updated : 2019-09-23">
+                <span><i class="fab fa-node-js"></i> 0.1.21 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - file descriptors are basically streams (channels) connected to a file or process </p>
+    <p> - Windows and POSIX systems uses different ways to work with file descriptors, however Node.js abstracts this difference for us, so there is no syntax difference when working from a node process </p> 
+    <p> - operating systems limit the number of file descriptors (<mark>1024</mark>), so it is <u>important to close file descriptors</u> when we have done working with the file </p>
+<h2 style="color:darkblue;"><u> The <mark>open()</mark> / <mark>openSync()</mark> / <mark>close()</mark> / <mark>closeSync()</mark> methods </u></h2>
+    <pre class="syntax">
+SYNTAX :    <strong>fs</strong>.open(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                <p> Default: <mark>r</mark> </p>
+                <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx+</mark> - read and write (creates a new file for reading and writing (file content will be truncated, fails if the file exist))</p>            </div></i>, <i class="openable">mode:nr<div>
+                <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err, fd)</strong>)          // asynchronously allocates a new file descriptor (<i>mode</i> argument <u>works only when a new file is created</u>) (LINUX <mark>open()</mark>)
+                                                                                          the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved on Windows   
+                                                                                          
+            <strong>fs</strong>.openSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">flag:str|nr<div>
+                <p> Default: <mark>r</mark> </p>
+                <p> <mark>a</mark> - append (open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - append - (creates a new file and appends the passed datas to it (fails if the file exist)) </p>
+                <p> <mark>a+</mark> - read and append (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>ax</mark> - read and append (creates a new file for reading and appending datas to it (fails if the file exist)) </p>
+                <p> <mark>as</mark> - append (synchronous) open file for appending data to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>as+</mark> - read and append (synchronous) (open file for reading and appending datas to its content (creates a new file if it does not exist)) </p>
+                <p> <mark>r</mark> - read (open existing file for reading (fails if the file does not exist)) </p>
+                <p> <mark>r+</mark> - read and write (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>rs+</mark> - read and write (synchronous) (open existing file for reading and writing (fails if the file does not exist)) </p>
+                <p> <mark>w</mark> - write (open file for writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+                <p> <mark>wx</mark> - write (creates a new file for writing (file content will be truncated, fails if the file exist)) </p>
+                <p> <mark>w+</mark> - read and write (open file for reading and writing (existing file will be truncated, a new file will be crated if it does not exist)) </p>
+<p> <mark>wx+</mark> - read and write (creates a new file for reading and writing (file content will be truncated, fails if the file exist))</p>            </div></i>, <i class="openable">mode:nr<div>
+                <p> Default: <mark>0o666</mark> (read write) <u>this option works only when a new file is created</u> </p>
+                <p> - on Windows only <mark>0o666</mark> (read write) and <mark>0o400</mark> can be used </p>
+                <p> - linux file access mechanism used (ex: <mark>744</mark> = owner has full permission but the gropu and others can read only) </p>
+                <p> <mark>7</mark> - read, write, and execute </p>
+                <p> <mark>6</mark> - read and write </p>
+                <p> <mark>5</mark> - read and execute </p>
+                <p> <mark>4</mark> - read only </p>
+                <p> <mark>3</mark> - write and execute </p>
+                <p> <mark>2</mark> - write only </p>
+                <p> <mark>1</mark> - execute only </p>
+                <p> <mark>0</mark> - no permission </p>
+            </div></i>)                   // synchronously allocates and returns a new file descriptor (<i>mode</i> argument <u>works only when a new file is created</u>) (LINUX <mark>open()</mark>)    
+                                                                                          the <mark>&lt;</mark> <mark>&gt;</mark> <mark>:</mark> <mark>"</mark> <mark>/</mark> <mark>\</mark> <mark>|</mark> <mark>?</mark> <mark>*</mark> characters are reserved in Windows
+                                                                                          
+            <strong>fs</strong>.close(<strong>fd:nr</strong>, <strong>fn(err)</strong>)                                                   // asynchronously closes the passed file descriptor (LINUX <mark>close()</mark>)    
+            <strong>fs</strong>.closeSync(<strong>fd:nr</strong>)                                                        // synchronously closes the passed file descriptor (LINUX <mark>close()</mark>)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const fs = require('fs');
+    
+// asynchronous -----------------------------------------------------------------------
+    fs.open('myTestFile.txt', 'r+', function(err, fd){                                 // file descriptor allocated to this file ('r+' = read and write and must be an existing file)    
+        if(err) console.log(err);                                                      // print eventual errors 
+        fs.write(fd, 'write this data', function(err){                                 // writing data to the file descriptor 
+            if(err) console.log(err);
+            fs.close(fd, (err) => {if(err) {console.log(err)} });                      // asynchronously closes the file descriptor (once the writing is finished)  
+        });
+    });
+    
+// synchronous ------------------------------------------------------------------------
+    var fd = fs.openSync('newFile.txt', 'ax', 0o400);                                  // file descriptor allocated to this file ('ax' = data will be appended and this file cannot be present in the directory)  
+                                                                                       // '0o400' (3rd argument) specifies that the file will be read-only // -! after the file descriptor is closed    // !! this works only if the file newly created by the method    
+    fs.writeSync(fd, 'write new data', 0, 'utf-8');                                    // synchronously write some data to the file descriptor   
+    
+    fs.closeSync(fd);                                                                  // closes the file descriptor (file descriptor does not references the'newFile.txt' after this)   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>open()</mark> / <mark>openSync()</mark> / <mark>close()</mark> / <mark>closeSync()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const fs = require('fs');
+    
+// asynchronous open method versions --------------------------------------------
+    fs.open('testFile1.txt', 'a', 0o400, function(err, fd){                      // the 'a' flag creates a new file or opens an existing one, data appended to a file  /  the '0o400' specifies that the file will be read-only (this flag has only effect if the file is newly created!)   
+        if (err) console.log( err );                                             // print eventual errors 
+        console.log( fd );
+        fs.write(fd, 'write this data--', 0, function(err, writtenSofar, data){  // write data to the newly created data (file is sitll writable while the file descriptor is open)   
+            if (err) console.log(err);
+            fs.close(fd, (err) => {if(err) console.log(err)});                   // close the file descriptor (after this the file is read-only)   
+        });
+    });
+    
+// synchronous open method version ----------------------------------------------
+    var fd1 = fs.openSync('testFile2.txt', 'r+');                                // the 'r+' flag opens the file for read and write operations (file must be an existing file) 
+    
+    var buffer = Buffer.alloc(100);
+    fs.readSync(fd1, buffer, 0, 100, 0);                                         // synchronously returned file descriptor references the file (read operation in this case)  
+    console.log( buffer.toString() );
+        
+    fs.closeSync(fd1);                                                           // closing the file descriptor (from this point file is not referenced by this file descriptor)   
+
+console.log( '-- end of module --' );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\01 open() openSync() close() closeSync() TEST> node main      
+        this is data from testFile2, cool he???                                  // -! console.log( buffer.toString() );
+        -- end of module --                                                      // operations are asynchronous after this 
+        3                                                                        // -! console.log( buffer.toString() );        // asynchronous file descriptor ID   
+    PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\01 open() openSync() close() closeSync() TEST>    
+    </pre>
+</details>
+    
+    
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST (empty) > </a></h2>
+</body>
+</html>

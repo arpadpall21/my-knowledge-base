@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> TEST </title>    
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script> 
+</head>
+<body>
+<h1> TEST </h1>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+    
+        
+<h4><u> function hoisting </u></h4>
+    <p id="funcHoist"></p>
+<script>
+    document.getElementById('funcHoist').innerHTML = "hoisted function = " + hoistFunc(4, 9);
+    
+    function hoistFunc(a, b) {                                          // function declared after initialization
+        return a + b;
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="funcHoist"&gt;&lt;/p&gt;
+&lt;script&gt;
+    document.getElementById('funcHoist').innerHTML = "hoisted function = " + hoistFunc(4, 9);
+    
+    function hoistFunc(a, b) {                                          // function declared after initialization
+        return a + b;
+    }
+&lt;/script&gt;
+        </pre>
+        </details>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> Self invoking function with local-global scopes </u></h4>
+    <p id="selfInvFunct_demo"></p>
+<script>
+    var globalVAR= "I'm a variable from the global scope";
+    (function () {
+        document.getElementById('selfInvFunct_demo').innerHTML = globalVAR; 
+        var localVAR = "I'm a variable from the local scope";
+    })();
+    
+    // document.getElementById('selfInvFunct_demo').innerHTML = localVAR;              // this throws an error because from the global scope local variables are not accessibles!
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="selfInvFunct_demo"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var globalVAR= "I'm a variable from the global scope";
+    (function () {
+        document.getElementById('selfInvFunct_demo').innerHTML = globalVAR; 
+        var localVAR = "I'm a variable from the local scope";
+    })();
+    
+    document.getElementById('selfInvFunct_demo').innerHTML = localVAR;              // this throws an erro because from the global scope local variables are not accessibles!
+&lt;/script&gt;
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> Using Function as Values and or Expressions </u></h4>
+    <p id="Func_value_expression"></p>
+<script>
+    function valueFunc(a, b) {
+        return a * b;
+    }
+    
+    var val_ue = valueFunc(2, 5);               // used as a value;
+    var expre_ssion = valueFunc(2, 5) * 3       // used as expression
+    
+    document.getElementById('Func_value_expression').innerHTML = 
+        "Function as a value = " + val_ue + "<br>" +
+        "Function as an expression = " + expre_ssion;
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="Func_value_expression"&gt;&lt;/p&gt;
+&lt;script&gt;
+    function valueFunc(a, b) {
+        return a * b;
+    }
+    
+    var val_ue = valueFunc(2, 5);               // used as a value;
+    var expre_ssion = valueFunc(2, 5) * 3       // used as expression
+    
+    document.getElementById('Func_value_expression').innerHTML = 
+        "Function as a value = " + val_ue + "&lt;br&gt;" +
+        "Function as an expression = " + expre_ssion;
+&lt;/script&gt;
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> the <mark>arguments + function to string </mark> Object </u></h4>
+    <p id="argu"></p>
+    <p id="argu.toString"></p>
+<script>
+(function() {
+    
+    function myFunction(a, b) {
+        arguments[2] = 10;                      // defined value to the 3rd argument
+        return (a + b) + arguments[2] + " || number of arguments = " + arguments.length;
+    }
+        
+    document.getElementById('argu').innerHTML = myFunction(2, 2, 2);
+    document.getElementById('argu.toString').innerHTML = myFunction.toString();
+})();   
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="argu"&gt;&lt;/p&gt;
+    &lt;p id="argu.toString"&gt;&lt;/p&gt;
+&lt;script&gt;
+(function() {
+    
+    function myFunction(a, b) {
+        arguments[2] = 10;                      // defined value to the 3rd argument
+        return (a + b) + arguments[2] + " || number of arguments = " + arguments.length;
+    }
+        
+    document.getElementById('argu').innerHTML = myFunction(2, 2, 2);
+    document.getElementById('argu.toString').innerHTML = myFunction.toString();
+    
+})();   
+&lt;/script&gt;
+    </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u><mark>toString()</mark> used on functions</u></h4>
+    <p id="printFunc"></p>
+<script>
+    function SoundSys(a, b) {
+        this.mark = a;
+        this.type = b;
+    }
+    
+    var creaTive = new SoundSys("creative", "lux-9");
+    var str_1 = new String('String Object');
+    
+        var i, creativeMemo = "", str_1Memo = "";
+        
+        for (i in creaTive) {
+            creativeMemo += creaTive[i] + " / ";
+        }
+    
+    document.getElementById('printFunc').innerHTML = 
+        creaTive.constructor + "<br>" +                         // constructor printed
+        str_1.constructor + "<br>" +
+        SoundSys.toString() + "<br>" +                          // function printed as a string                                                    
+        String.toString() + "<br>" + 
+        "----------------------------------------" + "<br>" +
+        creativeMemo;
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="printFunc"&gt;&lt;/p&gt;
+&lt;script&gt;
+    function SoundSys(a, b) {
+        this.mark = a;
+        this.type = b;
+    }
+    
+    var creaTive = new SoundSys("creative", "lux-9");
+    var str_1 = new String('String Object');
+    
+        var i, creativeMemo = "", str_1Memo = "";
+        
+        for (i in creaTive) {
+            creativeMemo += creaTive[i] + " / ";
+        }
+    
+    document.getElementById('printFunc').innerHTML = 
+        creaTive.constructor + "&lt;br&gt;" +                         // constructor printed
+        str_1.constructor + "&lt;br&gt;" +
+        SoundSys.toString() + "&lt;br&gt;" +                          // function printed as a string                                                    
+        String.toString() + "&lt;br&gt;" + 
+        "----------------------------------------" + "&lt;br&gt;" +
+        creativeMemo;
+&lt;/script&gt;
+    </pre>
+    </details>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> function missing parameters </u></h4>
+    <p id="manquantParametre"></p>
+<script>
+    function paramTest(a, b, c, d) {
+        if (d === undefined) {                          // default value set to the parameter "d" in case of "undefined"
+            d = "NON-declared";
+        }
+        return a + " / " + b + " / " + c + " / " + d;           
+    }
+    
+    document.getElementById('manquantParametre').innerHTML = paramTest("un", "deux");
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="manquantParametre"&gt;&lt;/p&gt;
+&lt;script&gt;
+    function paramTest(a, b, c, d) {
+        if (d === undefined) {                          // default value set to the parameter "d" in case of "undefined"
+            d = "NON-declared";
+        }
+        return a + " / " + b + " / " + c + " / " + d;           
+    }
+    
+    document.getElementById('manquantParametre').innerHTML = paramTest("un", "deux");
+&lt;/script&gt;
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> find maximum value function</u></h4>
+    <p id="findMax"></p>
+<script>
+    function findMax() {
+        var max = -Infinity;                                // we set the lowest possible number in order to be able to check very low number as well
+        for (var i = 0; i < arguments.length; i++) {
+            if (arguments[i] > max) {                       // this condition is fires only if the argument is bigger the "max"
+                max = arguments[i];
+            }
+        }
+        return max;
+    }
+    
+    document.getElementById('findMax').innerHTML = "find the highest value function = " + findMax(4, 74, 10, -41, 2);
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="findMax"&gt;&lt;/p&gt;
+&lt;script>
+    function findMax() {
+        var max = -Infinity;                                // we set the lowest possible number in order to be able to check very low number as well
+        for (var i = 0; i &lt; arguments.length; i++) {
+            if (arguments[i] &gt; max) {                       // this condition is fires only if the argument is bigger the "max"
+                max = arguments[i];
+            }
+        }
+        return max;
+    }
+    
+    document.getElementById('findMax').innerHTML = "find the highest value function = " + findMax(4, 74, 10, -41, 2);
+&lt;/script&gt;
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------------------------------------>
+<hr>
+<h4><u> window Ojbect with functions </u></h4>
+    <p id="scopeTest"></p>
+<script>
+    function passArg(a, b) {
+        return a + " " + b;
+    }
+    
+    window.document.getElementById('scopeTest').innerHTML = window.passArg("kicsi", "kutya");
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="scopeTest"&gt;&lt;/p&gt;
+&lt;script&gt;
+    function passArg(a, b) {
+        return a + " " + b;
+    }
+    
+    window.document.getElementById('scopeTest').innerHTML = window.passArg("kicsi", "kutya");
+&lt;/script&gt;
+    </pre>
+    </details>
+<!-------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> <mark>call()</mark> method practice </u></h4>    
+    <p id="callMethod"></p>
+<script>
+    var me = {
+        firstName:"Arpad",
+        lastName:"Pall",
+        age:32,
+        fullData:function() {
+            return this.lastName + " " + this.firstName + " : " + this.age + " years old";
+        }
+    };
+    
+    var bircsy = {firstName:"Attila", lastName:"Biro", age:31};
+    var miki = {firstName:"Zsolt", lastName:"Miki", age:28};
+    
+    document.getElementById('callMethod').innerHTML = 
+        me.fullData() + "<br>" +
+        me.fullData.call(bircsy) + "<br>" +
+        me.fullData.call(miki);
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &tl;p id="callMethod"&gl;&tl;/p&gl;
+&tl;script&gl;
+    var me = {
+        firstName:"Arpad",
+        lastName:"Pall",
+        age:32,
+        fullData:function() {
+            return this.lastName + " " + this.firstName + " : " + this.age + " years old";
+        }
+    };
+    
+    var bircsy = {firstName:"Attila", lastName:"Biro", age:31};
+    var miki = {firstName:"Zsolt", lastName:"Miki", age:28};
+    
+    document.getElementById('callMethod').innerHTML = 
+        me.fullData() + "&lt;br&gt;" +
+        me.fullData.call(bircsy) + "&lt;br&gt;" +
+        me.fullData.call(miki);
+&lt;/script&gt;
+    </pre>
+    </details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> <mark>apply()</mark> method with the <mark>Math</mark> object </u></h4>
+    <p id="applyMethod"></p>
+<script>
+(function() {
+    var myArray = [1.4, 3.4, 5.4, 8, 9, 3,];
+    
+    document.getElementById('applyMethod').innerHTML = 
+        "highest value is = " + Math.max.apply(null, myArray);          // we set the first argument to "null" because we don't have a target object
+                                                                        // the "max()" method doesn't accept any arrays that's why we need the "apply()" method here
+})();    
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="applyMethod"&gt;&lt;/p&gt;
+&lt;script&gt;
+(function() {
+    var myArray = [1.4, 3.4, 5.4, 8, 9, 3,];
+    
+    document.getElementById('applyMethod').innerHTML = 
+        "highest value is = " + Math.max.apply(null, myArray);          // we set the first argument to "null" because we don't have a target object
+                                                                        // the "max()" method doesn't accept any arrays that's why we need the "apply()" method here
+})();    
+&lt;/script&gt;
+    </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> the <mark>call()</mark> and <mark>apply()</mark> performing the same task </u></h4>
+    <p id="call_apply"></p>
+<script>
+    var mici_Cat = {firColor:"white",
+                   eyeColor:"green",
+                   catDescription:function() {
+                      return arguments[0] + " is a " + this.firColor + " cat with " + this.eyeColor + " eyes it is " +
+                          arguments[1] + " " + arguments[2] + " and " + arguments[3] + ".";
+                   }};
+    var pusy_Cat = {firColor:"black and gray", eyeColor:"black"};
+    var mittens_Cat = {firColor:"yellow and white", eyeColor:"chestnut"};
+    
+    document.getElementById('call_apply').innerHTML =
+        mici_Cat.catDescription("Mici", "nice", "fury", "soft") + "<br>" +
+        mici_Cat.catDescription.call(pusy_Cat, "Pusy", "likable", "nice to touch", "puffy") + "<br>" +
+        mici_Cat.catDescription.apply(mittens_Cat, ["Mittens", "soft", "soft", "soft"]);
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;p id="call_apply"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var mici_Cat = {firColor:"white",
+                   eyeColor:"green",
+                   catDescription:function() {
+                      return arguments[0] + " is a " + this.firColor + " cat with " + this.eyeColor + " eyes it is " +
+                          arguments[1] + " " + arguments[2] + " and " + arguments[3] + ".";
+                   }};
+    var pusy_Cat = {firColor:"black and gray", eyeColor:"black"};
+    var mittens_Cat = {firColor:"yellow and white", eyeColor:"chestnut"};
+    
+    document.getElementById('call_apply').innerHTML =
+        mici_Cat.catDescription("Mici", "nice", "fury", "soft") + "&lt;br&gt;" +
+        mici_Cat.catDescription.call(pusy_Cat, "Pusy", "likable", "nice to touch", "puffy") + "&lt;br&gt;" +
+        mici_Cat.catDescription.apply(mittens_Cat, ["Mittens", "soft", "soft", "soft"]);
+&lt;/script&gt;
+    </pre>
+    </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> function closures counters </u></h4>
+    <button id="clickMe"> Count </button> <button id="clickMe_check"> Count 2 </button><br>
+    <span id="funcClosures"> 0 </span>
+    <span id="funcClosures_check"> 0 </span>
+<script>
+(function() {
+    var count = 0;
+    var countCheck = count;
+        
+    document.getElementById('clickMe').addEventListener('click', countFunc);   
+    function countFunc() {
+        count += 1;
+        document.getElementById('funcClosures').innerHTML = count;
+    }
+
+    document.getElementById('clickMe_check').addEventListener('click', checkFunc);
+    function checkFunc() { 
+        countCheck ++;
+        document.getElementById('funcClosures_check').innerHTML = countCheck;
+    }
+})();
+    count = 41;             // this won't work because this variable is shielded by a closure!
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;button id="clickMe"&gt; Count &lt;/button&gt; &lt;button id="clickMe_check"&gt; Count 2 &lt;/button&gt;&lt;br&gt;
+    &lt;span id="funcClosures"&gt; 0 &lt;/span&gt;
+    &lt;span id="funcClosures_check"&gt; 0 &lt;/span&gt;
+&lt;script&gt;
+(function() {
+    var count = 0;
+    var countCheck = count;
+        
+    document.getElementById('clickMe').addEventListener('click', countFunc);   
+    function countFunc() {
+        count += 1;
+        document.getElementById('funcClosures').innerHTML = count;
+    }
+
+    document.getElementById('clickMe_check').addEventListener('click', checkFunc);
+    function checkFunc() { 
+        countCheck ++;
+        document.getElementById('funcClosures_check').innerHTML = countCheck;
+    }
+})();
+    count = 41;             // this won't work because this variable is shielded by a closure!
+&lt;/script&gt;
+    </pre>
+    </details>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> variable mutation test = <b>variables are not mutable!</b></u></h4>
+    <button onclick="count_A()"> Count </button> <span id="counter-A-print"> - </span><br>
+    <button onclick="count_B()"> Check Counter </button> <span id="counter-B-print"> - </span><br>
+    <button onclick="count_C()"> Clone Counter </button> <span id="counter-C-print"> - </span><br>
+<script>
+    var counterMemory = 0;
+    
+    var counterMemory_Clone = counterMemory;                        // this variable has its own value it is not mutated!
+    
+    function count_A() {
+        counterMemory ++;
+        document.getElementById('counter-A-print').innerHTML = counterMemory;
+    }
+    function count_B() {
+        document.getElementById('counter-B-print').innerHTML = counterMemory;
+    }
+    
+    function count_C() {                                                                
+        document.getElementById('counter-C-print').innerHTML = counterMemory_Clone;     
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    
+    var cont_A = "original Value";
+    var cont_B = cont_A;
+        cont_A = "modified Value";
+    
+    console.log(cont_B);                        // retunrs "original Value" = (still contains the original value) variables are NOT mutable
+    
+    var testObj = {prop:"test_value_ORIGINAL"};
+    var testObj_Clone = testObj;
+        testObj.prop = "test_value_MODIFIED";
+    
+    console.log(testObj_Clone.prop);            // retunrs "test_value_MODIFIED" = (clone object containes the updated value) objecta are mutable
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;button onclick="count_A()"&gt; Count &lt;/button&gt; &lt;span id="counter-A-print"&gt; - &lt;/span&gt;&lt;br&gt;
+    &lt;button onclick="count_B()"&gt; Check Counter &lt;/button&gt; &lt;span id="counter-B-print"&gt; - &lt;/span&gt;&lt;br&gt;
+    &lt;button onclick="count_C()"&gt; Clone Counter &lt;/button&gt; &lt;span id="counter-C-print"&gt; - &lt;/span&gt;&lt;br&gt;
+&lt;script&gt;
+    var counterMemory = 0;
+    
+    var counterMemory_Clone = counterMemory;                        // this variable has its own value it is not mutated!
+    
+    function count_A() {
+        counterMemory ++;
+        document.getElementById('counter-A-print').innerHTML = counterMemory;
+    }
+    function count_B() {
+        document.getElementById('counter-B-print').innerHTML = counterMemory;
+    }
+    
+    function count_C() {                                                                
+        document.getElementById('counter-C-print').innerHTML = counterMemory_Clone;     
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    
+    var cont_A = "original Value";
+    var cont_B = cont_A;
+        cont_A = "modified Value";
+    
+    console.log(cont_B);                        // retunrs "original Value" = (still contains the original value) variables are NOT mutable
+    
+    var testObj = {prop:"test_value_ORIGINAL"};
+    var testObj_Clone = testObj;
+        testObj.prop = "test_value_MODIFIED";
+    
+    console.log(testObj_Clone.prop);            // retunrs "test_value_MODIFIED" = (clone object containes the updated value) objecta are mutable
+&lt;/script&gt;
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4><u> extracting function from an object </u></h4>  
+    <p> - a function basically is a global object's method (<mark>window</mark>.<i>method</i>) </p>
+    <p> - a function in an Object belongs to that object, but you can extract and apply on the global scope easily</p>
+    <p id="extract_demo"></p>
+<script>
+    var potato = {localFunc:function(){return "Executed"}};
+    potato.localFunc();                                     // returns "Executed"
+    // locaFunc();                                          // this would not work because this method belongs to the "potato" object therefore this object can use it ONLY!
+    var extractFunction = potato.localFunc;                 // extracting the function from the local object
+    extractFunction();                                      // returns "Executed" (this is basically "window.extractFunction()")
+    
+    
+    document.getElementById('extract_demo').innerHTML =
+        " Original Object method = " + potato.localFunc() + "<br>" +
+        " Extracted function executed in the global scope = " + extractFunction();
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+     &lt;p id="extract_demo"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var potato = {localFunc:function(){return "Executed"}};
+    potato.localFunc();                                     // returns "Executed"
+    // locaFunc();                                          // this would not work because this method belongs to the "potato" object therefore this object can use it ONLY!
+    var extractFunction = potato.localFunc;                 // extracting the function from the local object
+    extractFunction();                                      // returns "Executed" (this is basically "window.extractFunction()")
+    
+    
+    document.getElementById('extract_demo').innerHTML =
+        " Original Object method = " + potato.localFunc() + "&lt;br&gt;" +
+        " Extracted function executed in the global scope = " + extractFunction();
+&lt;/script&gt;
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------------------------------------------------------>
+<hr>
+<h2><u> the <mark>bind()</mark> method test </u></h2>
+    <p id="bind_print"></p>
+<script>
+"use strict";
+// object literal
+    var formula = {a:25, b:41, c:11, sum:function(){return this.a + this.b + this.c;}};
+    
+// global object properties (variables)
+    var a = 10;
+    var b = 5;
+    var c = 20;
+    
+// bind the object's method to the global scope's properties 
+    var addition = formula.sum;                         // extracting and storing the object's function 
+    var readyOperation = addition.bind(window);         // bind the function to the object (bind "formula" object's method to the "window" object (global scope)) 
+    
+// print
+    document.getElementById('bind_print').innerHTML = readyOperation();            // execute the prestored formula
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="bind_print"&gt;&lt;/p&gt;
+&lt;script&gt;
+"use strict";
+// object literal
+    var formula = {a:25, b:41, c:11, sum:function(){return this.a + this.b + this.c;}};
+    
+// global object properties (variables)
+    var a = 10;
+    var b = 5;
+    var c = 20;
+    
+// bind the object's method to the global scope's properties 
+    var addition = formula.sum;                         // extracting and storing the object's function 
+    var readyOperation = addition.bind(window);         // bind the function to the object (bind "formula" object's method to the "window" object (global scope)) 
+    
+// print
+    document.getElementById('bind_print').innerHTML = readyOperation();            // execute the prestored formula
+&lt;/script&gt;
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2><u> another <mark>bind()</mark> method test </u></h2>
+    <p id="bind_print_2"></p>
+<script>
+// create a function (this function is the global object's method (window.average()))
+    function average (xx, zz) {                             // the 'xx' an 'zz' can be passed to the function manualy when called
+        return (this.a + this.b + this.c + xx + zz) / 5;    // the "this" needs to be set for later use (here it will be the global object "window")
+    }
+
+// create global object properties (variables)
+    var a = 41;
+    var b = 23;
+    var c = 78;
+
+// creating objects
+    var numberCollection = {a:21, b:83, c:27};
+    var numberCollection_2 = {a:87, b:26, c:44};
+    
+// bind the global method (function) to the objects and prestore them
+    var operation = average.bind(numberCollection, 45, 63);                 // 2 arguments passed to the function
+    var operation_2 = average.bind(numberCollection_2, 84, 14); 
+    
+// print
+    document.getElementById('bind_print_2').innerHTML = 
+        "call global function on global properties = " + average(15, 45) + "<br>" +
+        "binded_1 execution = " + operation() + "<br>" +
+        "binded_2 execution = " + operation_2();
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="bind_print_2"&gt;&lt;/p&gt;
+&lt;script&gt;
+// create a function (this function is the global object's method (window.average()))
+    function average (xx, zz) {                             // the 'xx' an 'zz' can be passed to the function manualy when called
+        return (this.a + this.b + this.c + xx + zz) / 5;    // the "this" needs to be set for later use (here it will be the global object "window")
+    }
+
+// create global object properties (variables)
+    var a = 41;
+    var b = 23;
+    var c = 78;
+
+// creating objects
+    var numberCollection = {a:21, b:83, c:27};
+    var numberCollection_2 = {a:87, b:26, c:44};
+    
+// bind the global method (function) to the objects and prestore them
+    var operation = average.bind(numberCollection, 45, 63);                 // 2 arguments passed to the function
+    var operation_2 = average.bind(numberCollection_2, 84, 14); 
+    
+// print
+    document.getElementById('bind_print_2').innerHTML = 
+        "call global function on global properties = " + average(15, 45) + "&lt;br&gt;" +
+        "binded_1 execution = " + operation() + "&lt;br&gt;" +
+        "binded_2 execution = " + operation_2();
+&lt;/script&gt;
+        </pre>
+        </details>
+<!------------------------------------------------------------------------------------------------------------------------------>
+<hr>
+<h2><u> count cows, chickens, ping, horses and ducks with 3 digits pading (two different aproach</u></h2>            
+    <p id="farmInv"></p>
+<script>
+$(function(){
+    let printFarmInventory = function(cOws, chIckens) {
+        let cows = String(cOws);
+        while (cows.length < 3) {
+            cows = "0" + cows;
+        }
+        let chickens = String(chIckens);
+        while (chickens.length < 3) {
+            chickens = "0" + chickens;
+        }
+        document.getElementById("farmInv").innerHTML = 
+            cows + " : Cows" + "<br>" + 
+            chickens + " : Chickens";
+    }
+    printFarmInventory(4, 12);
+    
+// this would be a very long and boring code to countinue so Let's use a different approach --------------------
+// first we need a function which prints us the desired format for any given data
+    function countAnimals(name, number) {
+        let number_ = String(number);
+        while(number_.length < 3) {
+            number_ = "0" + number_;
+        }                                          
+        // return number_ + " : " + name;
+        $("#farmInv").after("<p>" + number_ + " : " + name + "</p>")
+    }
+// summerize in one function the data and call the "print" function one by one
+    let printInventory = function(cow, chicken, pig, horse, duck) {
+        countAnimals("Cows", cow);
+        countAnimals("Chickens", chicken);
+        countAnimals("Pigs", pig);
+        countAnimals("Horses", horse);
+        countAnimals("Ducks", duck);
+    }
+    
+    printInventory(5, 12, 6, 2, 22);        // call the function with de given data
+});
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+$(function(){
+    let printFarmInventory = function(cOws, chIckens) {
+        let cows = String(cOws);
+        while (cows.length < 3) {
+            cows = "0" + cows;
+        }
+        let chickens = String(chIckens);
+        while (chickens.length < 3) {
+            chickens = "0" + chickens;
+        }
+        document.getElementById("farmInv").innerHTML = 
+            cows + " : Cows" + "<br>" + 
+            chickens + " : Chickens";
+    }
+    printFarmInventory(4, 12);
+    
+// this would be a very long and boring code to countinue so Let's use a different approach --------------------
+// first we need a function which prints us the desired format for any given data
+    function countAnimals(name, number) {
+        let number_ = String(number);
+        while(number_.length &lt; 3) {
+            number_ = "0" + number_;
+        }                                          
+        // return number_ + " : " + name;
+        $("#farmInv").after("&lt;p&gt;" + number_ + " : " + name + "&lt;/p&gt;")
+    }
+// summerize in one function the data and call the "print" function one by one
+    let printInventory = function(cow, chicken, pig, horse, duck) {
+        countAnimals("Cows", cow);
+        countAnimals("Chickens", chicken);
+        countAnimals("Pigs", pig);
+        countAnimals("Horses", horse);
+        countAnimals("Ducks", duck);
+    }
+    
+    printInventory(5, 12, 6, 2, 22);        // call the function with de given data
+});
+&lt;/script&gt;    
+        </pre>
+        </details>        
+            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+</body>
+</html>

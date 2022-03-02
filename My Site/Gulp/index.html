@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Glup </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../Assets/stylesPages.css"> 
+    <script src="../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Gulp (ver 3.2) </h1>
+    <p> Updated ( 2019-12-18 )</p>
+    <p class="sitenav"> <a href="../index.html">MySite></a> Gulp </p>
+    <p class="subSite"><a href="Wildcards & Globs/index.html"> Wildcards & Globs > </a></p>
+    <p class="subSite"><a href="Vinyl (Virtual Gulp File)/index.html"> Vinyl (Gulp Virtual File) > </a></p>
+    <p class="subSite"><a href="SourceMaps/index.html"> Creating Sourcemaps with Gulp> </a></p>
+<table class="table">
+<caption> Gulp CLI (Command Line Interface) </caption>
+    <tr>
+        <th style="width:30%;"> Command / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> npm install --global gulp-cli </td>
+        <td> npm installs the Gulp Command Line Interface globally, (the <mark>gulp</mark> command will be recognized in the command line) </td>
+    </tr>
+    <tr>
+        <td> npm install gulp <small>--save</small> </td>
+        <td> npm installs the Gulp package in the current folder (updates the local <mark>package.json</mark> file with the gulp dependency (from NPM 5.0.0 <small>--save</small> flag not required)) </td>
+    </tr>
+    <tr>
+        <td> gulp <i>gulpTask ...</i> </td>
+        <td> runs the <mark>gulpfile.js</mark> file in the current directory as a Gulp process (if no gulpfile.js file found in the current directory the next direct parent folder is checked recursively) </td>
+    </tr>
+    <tr>
+        <td> gulp --help </td>
+        <td> returns the available gulp commands </td>
+    </tr>
+    <tr>
+        <td> gulp --tasks </td>
+        <td> returns the available gulp tasks </td>
+    </tr>
+    <tr>
+        <td> gulp --v </td>
+        <td> returns the Gulp CLI and Local versions </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Gulp Module </caption>
+    <tr>
+        <th style="width:30%;"> Command / Method  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> exports.<strong>clTaskName</strong> = <strong>taskName|taskFn|series()|parallel()</strong> </td>
+        <td> exported tasks can be called from the command line (after the <mark>gulp</mark> command) (<strong>clTaskName</strong> is a public task) </td>
+    </tr>
+    <tr>
+        <td> exports.default = <strong>taskName|taskFn|series()|parallel()</strong> </td>
+        <td> default task called if no task is specified after the 'gulp' command on the command line (Ex: <mark>$> gulp </mark>) </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.dest(<strong>dir:glob|fn</strong>, <i>option:obj</i>) </td>
+        <td> - creates and returns a transform stream for writing vinyl files to to file system (<strong>dir:glob</strong> can create directories) (this method cannot rename files) <br>
+             - method can be used at the end or in the pipeline (can create files in the middle of the pipeline) <br>
+             - once vinyls are written to the file system they are modified (properites are updated to match the created file) 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.lastRun(<strong>taskName</strong>, <i>floor:nr</i>) </td>
+        <td> - returns the time in milliseconds (from zero time), when the passed task was <u>successfully completed the last time</u> <br>
+             - if the passed task not yet ran or failed returns <mark>undefined</mark> <br>
+             - not precise (precision vary depending the FS), last digits can be floored by setting the <i>floor</i> argument to <mark>10</mark> | <mark>100</mark> | <mark>...</mark> 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.parallel(<strong>taskName|taskFn|series()|parallel(), ...</strong>) </td>
+        <td> - combines the passed tasks or orther <mark>series()</mark> or <mark>parallel()</mark> methods into a larger operation and executes them <u>simultaneously</u> (all at one) <u>when exported and called</u> <br>
+             - returns a function which is when called programatically executes the passed tasks    
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.series(<strong>taskName|taskFn|series()|parallel(), ...</strong>) </td>
+        <td> - combines the passed tasks or orther <mark>series()</mark> or <mark>parallel()</mark> methods into a larger operation and executes them <u>sequencially</u> (one by one) <u>when exported and called</u> <br>
+             - if one task fails all further tasks won't be called <br>
+             - returns a function which is when called programatically executes the passed tasks    
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.src(<strong>glob|[glob, ...]</strong>, <i>option:obj</i>) </td>
+        <td> - creates and returns a transform stream for reading files from the file system (the read file(s) transformed to vinyl file(s) internally) <br> 
+             - method can be used at the start or in the pipeline to add additional files to the pipeline <br>
+             - by default the byte order mark is removed from utf-8 encoded files <br>
+             - if the glob targets a directory only the directory itself is targeted (but not its content!) 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.symlink(<strong>dir:glob|fn</strong>, <i>option:obj</i>) </td>
+        <td> - creates symbolic-links to files described by the internal vinyls (<strong>dir:glob</strong> can create directories) (this method cannot rename files) <br>
+             - method can be used at the end or in the pipeline (can create symbolic-links in the middle of the pipeline) <br>
+             - once symbolic-links are created the vinyls are modified (properties are updated to match the created file, the <mark>contents</mark> property is set to null) <br>
+             - on windows directory links are created using junctions (by Default) [TESTED:2020-01-01 but I cannot confirm this] </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.task(<i>taskName:str</i>, <strong>taskFn|series()|parallel()</strong>) </td>
+        <td> <span style="color:orangered;" title="updated: 2020-01-08">[DEPRECATED but available AFTER Gulp 4.0.0]</span> defines a public task (the <i>taskName:str</i> is not required if we pass a referenced task function) (the defined task can be accessed by the <mark>series()</mark>, <mark>parallel()</mark> and <mark>lastRun()</mark> methods as well) </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.task('default', <strong>taskFn|series()|parallel()</strong>) </td>
+        <td> <span style="color:orangered;" title="updated: 2020-01-08">[DEPRECATED but available AFTER Gulp 4.0.0]</span> defines a default task (called if no task passed after the <mark>gulp</mark> command on the command line (ex: <mark>> gulp </mark>)) </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.task(<strong>taskName:str</strong>) </td>
+        <td> <span style="color:orangered;" title="updated: 2020-01-08">[DEPRECATED but available AFTER Gulp 4.0.0]</span> returns a taskWrapper function of the passed task <u>(the passed task must be previously registered with the <mark>task()</mark> method)</u> </td>
+    </tr>
+    <tr>
+        <td> <strong>gulp</strong>.watch(<strong>glob|[glob, ...]</strong>, <i>option:obj</i>, <i>taskFn|series()|parallel()</i>) </td>
+        <td> - watches for the targeted file(s) and directory(ies) and triggers the passed task(s) if the set event(s) occur <br>
+             - default events <mark>['add', 'unlink', 'change']</mark> available events (<mark>'add'</mark> = add file) (<mark>'addDir'</mark> = add directory) (<mark>'unlink'</mark> = delete file) (<mark>'unlinkDir'</mark> = delete directory) (<mark>'change'</mark> = any file modification) (<mark>'ready'</mark> = watcher is watching) (<mark>'error'</mark> = error) <br>
+             - if a direcotry is watched all its nested items are watched (By Default) <br>
+             - returns a <mark>chokidar</mark> instance which offers a more specific way to watch fs items (chokidar does not provide access to the Gulp task system) <br>
+             - <span style="color:orangered;">[TESTED: 2020-01-14 Gulp: v4.0.2]</span> works inconsistently (apparently this is a problem from Gulp: v4.0.0) </td>
+    </tr>
+    <tr>
+        <td colspan="2"> task properties (metadata) </td>
+    </tr>
+    <tr>
+        <td> <strong>task</strong>.description = <strong>description:str</strong> </td>
+        <td> sets a description for a public task when displaying available tasks with the <mark>gulp --tasks</mark> command </td>
+    </tr>
+    <tr>
+        <td> <strong>task</strong>.displayName = <strong>aliasName:str</strong> </td>
+        <td> sets an alias name for a public task when displaying available tasks with the <mark>gulp --tasks</mark> command </td>
+    </tr>
+    <tr>
+        <td> <strong>task</strong>.flags = <em>{<strong>flag:str, ...</strong>}</em> </td>
+        <td> sets flags (key value description style) for a public task when displaying available flags with the <mark>gulp --tasks</mark> command </td>
+    </tr>
+    <tr>
+        <td> <strong>task</strong>.name </td>
+        <td> returns the task's name in a string </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Task Wrapper Function returned by the <mark>task()</mark> method <span style="color:orangered;" title="updated: 2020-01-08">[DEPRECATED but available AFTER Gulp 4.0.0]</span> </td>
+    </tr>
+    <tr>
+        <td> <strong>taskWrapperFn</strong>.displayName </td>
+        <td> returns the name of the wrapped task </td>
+    </tr>
+    <tr>
+        <td> <strong>taskWrapperFn</strong>.unwrap() </td>
+        <td> returns the original task function of the wrapped task </td>
+    </tr>
+    <tr>
+        <td colspan="2"> chokidar instance returned by the <mark>watch()</mark> method </td>
+    </tr>
+    <tr>
+        <td> <strong>chokidar</strong>.add(<strong>glob|[glob, ...]</strong>) </td>
+        <td> adds new globes to watch </td>
+    </tr>
+    <tr>
+        <td> <strong>chokidar</strong>.close() </td>
+        <td> shuts down the watcher and allows the Node process to close </td>
+    </tr>
+    <tr>
+        <td> <strong>chokidar</strong>.on(<strong>eventName:str</strong>, <strong>listenerFn(path, stats)</strong>) </td>
+        <td> - registers a listener function which is called when the passed <strong>eventName</strong> occurs (used the same evetns as the <mark>watch()</mark> method) <br>
+             - if the <mark>'all'</mark> event is registered the listener arguments are <strong>(eventName, path, stats)</strong>  
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>chokidar</strong>.unwatch(<strong>glob|[glob, ...]</strong>) </td>
+        <td> removes globes from watching <span style="color:orangered;">[NOT WORKING TESTED: 2020-01-14 Gulp: v4.0.2]</span> </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Glob characters </caption>
+    <tr>
+        <th style="width:30%;"> Character </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> / </td>
+        <td> segment separator <u>(on all platforms)</u> </td>
+    </tr>
+    <tr>
+        <td> \\<strong>escapedChar</strong> </td>
+        <td> escape character <u>(on all platforms)</u> </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Windcard Characters </td>
+    </tr>
+    <tr>
+        <td> * </td>
+        <td> matches zero or more characters <u>between segment separators</u> </td>
+    </tr>
+    <tr>
+        <td> ** </td>
+        <td> matches zero or more characters <u>across segment separators</u> </td>
+    </tr>
+    <tr>
+        <td> !<strong>glob</strong> </td>
+        <td> removes the targeted path from a glob collection <u>(must follow at least one positive glob (<em>['<strong>glob</strong>', <small>..., </small>'</em>!<em><strong>glob</strong>']</em>)</u> </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Vinyl object </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> new Vinyl(<i>option:obj</i>) </td>
+        <td> creates a new vinyl file [NOT TESTED: 2020-01-05] <a href="https://gulpjs.com/docs/en/api/vinyl" target="_blank">gulp new Vinyl file [link]</a> </td>
+    </tr>
+    <tr>
+        <td> Vinyl.isVinyl(<strong>arg</strong>) </td>
+        <td> returns <mark>true</mark> if the passed argument is a Vinyl file, otherwise returns <mark>false</mark> </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.base </td>
+        <td> - gets and sets a base directory for the vinyl file (falls back to <mark>cwd</mark> property value if set to null or undefined) <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.basename </td>
+        <td> gets and sets the virtual filename (extension included) </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.clone(<small>{contents:<i>bol</i>}</small>) </td>
+        <td> clones a new instance of the virtual file (the new clone has its own content by default) </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.contents </td>
+        <td> gets or sets the content of the virtual file </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.cwd </td>
+        <td> - gets and sets the current working directory of the virtual file as a string <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform 
+             </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.dirname </td>
+        <td> - gets and sets the absolute directory path of the vinyl file <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform </td>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.extname </td>
+        <td> gets and sets the virtual file's extension </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.history </td>
+        <td> returns an Array of all added path values (the first value is the original path, the last is the current path) </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.inspect() </td>
+        <td> - returns a string representation of the virtual file <br>
+             - automatically called internally when we print vinyls with <mark>console.log</mark>     
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isBuffer() </td>
+        <td> returns <mark>true</mark> if the <mark>contents</mark> property value is a buffer </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isDirectory() </td>
+        <td> returns <mark>true</mark> if the virtual file represents a directory </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isNull() </td>
+        <td> returns <mark>true</mark> if the <mark>contents</mark> property value is null </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isStream() </td>
+        <td> returns <mark>true</mark> if the <mark>contents</mark> property value is a stream </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.isSymbolic() </td>
+        <td> returns <mark>true</mark> if the virtual file represents a symbolic link <span style="color:orangered;">[NOT WORKING returns <mark>false</mark> for a symbolic link TESTED: 2020-01-06]</span> </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.path </td>
+        <td> - gets and sets the absolute file path of the vinyl file <br>
+             - when set the <mark>/</mark> segment separator must be used, the set path is normalized for the current platform <u>(appends the set path to the <mark>history</mark> property)</u> 
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.relative </td>
+        <td> returns the relative path between the <mark>base</mark> and the <mark>path</mark> values </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.stat </td>
+        <td> gets or sets an <mark>fs.Stats</mark> instance of the virtual file </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.stem </td>
+        <td> gets and sets the virtual filename <u>(without extension)</u> </td>
+    </tr>
+    <tr>
+        <td> <strong>vinyl</strong>.symlink </td>
+        <td> gets and sets the relative path between the symbolic link and its linked file <span style="color:orangered">[NOT WORKING! TESTED: [2020-01-06] becuase vinyls do not recognize symbolic links in the first place (always returns <mark>null</mark>) </span> </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <p style="color:yellow;"> - the <mark>unlinkDir</mark> event is not triggered when using <mark>*</mark> (asterisk) glob [TESTED and reported on GitHub: 2020-01-14] </p>
+        <p style="color:yellow;"> - [TESTED: 2020-01-14] the <mark>watch()</mark> method works unreliable with globs! (does very unexpected things like sometimes targets sometimes doesn't items) </p>
+        <p> - <mark>gulp.registry()</mark> <a href="https://gulpjs.com/docs/en/api/registry" target="_blank">[link]</a> [NOT TESTED: 2020-01-14] </p>
+        <p> - <mark>gulp.tree()</mark> <a href="https://gulpjs.com/docs/en/api/tree" target="_blank">[link]</a> [NOT TESTED: 2020-01-14] </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://gulpjs.com/" target="_blank"> Gulp.com </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - Gulp Globs are <u>platform independent</u>, the <mark>/</mark> is the segment separator and the <mark>\\</mark> is the escape character </p>
+    <p> - running a <mark>gulpfile.js</mark> file with the <mark>gulp</mark> command is basically running a node process BUT <u>any asynchronous function is treaded as Gulp Task in it!</u> </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Gulp is a task runner (bundler), a Node.js framework designed to automatically run other gulp frameworks (Gulp plugins sholud always transform files) (like SASS compiler) </p>
+    <pre class="syntax">
+Gulp Basic Working Mechanism :     src(['someFile', 'someOtherFile'])                  // creates a transform stream for readign files from the file system and transforms them to vinyl files (virtual files)    
+                                   .pipe(<strong>gulpPlugin</strong>)                                   // vinyls are pipes to Gulp plugins what modifiy them according to the used Gulp plugin    
+                                   .pipe(dest('otherFolder'))                          // modified vinyl files are piped and transfomred to a normal file and written to the file system  
+                                                                                          <span style="color:orange;">each file is modified individually (so the number of files gets in the number of files gets out)</span>  
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> Gulp <mark>C</mark>ommand <mark>L</mark>ine <mark>I</mark>nterface (CLI) (set up Gulp for your projects) </u></h2>
+    <p> - first we need to have Node.js installed (obviously) then install the Gulp CLI and Gulp locally </p>
+    <p> - <u>Gulp CLI</u> (Command Line Interface) is a utility program which allows to runs Gulp from anywhere (the <mark>gulp</mark> command is recognized from your shell, it runs the <mark>gulpfile.js</mark> from the current directory) </p>
+    <p> - <u>Gulp (local)</u> is the Gulp module itself, required in the <mark>gulpfile.js</mark> file (this is a node process) </p>
+    <pre class="syntax">
+SYNTAX :    > npm install --global gulp-cli                                            // npm installs the Gulp Command Line Interface globally, (the <mark>gulp</mark> command will be recognized in the command line)    
+            > npm install gulp <small>--save</small>                                                  // npm installs the Gulp package in the current folder (updates the local <mark>package.json</mark> file with the gulp dependency (from NPM 5.0.0 <small>--save</small> flag not required))    
+            
+            > gulp <i>gulpTask ...</i>                                                        // runs the <mark>gulpfile.js</mark> file in the current directory as a Gulp process (if no gulpfile.js file found in the current directory the next direct parent folder is checked recursively)    
+            > gulp --help                                                              // returns the available gulp commands     
+            > gulp --tasks                                                             // returns the available gulp tasks   
+            > gulp --v                                                                 // returns the Gulp CLI and Local versions
+    </pre>
+    <pre class="cmd" style="margin-bottom:1px;">
+    > npm install --global gulp-cli                                                    // npm installs the Gulp Command Line Interface (globally)
+    > npm init                                                                         // initializes the 'package.json' file (walks you through the file creation) for the local project in the current directory    
+    > npm install gulp --save                                                          // npm installs the gulp module locally (in the current directory) 
+                                                                                         // creates the 'node_modules' folder (if necessary) and updates the 'package.json' file with the gulp dependency  (--save flag not required above NPM 5.0.0)    
+    > ni gulpfile.js                                                                   // creates a new 'gulpfile.js' 
+    > gulp --v
+        CLI version: 2.2.0                                                             // version info    
+        Local version: 4.0.2
+    > gulp                                                                             // runs the local 'gulpfile.js' file 
+    </pre>
+    <pre style="margin-top:1px;">
+// gulpfile.js ------------------------------------------------------------------------
+    const gulp = require('gulp');                                                      // requires the Gulp module  
+        // require other Gulp plugins ... 
+        
+    // RUN JavaScript code | Node.js code | Gulp plugin                                // this is basically a node.js process so any JavaScript and Node code runs in it 
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> Gulp Module </u></h2>
+<h2 style="color:darkblue;"><u>Gulp Tasks <mark>task()</mark> / <mark>series()</mark> / <mark>parallel()</mark> </u></h2>
+    <p> - a gulp task is basically an asynchronous JavaScript function, a function that accepts an error-first callback or a function that returns a promise, stream, event emitter, child process or observable </p>
+    <p> - <u>private tasks</u> are available only inside the gulp process | <u>public tasks</u> are exported, so they can be called from the command line after the <mark>gulp</mark> command </p>
+    <p> - when a gulp task function returns a promise, stream, child process, event emitter or observable they automatically signals the end of the asynchronous completition, but if we use an error-first callback style task <u>we must manually signal the end of the asynchronous task</u> otherwise an 'async incomplete' style warning message will be emitted and the task is considered not finished </p>
+<h3 style="color:darkblue;"><u> Gulp 4.0.0 or higher <mark>parallel()</mark> / <mark>series()</mark> [USE THIS] [2020-01-05]</u></h3>
+    <pre class="syntax">
+SYNTAX :    function <strong>taskName</strong>(){                                                       // gulp task (returns a asynchronous operation)
+                return <strong>promise | stream | childProcess | eventEmitter</strong>                  <span style="color:orange;">// the event must be emitted asynchronously if we return an event emitter instance</span>   
+            }
+            
+            function <strong>taskName</strong>(cb){                                                     // error-first callback style gulp task function (cb = callback function) 
+                cb(<i>arr</i>)                                                                <span style="color:orange;">// signals the completition of the task (asynchronous completition) (if an argument is passed it will be thrown and the gulp task fails)</span>    
+            }
+            
+            async function <strong>taskName</strong>() { }                                              // any asynchronous function considered as gulp task in a Gulp context <u>(throwing something in the function will fail the gulp task)</u>    
+            
+    <span style="color:lightgreen;">// task properties (metadata) -----------------------------------------------------</span>
+            <strong>task</strong>.name                                                                  // returns the task's name in a string 
+            <strong>task</strong>.displayName = <strong>aliasName:str</strong>                                           // sets an alias name for a public task when displaying available tasks with the <mark>gulp --tasks</mark> command    
+            <strong>task</strong>.description = <strong>description:str</strong>                                         // sets a description for a public task when displaying available tasks with the <mark>gulp --tasks</mark> command    
+            <strong>task</strong>.flags = <em>{<strong>flag:str, ...</strong>}</em>                                               // sets flags (key value description style) for a public task when displaying available flags with the <mark>gulp --tasks</mark> command    
+    
+    <span style="color:lightgreen;">// task composition ---------------------------------------------------------------</span>
+            <strong>gulp</strong>.parallel(<strong>taskName|taskFn|series()|parallel(), ...</strong>)                    // combines the passed tasks or orther <mark>series()</mark> or <mark>parallel()</mark> methods into a larger operation and executes them <u>simultaneously</u> (all at one) <u>when exported and called</u>    
+                                                                                          returns a function which is when called programatically executes the passed tasks    
+            <strong>gulp</strong>.series(<strong>taskName|taskFn|series()|parallel(), ...</strong>)                      // combines the passed tasks or orther <mark>series()</mark> or <mark>parallel()</mark> methods into a larger operation and executes them <u>sequencially</u> (one by one) <u>when exported and called</u>    
+                                                                                          if one task fails all further tasks won't be called
+                                                                                          returns a function which is when called programatically executes the passed tasks    
+            
+    <span style="color:lightgreen;">// exporting tasks ----------------------------------------------------------------</span>
+            exports.<strong>clTaskName</strong> = <strong>taskName|taskFn|series()|parallel()</strong>                   // exported tasks can be called from the command line (after the <mark>gulp</mark> command) (<strong>clTaskName</strong> is a public task)    
+            exports.default = <strong>taskName|taskFn|series()|parallel()</strong>                      // default task called if no task is specified after the 'gulp' command on the command line (Ex: <mark>> gulp </mark>)
+                - <strong>clTaskName</strong> : command line task name (public task name which is passed after the <mark>gulp</mark> command)
+    </pre>
+    <pre>
+    const {series, parallel, src} = require('gulp');
+    const {exec} = require('child_process');
+    const EventEmitter = require('events');
+    
+// gulp tasks -------------------------------------------------------------------------// considered private tasks untill not exported  
+    function task1() { return Promise.resolve(); }                                     // returns a promise 
+    
+    function task2() { return src('*'); }                                              // returns a stream 
+    
+    function task3() { return exec('date', {timeout:100}) }                            // returns a child process 
+    
+    function task4() {
+        var emitter = new EventEmitter();
+        setTimeout(() => emitter.emit('finish'));                                      // -! event must be emitted asynchronously    
+        return emitter;                                                                // returns an event emitter object 
+    }
+    
+    function task5(cb) { cb() };                                                       // error-first callback style gulp task function   
+    
+    async function task6() {};                                                         // any asynchronous function in Gulp context is considered as Gulp task 
+    
+// task properties (metadata) ---------------------------------------------------------
+    task1.name;                                                                        // -> 'task1'        // task name returned 
+    
+    task1.displayName = 'task_one';                                                    // name to display when printing available tasks on the command line ($ > gulp --tasks)   
+    task1.description = 'some task description';                                       // description to display when printing available tasks on the command line ($ > gulp --tasks)    
+    task1.flags = {flag1:'flag-val1', flag2:'flag-val2'};                              // flags (key value pair style description) to display when printing available tasks on the command line ($ > gulp --tasks)    
+    
+    exports.tasks = task1;                                                             // the above metadata is only for public tasks (obviously)
+     
+// exporting tasks (public tasks) -----------------------------------------------------// exported tasks ('inOrder', 'nested') are considered 'public task' (available on the command line) 
+    exports.default = parallel(task1, task2, task3, task4, task5, task6);              // all tasks are called simultaneously                             // -! called on CM > gulp          // default task called when no task is specified after the gulp command     
+    exports.inOrder = series(task1, task2, task3, task4, task5, task6);                // tasks are called sequencially                                   // -! called on CM > gulp inOrder   
+    exports.nested = series(parallel(task1, task2, task3), parallel(task4, task5, task6));  // combine and nest simultaneous and sequencial compositions  // -! called on CM > gulp nested   
+    
+// calling tasks programatically ------------------------------------------------------
+    parallel(task1, task2, task3)                                                      // programatically triggers tasks in parallel 
+    series(task1, task2, task3)                                                        // programatically triggers tasks in series 
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Error-first callback style Task TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    function task1(cb){                                                                // callback passed
+        console.log( 'task-1 called!' );
+        cb();                                                                          // this signals asynchronous completition  
+    }
+    
+    function task2(cb){
+        console.log( 'task-2 called!' );
+        // cb();                                                                       // a warning message emitted because the asynchronous completition is no signaled here 
+    }
+    
+    function task3(cb){
+        console.log( 'task-3 called!' );
+        cb(new Error('task-3 failed'));                                                // error is passed as first argument in the callback signaling the failure of this task   
+    }
+    
+    exports.task1 = task1;
+    exports.task2 = task2;
+    exports.task3 = task3;
+    
+    console.log( '-- end of module --' );    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\02 error-first callback style task TEST> gulp task1 task2                   // task1 task2 called    
+        -- end of module --
+        [19:26:18] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\02 error-first callback style task TEST\gulpfile.js
+        [19:26:18] Starting 'task1'...
+        [19:26:18] Starting 'task2'...
+        task-1 called!
+        [19:26:18] Finished 'task1' after 2.59 ms                                                                                               // -! task1 successfully finished 
+        task-2 called!
+        [19:26:18] The following tasks did not complete: task2                                                                                  // -! task2 failed because we did not signal the asynchronous completition    
+        [19:26:18] Did you forget to signal async completion?                                                                                   
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\02 error-first callback style task TEST> gulp task3                         // task3 called   
+        -- end of module --
+        [19:26:23] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\02 error-first callback style task TEST\gulpfile.js
+        [19:26:23] Starting 'task3'...
+        task-3 called!
+        [19:26:23] 'task3' errored after 1.73 ms                                                                                                // -! task3 failed because an error is passed as 1st argument in the callback function     
+        [19:26:23] Error: task-3 failed
+            at task3 (D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\02 error-first callback style task TEST\gulpfile.js:15:8)
+            at task3 (D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\node_modules\undertaker\lib\set-task.js:13:15)
+            at bound (domain.js:422:14)
+            at runBound (domain.js:435:12)
+            at asyncRunner (D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\node_modules\async-done\index.js:55:18)
+            at processTicksAndRejections (internal/process/task_queues.js:75:11)
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\02 error-first callback style task TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> async function as Gulp Task TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    async function gulpTask(){
+        console.log('async function gulp task called!');
+    }
+    
+    exports.default = gulpTask;    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\03 async function as gulp task test> gulp
+        [20:22:06] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\03 async function as gulp task test\gulpfile.js
+        [20:22:06] Starting 'default'...
+        async function gulp task called!
+        [20:22:06] Finished 'default' after 2.24 ms
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\03 async function as gulp task test>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> gulp task function returns a promise, stream, child process, event emitter TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src, series, parallel} = require('gulp');
+    const {exec} = require('child_process');
+    const {EventEmitter} = require('events');
+    
+// promise returned gulp task function ------------------------------------------------
+    function promiseTask(){
+        console.log( 'promise gulp task called!' );
+        return Promise.resolve(null);                                                  // resolved promise returned (rejected promise would fail the task)
+    }
+    
+// stream returned gulp task function -------------------------------------------------
+    function streamTask(){
+        console.log( 'stream gulp task called!' );
+        return src('*');                                                               // transform stream returned 
+    }
+    
+// child process returned gulp task function ------------------------------------------
+    function childProcessTask(){
+        console.log( 'child process gulp task called!' );
+        return exec('date', {timeout:1});                                              // child process returned
+    }
+    
+// event emitter returned gulp task function ------------------------------------------
+    function eventEmitterTask(){
+        console.log( 'event emitter gulp task called!' );
+        var myEvEmitter = new EventEmitter();
+        setTimeout(() => {myEvEmitter.emit('finish')}, 0);                             // -! event must be emitted asynchronously   
+        return myEvEmitter;                                                            // emitter object returned 
+    }
+    
+    exports.default = series(promiseTask, streamTask, childProcessTask, eventEmitterTask);    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\04 gulp task function returns promise stream child_process event_emitter TEST> gulp
+        [22:18:36] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\04 gulp task function returns promise stream child_process event_emitter TEST\gulpfile.js
+        [22:18:36] Starting 'default'...
+        [22:18:36] Starting 'promiseTask'...
+        promise gulp task called!
+        [22:18:36] Finished 'promiseTask' after 1.19 ms
+        [22:18:36] Starting 'streamTask'...
+        stream gulp task called!
+        [22:18:36] Finished 'streamTask' after 18 ms
+        [22:18:36] Starting 'childProcessTask'...
+        child process gulp task called!
+        [22:18:36] Finished 'childProcessTask' after 9.3 ms
+        [22:18:36] Starting 'eventEmitterTask'...
+        event emitter gulp task called!
+        [22:18:36] Finished 'eventEmitterTask' after 1.65 ms
+        [22:18:36] Finished 'default' after 33 ms
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\04 gulp task function returns promise stream child_process event_emitter TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>series()</mark> / <mark>parallel()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {series, parallel} = require('gulp');
+    
+    function task1(cb){
+        setTimeout(() => {
+            console.log('task1 finished!');
+            cb();
+        }, 1000);
+    }
+    
+    function task2(cb){
+        setTimeout(() => {
+            console.log('task2 finished!');
+            cb();
+        }, 1000);
+    }
+    
+    function task3(cb){
+        setTimeout(() => {
+            console.log('task3 finished!');
+            cb();
+        }, 1000);
+    }
+    
+    exports.ser = series(task1, task2, task3);                                         // executed sequentially (one by one)
+    exports.par = parallel(task1, task2, task3);                                       // executed simultaneously (all at one)    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\05 series() parallel() TEST> gulp ser
+        [19:33:17] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\05 series() parallel() TEST\gulpfile.js
+        [19:33:17] Starting 'ser'...
+        [19:33:17] Starting 'task1'...                                                 // -! tasks are called one by one
+        task1 finished!
+        [19:33:18] Finished 'task1' after 1 s
+        [19:33:18] Starting 'task2'...                                                 // -! tasks are called one by one
+        task2 finished!
+        [19:33:19] Finished 'task2' after 1 s
+        [19:33:19] Starting 'task3'...                                                 // -! tasks are called one by one
+        task3 finished!
+        [19:33:20] Finished 'task3' after 1 s
+        [19:33:20] Finished 'ser' after 3.01 s
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\05 series() parallel() TEST> gulp par
+        [19:33:24] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\05 series() parallel() TEST\gulpfile.js
+        [19:33:24] Starting 'par'...            
+        [19:33:24] Starting 'task1'...                                                 // -! all tasks are called simultaneously
+        [19:33:24] Starting 'task2'...                                                 // -! all tasks are called simultaneously
+        [19:33:24] Starting 'task3'...                                                 // -! all tasks are called simultaneously
+        task1 finished!
+        [19:33:25] Finished 'task1' after 1 s
+        task2 finished!
+        [19:33:25] Finished 'task2' after 1.01 s
+        task3 finished!
+        [19:33:25] Finished 'task3' after 1.01 s
+        [19:33:25] Finished 'par' after 1.01 s
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\05 series() parallel() TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>name</mark> / <mark>displayName</mark> / <mark>description</mark> / <mark>flags</mark> (task properties) TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    function testTask(){
+        return Promise.resolve();
+    }
+    
+    console.log( testTask.name );                                                      // -> 'testTask'
+    
+    testTask.displayName = 'alias task name'                                           // task name displayed when printing available tasks 
+    testTask.description = 'some description added to my task';                        // task description displayed when printing available tasks 
+    testTask.flags = {flag1:'flag1', flag2:'flag2'};                                   // task flags displayed when printing available tasks 
+    
+    exports.myTask = testTask;
+    exports.default = (cb) => {cb()};
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\07 name displayName description flags (task properties) TEST> gulp
+        testTask                                                                       // -! console.log( testTask.name )
+        [16:48:03] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\07 name displayName description flags (task properties) TEST\gulpfile.js
+        [16:48:03] Starting 'default'...
+        [16:48:03] Finished 'default' after 1.58 ms
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\07 name displayName description flags (task properties) TEST> gulp --tasks
+        [16:48:07] Tasks for D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\07 name displayName description flags (task properties) TEST\gulpfile.js
+        [16:48:07] ├── alias task name  some description added to my task              // -! aliace taskname and task description  
+        [16:48:07] │   flag1            …flag1                                         // -! task flags    
+        [16:48:07] │   flag2            …flag2
+        [16:48:07] └── default
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\07 name displayName description flags (task properties) TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h3 style="color:darkblue;"><u> Gulp 3.9.9 or before <mark>task()</mark> [DEPREDATED -> kept for backward compatibility] [2020-01-05]</u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>gulp</strong>.task(<i>taskName:str</i>, <strong>taskFn|series()|parallel()</strong>)                        // defines a public task (the <i>taskName:str</i> is not required if we pass a referenced task function) (the defined task can be accessed by the <mark>series()</mark>, <mark>parallel()</mark> and <mark>lastRun()</mark> methods as well)    
+            <strong>gulp</strong>.task('default', <strong>taskFn|series()|parallel()</strong>)                           // defines a default task (called if no task passed after the <mark>gulp</mark> command on the command line (ex: <mark>> gulp </mark>))
+            
+            <strong>gulp</strong>.task(<strong>taskName:str</strong>)                                                    // returns a taskWrapper function of the passed task <u>(the passed task must be previously registered with the <mark>task()</mark> method)</u>   
+            
+            <strong>taskWrapperFn</strong>.displayName                                                  // returns the name of the wrapped task 
+            <strong>taskWrapperFn</strong>.unwrap()                                                     // returns the original task function of the wrapped task    
+    </pre>
+    <pre>
+    const {task} = require('gulp');
+    
+    function prTask(cb){ console.log( 'private task called!' ); cb(); }
+    
+// task() method ----------------------------------------------------------------------
+    task('default', function(cb){ console.log('default task'); cb(); });               // defines the default task                          // -! CL > gulp   
+    
+    task('task1', (cb) => { cb() });                                                   // task name and function defined                    // -! CL > gulp task1
+    task('task2', prTask);                                                             // task name defined and task function referenced    // -! CL > gulp task2
+    task(prTask);                                                                      // uses the function reference as task name          // -! CL > gulp prTask
+    
+    task(function(cb){ cb() });                                                        // !! throws an Assertion Error because no task name is defined and the the task function is anonymous   
+ 
+  // task wrapper ---------------------------------------------------------------------
+    var taskWrapper = task('task1');                                                   // returns a task wrapper function of a PREVIOUSLY defined task
+    
+    taskWrapper.displayName;                                                           // -> 'task1'                    // task name 
+    taskWrapper.unwrap();                                                              // -> (cb) => { cb() }           // original task function 
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>task()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {task, parallel, series} = require('gulp');
+        
+// define task name for an unnamed function -------------------------------------------
+        task('task1', function(cb){             
+            console.log('task1 called!');
+            cb();
+        });
+        
+        try{
+            task(function(cb){                                                         // Assertion Error thrown, anonymous task function cannot be referenced 
+                console.log('task')
+                cb();
+            })
+        } catch(err) { 
+            console.log( err.message )
+        };
+        
+// named task function reference passed ----------------------------------------------- 
+        function privateTask1(){
+            console.log('task2 called!');
+            return Promise.resolve();
+        }
+        
+        task(privateTask1);                                                            // task function name passed as public task name          
+        task('task4', privateTask1);                                                   // custom task name assigned to a task function           
+        
+// define default taks ----------------------------------------------------------------
+        task('default', function(cb){
+            console.log( 'default task called!' );
+            cb();
+        })
+        
+// task composition TEST --------------------------------------------------------------
+        task('composed', parallel('task1', series('privateTask1')));  // composed tasks  
+        
+// task wrapper function --------------------------------------------------------------  
+        var task1Wrapper = task('task4');                                              // returns a wrapper function of a PREVIOUSLY registered task    
+        
+        console.log( task1Wrapper.displayName );                                       // -> 'task4'                   // task name 
+        console.log( task1Wrapper.unwrap() );                                          // -> privateTask1 function     // the original task function associated with the name 'task4'  
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\06 task() TEST> gulp task1 privateTask1 task4 default composed
+        Task name must be specified                                                    // -! Assert Error 
+        task4                                                                          // console.log( task1Wrapper.displayName );
+        [Function: privateTask1]                                                       // console.log( task1Wrapper.unwrap() );
+        [13:34:35] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\06 task() TEST\gulpfile.js
+        [13:34:35] Starting 'task1'...
+        [13:34:35] Starting 'privateTask1'...
+        [13:34:35] Starting 'task4'...
+        [13:34:35] Starting 'default'...
+        [13:34:35] Starting 'composed'...
+        task1 called!
+        [13:34:35] Finished 'task1' after 3.85 ms
+        task2 called!
+        task2 called!
+        default task called!
+        [13:34:35] Finished 'default' after 4.35 ms
+        [13:34:35] Starting 'task1'...
+        task1 called!
+        [13:34:35] Finished 'task1' after 599 μs
+        [13:34:35] Starting 'privateTask1'...
+        task2 called!
+        [13:34:35] Finished 'privateTask1' after 6.9 ms
+        [13:34:35] Finished 'task4' after 6.89 ms
+        [13:34:35] Finished 'privateTask1' after 1.21 ms
+        [13:34:35] Finished 'composed' after 6.87 ms
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\06 task() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>src()</mark> / <mark>dest()</mark> / <mark>symlink()</mark> methods </u></h2>
+    <pre class="syntax">
+SYNTAX :    <strong>gulp</strong>.src(<strong>glob|[glob, ...]</strong>, <i>option:obj</i>)                                     // creates and returns a transform stream for reading files from the file system (the read file(s) transformed to vinyl file(s) internally)    
+                                                                                          method can be used at the start or in the pipeline to add additional files to the pipeline   
+                                                                                          by default the byte order mark is removed from utf-8 encoded files   
+                                                                                          if the glob targets a directory only the directory itself is targeted (but not its content!)    
+                - <i>option:obj</i> : { buffer: <strong>bol|fn</strong>            - <mark>true</mark> (Default) = all file content stored in a buffer | <mark>false</mark> file content streamed  
+                                 read: <strong>bol|fn</strong>              - read file content (Default: <mark>true</mark>)
+                                 removeBOM: <strong>bol|fn</strong>         - removes byte order mark from utf-8 encoded files (Default: <mark>true</mark>)
+                                 allowEmpty: <strong>bol</strong>           - no error thrown if the glob does not find any files (Default: <mark>false</mark>)
+                                 sourcemaps: <strong>bol|fn</strong>        - enambe sourcemaps support (Default: <mark>false</mark>)
+                                 strict: <strong>bol</strong>               - error thrown if an unexpected problem is encountered (Default: <mark>false</mark>)
+                                 debug: <strong>bol</strong>                - print debugging information on the command line (Default: <mark>false</mark>)
+                                 <a href="https://gulpjs.com/docs/en/api/src" target="_blank">other options [link]</a> }  
+                
+            <strong>gulp</strong>.dest(<strong>dir:glob|fn</strong>, <i>option:obj</i>)                                         // creates and returns a transform stream for writing vinyl files to to file system (<strong>dir:glob</strong> can create directories) (this method cannot rename files)    
+                                                                                          method can be used at the end or in the pipeline (can create files in the middle of the pipeline)    
+                                                                                          once vinyls are written to the file system they are modified (properites are updated to match the created file)    
+                - <i>option:obj</i> : { overwrite: <strong>bol</strong>            - overwrites existing files (Default: <mark>true</mark>)
+                                 append: <strong>bol</strong>               - appends data to the file's content instead of overwriting (Default: <mark>false</mark>)    
+                                 sourcemaps: <strong>bol|dir:glob|fn</strong>  - <mark>true</mark> = creates the sourcemap code at the bottom of the compiled file | <strong>dir:glob</strong> = creates a file with the sourcemap code which is linked from the compiled file (sourcemap file is placed relative to the compiled file)    
+                                 <a href="https://gulpjs.com/docs/en/api/dest" target="_blank">other options [link]</a> }  
+            
+            <strong>gulp</strong>.symlink(<strong>dir:glob|fn</strong>, <i>option:obj</i>)                                      // creates symbolic-links to files described by the internal vinyls (<strong>dir:glob</strong> can create directories) (this method cannot rename files)
+                                                                                          method can be used at the end or in the pipeline (can create symbolic-links in the middle of the pipeline)   
+                                                                                          once symbolic-links are created the vinyls are modified (properties are updated to match the created file, the <mark>contents</mark> property is set to null)   
+                                                                                          on windows directory links are created using junctions (by Default [TESTED:2020-01-01 but I cannot confirm this])
+                - <i>option:obj</i> : { overwrite: <strong>bol</strong>            - overwrites existing symbolic-links (Default: <mark>true</mark>) [TESTED: 2020-01-10 apparently this is silet, no error thrown if an existing file is not overwritten]   
+                                 useJunctions: <strong>bol</strong>         - creates junctions (instead of symbolic-links) when linking directories (for windows only) (Default: <mark>true</mark>) [TESTED: 2020-01-10 I couldn't find out if this works property]    
+                                 <a href="https://gulpjs.com/docs/en/api/symlink" target="_blank">other options [link]</a> }  
+    </pre>
+    <pre>
+    const {src, symlink, dest} = require('gulp');
+    const minify = require('gulp-minify');
+    
+    function defTask(cb){
+        src('*.js')                                                                    // the created transform stream reads all js files from the current directory 
+        .pipe(minify())                                                                // gulp plugin minifies the files 
+        .pipe(dest('testDir1'))                                                        // writes the minified files to the 'testDir1'   
+        .pipe(symlink('testDir2'))                                                     // writes symbolic-links to files created in 'testDir1'
+        cb();
+    }
+    
+    exports.default = defTask;
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>src()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src, dest} = require('gulp');
+    
+    function defTask(cb){
+// buffer VS stream -----------------------------------------------------------------------------------------------
+        var stream1 = src('testFile.txt');
+        stream1.on('data', function(vinyl){
+            console.log( '----- buffer returned -------------------------------------------------------' );
+            console.log( vinyl );                                                     // -> buffer 
+        });
+        
+        var stream2 = src('testFile.txt', {buffer:false});
+        stream2.on('data', function(vinyl){
+            console.log( '----- stream returned -------------------------------------------------------' );
+            console.log( vinyl );                                                     // -> stream 
+        });
+        
+// ----------------------------------------------------------------------------------------------------------------
+        var stream3 = src('testFile.txt', {read:false});
+        stream3.on('data', function(vinyl){
+            console.log( '----- file content not read -------------------------------------------------' );
+            console.log( vinyl );                                                     // -> no file content available 
+        });
+        
+// ----------------------------------------------------------------------------------------------------------------
+        var stream4 = src('noFile', {allowEmpty:true});                               // no error thrown if no file found
+        stream4.on('data', function(vinyl){
+            console.log( '----- non existing file targeted without error ------------------------------' );
+            console.log( vinyl );                                                     // stream reading never fires   
+        });
+        
+// add multiple src() methods on the pipeline ---------------------------------------------------------------------
+        src('testFile.txt').
+            pipe(src('../TEST')).                                                     // only the directory is targeted and NOT its content
+            pipe(src('../node_modules')).                                             // only the directory is targeted and NOT its content
+            pipe(src('../package.json')).
+            pipe(dest('testDir/'));                                                   // all above targeted files and directories are copied in the 'testDir' directory ('testDir' directory created by the dest() method)    
+        
+        cb();
+    }
+    
+    exports.default = defTask;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\08 src() TEST> gulp
+        [14:29:14] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\08 src() TEST\gulpfile.js
+        [14:29:14] Starting 'default'...
+        [14:29:14] Finished 'default' after 17 ms
+        ----- stream returned -------------------------------------------------------
+        &lt;File "testFile.txt" &lt;CloneableStream&gt;&gt;
+        ----- file content not read -------------------------------------------------
+        &lt;File "testFile.txt"&gt;
+        ----- buffer returned -------------------------------------------------------
+        &lt;File "testFile.txt" &lt;Buffer 74 65 73 74 20 63 6f 6e 74 65 6e 74 20 61 64 64 65 64 20 74 6f 20 74 68 65 20 66 69 6c 65 21 0d 0a&gt;&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\08 src() TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>dest()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src, dest} = require('gulp');
+    
+function defFunc(cb){
+// updated vinyl metadata -------------------------------------------------------------
+    var readFl = src('testFile.txt');
+    readFl.on('data', function(vinyl){
+        console.log( vinyl.path );                                                     // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testFile.txt'
+        dest('testDir').write(vinyl);                                                  // once the file is written to the file system the vinyl's metadata is updated to match the last written file   
+        console.log( vinyl.path );                                                     // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testDir\testFile.txt'
+    });
+        
+// overwriting existing files TEST ----------------------------------------------------
+    src('testFile.txt').on('data', function(vinyl){
+        vinyl.contents = Buffer.from([0xa1, 0xff, 0x09]);
+        console.log( vinyl.contents );
+        dest('testDir2', {overwrite:false}).write(vinyl);                              // does not writes over an existing file's content 
+    });
+        
+// append data to existing file's content ---------------------------------------------
+    src('testFile.txt')
+    .pipe(dest('testDir3', {append:true}));                                            // data appended to the existing file (called multiple times TESTED)  
+        
+// attempt to write read-only permision files -----------------------------------------
+    src('testFile.txt')
+    .pipe(dest('testDir4'))                                                            // read-only file cannot be written by the dest() method (obviously!)
+    .on('error', function(err){ console.log( err.message ); });                        // error caught here 
+        
+// rename the piped file --------------------------------------------------------------
+    src('testFile.txt').on('data', function(vinyl){                                    // there is no built-in feature to rename the original file's name (this is a walkaround)
+        vinyl.stem = 'testFile2';                                                      // rename file 
+        dest('./').write(vinyl);
+    });
+    
+    cb();
+}
+
+    exports.default = defFunc;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testDir4> gulp
+        [18:36:25] Working directory changed to D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST
+        [18:36:25] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\gulpfile.js
+        [18:36:25] Starting 'default'...
+        [18:36:25] Finished 'default' after 14 ms
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testFile.txt
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testDir\testFile.txt
+        &lt;Buffer a1 ff 09&gt;
+        EPERM: operation not permitted, open 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testDir4\testFile.txt'
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\09 dest() TEST\testDir4>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>symlink()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src, symlink, task} = require('gulp');
+    const fs = require('fs');
+    
+    function defTask(cb){
+// creates a symbolic-link to the file -----------------------------------------------------------
+        src('testFile.txt').pipe(symlink('testDir') );
+                                                                        
+// modify the vinyl content than write a symbolic-link -------------------------------------------
+        src('testFile.txt').on('data', function(vinyl){
+            vinyl.contents = Buffer.from('new content!');                              // modify the vinyl's content (this is basically lost)
+            symlink('testDir2').write(vinyl);                                          // the created symbolic link simply points to the original 'testFile.txt' file 
+            console.log( fs.readlinkSync('testDir2/testFile.txt') );                   // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testFile.txt'  
+        });
+        
+// chaining symbolic-links -----------------------------------------------------------------------
+        src('testFile.txt')
+        .pipe(symlink('testDir3'))                                                     // these created symbolic-links points to each other (as expected)
+        .pipe(symlink('testDir4'))
+        .pipe(symlink('testDir5'));
+        
+        console.log( `--> ` + fs.readlinkSync('testDir3/testFile.txt') );              // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testFile.txt'
+        console.log( `--> ` + fs.readlinkSync('testDir4/testFile.txt') );              // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testDir3\testFile.txt'
+        console.log( `--> ` + fs.readlinkSync('testDir5/testFile.txt') );              // -> 'D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testDir4\testFile.txt'
+        
+// useJunction TEST ------------------------------------------------------------------------------
+        src('testDir').pipe(symlink('LINK_DIR', {useJunctions:true}));                 // created item is a junction (Default)
+        src('testDir2').pipe(symlink('LINK_DIR', {useJunctions:false}));               // created item is a symbolic-link 
+        // !! I cannot test if the above items are symbolic-links or junctions, therefore I have no idea if the above option works or not
+        
+// overwrite TEST --------------------------------------------------------------------------------
+        src('testFile.txt').pipe(symlink('testDir6', {overwrite:false}));              // this doesn't seems to work (launching this code multiple times won't throw any error)  
+                                                                                       // apparently this is silet (symbolic-link not overwritten siliently (no error thrown))
+        
+        cb();
+    }
+    
+    task('default', defTask);   
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST> gulp
+        [08:59:55] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\gulpfile.js
+        [08:59:55] Starting 'default'...
+        --> D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testFile.txt
+        --> D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testDir3\testFile.txt
+        --> D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testDir4\testFile.txt
+        [08:59:55] Finished 'default' after 16 ms
+        D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST\testFile.txt
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\10 symlink() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>watch()</mark> / <mark>lastRun()</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX :    <strong>gulp</strong>.watch(<strong>glob|[glob, ...]</strong>, <i>option:obj</i>, <i>taskFn|series()|parallel()</i>)       // watches for the targeted file(s) and directory(ies) and triggers the passed task(s) if the set event(s) occur    
+                                                                                          default events <mark>['add', 'unlink', 'change']</mark> available events (<mark>'add'</mark> = add file) (<mark>'addDir'</mark> = add directory) (<mark>'unlink'</mark> = delete file) (<mark>'unlinkDir'</mark> = delete directory) (<mark>'change'</mark> = any file modification) (<mark>'ready'</mark> = watcher is watching) (<mark>'error'</mark> = error)  
+                                                                                          if a direcotry is watched all its nested items are watched (By Default)    
+                                                                                          returns a <mark>chokidar</mark> instance which offers a more specific way to watch fs items (chokidar does not provide access to the Gulp task system)    
+                                                                                          <span style="color:orange;">[TESTED: 2020-01-14 Gulp: v4.0.2]</span> works inconsistently (apparently this is a problem from Gulp: v4.0.0)    
+                - <i>option:obj</i> : { events: <strong>str|arr</strong>           - event to watch (Default: <mark>['add', 'change', 'unlink']</mark>)   
+                                 delay: <strong>ms:nr</strong>              - milliseconds between the event and the task execution  (Default: <mark>200</mark>)
+                                 persistent: <strong>bol</strong>           - keeps the node process alive (Default: <mark>true</mark>)
+                                 followSymlinks: <strong>bol</strong>       - <mark>true</mark> (Default) = watches both symbolic-link and its linked file | <mark>false</mark> = watches only the symbolic-link    
+                                 disableGlobbing: <strong>bol</strong>      - <strong>glob</strong> is treaded as literal path  
+                                 depth: <strong>nr</strong>                 - nested directory level to watch (Default: not specified = full depth)    
+                                 <a href="https://gulpjs.com/docs/en/api/watch" target="_blank">other options [link]</a> }  
+            
+            <strong>gulp</strong>.lastRun(<strong>taskName</strong>, <i>floor:nr</i>)                                           // returns the time in milliseconds (from zero time), when the passed task was <u>successfully completed the last time</u>  
+                                                                                          if the passed task not yet ran or failed returns <mark>undefined</mark>
+                                                                                          not precise (precision vary depending the FS), last digits can be floored by setting the <i>floor</i> argument to <mark>10</mark> | <mark>100</mark> | <mark>...</mark>    
+            
+            <strong>chokidar</strong>.on(<strong>eventName:str</strong>, <strong>listenerFn(path, stats)</strong>)                        // registers a listener function which is called when the passed <strong>eventName</strong> occurs (used the same evetns as the <mark>watch()</mark> method)    
+                                                                                          if the <mark>'all'</mark> event is registered the listener arguments are <strong>(eventName, path, stats)</strong>    
+            <strong>chokidar</strong>.add(<strong>glob|[glob, ...]</strong>)                                             // adds new globes to watch  
+            <strong>chokidar</strong>.unwatch(<strong>glob|[glob, ...]</strong>)                                         // removes globes from watching <span style="color:orange;">[NOT WORKING TESTED: 2020-01-14]</span>   
+            <strong>chokidar</strong>.close()                                                           // shuts down the watcher and allows the Node process to close    
+    </pre>
+    <pre>
+    const {watch, lastRun} = require('gulp');
+        
+    exports.default = function(cb){
+// watch() ----------------------------------------------------------------------------
+        watch('*.json', function(cb){                                                  // watches any '.json' files in the current directory (watches if file added, removed or modified by default)  
+            // task code...
+            cb();
+        });
+        
+        watch('testDir', {events:'all'}, function(cb){                                 // watches all activities in the targeted directory (in any depth) (add, remove or modify file | add remove directories)    
+            // task code...
+            cb();
+        });
+    
+// watching with chokidar instance ----------------------------------------------------
+    var myChokidar = watch('_');                                                       // chokidar instance returned 
+    
+    myChokidar.add('*');                                                               // new globs added to watch
+    myChokidar.unwatch('**/*.js')                                                      // removes any .js files from watching       // !! Not working Gulp v4.0.2 [TESTED: 2020-01-14]     
+    
+    myChokidar.on('all', function(event, path, stats){                                 // watch listener added 
+        console.log( event );                                                          // -> event name what triggered the listener function 
+        console.log( path );                                                           // -> item path 
+        console.log( stats );                                                          // -> fs.stats of the item 
+    });
+    
+    myChokidar.close();                                                                // closes the watcher and allows the process to close   
+    
+// lastRun() --------------------------------------------------------------------------
+    function report(cb){
+        lastRun(report);                                                               // -> undefined | 1579024923217      // returns the last time when the task was successfully completed (first returns undefined because the task has not yet ran)    
+        lastRun(report, 1000);                                                         // -> undefined | 1579024923000      // floors the last 3 digits  
+        cb();
+    }
+    
+    cb();
+}
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>watch()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const { watch } = require('gulp');
+        
+    exports.default = function(){
+// watching TEST ----------------------------------------------------------------------
+        watch('testFile.txt', function changeFile(cb){                                 // watches for the file content modification, file removal or adding the specified file    
+            console.count( '\'testFile.txt\' file changed added or deleted!' );
+            cb();
+        });
+        
+        watch('testDir', {events:['change', 'add', 'unlink']},                         // watches if any file added, deleted or modified (in any depth) (Default)    
+            function watchDir_fileChanges(cb){                         
+                console.count( 'file activity in \'testDir\' directory' );
+                cb();
+        });
+        
+        watch('testDir', {events:['addDir', 'unlinkDir']},                             // watches if any directory added, deleted (in any depth)
+            function watchDir_directoryChanges(cb){                         
+                console.count( 'directory  activity in \'testDir\' directory' );
+                cb();
+        });
+        
+        watch('testDir2', {events:'all'},                                              // watches for all events (except 'ready' and 'error') (in any depth)
+            function watch_all(cb){
+                console.count( 'activity in \'testDir2\' directory detected' );
+                cb();
+            }
+        )
+        
+        watch('testDir3', {events:'ready'},                                            // triggers when watcher is ready   
+            function ready(cb){
+                console.count('directory \'testDir3\' is ready to watch!');
+                cb();
+            });
+        
+// delay / disableGlobbing / depth (options) ------------------------------------------
+        watch(['*3', 'testDir4'], {events:'all', delay:2000, disableGlobbing:true, depth:1},      // watch 2 seconds delayed, no globbing used, 1 level depth watched only   
+            function optionTest1(cb){                                                             // the 'testDir3' is not watched because globbing is disabled but the 'testDir4' directory is watched    
+                console.count('option delay, disableGlobbing, depth watcher triggered!');
+                cb();
+            });
+        
+        return Promise.resolve();
+    }
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\11 watch() TEST> gulp
+        [18:59:07] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\11 watch() TEST\gulpfile.js
+        [18:59:07] Starting 'default'...
+        [18:59:07] Finished 'default' after 7.35 ms
+        [18:59:07] Starting 'ready'...
+        directory 'testDir3' is ready to watch!: 1
+        [18:59:07] Finished 'ready' after 1.64 ms
+        _                                                                              // Gulp is watching for the set events  
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> chokidar TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {watch} = require('gulp');
+    
+    exports.default = function(cb){ 
+        var myChokidar = watch('*.*');
+        
+// add new glob -----------------------------------------------------------------------
+        myChokidar.add('*Dir');                                                        // adds the passed glob to watch   
+        myChokidar.unwatch('**/*.js');                                                 // !! suppose to remove any .js files from watching but this method does not work (BUG reported on GitHub [2020-01-14])   
+        
+// register listeners -----------------------------------------------------------------
+        myChokidar.on('all', function(ev, path, stats){                                // listens to all events (does not tirgger when removing directory = BUG (reported on GitHub))    
+            console.log( `${ev} event triggered` );
+            console.count( path );
+        }); 
+        
+        myChokidar.on('unlinkDir', function(path){                                     // !! this never trigger because the above BUG
+            console.log( path + " directory removed!")
+        });
+        
+// close watcher ----------------------------------------------------------------------
+        setTimeout(function(){
+            myChokidar.close();                                                        // shuts down the watcher and allows the Node process to close after 20 seconds    
+        }, 20000);
+        
+        cb();
+    }
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\12 chokidar TEST> gulp
+    [12:08:20] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\12 chokidar TEST\gulpfile.js
+    [12:08:20] Starting 'default'...
+    [12:08:20] Finished 'default' after    
+    _                                                                                  // watches (exits after 20 seconds)
+    </pre>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>lastRun()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const { lastRun, parallel } = require('gulp');
+        
+    function testTask(cb){
+        console.log( 'task1 called!' );
+        console.log( lastRun(testTask) );                                              // -> undefined first then the timestamp when the task was last called 
+        console.log( lastRun(testTask, 100) + " flored 00" );                          // floors the last 2 digits to 00
+        cb();
+    }
+    
+    exports.default = function(cb){
+        setInterval(function(){
+            parallel(testTask)();
+        }, 1000);
+        cb();
+    }
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\13 lastRun() TEST> gulp
+        [18:32:06] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\13 lastRun() TEST\gulpfile.js
+        [18:32:06] Starting 'default'...
+        [18:32:06] Finished 'default' after 2.42 ms
+        [18:32:07] Starting 'testTask'...
+        task1 called!
+        undefined
+        undefined flored 00
+        [18:32:07] Finished 'testTask' after 2.93 ms
+        [18:32:08] Starting 'testTask'...
+        task1 called!
+        1579019527574                                                                  // lastRun(testTask)
+        1579019527500 flored 00                                                        // lastRun(testTask, 100) + " flored 00"
+        [18:32:08] Finished 'testTask' after 1.65 ms
+        [18:32:09] Starting 'testTask'...
+        task1 called!
+        1579019528579                                                                  // lastRun(testTask)
+        1579019528500 flored 00                                                        // lastRun(testTask, 100) + " flored 00"
+        [18:32:09] Finished 'testTask' after 1.39 ms
+        [18:32:10] Starting 'testTask'...
+        task1 called!
+        1579019529582                                                                  // lastRun(testTask)
+        1579019529500 flored 00                                                        // lastRun(testTask, 100) + " flored 00"
+        [18:32:10] Finished 'testTask' after 1.32 ms
+        [18:32:11] Starting 'testTask'...
+        task1 called!
+        1579019530584                                                                  // lastRun(testTask)
+        1579019530500 flored 00                                                        // lastRun(testTask, 100) + " flored 00"
+        [18:32:11] Finished 'testTask' after 1.43 ms
+        [18:32:12] Starting 'testTask'...
+        task1 called!
+        1579019531587                                                                  // lastRun(testTask)
+        1579019531500 flored 00                                                        // lastRun(testTask, 100) + " flored 00"
+        [18:32:12] Finished 'testTask' after 1.23 m    
+        
+        ... 
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

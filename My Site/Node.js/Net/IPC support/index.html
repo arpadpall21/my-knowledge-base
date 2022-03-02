@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> IPC Support </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> IPC Support (ver 3.4.1) </h1>
+    <p> Updated ( 2020-05-27 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a> 
+        <a href="../index.html">Net></a> IPC Support
+    </p>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> IPC with <mark>net</mark> module (UNIX Domain Socket) (Windows Named Pipe) </u></h2>
+    <p> - the <mark>net</mark> module uses <u>Domain Socket (on UNIX)</u> and <u>Named Pipe (on Windows)</u> to create Inter Process Communication (process communication within the same system without network) </p>
+    <p> - Domain Sockets and Named Pipes are basically local socket (sandboxed in the same system (no network communication)) </p>
+    <p> - the server process creates one 'local socket' and listen on it, then client processes can connect to this 'local socket' in order to estabilish an Inter Process Communication </p>
+<h3 style="color:darkblue;"><u> UNIX Domain Socket </u></h3>
+    <p> - a Domain Socket file is created when the <mark>.listen()</mark> method is called (path passed instead of a network domain and port), through this (file) Domain Socket the IPC communication will be estabilished </p>
+    <p> - if the server is not exlicitly closed (with the <mark>close()</mark> method) <u>the Domain Socket (file) is NOT removed from the file system</u> </p>
+    <pre>
+// IPC server (file) ------------------------------------------------------------------
+    var net = require('net');
+    
+    var ipcServer = net.createServer(function(socket){
+        socket;                                                                        // the actual IPC channel (Domain Socket = duplex stream) 
+    }).listen('./domSc', ()=>{});                                                      // creates and listens on the 'domSc' Domain Socket (file) 
+    
+  // -----------------------------------------------------
+    ipcServer.close();                                                                 // closes the ipc server and removes the 'domSc' file from the file system  
+                                                                                       // -! if the 'close()' method is not called the 'domSc' Domain Socket file is NOT removed from the file system    
+                                                            
+// IPC client (file) ------------------------------------------------------------------
+    var net = require('net');
+    
+    var client = net.createConnection('./domainSocket', ()=>{});                      // the ipc client connects to the created Domain Socket   
+    
+    client;                                                                           // the actual IPC channel (Domain Socket = duplex stream) 
+    </pre>
+<h3 style="color:darkblue;"><u> Windows Named Pipe </u></h3>
+    <p> - a Named Pipe is created <u>(NOT visible in the file system)</u> when the <mark>.listen()</mark> method is called (named pipe path passed instead of a network domain and port), through this Named Pipe the IPC communication will be estabilished </p>
+    <p> - the Windows Named pipe path starts with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> </p>
+    <p> - Windows Named pipes are not visible in the file system and <u>automatically removed when the server process is closed</u> (unlike Unix Domain Sockets) </p>
+    <pre>
+// IPC server (file) ------------------------------------------------------------------
+    var net = require('net');
+    
+    var server = net.createServer(function(socket){
+        socket;                                                                        // the actual IPC channel (Named Pipe = duplex stream) 
+    }).listen(path.join('\\\\?\\pipe\\C:\\namedPipe'), ()=>{});                        // creates and listens on the '\\?\pipe\C:\namedPipe' Named Pipe (not visible in the file system)
+                                                                                       // -! the server is not explicitly closed (with the 'close()' method) but when this process is closed the named pipe is removed automatically anyways    
+    
+// IPC client (file) ------------------------------------------------------------------
+    var net = require('net');
+    
+    var client = net.createConnection(path.join('\\\\?\\pipe\\C:\\namedPipe'), ()=>{}); // ipc client connects to crated Named Pipe 
+    
+    client;                                                                             // the actual IPC channel (Named Pipe = duplex stream) 
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> UNIX Doman Socket TEST (on Linux Ubuntu) </u></h4>
+    <pre>
+// IPC server -------------------------------------------------------------------------
+    var net = require('net');
+    
+    var server = net.createServer(function(socket){
+        socket.end('IPC server response');
+        
+    }).listen('./domainSocket', function(){                                            // creates a domain socket file 
+        console.log('local server is listening!')
+    });        
+                                                                                       // !! because the server is not closed the domain socket file ('./domainSocket') is left in the file system    
+                                                            
+// IPC client -------------------------------------------------------------------------
+    var net = require('net');
+    
+    var client = net.createConnection('./domainSocket', function(){                    // connecting to the specified domain socket 
+        console.log('client connected to the domai socket');
+    });
+    
+    client.on('data', function(chunk){                                                 // -> 'IPC server response'  // read streaming data from the socket 
+        console.log(chunk.toString());
+    });
+    
+    client.on('end', function(){
+        console.log('--- END OF MESSAGE ---');
+    });    
+    </pre>
+    <pre class="cmd">
+// IPC server -------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/IPC support/01 Unix Domain Socket TEST$ node srvProcess.js
+    local server is listening!
+        
+// IPC client -------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/IPC support/01 Unix Domain Socket TEST$ node clientProcess.js
+    client connected to the domai socket
+    IPC server response
+    --- END OF MESSAGE ---
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/IPC support/01 Unix Domain Socket TEST$
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Windows Named Pipe (on Windows 10) </u></h4>
+    <pre>
+// IPC server -------------------------------------------------------------------------
+    var net = require('net');
+    var path = require('path');
+    
+    var server = net.createServer(function(socket){
+        socket.end('IPC server response');
+        
+    }).listen(path.join('\\\\?\\pipe', process.cwd(), 'namedPipe'), function(){        // named pipe created (not visible in the file system)
+        console.log('local server is listening')
+    });    
+                                                                                       // -! the server is not explicitly closed but when this process is closed the named pipe is removed automatically (no named pipe file visible in the file system)    
+    
+// IPC client -------------------------------------------------------------------------
+    var net = require('net');
+    var path = require('path');
+    
+    var client = net.createConnection(path.join('\\\\?\\pipe', process.cwd(), 'namedPipe'), function(){ // connecting to the specified named pipe 
+        console.log('client connected to the local named pipe');
+    });
+    
+    client.on('data', function(chunk){                                                 // 'IPC server response'  // reads the streamin data from the socket 
+        console.log(chunk.toString());
+    });
+    
+    client.on('end', function(){
+        console.log('--- END OF MESSAGE  ---');
+    });    
+    </pre>
+    <pre class="cmd">
+// IPC server -------------------------------------------------------------------------
+PS D:\Safe\CodePlus\My Site\03 Improuve\Learn WebDesign\04 Node.js\Net\IPC support\02 Windows Named Pipe TEST> node proces
+sSrv.js
+    local server is listening    
+    
+// IPC client -------------------------------------------------------------------------
+PS D:\Safe\CodePlus\My Site\03 Improuve\Learn WebDesign\04 Node.js\Net\IPC support\02 Windows Named Pipe TEST> node processClient.js
+    client connected to the local named pipe
+    IPC server response
+    --- END OF MESSAGE  ---
+PS D:\Safe\CodePlus\My Site\03 Improuve\Learn WebDesign\04 Node.js\Net\IPC support\02 Windows Named Pipe TEST>
+    </pre>
+</details>
+    <br><br><br>
+    
+    
+</body>
+</html>

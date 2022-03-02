@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Dockerfile & .dockeringore files </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Dockerfile & .dockeringore files (ver 4.0.0) </h1>
+    <p> Updated ( 2021-10-28 )</p>
+    <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
+        <a href="../index.html">Docker></a> Dockerfile & .dockeringore files  
+    </p>
+<table class="table">
+<caption>
+    <mark>Dockerfile</mark> instructions 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Instruction </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            # <strong>directive</strong>=<strong>val</strong> 
+        </td>
+        <td> 
+            - parse directive (instruction how this Dockerfile can be used)
+        </td>
+    </tr>
+      <tr class="05.02"><td></td><td></td></tr>
+    <tr class="05.03">
+        <td> 
+            # escape=<strong>char</strong>
+        </td>
+        <td> 
+            - escape parse directive specifies the escape and new line character for this Dockerfile (Default: <mark>/</mark>) <br>
+            - the new line character is used to <span class="openable">specify multiple instructions for the same layer<div>
+        <pre>
+        ENV ENV1=val1 \
+          ENV2=val2 \
+          ENV3=val3 
+        </pre>
+    </div></span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            # <strong>comment</strong> 
+        </td>
+        <td> 
+            - comment
+        </td>
+    </tr>
+    <tr class="40.01">
+        <td> 
+            ADD <small class="openable">[--chown=<i>usr</i>:<i>grp</i>]<div>
+        <p> - Default <mark>0:0</mark> </p>
+        <p> - <mark><i>usr</i>:<i>grp</i></mark> can be <mark><strong>UID</strong>:<strong>GID</strong></mark> or <mark><strong>userName</strong>:<strong>groupName</strong></mark>   </p>
+        <p> - <u>if we pass userName or groupName a lookup will be performed to the <mark>/etc/passwd</mark> and <mark>/etc/group</mark> files for the user and group <span style="color:orangered;">if the user or group is not found the build will Fail!</span></u></p>
+    </div></small> <strong>src</strong><i> ...</i> <strong>dest</strong>
+        </td>
+        <td> 
+            - copies file(s) in the image (permission will be <mark>644</mark>) <br>
+            - the source (<strong>src</strong>) also can be a tarball (<mark>gzip</mark>, <mark>bzip2</mark> or <mark>xz</mark> tarball decompression supported) or URL (permission will be <mark>600</mark>) <br>
+            - (<small>--chown=<i>usr</i>:<i>grp</i></small>) changes the copied file's owner and group
+        </td>
+    </tr>
+      <tr class="40.02"><td></td><td></td></tr>
+    <tr class="40.03">
+        <td> 
+            ADD <small class="openable">[--chown=<i>usr</i>:<i>grp</i>]<div>
+        <p> - Default <mark>0:0</mark> </p>
+        <p> - <mark><i>usr</i>:<i>grp</i></mark> can be <mark><strong>UID</strong>:<strong>GID</strong></mark> or <mark><strong>userName</strong>:<strong>groupName</strong></mark>   </p>
+        <p> - <u>if we pass userName or groupName a lookup will be performed to the <mark>/etc/passwd</mark> and <mark>/etc/group</mark> files for the user and group <span style="color:orangered;">if the user or group is not found the build will Fail!</span></u></p>
+    </div></small> ["<strong>src</strong>"<smal><i>, ...</i></smal> "<strong>dest</strong>"]
+        </td>
+        <td> 
+        </td>
+    </tr>
+    <tr class="35.02">
+        <td> 
+            ARG <strong>key</strong><small>=</small><i>val</i>
+        </td>
+        <td> 
+            - sets a build-time variable (available in the current Dockerfile (build-time) but <u>not in the final image</u>) <span class="openable">(predefined ARGs)<div>
+        <p> - these ARGs are available in the Dockerfile without declaring them </p>
+        <p> - <u>for security reasons they are not printed with the <mark>docker history</mark> command and are NOT cached</u> </p>
+        <p> - <mark>HTTP_PROXY</mark> </p>
+        <p> - <mark>http_proxy</mark> </p>
+        <p> - <mark>HTTPS_PROXY</mark> </p>
+        <p> - <mark>https_proxy</mark> </p>
+        <p> - <mark>FTP_PROXY</mark> </p>
+        <p> - <mark>ftp_proxy</mark> </p>
+        <p> - <mark>NO_PROXY</mark> </p>
+        <p> - <mark>no_proxy</mark> </p>
+    </div></span> (available in <span class="openable">these Dockerfile instructions<div>
+        <p> - <mark>ADD</mark> </p>
+        <p> - <mark>COPY</mark> </p>
+        <p> - <mark>ENV</mark> </p>
+        <p> - <mark>EXPOSE</mark> </p>
+        <p> - <mark>FROM</mark> </p>
+        <p> - <mark>LABEL</mark> </p>
+        <p> - <mark>STOPSIGNAL</mark> </p>
+        <p> - <mark>USER</mark> </p>
+        <p> - <mark>VOLUME</mark> </p>
+        <p> - <mark>WORKDIR</mark> </p>
+        <p> - <mark>ONBUILD</mark> (when combined with one of the supported instructions above </p>
+    </div></span>) <br>
+            - goes out of scope at its <span class="openable">build stage<div>
+    <pre>
+    FROM busybox                        // build sage 1 
+    ARG SETTINGS=set1
+    RUN ./run/setup $SETTINGS           // ARG SETTINGS=set1 goes out of scope here 
+    
+    FROM busybox                        // build sage 2 
+    ARG SETTINGS=set2
+    RUN ./run/other $SETTINGS           // ARG SETTINGS=set2 goes out of scope here 
+    </pre>
+    </div></span> <br> 
+            - <mark>ARG</mark> cannot override <mark>ENV</mark> (doesn't matter the order) <br>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> 
+            CMD <strong>cmd</strong>
+        </td>
+        <td> 
+            - (shell form) default command when starting a container <br>
+            - can be overriden by the <mark>docker run <strong>image</strong> <i>cmd</i></mark> (<i>cmd</i>) command <br>
+            - command executed in <mark>/bin/sh -c</mark> for Linux | <mark>cmd /S /C</mark> for Windows shell <br>
+        </td>
+    </tr>
+        <tr class="25.02"><td></td><td></td></tr>
+    <tr class="25.03">
+        <td> 
+            CMD ["<strong>executable</strong>", "<strong>param</strong>", "<strong>param</strong>"]
+        </td>
+        <td> 
+            - (execution form) runs an <strong>executable</strong> directly (without shell) (ex: <mark>CMD ["/bin/bash", "-c", "echo Hello World!"]</mark> starts the container with <mark>/bin/bash -c "echo Hello World!"</mark>)  
+        </td>
+    </tr>
+        <tr class="25.04"><td></td><td></td></tr>
+    <tr class="25.05">
+        <td> 
+            CMD ["<strong>param</strong>", "<strong>param</strong>"]
+        </td>
+        <td> 
+            - this form is used to pass default parameters to the <mark>ENTRYPOINT</mark> instruction <u class="openable">(example)<div>
+  <pre>
+  ENTRYPOINT ["echo", "let's"]
+  CMD ["code"]
+  </pre>
+  <p> - running the image with <mark>docker run -it --rm <strong>image</strong></mark> command will start the container with <mark>echo let's code</mark> command </p>
+  <p> - running the image with <mark>docker run -it --rm <strong>image</strong> game</mark> command will start the container with <mark>echo leg's game</mark> command (command after the <strong>image</strong> will override the <mark>CMD</mark> instruction</p>
+            </div></u>
+        </td>
+    </tr>
+    <tr class="40.04">
+        <td> 
+            COPY <small class="openable">[--chown=<i>usr</i>:<i>grp</i>]<div>
+        <p> - Default <mark>0:0</mark> </p>
+        <p> - <mark><i>usr</i>:<i>grp</i></mark> can be <mark><strong>UID</strong>:<strong>GID</strong></mark> or <mark><strong>userName</strong>:<strong>groupName</strong></mark>   </p>
+        <p> - <u>if we pass userName or groupName a lookup will be performed to the <mark>/etc/passwd</mark> and <mark>/etc/group</mark> files for the user and group <span style="color:orangered;">if the user or group is not found the build will Fail!</span></u></p>
+    </div></small> <strong>src</strong><i> ...</i> <strong>dest</strong>
+        </td>
+        <td> 
+            - copies file(s) in the image (permission will be <mark>644</mark>) <br>
+            - the source can be local files only (does not support tarballs and URLs) <br>
+            - (<small>--chown=<i>usr</i>:<i>grp</i></small>) changes the copied file's owner and group
+        </td>
+    </tr>
+      <tr class="40.05"><td></td><td></td></tr>
+    <tr class="40.06">
+        <td> 
+            COPY <small class="openable">[--chown=<i>usr</i>:<i>grp</i>]<div>
+        <p> - Default <mark>0:0</mark> </p>
+        <p> - <mark><i>usr</i>:<i>grp</i></mark> can be <mark><strong>UID</strong>:<strong>GID</strong></mark> or <mark><strong>userName</strong>:<strong>groupName</strong></mark>   </p>
+        <p> - <u>if we pass userName or groupName a lookup will be performed to the <mark>/etc/passwd</mark> and <mark>/etc/group</mark> files for the user and group <span style="color:orangered;">if the user or group is not found the build will Fail!</span></u></p>
+    </div></small> ["<strong>src</strong>"<smal><i>, ...</i></smal> "<strong>dest</strong>"]
+        </td>
+        <td> 
+        </td>
+    </tr>
+      <tr class="40.07"><td></td><td></td></tr>
+    <tr class="40.08">
+        <td> 
+            COPY --from=<strong>buildStageId</strong> <strong>src</strong> <strong>dest</strong>
+        </td>
+        <td> 
+            - copies files from the specified build stage (used for multistage builds)    
+        </td>
+    </tr>
+    <tr class="25.06">
+        <td> 
+            ENTRYPOINT <strong>cmd</strong>
+        </td>
+        <td> 
+            - (shell form) entry point command when starting a container <br>
+            - this instruction is mostly used to provide an entry command when we build the container, then we can pass <u>parameters</u> after the <mark>docker run <strong>image</strong></mark> that will be appended to these instructions (override the <mark>CMD</mark> instruction) <br>
+            - the command (<i>cmd</i>) after <mark>docker run <strong>image</strong></mark> <u>does not</u> override this instruction <br>
+            - the command (<i>cmd</i>) after <mark>docker run <strong>image</strong> --entrypoint</mark> overrides this instruction <br>
+            - command executed in <mark>/bin/sh -c</mark> for Linux | <mark>cmd /S /C</mark> for Windows shell <br>
+        </td>
+    </tr>
+        <tr class="25.07"><td></td><td></td></tr>
+    <tr class="25.08">
+        <td> 
+            ENTRYPOINT ["<strong>executable</strong>", "<strong>param</strong>", "<strong>param</strong>"]
+        </td>
+        <td> 
+            - (execution form) runs an <strong>executable</strong> directly (without shell) (ex: <mark>ENTRYPOINT ["/bin/bash", "-c", "echo Hello World!"]</mark>)
+        </td>
+    </tr>
+    <tr class="35.01">
+        <td> 
+            ENV <strong>key</strong>=<strong>val</strong> <i>...</i>
+        </td>
+        <td> 
+            - sets environment variables (available in the current Dockerfile (build-time) and <u>also in the final image</u>) (available in <span class="openable">these Dockerfile instructions<div>
+        <p> - <mark>ADD</mark> </p>
+        <p> - <mark>COPY</mark> </p>
+        <p> - <mark>ENV</mark> </p>
+        <p> - <mark>EXPOSE</mark> </p>
+        <p> - <mark>FROM</mark> </p>
+        <p> - <mark>LABEL</mark> </p>
+        <p> - <mark>STOPSIGNAL</mark> </p>
+        <p> - <mark>USER</mark> </p>
+        <p> - <mark>VOLUME</mark> </p>
+        <p> - <mark>WORKDIR</mark> </p>
+        <p> - <mark>ONBUILD</mark> (when combined with one of the supported instructions above </p>
+    </div></span>)<br>
+            -  <mark>ARG</mark> cannot override <mark>ENV</mark> (doesn't matter the order)
+        </td>
+    </tr>
+    <tr class="45.01">
+        <td> 
+            EXPOSE <strong>port:nr</strong>/<small>tcp|udp</small>
+        </td>
+        <td> 
+            - when building the container with the <mark>-P</mark> flag (<mark>docker run -P</mark>) the <strong>port</strong> is mapped to the host's <mark>0.0.0.0:<strong>randomPort</strong></mark> address
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            FROM <strong>image</strong><small class="openable">:<i>tag</i><div>
+            <p> Default: <mark>latest</mark> </p>
+            </div></small> <small class="openable">[AS <i>buildStageId</i>]<div>
+              <p> - gives a build stage name for this image </p>
+              <p> - its used for multi stage builds, it references this image's artifacts for another build stage (ex: in the next build stage's <mark>COPY</mark> instructions <mark>COPY --from=<i>name</i></mark>) </p>
+              <p> - by Default each stage is named as <mark>0</mark> <mark>1</mark> <mark>...</mark> and so on </p>
+            </div></small>
+        </td>
+        <td> 
+            - specifies a base image (below layers will change this image) (must come frist, the <mark>ARG</mark> instruction is the only one may precede it) <br>
+            - if the <strong>image</strong> does not exist locally it will be pulled automatically <br>
+            - (<small>AS <i>buildStageId</i></small>) gives a build stage name for this build (used for multistage builds)    
+        </td>
+    </tr>
+    <tr class="75.01">
+        <td> 
+            HEALTHCHECK <small>[--start-period=<i>nr</i>s|m]</small> <small>[--interval=<i>nr</i>s|m]</small> <small>[--timeout=<i>nr</i>s|m]</small> <small>[--retries=<i>nr</i>]</small> CMD <strong>cmd</strong> 
+        </td>
+        <td> 
+            - runs a command periodically, (if <strong>cmd</strong> exit code is <mark>0</mark> = container healthy) (if <strong>cmd</strong> exit code is <mark>1</mark> = container unhealthy) <br>
+            - health can be checked with the <mark>docker insepct <strong>container</strong></mark> command (<mark>Status</mark> object) <br>
+            - (<small>--start-period=<i>nr</i>s|m</small>) after this period runs the <strong>cmd</strong> for the 1st time (Default: <mark>0s</mark>) <br>
+            - (<small>--interval=<i>nr</i>s|m</small>) run the <strong>cmd</strong> interval periods (Default: <mark>30s</mark>)<br>
+            - (<small>--timeout=<i>nr</i>s|m</small>) if the <strong>cmd</strong> does not respond after this period then the attempt fails (Default: <mark>30s</mark>)<br>
+            - (<small>--retries=<i>nr</i></small>) number of attempts before the container is considered unhealthy (Default: <mark>3</mark>)
+        </td>
+    </tr>
+      <tr class="75.02"><td></td><td></td></tr>
+    <tr class="75.03">
+        <td> 
+            HEALTHCHECK <small>[--start-period=<i>nr</i>s|m]</small> <small>[--interval=<i>nr</i>s|m]</small> <small>[--timeout=<i>nr</i>s|m]</small> <small>[--retries=<i>nr</i>]</small> CMD ["<strong>executable</strong>", "<strong>param</strong>", "<strong>param</strong>"]
+        </td>
+        <td> 
+            
+        </td>
+    </tr>
+      <tr class="75.04"><td></td><td></td></tr>
+    <tr class="75.05">
+        <td> 
+            HEALTHCHECK NONE
+        </td>
+        <td> 
+            - healthcheck disabled 
+        </td>
+    </tr>
+    <tr class="80.01">
+        <td> 
+            LABEL <strong>key</strong>=<strong>val</strong> <i>...</i>
+        </td>
+        <td> 
+            - adds label metadata to the docker image (<mark>docker inspect <strong>image</strong></mark> command = can be found in the <mark>Labels</mark> object key)
+        </td>
+    </tr>
+    <tr class="65.01">
+        <td> 
+            ONBUILD <strong>dockerInstruction</strong> 
+        </td>
+        <td> 
+            - sets a trigger instruction, the <strong>dockerInstruction</strong> is not executed in the current build <u>but in the next build (right after <mark>FROM</mark>) where the currently built image is used as base image</u> <br>
+            - used only in 'child' builds (does not trigger in 'grand-child' builds)
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> 
+            RUN <strong>cmd</strong>
+        </td>
+        <td> 
+            - (shell form) runs a command within the default shell of the <strong>image</strong> and commits the result (Default shell: <mark>/bin/sh -c</mark> for Linux | <mark>cmd /S /C</mark> for Windows)
+        </td>
+    </tr>
+        <tr class="20.02"><td></td><td></td></tr>
+    <tr class="20.03">
+        <td> 
+            RUN ["<strong>executable</strong>", "<strong>param</strong>", "<strong>param</strong>"]
+        </td>
+        <td> 
+            - (execution form) runs an <strong>executable</strong> directly (withouth shell) on top of the <strong>image</strong> and commits the result
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> 
+            SHELL ["<strong>executableShell</strong>", "<strong>param</strong>"]
+        </td>
+        <td> 
+            - sets the default shell in which the following <mark>RUN</mark> / <mark>CMD</mark> / <mark>ENTRYPOINT</mark> commands will be executed <u>when they are called in shell form (ex: <mark>RUN <strong>cmd</strong></mark>)</u>
+        </td>
+    </tr>
+    <tr class="70.01">
+        <td> 
+            SIGKILL <strong class="openable">signal<div>
+        <p> - Default : <mark>SIGTERM</mark> </p>
+    </div></strong>
+        </td>
+        <td> 
+            - sets the first signal which is sent by the <mark>docker stop</mark> command to the container's main process 
+        </td>
+    </tr>
+    <tr class="60.01">
+        <td> 
+            USER <strong>UID</strong>:<i>GID</i>
+        </td>
+        <td> 
+            - sets (switches) the user (and group) for the following <mark>RUN</mark> / <mark>CMD</mark> / <mark>ENTRYPOINT</mark> commands 
+        </td>
+    </tr>
+      <tr class="60.02"><td></td><td></td></tr>
+    <tr class="60.03">
+        <td> 
+            USER <strong>userName</strong>:<i>groupName</i>
+        </td>
+        <td> 
+        </td>
+    </tr>
+    <tr class="55.01">
+        <td> 
+            VOLUME <strong>path</strong> <i>...</i>
+        </td>
+        <td> 
+            - creates an anonymous volume and mounts it to <strong>path</strong> inside the container (for each mounted <strong>path</strong> a new volume is created) <br>
+            - the <mark>-v</mark> flag overrides this instruction when there's a <strong>path</strong> conflict  
+        </td>
+    </tr>
+      <tr class="55.02"><td></td><td></td></tr>
+    <tr class="55.03">
+        <td> 
+            VOLUME ["<strong>path</strong>", <i>...</i>]
+        </td>
+        <td> 
+        </td>
+    </tr>
+    <tr class="50.01">
+        <td> 
+            WORKDIR <strong>path</strong>
+        </td>
+        <td> 
+            - sets (creates if doesn't exist) the working directory for the following <mark>RUN</mark> / <mark>CMD</mark> / <mark>ENTRYPOINT</mark> / <mark>COPY</mark> / <mark>ADD</mark> commands 
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    <mark>ENTRYPOINT</mark> & <mark>CMD</mark> combinations
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Instructions </th>
+        <th> executed command on container start </th>
+    </tr>
+    <tr class="01.01">
+        <td> 
+            ENTRYPOINT <strong>executableENT</strong> <strong>param1ENT</strong>
+        </td>
+        <td> 
+            /bin/sh -c <strong>executableENT</strong> <strong>param1ENT</strong>
+        </td>
+    </tr>
+    <tr class="01.02">
+        <td> 
+            ENTRYPOINT ["<strong>executableENT</strong>", "<strong>param1ENT</strong>"]
+        </td>
+        <td> 
+            <strong>executableENT</strong> <strong>param1ENT</strong>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            CMD <strong>executableCMD</strong> <strong>param1CMD</strong>
+        </td>
+        <td> 
+            /bin/sh -c <strong>executableCMD</strong> <strong>param1CMD</strong>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            CMD ["<strong>executableCMD</strong>", "<strong>param1CMD</strong>"]
+        </td>
+        <td> 
+            <strong>executableCMD</strong> <strong>param1CMD</strong>
+        </td>
+    </tr>
+    <tr class="05.03">
+        <td> 
+            CMD ["<strong>param1CMD</strong>", "<strong>pram2CMD</strong>"] <br>
+        </td>
+        <td> 
+            <strong>param1CMD</strong> <strong>pram2CMD</strong>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            CMD <strong>executableCMD</strong> <strong>param1CMD</strong> <br>
+            ENTRYPOINT <strong>executableENT</strong> <strong>param1ENT</strong>
+        </td>
+        <td> 
+            /bin/sh -c <strong>executableENT</strong> <strong>param1ENT</strong> <span style="color:darkorange;">(CMD ignored)</span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> 
+            CMD ["<strong>executableCMD</strong>", "<strong>param1CMD</strong>"] <br>
+            ENTRYPOINT <strong>executableENT</strong> <strong>param1ENT</strong>
+        </td>
+        <td> 
+            /bin/sh -c <strong>executableENT</strong> <strong>param1ENT</strong> <span style="color:darkorange;">(CMD ignored)</span> <br>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> 
+            CMD ["<strong>param1CMD</strong>", "<strong>pram2CMD</strong>"] <br>
+            ENTRYPOINT <strong>executableENT</strong> <strong>param1ENT</strong>
+        </td>
+        <td> 
+            /bin/sh -c <strong>executableENT</strong> <strong>param1ENT</strong> <span style="color:darkorange;">(CMD ignored)</span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            CMD ["<strong>executableCMD</strong>", "<strong>param1CMD</strong>"] <br>
+            ENTRYPOINT ["<strong>executableENT</strong>", "<strong>param1ENT</strong>"]
+        </td>
+        <td> 
+            <strong>executableENT</strong> <strong>param1ENT</strong> <strong>executableCMD</strong> <strong>param1CMD</strong>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> 
+            CMD ["<strong>param1CMD</strong>", "<strong>pram2CMD</strong>"] <br>
+            ENTRYPOINT ["<strong>executableENT</strong>", "<strong>param1ENT</strong>"]
+        <td> 
+            <strong>executableENT</strong> <strong>param1ENT</strong> <strong>param1CMD</strong> <strong>pram2CMD</strong> (this is the most common usage of these 2 instructions together)
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> 
+            CMD <strong>executableCMD</strong> <strong>param1CMD</strong> <br>
+            ENTRYPOINT ["<strong>executableENT</strong>", "<strong>param1ENT</strong>"]
+        </td>
+        <td> 
+            <strong>executableENT</strong> <strong>param1ENT</strong> /bin/sh -c <strong>executableCMD</strong> <strong>param1CMD</strong>
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - using glob negation works but it's pretty tricky (avoid if possible), check the demo section </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>Dockerfile</mark> file </u></h2>
+    <p> - the <mark>Dockerfile</mark> contains instructions how the base image should be modified when building Docker Images </p>
+    <p> - each Dockerfile command represents a modification layer to the base image, they are executed one-by-one to build the final image </p>
+    <p> - The BuildKit (form v18.9) offers enhanced build features when building Docker Images, set the <mark>DOCKER_BUILDKIT=1</mark> environment variable before launching the build </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// parse directive and comment --------------------------------------------------------
+    # escape=`                                                                         // parse directive declares the escape character (<mark>/</mark> is the default)       // -! parse directives must come before any comments or instruction 
+    # this is a comment! it will be ignored when building the Docker Image             // comment 
+    
+    
+// FROM -------------------------------------------------------------------------------
+    ARG IMAGE=node                                                                     // the ARG is the only instruction that can precede the FROM instruction  
+    ARG VERSION=latest
+    FROM ${IMAGE}:${VERSION}                                                           // arguments (variables) are used 
+    
+    
+// RUN --------------------------------------------------------------------------------
+    RUN npm install                                                                    // executed command is <mark>/bin/sh -c "npm install"</mark>    
+    
+    // --------------------------------------------
+    RUN /bin/bash -c "\                                                                // executed command is <mark>/bin/sh -c "/bin/bash -c 'npm install'"</mark>    
+      npm install ; 
+    
+    // --------------------------------------------
+    RUN ["/bin/bash", "-c", "npm install"]                                             // executed command is <mark>/bin/bash -c "npm install"</mark>    
+    
+    
+// LABEL ------------------------------------------------------------------------------
+    LABEL "someLabel"="labelVal" \                                                     // labels the image 
+    "someOtherLabel"="someOtherValue"
+    
+    
+// ENV --------------------------------------------------------------------------------
+    ENV VAR_1='val_1' \                                                                // environment varialbes available in build-time but also persisted in the final images   
+      VAR_2='val_2' \
+      VAR_3='val_3' 
+    
+    
+// ARG --------------------------------------------------------------------------------
+    // CLI ----------------------------------------
+    $ docker build -t test:test --build-arg ARG2=arg2_val .                            // -! outputs a warning because the <mark>ARG2</mark> does not exist in the Dockerfile (does not set a new <mark>ARG2</mark>)
+    
+    // Dockerfile ----------------------------------
+    FROM node
+    
+    ENV TEST_ENV=original 
+    ARG ARG1=arg1_val                                                                  // build-time varialbe set 
+    ARG TEST_ENV=newVal                                                                // the <mark>TEST_ENV</mark> value stays <mark>original</mark> (ARG cannot override ENV)
+    
+    RUN echo ${TEST_ENV} > testFile.txt                                                // output value is <mark>original</mark> 
+  
+  
+// COPY -------------------------------------------------------------------------------
+    COPY --chown=node:node testSrv.js .                                                // copies the file to the container and sets its owner and group (the node user and group exist in the image)
+                                                                                         // docker performs a user and group lookup in the <mark>/etc/user</mark> and <mark>/etc/group</mark> files in this case 
+                                                                                         // -! if the node user and group does not exist in the image the build fails 
+    // ---------------------------------------------
+    COPY --chown=1000:1000 testSrv.js .                                                // set a user id and group id for the copied file (there's no user and group lookup in this case)    
+    
+    // ---------------------------------------------
+    COPY package.json testSrv.js ./                                                    // when passing multiple sources the destination must be a directory (<mark>./</mark>)   
+    
+    
+// ADD --------------------------------------------------------------------------------
+    ADD --chown=node:node testSrv.js .                                                 // copies the file to the container and sets its owner and group (the node user and group exist in the image)
+                                                                                         // docker performs a user and group lookup in the <mark>/etc/user</mark> and <mark>/etc/group</mark> files in this case 
+                                                                                         // -! if the node user and group does not exist in the image the build fails 
+    // ---------------------------------------------
+    ADD --chown=1000:1000 testSrv.js .                                                 // set a user id and group id for the copied file (there's no user and group lookup in this case)   
+  
+    // ---------------------------------------------
+    ADD package.json testSrv.js ./                                                     // when passing multiple sources the destination must be a directory (<mark>./</mark>)   
+  
+    // ---------------------------------------------
+    ADD  https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf .     // can copy from URLs 
+  
+    // ---------------------------------------------
+    ADD  testArc.tar .                                                                 // can extract and copy linux tarbal files (even if it's copressed)   
+    
+    
+// USER -------------------------------------------------------------------------------
+    USER someuser                                                                      // switches to <mark>someuser</mark> user (following <mark>RUN</mark> / <mark>CMD</mark> / <mark>ENTRYPOINT</mark> command are executed with <mark>someuser</mark>)   
+    
+    
+// WORKDIR ----------------------------------------------------------------------------
+    WORKDIR /app                                                                       // sets the working directory for the context   
+    
+// STOPSIGNAL -------------------------------------------------------------------------
+    STOPSIGNAL SIGKILL                                                                 // the 1st signal sent by the <mark>docker stop</mark> command to this container's main process will be <mark>SIGKILL</mark> (as opposed to <mark>SIGTERM</mark> which is the default)   
+    
+    
+// HEALTHCHECK ------------------------------------------------------------------------ 
+    HEALTHCHECK \                                                                     // checks the server periodically, if fails to respond exit code 1 is returned which makes the container to be considered unhealthy
+      --interval=10s \
+      --timeout=15s \
+      --start-period=10s \
+      --retries=2 \
+      CMD ["curl", "-f", "http://localhost:1000/"] || exit 1
+    
+    
+// SHELL ------------------------------------------------------------------------------ 
+    RUN echo $0 > shell_1                                                              // executed command <mark>/bin/sh -c 'echo $0 > shell_1'</mark> (default shell)    
+    
+    SHELL ["/bin/bash", "-c"]                                                          // <mark>RUN</mark> / <mark>CMD</mark> / <mark>ENTRYPOINT</mark> shell form commands will be executed in <mark>/bin/bash</mark> after this    
+    RUN echo $0 > shell_2                                                              // executed command <mark>/bin/bash -c 'echo $0 > shell_2'</mark>    
+    
+    RUN ["/bin/sh", "-c", "echo $0 > shell_3"]                                         // executed command <mark>/bin/sh -c 'echo $0 > shell_3'</mark>   // default shell not used here (RUN uses execution form)   
+    
+    CMD tail -f /dev/null                                                              // executed command <mark>/bin/bash -c 'tail -f /dev/null'</mark>    
+    
+    
+// VOLUME -----------------------------------------------------------------------------
+      VOLUME /test-vol1 /test-vol2                                                     // creates 2 anonymus volumes and mount them as '/test-vol1' and '/test-vol2' inside the container    
+      
+    // ---------------------------------------------
+    // CLI -----------------------------------------
+    $ docker run --name testcont -d -v vol1:/test-vol test:v1                          // overrides the VOLUME instruction because there's a mount point conflict (no anonymus volume is created uses 'vol1' instead)    
+    
+    // Dockerfile ----------------------------------
+    VOLUME /test-vol
+    </pre>
+    <p> - <mark>ONBUILD</mark> </p>
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    docker build -t node:onbuild .
+    
+// Dockerfile -------------------------------------------------------------------------
+    # FROM node
+    
+    WORKDIR /app
+    
+    ONBUILD COPY package.json package-lock.json testSrv.js ./                          // these commands are not executed here (but in the next build from this image)    
+    ONBUILD RUN npm install
+    </pre>
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    docker build -t nodesrv:v1 .                                                       // we build from the above image <mark>node:onbuild</mark> here (this is where <mark>ONBUILD</mark> commands will be executed)    
+    
+// Dockerfile -------------------------------------------------------------------------
+    FROM node:onbuild
+                                                                                       // the <mark>ONBUILD</mark> commands from the <mark>node:onbuild</mark> image are executed here (right after the <mark>FROM</mark> instruction)   
+    CMD node /app/testSrv.js 
+    </pre>
+    <p> - <mark>ENTRYPOINT</mark> VS <mark>CMD</mark> instructions </p> 
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    docker run -d --name testcont test:test
+    
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    WORKDIR /app
+    CMD /bin/bash -c "echo test > testFile ; tail -f /dev/null"                        // container starts with <mark>bin/sh -c "/bin/bash -c 'echo test > testFile ; tail -f /dev/null'"</mark> command
+    
+  // ---------------------------------------------------------
+    CMD ["/bin/bash", "-c", "echo test > testFile ; tail -f /dev/null"]                // container starts with <mark>/bin/bash -c "echo test > testFile ; tail -f /dev/null"</mark> command   
+    
+  // ---------------------------------------------------------
+    ENTRYPOINT /bin/bash -c "echo test > testFile ; tail -f /dev/null"                 // container starts with <mark>bin/sh -c "/bin/bash -c 'echo test > testFile ; tail -f /dev/null'"</mark> command
+    
+  // ---------------------------------------------------------
+    ENTRYPOINT ["/bin/bash", "-c", "echo test > testFile ; tail -f /dev/null"]         // container starts with <mark>/bin/bash -c "echo test > testFile ; tail -f /dev/null"</mark> command   
+    </pre>
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    docker run -d --name testcont test:test tail -f /dev/null                          // command following the image (test:test) will completely override the <mark>CMD</mark> instruction   
+                                                                                       // container starts with <mark>tail -f /dev/null</mark>   
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    WORKDIR /app
+    CMD /bin/bash -c "echo test > testFile ; tail -f /dev/null" 
+    </pre>
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    docker run -d --name testcont --entrypoint tail test:test -f /dev/null             // this will completely override the <mark>ENTRYPOINT</mark> and <mark>CMD</mark> instructions     // -! a bit tricky to use because we have to split the command   
+                                                                                       // container starts with <mark>tail -f /dev/null</mark>   
+                                                                                       
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    WORKDIR /app
+    ENTRYPOINT ["echo", "test"]
+    CMD ["test_2"]
+    </pre>
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    docker run -d --name testcont test:test                                            // container starts with <mark>echo exam is on monday</mark>    
+    
+  // ---------------------------------------------------------
+    docker run -d --name testcont test:test friday                                     // container starts with <mark>echo exam is on friday</mark>     // we override only the <mark>CMD</mark> instruction    
+                                                                                       
+// Dockerfile -------------------------------------------------------------------------
+    FROM node                                                                          // -! this is the most common use case for both <mark>ENTRYPOINT</mark> and <mark>CMD</mark> together    
+    WORKDIR /app
+    ENTRYPOINT ["echo", "exam is on"]                                                  // this is the base command 
+    CMD ["monday"]                                                                     // default parameter passed to the base command (which is overridable by the <mark>docker run</mark> command)    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> creating a basic ubuntu container TEST </u></h4> 
+    <pre>
+    // Dockerfile 
+    FROM ubuntu:focal                                                                  // pulls the base image from dockerHub if does not exist locally 
+    CMD tail -f /dev/null                                                              // this command will keep the container alive so we can run it in detached mode 
+    </pre>
+    <pre class="cmd">
+pall@Aspire:~$ docker build -t myimage .                                               // builds the docker images based on the Dockerfile 
+    Sending build context to Docker daemon  13.31kB
+    Step 1/2 : FROM ubuntu:focal
+    focal: Pulling from library/ubuntu
+    7b1a6ab2e44d: Pull complete 
+    Digest: sha256:626ffe58f6e7566e00254b638eb7e0f3b11d4da9675088f4781a50ae288f3322
+    Status: Downloaded newer image for ubuntu:focal
+    ---> ba6acccedd29
+    Step 2/2 : CMD tail -f /dev/null                                                   // image modified layer by layer 
+    ---> Running in 86f19692a66d
+    Removing intermediate container 86f19692a66d
+    ---> 4aec80476d64
+    Successfully built 4aec80476d64
+    Successfully tagged myimage:latest
+pall@Aspire:~$ docker images                                                           // prints all docker images 
+    REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+    myimage      latest    4aec80476d64   7 seconds ago   72.8MB
+    ubuntu       focal     ba6acccedd29   2 weeks ago     72.8MB
+pall@Aspire:~$ docker run -d --name mycont myimage                                     // builds and run the container based on the image 
+    3a958c760ca81a262ace95b33800dd5653fe6a65231b9e9d4129edd33a57dd44
+pall@Aspire:~$ docker ps                                                               // prints all running containers   
+    CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        PORTS     NAMES
+    3a958c760ca8   myimage   "/bin/sh -c 'tail -f…"   4 seconds ago   Up 1 second             mycont
+pall@Aspire:~$ docker exec -it mycont bash                                             // execute a command on a running container (this is how we go in a running container)  
+    root@3a958c760ca8:/#                                                               // we are inside the container here 
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> node/express server container TEST </u></h4> 
+    <p> - after spinning up this containter the "Hello World!" message is accessible through <mark>localhost:50000</mark> </p>
+    <pre>
+// testSrv.js 
+    const express = require('express');     
+    const app = express();
+    
+    app.get('/', function(req, res, next){
+        res.send(process.env.MSG)
+    })
+    
+    app.listen(50000, ()=>console.log('Express is listening on localhost:50000'));
+    </pre>
+    <pre>
+// Dockerfile 
+    FROM node                                                                          // the base image is node on top of GNU/Linux  
+    WORKDIR /app                                                                       // creates an '/app' direcotry in the container and from this point every target path in the container is based on /app
+    COPY testSrv.js ./                                                                 // copy necessary resources in the container (in /app directory)
+    COPY package.json ./
+    COPY package-lock.json ./
+    RUN npm install                                                                    // executes a command which install the necessary dependencies 
+    ENV MSG='Hello World!'                                                             // sets an environment variable (which will be used by the serever)
+    CMD node testSrv.js                                                                // final command kicks in the node/express server  
+    </pre>
+    <pre class="cmd">
+pall@Aspire:~$ docker build -t node:express .                                          // building the docker image 
+    // build step by step ...
+    Successfully tagged node:express
+pall@Aspire:~$ docker images
+    REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+    node         express   df65464d24ce   46 seconds ago   996MB
+    node         latest    7220633f01cd   8 days ago       992MB
+pall@Aspire:~$ docker run -d --name expresscont -p 50000:50000 node:express            // builds the container (port 50000 is routed outside '-p 50000:50000')
+    a90f47b3bb631c7dce65e7343cd7996e6cccbfcc3058ec4d1f955a267c358118
+pall@Aspire:~$ docker ps
+    CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                                           NAMES
+    a90f47b3bb63   node:express   "docker-entrypoint.s…"   5 seconds ago   Up 2 seconds   0.0.0.0:50000->50000/tcp, :::50000->50000/tcp   expresscont
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>#</mark> comment and parse directives TEST </u></h4> 
+    <pre>
+    # escape=`                                                                         // parse directive declares a new escape character (<mark>/</mark> is the default)       // -! parse directives must come before any comments or instruction 
+    # this is a comment! it will be ignored when building the Docker Image             // comment 
+    
+    FROM node
+    
+    WORKDIR /ap``p                                                                     // escape character used, the create working directory will be <mark>ap`p</mark>    
+    
+    COPY testSrv.js ./
+    COPY package.json ./ 
+    COPY package-lock.json ./
+    
+    RUN npm install
+    
+    ENV MSG='Hello World!' `                                                           // escape characters also used as new line character for specifying multiple instructions for the same layer (here we sepcify multiple environment variables)    
+    TEST_ENV_1=1 `
+    TEST_ENV_2=2
+    
+    CMD node testSrv.js   
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>FROM</mark> instruction TEST </u></h4> 
+    <pre>
+    ARG IMAGE=node                                                                     // the ARG is the only instruction that can precede the FROM instruction  
+    ARG VERSION=latest
+    FROM ${IMAGE}:${VERSION}                                                           // arguments (variables) are used 
+    
+    WORKDIR /app
+    
+    COPY testSrv.js ./
+    COPY package.json ./ 
+    COPY package-lock.json ./
+    
+    RUN npm install
+    
+    ENV MSG='Hello World!'
+    
+    CMD node testSrv.js    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>RUN</mark> instruction TEST </u></h4> 
+    <pre>
+    FROM node
+    
+    WORKDIR /app
+    
+    COPY testSrv.js ./
+    COPY package.json ./ 
+    COPY package-lock.json ./
+    
+    RUN npm install ; \                                                                // multiple command executed in the default (<mark>/bin/sh -c</mark>) shell  
+    mkdir newdir ; \
+    cd newdir ; \
+    echo 'write this in the test file' > testFile.txt
+    
+    ENV MSG='Hello World!'
+    
+    CMD node testSrv.js
+    </pre>
+    <p> - we are executing the same commands here but the default shell is not uses, instead we execute the <mark>/bin/bash</mark> executable (shell) first then commands are executed inside it </p>
+    <pre>
+    FROM node
+    
+    WORKDIR /app
+    
+    COPY testSrv.js ./
+    COPY package.json ./ 
+    COPY package-lock.json ./
+    
+    RUN ["/bin/bash", "-c", "npm install ; \
+    mkdir newdir ;\
+    cd newdir ; \
+    echo 'write this in the test file' > testFile.txt"]
+    
+    ENV MSG='Hello World!'
+    
+    CMD node testSrv.js
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>ENTRYPOINT</mark> VS <mark>CMD</mark> instructions TEST </u></h4> 
+    <pre>
+// container start command ------------------------------------------------------------
+    docker run -d --name testcont test:test
+    
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    WORKDIR /app
+    CMD /bin/bash -c "echo test > testFile ; tail -f /dev/null"                        // container starts with <mark>bin/sh -c "/bin/bash -c 'echo test > testFile ; tail -f /dev/null'"</mark> command
+    
+  // ---------------------------------------------------------
+    CMD ["/bin/bash", "-c", "echo test > testFile ; tail -f /dev/null"]                // container starts with <mark>/bin/bash -c "echo test > testFile ; tail -f /dev/null"</mark> command   
+    
+  // ---------------------------------------------------------
+    ENTRYPOINT /bin/bash -c "echo test > testFile ; tail -f /dev/null"                 // container starts with <mark>bin/sh -c "/bin/bash -c 'echo test > testFile ; tail -f /dev/null'"</mark> command
+    
+  // ---------------------------------------------------------
+    ENTRYPOINT ["/bin/bash", "-c", "echo test > testFile ; tail -f /dev/null"]         // container starts with <mark>/bin/bash -c "echo test > testFile ; tail -f /dev/null"</mark> command   
+    </pre>
+    <pre>
+// container start command ------------------------------------------------------------
+    docker run -d --name testcont test:test tail -f /dev/null                          // command following the image (test:test) will completely override the <mark>CMD</mark> instruction   
+                                                                                       // container starts with <mark>tail -f /dev/null</mark>   
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    WORKDIR /app
+    CMD /bin/bash -c "echo test > testFile ; tail -f /dev/null" 
+    </pre>
+    <pre>
+// container start command ------------------------------------------------------------
+    docker run -d --name testcont --entrypoint tail test:test -f /dev/null             // this will completely override the <mark>ENTRYPOINT</mark> and <mark>CMD</mark> instructions     // -! a bit tricky to use because we have to split the command   
+                                                                                       // container starts with <mark>tail -f /dev/null</mark>   
+                                                                                       
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    WORKDIR /app
+    ENTRYPOINT ["echo", "test"]
+    CMD ["test_2"]
+    </pre>
+    <pre>
+// container start command ------------------------------------------------------------
+    docker run -d --name testcont test:test                                            // container starts with <mark>echo exam is on monday</mark>    
+    
+  // ---------------------------------------------------------
+    docker run -d --name testcont test:test friday                                     // container starts with <mark>echo exam is on friday</mark>     // we override only the <mark>CMD</mark> instruction    
+                                                                                       
+// Dockerfile -------------------------------------------------------------------------
+    FROM node                                                                          // -! this is the most common use case for both <mark>ENTRYPOINT</mark> and <mark>CMD</mark> together    
+    WORKDIR /app
+    ENTRYPOINT ["echo", "exam is on"]                                                  // this is the base command 
+    CMD ["monday"]                                                                     // default parameter passed to the base command (which is overridable by the <mark>docker run</mark> command)    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>LABEL</mark> TEST </u></h4> 
+    <pre>
+    FROM node
+    WORKDIR /app
+    LABEL "someLabel"="labelVal" \
+      "someOtherLabel"="someOtherValue"
+    CMD echo test
+    </pre>
+    <pre class="cmd">
+    apall@apall-notebook:~/Documents/Pall's Stuff/CodePlus/My Site/Docker/Dockerfile & .dockerignore$ docker inspect test:test
+            // ...
+                ],
+                "OnBuild": null,
+                "Labels": {                                                            // label on the image's object 
+                    "someLabel": "labelVal",
+                    "someOtherLabel": "someOtherValue"
+                }
+            },
+            "DockerVersion": "20.10.7",
+            // ...
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>ENV</mark> TEST </u></h4> 
+    <pre>
+    FROM node
+    
+    ENV ENVVAR_1='val_1' \                                                             // environment varialbes available in build-time but also persisted in the final images   
+    ENVVAR_2='val_2' \
+    ENVVAR_3='val_3' 
+    
+    WORKDIR /test
+    
+    RUN echo ${ENVVAR_1} > testFile.txt \
+      ${ENVVAR_2} >> testFile.txt \
+      ${ENVVAR_3} >> testFile.txt 
+    
+    CMD tail -f /dev/null
+    </pre>
+    <pre class="cmd">
+// in the container -------------------------------------------------------------------
+root@c07cde9e8e56:/test# cat testFile.txt 
+    val_1 val_2 val_3
+root@c07cde9e8e56:/test# echo $ENVVAR_1
+    val_1
+root@c07cde9e8e56:/test# echo $ENVVAR_2
+    val_2
+root@c07cde9e8e56:/test# echo $ENVVAR_3
+    val_3
+root@c07cde9e8e56:/test#     
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>ARG</mark> TEST </u></h4> 
+    <pre>
+// CLI --------------------------------------------------------------------------------
+   apall@apall-notebook: docker build -t test:test --build-arg ARG2=arg2_val .         // -! outputs a warning because the <mark>ARG2</mark> does not exist in the Dockerfile (does not set a new <mark>ARG2</mark>)
+    
+// Dockerfile -------------------------------------------------------------------------
+    FROM node
+    
+    ENV TEST_ENV=original 
+    ARG ARG1=arg1_val                                                                  // build-time varialbe set 
+    ARG TEST_ENV=newVal                                                                // the <mark>TEST_ENV</mark> value stays <mark>original</mark> (ARG cannot override ENV)
+    
+    RUN echo ${TEST_ENV} > testFile.txt                                                // output value is <mark>original</mark> 
+  
+    CMD tail -f /dev/null
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>ADD</mark> TEST </u></h4> 
+    <pre>
+    FROM node
+    
+    WORKDIR /app
+    
+    ADD --chown=node:node testSrv.js .                                                 // copies the file to the container and sets its owner and group (the node user and group exist in the image)
+                                                                                         // docker performs a user and group lookup in the <mark>/etc/user</mark> and <mark>/etc/group</mark> files in this case 
+                                                                                         // -! if the node user and group does not exist in the image the build fails 
+  // ---------------------------------------------
+    ADD --chown=1000:1000 testSrv.js .                                                 // set a user id and group id for the copied file (there's no user and group lookup in this case)   
+  
+  // ---------------------------------------------
+    ADD package.json testSrv.js ./                                                     // when passing multiple sources the destination must be a directory (<mark>./</mark>)   
+  
+  // ---------------------------------------------
+    ADD  https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf .     // can copy from URLs 
+  
+  // ---------------------------------------------
+    ADD  testArc.tar .                                                                 // can extract and copy linux tarbal files (even if its copressed)   
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>COPY</mark> TEST </u></h4> 
+    <p> - <mark>COPY</mark> does the same as <mark>ADD</mark> but cannot take URLs or tarballs as source </p>
+    <pre>
+    FROM node
+    
+    WORKDIR /app
+    
+    COPY --chown=node:node testSrv.js .                                                // copies the file to the container and sets its owner and group (the node user and group exist in the image)
+                                                                                         // docker performs a user and group lookup in the <mark>/etc/user</mark> and <mark>/etc/group</mark> files in this case 
+                                                                                         // -! if the node user and group does not exist in the image the build fails 
+  // ---------------------------------------------
+    COPY --chown=1000:1000 testSrv.js .                                                // set a user id and group id for the copied file (there's no user and group lookup in this case)    
+    
+  // ---------------------------------------------
+    COPY package.json testSrv.js ./                                                    // when passing multiple sources the destination must be a directory (<mark>./</mark>)   
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>USER</mark> TEST </u></h4> 
+    <pre>
+    FROM ubuntu
+    
+    WORKDIR /app
+    
+    RUN adduser --uid 1001 --no-create-home someuser ; \                               // creating a new user with a specified user id 
+      mkdir testFolder ; \
+      chown someuser:someuser testFolder                                                  // we have to give priviledges to the newly create folder 
+      
+    USER someuser                                                                      // switches the the newly create user   
+    
+    RUN cd /app/testFolder ; \                                                         // command runs with someuser user 
+      mkdir testDir ; \
+      touch testFile
+    
+    CMD tail -f /dev/null                                                              // command runs with someuser user 
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>ONBUILD</mark> TEST </u></h4> 
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    apall@apall-notebook:$ docker build -t node:onbuild .
+    
+// Dockerfile -------------------------------------------------------------------------
+    # FROM node
+    
+    WORKDIR /app
+    
+    ONBUILD COPY package.json package-lock.json testSrv.js ./                          // these commands are not executed here (but in the next build from this image)    
+    ONBUILD RUN npm install
+    </pre>
+    <pre>
+// CLI --------------------------------------------------------------------------------
+    apall@apall-notebook:$ docker build -t nodesrv:v1 .                                // we build from the above image <mark>node:onbuild</mark> here (this is where <mark>ONBUILD</mark> commands will be executed)    
+    
+// Dockerfile -------------------------------------------------------------------------
+    FROM node:onbuild
+                                                                                       // the <mark>ONBUILD</mark> commands from the <mark>node:onbuild</mark> image are executed here (right after the <mark>FROM</mark> instruction)   
+    CMD node /app/testSrv.js 
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>STOPSIGNAL</mark> TEST </u></h4> 
+    <pre>
+    # FROM node
+    
+    STOPSIGNAL SIGKILL                                                                 // the 1st signal sent by the <mark>docker stop</mark> command to this container's main process will be <mark>SIGKILL</mark>    
+    
+    WORKDIR /app
+    
+    COPY package.json package-lock.json testSrv.js ./                                  // these commands are not executed here (but in the next build from this image)    
+    RUN npm install
+    
+    CMD node testSrv.js
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>HEALTHCHECK</mark> TEST </u></h4> 
+    <pre>
+    FROM node
+    
+    WORKDIR /mysrv
+    
+    HEALTHCHECK --interval=10s --timeout=15s --start-period=10s --retries=2 CMD ["curl", "-f", "http://localhost:1000/"] || exit 1      // checks the server periodically, if it fails to respond exit code 1 is returned which makes the container to be considered unhealthy    
+    
+    COPY *.json *.js ./
+    RUN npm install
+    
+    CMD node testSrv.js
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>SHELL</mark> TEST </u></h4> 
+    <pre>
+    FROM ubuntu:bionic
+    
+    WORKDIR /mysrv
+    
+    RUN echo $0 > shell_1                                                              // executed command <mark>/bin/sh -c 'echo $0 > shell_1'</mark> (default shell for this image)    
+    
+    SHELL ["/bin/bash", "-c"]                                                          // <mark>RUN</mark> / <mark>CMD</mark> / <mark>ENTRYPOINT</mark> commands will be executed in <mark>/bin/bash</mark> after this    
+    RUN echo $0 > shell_2                                                              // executed command <mark>/bin/bash -c 'echo $0 > shell_2'</mark>    
+    
+    RUN ["/bin/sh", "-c", "echo $0 > shell_3"]                                         // executed command <mark>/bin/sh -c 'echo $0 > shell_3'</mark>   // default shell not used here (execution form)   
+    
+    CMD tail -f /dev/null                                                              // executed command <mark>/bin/bash -c 'tail -f /dev/null'</mark>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>VOLUME</mark> TEST </u></h4> 
+    <pre>
+    FROM ubuntu:bionic
+    
+    VOLUME /test-vol1 /test-vol2                                                       // creates 2 anonymus volumes and mount them as '/test-vol1' and '/test-vol2' inside the container    
+    
+    CMD tail -f /dev/null
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Multi-stage build </u></h2> 
+    <p> - multistage build allow us collect files and directories in a final image from previous builds, doing all this in one single Dockerfile </p>
+    <pre class="syntax">
+    FROM <strong>image1</strong> AS <strong>buildStageName</strong>                                                      // names the build stage    
+    <span style="color:darkgray">// docker instructions ... </span>
+    
+    
+    FROM <strong>image2</strong>                                                                        // in the final image only this build is preserved (all pervious builds are excluded)   
+    COPY --from=<strong>buildStageName</strong> <strong>src trg</strong>                                                 // copies assets from the specified build stage  
+    <span style="color:darkgray">// docker instructions ... </span>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    FROM ubuntu AS buildStage1                                                         // naming the build stage as 'buildStage1'    
+    WORKDIR /workDir
+    RUN mkdir dir1 \
+      ; cd dir1 \
+      ; echo 'data from build 1' > file1
+    
+    
+    FROM ubuntu:bionic AS buildStage2                                                  // naming the build stage as 'buildStage2'    
+    WORKDIR /workDir
+    RUN mkdir dir2 \
+      ; cd dir2 \
+      ; echo 'data from build 2' > file2
+    
+    
+    FROM node                                                                          // this will be the final image (all pervious builds are excluded)   
+    WORKDIR /workDir
+    COPY --from=buildStage1 /workDir/** ./                                             // copying assets from previous builds    
+    COPY --from=buildStage2 /workDir/** ./
+    CMD tail -f /dev/null
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>.dockerignore</mark> file </u></h2>
+    <p> - the <mark>.dockerignore</mark> file is placed in the root your repo, it describes <u>files and directories</u> that will be ignored by the docker daemon when building images </p>
+    <p> - file paths are described by using <a href="../../Bash (Linux Terminal)/index.html#wildcards_globs" target="_blanc">globbing rules</a> line by line, <u>but there are some shitty exceptions and differences between <mark>.dockerignore</mark> and <mark>.gitignore</mark> (see below)</u> </p>
+    <pre class="syntax">
+<span style="color:darkgray;">// .dockerignore (file) </span>
+    # <strong>comment</strong>
+    
+    <strong>glob</strong>
+    <i>...</i>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    // glob                         // original path                // watched part by Docker       // ignored part by Docker 
+// -------------------------------------------------------------------------------------------------
+    **/logs                         logs/firstcase/monday/log1.log                                  logs/firstcase/monday/log1.log
+                                    logs/monday/foo.bar                                             logs/monday/foo.bar
+                                    logs/debug.log                                                  logs/debug.log
+                                    build/logs/debug.log            build/                          logs/debug.log
+                                    test/case1/logs/log1.log        test/case1/                     logs/log1.log
+                                    build/logs.log                  build/logs.log
+    
+// -------------------------------------------------------------------------------------------------
+    **/logs/debug.log               logs/debug.log                                                  logs/debug.log
+                                    build/logs/debug.log            build/                          logs/debulg.log
+                                    logs/build/debug.log            logs/build/debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    *.log                           debug.log                                                       debug.log
+                                    foo.log                                                         foo.log
+                                    .log                                                            .log
+                                    logs/debug.log                   logs/                          debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    *.log                           debug.log                                                       debug.log
+    !important.log                  trace.log                                                       trace.log
+                                    important.log                    important.log
+                                    logs/debug.log                   logs/debug.log
+                                    logs/important.log               logs/important.log
+    
+// -------------------------------------------------------------------------------------------------
+    **/*.log                        debug.log                                                       debug.log
+    !**/*important.log              trace.log                                                       trace.log
+                                    important.log                    important.log
+                                    logs/debug.log                   logs/                          debug.log
+                                    logs/trace.log                   logs/                          trace.log
+                                    logs/important.log               logs/important.log
+                                    server/logs/debug.log            server/logs                    debug.log
+                                    server/logs/important.log        server/logs/important.log
+    
+// -------------------------------------------------------------------------------------------------
+    **                              debug.log                                                       debug.log
+    !server/test/*test.js           trace.log                                                       trace.log                           // -! (!**/test/*.test.js) this would not work! we have to be specific when negating paths)    
+                                    db/db.log                                                       db/db.log
+                                    ui/frontend/landingpage.html                                    ui/frontend/landingpage.html
+                                    server/test/coveragereport.lcov                                 server/test/coveragereport.locov
+                                    server/test/test1.test.js        server/test/test1.test.js
+                                    server/test/test2.test.js        server/test/test1.test.js
+                                    
+// -------------------------------------------------------------------------------------------------
+    *.log                           debug.log                                                       debug.log
+    !important/*.log                important/trace.log              important/trace.log
+    trace.*                         important/debug.log              important/debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    logs/                           logs/debug.log                                                  logs/dubug.log
+    !logs/important.log             logs/important.log               logs/important.log
+    
+// -------------------------------------------------------------------------------------------------
+    /debug.log                      debug.log                                                       /debug.log
+                                    logs/debug.log                   logs/debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    debug.log                       debug.log                                                       debug.log
+                                    logs/debug.log                   logs/debug.log
+  
+// -------------------------------------------------------------------------------------------------
+    debug?.log                      debug0.log                                                      debug0.log
+                                    debug1.log                                                      debug1.log
+                                    debug10.log                      debug10.log
+  
+// -------------------------------------------------------------------------------------------------
+    debug[0-9].log                  debug0.log                                                      debug0.log
+                                    debug1.log                                                      debug1.log
+                                    debug10.log                      debug10.log
+    
+// -------------------------------------------------------------------------------------------------
+    debug[!0-9].log                 debug0.log                                                      debug0.log                          // !! for some shitty reason again this doesn't work as expected [TESTED! even with anorther example]
+                                    debug1.log                                                      debug1.log
+                                    debug10.log                      debug10.log
+    
+// -------------------------------------------------------------------------------------------------
+    debug[01].log                   debug0.log                                                      debug0.log
+                                    debug1.log                                                      debug1.log
+                                    debug2.log                       debug2.log
+                                    debug01.log                      debug01.log
+    
+// -------------------------------------------------------------------------------------------------
+    debug[!01].log                  debug0.log                                                      debug0.log                          // !! for some shitty reason again this doesn't work as expected [TESTED! even with anorther example]
+                                    debug1.log                                                      debug1.log
+                                    debug2.log                       debug2.log
+                                    debug01.log                      debug01.log
+    
+// -------------------------------------------------------------------------------------------------
+    debug[a-z].log                  debuga.log                                                      debuga.log
+                                    debugb.log                                                      debugb.lod
+                                    debug1.log                       debug1.log
+    
+// -------------------------------------------------------------------------------------------------
+    logs                            logs                                                            logs
+                                    logs/debug.log                                                  logs/debug.log
+                                    logs/latest/foo.bar                                             logs/latest/foo.bar
+                                    build/logs                       build/logs
+                                    build/logs/debug.log             build/logs/debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    logs/**/debug.log               logs/debug.log                   logs/                          debug.log
+                                    logs/monday/debug.log            logs/monday/                   debug.log
+                                    logs/monday/pm/debug.log         logs/monday/pm/                debug.log
+                                    test/debug.log                   test/debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    logs/*day/debug.log             logs/monday/debug.log            logs/monday/                   debug.log
+                                    logs/tuesday/debug.log           logs/tuesday/                  debug.log
+                                    logs/latest/debug.log            logs/latest/debug.log
+    
+// -------------------------------------------------------------------------------------------------
+    logs/debug.log                  logs/debug.log                                                  logs/debug.log
+                                    debug.log                        debug.log
+                                    build/logs/debug.log             build/logs/debug.log
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h3 style="color:darkblue;"><u> <mark>.dockerignore</mark> VS <mark>.gitignore</mark> </u></h3>
+    <p> - Git and Docker do fundamentally different things, Git track only files (for version control) VS Docker deals with directory structures for container file system managament </p>
+    <p> - this is one of the reasons why globs are used differently in these files! But there are other tricky things around globs as well </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    // -! in .gitignore golb files and directories are recursively checked, if there's a match the WHOLE PATH IS IGNORED (because git tracks only files)
+    // -! in .dockerignore there's no recursive check and only the matching part of the path is ignored (because docker copies directory structures)
+    
+    // glob (in ignore file)        // original path                // file ignored by Git          // watched parth by Docker           // ignored part by Docker 
+// --------------------------------------------------------------------------------------------------------------------------------------
+    **/logs                         logs/debug.log                  yes                                                                  logs/debug.log    
+                                    logs/monday/foo.bar             yes                                                                  logs/monday/foo.bar    
+                                    logs                            yes                                                                  logs 
+                                    build/logs/debug.log            yes                             build/                               logs/debug.log    
+                                    test/build/logs                 yes                             test/build                           logs
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    logs                            logs/debug.log                  yes                                                                  logs/debug.log 
+                                    logs/monday/foo.bar             yes                                                                  logs/monday/foo.bar 
+                                    logs                            yes                                                                  logs
+                                    build/logs/debug.log            yes                             build/logs/debug.log
+                                    test/build/logs                 yes                             test/build/logs 
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    *.log                           debug.log                       yes                                                                  debug.log
+                                    logs/debug.log                  yes                             logs/debug.log  
+                                    test/build/some.log             yes                             test/build/some.log  
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+    // -! in .gitignore its tricky to negate globs, we can negate entire file content but not individual files from a directory 
+    // -! in .dockerignore glob negation works but we have to be specific when negating paths 
+    
+    // glob (in ignore file)        // original path                // file ignored by Git          // watched parth by Docker           // ignored part by Docker 
+// --------------------------------------------------------------------------------------------------------------------------------------
+    // -! from this kind of glob in .gitignore we cannot negate at all
+    logs                            logs/monday/log1.log            yes                             logs/monday/log1.log
+    !logs/monday                    logs/monday/log2.log            yes                             logs/monday/log2.log
+    !logs/tuesday/log1.log          logs/tuesday/log1.log           yes                             logs/tuesday/log1.log
+    !logs/overall.log               logs/tuesday/log2.log           yes                                                                  logs/tuesday/log2.log
+                                    logs/overall.log                yes                             logs/overall.log
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    logs/*                          logs/monday/log1.log            no                              logs/monday/log1.log                                              // -! in .gitignore we cannot negate specific files only entire directories from an already ignored directory    
+    !logs/monday                    logs/monday/log2.log            no                              logs/monday/log1.log    
+    !logs/tuesday/log1.log          logs/tuesday/log1.log           yes                             logs/tuesday/log1.log
+    !logs/overall.log               logs/tuesday/log2.log           yes                                                                  logs/tuesday/log2.log 
+                                    logs/overall.log                no                              logs/overall.log
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    logs/monday/*                   logs/monday/stage1/log1.log     yes                             logs/monday/                         stage1/log1.log 
+    !logs/monday/stage1/log2.log    logs/monday/stage1/log2.log     yes                             logs/monday/stage1/log2.log
+    !logs/monday/stage2             logs/monday/stage2/log1.log     no                              logs/monday/stage2/log1.log
+                                    logs/monday/stage2/log2.log     no                              logs/monday/stage2/log2.log
+                                    logs/monday/log1.log            yes                             logs/monday/                         log1.log    
+                                    logs/monday/log2.log            yes                             logs/monday/                         log2.log    
+                                    logs/tuesday/log1.log           no                              logs/tuesday/log1.log   
+                                    logs/tuesday/log2.log           no                              logs/tuesday/log2.log   
+                                    logs/overall.log                no                              logs/overall.log        
+    </pre>
+</details>
+
+    <br><br>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> PageTransition / Popstate / HashChange Events </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> PageTransition / Popstate / HashChange Events (ver 2.9) </h1>
+    <p> Updated (2018-10-11)</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html"> Web Browser APIs> </a> 
+        <a href="../index.html"> DOM Events> </a> PageTransition / Popstate / HashChange Events
+    </p>
+<table class="table">
+<caption>PAGETRANSITION EVENTS </caption>
+    <tr>
+        <th> Event </th>
+        <th> Description </th>
+        <th> Tag Support </th>
+        <th> DOM </th>
+    </tr>
+    <tr>
+        <td> pagehide </td>
+        <td> fires when the user navigates away from the page </td>
+        <td> &lt;body&gt; </td>
+        <td> 3 </td>
+    </tr>    
+    <tr>
+        <td> pageshow </td>
+        <td> fires when the user navigates to the page </td>
+        <td> &lt;body&gt; </td>
+        <td> 3 </td>
+    </tr>
+</table>
+<table class="table">
+<caption>PAGETRANSITION EVENT PROPERTY </caption>
+    <tr>
+        <th> Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>eventObj</strong>.persisted </td>
+        <td> returns a boolean value indicating if the document is loaded from the browser cache </td>
+    </tr>    
+</table><br><hr><br>
+<table class="table">
+<caption> POPSTATE EVENT </caption>
+    <tr>
+        <th> Event </th>
+        <th> Description </th>
+        <th> Tag Support </th>
+        <th> DOM </th>
+    </tr>
+    <tr>
+        <td> popstate </td>
+        <td> fires when the user navigates between two history entries created by the <mark>pushState()</mark> and <mark>replaceState()</mark> methods </td>
+        <td> &lt;body&gt; </td>
+        <td> ? </td>
+    </tr>    
+</table>
+<table class="table">
+<caption>POPSTATE EVENT PROPERTY </caption>
+    <tr>
+        <th> Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>eventObj</strong>.state </td>
+        <td> returns the state object from the <u>current</u> history entry  </td>
+    </tr>    
+</table><br><hr><br>  
+<table class="table">
+<caption> HASHCHANGE EVENT </caption>
+    <tr>
+        <th> Event </th>
+        <th> Description </th>
+        <th> Tag Support </th>
+        <th> DOM </th>
+    </tr>
+    <tr>
+        <td> hashchange </td>
+        <td> event fires when the hashpart of the URL changes </td>
+        <td> &lt;body&gt; </td>
+        <td> 3 </td>
+    </tr>    
+</table>
+<table class="table">
+<caption>HASHCHANGE EVENT PROPERTIES </caption>
+    <tr>
+        <th> Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>eventObj</strong>.newURL </td>
+        <td> returns the URL after the <mark>hashchange</mark> event </td>
+    </tr> 
+    <tr>
+        <td> <strong>eventObj</strong>.oldURL </td>
+        <td> returns the URL before the <mark>hashchange</mark> event </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Useful Links : </u></h2> 
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PageTransitionEvent" target="_blank"> MDN PageTranstion Events </a></p>
+    <p><a href="https://www.w3schools.com/jsref/obj_pagetransitionevent.asp" target="_blank"> W3Schools PageTransition Events </a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PopStateEvent" target="_blank"> MDN PopState Event </a></p>
+    <p><a href="https://www.w3schools.com/jsref/obj_popstateevent.asp" target="_blank"> W3Schools PopState Event </a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HashChangeEvent" target="_blank"> MDN HashChange Event </a>
+    <p><a href="https://www.w3schools.com/jsref/obj_hashchangeevent.asp" target="_blank"> W3Schools HashChange Event </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2> 
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>    
+<h2 class="headerExtra"><u> <mark>PageTransitionEvent()</mark></u></h2>
+    <p> - the <mark>PageTransitionEvent()</mark> is derived from the <mark>Event()</mark> constructor </p>
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>
+<h2 style="color:darkblue;"><u> PageTransition Events</u></h2>
+    <pre class="syntax">
+SYNTAX :    pagehide                        // fires when the user navigates away from the page
+            pageshow                        // fires when the user navigates to the page
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>pageshow</mark> / <mark>pagehide</mark> demo </u></h4>
+    <p id="pageShowFeedback"> <mark>pageshow</mark> event fired = <span>NO</span></p>
+    <p id="pageHideFeedback"> <mark>pagehide</mark> event fired (reload the page in order to get the data from the "sessionStorage") = <span>NO</span> </p>
+<script>
+    document.body.onpageshow = function(event) {
+        document.querySelector("#pageShowFeedback span").textContent = "YES";
+    }
+    document.body.onpagehide = function(event) {
+        sessionStorage.setItem("beforeunloadCheck", true);          // sessionStorage stores the value when the user navigates away from the page, so when the page is reloaded we can get this result
+    }
+    
+    document.querySelector("#pageHideFeedback span").textContent = sessionStorage.getItem("beforeunloadCheck");
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="pageShowFeedback"&gt; &lt;mark&gt;pageshow&lt;/mark&gt; event fired = &lt;span&gt;NO&lt;/span&gt;&lt;/p&gt;
+    &lt;p id="pageHideFeedback"&gt; &lt;mark&gt;pagehide&lt;/mark&gt; event fired (reload the page in order to get the data from the "sessionStorage") = &lt;span&gt;NO&lt;/span&gt; &lt;/p&gt;
+&lt;script&gt;
+    document.body.onpageshow = function(event) {
+        document.querySelector("#pageShowFeedback span").textContent = "YES";
+    }
+    document.body.onpagehide = function(event) {
+        sessionStorage.setItem("beforeunloadCheck", true);          // sessionStorage stores the value when the user navigates away from the page, so when the page is reloaded we can get this result
+    }
+    
+    document.querySelector("#pageHideFeedback span").textContent = sessionStorage.getItem("beforeunloadCheck");
+&lt;/script&gt;     
+        </pre>
+        </details>
+</details>    
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>
+<h2 style="color:darkblue;"><u> PageTransition Event Property </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>eventObj</strong>.persisted              // returns a boolean value indicating if the document is loaded from the browser cache
+    </pre>
+    <pre>
+    document.dody.onpageshow = function(event) {
+        event.persisted;                    // -> false         // page is not loaded from the cache
+    }
+    </pre>
+<details class="example">    
+    <summary> Example : </summary>
+<h4><u> <mark>persisted</mark> property test </u></h4>    
+    <p id="cacheLoadFeedback"> Page Loaded form cache = <span></span></p>
+<script>
+    document.body.onpageshow = function(event) {
+        document.querySelector("#cacheLoadFeedback span").textContent = event.persisted;
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="cacheLoadFeedback"&gt; Page Loaded form cache = &lt;span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;script&gt;
+    document.body.onpageshow = function(event) {
+        document.querySelector("#cacheLoadFeedback span").textContent = event.persisted;
+    }
+&lt;/script&gt;    
+        </pre>
+        </details>
+</details>    
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>    
+<h2 id="mark1"><u> <mark>PopStateEvent()</mark></u></h2>    
+    <p> - the <mark>PopStateEvent()</mark> is derived from the <mark>Event()</mark> constructor </p>
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>      
+<h2 style="color:darkblue;"><u> PopState Event </u></h2>    
+    <pre class="syntax">
+SYNTAX :    popstate                        // fires when the user navigates between two history entries created by the <mark>pushState()</mark> and <mark>replaceState()</mark> methods   
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>popstate</mark> event tested with <mark>pushState()</mark> and <mark>replaceState()</mark> history API methods </u></h4>    
+    <p> - with the button below you accumulate the displayed number, but with each count a new history state is added with the "pushState()" method, therefore with the back button you can navigate back in the history <u>in this same page!</u> </p>
+    <p style="color:yellow;"> - tested with EDGE because this API is blocked on local files in most browsers apparently (2018-10-11), but according to "caniuse.com" it has full browser support! </p>
+    <button onmousedown="addHistoryState(event)"> Count (ass new History state) </button><br>
+    <button onmousedown="replaceHistoryState(event)"> Replace History State </button> <span> &lt;- replace the current history entry (state) </span>
+    <p id="historyCounter"> counter = <span>0</span></p>
+<script>
+    pushStateCounter = 0;
+
+// pushState
+    var addHistoryState = function(event) {
+        pushStateCounter ++;
+        var pushStateObj = {pushIt:pushStateCounter};               // this object will be returned by the "state" property by the "popstate" event at every state
+        window.history.pushState({prop1:pushStateCounter}, null, "pushStateCount=" + pushStateCounter);
+        document.querySelector("#historyCounter span").textContent = pushStateCounter;
+    }
+    
+// replaceState
+    var replaceHistoryState = function(event) {
+        window.history.replaceState({replaced:"replacedEntry"}, null, "replaceState");
+        document.querySelector("#historyCounter span").textContent = "replaceState";
+    }
+    
+// listener set up for the "popstate" event (popstate event hapens only when the user navigates under the same document here!)    
+    window.addEventListener("popstate", popstateFunc);
+    function popstateFunc(event) {
+        console.log(event.state);                                   // when navigating back or forward popstate event fires and the object associated with the current state is returned here!
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button onmousedown="addHistoryState(event)"&gt; Count (ass new History state) &lt;/button&gt;&lt;br&gt;
+    &lt;button onmousedown="replaceHistoryState(event)"&gt; Replace History State &lt;/button&gt; &lt;span&gt; &lt;- replace the current history entry (state) &lt;/span&gt;
+    &lt;p id="historyCounter"&gt; counter = &lt;span&gt;0&lt;/span&gt;&lt;/p&gt;
+&lt;script&gt;
+    pushStateCounter = 0;
+
+// pushState
+    var addHistoryState = function(event) {
+        pushStateCounter ++;
+        var pushStateObj = {pushIt:pushStateCounter};               // this object will be returned by the "state" property by the "popstate" event at every state
+        window.history.pushState({prop1:pushStateCounter}, null, "pushStateCount=" + pushStateCounter);
+        document.querySelector("#historyCounter span").textContent = pushStateCounter;
+    }
+    
+// replaceState
+    var replaceHistoryState = function(event) {
+        window.history.replaceState({replaced:"replacedEntry"}, null, "replaceState");
+        document.querySelector("#historyCounter span").textContent = "replaceState";
+    }
+    
+// listener set up for the "popstate" event (popstate event hapens only when the user navigates under the same document here!)    
+    window.addEventListener("popstate", popstateFunc);
+    function popstateFunc(event) {
+        console.log(event.state);                                   // when navigating back or forward popstate event fires and the object associated with the current state is returned here!
+    }
+&lt;/script&gt;  
+        </pre>
+        </details>    
+<h4><u> <mark>popstate</mark> test on simple navigation</u></h4>
+    <p> - the <mark>popstate</mark> event is only fired if the navigation is happening on the same document! </p>
+    <p id="popstateNavigation"> Popstate event fired = <span></span></p>
+<script>
+// if onpopstate event happens the session storage is updated   
+    window.onpopstate = function(event) {                       // this even is not fired by a simple navigation, it fires only if the navigation is on the same document (in other word "pushState()" and "replaceState()" is used)
+        sessionStorage.setItem("popstate", true);
+    }
+    
+    document.querySelector("#popstateNavigation span").textContent = sessionStorage.getItem('popstate');
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="popstateNavigation"&gt; Popstate event fired = &lt;span&gt;&lt;/span&gt;&lt;/p&gt;    // never gets fired in this situation
+&lt;script&gt;
+// if onpopstate event happens the session storage is updated   
+    window.onpopstate = function(event) {                                   // this even is not fired by a simple navigation, it fires only if the navigation is on the same document (in other word "pushState()" and "replaceState()" is used)
+        sessionStorage.setItem("popstate", true);
+    }
+    
+    document.querySelector("#popstateNavigation span").textContent = sessionStorage.getItem('popstate');
+&lt;/script&gt;    
+        </pre>
+        </details>
+</details>    
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>      
+<h2 style="color:darkblue;"><u> PopState Event Property </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>eventObj</strong>.state                  // returns the state object from the <u>current</u> history entry 
+    </pre>
+    <pre>
+&lt;script&gt;
+    window.onpopstate = function(event) {
+       event.state                              // -> {push1:"push1"}           // fired (1)
+    }                                           // -> {replaced:"replaced"}     // fired (2)
+                                                // -> null                      // fired (3) (original page has no object registered)
+    
+    history.pushState({push1:"push1"}, null, "state1");             // pushes a new history entry                                       // popstate event not fired
+    history.pushState({push2:"push2"}, null, "state2");             // pushes a new history entry                                       // popstate event not fired
+    history.replaceState({replaced:"replaced"}, null, "replaced");  // replaces the pushed history entry                                // popstate event not fired 
+    history.back();                                                 // navigate back to the 1st pushed history state                    // -> popstate event fired (1)
+    history.forward();                                              // navigate forward to the 2nd pushed and replaced history state    // -> popstate event fired (2)
+    history.go(-2);                                                 // navigate back to the original page                               // -> popstate event fired (3)
+&lt;/script&gt; 
+    </pre>
+<details class="example">
+    <summary> CODE : </summary>    
+<h4><u> <mark>state</mark> property test </u></h4>
+    <p> - after adding and replacing a history entry, when you navigate back the state property will return the saved objet by the <mark>replaceState()</mark> method <span style="color:yellow;">(tested with EDGE because other browsers has no support on local sites)</span></p>
+    <button onmousedown="historyEntryModify(event)"> add and replace a history entry </button>
+<script>
+    document.body.onpopstate = function(event) {
+        console.log(event.state);
+    }
+    
+    let counter = 0;
+    var historyEntryModify = function(event) {
+        counter += 1;
+        history.pushState(null, null);                                      // push (add) new history entry on this same page
+        history.replaceState({stateNr:counter}, "title", "REPLACED!");          // replace the newly added entry
+    }
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button onmousedown="historyEntryModify(event)"&gt; add and replace a history entry &lt;/button&gt;
+&lt;script&gt;
+    document.body.onpopstate = function(event) {
+        console.log(event.state);
+    }
+    
+    let counter = 0;
+    var historyEntryModify = function(event) {
+        counter += 1;
+        history.pushState(null, null);                                      // push (add) new history entry on this same page
+        history.replaceState({stateNr:counter}, "title", "REPLACED!");          // replace the newly added entry
+    }
+&lt;/script&gt;      
+        </pre>
+        </details>
+</details>    
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>    
+<h2 class="headerExtra"><u> <mark>HashChangeEvent()</mark> </u></h2>    
+    <p> - the <mark>HashChangeEvent()</mark> is derived from the <mark>Event()</mark> constructor </p>
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>      
+<h2 style="color:darkblue;"><u> HashChange Event </u></h2>    
+    <pre class="syntax">
+SYNTAX :    hashchange                      // event fires when the hashpart of the URL changes    
+    </pre>
+<details class="example">
+    <summary> Example : </summary>  
+<h4><u> <mark>hashchange</mark> event test </u></h4>    
+    <button onmouseup="hashChange(event)"> Change URL hash </button>    
+    <p> Document's original hash changed = <span id="hashChangeFeedback">NO</span></p>
+<script>
+// hashchange listener
+    window.onhashchange = function(event) {
+        document.getElementById('hashChangeFeedback').textContent = "YES";
+    }
+    
+// hashchange function    
+    function hashChange(event) {
+        var currentURL = location.href;
+        location.href = currentURL + "#myHashChanged!";
+    }
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button onmouseup="hashChange(event)"&gt; Change URL hash &lt;/button&gt;    
+    &lt;p&gt; Document's original hash changed = &lt;span id="hashChangeFeedback"&gt;NO&lt;/span&gt;&lt;/p&gt;
+&lt;script&gt;
+// hashchange listener      <span style="color:red;">&lt;- listener works TESTED! (maybe because on hashchange listenere is allowed in a document this one is canceled and only the next works!)</span>   
+    window.onhashchange = function(event) {
+        document.getElementById('hashChangeFeedback').textContent = "YES";
+    }
+    
+// hashchange function    
+    function hashChange(event) {
+        var currentURL = location.href;
+        location.href = currentURL + "#myHashChanged!";
+    }
+&lt;/script&gt;    
+        </pre>
+        </details>
+</details>    
+<!-------------------------------------------------------------------------------------------------------------------------------------> 
+<hr>      
+<h2 style="color:darkblue;"><u> HashChange Event Properties </u></h2>    
+    <pre class="syntax">
+SYNTAX :    <strong>eventObj</strong>.newURL                 // returns the URL after the <mark>hashchange</mark> event
+            <strong>eventObj</strong>.oldURL                 // returns the URL before the <mark>hashchange</mark> event
+    </pre>
+    <pre>
+    document.body.onhashchange = function(event) {
+        event.oldURL;       // -> "file:///D:/Safe/CODE%20+/My%20Site/03%20Improuve/Learn%20Webdesign/03%20JS/JS%20Events/PageTransition%20Popstate%20and%20Hashchange%20Events/index.html"
+        event.newURL;       // -> "file:///D:/Safe/CODE%20+/My%20Site/03%20Improuve/Learn%20Webdesign/03%20JS/JS%20Events/PageTransition%20Popstate%20and%20Hashchange%20Events/index.html#NEW_ADDED_HASH_PART"   
+    }
+    
+    location.hash = "#NEW_ADDED_HASH_PART";                     // URL hash modified
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> <mark>newURL</mark> and <mark>oldURL</mark> property test </u></h4>
+    <button onmousedown="changeHash()"> Change Hash </button> 
+    <p> Result = </p>
+<script>
+// hashChange listener  
+    window.onhashchange = function (event) {
+        document.querySelector('[onmousedown="changeHash()"]').nextElementSibling.innerHTML = " Result = " +
+            "Old URL Hash = ".fontcolor("orangered") + event.oldURL + "<br>" +
+            "New URL Hash = ".fontcolor("green") + event.newURL;
+        
+    }
+    
+// change URL hash    
+    function changeHash() {
+        location.hash = "#NEW_ADDED_HASH_PART";
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button onmousedown="changeHash()"&gt; Change Hash &lt;/button&gt; 
+    &lt;p> Result = &lt;/p>
+&lt;script&gt;
+    // hashChange listener     
+    window.onhashchange = function (event) {
+        document.querySelector('[onmousedown="changeHash()"]').nextElementSibling.innerHTML = " Result = " +
+            "Old URL Hash = ".fontcolor("orangered") + event.oldURL + "&lt;br&gt;" +
+            "New URL Hash = ".fontcolor("green") + event.newURL;
+    }
+    
+// change URL hash    
+    function changeHash() {
+        location.hash = "#NEW_ADDED_HASH_PART";
+    }
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>    
+    
+    <br><br>
+</body>
+</html>

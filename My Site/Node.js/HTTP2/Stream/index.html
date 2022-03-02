@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Stream </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Stream (ver 3.4.1) </h1>
+    <p> Updated ( 2020-06-10 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">HTTP/2></a> Stream   
+    </p>
+<table class="table">
+<caption> HTTP/2 Stream </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong> </td>
+        <td> represents a bidirectional HTTP/2 communication stream over a <strong>session</strong> (used on both client and server side), extends the <mark>stream.Duplex</mark> class
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.aborted </td>
+        <td> returns <mark>true</mark> when the stream is abnormally aborted in mid-communication (when the <mark>aborted</mark> event is emitted), otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.bufferSize </td>
+        <td> returns how many <u>characters (not bytes)</u> are queued up in the (writable) internal memory buffer
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream</strong>.close(<strong class="openable">errCode<div>
+                <p> - <mark>errCode</mark> - <strong>nr</strong> - 32bit integer error code (Default: <mark>0</mark>) </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>close</mark> event's listener callback </p>
+            </div></i>)
+        </td>
+        <td> closes the stream by sending an <mark>RST_STREAM</mark> frame to the connected peer  
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.closed </td>
+        <td> returns <mark>true</mark> if the stream has been closed, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.destroy(<i class="openable">err<div>
+                <p> - once destroyed the stream emits the <mark>error</mark> event with the passed error (<mark>close</mark> event not emitted in this case) </p>
+            </div></i>) </td>
+        <td> immediately destroys the stream (once the stream is destoryed the stream emits the <mark>close</mark> event) 
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.destroyed </td>
+        <td> returns <mark>true</mark> if the stream has been destroyed, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.endAfterHeaders </td>
+        <td> returns <mark>true</mark> if the received <mark>HEADERS</mark> frame has the <mark>END_STREAM</mark> flag set (no additional data should be sent after the header and the  writable side should be closed), otherwiser returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.11.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.id </td>
+        <td> returns the stream identifier (<mark>undefined</mark> = id not yet assigned)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.pending </td>
+        <td> returns <mark>ture</mark> if the <strong>stream</strong> has not yet been assigned an identifier 
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream</strong>.priority(<strong class="openable">option:obj<div>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and the <mark>parent</mark> property identifies a parent stream, this stream is going to be the sole dependency of the specified parent stream, all other streams are made dependent on this stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - makes the identified stream as parent of this stream </p>
+                <p> weight: <strong>nr</strong> - relative dependency of a stream in relation to other stream with the same parent (min <mark>1</mark> | max <mark>256</mark>) </p>
+                <p> silent: <strong>bol</strong> - changes the priority locally only (without sending a <mark>PRIORITY</mark> frame to the connected peer) (Default: <mark>false</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> updates the priority for this stream (relative to other streams)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.rstCode </td>
+        <td> 
+            - returns the RST error code in the received <mark>RST_STREAM</mark> frame from the connected peer (when the peer stream calls the <mark>close()</mark> method) (<mark>undefined</mark> = stream not closed) <br>
+            - if its value is anything other than <mark>0</mark> the <mark>error</mark> event is emitted
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sendTrailers(<strong>h2Headers:obj</strong>) </td>
+        <td> 
+            - send a trailing <mark>HEADERS</mark> frame to the connected peer and immediately closes the stream <br>
+            - must be called after the <mark>wantTrailers</mark> event is emitted <br>
+            - in order to send trailers to the server the <mark>waitForTrailers</mark> option must be set in the <mark>request()</mark> method    
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sentHeaders </td>
+        <td> returns the sent headers in a <strong>h2Headers:obj</strong>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sentInfoHeaders </td>
+        <td> returns the sent informational headers (a header with status code <mark>1**</mark>) in a <strong>h2Headers:obj</strong>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.sentTrailers </td>
+        <td> returns the sent trailers in a <strong>h2Headers:obj</strong>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 9.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.session </td>
+        <td> references the <mark>session</mark> that owns this stream (<mark>undefined</mark> = stream is destroeyed)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>stream</strong>.setTimeout(<strong>nr:ms</strong>, <strong class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - sets a counter (timeout) on the stream (<mark>0</mark> = infinity) <br>
+            - the counter starts when the connection is estabilished and restarts at every received data <br>
+            - once the timer expires the <mark>timeout</mark> event is emitted (connection not dropped regardless the <mark>timeout</mark> events is registered or not)   
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream</strong>.state </td>
+        <td> 
+            returns an <span class="openable">object containing miscellaneous informations about the current stream state<div>
+                    <p> localWindowSize: <number> - the number of bytes the connected peer may send for this <strong>stream</strong> without receiving a WINDOW_UPDATE </number>
+                    <p> state:<number> - a flag indicating the low-level current state of the <strong>stream</strong> as determined by nghttp2 </number>
+                    <p> localClose:<strong>nr</strong> - <mark>1</mark> if this <strong>stream</strong> has been closed locally </p>
+                    <p> remoteClose: <strong>nr</strong> - <mark>1</mark> if this <strong>stream</strong> has been closed remotely </p>
+                    <p> sumDependencyWeight: <strong>nr</strong> - the sum weight of all <strong>stream</strong> instances that depend on this <strong>stream</strong> as specified using PRIORITY frames </p>
+                    <p> weight: <strong>nr</strong> - the priority weight of this Http2Stream </p>
+                </div></span>
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('aborted' <strong>fn</strong>) </td>
+        <td> emitted when the stream is abnormally aborted in mid-communication
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('close' <strong>fn</strong>) </td>
+        <td> emitted when the stream is destroyed
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('error' <strong>fn(err)</strong>) </td>
+        <td> emitted when an error occurs during the stream processing
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream.listener</strong>('frameError' <strong class="openable">fn(type, errCode, streamId)<div>
+                <p> - <mark>type</mark> - <strong>nr</strong> - frame type </p>
+                <p> - <mark>streamId</mark> - <strong>nr</strong> - frame Id (if <mark>0</mark> the frame is not associated with a stream) </p>
+            </div></strong>)
+        </td>
+        <td> emitted when an error occures while attempting to send a frame, this <strong>stream</strong> will be closed after emitting this event
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('timeout' <strong>fn</strong>) </td>
+        <td> emitted when the stream's timeout expires (see <mark>setTimeout()</mark>)
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>stream.listener</strong>('trailers' <strong class="openable">fn(h2Headers:obj, flags<div>
+                <p> <mark>flags</mark> - frame type </p>
+            </div></strong>)
+        </td>
+        <td> emitted when trailing headers are received
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>stream.listener</strong>('wantTrailers' <strong>fn</strong>) </td>
+        <td> 
+            - emited when the final <mark>DATA</mark> frame is sent and the stream is ready to send trailing headers <br>
+            - when the <mark>waitForTrailers</mark> option is set in the <mark><strong>clientSession</strong>.request()</mark> method and the <mark>end()</mark> is called 
+            <span class="browserSupport" title="updated : 2020-06-12">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ClientStream </td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>clientStream</strong> </td>
+        <td> represents a bidirectional HTTP/2 communication stream over a <mark>session</mark> <u>(client side)</u> (extends <mark>session</mark>)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('continue', <strong>fn</strong>) </td>
+        <td> emitted when a <mark>100 Continue</mark> status received (usually because the request contains an <mark>Expect: 100-continue</mark> header field)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('headers', <strong>fn(h2Headers:obj, flags</strong>) </td>
+        <td> 
+            - emitted when an informational header (with status code <mark>1**</mark>) is received from the server <br>
+            - not emitted when a non informational header is received (status code other than <mark>1**</mark>) 
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('push', <strong>fn(h2Headers:obj, flags)</strong>) </td>
+        <td> emitted when this <strong>clientStream</strong> receives a server push header
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clientStream.listener</strong>('response', <strong>fn(h2Headers:obj, flags</strong>) </td>
+        <td> 
+            - emitted when a response <mark>HEADER</mark> frame has been received from the connected HTTP/2 server <br>
+            - not emitted when an informational header (with status code <mark>1**</mark>) is received
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="background-color:rgb(190, 133, 27); font-weight:bold; font-size:1.3em;"> HTTP/2 ServerStream </td>
+    </tr>
+    <tr>
+        <th style="width:30%; background-color:rgb(190, 133, 27);"> Method / Property </th>
+        <th style="background-color:rgb(190, 133, 27);"> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong> </td>
+        <td> represents a bidirectional HTTP/2 communication stream over a <mark>session</mark> <u>(server side)</u> (extends <mark>session</mark>)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong>.additionalHeaders(<strong>h2Headers:obj</strong>) </td>
+        <td> sends an informational header (with status code <mark>1**</mark>) to the client <u>(informational header only!)</u>
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong>.headersSent </td>
+        <td> returns <mark>true</mark> if the headers were sent, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>serverStream</strong>.pushAllowed </td>
+        <td> returns <mark>true</mark> if the remote client accepts push streams, otherwise <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.pushStream(<strong class="openable">h2Headers:obj<div>
+                <p> - header passed as 3rd argument to the callback </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and the <mark>parent</mark> property identifies a parent stream, this stream is going to be the sole dependency of the specified parent stream, all other streams are made dependent on this stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - makes the identified stream as parent of this stream </p>
+            </div></i>, <strong class="openable">fn(err, pushStream, h2Headers)<div>
+                <p> - called once the <strong>pushStream</strong> has been initialted </p>
+                <p> - <mark>pushStream</mark> - the newly created stream (pushStream) </p>
+                <p> - <mark>h2Headers</mark> - <strong>h2Headers</strong> the push stream initiated with (1st argument of this method) </p>
+            </div></strong>)
+        </td>
+        <td> 
+            creates a "push" stream in order to push data to the client (sends unrequested data to the client)
+                                                                                                         callback invoked when the <span class="openable">new <strong>pushStream</strong> is created<div>
+                <p> - setting the <mark>weight</mark> to the push stream it's not allowed in the <mark>HEADERS</mark> frame </p>
+                <p> - in order to set the priority to the push stream use the <mark>priority()</mark> method with the <mark>silent</mark> option (this way priority settings are not sent to the client) </p>
+                <p> - sending push stream within push stream is not allowed </p>
+            </div></span> 
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.respond(<i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> endStream: <strong>bol</strong> - if <mark>true</mark> the response does not include payload data </p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a response header (the messabe body (if any) will be sent by using the stream interface (<mark>write()</mark> / <mark>end()</mark>)) <br>
+            - cannot send informational header (<mark>1**</mark>)
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.respondWithFD(<strong>fd:nr</strong>, <i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> statCheck: <strong>fn</strong> - if specified can set additional content headers based on the <mark>fs.Stat</mark> details, an automatic <mark>fs.fstat()</mark> check is performed </p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+                <p> offset: <strong>nr</strong> - position at which to begin reading the file descriptor content </p>
+                <p> length: <strong>nr</strong> - how much data to read from the file descriptor </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a response whose data is read from the <span class="openable">specified file descriptor<div>
+                    <p> - Node.js does not perform validation check on the passed file descriptor, if an error occurs the stream will be closed </p>
+                    <p style="color:orangered"> - the specified file descriptor is NOT closed by this method after using it (consider closing it to save up system resoruces) </p>
+                    <p> - the same file descriptor cannot be used for multiple streams at the same time, however it can be used sequentially (one stream finishe reading then other starts reading it again) </p>
+                                                                                          this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+                </div></span> <u>(cannot send informational header (<mark>1**</mark>))</u> <br>
+            - this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 any file descriptor </span>
+                <span><i class="fab fa-node-js"></i> 12.12.0 <mark>FileHandle</mark> support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>serverStream</strong>.respondWithFile(<strong>filePath:str|buf|urlObj</strong>, <i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> statCheck: <strong>fn</strong> - if specified can set additional content headers based on the <mark>fs.Stat</mark> details, an automatic <mark>fs.fstat()</mark> check is performed </p>
+                <p> onError: <strong>fn</strong> - if specified handles the thrown error without closing the stream</p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+                <p> offset: <strong>nr</strong> - position at which to begin reading the file descriptor content </p>
+                <p> length: <strong>nr</strong> - how much data to read from the file descriptor </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a regular file as response <u>(cannot send informational header (<mark>1**</mark>))</u> <br>
+            - this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+            <span class="browserSupport" title="updated : 2020-06-13">
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 any readable file </span>
+            </span>
+        </td>
+    </tr>
+</table>    
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - an <mark>Http2Stream</mark> represents a bidirectional HTTP/2 communication stream over a <mark>http2.Http2Session</mark>, extends the <mark>stream.Duplex</mark> class </p>
+    <p> - <mark>Http2Stream</mark>s are not directly constructed </p> 
+    <p style="text-indent:25px;"> <u>on Server Side</u> the server (object) creates as response to an incomming request or when pushes a response (<mark>pushStream()</mark> method) </p>
+    <p style="text-indent:25px;"> <u>on Client Side</u> created when the client issues a requests (<mark>request()</mark> method) or when receives a push stream (<mark>push</mark> event) </p>
+<h2 style="color:darkblue;"><u> HTTP/2 Stream <mark>bufferSize</mark> / <mark>aborted</mark> / <mark>close()</mark> / <mark>closed</mark> / <mark>destroeyd</mark> / <mark>rstCode</mark> / <mark>id</mark> / <mark>pending</mark> / <mark>session</mark> / <mark>state</mark> / <mark>priority()</mark> / <mark>endAfterHeaders</mark> / <mark>sentHeaders</mark> / <mark>sentInfoHeaders</mark> / <mark>sentTrailers</mark> / <mark>sendTrailers()</mark> / <mark>setTimeout()</mark>  </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>aborted</mark> / <mark>close</mark> / <mark>error</mark> / <mark>frameError</mark> / <mark>trailers</mark> / <mark>wantTrailers</mark> / <mark>timeout</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>stream</strong>                                                                     // represents a bidirectional HTTP/2 communication stream over a <strong>session</strong> (used on both client and server side), extends the <mark>stream.Duplex</mark> class    
+
+            <strong>stream</strong>.bufferSize                                                          // returns how many <u>characters (not bytes)</u> are queued up in the (writable) internal memory buffer   
+                
+            <strong>stream</strong>.aborted                                                             // returns <mark>true</mark> when the stream is abnormally aborted in mid-communication (when the <mark>aborted</mark> event is emitted), otherwise <mark>false</mark>    
+                
+            <strong>stream</strong>.close(<strong class="openable">errCode<div>
+                <p> - <mark>errCode</mark> - <strong>nr</strong> - 32bit integer error code (Default: <mark>0</mark>) </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>close</mark> event's listener callback </p>
+            </div></i>)                                               // closes the stream by sending an <mark>RST_STREAM</mark> frame to the connected peer  
+            <strong>stream</strong>.closed                                                              // returns <mark>true</mark> if the stream has been closed, otherwise <mark>false</mark>
+            
+            <strong>stream</strong>.destroy(<i class="openable">err<div>
+                <p> - once destroyed the stream emits the <mark>error</mark> event with the passed error (<mark>close</mark> event not emitted in this case) </p>
+            </div></i>)                                                       // immediately destroys the stream (once the stream is destoryed it emits the <mark>close</mark> event)     
+            <strong>stream</strong>.destroyed                                                           // returns <mark>true</mark> if the stream has been destroyed, otherwise <mark>false</mark>
+            <strong>stream</strong>.rstCode                                                             // returns the RST error code in the received <mark>RST_STREAM</mark> frame from the connected peer (when the peer stream calls the <mark>close()</mark> method) (<mark>undefined</mark> = stream not closed)  
+                                                                                          if its value is anything other than <mark>0</mark> the <mark>error</mark> event is emitted 
+                
+            <strong>stream</strong>.id                                                                  // returns the stream identifier (<mark>undefined</mark> = id not yet assigned) 
+            <strong>stream</strong>.pending                                                             // returns <mark>ture</mark> if the <strong>stream</strong> has not yet been assigned an identifier   
+            <strong>stream</strong>.session                                                             // references the <mark>session</mark> that owns this stream (<mark>undefined</mark> = stream is destroeyed)  
+            <strong>stream</strong>.state                                                               // returns an <span class="openable">object containing miscellaneous informations about the current stream state<div>
+                    <p> localWindowSize: <number> - the number of bytes the connected peer may send for this <strong>stream</strong> without receiving a WINDOW_UPDATE </number>
+                    <p> state:<number> - a flag indicating the low-level current state of the <strong>stream</strong> as determined by nghttp2 </number>
+                    <p> localClose:<strong>nr</strong> - <mark>1</mark> if this <strong>stream</strong> has been closed locally </p>
+                    <p> remoteClose: <strong>nr</strong> - <mark>1</mark> if this <strong>stream</strong> has been closed remotely </p>
+                    <p> sumDependencyWeight: <strong>nr</strong> - the sum weight of all <strong>stream</strong> instances that depend on this <strong>stream</strong> as specified using PRIORITY frames </p>
+                    <p> weight: <strong>nr</strong> - the priority weight of this Http2Stream </p>
+                </div></span>    
+            
+            <strong>stream</strong>.priority(<strong class="openable">option:obj<div>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and the <mark>parent</mark> property identifies a parent stream, this stream is going to be the sole dependency of the specified parent stream, all other streams are made dependent on this stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - makes the identified stream as parent of this stream </p>
+                <p> weight: <strong>nr</strong> - relative dependency of a stream in relation to other stream with the same parent (min <mark>1</mark> | max <mark>256</mark>) </p>
+                <p> silent: <strong>bol</strong> - changes the priority locally only (without sending a <mark>PRIORITY</mark> frame to the connected peer) (Default: <mark>false</mark>) </p>
+            </div></strong>)                                               // updates the priority for this stream (relative to other streams)    
+            
+            <strong>stream</strong>.endAfterHeaders                                                     // returns <mark>true</mark> if the received <mark>HEADERS</mark> frame has the <mark>END_STREAM</mark> flag set (no additional data should be sent after the header and the    writable side should be closed), otherwiser returns <mark>false</mark>    
+            <strong>stream</strong>.sentHeaders                                                         // returns the sent headers in a <strong>h2Headers:obj</strong>    
+            <strong>stream</strong>.sentInfoHeaders                                                     // returns the sent informational headers (a header with status code <mark>1**</mark>) in a <strong>h2Headers:obj</strong>    
+                
+            <strong>stream</strong>.sentTrailers                                                        // returns the sent trailers in a <strong>h2Headers:obj</strong>    
+            <strong>stream</strong>.sendTrailers(<strong>h2Headers:obj</strong>)                                         // send a trailing <mark>HEADERS</mark> frame to the connected peer and immediately closes the stream 
+                                                                                          must be called after the <mark>wantTrailers</mark> event is emitted
+                                                                                          in order to send trailers to the server the <mark>waitForTrailers</mark> option must be set in the <mark>request()</mark> method    
+            
+            <strong>stream</strong>.setTimeout(<strong>nr:ms</strong>, <strong class="openable">fn<div>
+                <p> - <mark>timeout</mark> listener callback </p>
+            </div></strong>)                                              // sets a counter (timeout) on the stream (<mark>0</mark> = infinity)    
+                                                                                          the counter starts when the connection is estabilished and restarts at every received data 
+                                                                                          once the timer expires the <mark>timeout</mark> event is emitted (connection not dropped regardless the <mark>timeout</mark> events is registered or not)   
+            
+    <span style="color:darkgray">// Events -------------------------------------------------------------------------</span>
+            <strong>stream.listener</strong>('aborted' <strong>fn</strong>)                                              // emitted when the stream is abnormally aborted in mid-communication 
+                
+            <strong>stream.listener</strong>('close' <strong>fn</strong>)                                                // emitted when the stream is destroyed 
+            
+            <strong>stream.listener</strong>('error' <strong>fn(err)</strong>)                                           // emitted when an error occurs during the stream processing 
+            <strong>stream.listener</strong>('frameError' <strong class="openable">fn(type, errCode, streamId)<div>
+                <p> - <mark>type</mark> - <strong>nr</strong> - frame type </p>
+                <p> - <mark>streamId</mark> - <strong>nr</strong> - frame Id (if <mark>0</mark> the frame is not associated with a stream) </p>
+            </div></strong>)                 // emitted when an error occures while attempting to send a frame, this <strong>stream</strong> will be closed after emitting this event  
+            
+            <strong>stream.listener</strong>('trailers' <strong class="openable">fn(h2Headers:obj, flags<div>
+                <p> <mark>flags</mark> - frame type </p>
+            </div></strong>)                       // emitted when trailing headers are received  
+            <strong>stream.listener</strong>('wantTrailers' <strong>fn</strong>)                                         // emited when the final <mark>DATA</mark> frame is sent and the stream is ready to send trailing headers 
+                                                                                          when the <mark>waitForTrailers</mark> option is set in the <mark><strong>clientSession</strong>.request()</mark> method and the <mark>end()</mark> is called    
+            
+            <strong>stream.listener</strong>('timeout' <strong>fn</strong>)                                              // emitted when the stream's timeout expires (see <mark>setTimeout()</mark>)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <p><u>Client</u></p>
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000', options);
+    
+    var req = client.request({':method':'POST', 'myHeader':21}, {waitForTrailers:true});  // trailers allowed 
+    
+// close() / closed / destroyed -------------------------------------------------------
+    req.close(4152);                                                                   // sends an RST_STREAM frame to the connected peer which closes the stream with 4152 error code (other than 0 error code emits the 'error' event)    
+    req.closed;                                                                        // -> true           // stream closed
+    req.destroyed;                                                                     // -> true           // stream destroyed
+    
+// id / pending / session / state -----------------------------------------------------
+    req.id;                                                                            // -> 1              // stream identifier
+    req.pending;                                                                       // -> false          // stream identifier is assigned to the stream   
+    req.session;                                                                       // -> session object that owns this stream 
+    req.state;                                                                         // -> stream state returned in an object 
+    
+// priority() -------------------------------------------------------------------------
+    req.priority({weight:21});                                                         // sets the priority of the stream 
+    
+// sendTrailers() / sentTrailers / wantTrailers (event) -------------------------------
+    req.on('wantTrailers', function{                                                   // emitted when the request's full body message is sent 
+        req.sendTrailers({'trail1':'val1'});                                           // sens trailing headers in a HEADERS frame to the server
+        req.sentTrailers;                                                              // -> already sent trailing headers returned in an h2Headers object    
+    });
+    
+// setTimeout() / timeout (event) -----------------------------------------------------
+    req.setTimeout(5000);                                                              // session emits the timeout event after 5 seconds (counted from connection and restarted at every data received)  
+    
+    req.on('timeout', ()=>{});                                                         // emitted when the session times out ('setTimeout')
+    </pre>
+    <p><u>Server</u></p>
+    <pre>
+    var http2 = require('http2');
+    
+    var server = http2.createServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        
+// rstCode ----------------------------------------------------------------------------
+        stream.rstCode;                                                                // -> 4152           // stream closed with 4152 rst code
+        
+// endAfterHeaders / sentHeaders / sentInfoHeaders ------------------------------------ 
+        stream.endAfterHeaders;                                                        // -> true           // no more data will be received after the message header    
+        steram.sentHeaders;                                                            // -> already sent headers returned in an h2Headers object 
+        stream.sentInforHeaders;                                                       // -> already sent informational headers (header with status code 1**) returned in an h2Headers object   
+        
+// trailers (event) -------------------------------------------------------------------
+        stream.on('trailers', function(headers){                                       // emitted when the server receives the trailers (trailing headers)   
+            headers;                                                                     // -> received trailers returned in a h2Headers object 
+        })
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>close()</mark> / <mark>closed</mark> / <mark>destroyed</mark> / <mark>rstCode</mark> / <mark>close</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    setTimeout(function(){
+        req.close(2121, function(){                                                    // sending an RST_STREAM frame with 2121 error code the steam emits the error event too! 
+            console.log( 'close event emitted! (1)' );
+        });
+    }, 3000);
+    
+    req.on('close', function(){
+        console.log( 'close event emitted! (2)' );    
+        console.log( req.closed );                                                     // -> true 
+        console.log( req.destroyed );                                                  // -> true
+        console.log( req.rstCode );                                                    // -> 2121          // the received RST error code (from the received RST_STREAM frame)   
+    });
+    
+    req.on('error', function(err){                                                     // error thrown because the rstCode value is not 0 
+        console.log( err.message );                                                    // -> 'Stream closed with error code 2121'
+    });    
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.write('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        stream.on('close', function(){
+            console.log( 'close event emitted!' );
+            console.log( stream.closed );                                              // -> true 
+            console.log( stream.destroyed );                                           // -> true
+            console.log( stream.rstCode );                                             // -> 2121          // the received RST error code (from the received RST_STREAM frame)   
+        }); 
+        
+        stream.on('error', function(err){
+            console.log( err.message );                                                // -> 'Stream closed with error code 2121'
+        })
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>id</mark> / <mark>pending</mark> / <mark>session</mark> / <mark>state</mark> TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    client.on('connect', function(stream){                                             // session must be connected before getting these connected informations 
+        console.log( req.id );                                                         // -> 1     
+        console.log( req.pending );                                                    // -> false                 // id assigned 
+        console.log( req.state );                                                      // -> state object 
+        console.log( req.session == client );                                          // -> true                  // the session that owns this stream  
+    });    
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.write('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        console.log( stream.id );                                                      // -> 1     
+        console.log( stream.pending );                                                 // -> false                 // id assigned 
+        console.log( stream.state );                                                   // -> state object 
+        console.log( stream.session );                                                 // -> session that owns this stream  
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>priority()</mark> TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'}); 
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    client.on('connect', function(stream){                                             // session must be connected before getting these connected informations 
+        console.log( req.state.weight )
+        
+        setTimeout(function(){
+            req.priority({weight:21});                                                 // setting the priority after 1 second 
+        }, 1000);
+    });
+    
+    setTimeout(function(){
+        console.log( req.state.weight );                                               // -> 21            // priority set 
+    }, 5000);
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.write('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        setTimeout(function(){
+            console.log( stream.state.weight );                                        // -> 21 stream priority set by the client 
+        }, 5000);
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>endAfterHeaders</mark> / <mark>sentHeaders</mark> / <mark>sentInfoHeaders</mark> TEST </u></h4>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.additionalHeaders({'addHeader':21});
+        stream.write('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        console.log( stream.endAfterHeaders );                                         // -> true                      // GET request received (no additional message body should be received)  
+        console.log( stream.sentHeaders );                                             // -> {':status': 200, date:'Fri, 12 Jun 2020 04:43:13 GMT'}    // sent headers
+        console.log( stream.sentInfoHeaders );                                         // -> { addHead: 546 }          // additional headers 
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>sendTrailers()</mark> / <mark>sentTrailers</mark> / <mark>wantTrailers</mark> (event) / <mark>trailers</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST', 'myHeader':21}, {waitForTrailers:true});    // trailers allowed 
+    
+    req.end('some client data');                                                       // sending the last data chunk ('write()' method doesn't work)
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    console.log( req.sentTrailers );                                                   // -> undefined             // trailers not yet sent 
+        
+    req.on('wantTrailers', function(){                                                 // emitted when the client is ready to send trailers 
+        console.log( 'wantTrailers event emitted!' );
+        req.sendTrailers({'trail-1':1, 'trail-2':2});                                  // sending trailers 
+        
+        console.log( req.sentTrailers );                                               // -> {'trail-1':1, 'trail-2':2} 
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.write('server response'); 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        stream.on('trailers', function(headers, flag){                                 // emitted when trailers has been received 
+            console.log( 'trailers event emitted!' );
+            console.log( headers );                                                    // -> { 'trail-1': '1', 'trail-2': '2' }
+            console.log( flag );
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setTimeout()</mark> / <mark>timeout</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST', 'myHeader':21}, {waitForTrailers:true});    // trailers allowed 
+    
+    req.write('some client data');                                                     // sending the last data chunk ('write()' method doesn't work)
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    req.setTimeout(3000, function(){                                                   // stream emitts the 'timeout' event counter from the connection and restarted ate every data received   
+        console.log( 'timeout event emitted! (1)');
+    });
+    
+    req.on('timeout', function(){
+        console.log( 'timeout event emitted! (2)');
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>destroy()</mark> / <mark>destroyed</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {
+        key:fs.readFileSync('cert/privkey.pem'), 
+        cert:fs.readFileSync('cert/cert.pem'),
+        allowHTTP1:true};  
+    
+    var server = http2.createSecureServer(options);
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers){
+        stream.respond({':status':200});
+        setInterval(function(){
+            stream.write('server response!');                   // write some data continuously
+        }, 1000);
+        
+        setTimeout(function(){
+            stream.destroy('some error');                       // destroying the stream after 4 seconds 
+        }, 4000);
+        
+        stream.on('close', function(){                          // emitted once the stream is destroyed
+            console.log( 'close event emitted!' );
+        });
+    });
+    
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTP/2 Client Stream</u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>response</mark> / <mark>headers</mark> / <mark>continue</mark> / <mark>push</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>clientStream</strong>                                                               // represents a bidirectional HTTP/2 communication stream over a <mark>session</mark> <u>(client side)</u> (extends <mark>session</mark>)   
+            
+            <strong>clientStream.listener</strong>('response', <strong>fn(h2Headers:obj, flags</strong>)                 // emitted when a response <mark>HEADER</mark> frame has been received from the connected HTTP/2 server    
+                                                                                          not emitted when an informational header (with status code <mark>1**</mark>) is received 
+            
+            <strong>clientStream.listener</strong>('headers', <strong>fn(h2Headers:obj, flags</strong>)                  // emitted when an informational header (with status code <mark>1**</mark>) is received from the server 
+                                                                                          not emitted when a non informational header is received (status code other than <mark>1**</mark>)   
+                
+            <strong>clientStream.listener</strong>('continue', <strong>fn</strong>)                                      // emitted when a <mark>100 Continue</mark> status received (usually because the request contains an <mark>Expect: 100-continue</mark> header field)   
+        
+            <strong>clientStream.listener</strong>('push', <strong>fn(h2Headers:obj, flags)</strong>)                    // emitted when this <strong>clientStream</strong> receives a server push header 
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+    var http2 = require('http2');
+    
+    var client = http2.connect('http://localhost:1000);
+    
+    var req = client.request({':method':'GET'});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+// response / headers / continue (events) ---------------------------------------------
+    req.on('response', function(headers){                                              // emitted when a response header is recieved (non informational headers only!)
+        headers;                                                                         // -> h2Headers object 
+    });
+    req.on('headers', function(headers){                                               // emitted when an informational header is received (with status code 1**)    
+        headers;                                                                         // -> h2Headers object 
+    });
+    req.on('continue', ()=>{});                                                        // emitted when a '100 Continue' status code is received    
+    
+// push (event) -----------------------------------------------------------------------
+    client.on('stream', function(stream){                                              // listening on session for new streams (server push creates a new 'push stream')     
+        stream.on('push', function(headers){                                           // emitted when this stream recieves a server push header 
+            headers;                                                                     // -> h2Headers object 
+        });
+    })
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Server <mark>respond()</mark> / Client <mark>response</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST', 'myHeader':21});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    req.on('response', function(headers, flag){                                        // emitted when a HEADERS frame is received 
+        console.log( headers );                                                        // -> {':status':200, customheader:'51', date:'Fri, 12 Jun 2020 15:38:51 GMT'}   
+        console.log( flag );
+    }); 
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        stream.respond({':status':200, 'customHeader':51})                             // writing a response header
+        stream.write('server response');                                               // response body 
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Server <mark>continue</mark> (event) TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST'});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    req.on('continue', function(){                          // event emitted because a '100 Continue' response status is received 
+        console.log( 'continue event emitted!' );
+    });    
+    </pre>
+<h4 style="color:darkblue;"><u> Client <mark>push</mark> (event) Server <mark>pushStream()</mark> TEST </u></h4>
+    <p><u>Client</u></p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST'});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    client.on('stream', function(stream){ 
+        stream.on('push', function(headers, flags){                                    // emitted when this stream receives a server push header 
+            console.log( 'push event emitted' );
+            console.log( headers );                                                    // -> {':status': 200, cust:'32'}       // received push headers 
+        });
+        
+        stream.on('data', (chunk)=>console.log(chunk.toString()));                     // read the pushed stream data  
+    });
+    </pre>
+    <p><u>Server</u></p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    console.log( http2.getDefaultSettings().enablePush );                              // -> true          // server push enabled by default 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.respond({':status':200});
+        stream.end('server response');
+        
+        console.log( stream.pushAllowed );                                             // -> true          // server push allowed 
+        
+        stream.pushStream({}, function(err, pushStream, headers){                      // creates a push stream and sends a data to the client through it 
+            pushStream.respondWithFile('test.txt', {':status':200, 'cust':32});        // the newly created push stream used to push data to the client 
+        });
+    });
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTP/2 Server Stream <mark>respond()</mark> / <mark>respondWithFD()</mark> / <mark>respondWithFile()</mark> / <mark>additionalHeaders()</mark> / <mark>headersSent</mark> / <mark>pushAllowed</mark> / <mark>pushStream()</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>serverStream</strong>                                                               // represents a bidirectional HTTP/2 communication stream over a <mark>session</mark> <u>(server side)</u> (extends <mark>session</mark>)   
+            
+            <strong>serverStream</strong>.respond(<i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> endStream: <strong>bol</strong> - if <mark>true</mark> the response does not include payload data </p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+            </div></i>)                           // sends a response header (the messabe body (if any) will be sent by using the stream interface (<mark>write()</mark> / <mark>end()</mark>))    
+                                                                                          cannot send informational header (<mark>1**</mark>)
+            <strong>serverStream</strong>.respondWithFD(<strong>fd:nr</strong>, <i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> statCheck: <strong>fn</strong> - if specified can set additional content headers based on the <mark>fs.Stat</mark> details, an automatic <mark>fs.fstat()</mark> check is performed </p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+                <p> offset: <strong>nr</strong> - position at which to begin reading the file descriptor content </p>
+                <p> length: <strong>nr</strong> - how much data to read from the file descriptor </p>
+            </div></i>)              // sends a response whose data is read from the <span class="openable">specified file descriptor<div>
+                    <p> - Node.js does not perform validation check on the passed file descriptor, if an error occurs the stream will be closed </p>
+                    <p style="color:orangered"> - the specified file descriptor is NOT closed by this method after using it (consider closing it to save up system resoruces) </p>
+                    <p> - the same file descriptor cannot be used for multiple streams at the same time, however it can be used sequentially (one stream finishe reading then other starts reading it again) </p>
+                                                                                          this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+                </div></span> <u>(cannot send informational header (<mark>1**</mark>))</u>    
+                                                                                          this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+            <strong>serverStream</strong>.respondWithFile(<strong>filePath:str|buf|urlObj</strong>, <i>h2Headers:obj</i>, <i class="openable">option:obj<div>
+                <p> statCheck: <strong>fn</strong> - if specified can set additional content headers based on the <mark>fs.Stat</mark> details, an automatic <mark>fs.fstat()</mark> check is performed </p>
+                <p> onError: <strong>fn</strong> - if specified handles the thrown error without closing the stream</p>
+                <p> waitForTrailers: <strong>bol</strong> - if <mark>true</mark> the stream emits the <mark>wantTrailers</mark> event after the final <mark>DATA</mark> frame has been sent (allows sending trailers to the client), <u style="color:orangered">(if this option is set the stream does not close automatically! the <mark>sendTrailers()</mark> or <mark>close()</mark> methods must be used explicilty)</u> </p>
+                <p> offset: <strong>nr</strong> - position at which to begin reading the file descriptor content </p>
+                <p> length: <strong>nr</strong> - how much data to read from the file descriptor </p>
+            </div></i>)    // sends a regular file as response <u>(cannot send informational header (<mark>1**</mark>))</u>
+                                                                                                     this method disables the stream interface of this <strong>clientStream</strong> (ex: <mark>write()</mark> throws an error)  
+                                                                                                     
+            <strong>serverStream</strong>.additionalHeaders(<strong>h2Headers:obj</strong>)                              // sends an informational header (with status code <mark>1**</mark>) to the client <u>(informational header only!)</u>
+            
+            <strong>serverStream</strong>.headersSent                                                   // returns <mark>true</mark> if the headers were sent, otherwise returns <mark>false</mark>
+            
+            <strong>serverStream</strong>.pushAllowed                                                   // returns <mark>true</mark> if the remote client accepts push streams, otherwise <mark>false</mark>
+            <strong>serverStream</strong>.pushStream(<strong class="openable">h2Headers:obj<div>
+                <p> - header passed as 3rd argument to the callback </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> exclusive: <strong>bol</strong> - when <mark>true</mark> and the <mark>parent</mark> property identifies a parent stream, this stream is going to be the sole dependency of the specified parent stream, all other streams are made dependent on this stream (Default: <mark>false</mark>) </p>
+                <p> parent: <strong>nr</strong> - makes the identified stream as parent of this stream </p>
+            </div></i>, <strong class="openable">fn(err, pushStream, h2Headers)<div>
+                <p> - called once the <strong>pushStream</strong> has been initialted </p>
+                <p> - <mark>pushStream</mark> - the newly created stream (pushStream) </p>
+                <p> - <mark>h2Headers</mark> - <strong>h2Headers</strong> the push stream initiated with (1st argument of this method) </p>
+            </div></strong>)    // creates a "push" stream in order to push data to the client (sends unrequested data to the client)
+                                                                                                         callback invoked when the <span class="openable">new <strong>pushStream</strong> is created<div>
+                <p> - setting the <mark>weight</mark> to the push stream it's not allowed in the <mark>HEADERS</mark> frame </p>
+                <p> - in order to set the priority to the push stream use the <mark>priority()</mark> method with the <mark>silent</mark> option (this way priority settings are not sent to the client) </p>
+                <p> - sending push stream within push stream is not allowed </p>
+            </div></span> 
+    </pre>
+<details class="example">
+<summary> DEMO </summary> 
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var server = http2.createServer();                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers){
+    
+// respond() --------------------------------------------------------------------------
+        stream.respond({':status':200});                                               // sends a response header to the client 
+        stream.end('server response');                                                 // the stream interface is used to send the message body  
+        
+// respondWithFD() --------------------------------------------------------------------
+        var fd = fs.openSync('./someFile');                                            // opening a file descriptor 
+        stream.respondWithFD(fd, {':status':200});                                     // sends a response by using a file descriptor   // -! this method does not close the file descriptor    
+        // stream.end('server response');                                              // -! this would throw an error because this method disables the stream interface   
+        
+// respondWithFile() ------------------------------------------------------------------
+        strea.respondWithFile('./someFile', {':status':200});                          // sends a response by using a file    
+        // stream.end('server response');                                              // -! this would throw an error because this method disables the stream interface   
+    
+// additionalHeaders() ----------------------------------------------------------------
+        stream.additionalHeaders({':status':100});                                     // sends an informational header to the client (header with 1** status)
+            
+// headersSent ------------------------------------------------------------------------
+        stream.headersSent;                                                            // -> true           // headers already sent to the client 
+        
+// pushAllowed / pushStream() ---------------------------------------------------------
+        stream.pushAllowed;                                                            // -> true           // remote client accepts push streams   
+        stream.pushStream({}, function(err, pushStream){                               // creates a new push stream to the client 
+            pushStream.respond({':status':200});                                       // the newly created push stream can be used to send (push) data to the remote client just like normal streams do    
+        });
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Server <mark>respond()</mark> / Client <mark>response</mark> (event) TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST', 'myHeader':21});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    req.on('response', function(headers, flag){                                        // emitted when a HEADERS frame is received 
+        console.log( headers );                                                        // -> {':status':200, customheader:'51', date:'Fri, 12 Jun 2020 15:38:51 GMT'}   
+        console.log( flag );
+    }); 
+    </pre>
+    <p> Server </p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        stream.respond({':status':200, 'customHeader':51})                             // writing a response header
+        stream.write('server response');                                               // response body 
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>respondWithFD()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    var resFd = fs.openSync('test.txt');                                               // open a file descriptor 
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        stream.respondWithFD(resFd, {':status':200})                                   // respond with a file descriptor 
+        // stream.write('server response');                                            // -! this would throw an erro because the stream interface is disabled now 
+        stream.on('close', function(){
+            fs.closeSync(resFd);                                                       // closing the file descriptor because the 'respondWithFD()' method does not close it 
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>respondWithFile()</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.on('data', (chunk)=>console.log(chunk.toString())); 
+        
+        stream.respondWithFile('test.txt', {':status':200})                            // respond with a file  
+        // stream.write('server response');                                            // -! this would throw an erro because the stream interface is disabled now 
+    });
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>headersSent</mark> TEST </u></h4>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        console.log( stream.headersSent );                                             // -> false         // headers not yet sent
+        stream.respondWithFile('test.txt', {':status':200});
+        
+        setTimeout(function(){                                                         // checking after 1 seconds 
+            console.log( stream.headersSent );                                         // -> true          // headers sent 
+        }, 1000);
+    });    
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Client <mark>headers</mark> (event) Server <mark>additionalHeaders()</mark> TEST </u></h4>
+    <p><u>Client</u></p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'GET'/*, 'Expect':'100-continue'*/});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+    
+    req.on('response', function(headers, flag){                                        // not emitted because an informational header is received 
+        console.log( 'response event emitted! ');
+        console.log( headers ); 
+    }); 
+    
+    req.on('headers', function(headers){                                               // emitted because an informational header is received 
+        console.log( 'headers event emitted!' );
+        console.log( headers );                                                        // -> {':status':105, custhead:'32'}
+    });
+    </pre>
+    <p><u>Server</u></p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        // stream.respond({':status':105, 'custHead':32});                             // -! this would throw an error, this method cannot respond with informational header  
+        stream.additionalHeaders({':status':105, 'custHead':32});                      // generates an informational header response  
+    });
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Client <mark>push</mark> (event) Server <mark>pushStream()</mark> TEST </u></h4>
+    <p><u>Client</u></p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {ca:fs.readFileSync('cert/cert.pem')};
+    
+    var client = http2.connect('https://localhost:1000', options);
+    
+    var req = client.request({':method':'POST'});  
+    req.on('data', (chunk)=>console.log(chunk.toString()));   
+        
+    client.on('stream', function(stream){ 
+        stream.on('push', function(headers, flags){                                    // emitted when this stream receives a server push header 
+            console.log( 'push event emitted' );
+            console.log( headers );                                                    // -> {':status': 200, cust:'32'}       // received push headers 
+        });
+        
+        stream.on('data', (chunk)=>console.log(chunk.toString()));                     // read the pushed stream data  
+    });
+    </pre>
+    <p><u>Server</u></p>
+    <pre>
+    var http2 = require('http2');
+    var fs = require('fs');
+    
+    var options = {cert:fs.readFileSync('cert/cert.pem'), key:fs.readFileSync('cert/privkey.pem')};
+    
+    var server = http2.createSecureServer(options);                              
+    server.listen(1000, 'localhost', ()=>console.log('server listening!')); 
+    
+    console.log( http2.getDefaultSettings().enablePush );                              // -> true          // server push enabled by default 
+    
+    server.on('stream', function(stream, headers, flags){ 
+        stream.respond({':status':200});
+        stream.end('server response');
+        
+        console.log( stream.pushAllowed );                                             // -> true          // server push allowed 
+        
+        stream.pushStream({}, function(err, pushStream, headers){                      // creates a push stream and sends a data to the client through it 
+            pushStream.respondWithFile('test.txt', {':status':200, 'cust':32});        // the newly created push stream used to push data to the client 
+        });
+    });
+    </pre>
+</details>
+    
+<br><br>
+</body>
+</html>

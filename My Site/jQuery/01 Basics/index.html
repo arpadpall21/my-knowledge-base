@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> jQuery Basics </title> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="../../Assets/stylesPages.css" type="text/css" rel="stylesheet">
+    <script src="../../Assets/scriptPages.js" type="application/javascript"></script>
+</head>
+<body>
+<h1> jQuery Basics (ver 2.9) </h1>
+	<p> Updated ( 2018-04-23 / 2018-05-05 / 2018-06-01 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html"> jQuery> </a> jQuery Basics
+    </p>
+<table class="table">
+    <tr>
+        <th> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> $(<strong>jQuery_selector/htmlString</strong>, <i>context</i>) </td>
+        <td> returns a jQuery object </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.get("<i>index</i>")<br>
+        <strong>jQ_obj</strong>[<strong>index</strong>]</td>
+        <td> returns the called element from a jQuery object </td>
+    </tr>
+    <tr>
+        <td>  
+            (function($){<br>
+                &nbsp; &nbsp; $.fn.<strong>plugin_name</strong> = function(){<br>
+                    &nbsp; &nbsp; &nbsp; &nbsp; <i>&lt;plugin CODE here&gt;</i><br>
+                &nbsp; &nbsp; };<br>
+            })(jQuery);
+        </td>
+        <td> creates a jQuery plugin (custom method) which once created will be available on the jQuery object </td>
+    </tr>
+</table> 
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.w3schools.com/jquery/jquery_intro.asp"> W3Schools jQuery Tutorial </a></p>
+    <p><a class="important-link" href="http://jquery.com" target="_blank"> jQuery </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - ther are some Big advantages to use CDNs </p>
+    <p style="text-indent:2.5em;"> 1) when the user visited a site which use jQuery it will be downloaded in the browser cache </p>
+    <p style="text-indent:2.5em;"> 2) CDN's make sure that you download jQuery from the server closest to you </p>
+    <p> - nest all you jQuery code in <mark>$(document).ready(function(){ })</mark> or <mark>$(function(){ })</mark> (shorter version) code, this makes sure that your document is fully loaded before the nested code fires </p>
+    <p> - always nest JavaScript code in jQuery callback functions to avoid bugs! </p>
+    <p> - relative values are allowed in jQuery (ex: <mark>width: "+=10px";</mark>) </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - jQuery is a lightweight "write less do more" JavaScript library (frameworks) which greatly simplifies some of JavaScript tasks </p>
+    <p> - with jQuery you can select HTML elements and perform "actions" on them </p>
+    <p> - jQuery wraps arround HTML elements with a jQuery object, therefore jQuery methods will be available on them </p>
+    <pre class="syntax">
+SYNTAX :    $(<strong>jQuery_selector</strong>, <i>context</i>).<strong>method</strong>()    
+    </pre>
+    <pre>
+    $(document).ready(function(){               // this makes sure that the document is loaded before the nested jQuery code is fired
+        $("button").click(function{            
+            $("p").hide();
+        });
+    });
+//-----------    
+    $(function(){                               // does the same as the code above (shorter version)
+        $("button").click(function(){            
+            $("p").hide();
+        });
+    });
+    </pre>
+    <p> - there are 2 versions of jQuery</p>
+    <p style='text-indent:2.5em;'><u>Production Version</u> (minified and compressed) lightweight version for production use </p>
+    <p style='text-indent:2.5em;'><u>Development Version</u> (uncompressed and readable) for testing and development </p>
+    <p> - you can download directly jQuery files form <a href="http://jquery.com/download/">jQuery</a> website </p>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> jQuery object </u></h2>    
+    <p> - a jQuery object is an Array like object containing DOM elements </p>
+    <p> - the beauty of jQuery objects is that once DOM elements are selected jQuery methods are available on them! </p>
+    <pre class="syntax">
+SYNTAX :    $(<strong>jQuery_selector</strong>)                          // returns a jQuery object
+            <strong>jQ_obj</strong>.get("<i>index</i>")                         // returns a DOM element from a jQuery object
+            <strong>jQ_obj</strong>[<strong>index</strong>]                               // this does the same
+                - <strong>index</strong> : refers to the targeted element 
+    </pre>
+    <pre>
+    $()                                                 // anyting in a jQuery selctor is a jQuery object (can be empty)
+    $("#demo")                                          // the "id="demo" element is wrapped in a jQuery object
+    $("p")                                              // all paragraphs in the page are wrapped by a jQuery object   
+    
+// ---------------------------- create jQuery object
+    $("&lt;p&gt;demo&lt;/p&gt;")                                    // this is how easily you can create an element with jQuery
+
+// ---------------------------- return DOM element with jQuery 
+    &lt;p class="style_me"&gt; Paragraph &lt;/p&gt;
+    &lt;p class="style_me"&gt; Paragraph &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        var jQuery_obj = $(".style_me");                // returns a jQuery object which contains both paragraphs
+        var DOM_obj_A = $(".style_me").get(0);          // returns the first paragraph as DOM element 
+        var DOM_obj_B = $(".style_me")[1];              // returns the second paragraph as DOM element
+    // ---
+        jQuery_obj.css("color", "blue");                // jQuery method available but not native DOM methods!
+        DOM_obj_A.style.fontWeight = "bold";            // native DOM method available but not jQuery methods!  
+        DOM_obj_B.style.textDecoration = "underline";   // native DOM method available but not jQuery methods!   
+    });
+&lt;/script&gt;
+    </pre>
+<details class="example">
+<summary> Example : </summary>    
+<h4><u> return DOM element with jQuery </u></h4>    
+    <p id="element"> myParagraph</p>
+<script>
+    $(document).ready(function(){
+        var jQ_obj = $("#element");                     // this returns a jQuery Object
+        var DOM_obj = $("#element").get(0);             // this returns the DOM object itself!
+        
+        jQ_obj.css("color", "green");                   // jQuery methods are available but not native DOM methods!
+        DOM_obj.style.textDecoration = "underline";     // native DOM methods are available but not JQuery methods!
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="element"&gt; myParagraph&lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        var jQ_obj = $("#element");                     // this returns a jQuery Object
+        var DOM_obj = $("#element").get(0);             // this returns the DOM object itself!
+        
+        jQ_obj.css("color", "green");                   // jQuery methods are available but not native DOM methods!
+        DOM_obj.style.textDecoration = "underline";     // native DOM methods are available but not JQuery methods!
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> moving element javaScript VS jQuery </u></h4>
+    <p id="move_JS"> MOVE </p>
+        <div id="parent_JS" style="width:300px; height:40px; border:solid black 1px;">  </div>
+    <p id="move_jq"> MOVE </p>
+        <div id="parent_jq" style="width:300px; height:40px; border:solid black 1px;">  </div>
+<script>
+// JS   
+    var moveMe = document.getElementById("move_JS");
+    var parent = document.getElementById("parent_JS");
+    parent.appendChild(moveMe);
+    
+// jQ                                                   // same task with jQuery
+    $(document).ready(function(){
+        var moveMe = $("#move_jq");
+        $("#parent_jq").append(moveMe);
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="move_JS"&gt; MOVE &lt;/p&gt;
+        &lt;div id="parent_JS" style="width:300px; height:40px; border:solid black 1px;"&gt;  &lt;/div&gt;
+    &lt;p id="move_jq"&gt; MOVE &lt;/p&gt;
+        &lt;div id="parent_jq" style="width:300px; height:40px; border:solid black 1px;"&gt;  &lt;/div&gt;
+&lt;script&gt;
+// JS   
+    var moveMe = document.getElementById("move_JS");
+    var parent = document.getElementById("parent_JS");
+    parent.appendChild(moveMe);
+    
+// jQ                                                   // same task with jQuery
+    $(document).ready(function(){
+        var moveMe = $("#move_jq");
+        $("#parent_jq").append(moveMe);
+    });
+&lt;/script&gt;
+        </pre>
+        </details>    
+<h4><u> create new HTML element </u></h4>
+    <div id="parent_Fix" style="width:300px; height:80px; border:solid black 1px;"></div>
+<script>
+// JS   
+    var par = document.createElement("p");
+    var txt = document.createTextNode("JavaScript Created");
+    par.appendChild(txt);
+    document.getElementById("parent_Fix").appendChild(par);
+    
+// jQ                                                   // same task with jQuery
+    $(function(){
+        $("#parent_Fix").append("<p>jQuery Created</p>");    
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;div id="parent_Fix" style="width:300px; height:80px; border:solid black 1px;"&gt;&lt;/div&gt;
+&lt;script&gt;
+// JS   
+    var par = document.createElement("p");
+    var txt = document.createTextNode("JavaScript Created");
+    par.appendChild(txt);
+    document.getElementById("parent_Fix").appendChild(par);
+    
+// jQ                                                   // same task with jQuery
+    $(function(){
+        $("#parent_Fix").append("&lt;p&gt;jQuery Created&lt;/p&gt;");    
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>    
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra">
+<h2 class="headerExtra"><u> Adding jQuery to the webpage </u></h2>    
+    <p> - you can directly add jQuery files to your website or use CDN (Content Delivery Network) </p>
+<h2 style="color:darkblue;"><u> add jQuery as local file </u></h2>
+    <pre class="syntax">
+&lt;head&gt; 
+    &lt;script src="<strong>jQuery_file</strong>"&gt;&lt;/script&gt;
+&lt;/head&gt;
+    </pre>
+<h2 style="color:darkblue;"><u> add jQuery with CDN </u></h2>
+    <p> - ther are some Big advantages to use CDNs </p>
+    <p style="text-indent:2.5em;"> 1) when the user visited a site which use jQuery it will be downloaded in the browser cache </p>
+    <p style="text-indent:2.5em;"> 2) CDN's make sure that you download jQuery from the server closest to you </p>
+    <p> - both Google and Microsoft host jQuery </p>
+    <pre class="syntax">
+&lt;head&gt; 
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"&gt;&lt;/script&gt;            // Google
+    &lt;script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"&gt;&lt;/script&gt;                  // Microsoft
+&lt;/head&gt;    
+    </pre>
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra">
+<h2 class="headerExtra"><u> Using callback functions in jQuery </u></h2>
+    <p> - any JS code can be fired in jQuery but they can fire eralier than jQuery code this can cause bugs! </p>
+    <p> - it is highliy recommended to nest JS code in jQuery callback functions </p>
+    <pre>
+    $(document).ready(function(){
+        &lt;code to be executed&gt;         // this code is garanteed to fire after the document is loaded
+    }
+        &lt;code to be executed&gt;         // this code is not garanteed to fire because it is not nested in the callback function
+    );
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4><u> TEST 1 </u></h4>
+    <button id="hide_not_nest"> Hide this button (JS code not nested in jQuery callback) </button><br>
+    <button id="hide_nest"> Hide this button (JS code is nested in jQuery callback) </button>
+<script>
+    $(document).ready(function(){
+        $("#hide_not_nest").click(function(){
+            $(this).hide();
+            alert("Button Hiden!");         // because this JS code is not nested in a jQuery callback function it fires BEFORE the button hides
+        });
+        //---------
+        $("#hide_nest").click(function(){
+            $(this).hide(function(){
+            alert("Button Hiden!");         // button hiddes before the allert message is shown
+            });
+        });
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button id="hide_not_nest"&gt; Hide this button (JS code not nested in jQuery callback) &lt;/button>&lt;br&gt;
+    &lt;button id="hide_nest"&gt; Hide this button (JS code is nested in jQuery callback) &lt;/button&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#hide_not_nest").click(function(){
+            $(this).hide();
+            alert("Button Hiden!");         // because this JS code is not nested in a jQuery callback function it fires BEFORE the button hides
+        });
+        //---------
+        $("#hide_nest").click(function(){
+            $(this).hide(function(){
+            alert("Button Hiden!");         // button hiddes before the allert message is shown
+            });
+        });
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>    
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra">
+<h2 class="headerExtra"><u> Chaining in jQuery </u></h2>
+    <p> - it is possible to chain multiple jQuery methods, these methods will be executed in the chained order </p>
+    <pre>
+    &lt;p id="fade_IN"&gt; I'm Faded :P &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#fade_IN").css("color", "white").fadeOut(200).fadeIn(1500);              // chained methods
+        
+        $("#fade_IN")                                                               // this does the same jQuery has no strict Syntax!
+        .css("color", "white")
+        .fadeOut(200)
+        .fadeIn(1500);
+    });
+&lt;/script&gt;
+    </pre>
+<details class="example">    
+<summary> Example : </summary>    
+<h4><u> TEST </u></h4>
+    <p id="chain_Demo"> Click on me to see the chain Effect! </p>
+<script>
+    $(document).ready(function(){
+        $("#chain_Demo").click(function(){
+            $(this).fadeOut(800).fadeIn(800);                   // chaining methods
+        });    
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="chain_Demo"&gt; Click on me to see the chain Effect! &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#chain_Demo").click(function(){
+            $(this).fadeOut(800).fadeIn(800);                   // chaining methods
+        });    
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>   
+<!--------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra">
+<h2 class="headerExtra"><u> jQuery Plugins (custom methods) </u></h2>
+    <p> - a jQuery plugin is basically a custom method which once created will be available on the jQuery object </p>
+    <pre class="syntax">
+SYNTAX :    (function($){
+                $.fn.<strong>plugin_name</strong> = function(){
+                    <i>&lt;plugin CODE here&gt;</i>
+                };
+            })(jQuery);        
+    </pre>
+    <pre>
+    $(document).ready(function(){
+// basic plugin concepts
+        (function($){                               // closure makes sure that the "$" identifier can be used even if "noConflict" is declared
+            $.fn.myPlugin_A = function(){           // colors the element(s) on which is called
+                this.css("color", "red");
+                return this;                        // this returns the element itself (maintains chainability)
+        };
+        })(jQuery); 
+        
+// advanced plugin concept BEST PRACTICE USE THIS!!!
+        (function($){
+            $.fn.myPlugin_B = function(){
+                return this.each(function(){        // using the each method makes possible to return every element's values and the element is automatically returned this way
+                    $(this).css("color", "red");    // colors the element(s) on which is called   
+                                                    // elements are passed as DOM elements!   
+                    $(this).append("(style= " + $(this).attr("style") + ")");   // prints the style attribute's value at the end of the element
+                });
+            };
+        })(jQuery);
+        
+// passing plugin arguments 
+        (function($){
+            $.fn.setColor = function(color){        // argument can be passed in order to define the color
+                return this.each(function(){
+                    $(this).css("color", color);    // custom color can be defined
+                });
+            };
+        })(jQuery);
+    // options
+        (function($){
+            $.fn.greenDefault = function(option){   // this plugin has a defalut values set but it can be modified by passing options
+                var setting = $.extend({}, {color:"white", backgroundColor:"darkgreen"}, option);
+                                                    // the second argument contains the default settings
+                                                    // the third argument is the object which can be set to overwrite default settings
+                this.css({color:setting.color, backgroundColor:setting.backgroundColor});
+                                                    // execute Plugin (this way property values can be overwritten)
+                return this;                        // Don't forget about returning the element itself for maintaining chainability
+            };
+        })(jQuery);
+    });
+    </pre>
+<details class="example">    
+<summary> Example : </summary>    
+<h4><u> basic plugin creation </u></h4>
+    <p class="customFn"> myContent Bakker </p>
+    <button id="demoButton_cust"> TEST </button>
+<script>
+    $(document).ready(function(){
+        (function($){
+        $.fn.returnContent = function() {                   // create a custom jQuery method
+            alert (this.text());                            // returns the element's content in the alert window
+            return this;                                    // this makes your custom method chainable (returns the current element(s))
+        };
+        })(jQuery);                                         // this closure makes sure if "$.noConflict()" is declared "$" is sill usable as identifier!
+        $("#demoButton_cust").mouseup(function(){
+            $(".customFn").returnContent().css("color", "green");   // run the custom method
+        });
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p class="customFn"&gt; myContent Bakker &lt;/p&gt;
+    &lt;button id="demoButton_cust"&gt; TEST &lt;/button&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        (function($){
+        $.fn.returnContent = function() {                   // create a custom jQuery method
+            alert (this.text());                            // returns the element's content in the alert window
+            return this;                                    // this makes your custom method chainable (returns the current element(s))
+        };
+        })(jQuery);                                         // this closure makes sure if "$.noConflict()" is declared "$" is sill usable as identifier!
+        $("#demoButton_cust").mouseup(function(){
+            $(".customFn").returnContent().css("color", "green");   // run the custom method
+        });
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> using the <mark>each()</mark> method (Best Practice)</u></h4>
+    <div id="myColors">
+        <p style="color:blue; margin:0;"> Je suis bleu </p>
+        <p style="color:white; margin:0;"> Je suis blanc </p>
+        <p style="color:red; margin:0;"> Je suis rouge </p>
+    </div>
+    <p id="getColors"> colors are = </p>
+    <p id="getColors_2"> colors are = </p>
+<script>
+    $(document).ready(function(){
+        (function($){
+            $.fn.getColor = function(){
+                // return $(this).css("color");                 // problem with this is that it returns ONLY THE FIRST element's color 
+                // return this;
+            // get information and print it
+                this.each(function(){                           // runs a function for each elements 
+                    $("#getColors").append($(this).css("color") + " / ");
+                });
+            // get information and collect in an object
+                var collectCollors = "";                        // internally created JS object
+                this.each(function(){
+                    collectCollors += $(this).css("color") + " / ";
+                });
+                $("#getColors_2").append(collectCollors);
+            // set 
+                return this.each(function(){
+                    $(this).css("textDecoration", "underline");
+                });
+            };
+        })(jQuery);
+        $("#myColors p").getColor();                            // call on targeted elements
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;div id="myColors"&gt;
+        &lt;p style="color:blue; margin:0;"&gt; Je suis bleu &lt;/p&gt;
+        &lt;p style="color:white; margin:0;"&gt; Je suis blanc &lt;/p&gt;
+        &lt;p style="color:red; margin:0;"&gt; Je suis rouge &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;p id="getColors"&gt; colors are = &lt;/p&gt;
+    &lt;p id="getColors_2"&gt; colors are = &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        (function($){
+            $.fn.getColor = function(){
+                // return $(this).css("color");                 // problem with this is that it returns ONLY THE FIRST element's color 
+                // return this;
+            // get information and print it
+                this.each(function(){                           // runs a function for each elements 
+                    $("#getColors").append($(this).css("color") + " / ");
+                });
+            // get information and collect in an object
+                var collectCollors = "";                        // internally created JS object
+                this.each(function(){
+                    collectCollors += $(this).css("color") + " / ";
+                });
+                $("#getColors_2").append(collectCollors);
+            // set 
+                return this.each(function(){
+                    $(this).css("textDecoration", "underline");
+                });
+            };
+        })(jQuery);
+        $("#myColors p").getColor();                            // call on targeted elements
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> passing arguments </u></h4>
+    <button id='setGreen_small'> Set all paragraphs green and half size </button>
+    <button id='setWhite_big'> Set all paragraphs white and double size </button>
+<script>
+    $(document).ready(function(){
+        (function($){
+            $.fn.color_size = function(color, size){            // arguments passed
+                return this.each(function(){
+                    $(this).css("color", color);
+                    $(this).css("fontSize", size);
+                });
+            };    
+        })(jQuery);
+        $("#setGreen_small").mouseup(function(){
+            $("p").color_size("green", "0.5em");                // set custom function with arguments
+        });
+        $("#setWhite_big").click(function(){                    
+            $("p").color_size("white", "2.0em");                // set custom function with arguments
+        });
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button id='setGreen_small'&gt; Set all paragraphs green and half size &lt;/button&gt;
+    &lt;button id='setWhite_big'&gt; Set all paragraphs white and double size &lt;/button&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        (function($){
+            $.fn.color_size = function(color, size){            // arguments passed
+                return this.each(function(){
+                    $(this).css("color", color);
+                    $(this).css("fontSize", size);
+                });
+            };    
+        })(jQuery);
+        $("#setGreen_small").mouseup(function(){
+            $("p").color_size("green", "0.5em");                // set custom function with arguments
+        });
+        $("#setWhite_big").click(function(){                    
+            $("p").color_size("white", "2.0em");                // set custom function with arguments
+        });
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> Accepting Options </u></h4>
+    <div id="pluginOpt">
+        <p> Original Plugin </p>
+        <p> Modified A </p>
+        <p> Modified B </p>
+    </div>
+<script>
+    jQuery(document).ready(function(){
+        $("#pluginOpt p").css("margin", 0);
+        (function($){                           
+            $.fn.styleMe = function(option){
+                var settings = $.extend(true, {color:"white", backgroundColor:"black"}, option);    // plugin's default settings
+                                                                                                    // "option" argument passed can overwrite the "settings" object's properties
+                return this.css({color:settings.color, backgroundColor:settings.backgroundColor});  
+            };
+        })(jQuery); 
+        
+        $("#pluginOpt p:first").styleMe();                                          // plugin called with default settings
+        $("#pluginOpt p:eq(1)").styleMe({color:"red", backgroundColor:"white"});    // plugin called with modified settings
+        $("#pluginOpt p:last").styleMe({color:"yellow"});                           // plugin called with partially modifications
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;div id="pluginOpt"&gt;
+        &lt;p&gt; Original Plugin &lt;/p&gt;
+        &lt;p&gt; Modified A &lt;/p&gt;
+        &lt;p&gt; Modified B &lt;/p&gt;
+    &lt;/div&gt;
+&lt;script&gt;
+    jQuery(document).ready(function(){
+        $("#pluginOpt p").css("margin", 0);
+        (function($){
+            $.fn.styleMe = function(option){
+                var settings = $.extend(true, {color:"white", backgroundColor:"black"}, option);    // plugin's default settings
+                                                                                                    // "option" argument passed can overwrite the "settings" object's properties
+                return this.css({color:settings.color, backgroundColor:settings.backgroundColor});  
+            };
+        })(jQuery);   
+        
+        $("#pluginOpt p:first").styleMe();                                          // plugin called with default settings
+        $("#pluginOpt p:eq(1)").styleMe({color:"red", backgroundColor:"white"});    // plugin called with modified settings
+        $("#pluginOpt p:last").styleMe({color:"yellow"});                           // plugin called with partially modifications
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> append element's "style" attribute plugin </u></h4>
+    <div id="getStyle">
+        <p style="color:white; background-color:red;"> myParagraph A  </p>
+        <p style="color:green; font-style:italic;"> myParagraph B  </p>
+        <p style="color:blue; font-weight:bold;"> myParagraph C  </p>
+    </div>
+<script>
+    jQuery(document).ready(function(){
+        $("#getStyle p").css("margin", 0);
+        (function($){
+            $.fn.printStyle = function(){
+                this.each(function(){
+                    $(this).append("(style = " + $(this).attr("style") + " ) ");
+                });
+                return this;
+            };
+        })(jQuery);
+        $("#getStyle p").printStyle();
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;div id="getStyle"&gt;
+        &lt;p style="color:white; background-color:red;"&gt; myParagraph A  &lt;/p&gt;
+        &lt;p style="color:green; font-style:italic;"&gt; myParagraph B  &lt;/p&gt;
+        &lt;p style="color:blue; font-weight:bold;"&gt; myParagraph C  &lt;/p&gt;
+    &lt;/div&gt;
+&lt;script&gt;
+    jQuery(document).ready(function(){
+        $("#getStyle p").css("margin", 0);
+        (function($){
+            $.fn.printStyle = function(){
+                this.each(function(){
+                    $(this).append("(style = " + $(this).attr("style") + " ) ");
+                });
+                return this;
+            };
+        })(jQuery);
+        $("#getStyle p").printStyle();
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>    
+    
+    <br><br>
+</body>
+</html>

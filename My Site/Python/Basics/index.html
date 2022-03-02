@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Python basics</title>    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1>  Python Basics (ver 4.0.0) </h1>
+    <p> Updated (2017-05-26 / 2017-06-03 / 2017-08-04 / 2018-06-26 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Python></a> Basics  
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Command </th>
+        <th> Description </th>
+    </tr>
+    <tr class="0">
+        <td> 
+            python <small>[3]</small> <small>[-c <i>code</i>]</small>
+        </td>
+        <td>
+            - starts python command line environment <br>
+            - (<small>3</small>) if multiple python version is installed starts python 3 <br>
+            - (<small>-c <i>code</i></small>) executes the <i>code</i> in the python command line environment  
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            exit()
+        </td>
+        <td>
+            - exits from python command line evironment   
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.w3schools.com/python/default.asp" target="_blank">Python (w3schools.com)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+<h2 style="color:green;"><u> Description and Demonstration: </u></h2>
+    <p> - Python is an interpreted programming languages that can be treated as procedural, OOP or functional programming language, it was developed by Guido van Rossum (released in 1991) </p>
+    <p> - Python uses simple English language-like syntax, aims to write more with less typing (uses the minimum possible symbols as possible, like it doesn't use parenthesies) </p>
+    <p> - Python is synchronous but it has libraries what we can use for asynchronous programming (<mark class="mark">asyncio</mark>) </p>
+    <h2 class="header"> Code Blocks (identations) </h2>
+    <p> - Python relies on identations instead of using paranthesies, in order to create a code blocks, <u>we have to use the same identation wihin the same code block</u> </p> 
+    <pre class="syntax">
+    <strong>statement</strong>                                                                           // statement using code block
+        <strong>someCode</strong>                                                                        // code block uses 4 space identations    
+        <strong>someCode</strong>
+        <strong>...</strong>
+    
+    <strong>statement</strong>                                                                           // if we want the code block to be empty we have to use the <mark>pass</mark> keyword   
+        pass
+    </pre>
+<details class="example" open>
+<summary> DEMO </summary>
+    <pre>
+    def fn1():
+      print('fn1 called!')                                                              // function uses 2 space identations
+    
+    def fn1(eval):                                                                      // function uses 4 space identations 
+        print('fn2 called!')
+        if eval:                                                                        // if statement uses 6 space identations 
+              print('argument is truthy!')
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+    <h2 class="header"> Comments </h2>
+    <pre class="syntax">
+    # <strong>some comment</strong>                                                                      // lines start with <mark>#</mark> are not parsed => comment   
+    
+    '''                                                                                 // multiline comment (officially this is not a multiline comment but a multiline string (Python does not parses it, so we can use it as a hack for multiline comment))   
+    <strong>some comment</strong>
+    <strong>some comment</strong>
+    '''
+    </pre>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+    <h2 class="header"> Variables and Scoping (<mark>global</mark> / <mark>nonlocal</mark>) </h2>
+    <p> - python is case-sensitive, variable names can contain <mark>A-z</mark> <mark>0-9</mark> <mark>_</mark> but cannot start with any number </p>
+    <p> - there are 2 scope types in Python, global scope and function scope (local scope) </p>
+    <pre class="syntax">
+<span style="color:darkgray;"> // variables --------------------------------------------------------------------------</span>
+    <strong>varName</strong> = <strong>val</strong>                                                                       // a variable is created when we assign a value to it   
+    <strong>varName</strong>                                                                             // -! this will raise a NameError
+    
+    <strong>var1</strong> = <strong>var2</strong> = <strong>var3</strong> = <strong>val</strong>                                                            // we can assign one value to multiple variables in one statement     
+    <strong>var1</strong>, <strong>var2</strong>, <strong>var3</strong> = <strong>val1</strong>, <strong>val2</strong>, <strong>val3</strong>                                                 // we can assign values to multiple variables in one statement (this is basically unpacking)   
+    
+<span style="color:darkgray;"> // scopes -----------------------------------------------------------------------------</span>
+    <strong>glogVar</strong> = <strong>val</strong>                                                                       // global variable   
+    
+    def <strong>fnName</strong> ():
+        <strong>localVar1</strong> = <strong>val</strong>                                                                 // local variable 
+        
+        def <strong>fnName</strong> ():
+            <strong>localVar2</strong> = <strong>val</strong>                                                             // local variable 
+            global <strong>globVar</strong>                                                              // in this scope from now on the <strong>globVar</strong> is referenced as global variable  
+            nonlocal <strong>localVar1</strong>                                                          // in this scope from now on the <strong>localVar1</strong> referenced a the parent scope variable    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    someVar = 1
+    SomeVar = 1                                                                        // different variable 
+    somevar                                                                            // -! raises a NameError, (no value assigned)  
+    
+    _someVar = 1
+    1someVar = 1                                                                       // -! raises a SytaxError (varaible cannot start with letter) 
+    
+    a = b = c = 1                                                                      // we can assign one value to multiple variables   
+    a                                                                                  // -> 1
+    b                                                                                  // -> 1
+    c                                                                                  // -> 1  
+    
+    a, b, c = 1, 2, 3
+    
+    a                                                                                  // -> 1
+    b                                                                                  // -> 2
+    c                                                                                  // -> 3
+    </pre>
+    <pre>
+    x = 0
+    y = 1
+    
+    def fn():
+        x = 11
+        x                                                                               // -> 11     // the local varialbe's value 
+        y                                                                               // -> 1      // globa variable's value 
+        
+    x
+    fn() 
+    
+// global keyword -----------------------------------------------------------------------
+    def fn():
+        def nestFn():
+            global x                                                                     // from now on the x variable references the global x variable    
+            x = "I'm global"                                                             // assing value to the global variable 
+        nestFn()
+    fn()
+    
+    x                                                                                    // -> "I'm global"
+    
+// nonlocal keyword ---------------------------------------------------------------------
+    x = 'global'
+    def fn():
+        x = 'local-1'
+        
+        def nestFn():
+            nonlocal x                                                                   // from now on the x variable references the the parent scope's x variable    
+            x                                                                            // -> 'local-1'
+        nestFn()
+    fn()
+    </pre>
+</details>
+<details class="example">
+<summary> Example </summary>
+    <h4 class="header"> <mark>global</mark> / <mark>nonlocal</mark> TEST </h4>
+    <pre>
+    x = 'global1'
+    y = 'global2' 
+    
+    def fn():
+        x = 'local1'
+        y = 'local2'
+        
+        def nestFn():
+            global x
+            nonlocal y
+            
+            print(x)                                                                    // -> 'global1'
+            print(y)                                                                    // -> 'local2'
+        nestFn()
+    fn()
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+    <h2 class="header"> CLI </h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cmd">
+    $ python 3                                                                         // opnes python 3 command line environment 
+        >>> exit()                                                                     // exist from CLE 
+    
+// ------------------------------------------------------------------------------------
+    $ python -c "print('test')"                                                        // executes <mark>print('test')</mark> in python CLE
+        test
+    </pre>
+</details>
+    
+    
+    
+    
+    
+    
+<!--
+    - if we want to assign a specific data type we can use casting (ex x = int(1))
+    - type() 
+        - returns the data type of a variable
+    - we can use single or double quotes (just like in JS)
+    
+        - we can use the '+' operator to combine value with variable (ex: "Hello World" + x)
+        - for numbers the '+' operator is used as matematical +
+        - if we try to combine string with number python throws an error 
+    
+    
+    
+    
+    
+    - in python we call object attribute (what is called object property in javaScript)
+    
+    
+    
+    - code block cannot be empty in python like the if for or function (use the pass keywork in this case)
+
+- sytnax
+    - in python objects are immutable (just like in JS)
+    - list(<iterable>)        - creates a list from the passed iterable's items 
+    - len(<obj>)              - returns the number if items held by the object (sequence or collection)
+    
+    
+- data types 
+    - test type               str 
+                                  str - uses utf-8 to encoding and store characters 
+    - numerict types          int, float, complex
+                                  int - arbitary size (awesome!)
+                                  float - double precision floating point 32bit
+                                  complex - complex numbers has a real and an imainary part 
+                                      <var>.real      -> to see the real part
+                                      <var>.image     -> to se the imaginary part
+    - sequence type           list, tuple, range
+    - map                     dic
+    - set                     set, frozenset
+    - boolean                 bol
+    - binary                  bytes, bytearray, memoryview
+
+    - type(<var>)
+        - returns the datatype 
+
+    - we can use casting => constructor to cast specific data types ex: int(), float() etc...
+
+- string
+    - single or double quotes are ok, 
+    - multiline strings with triple quotes (single or double)
+    - strings are iterable (as unicode characters)
+    - the 'in' orn 'not in' operator can find parts of a string (returns a boolean)
+        - we can combine this with the if operator (demo if 'this' not in 'eaz':)
+    - the slice index returns parts of a string (fist index included 2nd not = like in JS)
+        - omiting index mean till the start|end
+        - negative indexing can be used (starts from the end => indexes work the same way here to (start idx included end index excluded))
+    - .upper() / .lower() / 
+    - strip() = removes white space bot end like .trim() in JS
+    - replace(trgChar, newChar) => does not modify the string only return the modified version 
+    - split(char) => returns a list of the sliced parts 
+    - the + operator can be used to concatenate string parts together (does not modify the original string)
+        - throws an error if a string is concatenated to a number 
+    - .format() => formats (converts the passed value into a string and places in in the string here the {} are)
+        - expects as many arguments as {} are in the string (or we can index passed values in {}) (we also can pass key=val pairs) (index and key=val can be combined)
+        - does not modify the original string (only returns the result)
+        - go through the docs with this !!!
+    - escape characgter is \<escapedCharacter> (\n = new line, \t = tab, etc..., \o = octal, \x =hex)
+        - test /0 /x (odtal adn decimal escaping)
+    - to through the string methods 
+
+
+
+    - 
+
+
+
+- operators
+    - arithmetic operators 
+        + 
+        - 
+        * 
+        / 
+        % 
+        ** 
+        // 
+
+    - assignment operators
+        = 
+        +=
+        -=
+        *=
+        /=
+        %=
+        //=
+        **=
+        &=
+        |=
+        ^=
+        >>=
+        <<=
+
+    - comparison operators
+        ==              - can compare objects  
+        !=
+        >
+        <
+        >=
+        <=
+
+    - logical operators
+        and
+        or
+        not
+
+    - identity operators
+        is 
+        is not
+
+    - bitwise operators
+        &
+        |
+        ^
+        <<
+        >>
+        
+        
+- loops 
+    - while loop = the usual way 
+    - for loop = loop through iterators (cycle varialbe is the current item)
+        - the range() method can create a sequence for us 
+        - dir(<obj>)  returns the attributes of the passed object 
+        
+    - these guys have the same break and continue (no labeling here)
+    
+    - else does not execute when the loop was stopped by a break
+    <loopBlock>
+    else:
+        <executes when the loop ends>
+
+
+- Classes/Objects
+    - in python an object is not a dictionary!!! (obj.key VS dict["key"])
+    - python is OOP 
+    - the 'self' = parameter does not have to be called self
+    - parent|child class 
+    - object properties are caled attributes here 
+    - dict(obj)    - to print as dictionary
+    - passing self as 1st argument won't count in the final object as 1st argument 
+    - class MyClass(ParentClass)    -> extend 
+    - super() 
+
+- iterators and generators 
+    - iterators implement the __iter__() and __next__()
+    - the iter(<iterable>) returns an iterator then we can use the next() on the iterator object to get the next value 
+    - the for loop actually creates an iterator and execute the next() method for each loop 
+    - calling the next() on the iteration is over will rise an exception
+    - this essentially creates a generator 
+    - StopIteration statement stops the iteration 
+    - generator function 
+        - function having the yield keyword automatically becomes a generator function 
+        - the generator function returns a generator ojbect on which we can call the iter() or loop through it
+
+
+- scope
+    - we have only function scopes here
+
+
+- module 
+    - <moduleFile>.py is a python module 
+    - import <moduleFileName> [as <moduleName>]
+        - the <moduleFileName> is the imported object (on thist we found the other module's keys)
+    - from <moduleFileName> import <var>
+        - import ony the specified variable 
+    - here any variable on the module is automatically exported 
+    - [as <moduleName>] - names the module 
+    - built-in moudles can be imported as 
+    - this shit will be a masive run -> but I have to do it ;)
+
+
+- dates
+    - not a data-type in python but can be imported as 'datetime'
+    - another shit to go through 
+    - 
+
+
+- math
+    - we have some global function that can perform mathematichal task, but we also have the math built-in moudle 
+    
+
+- PIP
+    - included from version 3.4
+  
+
+- exception handling
+
+
+- user input
+    - input() global method from python 3.6
+        - block the program untill an input is entered 
+        
+    
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+    - Git LFS
+    
+    
+    
+    - hashability in python => document in basics 
+    An object is hashable if it has a hash value which never changes during its lifetime (it needs a __hash__() method), and can be compared to other objects (it needs an __eq__() method). Hashable objects which compare equal must have the same hash value.
+
+    Hashability makes an object usable as a dictionary key and a set member, because these data structures use the hash value internally.
+
+    Most of Python’s immutable built-in objects are hashable; mutable containers (such as lists or dictionaries) are not; immutable containers (such as tuples and frozensets) are only hashable if their elements are hashable. Objects which are instances of user-defined classes are hashable by default. They all compare unequal (except with themselves), and their hash value is derived from their id().
+    
+    
+
+
+-->
+
+
+
+
+
+
+
+
+
+<!--
+    - can be treated -> procedural, OOP, functional
+    - python2 is not developped anymore but still has security updates (still quiet popular)
+    - uses indetations instead of paranthesies (means less code)
+        - the same number of identation must be use within a code block 
+    - interpreted (human-readable) language (no need to compile)
+
+- variables 
+    - no keyword, variable is created when a value is assigned to it
+    - python is case-sensitive 
+    - variables must start with a letter or underscore and can container only (A-z 0-9 _) and case sensitive 
+    - we can assign multiple variables in one line (a = b = c = 1)
+    - scopes are the same like in JS (but we don't have block scope here) (no block scopes here)
+    - we can use the 'globa' keyword to reach for a global variable from insed local scopes (fuctions)
+    - no const or let here 
+
+
+
+    - python / python3 <script>  
+        - executes python file 
+    - python 
+        - enter CLI python (lik repl in node)
+    - exit()
+        - exit CLI 
+    <varName> = <val>
+        - creates a variable 
+    # some comment 
+        - comment 
+    "<content ignored by the parser>"
+    """
+    <content ignored by the pareser (multi lines)>
+    """"
+        - python ignores string literals that are not assigned to any variable, so this can be used as comment
+
+
+
+
+- if / elif / else
+    - the usual way 
+    - shorthand statements
+        - if <cond>: <exp>                - if <cond> is truthy <exp> evaluated 
+        - <valA> if <cond> else <valB> [if <cond> else <valC>] ...    - if <cond> is truty returns <valA> and never evaluates <valB>, if <cond> is falsy returns <valB> (called ternary operator in python) we can chain this shit (supported from python 2.5)
+
+
+    - tuple ()
+    - iterable object, can hold any data type
+    - not changable (cannot add or remove items), allow multiple same values 
+    - (<val>,)              - to create a tuple with one item 
+    - <val> in <tuple>      - return True if tuple has <val>
+    - tuples are unchangable but we are allowed to concatenate multiple tuples together (append another tuple to curent one) to get a new one holding all items (with the + operator)
+    - can be unpacked (we can use the * for the last varialbe to unpack the remaining values, the * can be used at any position to get remaining data)
+    
+    - we simply multiply the items by using the * operator  
+    - there are only 2 built-in methods .count() .index()
+
+
+
+
+
+    - frozensets are immutable 
+    - unordered, can hold any data type 
+    - items are not chagable but we can add / remove, no duplicate values allowed 
+    - set((<val>, ...))   - constructor can create new set 
+    - sets are unordered but we still can use the for loop on it
+    - the in keyword can be used to check if the set has the searched value 
+    
+    
+    - <set>.add() - adds new item 
+    - <set>.update(<iterable>) - adds itmes to the set 
+    - <set|frozenset>.copy()
+                  - creates a new copy of the original set 
+    
+    
+    - <set>.pop()  - removes the last item and return it (this shit is dangerous because the set is unordered)
+    - <set>.remove() / discard() - to remove an item (.remove() raises an error if the item does not exitst, .discard() does not raise the error)
+    - <set>.clear()  - removes all items from the set 
+    
+    
+    
+    
+    - <set|frozenset>.union(<list|tuple|set|dict>)  
+                  - returns a new set|frozenset with the original and the appended collection's items (omit duplicate members) (does not modify originals)
+    <set1|frozenset1> | <set2|frozenset2> 
+                  - same as above but sets only 
+    
+    - <set|frozenset>.intersection(<list|tuple|set|dict>) 
+                  - returns only duplicate members in a new set (does not modify the originals)
+    - <set>.intersection_update(<iterable>)   
+                  - does the same as above but modifies the original set 
+    <set1|frozenset1> & <set2|frozenset2> 
+                  - same as above but only between sets 
+    
+    - <set|frozenset>.difference(<list|tuple|set|dict>) 
+                  - returns in a new set|frozenset set|frozenset memebers that are not appear in <list|tuple|set|dict>    
+    <set1|frozenset1> - <set2|frozenset2> 
+                  - does the same as above but only between sets 
+    - <set>.difference_update(<list|tuple|set|dict>) 
+                  - same as above but modifies the original set 
+
+    - <set|frozenset>.symmetric_difference(<list|tuple|set|dict>)
+                  - returns a new set with elements that are not present in both (does not modify the original iterables)
+    <set1|frozenset1> ^ <set2|frozenset2> 
+                  - same as above but only between sets 
+    - <set>.symmetric_difference_update(<iterable>)
+                  - does the same as above but modifies the original set 
+    
+    
+    - <set|frozenset>.isdisjoint(<list|tuple|set|frozenset>)
+                  - returns True if the <set> and <iterable> have no common members, otherwise returns False
+    
+    
+- set {}
+    - <set|frozenset>.issubset(<list|tuple|set>)
+                  - returns True if all <set> members exist in <iterable>, otherwise returns False 
+    <set1|frozenset1> <= <set2|frozenset2> 
+                  - same as above but between sets only 
+    <set1|frozenset1> < <set2|frozenset2> 
+                  - same as above but the <set1> != <set2>
+    
+    
+    - <set>.issuperset(<list|tuple|set>)
+                  - returns True if all <list|tuple|set> members exist in <set>, otherwise returns False 
+    <set1|frozenset1> >= <set2|frozenset2> 
+                  - same as above but between sets only 
+    <set1|frozenset1> > <set2|frozenset2> 
+                  - same as above but the <set1> != <set2>
+    
+    
+- dictionary 
+    - store data in key/value pairs 
+    - ordered after python 3.7, changable but not allow same keys (the latest key override the value of the previos key)
+    - “associative memories” or “associative arrays” (dictionaries are indexed by keys) 
+    - any immutalble type as key (tuple can be a key if does not contain any mutables)
+    
+    
+    
+    - we can assess values as dict["<key>"] or .get("<key>") 
+    - <key> in <dict> - check if the specified key exist in the dictionary 
+    - del dict[key:str]
+    - does + joins ???? TEST  => nope!!!
+
+
+    - dict.fromkeys(<iterableWithKeys>, <val>)
+                  - returns a new dictionary where keyse have val (classmethod)
+    
+    - .get()    - returns the key's value 
+    - .setdefault(<key>, <val>)
+                  - returns the value of the key 
+                  - if the key does not exist in the dictionary it will be created with the specified value 
+    - .update(dict|iterable)  - updates the dictionary with the specified key|val pair 
+    - .copy()     - creates a new dictionary (complex data is not mutable in python)
+    
+    - .keys()   - retuns a view object list of keys (any changed to the original dictionary is reflected here aw well)
+    - .values()   - same as keys() but for values 
+    - items()     - returns all key value pairs in a list (each key/value pairs are stored in a tuple)
+    
+    
+    - .pop(<key>) - removes the specified key 
+    - .popitem()  - removes the last item (before 3.7 can be any because dictionaries are not iterable)
+    - .clear()    - empties the dictionary 
+
+
+
+-- access list and tuple members (indexed collections)
+    list|tuple[idx]
+    list|tuple[stIdx(inc):endIdx(exc)]
+
+
+
+
+    -- access dictionary and set members 
+
+
+
+
+    - list[-1] 
+      - negative indexing allowed (-1 last item -2 second last, etc)
+    - list[2:5]
+      - range (st included end excluded) omitting means from start|to end (this also support negative indexes) ( list[-3:-1] )
+    - with the range technique we can change a range of items 
+    - code block cannot be empty in python like the if for or function (use the pass keywork in this case)
+
+
+    - clear * and ** operators 
+    - what about dictionaries (access range and unpack)
+
+    - dictionaries are not indexed so the above indexing range does not apply 
+    
+
+    - we can unpack a collection (list, tuples, etc) (list = [1, 2, 3]  ||  a, b, c = list)
+
+
+- accessing data on iterables
+    - list[-1] 
+      - negative indexing allowed (-1 last item -2 second last, etc)
+    - list[2:5]
+      - range (st included end excluded) omitting means from start|to end (this also support negative indexes) ( list[-3:-1] )
+    - with the range technique we can change a range of items 
+
+
+- boolean
+    - True of False value (expression are evaluated True of False)
+    - no data conversion when comparing values (this is not JS baby!)
+    - use the bool() class to see evaluation 
+    - most values are turthy (same as in JS)
+
+
+- functions
+    def <fnName>():
+        'doc string'
+        <fnBody>
+    
+    <fnName>__doc__ 
+              - returns the document string (docstring)
+
+
+
+
+    - we must pass as many arguments as the function is declared with (must be called with the correct number of arguments)
+    - we can pass the argument as *arg|**arg => the function body will receve a tuple|dictionary of argumens with the passed values as argument 
+    - we can pass arguments as key=val pairs (this way the order thoes not mater)
+    - default parameter can be used just like in javaScript
+    
+    
+    - python supports recursion and closures 
+    
+    
+- lambda
+    - small anonymus function that can have one expression only
+    lambda <arg>, ... : <exp>   
+        - returns the lambda function which can be executed
+        - the result of <exp> is automatically returned returned 
+        - arguments work the same was is for the function definition 
+
+
+
+
+    - .next()                     -> in python 2.x
+    - .__next__()                 -> in python 3.x
+    
+    - next(<genObj>, [defVal])    -> same as above 
+    
+    
+    - the return value does not belong to the iteration 
+
+
+    - raises a StopIteration error 
+
+-->
+    
+    
+    
+    <br><br>
+</body>
+</html>

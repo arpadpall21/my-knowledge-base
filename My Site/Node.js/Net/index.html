@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Net </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Net (ver 3.4.1) </h1>
+    <p> Updated ( 2020-03-19 / 2020-05-30 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Net
+    </p>
+    <pre class="syntax">
+    <span style="color:deepskyblue;">------- incomming traffic -------> </span>
+    
+      <span style="color:deepskyblue;">---></span>  net.Socket 
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> net.Server
+    </pre>
+    <p class="subSite"><a href="IPC support/index.html"> IPC (Inter Process Communication) support> </a></p>
+<table class="table">
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>net</strong>.isIP(<strong>ipAdd:str</strong>) </td>
+        <td> returns (<mark>4</mark> = valid IPv4 address) (<mark>6</mark>=valid IPv6 address) (<mark>0</mark> = invalid IP address)
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>net</strong>.isIPv4(<strong>ipAdd:str</strong>) </td>
+        <td> returns <mark>true</mark> if the passed string contains a valid IPv4 address, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>net</strong>.isIPv6(<strong>ipAdd:str</strong>) </td>
+        <td> returns <mark>true</mark> if the passed string contains a valid IPv6 address, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Net Client </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>net</strong>.createConnection(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>net</strong>.createConnection(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>net</strong>.createConnection(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> localAddress: <strong>str</strong> - IP addres the socket should connect from </p>
+                <p> localPort: <strong>str</strong> - local port the socket should connect from </p>
+                <p> family: <strong>nr</strong> - allowed IP address family <mark>4</mark>|<mark>6</mark>|<mark>0</mark> = both allowed (Default: <mark>0</mark>) </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> onread: {buffer:<strong>buf|Uint8Arr|fn</strong>, callback:<strong>fn</strong>} - <u>if supplied</u> the incoming data is stored in the provided buffer and passed to the <mark>callback</mark>, <u>(this disables straming functionalities)</u>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>net</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>net</strong>.connect(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>net</strong>.connect(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> localAddress: <strong>str</strong> - IP addres the socket should connect from </p>
+                <p> localPort: <strong>str</strong> - local port the socket should connect from </p>
+                <p> family: <strong>nr</strong> - allowed IP address family <mark>4</mark>|<mark>6</mark>|<mark>0</mark> = both allowed (Default: <mark>0</mark>) </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> onread: {buffer:<strong>buf|Uint8Arr|fn</strong>, callback:<strong>fn</strong>} - <u>if supplied</u> the incoming data is stored in the provided buffer and passed to the <mark>callback</mark>, <u>(this disables straming functionalities)</u>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - synchronously returns a <strong>socket</strong> object, then asynchronously initiates the connection with <mark><strong>socket</strong>.connect()</mark> internally <br>
+            - on successful connection returns a <strong>socket</strong> object again which represents the underlying TCP or IPC socket <br>
+            - the returned connected <strong>socket</strong> client is a duplex stream which can be read|write in order to communicate with the connected server 
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Net Server </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>net</strong>.createServer(<i class="openable">option:obj<div>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was closed (if the client ends the stream with the <mark>end()</mark> method only the readable side is closed of the socket (duplex stream)) (if the server ends the stream with the <mark>end()</mark> method only th writable side is closed of the socket (duplex stream)) </p>
+                <p> pauseOnConnect: <strong>bol</strong> - on connection the socket's readable side will be paused (No read mode) (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(socket)<div>
+                <p> - <mark>connection</mark> listener's callback function </p>
+            </div></i>) <br>
+            new <strong>net</strong>.Server(<i class="openable">option:obj<div>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was closed (if the client ends the stream with the <mark>end()</mark> method only the readable side is closed of the socket (duplex stream)) (if the server ends the stream with the <mark>end()</mark> method only th writable side is closed of the socket (duplex stream)) </p>
+                <p> pauseOnConnect: <strong>bol</strong> - on connection the socket's readable side will be paused (No read mode) (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(socket)<div>
+                <p> - <mark>connection</mark> listener's callback function </p>
+            </div></i>)
+        </td>
+        <td> 
+            - creates and returns a TCP (any kind of TCP server) or IPC server (extends the <mark>EventEmitter</mark> class) <br>
+            - the returned server type is defined by what kind of socket the <mark>listen()</mark> method is listening to 
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer</strong>.address() </td>
+        <td> returns the listened address (reported by the OS), (<strong class="openable">object<div>
+                <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
+            </div></strong> for TCP servers) (<strong class="openable">string<div>
+                <p> - the socket argument as it was passed in the <mark>listen()</mark> method (ex: <mark>./domainSocket</mark>) </p>
+            </div></strong> for IPC servers)
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer</strong>.close(<i>fn(err)</i>) </td>
+        <td> 
+            - asynchronously stops the server listening for new connections (keeps pending connections) <br>
+            - the server is finally closed when all its connections are closed <br>
+            - when the server if finally closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback arguments trown if this method is called on a closed server) <br>
+            - on Unix systems removes the Domain Socket (from the file system) creted by the server <br>
+            - returns this <strong>netServer</strong> object 
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>netServer</strong>.getConnections(<strong class="openable">fn(err, count:nr)<div>
+                <p> count = the reutrned number indicates the maximum allowed live connections</p>
+            </div></strong>) 
+        </td>
+        <td> asynchronously returns (in the callback) how many live connections the server currently have
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.9.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>netServer</strong>.listen(<i>port:nr, host:str, </i><i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>) <br>
+            <strong>netServer</strong>.listen(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default <mark>511) </mark>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>) <br>
+            <strong>netServer</strong>.listen(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> - if this value is specified the <strong>netServer</strong> will be a TCP server </p>
+                <p> host: <strong>str</strong> </p>
+                <p> path: <strong>str</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> backlog: <strong>nr</strong> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
+                <p> readableAll: <strong>bol</strong> - for IPC servers the pipe (socket) is readable for all users (Default: <mark>false</mark>) </p>
+                <p> writableAll: <strong>bol</strong> - for IPC servers the pipe (socket) is writable for all users (Default: <mark>false</mark>) </p>
+                <p> ipv6Only: <strong>bol</strong> - for TCP servers IPv6 connections only [NOT TESTED: 2020-05-27] </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously starts the server listening for TCP or IPC connections <br>
+            - makes the server emit the <mark>listening</mark> event (if the server is successfully started) <br>
+            - can be called again if the if the previous listening attempt is failed or after the <mark>close()</mark> method <br>
+            - returns this <strong>netServer</strong> object 
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 11.4.0 ipv6Only option support </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer</strong>.listening </td>
+        <td> returns <mark>true</mark> if the server is listening for connections, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 5.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer</strong>.maxConnections </td>
+        <td> limits the number of live connections of the server, returns <mark>undefined</mark> <u>(setter only!)</u>  
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer</strong>.ref() </td>
+        <td> (re)attaches this <strong>netServer</strong> object in the event loop, so this <strong>netServer</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.9.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer</strong>.unref() </td>
+        <td> removes this <strong>netServer</strong> object from the event loop, so this <strong>netServer</strong> does not prevent the process from closing 
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.9.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>netServer.listener</strong>('connection', <strong class="openable">fn(socket)<div>
+                <p> - the <mark>socket</mark> references the connected TCP or IPC socket </p> 
+            </div></strong>) 
+        </td>
+        <td> emitted each time there's a connection (request)
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> emitted when the server closes (all server connections are closed)
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> emitted when there's a server error
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>netServer.listener</strong>('listening', <strong>fn</strong>) </td>
+        <td> emitted when the <mark>listen()</mark> mehotd is called and the server successfully starts listening for new connections
+            <span id="browserSupport" title="updated : 2020-05-28">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> Socket </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong> </td>
+        <td> 
+            - abstraction of a TCP socket or an IPC socket (Unix Domain Socket or Windows Name Pipe) extension of <mark>stream.Duplex</mark> and <mark>EventEmitter</mark> classes <br>
+            - mostly internally created by connection APIs (ex: <mark>http.createServer().listen()</mark>)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            new <strong>net</strong>.Socket(<i class="openable">option:obj<div>
+                <p> fd: <strong>nr</strong> - file descriptor wich wraps around a socket <u>if specified</u>, if not specified a new socket will be created </p> 
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was closed (if the client ends the stream with the <mark>end()</mark> method only the writable side is closed of the socket) (if the server ends the stream with the <mark>end()</mark> method only th readable side is closed of the socket </p>
+                <p> readable: <strong>bol</strong> - allow reads on the socket when a <mark>fd</mark> (file descriptor) passed, otherwise ignored (Default: <mark>false</mark>) </p>
+                <p> writable: <strong>bol</strong> - allow writes on the socket when a <mark>fd</mark> (file descriptor) passed, othewise ignored (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> creates and returns a <strong>socket</strong> object (can be used as net client)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.address() </td>
+        <td> returns an <strong class="openable">object<div>
+                <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
+            </div></strong> with the connected address (for TCP connection only)  
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.bufferSize </td>
+        <td> returns how many <u>characters (not bytes)</u> are queued up in the (writable) internal memory buffer
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.3.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.bytesRead </td>
+        <td> returns the number of <u>bytes</u> received
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.5.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.bytesWritten </td>
+        <td> returns the number of <u>bytes</u> sent
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.5.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>socket</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>socket</strong>.connect(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>) <br>
+            <strong>socket</strong>.connect(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> localAddress: <strong>str</strong> - IP addres the socket should connect from </p>
+                <p> localPort: <strong>str</strong> - local port the socket should connect from </p>
+                <p> family: <strong>nr</strong> - allowed IP address family <mark>4</mark>|<mark>6</mark>|<mark>0</mark> = both allowed (Default: <mark>0</mark>) </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> onread: {buffer:<strong>buf|Uint8Arr|fn</strong>, callback:<strong>fn</strong>} - <u>if supplied</u> the incoming data is stored in the provided buffer and passed to the <mark>callback</mark>, <u>(this disables straming functionalities)</u>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - synchronously returns this <strong>socket</strong>, then asynchronously initiates the connection <br>
+            - on successful connection returns this connected TCP or IPC <strong>socket</strong> again (depending connection)   
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.connecting </td>
+        <td> 
+            - returns <mark>true</mark> after the <mark>connect()</mark> called but the socket is not yet connected (stays <mark>true</mark> untill the socket becomes connected) <br>
+            - once the socket is connected returns <mark>false</mark> and the <mark>connect</mark> event is emitted
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 6.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.destroy(<i>err</i>) </td>
+        <td> 
+            - destroys the socket and closes the connection (returns this <strong>socket</strong>) <br>
+            - if an <i>err</i> argument is passed the socket emits the <mark>error</mark> event and the passed argument is returned in the error listener 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.destroyed </td>
+        <td> returns <mark>true</mark> if the socket is destroyed by the <mark>destory()</mark> method, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.end(<i>data:str|buf|uint8Arr</i><i>, encode:str, fn</i>) </td>
+        <td> 
+            - sends a FIN (last) packet which half closes the socket (optionally sends a last piece of data) <a href="../Stream/index.html#endR" target="_blank">(Stream method)</a> <br>
+            - the callback fires when the FIN packet is flushed to the underlying kernel buffer 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.localAddress </td>
+        <td> returns the local IP address (in a string) on which the remote client|server is connected to
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.9.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.localPort </td>
+        <td> returns the local port (number) on which the remote client|server is connected to
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.9.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.pause() </td>
+        <td> pauses the readable side of the socket (prevent emitting the <mark>data</mark> event) <a href="../Stream/index.html#pause" target="_blank">(Stream method)</a> 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.9.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.pending </td>
+        <td> returns <mark>true</mark> if the socket is not yet connected (before and during the <mark>connect()</mark> method call), <mark>false</mark> if the socket is connected
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 10.16.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.ref() </td>
+        <td> (re)attaches this <strong>socket</strong> in the event loop, so this <strong>socket</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.9.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.remoteAddress </td>
+        <td> returns the remote IP address (in a string) which the socket is connected to
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.5.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.remoteFamily </td>
+        <td> returns the remote IP address faimily which the socket is connected to (<mark>'IPv4'</mark>|<mark>'IPv6'</mark>)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.remotePort </td>
+        <td> returns the remote port (number) which the socket is connected to
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.5.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.resume() </td>
+        <td> unpauses the readable side of the socket (emits the <mark>data</mark> event again) <a href="../Stream/index.html#resume" target="_blank">(Stream method)</a>
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.9.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.setEncoding(<i>encode:str</i>) </td>
+        <td> sets the encoding for the readable side of the socket <a href="../Stream/index.html#setEncoding" target="_blank">(Stream method)</a> (returns this <strong>socket</strong>)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td id="setKeepAlive"> 
+            <strong>socket</strong>.setKeepAlive(<i class="openable">enable:bol<div>
+                <p> - (Default: <mark>false</mark> = keep-alive probe test disabled) (<mark>true</mark> = keep-alive probe test enabled) </p>
+                <p> - once this [TCP Keep-Alive] funcionality is enabled the module manages this testing behaviour apparently (how often the keep-alive probe is performed) however we can specify the first keep-alive probe by specifying the <i>ms</i> argument </p> 
+            </div></i>, <i class="openable">ms:nr<div>
+                <p> - timer starts from the last received data packet, once expired a [TCP Keep-Alive] probe sent to the server </p>
+            </div></i>) 
+        </td>
+        <td>  
+            enables|disables the socket's <span class="openable">Keep-Alive functionality<div>
+                <p> - on idle connection the client sends a [TCP Keep-Alive] data packet to the server in order to check the connection betwen the client and the server, if the server fails to respond the client closes the connection </p>
+                <p> <b>[TESTED: 2020-05-30]</b> here are the results : </p>
+                <p> - it works! but was tricky to test </p>
+                <p> - when the server (or the server system) shuts down it notifies the client so the connection is closed (in this case the Keep-Alive functionality is irrelevant) </p>
+                <p> - however when the server (or the server system) crashes or if ther's some network issue <u>the client is NOT notified</u> and the client still 'believes' that the server is sitll there </p>
+                <p> - this is where the Keep-Alive funcionality comes handy because the client test the presence of the server, if the server doesn't reply to the [TCP Keep-Alive] request the client closes the connection </p>
+            </div></span>  (Default: <mark>false</mark> = disabled) 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.92 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td id="setNoDelay"> <strong>socket</strong>.setNoDelay(<i class="openable">noDelay:bol<div>
+                <p> (Default: <mark>true</mark> = Nagle's algorithm disabled) (<mark>false</mark> = Nagle's algorithm enabled) </p>
+            </div></i>) </td>
+        <td> enables|disables the socket's <span class="openable">Nagel's algorithm funcionality<div>
+                <p> - Nagle's algorithm makes sure that network packets are fully filled </p>
+                <p> - for large network communication works well because less data packets has to be sent through the network </p>
+                <p> - for small network communication can cause latency because network packets must wait till they fully filled</p>
+            </div></span> (Default: <mark>true</mark> = disabled)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td id="setTimeout">  
+            <strong>socket</strong>.setTimeout(<strong>ms:nr</strong>, <i class="openable">fn<div>
+                <p> - <mark>timeout</mark> event's callback function</p>
+            </div></i>) 
+        </td>
+        <td> 
+            - sets a timer on the socket, once the timer expires the socket emits the <mark>timeout</mark> event <u>(which does not drop the connection)</u> <br>
+            - the timer starts when this method set and <u>restarts on every request or response</u> 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.unref() </td>
+        <td> removes this <strong>socket</strong> from the event loop, so this <strong>socket</strong> does not prevent the process from closing 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.9.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket</strong>.write(<strong>data:str|buf|uint8Arr</strong><i>, encode:str, fn</i>) </td>
+        <td> 
+            - sends data on the socket (Default encoding <mark>utf-8</mark>) <a href="../Stream/index.html#write" target="_blank">(Stream method)</a> <br>
+            - returns <mark>true</mark> if the data is successfully fulshed to the underlying kernel buffer <br>
+            - returns <mark>false</mark> if the internal socket buffer is full (written data is overflowing) (the <mark>drain</mark> event emitted when the buffer is free again) <br>
+            - the callback fires when all data is flushed to the underlying kernel buffer 
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>socket.listener</strong>('close', <strong class="openable">fn(hadErr)<div>
+                <p> - <mark>hadErr</mark> -> (<mark>true</mark> = socket closed due to a transmission error) (<mark>false</mark> = socket cosed normally) </p>
+            </div></strong>)
+        </td>
+        <td> emitted when the socket is fully closed
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('connect', <strong>fn</strong>) </td>
+        <td> emitted when the socket is successfully connected
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('data', <strong>fn(chunk:buf|str)</strong>) </td>
+        <td> emitted when a data chunk is received on the stream <a href="../Stream/index.html#data" target="_blank">(Stream method)</a>
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('drain', <strong>fn</strong>) </td>
+        <td> when the <mark>write()</mark> method returns <mark>false</mark> the socket's internal buffer is overflown, once the buffer is freed up this event is emitted to signal that the stream can be written again
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('end', <strong>fn</strong>) </td>
+        <td> 
+            emitted when the other side of the socket sends the <span class="openable">FIN packet<div>
+                <p> - the FIN data packet signals the end of the communication (this closes the writable side of this socket) </p>
+                <p> - by Default this socket once receives the FIN packet sends back another FIN packet to the other side to fully close the stocket (because of the <mark>allowHalfOpen</mark> = <mark>false</mark>) </p>
+                <p> - by setting the <mark>allowHalfOpen</mark> = <mark>ture</mark> this socket does not sent the FIN packet back automatically so the socket will be half open </p>
+                <p> - explicitly calling the <mark>end()</mark> method on this socket sends the FIN packet to the other side </p>
+            </div></span> (closes the readable side of this socket) <a href="../Stream/index.html#end" target="_blank">(Stream method)</a>
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> emmited when an error occures (the <mark>close</mark> event emitted immediately after this)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>socket.listener</strong>('lookup', <strong class="openable">fn(err, add, fam, host)<div>
+                <p> <mark>err</mark> = eventual error </p>
+                <p> <mark>add</mark> = IP address (ex: <mark>172.217.19.110</mark>) </p>
+                <p> <mark>fam</mark> = IP address family (ex: <mark>4</mark>) </p>
+                <p> <mark>host</mark> = host name (es: <mark>google.com</mark>) </p>
+            </div></strong>)
+        </td>
+        <td> emitted when the host name is resolved but before connection
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+                <span><i class="fab fa-node-js"></i> 5.10.0 <mark>host</mark> argument </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('ready', <strong>fn</strong>) </td>
+        <td> emitted when the socket is ready to be used (right after the <mark>connect</mark> event)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 9.11.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>socket.listener</strong>('timeout', <strong>fn</strong>) </td>
+        <td> emitted when the sockets times out (see <mark>setTimeout()</mark>)
+            <span id="browserSupport" title="updated : 2020-05-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <p> - I did not tested the <mark>listen()</mark> method with the <mark>handle</mark> argument because I don't know how to reference a UNIX Domain Socket from a node process <a href="https://nodejs.org/dist/latest-v14.x/docs/api/net.html#net_server_listen_handle_backlog_callback" target="_blank">server.listen(handle, backlog, callback)</a> </p>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v13.x/docs/api/net.html" target="_blank">Net module (Node.js) </a>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - by default the <mark>net.Socket</mark> doesn't have timeout, (therefore the <mark>netServer</mark> and net client don't have eighter) [TESTED: 2020-05-29 node v14.3.0] </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>isIP()</mark> / <mark>isIPv4()</mark> / <mark>isIPv6()</mark> methods </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>net</strong>.isIP(<strong>ipAdd:str</strong>)                                                        // returns (<mark>4</mark> = valid IPv4 address) (<mark>6</mark>=valid IPv6 address) (<mark>0</mark> = invalid IP address)  
+            <strong>net</strong>.isIPv4(<strong>ipAdd:str</strong>)                                                      // returns <mark>true</mark> if the passed string contains a valid IPv4 address, otherwise returns <mark>false</mark>    
+            <strong>net</strong>.isIPv6(<strong>ipAdd:str</strong>)                                                      // returns <mark>true</mark> if the passed string contains a valid IPv6 address, otherwise returns <mark>false</mark>    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var net = require('net');
+    
+    net.isIP('172.217.19.110');                                                        // -> 4
+    net.isIP('2a00:1450:400d:804::200e');                                              // -> 6
+    
+    net.isIPv4('172.217.19.110');                                                      // -> true
+    net.isIPv4('2a00:1450:400d:804::200e');                                            // -> false
+    
+    net.isIPv6('172.217.19.110');                                                      // -> false
+    net.isIPv6('2a00:1450:400d:804::200e');                                            // -> true
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>isIP()</mark> / <mark>isIPv4()</mark> / <mark>isIPv6()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var ip_v4 = '172.217.19.110';
+    var ip_v6 = '2a00:1450:400d:804::200e'
+    var ip_invalid = '2a00::1450:400d:804::200e'                                       // invalid IP address (2 '::' ar not allowed)
+    
+// isIP() -----------------------------------------------------------------------------
+console.log( "--- isIP() ---" );
+    console.log( net.isIP(ip_v4) );                                                    // -> 4
+    console.log( net.isIP(ip_v6) );                                                    // -> 6
+    console.log( net.isIP(ip_invalid) );                                               // -> 0
+    
+// isIPv4() ---------------------------------------------------------------------------
+console.log( "--- isIPv4() ---" );
+    console.log( net.isIPv4(ip_v4) );                                                  // -> true
+    console.log( net.isIPv4(ip_v6) );                                                  // -> false
+    console.log( net.isIPv4(ip_invalid) );                                             // -> false
+    
+// isIPv6() ---------------------------------------------------------------------------
+console.log( "--- isIPv6() ---" );
+    console.log( net.isIPv6(ip_v4) );                                                  // -> false
+    console.log( net.isIPv6(ip_v6) );                                                  // -> true
+    console.log( net.isIPv6(ip_invalid) );                                             // -> flase
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/13 isIP() isIPv4() isIPv6() TEST$ node client
+    --- isIP() ---
+    4
+    6
+    0
+    --- isIPv4() ---
+    true
+    false
+    false
+    --- isIPv6() ---
+    false
+    true
+    false
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/13 isIP() isIPv4() isIPv6() TEST$ 
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Net Client <mark>createConnection()</mark> / <mark>connect()</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>net</strong>.createConnection(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)                               // synchronously returns a <strong>socket</strong> object, then asynchronously initiates the connection with <mark><strong>socket</strong>.connect()</mark> internally    
+            <strong>net</strong>.createConnection(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)                                    on successful connection returns a <strong>socket</strong> object again which represents the underlying TCP or IPC socket  
+            <strong>net</strong>.createConnection(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> localAddress: <strong>str</strong> - IP addres the socket should connect from </p>
+                <p> localPort: <strong>str</strong> - local port the socket should connect from </p>
+                <p> family: <strong>nr</strong> - allowed IP address family <mark>4</mark>|<mark>6</mark>|<mark>0</mark> = both allowed (Default: <mark>0</mark>) </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> onread: {buffer:<strong>buf|Uint8Arr|fn</strong>, callback:<strong>fn</strong>} - <u>if supplied</u> the incoming data is stored in the provided buffer and passed to the <mark>callback</mark>, <u>(this disables straming functionalities)</u>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)                                        the returned connected <strong>socket</strong> client is a duplex stream which can be read|write in order to communicate with the connected server    
+            <strong>net</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)
+            <strong>net</strong>.connect(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)
+            <strong>net</strong>.connect(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> localAddress: <strong>str</strong> - IP addres the socket should connect from </p>
+                <p> localPort: <strong>str</strong> - local port the socket should connect from </p>
+                <p> family: <strong>nr</strong> - allowed IP address family <mark>4</mark>|<mark>6</mark>|<mark>0</mark> = both allowed (Default: <mark>0</mark>) </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> onread: {buffer:<strong>buf|Uint8Arr|fn</strong>, callback:<strong>fn</strong>} - <u>if supplied</u> the incoming data is stored in the provided buffer and passed to the <mark>callback</mark>, <u>(this disables straming functionalities)</u>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var net = require('net');
+    
+// createConnection() -----------------------------------------------------------------
+    var client = net.createConnection(1000, 'localhost', ()=>{ });                     // net client connects to a TCP socket 'localhost:1000'
+  // -------------------------------------------------------------
+    var client = net.createConnection('domSc', ()=>{ });                               // net client connects to an IPC socket './domSc' Domain Socket   
+    
+// connect() --------------------------------------------------------------------------
+    // alias to the 'createConnection()' method = it does the same
+    
+// communication through the estabilished connection ----------------------------------
+    client.write('some data');   
+    client.on('data', (chunk)=>{ });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createConnection()</mark> TEST </u></h4>
+    <p> - all grayed out code is tested one by one! </p>
+    <pre>
+    var net = require('net');
+    
+// net client TCP ----------------------------------------------------------------
+    // var client = net.createConnection(1000, 'localhost', function(){
+    //     console.log( 'client connected');
+    // });
+    
+// net client IPC ----------------------------------------------------------------
+    // var client = net.createConnection('domSc', function(){
+    //     console.log( 'client connected');
+    // });
+    
+// -------------------------------------------------------------------------------
+// net client option argument TEST -----------------------------------------------
+    // var client = net.createConnection({port:1000, host:'localhost'}, function(){
+    //     console.log( 'client connected');
+    // });
+    
+    var client = net.createConnection({path:'domSc'}, function(){
+        console.log( 'client connected');
+    });
+    
+    
+    client.on('data', (chunk)=>{console.log(chunk.toString())});
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/11 createConnection() TEST$ sudo node client
+    client connected
+    server response
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/11 createConnection() TEST$    
+    </pre>
+<h4 style="color:darkblue;"><u> <mark>connect()</mark> (same test as above) TEST </u></h4>
+    <p> - all grayed out code is tested one by one! </p>
+    <pre>
+    var net = require('net');
+    
+// net client TCP ----------------------------------------------------------------
+    // var client = net.createConnection(1000, 'localhost', function(){
+    //     console.log( 'client connected');
+    // });
+    
+// net client IPC ----------------------------------------------------------------
+    // var client = net.createConnection('domSc', function(){
+    //     console.log( 'client connected');
+    // });
+    
+// -------------------------------------------------------------------------------
+// net client option argument TEST -----------------------------------------------
+    // var client = net.createConnection({port:1000, host:'localhost'}, function(){
+    //     console.log( 'client connected');
+    // });
+    
+    var client = net.createConnection({path:'domSc'}, function(){
+        console.log( 'client connected');
+    });
+    
+    
+    client.on('data', (chunk)=>{console.log(chunk.toString())});    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/12 connect() TEST$ sudo node client
+    client connected
+    server response
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/12 connect() TEST$    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Net Server <mark>createServer()</mark> / <mark>Server()</mark> / <mark>listening</mark> / <mark>listen()</mark> / <mark>close()</mark> / <mark>maxConnections</mark> / <mark>getConnections()</mark> / <mark>address()</mark> / <mark>unref()</mark> / <mark>ref()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>listening</mark> / <mark>connection</mark> / <mark>close</mark> / <mark>error</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>net</strong>.createServer(<i class="openable">option:obj<div>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was closed (if the client ends the stream with the <mark>end()</mark> method only the readable side is closed of the socket (duplex stream)) (if the server ends the stream with the <mark>end()</mark> method only th writable side is closed of the socket (duplex stream)) </p>
+                <p> pauseOnConnect: <strong>bol</strong> - on connection the socket's readable side will be paused (No read mode) (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(socket)<div>
+                <p> - <mark>connection</mark> listener's callback function </p>
+            </div></i>)                                 // creates and returns a TCP (any kind of TCP server) or IPC server (extends the <mark>EventEmitter</mark> class)    
+            new <strong>net</strong>.Server(<i class="openable">option:obj<div>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was closed (if the client ends the stream with the <mark>end()</mark> method only the readable side is closed of the socket (duplex stream)) (if the server ends the stream with the <mark>end()</mark> method only th writable side is closed of the socket (duplex stream)) </p>
+                <p> pauseOnConnect: <strong>bol</strong> - on connection the socket's readable side will be paused (No read mode) (Default: <mark>false</mark>) </p>
+            </div></i>, <i class="openable">fn(socket)<div>
+                <p> - <mark>connection</mark> listener's callback function </p>
+            </div></i>)                                      the returned server type is defined by what kind of socket the <mark>listen()</mark> method is listening to 
+            
+            <strong>netServer</strong>.listening                                                        // returns <mark>true</mark> if the server is listening for connections, otherwise returns <mark>false</mark>
+            <strong>netServer</strong>.listen(<i>port:nr, host:str, </i><i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)                      // asynchronously starts the server listening for TCP or IPC connections 
+            <strong>netServer</strong>.listen(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default <mark>511) </mark>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)                           makes the server emit the <mark>listening</mark> event (if the server is successfully started)  
+            <strong>netServer</strong>.listen(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> - if this value is specified the <strong>netServer</strong> will be a TCP server </p>
+                <p> host: <strong>str</strong> </p>
+                <p> path: <strong>str</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> backlog: <strong>nr</strong> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
+                <p> readableAll: <strong>bol</strong> - for IPC servers the pipe (socket) is readable for all users (Default: <mark>false</mark>) </p>
+                <p> writableAll: <strong>bol</strong> - for IPC servers the pipe (socket) is writable for all users (Default: <mark>false</mark>) </p>
+                <p> ipv6Only: <strong>bol</strong> - for TCP servers IPv6 connections only [NOT TESTED: 2020-05-27] </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)                                            can be called again if the if the previous listening attempt is failed or after the <mark>close()</mark> method  
+                                                                                          returns this <strong>netServer</strong> object 
+            
+            <strong>netServer</strong>.close(<i>fn(err)</i>)                                                   // asynchronously stops the server listening for new connections (keeps pending connections) 
+                                                                                          the server is finally closed when all its connections are closed  
+                                                                                          when the server if finally closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback arguments trown if this method is called on a closed server)    
+                                                                                          on Unix systems removes the Domain Socket (from the file system) creted by the server   
+                                                                                          returns this <strong>netServer</strong> object   
+            
+            <strong>netServer</strong>.maxConnections                                                   // limits the number of live connections of the server, returns <mark>undefined</mark> <u>(setter only!)</u>    
+            <strong>netServer</strong>.getConnections(<strong class="openable">fn(err, count:nr)<div>
+                <p> count = the reutrned number indicates the maximum allowed live connections</p>
+            </div></strong>)                               // asynchronously returns (in the callback) how many live connections the server currently have    
+            
+            <strong>netServer</strong>.address()                                                        // returns the listened address (reported by the OS), (<strong class="openable">object<div>
+                <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
+            </div></strong> for TCP servers) (<strong class="openable">string<div>
+                <p> - the socket argument as it was passed in the <mark>listen()</mark> method (ex: <mark>./domainSocket</mark>) </p>
+            </div></strong> for IPC servers)    
+                
+            <strong>netServer</strong>.unref()                                                          // removes this <strong>netServer</strong> object from the event loop, so this <strong>netServer</strong> does not prevent the process from closing    
+            <strong>netServer</strong>.ref()                                                            // (re)attaches this <strong>netServer</strong> object in the event loop, so this <strong>netServer</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)    
+            
+            
+    <span style="color:darkgray;">// Events -------------------------------------------------------------------------</span>
+            <strong>netServer.listener</strong>('listening', <strong>fn</strong>)                                        // emitted when the <mark>listen()</mark> mehotd is called and the server successfully starts listening for new connections    
+            <strong>netServer.listener</strong>('connection', <strong class="openable">fn(socket)<div>
+                <p> - the <mark>socket</mark> references the connected TCP or IPC socket </p> 
+            </div></strong>)                              // emitted each time there's a connection (request)    
+            
+            <strong>netServer.listener</strong>('close', <strong>fn</strong>)                                            // emitted when the server closes (all server connections are closed)    
+            
+            <strong>netServer.listener</strong>('error', <strong>fn(err)</strong>)                                       // emitted when there's a server error 
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var net = require('net');
+    
+    var server = net.createServer();                                                   // creates a net server
+    var server2 = new net.Server();                                                    // creates a net server (does the same as above)  
+    
+// listen() / listening ---------------------------------------------------------------
+    server.listen(1000, 'localhost', ()=>{});                                          // the net server is a TCP server now and listens on 'localhost:1000'
+    server2.listen({port:1000, host:'localhost'}, ()=>{})                                // object argument used 
+   // ---------------------------------------
+    server.listen('domSc', ()=>{});                                                    // the net server is a IPC server now and creates and listens on './domSc' Domain Socket     // -! the './domSc' Domain Socket is not removed from the file system if the server is not explicitly closed with the 'close()' method    
+    
+    server.listening;                                                                  // -> true               // server listening for incoming connections    
+    
+// close() ----------------------------------------------------------------------------
+    server.close(function(err){                                                        // gracefully closes the server (server finally closed when all pending connections are closed)    
+        err;                                                                           // error is thrown if this method is called on a closed server (asynchronous)    
+    });
+    
+// maxConnections / getConnections() --------------------------------------------------
+    server.maxConnections = 10;                                                        // server allowed to have maximum 10 live connections (setter only)   
+    
+    server.getConnection(function(err, con){                                           // asynchronously returns the number current live connections   
+        con;                                                                             // -> 1      // number of current life connections 
+    });
+    
+// address() --------------------------------------------------------------------------
+    server.listening                                                                   // -> {address:'127.0.0.1', family:'IPv4', port:1000}  // address the server is currently listening to   
+    
+// unref() / ref() --------------------------------------------------------------------
+    server. unref();                                                                   // net server allows the process to be closed 
+    server.ref();                                                                      // net server is reattached to the event loop, so it prevents the process to be closed   
+    
+// listening / connection (events) ----------------------------------------------------
+    server.on('listening', ()=>{});                                                    // emitted when the server is listening 
+    
+    server.on('connection', function(socket){                                          // emitted each time a client issues a request to this server   
+        socket;                                                                          // references the underlying TCP or IPC socket 
+    });
+    
+// close / error (events) -------------------------------------------------------------
+    server.on('close', ()=>{});                                                        // emitted when the server is fully closed 
+    
+    server.on('error', function(err){                                                  // emitted an error occures on the server   
+        err;                                                                             // the emitted error 
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>createServer()</mark> TEST </u></h4>
+    <pre>
+// ipc client -------------------------------------------------------------------------
+    var net = require('net');
+    
+    var client = net.createConnection('./socket', ()=>{console.log('ipc client connected')});
+    
+    client.write('some client data');                                                  // data exchange through the domain socket 
+    client.end();
+    
+    client.on('data', (chunk)=>{console.log(chunk.toString())});
+    client.on('end', ()=>{console.log('--- MESSAGE END ---')});
+    
+// ipc server -------------------------------------------------------------------------
+    var net = require('net');
+    
+    net.createServer(function(socket){
+        socket.write('some server data');                                              // data exchange through the domain socket 
+        socket.end();
+        
+        socket.on('data', (chunk)=>{console.log(chunk.toString())});
+        socket.on('end', ()=>{console.log('--- MESSAGE END ---')});
+    }).listen('./socket', ()=>{console.log('ipc server listening')});
+    </pre>
+    <pre class="cmd">
+// ipc client -------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/01 createServer() TEST$ node client
+    ipc client connected
+    some server data
+    --- MESSAGE END ---
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/01 createServer() TEST$ 
+    
+// ipc server -------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/01 createServer() TEST$ node srv
+    ipc server listening
+    some client data
+    --- MESSAGE END ---
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>createServer()</mark> pauseOnConnect TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    net.createServer({pauseOnConnect:true}, function(socket){
+        console.log( socket.isPaused() );                                              // -> true      // the readable side of the socket is paused (is in No read mode)  
+        
+    }).listen(1000, ()=>{console.log('server listening')})    
+    </pre>
+    <pre class="cmd">
+all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/02 createServer() pauseOnConnect TEST$ sudo node srv
+    server listening
+    true
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>createServer()</mark> allowHalfOpen TEST </u></h4>
+    <p> - the client closes the writable side of the socket <mark>end()</mark> method but the server sitll can write and send data to the client because only the readable side of the socket is closed (the writable side is sill open)
+    <pre>
+    var net = require('net');
+    
+    net.createServer({allowHalfOpen:true}, function(socket){                           // half open socket (duplex stream) is allowed  
+        socket.on('data', (chunk)=>{console.log(chunk)});
+        socket.on('end', ()=>{console.log('--END--')});
+        
+        setInterval(function(){
+            socket.write('server response');                                           // server keep writing to the socket 
+        }, 2500);
+    }).listen(1000, ()=>{console.log('server is listening')});    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/03 createServer() allowHalfOpen TEST$ sudo node srv
+    server is listening
+    &lt;Buffer 63 6c 69 65 6e 74 20 64 61 74 61&gt;                                          // client response 
+    --END--
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>Server()</mark> TEST </u></h4>
+    <p> - the <mark>new net.Socket()</mark> is doing the same as the <mark>net.createServer()</mark> </p>
+    <pre>
+    var net = require('net');
+    
+    new net.Server(function(socket){
+        socket.on('data', (chunk)=>{console.log(chunk)});
+        socket.on('end', ()=>{console.log('--END--')});
+        
+        socket.end('server response');
+    }).listen(1000, ()=>{console.log('server is listening')});
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/04 Server() TEST$ node srv
+    server is listening
+    &lt;Buffer 63 6c 69 65 6e 74 20 64 61 74 61&gt;
+    --END--
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>listen()</mark> / <mark>listening</mark>  TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var server = new net.Server(function(socket){
+        socket.write('server response');
+    });
+    
+// listen TCP -------------------------------------------------------------------------
+    // server.listen(1000, 'localhost', ()=>{console.log('TCP server listening')});
+    
+// listen IPC -------------------------------------------------------------------------
+    // server.listen('domainSocket', ()=>{console.log('IPC server listening')});
+    
+// listen option object TCP -----------------------------------------------------------
+    server.listen({port:1000, host:'localhost'}, ()=>{console.log('TCP server listening')});
+    
+// listen option object IPC -----------------------------------------------------------
+    // server.listen({path:'domainSocket'}, ()=>{console.log('IPC server listening')});
+    
+// ------------------------------------------------------------------------------------
+// 'listening' event emitted TEST -----------------------------------------------------
+    server.on('listening', function(){
+        console.log( 'listening event emitted!' );
+        console.log( this.listening );                                                 // -> true
+    });
+    
+    console.log( server.listening );                                                   // -> false    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/05 listen() TEST$ sudo node srv.js
+    false
+    TCP server listening
+    listening event emitted!
+    true
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>close()</mark>  TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var server = net.createServer(function(socket){
+        socket.write('server response');
+    }).listen(1000, 'localhost', ()=>{console.log('server listening')});
+    
+    setTimeout(function(){
+        server.close(function(){                                                       // server closes after 5 seconds if there's no pending connections
+            console.log('close event emitted 1');
+        });  
+    }, 5000);
+    
+// close event listener ---------------------------------------------------------------
+    server.on('close', function(){
+        console.log( 'close event emitted!');
+    });
+    
+// calling 'close()' on a closed server -----------------------------------------------
+    server.close(function(err){                                                        // the server is not yet running so the error argument is thrown 
+        console.log( err.message );                                                    // -> 'Server not running'
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/06 close() TEST$ sudo node srv.js
+    close event emitted!
+    Server is not running.                                                             // err.message
+    server listening
+    close event emitted!
+    close event emitted 1
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/06 close() TEST$     
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>address()</mark> / <mark>getConnections()</mark> / <mark>maxConnections</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var server = net.createServer(function(socket){
+        socket.end('server response');
+    }).listen(1000, 'localhost', ()=>{console.log('server is listening!')});
+    
+// maxConnections ---------------------------------------------------------------------
+    console.log( server.maxConnections );                                              // -> undefined    // setter property only!
+    server.maxConnections = 2;                                                         // server allowed to have up to 2 live connections 
+    
+// address() --------------------------------------------------------------------------
+    server.on('listening', function(){
+        console.log( server.address() );                                               // -> {address:'127.0.0.1', family:'IPv4', port:1000}    
+    });
+    
+// getConnections() -------------------------------------------------------------------
+    server.on('connection', function(){
+        server.getConnections(function(err, count){                              
+            if (err) console.log(err.message);
+            console.log(count);                                                        // -> 1 | -> 2         // number of current live connections  
+        });    
+    });
+    </pre>
+    <pre class='cmd'>
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/07 address() getConnections() maxConnections TEST$ sudo node srv
+    node srv
+    undefined                                                                          // server.maxConnections 
+    server is listening!
+    { address: '127.0.0.1', family: 'IPv4', port: 1000 }
+    1                                                                                  // getConnections()
+    2                                                                                  // getConnections()  // 2nd request 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>unref()</mark> / <mark>ref()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var server = new net.Server(function(socket){  
+    }).listen('./socket', ()=>{console.log('server is listening')});                   // server listening will prevent the process from closing 
+    
+    setTimeout(function(){
+        server.unref();                                                                // server allows the process to be closed 
+    }, 3000);
+    
+    setTimeout(function(){
+        server.ref();                                                                  // server reattached in the event loop = server prevents the process from closing 
+    }, 6000);
+    
+    setTimeout(function(){
+        server.unref();                                                                // server allows the process to be closed again 
+    }, 10000);
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/08 unref() ref() TEST$ node srv
+    server is listening
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/08 unref() ref() TEST$     // process closed after 10 seconds 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>error</mark> (event) TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var server = new net.Server().listen('socket');
+    
+    server.on('error', function(err){
+        console.log( err.message );                                                    // -> 'listen EADDRINUSE: address already in use socket'        // 'socket' already exist 
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/09 error event TEST$ node srv
+    listen EADDRINUSE: address already in use socket
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/09 error event TEST$    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>connection</mark> (event) TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var server = new net.Server().listen(1000);
+    
+    server.on('connection', function(socket){
+        console.log( 'connection event emitted!' );
+        
+        socket.end('server response');                                                 // writing on the socket 
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/10 connection event TEST$ sudo node srv.js
+    connection event emitted!                                                          // new connections 
+    connection event emitted!
+    connection event emitted!
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Socket <mark>Socket()</mark> / <mark>connect()</mark> / <mark>pending</mark> / <mark>connecting</mark> / <mark>address()</mark> / <mark>bytesWritten</mark> / <mark>bytesRead</mark> / <mark>bufferSize</mark> / <mark>destroy()</mark> / <mark>destroyed</mark> / <mark>setEncoding()</mark> / <mark>write()</mark> / <mark>end()</mark> / <mark>pause()</mark> / <mark>resume()</mark> / <mark>localAddress</mark> / <mark>localPort</mark> / <mark>remoteAddress</mark> / <mark>remotePort</mark> / <mark>remoteFamily</mark> / <mark>unref()</mark> / <mark>ref()</mark> / <mark>setNoDelay()</mark> / <mark>setKeepAlive</mark> / <mark>setTimeout()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>connect</mark> / <mark>ready</mark> / <mark>lookup</mark> / <mark>data</mark> / <mark>end</mark> / <mark>close</mark> / <mark>drain</mark> / <mark>error</mark> / <mark>timeout</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>socket</strong>                                                                     // abstraction of a TCP socket or an IPC socket (Unix Domain Socket or Windows Name Pipe) extension of <mark>stream.Duplex</mark> and <mark>EventEmitter</mark> classes   
+                                                                                          mostly internally created by connection APIs (ex: <mark>http.createServer().listen()</mark>) 
+                
+            new <strong>net</strong>.Socket(<i class="openable">option:obj<div>
+                <p> fd: <strong>nr</strong> - file descriptor wich wraps around a socket <u>if specified</u>, if not specified a new socket will be created </p> 
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was closed (if the client ends the stream with the <mark>end()</mark> method only the writable side is closed of the socket) (if the server ends the stream with the <mark>end()</mark> method only th readable side is closed of the socket </p>
+                <p> readable: <strong>bol</strong> - allow reads on the socket when a <mark>fd</mark> (file descriptor) passed, otherwise ignored (Default: <mark>false</mark>) </p>
+                <p> writable: <strong>bol</strong> - allow writes on the socket when a <mark>fd</mark> (file descriptor) passed, othewise ignored (Default: <mark>false</mark>) </p>
+            </div></i>)                                                // creates and returns a <strong>socket</strong> object (can be used as net client)
+            
+            <strong>socket</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)                                     // synchronously returns this <strong>socket</strong>, then asynchronously initiates the connection    
+            <strong>socket</strong>.connect(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)                                          on successful connection returns this connected TCP or IPC <strong>socket</strong> again (depending connection)   
+            <strong>socket</strong>.connect(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> localAddress: <strong>str</strong> - IP addres the socket should connect from </p>
+                <p> localPort: <strong>str</strong> - local port the socket should connect from </p>
+                <p> family: <strong>nr</strong> - allowed IP address family <mark>4</mark>|<mark>6</mark>|<mark>0</mark> = both allowed (Default: <mark>0</mark>) </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> onread: {buffer:<strong>buf|Uint8Arr|fn</strong>, callback:<strong>fn</strong>} - <u>if supplied</u> the incoming data is stored in the provided buffer and passed to the <mark>callback</mark>, <u>(this disables straming functionalities)</u>
+            </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener callback </p>
+            </div></i>)                                                 
+            
+            <strong>socket</strong>.pending                                                             // returns <mark>true</mark> if the socket is not yet connected (before and during the <mark>connect()</mark> method call), <mark>false</mark> if the socket is connected    
+            <strong>socket</strong>.connecting                                                          // returns <mark>true</mark> after the <mark>connect()</mark> called but the socket is not yet connected (stays <mark>true</mark> untill the socket becomes connected)    
+                                                                                          once the socket is connected returns <mark>false</mark> and the <mark>connect</mark> event is emitted  
+                
+            <strong>socket</strong>.bytesWritten                                                        // returns the number of <u>bytes</u> sent  
+            <strong>socket</strong>.bytesRead                                                           // returns the number of <u>bytes</u> received  
+            <strong>socket</strong>.bufferSize                                                          // returns how many <u>characters (not bytes)</u> are queued up in the (writable) internal memory buffer   
+            
+            <strong>socket</strong>.destroy(<i>err</i>)                                                        // destroys the socket and closes the connection (returns this <strong>socket</strong>)
+                                                                                          if an <i>err</i> argument is passed the socket emits the <mark>error</mark> event and the passed argument is returned in the error listener    
+            <strong>socket</strong>.destroyed                                                           // returns <mark>true</mark> if the socket is destroyed by the <mark>destory()</mark> method, otherwise returns <mark>false</mark>
+            
+            <strong>socket</strong>.setEncoding(<i>encode:str</i>)                                             // sets the encoding for the readable side of the socket <a href="../Stream/index.html#setEncoding" target="_blank">(Stream method)</a> (returns this <strong>socket</strong>)     
+            
+            <strong>socket</strong>.write(<strong>data:str|buf|uint8Arr</strong><i>, encode:str, fn</i>)                        // sends data on the socket (Default encoding <mark>utf-8</mark>) <a href="../Stream/index.html#write" target="_blank">(Stream method)</a>   
+                                                                                          returns <mark>true</mark> if the data is successfully fulshed to the underlying kernel buffer
+                                                                                          returns <mark>false</mark> if the internal socket buffer is full (written data is overflowing) (the <mark>drain</mark> event emitted when the buffer is free again)    
+                                                                                          the callback fires when all data is flushed to the underlying kernel buffer 
+            <strong>socket</strong>.end(<i>data:str|buf|uint8Arr</i><i>, encode:str, fn</i>)                          // sends a FIN (last) packet which half closes the socket (optionally sends a last piece of data) <a href="../Stream/index.html#endR" target="_blank">(Stream method)</a>    
+                                                                                          the callback fires when the FIN packet is flushed to the underlying kernel buffer 
+            
+            <strong>socket</strong>.pause()                                                             // pauses the readable side of the socket (prevent emitting the <mark>data</mark> event) <a href="../Stream/index.html#pause" target="_blank">(Stream method)</a>  
+            <strong>socket</strong>.resume()                                                            // unpauses the readable side of the socket (emits the <mark>data</mark> event again) <a href="../Stream/index.html#resume" target="_blank">(Stream method)</a>
+            
+            <strong>socket</strong>.address()                                                           // returns an <strong class="openable">object<div>
+                <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
+            </div></strong> with the connected address (for TCP connection only) 
+            
+            <strong>socket</strong>.localAddress                                                        // returns the local IP address (in a string) on which the remote client|server is connected to    
+            <strong>socket</strong>.localPort                                                           // returns the local port (number) on which the remote client|server is connected to  
+            
+            <strong>socket</strong>.remoteAddress                                                       // returns the remote IP address (in a string) which the socket is connected to 
+            <strong>socket</strong>.remoteFamily                                                        // returns the remote IP address faimily which the socket is connected to (<mark>'IPv4'</mark>|<mark>'IPv6'</mark>)
+            <strong>socket</strong>.remotePort                                                          // returns the remote port (number) which the socket is connected to 
+            
+            <strong>socket</strong>.unref()                                                             // removes this <strong>socket</strong> from the event loop, so this <strong>socket</strong> does not prevent the process from closing 
+            <strong>socket</strong>.ref()                                                               // (re)attaches this <strong>socket</strong> in the event loop, so this <strong>socket</strong> does prevent the process from closing (opposite of <mark>unref()</mark>) 
+            
+            <strong>socket</strong>.setNoDelay(<i class="openable">noDelay:bol<div>
+                <p> (Default: <mark>true</mark> = Nagle's algorithm disabled) (<mark>false</mark> = Nagle's algorithm enabled) </p>
+            </div></i>)                                            // enables|disables the socket's <span class="openable">Nagel's algorithm funcionality<div>
+                <p> - Nagle's algorithm makes sure that network packets are fully filled </p>
+                <p> - for large network communication works well because less data packets has to be sent through the network </p>
+                <p> - for small network communication can cause latency because network packets must wait till they fully filled</p>
+            </div></span> (Default: <mark>true</mark> = disabled)
+            <strong>socket</strong>.setKeepAlive(<i class="openable">enable:bol<div>
+                <p> - (Default: <mark>false</mark> = keep-alive probe test disabled) (<mark>true</mark> = keep-alive probe test enabled) </p>
+                <p> - once this [TCP Keep-Alive] funcionality is enabled the module manages this testing behaviour apparently (how often the keep-alive probe is performed) however we can specify the first keep-alive probe by specifying the <i>ms</i> argument </p> 
+            </div></i>, <i class="openable">ms:nr<div>
+                <p> - timer starts from the last received data packet, once expired a [TCP Keep-Alive] probe sent to the server </p>
+            </div></i>)                                   // enables|disables the socket's <span class="openable">Keep-Alive functionality<div>
+                <p> - on idle connection the client sends a [TCP Keep-Alive] data packet to the server in order to check the connection betwen the client and the server, if the server fails to respond the client closes the connection </p>
+                <p> <b>[TESTED: 2020-05-30]</b> here are the results : </p>
+                <p> - it works! but was tricky to test </p>
+                <p> - when the server (or the server system) shuts down it notifies the client so the connection is closed (in this case the Keep-Alive functionality is irrelevant) </p>
+                <p> - however when the server (or the server system) crashes or if ther's some network issue <u>the client is NOT notified</u> and the client still 'believes' that the server is sitll there </p>
+                <p> - this is where the Keep-Alive funcionality comes handy because the client test the presence of the server, if the server doesn't reply to the [TCP Keep-Alive] request the client closes the connection </p>
+            </div></span>  (Default: <mark>false</mark> = disabled)
+            
+            <strong>socket</strong>.setTimeout(<strong>ms:nr</strong>, <i class="openable">fn<div>
+                <p> - <mark>timeout</mark> event's callback function</p>
+            </div></i>)                                              // sets a timer on the socket, once the timer expires the socket emits the <mark>timeout</mark> event <u>(which does not drop the connection)</u>
+                                                                                          the timer starts when this method set and <u>restarts on every request or response</u> 
+            
+    <span style="color:darkgray;">// Events -------------------------------------------------------------------------</span> 
+            <strong>socket.listener</strong>('connect', <strong>fn</strong>)                                             // emitted when the socket is successfully connected 
+            <strong>socket.listener</strong>('ready', <strong>fn</strong>)                                               // emitted when the socket is ready to be used (right after the <mark>connect</mark> event)    
+            <strong>socket.listener</strong>('lookup', <strong class="openable">fn(err, add, fam, host)<div>
+                <p> <mark>err</mark> = eventual error </p>
+                <p> <mark>add</mark> = IP address (ex: <mark>172.217.19.110</mark>) </p>
+                <p> <mark>fam</mark> = IP address family (ex: <mark>4</mark>) </p>
+                <p> <mark>host</mark> = host name (es: <mark>google.com</mark>) </p>
+            </div></strong>)                        // emitted when the host name is resolved but before connection 
+            
+            <strong>socket.listener</strong>('data', <strong>fn(chunk:buf|str)</strong>)                                 // emitted when a data chunk is received on the stream <a href="../Stream/index.html#data" target="_blank">(Stream method)</a>    
+            <strong>socket.listener</strong>('end', <strong>fn</strong>)                                                 // emitted when the other side of the socket sends the <span class="openable">FIN packet<div>
+                <p> - the FIN data packet signals the end of the communication (this closes the writable side of this socket) </p>
+                <p> - by Default this socket once receives the FIN packet sends back another FIN packet to the other side to fully close the stocket (because of the <mark>allowHalfOpen</mark> = <mark>false</mark>) </p>
+                <p> - by setting the <mark>allowHalfOpen</mark> = <mark>ture</mark> this socket does not sent the FIN packet back automatically so the socket will be half open </p>
+                <p> - explicitly calling the <mark>end()</mark> method on this socket sends the FIN packet to the other side </p>
+            </div></span> (closes the readable side of this socket) <a href="../Stream/index.html#end" target="_blank">(Stream method)</a>    
+                
+            <strong>socket.listener</strong>('close', <strong class="openable">fn(hadErr)<div>
+                <p> - <mark>hadErr</mark> -> (<mark>true</mark> = socket closed due to a transmission error) (<mark>false</mark> = socket cosed normally) </p>
+            </div></strong>)                                      // emitted when the socket is fully closed 
+                
+            <strong>socket.listener</strong>('drain', <strong>fn</strong>)                                               // when the <mark>write()</mark> method returns <mark>false</mark> the socket's internal buffer is overflown, once the buffer is freed up this event is emitted to signal that the stream can be written again    
+            
+            <strong>socket.listener</strong>('error', <strong>fn(err)</strong>)                                          // emmited when an error occures (the <mark>close</mark> event emitted immediately after this)     
+            
+            <strong>socket.listener</strong>('timeout', <strong>fn</strong>)                                             // emitted when the sockets times out (see <mark>setTimeout()</mark>)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var net = require('net');
+    
+    var socket = new net.Socket();                                                     // creates a new socket 
+    
+// connect ----------------------------------------------------------------------------
+    var socket = socket.connect(1000, 'localhost');                                    // connects the created socket (a new connected TCP socket is returned )
+    
+// pending / connecting ---------------------------------------------------------------
+    socket.pending;                                                                    // -> false      // socket connected ('true' before and durring connecting)    
+    socket.connecting;                                                                 // -> false      // socket connected ('true' durreing connecting only)    
+    
+// bytesWritten / bytesRead / bufferSize ----------------------------------------------
+    socket.bytesWritten;                                                               // -> 1546       // bytes sent trought the socket 
+    socket.bytesRead;                                                                  // -> 48762      // bytes received through the socket  
+    socket.bufferSize;                                                                 // -> 0          // writable internal buffer memory empty   
+    
+// destory() / destroyed --------------------------------------------------------------
+    socket.destroy();                                                                  // destroys the socket and drops the connection 
+    socket.destroyed;                                                                  // -> ture       // the socket is destroyed by the 'destroy()' method    
+    
+// setEncoding() ----------------------------------------------------------------------
+    socket.setEncoding('utf-8');                                                       // received data interpreted as 'utf-8' (default)
+    
+// write() / end() --------------------------------------------------------------------
+    socket.write('some data');                                                         // -> ture       // writes data to the stream (successfully flushed to the underlying kernel buffer)   
+    socket.end();                                                                      // sends the FIN packet wich closes the writable side of this socket (and readable side of the server socket)    
+    
+// pause() / resume() -----------------------------------------------------------------
+    socket.pause();                                                                    // switches the socket's readalbe side into 'paused reading mode'
+    socket.resume();                                                                   // switches teh socket's readalbe side into 'flowing reading mode' (emits the 'data' event again)    
+    
+// address() / localAddress / localPort / remoteAddress / remotePort / remoteFamily ---
+    socket.address();                                                                  // -> {address:'127.0.0.1', port:1000, family:'IPv4'}    // remote socket address   
+    
+    socket.remoteAddress;                                                              // -> '127.0.0.1'    
+    socket.remotePort;                                                                 // -> 1000
+    socket.remoteFamily;                                                               // -> 'IPv4'
+    
+    socket.localAddress;                                                               // -> '127.0.0.1' 
+    socket.localPort                                                                   // -> 49212      // the server is connected to this local port    
+    
+// unref() / ref() --------------------------------------------------------------------
+    socket.unref();                                                                    // socket allows the process to be closed 
+    socket.ref();                                                                      // socket prevents the process from closing 
+    
+// setNoDelay() / setKeepAlive() ------------------------------------------------------
+    socket.setNoDela(false);                                                           // enables Nagle's algorithm   
+    socket.setKeepAlive(true, 30000);                                                  // on idle connection the client sends the first [TCP Keep-Alive] proble after 30 seconds    
+    
+// setTimeout() -----------------------------------------------------------------------
+    socket.setTimeout(5000, ()=>{});                                                   // after 5 seconds the socket emits the 'timeout' event (does not drop the connection) (callback is the 'timeout' listener)    
+    
+// connect / ready / lookup (events) --------------------------------------------------
+    socket.on('connect', ()=>{});                                                      // emitted when the socket is connected 
+    
+    socket.on('ready', ()=>{});                                                        // emitted right after the 'connect' event 
+    
+    socket.on('lookup', funcionality(err, add, fam, host){                             // emitted after DNS resolution but before connection 
+        add;                                                                             // -> '127.0.0.1'
+        fam;                                                                             // -> 4
+        host;                                                                            // -> 'localhost'
+    });
+    
+// data / end (events) ----------------------------------------------------------------
+    socket.on('data', function(chunk){                                                 // emitted when the socket receives a data chunk 
+        chunk;                                                                           // -> data chunk 
+    });
+    
+    socket.on('end', ()=>{});                                                          // emitted when the socket receives the FIN packet  
+    
+// close / error / timeout (events) ---------------------------------------------------
+    socket.on('close', function(hadErr){                                               // emitted when the socket is fully closed
+        hadErr;                                                                          // -> false        // socket not closed due to a transmission error    
+    });                                                         
+    
+    socket.on('error', function(err){                                                  // emmited when an error occures on the socket 
+        err;                                                                             // -> err          // throw error 
+    });
+    
+    socket.on('timeout', ()=>{});                                                      // emitted when the socket times out (set by the 'setTimeout()' method)    
+    
+// drain (event) ----------------------------------------------------------------------
+    socket.on('drain', ()=>{});                                                        // emitted when the writable internal buffer is free again   
+                                                                                       // the 'write()' method returns false (buffer full) then the buffer becomes empty again the 'drain' event is emitted    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>connecting</mark> / <mark>pending</mark> / <mark>address()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var socket = new net.Socket();
+    
+// the 'connect()' is not yet called --------------------------------------------------
+    console.log( '--- \'connect()\' not yet called!' );
+    console.log( socket.pending );                                                     // -> true 
+    console.log( socket.connecting );                                                  // -> false 
+    
+// the 'connect()' is called but not yet connected -------------------------------------
+    socket.connect({port:1000});
+    
+    console.log( '--- \'connect()\' called!' );
+    console.log( socket.pending );                                                     // -> true      
+    console.log( socket.connecting );                                                  // -> true      // while the 'connect()' called but the socket is not yet connected
+    
+// socket connected -------------------------------------------------------------------
+    socket.on('connect', function(){
+        console.log( '--- socket connected!' );
+        console.log( socket.pending );                                                 // -> false 
+        console.log( socket.connecting );                                              // -> false 
+        
+        console.log( this.address() );                                                 // -> {address:'127.0.0.1', family:'IPv4', port:47554}   
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/14 connecting pending TEST$ node client
+    --- 'connect()' not yet called!
+    true
+    false
+    --- 'connect()' called!
+    true
+    true
+    --- socket connected!
+    false
+    false
+    { address: '127.0.0.1', family: 'IPv4', port: 47554 }
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/14 connecting pending TEST$    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>bufferSize</mark> / <mark>bytesRead</mark> / <mark>bytesWritten</mark> TEST </u></h4>
+    <p> - the <mark>bufferSize</mark> is tested with large amount of data queued up = and works fine </p>
+    <pre>
+var net = require('net');
+    
+var socket = new net.Socket({});
+    
+socket.connect(1000, function(){
+    console.log( 'socket connected!' );
+    
+    socket.end('client data')
+    console.log( socket.bufferSize );                                                  // -> 0        // no queued up string waiting to be written to the stream  
+    
+    socket.on('data', (chunk)=>{console.log(chunk)})
+    socket.on('end', ()=>{
+        console.log( socket.bytesWritten );                                            // -> 11  
+        console.log( socket.bytesRead );                                               // -> 16
+    });
+});
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/15 bufferSize bytesRead bytesWritten TEST$ node client
+    socket connected!
+    0                                                                                  // socket.bufferSize
+    &lt;Buffer 73 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 21&gt;                           // the recieved data 
+    11                                                                                 // socket.bytesWritten
+    16                                                                                 // socket.bytesRead
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/15 bufferSize bytesRead bytesWritten TEST$     
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>destroy()</mark> / <mark>destroyed</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+        
+    var socket = new net.Socket();
+        
+    console.log( socket.destroyed );                                                   // -> false
+        
+    var err = new Error('customError');
+    socket.destroy(err);                                                               // passing an arrgument triggers the 'error' event 
+        
+    console.log( socket.destroyed );                                                   // -> true
+        
+    socket.on('error', function(err){
+        console.log( err.message );                                                    // -> 'customError'         // the passed error is returned     here 
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/16 destroy() destroyed TEST$ node client
+    false
+    true
+    customError
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/16 destroy() destroyed TEST$    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setEncoding()</mark> / <mark>write()</mark> / <mark>end()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var socket = new net.Socket();
+    
+    socket.connect(1000, function(){
+        socket.setEncoding('base64');                                                  // incomming data interpreted in 'base64'
+        socket.on('data', (chunk)=>console.log(chunk.toString()));                     // -> 'c2VydmVyIHJlc3BvbnNl'      // which is gibberish 
+        
+        socket.write('client sent some data');
+        socket.end('last message');                                                    // last piece of data sent (FIN packet)
+    });
+    </pre>
+    <pre class="cmd">
+all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/17 setEncoding() end() write() TEST$ node client
+    c2VydmVyIHJlc3BvbnNl
+    IQ==
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/17 setEncoding() end() write() TEST$     
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>pause()</mark> / <mark>resume()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var socket = new net.Socket();
+    
+    socket.connect(1000, function(){
+        socket.pause();                                                                // pauses the readable side of the stream 
+        
+        setTimeout(function(){
+            socket.resume();                                                           // resumese the reading side of the stream 
+        }, 4000);
+        
+        socket.on('data', (chunk)=>{console.log(chunk)});                              // reading data after 4 seconds 
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/18 pause() resume() TEST$ node client
+    &lt;Buffer 73 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 21&gt;
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/18 pause() resume() TEST$    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>localAddress</mark> / <mark>localPort</mark> / <mark>remoteAddress</mark> / <mark>remotePort</mark> / <mark>remoteFamily</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    new net.Socket().connect(1000, function(){
+        console.log( this.localAddress );                                              // -> '127.0.0.1'
+        console.log( this.localPort );                                                 // -> 49212
+        
+        console.log( this.remoteAddress );                                             // -> 127.0.0.1
+        console.log( this.remotePort );                                                // -> 1000
+        console.log( this.remoteFamily );                                              // -> 'IPv4'
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/19 localAddress localPort remoteAddress remotePort remoteFamily TEST$ node client
+    127.0.0.1
+    49212
+    127.0.0.1
+    1000
+    IPv4
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>unref()</mark> / <mark>ref()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var socket = new net.Socket();
+    
+    socket.connect(1000, 'localhost');
+    
+    setTimeout(function(){
+        socket.unref();                                                                // the socket allows the process to be closed 
+    }, 3000);
+    
+    setTimeout(function(){
+        socket.ref();                                                                  // socket reattached to the event loop so prefents it from closing 
+    }, 6000);
+    
+    setTimeout(function(){
+        socket.unref();                                                                // the socket allows the process to be closed again
+    }, 9000);
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/20 ref() unref() TEST$ node client
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/20 ref() unref() TEST$    // process closed after 9 seconds 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setTimeout()</mark> / <mark>setNoDelay()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var socket = new net.Socket();
+    
+    socket.connect(1000, 'localhost', function(){
+        socket.write('client data');
+        
+        socket.on('data', (chunk)=>{console.log(chunk.toString())})
+        socket.on('end', ()=>{console.log('--- MESSAGE END ---')});
+        
+    });
+    
+    socket.setTimeout(5000, function(){                                                // if ther's no request or response emits the 'timeout' event on the socket after 5 seconds   
+        console.log('timeout event emitted!');
+    });
+    
+    socket.setNoDelay(false);                                                          // Nagle's algorithm enabled    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/22 setTimeout() TEST$ node client
+    server response!
+    timeout event emitted!                                                             // emitted after 5 seconds 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>setKeepAlive()</mark> TEST </u></h4>
+    <pre>
+    var net = require('net');
+
+    let socket = new net.Socket();
+
+    socket.connect(1000, '192.168.0.103', function(){
+        socket.on('data', (chunk)=>{console.log(chunk.toString())})
+        socket.on('end', ()=>{ '-- END --' });
+    });
+
+    socket.setKeepAlive(true, 60000);                   // a keepalive probe (TCP Keep-Alive packet) will be send after 1 minute 
+                                                        // -! I intentiannaly crushed the server system to check this behaviour and it WORKS!
+                                                        // -! after 1 minute the client test the connection which fails 
+                                                        // -! this does not work when the server is closed or the system is shut down because the server process notifies the client to close the connection!     
+                                                        // -! however on system crash the server does not notify the client and the connection will stay open       
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/23 setKeepAlive() TEST$ node client
+    server response
+    events.js:292
+        throw er; // Unhandled 'error' event
+        ^
+    
+    Error: read ETIMEDOUT
+        at TCP.onStreamRead (internal/stream_base_commons.js:205:27)
+    Emitted 'error' event on Socket instance at:
+        at emitErrorNT (internal/streams/destroy.js:100:8)
+        at emitErrorCloseNT (internal/streams/destroy.js:68:3)
+        at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+    errno: -110,
+    code: 'ETIMEDOUT',
+    syscall: 'read'
+    }                                                   // -! open connection closed after 1 minute (server system crash tested!)
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/23 setKeepAlive() TEST$    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>data</mark> / <mark>end</mark> / <mark>close</mark> (events) TEST </u></h4>
+    <pre>
+    var net = require('net');
+    
+    var client = net.connect(1000, 'localhost');
+    
+    client.on('data', function(chunk){
+        console.log( chunk.toString() );
+    });
+    
+    client.on('end', function(){
+        console.log( '--- END OF MESSAGE ---');
+    });
+    
+    client.on('close', function(hadErr){
+        console.log( 'socket closed' );
+        console.log( hadErr );                                                         // -> false     // no transmission error 
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/25 data end close events TEST$ node client
+    server response!
+    --- END OF MESSAGE ---
+    socket closed
+    false                                                                              // hadErr
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/25 data end close events TEST$    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>drain</mark> event TEST </u></h4>
+    <p> - the server stops reading the incoming data this causes the stream buffer overflow on the client </p>
+    <p> - after 25 seconds the server resumes reading the stream, so the buffer memory on the client side will be freed up, this causes the socket to emit the <mark>drain</mark> event </p>
+    <pre>
+var net = require('net');
+
+var client = net.connect(1000, 'localhost', function(){
+    var int = setInterval(function(){                                                  // keeps writing the socket 
+        var wrt = client.write('data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data data');
+        
+        if (wrt == false) {                                                            // write false = internal buffer overflowing 
+            console.log( client.bufferSize );                                          // -> 16873         // characters in the internal buffer memory 
+            clearInterval(int);                                                        // stop writing new data 
+            
+        }
+    }, 1);
+    
+});
+
+client.on('drain', function(){                                                         // emitted once the server resumes reading the buffered data 
+    console.log( 'drain event emitted!');
+    
+    console.log( client.bufferSize );                                                  // -> 0             // buffer empty
+});
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Net/26 drain event TEST$ node client
+    16873                                                                              // client.bufferSize
+    drain event emitted!                                                               
+    0                                                                                  // client bufferSize (in drain event)
+    </pre>
+</details>
+    
+<br><br>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Styling </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Styling (ver 4.0.0) </h1>
+    <p> Updated ( 2018-02-02 / 2018-02-14 / 2018-09-03 / 2018-10-18 / 2018-12-23 / 2021-10-05 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html"> Web Browser APIs> </a> 
+        <a href="../index.html"> DOM> </a> Styling
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="10.01">
+        <td> <em>window</em>.getComputedStyle(<strong>htmlElement</strong>, <i>pseudoSelector:str</i>) </td>
+        <td> 
+            - returns <u class="openable">the computed syles<div>
+                <p> - the curently rendered style parameters on the screen </p>
+            </div></u> of the element in a <strong>CSSStyleDeclaration</strong> object (read only) <br>
+            - the <strong>CSSStyleDeclaration</strong> is essentially an object holding css property/values (ex: <mark>{ fontSize:<strong>nr:px</strong>}</mark> <u>properties are camelCassed</u>) <br>
+            <span id="browserSupport" title="updated: 2021-10-06">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 1 </span>
+                <span><i class="fab fa-opera"></i> 7.2 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 9 </span>
+                <span><i class="fab fa-safari"></i> 3 </span>
+            </span>        
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>htmlElement</strong>.style </td>
+        <td> 
+            - gets or sets <u>inline</u> styles through a <strong>CSSStyleDeclaration</strong> object of the element <br>
+            - the <strong>CSSStyleDeclaration</strong> is essentially an object holding css property/values (ex: <mark>{ fontSize:<strong>nr:px</strong>}</mark> <u>properties are camelCassed</u>) <br>
+            <span id="browserSupport" title="updated: 2021-10-05">
+                <span><i class="fab fa-chrome"></i> 1 </span>
+                <span><i class="fab fa-firefox"></i> 1 </span>
+                <span><i class="fab fa-opera"></i> 8 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 5.5 </span>
+                <span><i class="fab fa-safari"></i> 3 </span>
+            </span>        
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+	<!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>style</mark> / <mark>getComputedStyle()</mark> property and method </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+        <pre>
+// CSS --------------------------------------------------------------------------------
+    #testElement {
+        color: red;
+        font-size: 25px;
+    }
+    
+// HTML -------------------------------------------------------------------------------
+    &lt;p id="testElement" style="background-color:white;" onmouseup="getStyles(event)"&gt; Style Test element &lt;/p&gt;
+&lt;script&gt;
+    const thisElement = document.getElementById('testElement');
+        
+    thisElement.style.color;                                                           // -> ''                  // because this only shows inline styles 
+    thisElement.style.fontSize;                                                        // -> ''
+        
+    window.getComputedStyle(thisElement).color;                                        // -> 'rgb(255, 0, 0)'    // gets the currently rendered style (read only)
+    window.getComputedStyle(thisElement).fontSize;                                     // -> '24px'
+        
+    thisElement.style.border = '2px black solid';                                      // we can set inline styles like this   
+    thisElement.style.fontWeight = 'bold';
+    thisElement.style.animationPlayState = 'running';
+&lt;/script&gt;
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:darkblue;"><u> <mark>style</mark> VS <mark>getComputedStyle()</mark> TEST </u></h3>
+    <p> - click on the element to display the results in console </p>
+    <p id="testElement" style="background-color:white;" onmouseup="getStyles(event)"> Style Test element </p>
+<script>
+    function getStyles(event){
+        const thisElement = event.currentTarget;
+        
+        console.log( thisElement.style.color );                                   // -> ''                  // because this only shows inline styles 
+        console.log( thisElement.style.fontSize );                                // -> ''
+        
+        console.log( window.getComputedStyle(thisElement).color );                // -> 'rgb(255, 0, 0)'    // gets the current style (read only)
+        console.log( window.getComputedStyle(thisElement).fontSize );             // -> '24px'
+        
+        
+        thisElement.style.border = '2px black solid';                             // we can set inline styles like this   
+        thisElement.style.fontWeight = 'bold';
+        thisElement.style.animationPlayState = 'running';
+        
+        
+        window.setInterval(function(){  
+            console.log( thisElement.style.backgroundColor );                     // -> 'white'
+            console.log( window.getComputedStyle(thisElement).backgroundColor );  // -> 'rgb(255, 0, 0)' | 'rgb(70, 70, 70)' | 'rgb(3, 3, 3)'   // gets the currently computed style   
+        }, 1300)
+    }
+</script>
+    <details open>
+    <summary> CODE : </summary>
+    <pre>
+// CSS --------------------------------------------------------------------------------
+    #testElement {
+        color: red;
+        font-size: 25px;
+        animation: someAnimation 3s infinite;
+        animation-direction: alternate;
+        animation-play-state: paused;
+    }
+    
+    @keyframes someAnimation {
+        from { background-color: white; }
+        to { background-color: black; }
+    }
+    
+// HTML -------------------------------------------------------------------------------
+    &lt;p id="testElement" style="background-color:white;" onmouseup="getStyles(event)"&gt; Style Test element &lt;/p&gt;
+&lt;script&gt;
+    function getStyles(event){
+        const thisElement = event.currentTarget;
+        
+        console.log( thisElement.style.color );                                        // -> ''                  // because this only shows inline styles 
+        console.log( thisElement.style.fontSize );                                     // -> ''
+        
+        console.log( window.getComputedStyle(thisElement).color );                     // -> 'rgb(255, 0, 0)'    // gets the current style (read only)
+        console.log( window.getComputedStyle(thisElement).fontSize );                  // -> '24px'
+        
+        
+        thisElement.style.border = '2px black solid';                                  // we can set inline styles like this   
+        thisElement.style.fontWeight = 'bold';
+        thisElement.style.animationPlayState = 'running';
+        
+        
+        window.setInterval(function(){  
+            console.log( thisElement.style.backgroundColor );                          // -> 'white'
+            console.log( window.getComputedStyle(thisElement).backgroundColor );       // -> 'rgb(255, 0, 0)' | 'rgb(70, 70, 70)' | 'rgb(3, 3, 3)'   // gets the currently computed style   
+        }, 1300)
+    }
+&lt;/script&gt;
+    </pre>
+    </details>
+</details>
+    
+    
+    <br><br>
+</body>
+</html>

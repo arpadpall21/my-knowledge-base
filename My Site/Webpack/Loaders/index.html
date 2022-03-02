@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Loaders </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Loaders (ver 4.0.0) </h1>
+    <p> Updated ( 2021-02-24 )</p>
+    <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
+        <a href="../index.html">Webpack></a> Loaders 
+    </p>
+<table class="table">
+<caption>
+    Loaders 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Loader </th>
+        <th> Description </th>
+    </tr>
+<tr class="05.01">
+<td colspan="2">
+            CSS 
+</td>
+</tr>
+<tr class="05.03">
+<td> 
+            css-loader
+</td>
+<td> 
+            - compiles CSS code into a JS module (downloadable as <mark>css-loader</mark>) <a href="https://webpack.js.org/loaders/css-loader/" target="_blank">[link]</a><br>
+            - calling <mark>toString()</mark> on the returned default import <span class="openable">returns the css string<div>
+                <p> <mark>import style from './someCss.css'</mark> </p>
+                <p> <mark>style.toString()</mark> = CSS code in a string of the 'someCss.css' file</p>
+            </div></span>
+</td>
+</tr>
+<tr class="05.02">
+<td> 
+            style-loader
+</td>
+<td> 
+            - injects CSS modules into the DOM (downloadable as <mark>style-loader</mark>) <br>
+            - <span class="openable">options<div>
+                <p> <b>injectType</b>: <strong>str</strong> - how the style is injected into the DOM </p>
+                <p><u>possible values</u></p>
+                <p> <mark>styleTag</mark> - uses multiple &lt;style&gt;&lt;/style&gt; tags (Default) </p>
+                <p> <mark>singletonStyleTag</mark> - uses a single &lt;style&gt;&lt;/style&gt; tag </p>
+                <p> <mark>lazyStyleTag</mark> - uses multiple &lt;style&gt;&lt;/style&gt; tags on demand (when the <mark>use()</mark> is called on the default imported style </p>
+                <p> <mark>lazySingletonStyleTag</mark> - uses multiple &lt;style&gt;&lt;/style&gt; tags on demand (when the <mark>use()</mark> is called on the default imported style </p>
+                <p> <mark>linkTag</mark> - uses the &lt;link&gt; tag (for this the we must use the 'file-loader' which returns the css file's URL and includes in the link's href) </p>
+                    <hr>
+                <p> <b>attributes</b>: <strong>obj</strong> attributes added to the injected style or link tag </p>
+                    <hr>
+                <p> <b>insert</b>: <strong>str|fn</strong> - where to insert the tag </p> 
+                <p><u>possible values</u></p>
+                <p> <mark>head</mark> - last element of the document head (Default) </p>
+                <p> <mark>body</mark> - into the document body </p>
+                    <hr>
+                <p> <b>esModule</b>: <strong>bol</strong> - generates a JS module that use ES module syntax (Default: <mark>true</mark>) </p>
+                    <hr>
+                <p> <b>modules</b>: <strong>obj</strong> - configuration of CSS modules (Default: <mark>undefined</mark>) </p>
+            </div></span>
+</td>
+</tr>
+<tr class="05.05">
+<td> 
+            less-loader
+</td>
+<td> 
+            - compiles LESS code into CSS code (downloadable as <mark>less-loader</mark>) <a href="https://webpack.js.org/loaders/less-loader/" target="_blank">[link]</a> <br>
+</td>
+</tr>
+<tr class="05.04">
+<td> 
+            sass-loader 
+</td>
+<td> 
+            - compiles SASS/SCSS code into CSS code (downloadable as <mark>sass-loader</mark>) <a href="https://webpack.js.org/loaders/sass-loader/" target="_blank">[link]</a> <br>
+            - requires <mark>node-sass</mark> or (dart) <mark>sass</mark> to be installed locally 
+</td>
+</tr>
+<tr class="20.01">
+<td colspan="35.01">
+            Templating 
+</td>
+</tr>
+<tr class="35.02">
+<td> 
+            html-loader 
+</td>
+<td> 
+            - reads HTML and returns the content in a string (downloadable as <mark>html-loader</mark>) <a href="https://webpack.js.org/loaders/html-loader/" target="_blank">[link]</a> <br>
+</td>
+</tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    Asset Modules 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Loader </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> asset/resource </td>
+        <td> - emits (copies) the file in the ouput directory and returns its URL </td>
+    </tr>
+    <tr>
+        <td> asset/inline </td>
+        <td> - returns the resource's content in a base64 URI </td>
+    </tr>
+    <tr>
+        <td> asset/source </td>
+        <td> - returns the resource's content in a string </td>
+    </tr>
+    <tr>
+        <td> asset </td>
+        <td> - Webpack will automatically chose between <mark>asset/resource</mark> and <mark>inline</mark> (by Default if the file's size is less than 8kb = <mark>asset/inline</mark> if greated than 8kb = <mark>asset/resource</mark> </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    NON TESTED Loaders (there are a bunch of loader out there, here are some worth mentioning)
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span> 
+</caption>
+    <tr>
+        <th style="width:30%;"> Loader </th>
+        <th> Description </th>
+    </tr>
+<tr class="11.01">
+<td> 
+            babel-loader
+</td>
+<td> 
+            - transpiles ES6 code into ES5 code 
+</td>
+</tr>
+<tr class="11.03">
+<td> 
+            coffee-loader
+</td>
+<td> 
+            - transpiles CoffeeScript into JavaScript
+</td>
+</tr>
+<tr class="10.01">
+<td> 
+            file-loader
+</td>
+<td> 
+            - <u>[Deprecated for Webpack v5]</u> asset module should be used instead <br>
+            - emits (copies) the file into the output directory and returns its URL 
+</td>
+</tr>
+<tr class="10.03">
+<td> 
+            raw-loader
+</td>
+<td> 
+            - <u>[Deprecated for Webpack v5]</u> asset module should be used instead <br>
+            - returns the file's content in a string  
+</td>
+</tr>
+<tr class="11.02">
+<td> 
+            ts-loader
+</td>
+<td> 
+            - transpiles TypeScript into JavaScript  
+</td>
+</tr>
+<tr class="10.02">
+<td> 
+            url-loader
+</td>
+<td> 
+            - <u>[Deprecated for Webpack v5]</u> asset module should be used instead <br>
+            - transforms files into base64 URIs
+</td>
+</tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://webpack.js.org/loaders/" target="_blank"> Webpack loaders (webpack.js.org/loaders/)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - out of the box Webpack 'understands' only <mark>*.js</mark> and <mark>*.json</mark> files </p> 
+    <p> - a loader can read non JavaScript code 'translate' and load as module into Webpack (preprocesses the file) </p>
+    <p> - specified loaders must be installed and configured in the webpack config file in the <mark>module.rules</mark> Array <u style="background-color:yellow;">executed from rigth-to-left</u></p>
+    <pre class="syntax">
+SYNTAX webpack config (file) : 
+    
+    module.exports = { 
+        module: {        
+            noParse: <strong>str|regExp</strong>                                                        // matching files won't be parsed and loaded     
+            
+            rules: [                                                    
+                {
+                    test: <strong>regExp</strong>,                                                      // the regular expression specifies which files to apply the below loader(s) (ex: <mark>/\.css$/</mark> for CSS files)    
+                    use: [<strong>loader1</strong><i>, loader2, ...</i>]                                       // loaders to use <u style="color:orange;">(the loading order is from rigth-to-left)</u>
+                },
+                {
+                    test: <strong>regExp</strong>,    
+                    use: [
+                        {loader:<strong>loader</strong>, options:{<strong>loaderOptions</strong>}},                      // loaders can have their own options specified    
+                        <i>...</i>
+                    ]
+                },
+                <i>...</i>
+            ]
+        }
+    }
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+    <pre>
+// webpack.config.js (file) -----------------------------------------------------------
+    module.exports = {    
+        module: {
+            rules: [
+                {
+                    test: /\.s[ac]ss$/i,                                               // rule kicks-in if a '*.sass' or '*.scss' file is detected 
+                    use: ['style-loader', 'css-loader', 'sass-loader']                     // 1st) the 'sass-loader'  => compiles sass to css
+                },                                                                         // 2nd) the 'css-loader'   => compiles css to JS module   
+            ]                                                                              // 3rd) the 'style-lodaer' => injects the css into the HTML document    
+        }
+    }
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> CSS loaders <mark>style-loader</mark> / <mark>css-loader</mark> / <mark>less-loader</mark> / <mark>sass-loader</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.css$/i,                                                   // when a '*.css' file is imported
+                    use: ['style-loader', 'css-loader']                                // the 'css-loader' compiles CSS into JS module 
+                }                                                                      // the 'style-loader' loads the css module in the DOM  
+            ]
+        }
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import './styles.css';
+    </pre>
+    <p> <mark>./src/styles.css</mark> (file) </p>
+    <pre>
+    body{
+        background-color: white;
+    }
+    </pre>
+    
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>style-loader</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.css$/i,                                                   // when a '*.css' file is imported
+                    use: ['style-loader', 'css-loader']                                // the 'css-loader' compiles CSS into JS module 
+                }                                                                      // the 'style-loader' loads the css module in the DOM  
+            ]
+        }
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import './styles.css';
+    </pre>
+    <p> <mark>./src/styles.css</mark> (file) </p>
+    <pre>
+    body{
+        background-color: white;
+    }
+    </pre>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>style-loader</mark> TEST-2 </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.css$/i,
+                    use: [
+                        {
+                            loader:'style-loader', 
+                            options:{
+                                injectType: 'linkTag',                                 // style inserted as link element in the document 
+                                attributes: {referrerpolicy: 'no-referrer'},
+                                insert: 'body'                                         // injected in the in the document's body  
+                            }
+                        }, 
+                        'file-loader'                                                  // because the style is injected as link element we must use the file-loader before (it reads the file's content and returns the file's url which is inserted in the link element's href attribute)   
+                    ]   
+                }  
+            ]
+        }
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import './styles.css';
+    </pre>
+    <p> <mark>./src/styles.css</mark> (file) </p>
+    <pre>
+    body{
+        background-color: white;
+    }
+    </pre>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>css-loader</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.css$/i,
+                    use: [ 
+                        {
+                            loader:'css-loader', 
+                            options:{
+                            
+                            }
+                        }, 
+                    ]
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import styles from './styles.css';
+    
+    console.log( styles.toString() );                                                  // -> 'h1 {background-color:white;}' 
+    </pre>
+    <p> <mark>./src/styles.css</mark> (file) </p>
+    <pre>
+    h1 {
+        background-color: white;
+    }    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>sass-loader</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = { 
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.scss$/i,
+                    use: ['style-loader', 'css-loader', 'sass-loader']
+                }
+            ]
+        },
+    }
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import './styles.scss';
+    </pre>
+    <p> <mark>./src/styles.scss</mark> (file) </p>
+    <pre>
+    $font-stack:    Helvetica, sans-serif;
+    $primary-color: #fff;
+    
+    h1 {
+    font: 100% $font-stack;
+    color: $primary-color;
+    }    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>less-loader</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.less$/i,
+                    use: ['style-loader', 'css-loader', 'less-loader']
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import './styles.less';
+    </pre>
+    <p> <mark>./src/styles.less</mark> (file) </p>
+    <pre>
+    @bgCol: #fff;
+    @fontCol: #ff0000;
+    
+    h1 {
+    color: @fontCol;
+    background-color: @bgCol;
+    }    
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Templating <mark>html-loader</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.html$/i,
+                    use: [{loader:'html-loader', options:{sources:false}}]             // linked sources are not handled   
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import html from '../../Loaders/index.html';
+    
+    console.log( html );                                                               // -> 'index.html' file's content in a string 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>html-loader</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.html$/i,
+                    use: [{loader:'html-loader', options:{sources:false}}]             // linked sources are not handled   
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    import html from '../../Loaders/index.html';
+    
+    console.log( html );                                                               // -> 'index.html' file's content in a string 
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> Asset Modules </u></h2>
+    <p> - the Asset Module essentially manages assets (from Webpack v5 replaces the <mark>raw-loader</mark>, <mark>url-loader</mark> and <mark>file-loader</mark> modules) </p>
+    <pre class="syntax">
+SYNTAX webpack config (file) : 
+    
+    module.exports = { 
+        output: {
+            assetModuleFilename: <strong>str</strong>                                                   <span style="color:darkgray;">// file name outputed by the asset module (Default: <mark>[hash][ext][query]</mark>) (substitution recommended to avoid conflicts</span>    
+        },
+        module: {
+            rules: [                                                    
+                {
+                    test: <strong>regExp</strong>,                                                      <span style="color:darkgray;">// the regular expression specifies which files to apply the below loader(s) (ex: <mark>/\.png$/</mark> for CSS files)</span>    
+                    type: <strong class="openable">assetModule<div>
+                        <p> - asset/resource - emits (copies) the file in the ouput directory and returns its URL </p>
+                        <p> - asset/inline - returns the resource's content in a base64 URI </p>
+                        <p> - asset/source - returns the resource's content in a string </p>
+                        <p> - asset - Webpack will automatically chose between <mark>asset/resource</mark> and <mark>inline</mark> (by Default if the file's size is less than 8kb = <mark>asset/inline</mark> if greated than 8kb = <mark>asset/resource</mark>) </p>
+                    </div></strong>                                                 <span style="color:darkgray;">// Asset module to use </span>
+                },
+                <i>...</i>
+            ]
+        }
+    }
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    import file from './testFile.txt';
+    
+// asset/resource ---------------------------------------------------------------------
+    file;                                                                              // -> 'http://localhost:1000/Webpack/_TEST/dist/res-testFile'      
+                                                                                         // the URL of the resource file (from the new location)
+// asset/inline -----------------------------------------------------------------------
+    file;                                                                              // -> 'data:text/plain;base64,dGhpcyBpcyBzb21lIHRlc3QgY29udGVudCBoZXJlIC4uLi4='   
+                                                                                         // base64 encoded data URL of the resource file  
+// asset/source -----------------------------------------------------------------------
+    file;                                                                              // -> 'this is some test content here ....'   
+                                                                                         // the file's conent in a string 
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        output: {
+            assetModuleFilename: 'res-[name]'                                          // the new copy file name (when asset module creates a new copy)
+        },
+        module: {
+            rules:[
+                {
+                    test: /\.txt$/i,
+// asset/resource ---------------------------------------------------------------------
+                    type: 'asset/resource'
+                    
+// asset/inline -----------------------------------------------------------------------
+                    type: 'asset/inline'
+                    
+// asset/source -----------------------------------------------------------------------
+                    type: 'asset/source'
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/testFile.txt</mark> (file) </p>
+    <pre>
+    this is some test content here ...    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>asset/resource</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    import file from './testFile.txt';
+    
+    console.log( file );                                                               // -> 'http://localhost:1000/Webpack/_TEST/dist/res-testFile'   // the URL of the resource file (from the new location)   
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        output: {
+            assetModuleFilename: 'res-[name]'
+        },
+        module: {
+            rules:[
+                {
+                    test: /\.txt$/i,
+                    type: 'asset/resource'
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/testFile.txt</mark> (file) </p>
+    <pre>
+    this is some test content here ...    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>asset/inline</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    import file from './testFile.txt';
+    
+    console.log( file );                                                               // -> 'data:text/plain;base64,dGhpcyBpcyBzb21lIHRlc3QgY29udGVudCBoZXJlIC4uLi4='   // base64 encoded data URL of the resource file   
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.txt$/i,
+                    type: 'asset/inline'
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/testFile.txt</mark> (file) </p>
+    <pre>
+    this is some test content here ...    
+    </pre>
+<!------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>asset/source</mark> TEST </u></h4>
+    <p> - Webpack outputs a <mark>./dist/main.js</mark> file which is linked in the document body </p>
+    <p> <mark>webpack.config.js</mark> (file) </p>
+    <pre>
+    import file from './testFile.txt';
+    
+    console.log( file );                                                               // -> 'this is some test content here ....'   // the file's conent in a string   
+    </pre>
+    <p> <mark>./src/index.js</mark> (file) </p>
+    <pre>
+    module.exports = {    
+        mode: 'development',
+        module: {
+            rules:[
+                {
+                    test: /\.txt$/i,
+                    type: 'asset/source'
+                }
+            ]
+        },
+    }    
+    </pre>
+    <p> <mark>./src/testFile.txt</mark> (file) </p>
+    <pre>
+    this is some test content here ...    
+    </pre>
+    
+    
+    
+    
+</details>
+    
+    <br><br>
+</body>
+</html>

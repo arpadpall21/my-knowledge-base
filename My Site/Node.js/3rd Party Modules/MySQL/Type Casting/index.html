@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Type Casting </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css"> 
+    <script src="../../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Type Casting (ver 4.0.0) </h1>
+    <p> Updated ( 2020-10-11 / 2022-01-31 )</p>
+    <p class="sitenav"> <a href="../../../../index.html">MySite></a>
+        <a href="../../../index.html">Node.js></a> 
+        <a href="../index.html">MySQL></a> Type Casting   
+    </p>
+    <p> - Type Casting = data type conversion from MySQL to Node.js (or vice versa) </p>
+<table class="table">
+<caption> 
+    Type Casting 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Node.js </th>
+        <th> MySQL </th>
+    </tr>
+    <tr>
+        <td> Number </td>
+        <td>  
+            - TINYINT <br>
+            - SMALLINT <br>
+            - INT <br>
+            - MEDIUMINT <br>
+            - YEAR <br>
+            - FLOAT <br>
+            - DOUBLE 
+        </td>
+    </tr>
+    <tr>
+        <td> Date </td>
+        <td>  
+            - TIMESTAMP <br>
+            - DATE <br>
+            - DATETIME
+        </td>
+    </tr>
+    <tr>
+        <td> Buffer </td>
+        <td>  
+            - TINYBLOB <br>
+            - MEDIUMBLOB <br>
+            - LONGBLOG <br>
+            - BLOB <br>
+            - BINARY <br>
+            - VARBINARY <br>
+            - BIT (last byte will be filled with <mark>0</mark> bits as necessary) 
+        </td>
+    </tr>
+    <tr>
+        <td> String </td>
+        <td>  
+            - CHAR <br>
+            - VARCHAR <br>
+            - TINYTEXT <br>
+            - MEDIUMTEXT <br>
+            - LONGTEXT <br>
+            - TEXT <br>
+            - ENUM <br>
+            - SET <br>
+            - DECIMAL (may exeed float precision) <br>
+            - BIGINT (may exeed float precision) <br>
+            - TIME 
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Escaping JavaScript values with <mark><strong>mysql|connection|pool</strong>.escape()</mark> 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:25%;"> Original JavaScript value </th>
+        <th style="width:25%;"> Escaped Value </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 21 </td>
+        <td> 21 </td>
+        <td> Numbers are left untuched </td>
+    </tr>
+    <tr>
+        <td> 21n </td>
+        <td> '21' </td>
+        <td> BigInt (Big Integers) are converted to string </td>
+    </tr>
+    <tr>
+        <td> new Boolean(1); </td>
+        <td> true </td>
+        <td> Booleans are converted <mark>true</mark> or <mark>false</mark> </td>
+    </tr>
+    <tr>
+        <td> new Date(); </td>
+        <td> '2020-10-15 16:31:03.644' </td>
+        <td> Date Objects are converted to <mark>'<strong>YYYY</strong>-<strong>MM</strong>-<strong>DD</strong> <strong>HH</strong>:<strong>MM</strong>:<strong>SS</strong>'</mark> string </td>
+    </tr>
+    <tr>
+        <td> Buffer.from('JavaScript'); </td>
+        <td> X'4a617661536372697074' </td>
+        <td> Buffers are converted to hex strings <mark>X'<strong>hex...</strong>'</mark> </td>
+    </tr>
+    <tr>
+        <td> 'зҦ۩ਊ' </td>
+        <td> 'зҦ۩ਊ' </td>
+        <td> Strings are safely escaped </td>
+    </tr>
+    <tr>
+        <td> [1, 'egy', false] </td>
+        <td> 1, 'egy', false </td>
+        <td> Arrays are turned into list </td>
+    </tr>
+    <tr>
+        <td> ['a', [1, 2, ['x', 'y']], 'b'] </td>
+        <td> 'a', (1, 2, ('x', 'y')), 'b' </td>
+        <td> Nested Arrays are turned into grouped list </td>
+    </tr>
+    <tr>
+        <td> {p1:21, p2:function(){ return 21}, p3:{pn1:21}} </td>
+        <td> `p1` = 21, `p3` = '[object Object]' </td>
+        <td> 
+            - Objects are turned into key = 'val' pairs for each enumerable property <br>
+            - if the property's value is a function it is skipped <br>
+            - if the property value ins an object (nested object) <mark>.toString()</mark> is called on it
+        </td>
+    </tr>
+    <tr>
+        <td> null </td>
+        <td> NULL </td>
+        <td> <mark>null</mark> and <mark>undefined</mark> are converted to <mark>NULL</mark> </td>
+    </tr>
+        <tr><td></td><td></td><td></td></tr>
+    <tr>
+        <td> undefined </td>
+        <td> NULL </td>
+        <td>  </td>
+    </tr>
+    <tr>
+        <td> NaN </td>
+        <td> NaN </td>
+        <td> <mark>NaN</mark> and <mark>Infinity</mark> are left as-is (will trigger MySQL Error if tried to insert) </td>
+    </tr>
+        <tr><td></td><td></td><td></td></tr>
+    <tr>
+        <td> Infinity </td>
+        <td> Infinity </td>
+        <td>  </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Escaping JavaScript values with <mark><strong>mysql|connection|pool</strong>.escapeId()</mark> 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:25%;"> Original JavaScript value </th>
+        <th style="width:25%;"> Escaped Value </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 21 </td>
+        <td> '21' </td>
+        <td> Numbers are stringified </td>
+    </tr>
+    <tr>
+        <td> 21n </td>
+        <td> '21' </td>
+        <td> BigInt (Big Integers) are stringified </td>
+    </tr>
+    <tr>
+        <td> Boolean(1); </td>
+        <td> 'true' </td>
+        <td> Booleans are stringified </td>
+    </tr>
+    <tr>
+        <td> new Date(); </td>
+        <td> `Thu Oct 15 2020 18:37:46 GMT+0300 (Eastern European Summer Time)` </td>
+        <td> Date Objects are converted to a date and time string </td>
+    </tr>
+    <tr>
+        <td> Buffer.from('JavaScript'); </td>
+        <td> 'JavaScript' </td>
+        <td> Buffers are stringified </td>
+    </tr>
+    <tr>
+        <td> 'зҦ۩ਊ' </td>
+        <td> 'зҦ۩ਊ' </td>
+        <td> Strings are safely escaped </td>
+    </tr>
+    <tr>
+        <td> [1, 'egy', false] </td>
+        <td> 1, 'egy', false </td>
+        <td> Arrays are turned into list </td>
+    </tr>
+    <tr>
+        <td> ['a', [1, 2, ['x', 'y']], 'b'] </td>
+        <td> `a`, `1`, `2`, `x`, `y`, `b` </td>
+        <td> Nested Arrays are also turned into list </td>
+    </tr>
+    <tr>
+        <td> {p1:21, p2:function(){ return 21}, p3:{pn1:21}} </td>
+        <td> `[object Object]` </td>
+        <td> on objects the <mark>.toString()</mark> is called 
+        </td>
+    </tr>
+    <tr>
+        <td> null </td>
+        <td> 'null' </td>
+        <td> <mark>null</mark> and <mark>undefined</mark> are stringified </td>
+    </tr>
+        <tr><td></td><td></td><td></td></tr>
+    <tr>
+        <td> undefined </td>
+        <td> 'undefined' </td>
+        <td>  </td>
+    </tr>
+    <tr>
+        <td> NaN </td>
+        <td> 'NaN' </td>
+        <td> <mark>NaN</mark> and <mark>Infinity</mark> are stringified </td>
+    </tr>
+        <tr><td></td><td></td><td></td></tr>
+    <tr>
+        <td> Infinity </td>
+        <td> 'Infinity' </td>
+        <td>  </td>
+    </tr>
+</table>
+
+
+
+    <br><br>
+</body>
+</html>

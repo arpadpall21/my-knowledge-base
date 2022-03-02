@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Wildcards & Glbos </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Wildcards & Glbos (ver 3.2) </h1>
+    <p> Updated ( 2020-01-05 )</p>
+    <p class="sitenav"> <a href="../../index.html" >MySite></a>
+        <a href="../index.html">Gulp></a> Wildcards & Glbos  
+    </p>
+<table class="table">
+<caption>
+    Wildcards and Globs 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Wildcards </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td colspan="2"> Windcards (symbols that stand in for other characters) </td>
+    </tr>
+    <tr>
+        <td> * </td>
+        <td> - matches zero or more characters (any character) </td>
+    </tr>
+    <tr>
+        <td> ? </td>
+        <td> - matches one character (any character) </td>
+    </tr>
+    <tr>
+        <td> [<strong>char</strong>-<strong>char</strong>] </td>
+        <td> - matches one character (any of the specified range (ex: <mark>[a-e]</mark> matches <mark>a</mark> <mark>b</mark> <mark>c</mark> <mark>d</mark> <mark>e</mark>)) </td>
+    </tr>
+    <tr>
+        <td> [<strong>char</strong>...] </td>
+        <td> - matches one character (any of the enclosed character(s) (ex: <mark>[aex]</mark> matches <mark>a</mark> <mark>e</mark> <mark>x</mark>)) </td>
+    </tr>
+    <tr>
+        <td> [!<strong>char</strong>-<strong>char</strong>] </td>
+        <td> - negative match one character (any other thant the specified range (ex: <mark>[!a-e]</mark> matches any other character than  <mark>a</mark> <mark>b</mark> <mark>c</mark> <mark>d</mark> <mark>e</mark>)) </td>
+    </tr>
+    <tr>
+        <td> [!<strong>char</strong>...] </td>
+        <td> - negative match one character (any other than the enclosed character(s) (ex: <mark>[!aex]</mark> matches any other character than <mark>a</mark> <mark>e</mark> <mark>x</mark>)) </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Globs (pathnames expressed with Wildcards) </td>
+    </tr>
+    <tr>
+        <td> / </td>
+        <td> - segment separator <u>(on all platforms)</u> </td>
+    </tr>
+    <tr>
+        <td> * </td>
+        <td> - matches zero or more characters <u>between segment separators</u> </td>
+    </tr>
+    <tr>
+        <td> ** </td>
+        <td> - matches zero or more characters <u>across segment separators</u> </td>
+    </tr>
+    <tr>
+        <td> \\<strong>char</strong> </td>
+        <td> - escapes the character <u>(on all platforms)</u> </td>
+    </tr>
+    <tr>
+        <td> !<strong>glob</strong> </td>
+        <td> - negative glob, removes one glob from a previous positive glob <u>(must come right under a positive glob)</u> </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+	<!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://gulpjs.com/docs/en/getting-started/explaining-globs" target="_blank">Gulpjs.com Globs Explained</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Globbing is targeting files in the file system, (Globbing is a general concept (used by other systems as well)) </p>
+    <p> - a Glob is basically a string which targets files, it uses string literals and wildcard characters (like <mark>*</mark>)</p>
+    <p> - Gulp Globs are <u style="background-color:yellow;">platform independent</u>, the <mark>/</mark> is the segment separator and the <mark>\\</mark> is the escape character <u>regardless the platform</u> </p>
+    <pre class="syntax">
+Glob Characters :   /                                                                  // segment separator <u>(on all platforms)</u>   
+                    \\<strong>escapedChar</strong>                                                      // escape character <u>(on all platforms)</u>   
+                    
+    <span style="color:lightgreen;">// wildcard characters ------------------------------------------------------------</span>
+                    *                                                                  // matches zero or more characters <u>between segment separators</u>    
+                    **                                                                 // matches zero or more characters <u>across segment separators</u>
+                    !<strong>glob</strong>                                                              // removes the targeted path from a glob collection <u>(must follow at least one positive glob (<em>['<strong>glob</strong>', <small>..., </small>'</em>!<em><strong>glob</strong>']</em>)</u>
+    </pre>
+    <pre>
+    const {src} = require('gulp');
+    
+    function testTask(cb){
+// segment separator and escape character ---------------------------------------------
+        src('testDir/subSub_Dir/**');                                                  // this is the segment separator ('/') regardless of the platform           
+        src('this\\*File.txt');                                                        // the 'this*File.txt' is selected   // -! [NOT TESTED (on windows the asterisk cannot be used as file|directory name)]   
+        
+// wildcard characters ----------------------------------------------------------------
+        src('*');                                                                      // gets all items in the current directory 
+        src('*.js');                                                                   // gets all files with the '.js' extension from the current directory   
+        src('testDir/*file*');                                                         // gets all items which contains 'file' from the 'testDir' direct subdirectory  
+        
+        src('**');                                                                     // gets all items in the current and all nested directories   
+        src('**/*.txt');                                                               // gets all files with the '.txt' extension from the current and all nested directories    
+        src('testDir/**/*.txt');                                                       // gets all files with the '.txt' extension from the 'testDir' and from all its nested directories   
+        
+        src(['**', '!node_modules/**']);                                               // gets all items in the current and all nested directories except the'node_modules' directory and all its content    
+        src(['**/*.js', '!**/gulpfile.js']);                                           // gets all '.js' files from the current and all nested directories except 'gulpfile.js' files     
+                                                                                       // -! negative globs must be preceded at least by one positive glob   
+        cb();
+    }
+        
+    exports.default = testTask;    
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Globbing TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const {src} = require('gulp');
+    
+    function readFile1(cb) {                
+    // get targeted file --------------------------------------------------------------------------
+        var singleFile = src('testFile1.txt')                           // single glob
+        singleFile.on('data', function(chunk){ 
+            console.log( 'singleFile' );
+            console.log( chunk );                                       // -> testFile1.txt     
+        });            
+        
+    // get multiple files -------------------------------------------------------------------------
+        var multipleFiles = src(['testFile1.txt', 'testFile2.txt']);    // multiple globes 
+        multipleFiles.on('data', function(chunk){ 
+            console.log( 'multipleFiles' );
+            console.log(chunk);                                         // -> testFile1.txt | testFile2.txt
+        });
+        
+    // * wildcard character targets zero or more characters between segment separators ------------
+        var asterisk = src('*');                                        // this basically targets all characters in the current directory (even sub directories) 
+        asterisk.on('data', function(chunk){
+            console.log( 'asterisk' );
+            console.log( chunk );                                       // -> testFile1.txt | testFile2.txt | gulpFile.js | testDir
+        });   
+        
+        var asterisk2 = src('*.txt');                                   // get all items that finishes with '.txt' in the current directory
+        asterisk2.on('data', function(chunk){
+            console.log( 'asterisk2' );
+            console.log( chunk );                                       // -> testFile1.txt | testFile2.txt   
+        });
+        
+    // ** wildcard character targets zero or more characters accross segment separators -----------
+        var doubleAsterisk = src('**');                                 // this targets all files, subfiles and directories, subdirectories from the current directory   
+        doubleAsterisk.on('data', function(chunk){
+            console.log( 'doubleAsterisk' );
+            console.log( chunk );                                       // -> testFile1.txt | testFile2.txt | gulpFile.js | testDir | subFile1.txt | subFile2.txt   
+        });
+
+        var doubleAsterisk2 = src('**/*.txt');                          // gets all files ending with '.txt' from the current and any subdirectories
+        doubleAsterisk2.on('data', function(chunk){
+            console.log( 'doubleasterisk2' );
+            console.log( chunk );                                       // -> testFile1.txt | testFile2.txt | subFile1.txt | subFile2.txt
+        });
+        
+    // ! wildcard character removes a glob from a glob collection ---------------------------------
+        var negate = src(['**/*.*', '!**/*.js']);                      // targets all items with extension (files) from the current and sub directories and removes any files finishing with '.js' from the glob collection 
+        negate.on('data', function(chunk){
+            console.log( 'negate' );
+            console.log( chunk );                                       // -> testFile1.txt | testFile2.txt | subFile1.txt | subFile2.txt   
+        });   
+        
+        var negate2 = src(['**/*.txt', '!**/*2*']);                     // targets all files with 'txt' extension from the current and all sub directories but removes any files containing 2
+        negate2.on('data', function(chunk){
+            console.log( 'negate2' );
+            console.log( chunk );                                       // -> testFile1.txt | subFile1.txt     
+        });
+        
+        cb();
+    }
+    
+    exports.default = readFile1;
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\01 globbing test> gulp
+        [17:48:13] Using gulpfile D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\01 globbing test\gulpfile.js
+        [17:48:13] Starting 'default'...
+        [17:48:14] Finished 'default' after 17 ms
+        // singleFile ------------------------------------------------------------------
+        singleFile
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // multipleFiles ---------------------------------------------------------------
+        multipleFiles
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        multipleFiles
+        &lt;File "testFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // asterisk --------------------------------------------------------------------
+        asterisk
+        &lt;File "gulpfile.js" &lt;Buffer 63 6f 6e 73 74 20 7b 73 72 63 7d 20 3d 20 72 65 71 75 69 72 65 28 27 67 75 6c 70 27 29 3b 0d 0a 0d 0a 66 75 6e 63 74 69 6f 6e 20 72 65 61 64 46 69 6c ... 3522 more bytes&gt;&gt;
+        asterisk
+        &lt;File "testDir"&gt;
+        asterisk
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        asterisk
+        &lt;File "testFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // asterisk2 -------------------------------------------------------------------
+        asterisk2
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        asterisk2
+        &lt;File "testFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // doubleAsterisk --------------------------------------------------------------
+        doubleAsterisk
+        &lt;File &gt;
+        doubleAsterisk
+        &lt;File "gulpfile.js" &lt;Buffer 63 6f 6e 73 74 20 7b 73 72 63 7d 20 3d 20 72 65 71 75 69 72 65 28 27 67 75 6c 70 27 29 3b 0d 0a 0d 0a 66 75 6e 63 74 69 6f 6e 20 72 65 61 64 46 69 6c ... 3522 more bytes&gt;&gt;
+        doubleAsterisk
+        &lt;File "testDir"&gt;
+        doubleAsterisk
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        doubleAsterisk
+        &lt;File "testFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        doubleAsterisk
+        &lt;File "testDir\subFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        doubleAsterisk
+        &lt;File "testDir\subFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // doubleAsterisk2 -------------------------------------------------------------
+        doubleasterisk2
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        doubleasterisk2
+        &lt;File "testFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        doubleasterisk2
+        &lt;File "testDir\subFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        doubleasterisk2
+        &lt;File "testDir\subFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // negate ----------------------------------------------------------------------
+        negate
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        negate
+        &lt;File "testFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        negate
+        &lt;File "testDir\subFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        negate
+        &lt;File "testDir\subFile2.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        // negate 2 --------------------------------------------------------------------
+        negate2
+        &lt;File "testFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+        negate2
+        &lt;File "testDir\subFile1.txt" &lt;Buffer 74 65 73 74 20 74 65 73 74 20&gt;&gt;
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\03.7 gulp\01 globbing test&gt;    
+    </pre>
+</details>
+    
+   
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST (empty) > </a></h2>
+</body>
+</html>

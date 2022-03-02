@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Basics </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Basics (ver 4.0.0) </h1>
+    <p> Updated ( 2020-03-12 / 2020-07-12 )</p>
+    <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
+        <a href="../index.html">HTTP Protocols></a> Basics
+    </p>
+<table class="table">
+<caption> 
+    HTTP 1.1 VS HTTP/2
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr class="01">
+        <th> HTTP 1.1 </th>
+        <th style="width:50%;"> HTTP/2 <br>
+            <span id="browserSupport" title="updated : 2020-03-13">
+                <span><i class="fab fa-chrome"></i> 41 </span>
+                <span><i class="fab fa-firefox"></i> 36 </span>
+                <span><i class="fab fa-opera"></i> 28 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 11 partial / 12 </span>
+                <span><i class="fab fa-safari"></i> 9 patial / 11 </span>
+                <span><i class="fab fa-node-js"></i> 8.4.0 </span>
+            </span>
+        </th>
+    </tr>
+    <tr class="02">
+        <td> 
+            <b><u>Text-Based Protocol :</u></b><br> 
+            data is transfered as string 
+        </td>
+        <td>  
+            <b><u>Binary Protocol :</u></b><br> 
+            transfers binary data which is more bandwidth efficient and more error-prone 
+        </td>
+    </tr>
+    <tr class="03">
+        <td>  
+            <b><u>No Multiplexing :</u></b><br>
+            - multiple requests are sent in sequential order (they block each other) <br>
+            - this uses multiple connections which enhances complexity
+        </td>
+        <td> 
+            <b><u>Multiplexing :</u></b><br>
+            - multiple requests are sent at the same time (streaming) (sends/receives requests in parallel) <br>
+            - this uses one connection and streams all requests through at the same time
+        </td>
+    </tr>
+    <tr class="04">
+        <td>  
+            <b><u>No Header Compression :</u></b><br>
+            header is not compressed 
+        </td>
+        <td>  
+            <b><u>Header Compression :</u></b><br>
+            compresses the header reducing overhead
+        </td>
+    </tr>
+    <tr class="05">
+        <td>  
+            <b><u>No Server Push :</u></b><br>
+            no unrequested data sent 
+        </td>
+        <td>  
+            <b><u>Server Push :</u></b><br>
+            server sends unrequested data to the browser cache
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    HTTP/2 frame types 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:10%;"> Code </th>
+        <th style="width:20%;"> Frame Type </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> 0 </td>
+        <td> DATA </td>
+        <td> - transfers arbitrary data </td>
+    </tr>
+    <tr>
+        <td> 1 </td>
+        <td> HEADERS </td>
+        <td> - opens a stream and carries header block fragments (http2 headers are compressed) </td>
+    </tr>
+    <tr>
+        <td> 2 </td>
+        <td> PRIORITY </td>
+        <td> - sender-advised priority of a stream </td>
+    </tr>
+    <tr>
+        <td> 3 </td>
+        <td> RST_STREAM </td>
+        <td> - stream cancellation or error sending </td>
+    </tr>
+    <tr>
+        <td> 4 </td>
+        <td> SETTINGS </td>
+        <td> - sends configuration parameters (settings how endpoints communicate) </td>
+    </tr>
+    <tr>
+        <td> 5 </td>
+        <td> PUSH_PROMISE </td>
+        <td> - notifies the peer endpoint in advance the sender intends to initiate </td>
+    </tr>
+    <tr>
+        <td> 6 </td>
+        <td> PING </td>
+        <td> - mechanism to measure a minimal round-trip time from the sender </td>
+    </tr>
+    <tr>
+        <td> 7 </td>
+        <td> GOAWAY </td>
+        <td> - initiates shutdown (signals a serious error) </td>
+    </tr>
+    <tr>
+        <td> 8 </td>
+        <td> WINDOW_UPDATE </td>
+        <td> - flow control </td>
+    </tr>
+    <tr>
+        <td> 9 </td>
+        <td> CONTINUATION </td>
+        <td> - continue header block fragments (http2 headers are compressed) </td>
+    </tr>
+    <tr>
+        <td> 10 </td>
+        <td> ALTSVC </td>
+        <td> - alternative service </td>
+    </tr>
+    <tr>
+        <td> 11 </td>
+        <td> </td>
+        <td> - (unassigned) </td>
+    </tr>
+    <tr>
+        <td> 12 </td>
+        <td> ORIGIN </td>
+        <td> - available origins (URLs) </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers" target="_blank">HTTP headers (developer.mozilla.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - <mark>\r\n\r\n</mark> (double new line characters) signify the end of a HTTP request|response header, so a minimum HTTP request|response contains the request|response line plus 2 new line characters (ex: <mark>'HTTP/1.1 OK 200\r\n\r\n'</mark>) </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the HTTP (Hypher Text Transfer Protocol) is an application level TCI/IP based data communication protocol for the World Wide Web </p> 
+    <p> - <u>HTTP 1.0 (1991)</u> uses a new connection for each request/response (obsolete), <u>HTTP 1.1 (1997)</u> can use the same connection for multiple request/responses, <u>HTTP/2 (2015)</u> is further upgraded for speed benefits </p> 
+    
+    <br><br>
+</body>
+</html>

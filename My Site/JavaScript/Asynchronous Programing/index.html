@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Async Programing </title>    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Async Programing (ver 4.0.0) </h1>
+    <p> Updated ( 2018-08-19 / 2018-08-23 / 2019-09-17 / 2020-06-01 / 2021-01-14)</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">JavaScript></a> Async Programming 
+    </p>
+<table class="table">
+<caption> 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Keyword </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            <em>new</em> Promise(<strong class="openable">fn(res, rej)<div>
+                <p><b> The Code here does not run asynchronously! </b></p> 
+                <p> - this callback should call the asynchronous API first </p>
+                <p> - calling <mark>res(<strong>resData</strong>)</mark> this Promise will be resolved as <strong>resData</strong> as result </p>
+                <p> - calling <mark>rej(<strong>rejData</strong>)</mark> this Promise will be rejected as <strong>resData</strong> as result </p>
+            </div></strong>)        
+        </td>
+        <td> 
+            - creates a resolved or rejected promise object based on the returned argument in the callback function <br>
+            - can be used as a wrapper for an asynchronous API (promisifies an asynchronous API)
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td colspan="2"> consuming Promises </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>promise</strong>.then(<strong>fn(res)</strong><i>, fn(rej)</i>) </td>
+        <td> 
+            - if the Promise is resolved asynchronously calls the first callback with the resolved data as argument <br>
+            - returns a resolved Promise (the resolved data will be the returned data by the callback) <br>
+            - if the Promise is rejected asynchronously calls the second callback with the rejected data as argument <br>
+            - if the Promise is rejected and the 2nd callback is omitted returns the Promise as it is <br>
+            - if the Promise is resolved and the 2nd callback is present returns a resolved Promise (the resolved data will be the returned data by the callback)            
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>promise</strong>.catch(<strong>fn(rej)</strong>) </td>
+        <td> 
+            - if the Promise is rejected asynchronously calls the callback with the rejected data as argument <br>
+            - returns a resolved Promise (the resolved data will be the returned data by the callback) <br>
+            - if the Promise is resolved returns it as it is
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> <strong>promise</strong>.finally(<strong>fn</strong>) </td>
+        <td> 
+            - asynchronously calls the callback regardless of a resolved or rejected Promise <br>
+            - returns the the Promise as it was received            
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 63 </span>
+                <span><i class="fab fa-firefox"></i> 58 </span>
+                <span><i class="fab fa-opera"></i> 50 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 18 </span>
+                <span><i class="fab fa-safari"></i> 11.1 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0</span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td colspan="2"> Static Methods </td>
+    </tr>
+    <tr class="20.01">
+        <td> <em>Promise</em>.all([<strong>val:any|promise</strong><i>, ...</i>]) </td>
+        <td>
+            - creates a resolved promise if all passed promises (or values) are resolved (resolved data is collected and returned in an Array)<br>  
+            - creates a rejected promise if one of the passed promise is rejected (returns the first rejected promise data) 
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <em>Promise</em>.any([<strong>val:any|prom</strong><i>, ...</i>]) </td>
+        <td>
+            - returns the fastest resolved Promise in the row (ignores rejected Promises) <br>
+            - if all Promises are rejected returns a rejected Promise with <mark>"AggregateError"</mark>   
+            <span id="browserSupport" title="updated: 2021-01-14">
+                <span><i class="fab fa-chrome"></i> 85 </span>
+                <span><i class="fab fa-firefox"></i> 79 </span>
+                <span><i class="fab fa-opera"></i> NO </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 85 </span>
+                <span><i class="fab fa-safari"></i> 14 </span>
+                <span><i class="fab fa-node-js"></i> 15.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> <em>Promise</em>.allSettled([<strong>val:any|promise</strong><i>, ...</i>]) </td>
+        <td> - creates a resolved promise no matter if the passed promises are resolved or rejected (returs an object containing each passed promise data and status) 
+            <span id="browserSupport" title="updated: 2020-05-01">
+                <span><i class="fab fa-chrome"></i> 76 </span>
+                <span><i class="fab fa-firefox"></i> 71 </span>
+                <span><i class="fab fa-opera"></i> 63 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> 10 </span>
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <em>Promise</em>.race([<strong>val:any|promise</strong><i>, ...</i>]) </td>
+        <td> - returns the fastest resolved or rejected Promise in the row  
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <em>Promise</em>.reject(<strong>val:any|promise</strong>) </td>
+        <td> - creates and returns a rejected Promise with the passed data 
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> <em>Promise</em>.resolve(<strong>val:any|promise</strong>) </td>
+        <td> - creates and returns a resolved Promise with the passed data    
+            <span id="browserSupport" title="updated: 2019-08-06">
+                <span><i class="fab fa-chrome"></i> 32 </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> 19 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span>
+                <span><i class="fab fa-safari"></i> 8 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank"> Promise (developer.mozilla.org)</a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank"> Async Function (developer.mozilla.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <img src="Async.jpg" height="400">
+<h2 class="headerExtra"><u> The <mark>Promise</mark> (async) object (new in ES6) </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>then()</mark> / <mark>catch()</mark> / <mark>finally()</mark> / <mark>resolve()</mark> / <mark>reject()</mark> / <mark>all()</mark> / <mark>allSetteled()</mark> / <mark>race()</mark> / <mark>any()</mark> methods </u></h2>
+    <p> - the Promise object represents the completition or failure of an asynchronous task (like the <mark>fentch()</mark> API) </p>
+    <p> - the <mark>Promise()</mark> constructor can be uses as a <u>wrapper</u> for asynchronous APIs <u>(the code inside does not run asynchronously as I thought)</u>
+    <p> - a Promise can have 3 states <mark>pending</mark> / <mark>resolved</mark> / <mark>rejected</mark> </p>
+    <p> - the Promise API basically offers a more convenient way to handle asynchronously APIs </p>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - "Promisifying" asynchronous APIs </p>
+    <pre>
+// creating a Promise -----------------------------------------------------------------
+    var timerPromise = new Promise(function(res, rej){                                 // we basically profisifying the setTimeout asynchronous API here    
+        setTimeout(function(){
+            res('time elapsed!')                                                       // promise will be resolved with this data 
+            // rej('rejec')                                                            // this would create a rejected promise 
+        }, 1000);
+    });
+    </pre>
+    <p> - consuming Promises <u>(all <mark>then()</mark> / <mark>catch()</mark> / <mark>finally</mark> callbacks fires asynchronously!)</u> </p>
+    <pre>
+    var resPromise = Promise.resolve('resolved!');                                     // resolved promise 
+    var rejPromise = Promise.reject('rejected!');                                      // rejected promise 
+        
+// then() -----------------------------------------------------------------------------
+    resPromise                                                                         // resolved promise 
+        .then(res => { res; return "resModified" },                                    // -> res = 'resolved'       // returns a new resolved Promise with 'resModified'  
+              rej => { rej })                                                              // 2nd callback not fired 
+        .then(res => { res },                                                          // -> res = 'resModified'    // returns a new resolved Promise with undefined (no return)
+              rej => { rej })                                                              // 2nd callback not fired 
+              
+    rejPromise                                                                         // rejected promise 
+        .then(res => { res },                                                              // 1st callback not fired 
+              rej => { rej; return 'rejModified'})                                     // -> rej = 'rejected'       // returns a new resolved Promise with 'rejModified' 
+        .then(res => { res },                                                          // -> res = 'rejModified'
+              rej => { rej });
+    
+    rejPromise                                                                         // rejected promise 
+        .then(res => { res },                                                          // 1st callback not fired    // returns the rejected Promise as it was received (no 2nd callback) 
+        .then(res => { res },                                                              // 1st callback not fired 
+              rej => { rej });                                                         // -> rej = 'rejected'       // -! always handle rejection   
+    
+// catch() ----------------------------------------------------------------------------
+    resPromise                                                                         // resolved promise    
+        .catch(err => { err })                                                         // callback not fired        // returns the resolved Promise as it was received 
+        .then(res => { res })                                                          // -> res = 'resolved'  
+    
+    rejPromise                                                                         // rejected promise    
+        .catch(err => { err; return 'rejModified'})                                    // -> err = 'rejected'       // returns a new resolved Promise with 'rejModified'   
+        .then(res => { res })                                                          // -> res = 'rejModified'
+    
+// finally() --------------------------------------------------------------------------
+    resPromise                                                                         // resolved promise 
+        .finally(() => { })                                                            // callback fired            // returns the resolved Promise as it was received 
+        .then(res => { res })                                                          // -> res = 'resolved'
+    
+    rejPromise                                                                         // rejected promise 
+        .finally(() => { })                                                            // callback fired            // returns the rejected Promise as it was received  
+        .catch(err => { err })                                                         // -> res = 'rejected'
+    </pre>
+    <pre>
+// resolve() / reject() ---------------------------------------------------------------
+    Promise.resolve("resolved");                                                       // -> Promise                // creates and returns a resolved Promise with 'resolved'    
+    Promise.reject("reject");                                                          // -> Promise                // creates and returns a rejected Promise with 'reject'   
+    
+    
+// all() / allSettle()-----------------------------------------------------------------
+    Promise.all([Promise.resolve("resolved 1"), Promise.resolve("resolved 2"), Promise.resolve("resolved 3")])
+        .then(res => res,                                                              // -> ["resolved 1", "resolved 2", "resolved 3"]   // all promises are resolved and their values are returned in an Array    
+              rej => rej);
+              
+    Promise.all([Promise.resolve("resolved 1"), Promise.resolve("resolved 2"), Promise.reject("reject 3"), Promise.reject("reject 4")])
+        .then(res => res, 
+              rej => rej);                                                             // -> "reject 3"                                   // the first rejected promise's value is returned 
+    
+    
+    Promise.allSettled([Promise.resolve("resolved 1"), Promise.resolve("resolved 2"), Promise.resolve("resolved 3")])
+        .then(res => res,                                                              // -> [{status:'fulfilled', value:'resolved 1'}, {status:'fulfilled', value:'resolved 2'}, {status:'fulfilled',value:'resolved 3'}]   
+              rej => rej);
+              
+    Promise.allSettled([Promise.resolve("resolved 1"), Promise.resolve("resolved 2"), Promise.reject("reject 3"), Promise.reject("reject 4")])
+        .then(res => res, 
+              rej => rej);                                                             // -> [{status:'fulfilled', value:'resolved 1'}, {status:'fulfilled', value:'resolved 2'}, {status:'rejected', reason:'reject 3'}, {status:'rejected', reason:'reject 4'}]    
+    
+// race() / any() ---------------------------------------------------------------------
+    Promise.race([Promise.reject("reject 1"), Promise.resolve("resolved 2"), Promise.reject("reject 3")])                                 // returns the fastest Promise 
+        .then(res => res,                                                                  
+              rej => rej);                                                             // -> 'reject 1'
+        
+    Promise.any([Promise.reject("reject 1"), Promise.resolve("resolved 2"), Promise.reject("reject 3")])                                  // returns the fastest resolved Promise 
+        .then(res => res,                                                              // -> 'resolved 2'    
+              rej => rej);                                                             
+              
+    Promise.any([Promise.reject("reject 1"), Promise.reject("reject 2"), Promise.reject("reject 3")])
+        .then(res => res,                                                              
+              rej => rej);                                                             // -> 'AggregateError: All promises were rejected'
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Promise object Asynchronous Demo </u></h4>
+    <p> - the Promise object is asynchronous (even without asynchronous API) </p>
+    <pre>
+&lt;script&gt;
+    var thisPromise = Promise.resolve("promise print");
+        thisPromise.then(value => console.log(value));                                 // printed after the main synchronous thread 
+    
+    console.log("flow print");
+&lt;/script&gt;    
+    </pre>
+    <pre>
+// printed in console -----------------------------------------------------------------
+    -> "flow print"
+    -> "promise print"                                                                 // asynchronous
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------->
+<h4><u> Error handling <mark>catch()</mark> /  <mark>finally()</mark> </u></h4>    
+    <p> - check console for ---> "Error handling" </p>
+<script>
+console.warn("2) Error handling");
+// function generates a random true/false result
+    (function() {
+        var random = Math.ceil(Math.random() * 10);
+        if (random >= 5) {
+            promiseTest = true;
+        }
+        else {
+            promiseTest = false;
+        }
+    })();
+    
+// promise object random result generated thanks to the above function
+    var myPromise = new Promise(function(resolve, reject) { 
+        if (promiseTest) {
+            resolve(" promise passed successfully! ");                            
+        }
+        else {
+            reject(" promise failed! ");
+        }
+    
+    });
+
+// handling promise result   
+    myPromise                   
+        // the promese object is chainable!!!
+        .then(value => console.log(value))            // handles "resolve()" value
+        .catch(error => console.log(error))           // handles "reject()" value [handles error]
+        .finally(console.log(" finaly Fired! "));     // fired garanteed!    
+    
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+    console.warn("2) Error handling");
+// function generates a random true/false result
+    (function() {
+        var random = Math.ceil(Math.random() * 10);
+        if (random >= 5) {
+            promiseTest = true;
+        }
+        else {
+            promiseTest = false;
+        }
+    })();
+    
+// promise object random result generated thanks to the above function
+    var myPromise = new Promise(function(resolve, reject) { 
+        if (promiseTest) {
+            resolve(" promise passed successfully! ");                            
+        }
+        else {
+            reject(" promise failed! ");
+        }
+    
+    });
+
+// handling promise result   
+    myPromise                   
+        // the promese object is chainable!!!
+        .then(value => console.log(value))            // handles "resolve()" value
+        .catch(error => console.log(error))           // handles "reject()" value [handles error]
+        .finally(console.log(" finaly Fired! "));     // fired garanteed!    
+    
+&lt;/script&gt;
+        </pre>
+        </details>
+<hr>
+<!---------------------------------------------------------------------------------------->
+<h4><u> Error handling by <mark>then()</mark> </u></h4>  
+    <p> - check console for ---> "3) Error handling by the "then()" method" </p>
+<script>
+console.warn("3) Error handling by the \"then()\" method");
+    var testPromise = new Promise(function(resolve, reject) {
+        if (false) {
+            resolve("resolved!");
+        }
+        else {
+            reject("rejected!");
+        }
+    });
+    
+// printed in console
+    testPromise
+        .then(resolve => console.log(resolve), reject => console.log(reject));
+            // the second function callback function does the same as the "catch()" method handles rejection
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+console.warn("3) Error handling by the \"then()\" method");
+    var testPromise = new Promise(function(resolve, reject) {
+        if (false) {
+            resolve("resolved!");
+        }
+        else {
+            reject("rejected!");
+        }
+    });
+    
+// printed in console
+    testPromise
+        .then(resolve =&gt; console.log(resolve), reject =&gt; console.log(reject));
+            // the second function callback function does the same as the "catch()" method handles rejection
+&lt;/script&gt;
+        </pre>
+        </details>
+<hr>
+<!---------------------------------------------------------------------------------------->
+<h4><u> Chaining with the <mark>then()</mark> method </u></h4>  
+    <p> - check console for ---> "4) Chaining with the "then()" method" </p>
+<script>
+console.warn("4) Chaining with the \"then()\" method");
+    var multiPromise = Promise.resolve("1st promise");
+    
+    multiPromise.then(value => {console.log(value); return value})                      
+        // value printed and returned in order to reuse it!
+                .then(value => {console.log(value); return Promise.resolve("2nd promise")})        
+        // previous promise printed but new promise created and returned 
+                .then(value => {console.log(value);});                                 
+        // handles the previously returned promise
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+    console.warn("4) Chaining with the \"then()\" method");
+    var multiPromise = Promise.resolve("1st promise");
+    
+    multiPromise.then(value =&gt; {console.log(value); return value})                      
+        // value printed and returned in order to reuse it!
+                .then(value =&gt; {console.log(value); return Promise.resolve("2nd promise")})        
+        // previous promise printed but new promise created and returned 
+                .then(value =&gt; {console.log(value);});                                 
+        // handles the previously returned promise
+&lt;/script&gt;
+        </pre>
+        </details>
+<hr>
+<!---------------------------------------------------------------------------------------->
+<h4><u> <mark>Promise</mark> static methods </u></h4> 
+    <p> - check console for ---> "5) "Promise" static methods" </p>
+<script>
+console.warn("5) \"Promise\" static methods");
+    Promise.resolve("resolved Promise").then(value => console.log(value));                  
+        // returns an already resolved promise
+    Promise.reject("rejected Promise").then(null, value => console.log(value))     
+        // returns a rejected promise (rejected promise handled by the 2nd function arg of the "then()" method)
+    
+// multiple promises 
+    // Promise.all() = returns all promises IF ALL are resolved otherwise returns the first rejected one
+    Promise.all([Promise.resolve("resolved -1"), Promise.resolve("resolved -2"), "myText"])
+        .then(value => console.log(value), error => console.log(error) );      
+            // returns the promises in an Array becase they are ALL resolved
+    
+    Promise.all([Promise.reject("reject -1"), Promise.reject("reject -2"), "myText"])
+        .then(value => console.log(value), error => console.log(error) ); 
+            // returns the first rejected promise only
+    
+    Promise.all([Promise.resolve("resolved -a"), Promise.resolve("resolved -b"), Promise.reject("rejected -c")])
+        .then(value => console.log(value), error => console.log(error) );
+            // returns the first rejected promise only (all promises must be resolved in order to return them!)
+    
+    // Promise.race() = returns the first promise which gives a result
+    Promise.race([Promise.resolve("race - resolved!"), Promise.reject("rejected!")])
+        .then(value => console.log(value), error => console.log(error));
+            // returns the first finished promise (first in the order in this case)
+    
+    var promise_A = new Promise(function(resolve, reject) {
+        setTimeout(() => reject("promise_A - rejected"), 600); 
+    });
+    var promise_B = new Promise(function(resolve, reject) {
+        setTimeout(() => reject("promise_B - rejected"), 500);      // promise_B is rejected faster
+    });
+    
+    Promise.race([promise_A, promise_B], "value").then(value => console.log(value), error => console.log(error));
+        // promise_B is returned because it gives a faster result
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+console.warn("5) \"Promise\" static methods");
+    Promise.resolve("resolved Promise").then(value => console.log(value));                  
+        // returns an already resolved promise
+    Promise.reject("rejected Promise").then(null, value => console.log(value))     
+        // returns a rejected promise (rejected promise handled by the 2nd function arg of the "then()" method)
+    
+// multiple promises 
+    // Promise.all() = returns all promises IF ALL are resolved otherwise returns the first rejected one
+    Promise.all([Promise.resolve("resolved -1"), Promise.resolve("resolved -2"), "myText"])
+        .then(value => console.log(value), error => console.log(error) );      
+            // returns the promises in an Array becase they are ALL resolved
+    
+    Promise.all([Promise.reject("reject -1"), Promise.reject("reject -2"), "myText"])
+        .then(value => console.log(value), error => console.log(error) ); 
+            // returns the first rejected promise only
+    
+    Promise.all([Promise.resolve("resolved -a"), Promise.resolve("resolved -b"), Promise.reject("rejected -c")])
+        .then(value => console.log(value), error => console.log(error) );
+            // returns the first rejected promise only (all promises must be resolved in order to return them!)
+    
+    // Promise.race() = returns the first promise which gives a result
+    Promise.race([Promise.resolve("race - resolved!"), Promise.reject("rejected!")])
+        .then(value => console.log(value), error => console.log(error));
+            // returns the first finished promise (first in the order in this case)
+    
+    var promise_A = new Promise(function(resolve, reject) {
+        setTimeout(() => reject("promise_A - rejected"), 600); 
+    });
+    var promise_B = new Promise(function(resolve, reject) {
+        setTimeout(() => reject("promise_B - rejected"), 500);      // promise_B is rejected faster
+    });
+    
+    Promise.race([promise_A, promise_B], "value").then(value => console.log(value), error => console.log(error));
+        // promise_B is returned because it gives a faster result
+&lt;/script&gt;        
+        </pre>
+        </details>
+<hr>
+<!---------------------------------------------------------------------------------------->
+<h4><u> a <mark>Promise</mark> with both resolve and rejected values test  </u></h4>    
+    <p> - check console for ---> "6) "Promise" with double results" </p>
+<script>
+console.warn("6) \"Promise\" with double results");
+    var doublePromise = new Promise(function(resolve, reject) {     // this promise will be rejected because reject statement comes first!
+        reject("rejected!");                               
+        resolve("resolved!");               
+    });
+    
+    doublePromise.then(value => console.log(value)).catch(err => console.log(err));
+        // rejected promise printed in console 
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&lt;
+console.warn("6) \"Promise\" with double results");
+    var doublePromise = new Promise(function(resolve, reject) {     // this promise will be rejected because reject statement comes first!
+        reject("rejected!");                               
+        resolve("resolved!");               
+    });
+    
+    doublePromise.then(value => console.log(value)).catch(err => console.log(err));
+        // rejected promise printed in console 
+&lt;/script&gt;    
+        </pre>
+        </details>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>Promise.allSetteled()</mark> TEST </u></h4> 
+    <pre>
+    var prom1 = Promise.resolve('res1');                                               // resolved promise
+    var prom2 = new Promise(function(res, rej){                                        // rejected promise (after 4 seconds)
+        setTimeout(()=>rej('rej2'), 4000);
+    });
+    var prom3 = new Promise(function(res, rej){
+        setTimeout(()=>res('res3'), 1500);                                             // resolved promise (after 1.5 second)  
+    });
+    
+    var allS = Promise.allSettled([prom1, prom2, prom3]);
+    
+    allS.then((res)=>{
+        console.log(res)                                                               // -> [{status:'fulfilled', value:'res1'}, { status:'rejected', reason:'rej2'}, {status:'fulfilled', value:'res3'}]    
+    }, (res)=>{
+        console.log('allS rejected!')
+    });
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/03 JS/Asynchronous Programing/01 allsettled() TEST$ node main
+    [
+    { status: 'fulfilled', value: 'res1' },
+    { status: 'rejected', reason: 'rej2' },
+    { status: 'fulfilled', value: 'res3' }
+    ]
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/03 JS/Asynchronous Programing/01 allsettled() TEST$    
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>Promise.any()</mark> TEST </u></h4> 
+    <pre>
+    var promise1 = new Promise(function(res, rej){
+        setTimeout(()=> res('resolve-1'), 1000);
+    })
+
+    var promise2 = new Promise(function(res, rej){                  
+        setTimeout(()=> rej('reject-2'), 200);
+    })
+
+    var promise3 = new Promise(function(res, rej){
+        setTimeout(()=> res('resolve-3'), 700);
+    })
+
+    var promise4 = new Promise(function(res, rej){
+        setTimeout(()=> rej('resolve-3'), 2000);
+    })
+    
+    
+    Promise.any([promise1, promise2, promise3, promise4])                              // promise3 is the fastes resolved promise (rejected promises are ignored)
+        .then(
+            res => console.log(res),                                                   // -> 'resolve-3'
+            err => console.log(err)
+        );
+        
+    Promise.any([promise2, promise4])                                                  // all promises are rejected in the row 
+        .then(
+            res => console.log(res),  
+            err => console.log(err)                                                    // -> [AggregateError: All promises were rejected]
+        );
+    
+    </pre>
+</details>
+<!--------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h2 id="await_"><u> The async function <mark>async</mark> / <mark>await</mark> (new in ES6) </u></h2>    
+    <p> - we can use async functions to write custom promise based asynchronous APIs </p>
+    <pre class="syntax">
+SYNTAX :                                                                                 <span id="browserSupport" title="updated: 2019-08-06" style="color:yellow;"><span><i class="fab fa-chrome"></i> 32 </span><span><i class="fab fa-firefox"></i> 29 </span><span><i class="fab fa-opera"></i> 19 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 12 </span><span><i class="fab fa-safari"></i> 8 </span><span><i class="fab fa-node-js"></i> 0.12 </span></span>
+            async function <strong>fnId</strong>() {                                                    // returns a Promise    
+                <small>await</small> <strong>promise</strong>                                                          // pauses the async function body utill the promise is resolved or rejected    
+                                                                                         <span style="color:lightgreen;">// resolved promise = the resolved data is returned and function body continues execution</span> 
+                                                                                         <span style="color:orange;">// rejected promise = blocks the function body and the rejected promise is returned by the async function </span>    
+                
+                return <strong>promise|val:any</strong>                                                 // any returned data will be wrapped in a resolved promise by the async function 
+                                                                                          or we can return the awaited resolved Promise simply  
+                throw <strong>val:any</strong>                                                          // any thrown data will be wrappend in a rejected promise by the async function    
+            }   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// async function (return / throw) ----------------------------------------------------
+    async function testAsync1() { return 'resolved data'; }                            // -> Promise{resolved}  // any returned data will be returned as resolved promise value    
+    
+    async function testAsync2() { throw 'rejected data'; }                             // -> Promise{rejected}  // if JavaScript throws or throwing manually any data will be returned as rejected promise value    
+    
+    testAsync1()
+        .then(res => console.log(res),                                                 // -> 'resolved data'
+              rej => console.log(rej));
+              
+    testAsync2()
+        .then(res => console.log(res), 
+              rej => console.log(rej));                                                // -> 'rejected data'
+    
+    
+// await ------------------------------------------------------------------------------
+    async function asyncFunc1() {
+        var promise = Promise.resolve('resolved result!');                             // resolved Promise 
+        await promise;                                                                 // -> 'resolved result!' // function body pauses untill the promise is resolved, if the promise is resolved its value is retured here   
+        
+        // further code will execute when the promise is resolved ....
+        
+        return promise;                                                                // we simply return the resolved Promise here     
+    }
+    
+    async function asyncFunc2() {
+        var promise = Promise.reject('rejected result!');                              // rejected Promise    
+        await promise;                                                                 // function blocked and the rejected Promise is returned by the async function 
+        
+        // -! no further code will be executed because the await promise is rejected 
+    }
+    
+    
+    asyncFunc1()                                                                          
+        .then(res => res)                                                              // -> 'resolved result'
+        .catch(rej => rej);                                               
+        
+    asyncFunc1()
+        .then(res => res) 
+        .catch(rej => rej);                                                            // -> 'rejected result'
+    </pre>
+</details>
+<details class="example">
+    <summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>async</mark> function demo </u></h4>
+    <p> - check console for ---> "7) async demo" </p>
+<script>
+console.warn("7) async demo");
+    async function acceptPromise() {return Promise.resolve("async Function Promise accepted")};
+        // function will return a resolved Promise object 
+    async function rejectPromise() {return Promise.reject("async Function Promise rejected")};
+        // function will return a rejected Promise object
+    async function acceptAny() {return "myString"};
+        // any returned value is wraped in a resolved Promise object and returned
+    
+    acceptPromise().then(val => console.log(val));          // calling for the accepted promise
+    rejectPromise().then().catch(err => console.log(err))   // calling for the rejected promise (catch used to handle exeption)
+    acceptAny().then().then(val => console.log(val));       // string wraped into a resolved promise and returned
+    
+    console.log("control Text");                            // this is printed first in console because the above object are asynchronous
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+console.warn("7) async demo");
+    async function acceptPromise() {return Promise.resolve("async Function Promise accepted")};
+        // function will return a resolved Promise object 
+    async function rejectPromise() {return Promise.reject("async Function Promise rejected")};
+        // function will return a rejected Promise object
+    async function acceptAny() {return "myString"};
+        // any returned value is wraped in a resolved Promise object and returned
+    
+    acceptPromise().then(val =&gt; console.log(val));          // calling for the accepted promise
+    rejectPromise().then().catch(err =&gt; console.log(err))   // calling for the rejected promise (catch used to handle exeption)
+    acceptAny().then().then(val =&gt; console.log(val));       // string wraped into a resolved promise and returned
+    
+    console.log("control Text");                            // this is printed first in console because the above object are asynchronous
+&lt;/script&gt;        
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h4 style="color:darkblue;"><u> waiting for promises <mark>await</mark> demo </u></h4>
+    <p> - check console for ---> "8) await demo" </p>
+<script>
+console.warn("8) await demo");
+    var waitMe_A = async function() {           // function expression
+        let promise = new Promise(function(resolve, reject) {       
+            setTimeout(()=>resolve("waitResolved!"), 800)
+        });
+        await promise;                          // function is paused until promise get a response
+            // -> if we omit the "await" keyword the async function still waits for the promise 
+            // -> the "await" keyword is made to pause the 'async function' at a specified line util promise gets a response
+        console.log(" - control text - ");      // this line is not executed until await gets a respose
+        return promise;                         // return the promise
+    }
+    waitMe_A().then(val => console.log(val));   // handles resolved promise only
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+console.warn("8) await demo");
+    var waitMe_A = async function() {           // function expression
+        let promise = new Promise(function(resolve, reject) {       
+            setTimeout(()=>resolve("waitResolved!"), 800)
+        });
+        await promise;                          // function is paused until promise get a response
+            // -> if we omit the "await" keyword the async function still waits for the promise 
+            // -> the "await" keyword is made to pause the 'async function' at a specified line util promise gets a response
+        console.log(" - control text - ");      // this line is not executed until await gets a response
+        return promise;                         // return the promise
+    }
+    waitMe_A().then(val => console.log(val));   // handles resolved promise only
+&lt;/script&gt;       
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h4 style="color:darkblue;"><u> rejected promise VS resolved promise with <mark>await</mark> demo </u></h4>
+    <p> - check console for ---> "9) await resolve/reject demo" </p>    
+<script>
+console.warn("9) await resolve/reject demo");    
+    async function rejectTest() {
+        let promise = new Promise(function(resolve, reject) {
+            if(Math.ceil(Math.random() * 10) <= 5) {            // 50 % chance to true/false
+                setTimeout(()=> resolve("Accepted!"), 200);
+            }
+            else {
+                setTimeout(()=> reject("Rejected!"), 200);
+            }
+        });
+        await promise;                      
+            // if the promise is rejected it is returned by the "await" therefore no code will be executed after it in the function
+            // if the promise is resolved the code will continue execution further but the promise must be returned further!
+        console.log(" --- CONTROL --- ");
+            // when the promise is rejected the "control" text won't be printed!
+        return promise;
+            // this makes sure that the resolved promise is returned
+    }
+    rejectTest().then(value => console.log(value)).catch(err => console.log(err));
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+console.warn("9) await resolve/reject demo");    
+    async function rejectTest() {
+        let promise = new Promise(function(resolve, reject) {
+            if(Math.ceil(Math.random() * 10) &lt;= 5) {            // 50 % chance to true/false
+                setTimeout(()=> resolve("Accepted!"), 200);
+            }
+            else {
+                setTimeout(()=> reject("Rejected!"), 200);
+            }
+        });
+        await promise;                      
+            // if the promise is rejected it is returned by the "await" therefore no code will be executed after it in the function
+            // if the promise is resolved the code will continue execution further but the promise must be returned further!
+        console.log(" --- CONTROL --- ");
+            // when the promise is rejected the "control" text won't be printed!
+        return promise;
+            // this makes sure that the resolved promise is returned
+    }
+    rejectTest().then(value => console.log(value)).catch(err => console.log(err));
+&lt;/script&gt;    
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h4 style="color:darkblue;"><u> async function returns resolved|rejected promise TEST </u></h4>
+    <p id="asyncProm1"></p>
+    <p id="asyncProm2"></p>
+<script>
+// primitive data returned in a resolved promise by async function -----------------
+    var promise1 = prms1();
+    
+    promise1.then(function(val){                                                    // handles the resolved promise 
+        document.getElementById('asyncProm1').innerHTML = "resolved promise data = " + val;
+    });
+    
+    async function prms1() {                                                        // if asycn function returns a data then this will be a resolved Promise with the returned data   
+        return 'my promise is resolved!'                                            // resolved promise data 
+    }
+    
+// primitive data returned in a rejected promise by async function -----------------
+    var promise2 = prms2();
+    
+    promise2.then(()=>{}, (val)=>{                                                  // handles the rejected promise  
+        document.getElementById('asyncProm2').innerHTML = "rejected promise data = " + val;
+    });
+    
+    async function prms2() {                                                        // if async function throws a data then this will be a rejected Promise with the thrown data
+        throw 'my promise rejected';                                                // rejected promise data 
+    }
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+&lt;script&gt;
+// primitive data returned in a resolved promise by async function -----------------
+    var promise1 = prms1();
+    
+    promise1.then(function(val){                                                    // handles the resolved promise 
+        document.getElementById('asyncProm1').innerHTML = "resolved promise data = " + val;
+    });
+    
+    async function prms1() {                                                        // if asycn function returns a data then this will be a resolved Promise with the returned data   
+        return 'my promise is resolved!'                                            // resolved promise data 
+    }
+    
+// primitive data returned in a rejected promise by async function -----------------
+    var promise2 = prms2();
+    
+    promise2.then(()=>{}, (val)=>{                                                  // handles the rejected promise  
+        document.getElementById('asyncProm2').innerHTML = "rejected promise data = " + val;
+    });
+    
+    async function prms2() {                                                        // if async function throws a data then this will be a rejected Promise with the thrown data
+        throw 'my promise rejected';                                                // rejected promise data 
+    }
+&lt;/script&gt;    
+        </pre>
+        </details>
+<!--------------------------------------------------------------------------------------------------------------------->    
+<hr>
+<h4 style="color:darkblue;"><u> promisifying <mark>setTimeout()</mark> by using <mark>async</mark> / <mark>await</mark> TEST </u></h4>
+    <pre>
+    async function timerApi(delay){                                                    // awesome way to create promisified APIs 
+        var delay = delay * 1000;
+        var promise = new Promise(function(res){                                       // promise used to promisify the setTimeout api 
+            if(delay >= 0 && delay &lt; 60000){
+                setTimeout(() => res('time out!'), delay)
+            } else {
+                res('Out of allowed time range (0-59)');
+            }
+        });
+        
+        await promise;                                                                 // blocks the function body untill the promise is resolved or rejected 
+        
+        return promise;                                                                // returning the promise 
+                                                                                       // we could return anything that signals the end of the timer here 
+    }
+    
+    timerApi(10)
+        .then(
+            res => console.log(res),                                                   // -> 'time out!'     // after 10 seconds 
+            err => console.log(err)
+        )
+        
+    timerApi(60)                                                                       // invalid delay input
+        .then(
+            res => console.log(res),
+            err => console.log(err)                                                    // -> 'Out of allowed time range (0-59)'
+        )    
+    </pre>
+</details>
+<script>
+    console.error(" - Timed Operations printed after ");
+</script>    
+    
+    <br><br>
+</body>
+</html>

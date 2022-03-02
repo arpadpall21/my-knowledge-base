@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> HTTP Client </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> HTTP Client (ver 3.4.1) </h1>
+    <p> Updated ( 2020-05-19 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Node.js></a>  
+        <a href="../index.html">HTTP></a> HTTP Client   
+    </p>
+<table class="table" id="client">
+<caption> HTTP Client (ClientRequest object) </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>http</strong>.get(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)        
+                <br>
+            <strong>http</strong>.get(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>                   
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously issues a GET request to the specified host <br>
+            - return a clientRequest object which is a writable stream, <u>the <mark>end()</mark> method is automatically called on it</u> <br> 
+            - it does the same as the <mark>request()</mark> method with 2 differences (1) issues a GET request) (2) the <mark>end()</mark> method is automatically called on the returend clientRequest object)
+            <span class="browserSupport" title="updated : 2020-05-06">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span> 
+                <span><i class="fab fa-node-js"></i> 7.5.0 WHATWG parameter </span>
+                <span><i class="fab fa-node-js"></i> 13.3.0 maxHeaderSize </span>
+                <span><i class="fab fa-node-js"></i> 13.8.0 insecureHTTPParser </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.request(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)  
+                <br>
+            <strong>http</strong>.request(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>                   
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously issues a request to the specified host <br>
+            - return a clientRequest object which is a writable stream, <u>it must be written at least with the <mark>end()</mark> method in order to issue the request</u> 
+            <span class="browserSupport" title="updated : 2020-05-06">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span> 
+                <span><i class="fab fa-node-js"></i> 7.5.0 WHATWG parameter </span>
+                <span><i class="fab fa-node-js"></i> 13.3.0 maxHeaderSize </span>
+                <span><i class="fab fa-node-js"></i> 13.8.0 insecureHTTPParser </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong> </td>
+        <td> represents an in-progress request whose headers has already been queued (headers are still mutable) extends the <mark>Stream</mark> class </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.abort() </td>
+        <td> <u>[Deprecated since node v.14.0.1 use <mark>destroy()</mark> instead]</u> aborts the request (destroys the socket and drops the remaining data)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.aborted </td>
+        <td> retrns <mark>true</mark> if the request is aborted (when the <mark>abort()</mark> method has been called), otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.11.14 </span>
+                <span><i class="fab fa-node-js"></i> 11.0.0 no longer timestamp </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.connection </td>
+        <td> <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.destroy(<i class="openable">err:obj<div>
+                <p> - throws this error object on error event </p>
+            </div></i>, <i>fn</i>) </td>
+        <td> destorys the request and emits the <mark>error</mark> then the <mark>close</mark> events (drops the remaining data) <a href="../../Stream/Writable Streams/index.html#destroy" target="blank_">(Stream method)</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.destroyed </td>
+        <td> eturns <mark>true</mark> if the <mark>destroy()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 14.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.end(<i>chunk:any, encode:str, fn</i>) </td>
+        <td> 
+            - finishes sending the request (optionally sends a last data chunk to the message body) <a href="../../Stream/Writable Streams/index.html#end" target="blank_">(Stream method)</a> <br>
+            - callback called when the request stream is finished <br>
+            - returns this <strong>clientReq</strong> object
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 returns this clientRequest object </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.finished </td>
+        <td> <u>[Deprecated since node v.12.16.1 / 13.4.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.0.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.flushHeaders() </td>
+        <td> flushes (already set) request headers to the underlying kernel buffer (sends the message header to the server)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.getHeader(<strong>headName:str</strong>) </td>
+        <td> returns the specified request header value
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.maxHeadersCount </td>
+        <td> gets or sets the maximum number of <u>response headers</u> received from the server (Defalut: <mark>2000</mark>)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.path </td>
+        <td> returns the request URL path in a string
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.removeHeader(<strong>headerName:str</strong>) </td>
+        <td> removes the specified header from the request
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.reusedSocket </td>
+        <td> returns <mark>true</mark> if the underlying socket has already been used by another request, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 12.16.0 </span>
+                <span><i class="fab fa-node-js"></i> 13.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string!</u> </p>
+                <p> - if a header has multiple values whe can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'language=javascript']</mark>) </p>
+            </div></strong>) </td>
+        <td> sets a request header (if the header already exist its value will be reset)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.6.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setNoDealy(<strong>bol</strong>) </td>
+        <td> <u>[Internally called]</u> when a socket is assigned to this request <a href="../../Net/index.html#setNoDelay" target="_blank">(<strong>socket</strong>.setNoDelay())</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setSocketKeepAlive(<i>enable:bol, initialDelay:nr</i>) </td>
+        <td> <u>[Internally called]</u> when a socket is assigned to this request and is connected <a href="../../Net/index.html#setKeepAlive" target="_blank">(<strong>socket</strong>.setKeepAlive()</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.setTimeout(<strong>timeout:nr</strong>, <i>fn</i>) </td>
+        <td> <u>[Internally called]</u> when a socket is assigned to this request and is connected <a href="../../Net/index.html#setTimeout" target="_blank">(<strong>socket</strong>.setTimeout())</a>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.socket </td>
+        <td> references the underlying socket
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.wiritableEnded </td>
+        <td> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.writableFinished </td>
+        <td> returns <mark>true</mark> if the data has been flushed to the underlying kernel buffer, otherwise returns <mark>false</mark>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 12.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq</strong>.write(<strong>chunk:any</strong><i>, encode:str, fn(err)</i>) </td>
+        <td> 
+            - streams a data chunk to the request message body <a href="../../Stream/Writable Streams/index.html#write" target="blank_">(Stream method)</a> <br>
+            - if called multiple time the <mark>Transfer-Encoding: chunk</mark> header is suggested <br>
+            - returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again) <br>
+            - callback called when the data chunk is successfully flushed to the kernel buffer
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.29 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('abort', <strong>fn</strong>) </td>
+        <td> emitted when the <mark>abort()</mark> method is called on the client
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 1.4.1 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('connect', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - this suppose to be the incomming http message but it does not appear to have any functionality here because the client and the server are communicating through the socket [TESTE: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the server what is responded to the <mark>CONNECT</mark> request </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong></strong>) 
+        </td>
+        <td> 
+            - emitted each time when this client receives a response to a previously issued <mark>CONNECT</mark> request (from a proxy server) <br>
+            - the client communicates with the server through the <strong>socket</strong> argument (which is the tunnel between the client and the server) <br>
+            - if this event is not listened the connection is dropped
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('continue', <strong>fn</strong>) </td>
+        <td> 
+            - emitted when the client receives a <mark>100 Continue</mark> status response <br>
+            - the issued request should contain the <mark>Expect: 100-continue</mark> header
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.3.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('information', <strong>fn(<strong class="openable">info:obj<div>
+                <p> httpVersion: <strong>str</strong> </p>
+                <p> httpVersionMajor: <strong>nr</strong> </p>
+                <p> httpVersionMinor: <strong>nr</strong> </p>
+                <p> statusCode: <strong>nr</strong> </p>
+                <p> statusMessage: <strong>str</strong> </p>
+                <p> headers: <strong>obj</strong> </p>
+                <p> rawHeaders: <strong>arr</strong> </p>
+            </div></strong>)</strong>) 
+        </td>
+        <td> emitted when the client receives a <mark>1**</mark> status code response <u>(<mark>101 Upgrade</mark> excluded)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('response', <strong>fn(incMsg)</strong>) </td>
+        <td> emitted each time the client receives a response from the server
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('socket', <strong>fn(socket)</strong>) </td>
+        <td> emitted when the underlying socket is created (or the request is assigned to a socket)
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.5.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('timeout', <strong>fn</strong>) </td>
+        <td> 
+            - emitted after the set timeout on the client (<mark><strong>http</strong>.request({timeout:2000})</mark>) <br>
+            - does not have any effect on the connection <u>(does not drop the connection or destory the socket)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.7.8 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>clienReq.listener</strong>('upgrade', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - this suppose to be the incomming http message but it does not appear to have any functionality here because the client and the server are communicating through the socket [TESTE: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the server what is responded to the <mark>CONNECT</mark> request </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>) 
+        </td>
+        <td> 
+            - emitted each time when this client receives a (<mark>101 Switcing Protocols</mark>) response to a previously issued "Upgrade" request (response should contain the <mark>Connection: Upgrade</mark> and <mark>Upgrade: *</mark> headers) <br>
+            - the client communicates with the server through the <strong>socket</strong> argument (which is the tunnel between the client and the server) <br>
+            - if this event is not listened the "Upgrade" connection is dropped <u>(the client cannot insist on protocol upgrade)</u>
+            <span class="browserSupport" title="updated : 2020-05-20">
+                <span><i class="fab fa-node-js"></i> 0.1.94 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table" id="agent">
+<caption> Agent Object</caption>
+    <tr>
+        <th style="width:30%"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>http</strong>.globalAgent </td>
+        <td> returns the global agent which is the default agent for all HTTP client requests
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> new <strong>http</strong>.Agent(<i class="openable">options:obj<div> 
+                <p> keepAlive: <strong>bol</strong> - allows http clients to keep their connections open (live connection) (Default: <mark>false</mark>) </p>
+                <p> keepAliveMsecs: <strong>nr:ms</strong> - initial delay for TCP Keep-Alive packets (only when <mark>keepAlive:true</mark>) </p>
+                <p> maxSockets: <strong>nr</strong> - maximum number of active sockets allowed (when the agent makes the requests) (multiple http client can connect through the same socket) (Default: <mark>Infinity</mark>) </p> 
+                <p> maxFreeSockets: <strong>nr</strong> - maximum number of socket allowed in free state (connection keep-alive state) (only when <mark>keepAlive:true</mark>)(Default: <mark>256</mark>) </p>
+                <p> timeout: <strong>nr:ms</strong> - destroys open sockets after this time (only when <mark>keepAlive:true</mark>) (Default: <mark>0</mark> = no timeout)</p>
+            </div></i>) 
+        </td>
+        <td> 
+            - the returned agent instance manages the connections for its HTTP clients <br>
+            - deals with pending requests, live connections, destroys|reuse sockets <br>
+             - when the agent is set to keep-alive its HTTP clients connections, the <mark>Connection: Keep-Alive</mark> header is automatically sent in the client's request header
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.createConnection(<strong>port:nr</strong>, <i class="openable">host:str<div>
+                <p> - Default <mark>'localhost'</mark> </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener function (fired on successful connection) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - synchronously returns a <strong>socket</strong> object, then asynchronously initiates the connection with <mark><strong>socket</strong>.connect()</mark> internally <br>
+            - on successful connection returns a <strong>socket</strong> object again which keeps the process alive (this socket started the actual connection) <br>
+            - this method is the same as <mark><strong>net</strong>.createConnection()</mark> and <mark><strong>net</strong>.connect()</mark>
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.destroy() </td>
+        <td> immediately destroys all of the agent's sockets (active and free sockets alike)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.freeSockets </td>
+        <td> returns an object with the agent's unused sockets (agent 'keep-alive' socket pool)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.getName(<strong class="openable">options:obj<div>
+                <p> host: <strong>str</strong> - domain name or IP of the server to issue the request to (Default: <mark>'localhost'</mark>) </p>
+                <p> port: <strong>nr</strong> - remote server port </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> family: 4|6 - ip version </p>
+            </div></strong>)
+        </td> 
+        <td> returns a unique string based on the passed request options
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.keepSocketAlive(<strong>socket</strong>) </td>
+        <td> <u>[Internally called]</u> when the socket is detached from the request and can be persisted (keep-alive connection) (same as <mark><strong>socket</strong>.unref()</mark>)  
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.maxFreeSockets </td>
+        <td> gets or sets how many unused (keep-alive) sockets the agent allowed have
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.11.7 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.maxSockets </td>
+        <td> gets or sets how many active sockets the agent is allowed to open at the same time (active socket = traffic going through)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.requests </td>
+        <td> returns an object which contains a queue of <strong>clientRequest</strong> objects what are not yet been assigned to sockets
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.reuseSocket(<strong>socket</strong>, <strong>clientReq</strong>) </td>
+        <td> <u>[Internally called]</u> when the socket is attached to a request after being persisted (keep-alive connection) (same as <mark><strong>socket</strong>.ref()</mark>)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 8.1.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td> <strong>agent</strong>.sockets </td>
+        <td> returns an object which contains sockets currently used by the agent (active sockets)
+            <span class="browserSupport" title="updated : 2020-05-09">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> HTTP Client <mark>request()</mark> / <mark>get()</mark> / <mark>abort()</mark> / <mark>aborted</mark> / <mark>destroy()</mark> / <mark>destroyed</mark> / <mark>connection</mark> / <mark>socket</mark> / <mark>path</mark> / <mark>reusedSocket</mark> / <mark>write()</mark> / <mark>end()</mark> / <mark>finished</mark> / <mark>writableEnded</mark> / <mark>writableFinished</mark> / <mark>maxHeadersCount</mark> / <mark>setHeader()</mark> / <mark>getHeader()</mark> / <mark>removeHeader()</mark> / <mark>flushHeaders()</mark> / <mark>outputData</mark> / <mark>outputSize</mark> / <mark>setNoDelay()</mark> / <mark>setSocketKeepAlive()</mark> / <mark>setTimeout()</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events : <mark>abort</mark> / <mark>response</mark> / <mark>socket</mark> / <mark>timeout</mark> / <mark>connect</mark> / <mark>upgrade</mark> / <mark>continue</mark> / <mark>information</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>http</strong>.request(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                   // asynchronously issues a request to the specified host  
+            <strong>http</strong>.request(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>                   
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                                       return a clientRequest object which is a writable stream, <u>it must be written at least with the <mark>end()</mark> method in order to issue the request</u>    
+            
+            <strong>http</strong>.get(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                       // asynchronously issues a GET request to the specified host  
+            <strong>http</strong>.get(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>undefined</mark>) (<mark>undefined</mark> = uses the <mark>http.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>80</mark> if not) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'http'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>                   
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                                           return a clientRequest object which is a writable stream, <u>the <mark>end()</mark> method is automatically called on it</u>    
+                                                                                          it does the same as the <mark>request()</mark> method with 2 differences (1) issues a GET request) (2) the <mark>end()</mark> method is automatically called on the returend clientRequest object)    
+            
+            <strong>clienReq</strong>                                                                   // represents an in-progress request whose headers has already been queued (headers are still mutable) extends the <mark>Stream</mark> class   
+    
+            <strong>clienReq</strong>.abort()                                                           // <u>[Deprecated since node v.14.0.1 use <mark>destroy()</mark> instead]</u> aborts the request (destroys the socket and drops the remaining data) 
+            <strong>clienReq</strong>.aborted                                                           // retrns <mark>true</mark> if the request is aborted (when the <mark>abort()</mark> method has been called), otherwise returns <mark>false</mark>  
+            <strong>clienReq</strong>.destroy(<i class="openable">err:obj<div>
+                <p> - throws this error object on error event </p>
+            </div></i>, <i>fn</i>)                                             // destorys the request and emits the <mark>error</mark> then the <mark>close</mark> events (drops the remaining data) <a href="../../Stream/Writable Streams/index.html#destroy" target="blank_">(Stream method)</a>
+            <strong>clienReq</strong>.destroyed                                                         // returns <mark>true</mark> if the <mark>destroy()</mark> method was called, otherwise returns <mark>false</mark>    
+    
+            <strong>clienReq</strong>.connection                                                        // <u>[Deprecated since node v.13.0.0 use <mark>socket</mark> instead]</u> references the underlying socket 
+            <strong>clienReq</strong>.socket                                                            // references the underlying socket 
+            <strong>clienReq</strong>.path                                                              // returns the request URL path in a string   
+                
+            <strong>clienReq</strong>.reusedSocket                                                      // returns <mark>true</mark> if the underlying socket has already been used by another request, otherwise returns <mark>false</mark>    
+            
+            <strong>clienReq</strong>.write(<strong>chunk:any</strong><i>, encode:str, fn(err)</i>)                             // streams a data chunk to the request message body <a href="../../Stream/Writable Streams/index.html#write" target="blank_">(Stream method)</a>
+                                                                                          if called multiple time the <mark>Transfer-Encoding: chunk</mark> header is suggested    
+                                                                                          returns <mark>true</mark> if the entire chunk is flushed to the underlying kernel buffer, <mark>false</mark> if the chunk is queued in memory (emits the <mark>drain</mark> event is the buffer is free again)    
+                                                                                          callback called when the data chunk is successfully flushed to the kernel buffer    
+            <strong>clienReq</strong>.end(<i>chunk:any, encode:str, fn</i>)                                    // finishes sending the request (optionally sends a last data chunk to the message body) <a href="../../Stream/Writable Streams/index.html#end" target="blank_">(Stream method)</a>    
+                                                                                          callback called when the request stream is finished 
+                                                                                          returns this <strong>clientReq</strong> object   
+            
+            <strong>clienReq</strong>.finished                                                          // <u>[Deprecated since node v.12.16.1 / 13.4.0 use <mark>writableEnded</mark> instead]</u> returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark>     
+            <strong>clienReq</strong>.wiritableEnded                                                    // returns <mark>true</mark> if the <mark>end()</mark> method was called, otherwise returns <mark>false</mark> <u>(does not indicate if the data has been flushed to the underlying system)</u>    
+            <strong>clienReq</strong>.writableFinished                                                  // returns <mark>true</mark> if the data has been flushed to the underlying kernel buffer, otherwise returns <mark>false</mark>
+            
+            <strong>clienReq</strong>.maxHeadersCount                                                   // gets or sets the maximum number of <u>response headers</u> received from the server (Defalut: <mark>2000</mark>)   
+            <strong>clienReq</strong>.setHeader(<strong>headerName:str</strong>, <strong class="openable">val:any<div>
+                <p> - any data type can be set, so we can get back the set data type with the <mark>getHeader()</mark> method, <u>however once the header is sent through the network the value is converted to string!</u> </p>
+                <p> - if a header has multiple values whe can specify those in an Array (ex: <mark>'Cookie': ['type=ninja', 'language=javascript']</mark>) </p>
+            </div></strong>)                               // sets a request header (if the header already exist its value will be reset)    
+            <strong>clienReq</strong>.getHeader(<strong>headName:str</strong>)                                           // returns the specified request header value 
+            <strong>clienReq</strong>.removeHeader(<strong>headerName:str</strong>)                                      // removes the specified header from the request 
+            <strong>clienReq</strong>.flushHeaders()                                                    // flushes (already set) request headers to the underlying kernel buffer (sends the message header to the server)   
+            
+            <strong>clienReq</strong>.setNoDealy(<strong>bol</strong>)                                                   // <u>[Internally called]</u> when a socket is assigned to this request <a href="../../Net/index.html#setNoDelay" target="_blank">(<strong>socket</strong>.setNoDelay())</a>    
+            <strong>clienReq</strong>.setSocketKeepAlive(<i>enable:bol, initialDelay:nr</i>)                   // <u>[Internally called]</u> when a socket is assigned to this request and is connected <a href="../../Net/index.html#setKeepAlive" target="_blank">(<strong>socket</strong>.setKeepAlive()</a>    
+            <strong>clienReq</strong>.setTimeout(<strong>timeout:nr</strong>, <i>fn</i>)                                        // <u>[Internally called]</u> when a socket is assigned to this request and is connected <a href="../../Net/index.html#setTimeout" target="_blank">(<strong>socket</strong>.setTimeout())</a>    
+            
+            
+  <span style="color:darkgray">// Events ---------------------------------------------------------------------------</span>
+            <strong>clienReq.listener</strong>('abort', <strong>fn</strong>)                                             // emitted when the <mark>abort()</mark> method is called on the client   
+            <strong>clienReq.listener</strong>('response', <strong>fn(incMsg)</strong>)                                  // emitted each time the client receives a response from the server 
+            <strong>clienReq.listener</strong>('socket', <strong>fn(socket)</strong>)                                    // emitted when the underlying socket is created (or the request is assigned to a socket)  
+            <strong>clienReq.listener</strong>('timeout', <strong>fn</strong>)                                           // emitted after the set timeout on the client (<mark><strong>http</strong>.request({timeout:2000})</mark>)
+                                                                                          does not have any effect on the connection <u>(does not drop the connection or destory the socket)</u>
+                
+            <strong>clienReq.listener</strong>('connect', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - this suppose to be the incomming http message but it does not appear to have any functionality here because the client and the server are communicating through the socket [TESTE: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the server what is responded to the <mark>CONNECT</mark> request </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong></strong>)              // emitted each time when this client receives a response to a previously issued <mark>CONNECT</mark> request (from a proxy server)    
+                                                                                          the client communicates with the server through the <strong>socket</strong> argument (which is the tunnel between the client and the server)   
+                                                                                          if this event is not listened the connection is dropped 
+            <strong>clienReq.listener</strong>('upgrade', <strong>fn(<strong class="openable">incMsg<div>
+                <p> - this suppose to be the incomming http message but it does not appear to have any functionality here because the client and the server are communicating through the socket [TESTE: 2020-05-18]</p>
+            </div></strong>, <strong class="openable">socket<div>
+                <p> - socket to the server what is responded to the <mark>CONNECT</mark> request </p>
+            </div></strong>, <strong class="openable">head:buf<div>
+                <p> - first chunk of the tunneling stream </p>
+            </div></strong>)</strong>)             // emitted each time when this client receives a (<mark>101 Switcing Protocols</mark>) response to a previously issued "Upgrade" request (response should contain the <mark>Connection: Upgrade</mark> and <mark>Upgrade: *</mark> headers)    
+                                                                                          the client communicates with the server through the <strong>socket</strong> argument (which is the tunnel between the client and the server)   
+                                                                                          if this event is not listened the "Upgrade" connection is dropped <u>(the client cannot insist on protocol upgrade)</u>
+            <strong>clienReq.listener</strong>('continue', <strong>fn</strong>)                                          // emitted when the client receives a <mark>100 Continue</mark> status response    
+                                                                                          the issued request should contain the <mark>Expect: 100-continue</mark> header   
+            <strong>clienReq.listener</strong>('information', <strong>fn(<strong class="openable">info:obj<div>
+                <p> httpVersion: <strong>str</strong> </p>
+                <p> httpVersionMajor: <strong>nr</strong> </p>
+                <p> httpVersionMinor: <strong>nr</strong> </p>
+                <p> statusCode: <strong>nr</strong> </p>
+                <p> statusMessage: <strong>str</strong> </p>
+                <p> headers: <strong>obj</strong> </p>
+                <p> rawHeaders: <strong>arr</strong> </p>
+            </div></strong>)</strong>)                            // emitted when the client receives a <mark>1**</mark> status code response <u>(<mark>101 Upgrade</mark> excluded)</u>    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var http = require('http');
+    
+// request() --------------------------------------------------------------------------
+    var client = http.request('google.com', function(incMsg){                          // -> returns a writable stream instance         // the url (1st argument) is internally parsed by the 'new URL()' class    
+        incMsg.on('data', function(chunk){ chunk });                                   // read the incoming message (readable stream)
+    });
+    
+// get() ------------------------------------------------------------------------------
+    var client = http.get({host:'google.com'}, function(incMsg){                       // this does the same as above except automatically issues a GET request    
+        incMsg.on('data', function(chunk){ chunk });                                   
+    });                                                                                // -! this method automatically calls the 'end()' method on the returned clientRequest (writable stream) object 
+    
+// destroy() / destroyed --------------------------------------------------------------
+    client.destroy();                                                                  // destroys the request and drops all pending data (emits the 'error' then the 'close' events)   
+    client.destroy;                                                                    // -> true 
+    
+// socket / reusedSocket / path -------------------------------------------------------
+    client.socket;                                                                     // -> Socket{...}      // returns the underlying socket 
+    client.reusedSocket;                                                               // -> false            // 'true' if the underlying socket has already been used by another request    
+    client.path;                                                                       // -> '/'              // returns the request URL path 
+    
+// write() / end() / writableEnded / writableFinished ---------------------------------
+    client.write('some data to message body');                                         // writes a data chunk to the request message's body (writable stream)       
+    client.end();                                                                      // finishes the request message (writable stream)    // -! this issues the acual request
+    
+    client.writableEnded;                                                              // -> true             // because the "end()" method was called 
+    client.writableFinished;                                                           // -> true             // data is flushed to the underlying kernel buffer    
+    
+// maxHeadersCount / setHeader() / getHeader() / removeHeader() / flushHeaders() ------
+    client.maxHeadersCount;                                                            // -> 2000             // the number of response headers parsed by the http module parser   
+    
+    client.setHeader('someHeader', 21);                                                // sets a request header 
+    client.getHeader('someHeader');                                                    // -> 21                 // the set data type is returned 
+    client.removeHeader('someHeader');                                                 // deletes the specified header
+    
+    client.flushHeaders();                                                             // flushes request headers to the underlying kernel buffer  
+    
+// abort / response / socket (events) -------------------------------------------------
+    client.on('abort', ()=>{});                                                        // emitted when the 'abort()' method is called on the client 
+    
+    client.on('response' function(incMsg){                                             // emitted each time when the client receives a response from the server 
+        incMsg;                                                                          // IncomingMessage object   
+    });
+    
+    client.on('socket', function(socket){                                              // emitted when this request is assigned to a socket
+        socket;                                                                          // underlying socket     (same as client.socket)  
+    });
+    
+// connect / upgrade (events) ---------------------------------------------------------
+    client.on('connect', function(incMsg, socket, head){                               // emitted when the client receives a response to a previously issued 'CONNECT' request    
+        socket;                                                                          // client-server communication tunnel once the 'connect' connection is estabilished (duplex stream)    
+        head;                                                                            // -> &lt;Buffer ...&gt;     // first received data chunk 
+    });
+    
+    client.on('upgrade', function(incMsg, socket, head){                               // emitted when the client receives a response to a previously issued "upgrade" request (the response should contain the "Connection: Upgrade" and "Upgrade: *" headers)    
+        socket;                                                                          // client-server communication tunnel once the 'upgrade' connection is estabilished (duplex stream)    
+        head;                                                                            // -> &lt;Buffer ...&gt;     // first received data chunk 
+    });
+    
+// continue / information (events) ----------------------------------------------------
+    client.on('continue', ()=>{});                                                     // emitted when a '100 Contiune' status code response is received   
+    
+    client.on('information', function(info){                                           // emitted when a 1** status code response is received (except 101)  
+        info;                                                                            // -> information object about http version and headers
+    });
+    
+// timeout (event) --------------------------------------------------------------------
+    var myClient = http.request({host:'someHost', port:21, timeout:5000});             // setting the client timeout    // -! client simply emits the 'timeout' event but doesn't have any effect on the connection    
+    
+    myClient.on('timeout', ()=>{});                                                    // emitted after 5 seconds 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>request()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    var url = require('url');
+        
+// url object or string passed as url -------------------------------------------------
+    var httpClient = http.request('http://www.erdelyivendeglatas.com/ellatas', function(res){
+        console.log( res.statusCode );
+        console.log( '-&gt; CLIENT-1 RESPONSE &lt;-' );
+        res.on('data', function(chunk){
+            console.log( chunk.toString() );
+        });
+        res.on('end', function(){
+            console.log( '-&gt; CLIENT-1 RESPONSE END &lt;-' );
+        });
+    });
+        
+    httpClient.end();                                                                  // -! the returned clientRequest stream must be ended in order to send the request   
+    
+  // using WHATWG URL object ---------------------------------------
+    var reqUrl = new url.URL('http://www.erdelyivendeglatas.com/ellatas');
+        
+    var httpClient2 = http.request(reqUrl, function(res){
+        console.log( res.statusCode );
+        console.log( '-&gt; CLIENT-2 RESPONSE &lt;-' );
+        res.on('data', function(chunk){
+            console.log( chunk.toString() );
+        });
+        res.on('end', function(){
+            console.log( '-&gt; CLIENT-2 RESPONSE END &lt;-' );
+        });
+    });
+        
+    httpClient2.end();                                                                 // -! the returned clientRequest stream must be ended in order to send the request   
+    
+    
+// option object only -----------------------------------------------------------------
+    var option = {
+        hostname: 'www.erdelyivendeglatas.com',
+        path: '/ellatas'
+    }
+    
+    var httpClient3 = http.request(option, function(res){
+        console.log( res.statusCode );
+        console.log( '-&gt; CLIENT-3 RESPONSE &lt;-' );
+        res.on('data', function(chunk){
+            console.log( chunk.toString() );
+        });
+        res.on('end', function(){
+            console.log( '-&gt; CLIENT-3 RESPONSE END &lt;-' );
+        });
+    });
+    
+    httpClient3.end();                                                                 // -! the returned clientRequest stream must be ended in order to send the request   
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/001 request()$ node client
+    200                                                                                // httpClient response 
+    -> CLIENT-1 RESPONSE <-
+    &lt;!DOCTYPE html&gt;       // the requested html page ............
+    -> CLIENT-1 RESPONSE END &lt;-
+    200                                                                                // httpClient2 response 
+    -> CLIENT-2 RESPONSE <-
+    &lt;!DOCTYPE html&gt;       // the requested html page ............
+    -> CLIENT-2 RESPONSE END &lt;-
+    200                                                                                // httpClient3 response 
+    -&gt; CLIENT-3 RESPONSE &lt;-
+    &lt;!DOCTYPE html&gt;       // the requested html page ............
+    -&gt; CLIENT-3 RESPONSE END &lt;-
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/001 request()$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>get()</mark> TEST </u></h4>
+    <p> - this method does the same as the <mark>request()</mark> method with the difference that it issues automatically a <mark>'GET'</mark> request and the <mark>write()</mark> method is automatically called on the returned clientRequest object </p>
+    <pre>
+    var http = require('http');
+    
+    var client = http.get({host:'www.erdelyivendeglatas.com', path:'/ellatas'}, function(res){
+        console.log( res.statusCode );
+        res.on('data', function(chunk){
+            console.log( chunk.toString() );
+        });
+        res.on('end', function(){
+            console.log( '--&gt; RESPONSE END &lt;---' );
+        });
+    }); 
+    
+    // -! automatically calls the 'client.end()' method in order to issue the request righ away 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/002 get() TEST$ node client.js
+    200
+    &lt;!DOCTYPE html&gt;       // the requested html page .........
+    --&gt; RESPONSE END &lt;---
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/002 get() TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>abort()</mark> / <mark>aborted</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var client = http.request({host:'localhost', port:80});
+    
+    client.abort();                                                                    // aborts the request 
+    console.log( client.aborted );                                                     // -> true 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/18 abort() aborted TEST$ node client.js
+    true                                                                           // client.aborted
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/18 abort() aborted TEST$     
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>connection</mark> / <mark>socket</mark> / <mark>path</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+
+    var client = http.get({host:'localhost', port:80}, function(incMsg){
+        console.log( client.connection );                                              // -> Socket{ ... }         // underlying socket returned 
+        console.log( client.socket );                                                  // -> Socket{ ... }         // underlying socket returned
+    });
+    
+    console.log( client.path );                                                        // -> '/'                   // request path 
+    </pre>
+    <pre class='cmd'>
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/19 connection socket TEST$ node client     
+     /                                                                                 // client.path
+     Socket { ... }                                                                    // client.connection
+     Socket { ... }                                                                    // client.socket
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/19 connection socket TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>reusedSocket</mark> TEST </u></h4>
+    <pre>
+var http = require('http');
+    
+var myAgent = new http.Agent({keepAlive:true, maxSockets:1});                          // agent opens and keeps open 1 socket (must be reused in order to send other requests)    
+    
+http.get({host:'localhost', port:80, agent:myAgent}, function(incMsg){
+    incMsg.on('data', function(chunk){ console.log( chunk.toString() ); });
+    incMsg.on('end', function(){ console.log( '--- END OF RESPONSE ---' ); });
+    
+    console.log( this.reusedSocket );                                                  // -> false         // socket used for the first time 
+});
+    
+setTimeout(function(){                                                                 // afer 2 seconds issue another request 
+    http.get({host:'localhost', port:80, agent:myAgent}, function(incMsg){
+        incMsg.on('data', function(chunk){ console.log( chunk.toString() ); });
+        incMsg.on('end', function(){ console.log( '--- END OF RESPONSE ---' ); });
+        
+        console.log( this.reusedSocket );                                              // -> true          // socket has already been used 
+    });
+}, 2000);
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/20 reusedSocket$ node client
+    false
+    Server response Success!
+    --- END OF RESPONSE ---
+    true                                                                               // second request 
+    Server response Success!
+    --- END OF RESPONSE ---
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/20 reusedSocket$
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>write()</mark> / <mark>end()</mark> TEST </u></h4>
+    <pre>
+var http = require('http');
+    
+var client = http.request({host:'localhost', port:80, method:'POST'}, function(incMsg){
+    incMsg.on('data', function(chunk){ console.log(chunk) });
+    incMsg.on('end', function(chunk){ console.log('--- END OF MESSAGE ---') });
+});
+    
+console.log( client.write('first data chunk') );                                       // -> true          // data is flushed to the kernel buffer
+console.log( client.write('second data chunk') );                                      // -> true          // data is flushed to the kernel buffer
+    
+console.log( client.end('last chunk') );                                               // -> clientRequest // this client request 
+    
+// client.write('something');                                                          // this would throw an error because the request is finished with the 'end()' method above!     
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/21 write() end() TEST$ node client
+    true                                                                               // client.write('first data chunk');
+    true                                                                               // client.write('second data chunk');
+    ClientRequest { ... }                                                              // client.end('last chunk');
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;   // server response 
+    --- END OF MESSAGE ---
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/21 write() end() TEST$ node client
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>destroy()</mark> / <mark>destoryed</mark> TEST </u></h4>
+    <pre>
+var http = require('http');
+    
+var client = http.request({host:'localhost', port:80}, function(incMsg){
+    incMsg.on('data', function(chunk){ console.log(chunk) });
+    incMsg.on('data', function(){ console.log("--- END OF MESSAGE ---" ) });
+}).on('error', function(err){ if (err) console.log(err.message) });
+    
+client.destroy();
+    
+console.log( client.destroyed );                                                       // -> true 
+console.log( client.aborted );                                                         // -> false 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/22 destroy() destroyed$ node client
+    true                                                                               // client.destroyed
+    false                                                                              // client.aborted
+    socket hang up
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/22 destpall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/22 destroy() destroyed$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>finished</mark> / <mark>writableEnded</mark> / <mark>writableFinished</mark> TEST </u></h4>
+    <pre>
+var http = require('http');
+    
+var client = http.request({host:'localhost', port:80});
+    
+client.end();
+    
+console.log( client.finished );                                                        // -> true 
+console.log( client.writableEnded );                                                   // -> true      // request ended 
+console.log( client.writableFinished );                                                // -> false     // data in not yet flushed to the underlying kernel buffer   
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/23 finished writableEnded writableFinished TEST$ node client
+    true                                                                               // client.finished
+    true                                                                               // client.writableEnded
+    false                                                                              // client.writableFinished
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>maxHeadersCount</mark> / <mark>setHeader()</mark> / <mark>getHeader()</mark> / <mark>removeHeader()</mark> / <mark>flushHeaders()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http'); 
+    
+    var client = http.request({host:'localhost', port:80, method:'POST'}, function(incMsg){
+        console.log( incMsg.headers );
+    });
+    
+// maxHeadersCount --------------------------------------------------------------------
+    client.maxHeadersCount = 3;                                                        // up to 3 response headers will be received 
+    
+// setHeader() ------------------------------------------------------------------------
+    client.setHeader('myHeader1', 1);
+    client.setHeader('myHeader2', 2);
+    client.setHeader('myHeader3', 3);
+    
+// getHeader() / removeHeader() -------------------------------------------------------
+    console.log( client.getHeader('myHeader2') );                                      // -> 2 
+    
+    client.removeHeader('myHeader3');                                                  // removes the specified header from the request 
+    console.log( client.getHeader('myHeader3') );                                      // -> undefined        // header removed 
+    
+// flushHeaders() ---------------------------------------------------------------------
+    client.flushHeaders();                                                             // the message headers are flushed to the kernel buffer (request headers are sent to the server)
+    
+    client.end('some data');                                                           // ends the request with some data     
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/24 maxHeadersCount setHeader() getHeader() removeHeader() flushHeaders() TEST$ node client
+    2                                                                                  // client.getHeader('myHeader2');
+    undefined                                                                          // client.getHeader('myHeader3');        // after the header is removed 
+    {
+    'content-type': 'text/plain',                                                      // only 3 headers are received because the 'maxHeadersCount' is set to 3    
+    date: 'Tue, 12 May 2020 15:15:48 GMT',
+    connection: 'close'
+    }
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/24 maxHeadersCount setHeader() getHeader() removeHeader() flushHeaders() TEST$     
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>outputData</mark> / <mark>outputSize</mark> TEST </u></h4>
+    <pre>
+var http = require('http');
+    
+var client = http.request({host:'localhost', port:80});
+    
+console.log( client.outputData );                                                      // -> []    // before the request is empty 
+console.log( client.outputSize );                                                      // -> 0     
+    
+client.end('send some data to the server');
+    
+console.log( client.outputData );                                                      // -> [ ... ]
+console.log( client.outputSize );                                                      // -> 82    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/26 outputData outputSize TEST$ node client
+    []                                                                                 // client.outputData         // before request 
+    0                                                                                  // client.outputSize         // before request 
+    [                                                                       
+    {                                                                                  // client.outputData         // after request 
+        data: 'GET / HTTP/1.1\r\n' +
+        'Host: localhost\r\n' +
+        'Connection: close\r\n' +
+        '\r\n' +
+        'send some data to the server',
+        encoding: undefined,
+        callback: null
+    },
+    {
+        data: '',
+        encoding: 'latin1',
+        callback: [Function: bound onFinish]
+    }
+    ]
+    82                                                                                 // client.outputSize         // after request
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/26 outputData outputSize TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>abort</mark> / <mark>response</mark> / <mark>timeout</mark> / <mark>socket</mark> events TEST </u></h4>
+    <pre>
+    var http = require('http');
+    var util = require('util');
+            
+// abort -----------------------------------------------------------------------------
+    var client_1 = http.request({host:'localhost', port:80});   
+    
+    client_1.abort();
+    
+    client_1.on('abort', function(){
+        console.log( 'client_1 request aborted!' );
+    });
+    
+// response / timeout -----------------------------------------------------------------
+    var client_2 = http.request({host:'localhost', port:80, timeout:3000});            // request queued only but not sent (timeout value set)
+                                                                                       // -! client timeout is only an indication! it does not have any effect on connection 
+    client_2.on('timeout', function(){                                                 // fires after 3 seconds    // -! does not destroys the socket or drops the connection this is only an indication!    
+        console.log( 'client_2 timed out!');
+    });
+    
+    client_2.on('response', function(incMsg){
+        console.log( 'client_2 response received!' );
+        incMsg.on('data', function(chunk){ console.log(chunk) });
+        incMsg.on('end', function(){ console.log('--- END ---') });
+    });
+    
+    setTimeout(function(){
+        client_2.end();                                                                // after 5 seconds the requets is sent (after the client times out this prouves that the timeout has no effect on connection)    
+    }, 5000);
+    
+// socket -----------------------------------------------------------------------------
+    var client_3 = http.request({host:'localhost', port:80}).end();
+    
+    client_3.on('socket', function(socket){
+        console.log( 'client_3 socket crated' );
+        console.log( util.isDeepStrictEqual(socket, client_3.socket) );                // -> true      // same socket 
+    });
+    
+    console.log( client_3.socket );                                                    // -> null      // socket not yet created 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/27 abort response timeout socket events TEST$ node client
+    null                                                                               // client_3.socket       // synchronous
+    client_1 request aborted!                                                          // 'abort' event 
+    client_3 socket crated                                                             // 'socket' event 
+    true                                                                               // util.isDeepStrictEqual(socket, client_3.socket);
+    client_2 timed out!                                                                // 'timeout' event
+    client_2 response received!                                                        // 'response' event 
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    --- END ---
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/27 abort response timeout socket events TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>connect</mark> event TEST </u></h4>
+    <pre>
+// client -----------------------------------------------------------------------------
+    var http = require('http'); 
+    
+    var client = http.request({host:'localhost', port:1000, method:'CONNECT'}).end();  // CONNECT request issued 
+    
+    client.on('connect', function(incMsg, socket, head){                               // emitted when the server respond to a CONNECT request 
+        socket.on('data', (chunk)=>{ console.log(chunk.toString()) });                 // read the incomming message body on the socket 
+    });
+    
+// server -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer().listen(1000, 'localhost');
+    
+    server.on('connect', function(incMsg, clientSocket, head){                         // emitted when the server receives a 'CONNECT' request 
+        clientSocket.write('HTTP/1.1 200 OK\r\n\r\n');                                 // responding to the client 
+        clientSocket.end('proxy responded!');                                          // send message to the client 
+    });
+    </pre>
+    <pre class="cmd">
+// client side ----------------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/28 connect event TEST$ node client
+    proxy responded!
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/28 connect event TEST$
+    
+// server side ----------------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/28 connect event TEST$ sudo node srv
+    
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>continue</mark> / <mark>information</mark> events TEST </u></h4>
+    <p> -server response status line contains the <mark>100 Continue</mark> status code </p>
+    <pre>
+    var http = require('http');
+    
+    var client = http.request({host:'localhost', port:80});
+    
+    client.setHeader('Expect', '100-continue');
+    client.end();
+    
+    client.on('continue', function(){
+        console.log( 'continue event emitted!' );
+    });
+    
+    client.on('information', function(info){
+        console.log( 'information event emitted!' );
+        console.log( info );
+    });    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/29 continue information events TEST$ node client
+    continue event emitted!
+    information event emitted!
+    {
+        statusCode: 100,
+        statusMessage: 'Continue',
+        httpVersion: '1.1',
+        httpVersionMajor: 1,
+        httpVersionMinor: 1,
+        headers: {},
+        rawHeaders: []
+    }
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>upgrade</mark> event TEST </u></h4>
+    <pre>
+// client -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var client = http.request({host:'localhost', port:80});
+    
+    client.setHeader('Connection', 'Upgrade');                                         // headers to request an HTTP protocol upgrade 
+    client.setHeader('Upgrade', 'Websocket');
+    client.end();
+    
+    client.on('upgrade', function(incMsg, socket, head){                               // emitted when the client receives a response to a previous requested upgrade request (with the appropriate headers)    
+        console.log( 'upgrade event emitted!' );
+    });    
+    
+// server -----------------------------------------------------------------------------
+    var http = require('http');
+    
+    var server = http.createServer().listen(80, 'localhost');
+    
+    server.on('upgrade', function(incMsg, socket, head){                               // emitted when the server receives an upgrade request (with the appropriate headers)    
+        console.log( 'update event emitted!' );
+        
+        socket.write('HTTP/1.1 101 Switching Protocols\r\n' +                          // headers to respond to an HTTP protocol upgrade request 
+        'Connection: Upgrade\r\n' +
+        'Upgrade: something\r\n' + 
+        '\r\n');                                                                       // -! last new line required!  
+    });    
+    </pre>
+    <pre class="cmd">
+// client side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Client/30 upgrade event TEST$ node client
+    upgrade event emitted!
+    
+// server side ------------------------------------------------------------------------
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/HTTP Client/30 upgrade event TEST$ sudo node srv
+    update event emitted!    
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>Agent</mark> Object <mark>globalAgent</mark> / <mark>maxSockets</mark> / <mark>maxFreeSockets</mark> / <mark>sockets</mark> / <mark>freeSockets</mark> / <mark>destory()</mark> / <mark>requests</mark> / <mark>createConnection()</mark> / <mark>keepSocketAlive()</mark> / <mark>reuseSocket()</mark>  / <mark>getName()</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>http</strong>.globalAgent                                                           // returns the global agent which is the default agent for all HTTP client requests    
+            
+            new <strong>http</strong>.Agent(<i class="openable">options:obj<div> 
+                <p> keepAlive: <strong>bol</strong> - allows http clients to keep their connections open (live connection) (Default: <mark>false</mark>) </p>
+                <p> keepAliveMsecs: <strong>nr:ms</strong> - initial delay for TCP Keep-Alive packets (only when <mark>keepAlive:true</mark>) </p>
+                <p> maxSockets: <strong>nr</strong> - maximum number of active sockets allowed (when the agent makes the requests) (multiple http client can connect through the same socket) (Default: <mark>Infinity</mark>) </p> 
+                <p> maxFreeSockets: <strong>nr</strong> - maximum number of socket allowed in free state (connection keep-alive state) (only when <mark>keepAlive:true</mark>)(Default: <mark>256</mark>) </p>
+                <p> timeout: <strong>nr:ms</strong> - destroys open sockets after this time (only when <mark>keepAlive:true</mark>) (Default: <mark>0</mark> = no timeout)</p>
+            </div></i>)                                               // the returned agent instance manages the connections for its HTTP clients   
+                                                                                          deals with pending requests, live connections, destroys|reuse sockets 
+                                                                                          when the agent is set to keep-alive its HTTP clients connections, the <mark>Connection: Keep-Alive</mark> header is automatically sent in the client's request header    
+                    
+            <strong>agent</strong>.maxSockets                                                           // gets or sets how many active sockets the agent is allowed to open at the same time (active socket = traffic going through)   
+            <strong>agent</strong>.maxFreeSockets                                                       // gets or sets how many unused (keep-alive) sockets the agent allowed have 
+            
+            <strong>agent</strong>.sockets                                                              // returns an object which contains sockets currently used by the agent (active sockets)
+            <strong>agent</strong>.freeSockets                                                          // returns an object with the agent's unused sockets (agent 'keep-alive' socket pool)  
+            <strong>agent</strong>.destroy()                                                            // immediately destroys all of the agent's sockets (active and free sockets alike)    
+    
+            <strong>agent</strong>.requests                                                             // returns an object which contains a queue of <strong>clientRequest</strong> objects what are not yet been assigned to sockets    
+            
+            <strong>agent</strong>.createConnection(<strong>port:nr</strong>, <i class="openable">host:str<div>
+                <p> - Default <mark>'localhost'</mark> </p>
+            </div></i>, <i class="openable">fn<div>
+                <p> - <mark>connect</mark> event's listener function (fired on successful connection) </p>
+            </div></i>)                            // synchronously returns a <strong>socket</strong> object, then asynchronously initiates the connection with <mark><strong>socket</strong>.connect()</mark> internally   
+                                                                                          on successful connection returns a <strong>socket</strong> object again which keeps the process alive (this socket started the actual connection)   
+                                                                                          this method is the same as <mark><strong>net</strong>.createConnection()</mark> and <mark><strong>net</strong>.connect()</mark>  
+            
+            <strong>agent</strong>.getName(<strong class="openable">options:obj<div>
+                <p> host: <strong>str</strong> - domain name or IP of the server to issue the request to (Default: <mark>'localhost'</mark>) </p>
+                <p> port: <strong>nr</strong> - remote server port </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> family: 4|6 - ip version </p>
+            </div></strong>)                                                // returns a unique string based on the passed request options 
+            
+            <strong>agent</strong>.keepSocketAlive(<strong>socket</strong>)                                              // <u>[Internally called]</u> when the socket is detached from the request and can be persisted (keep-alive connection) (same as <mark><strong>socket</strong>.unref()</mark>)    
+            <strong>agent</strong>.reuseSocket(<strong>socket</strong>, <strong>clientReq</strong>)                                       // <u>[Internally called]</u> when the socket is attached to a request after being persisted (keep-alive connection) (same as <mark><strong>socket</strong>.ref()</mark>)
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var http = require('http');
+   
+// globalAgent ------------------------------------------------------------------------
+    http.globalAgent;                                                                  // -> Agent { ... }      // global agent is default agent for all http clients  
+    
+// custom agent -----------------------------------------------------------------------
+    var myAgent = new http.Agent({                                                     // creates a new custom agent 
+        keepAlive: true,                                                               // allows 'keep-alive' connections 
+        maxSockets: 5,                                                                 // up to 5 active sockets can be opened 
+        maxFreeSockets: 2,                                                             // can have 2 sockets on 'keep-alive' state 
+        timeout: 5000                                                                  // keep-alive sockets are destroyed after 5 seconds and the connection is dropped 
+    });
+    
+    http.get({host:'some_site.com', agent:myAgent}, function(){ ... });                // the above custom agent manages connections for all these http clients   
+    http.get({host:'some_siteA.com', agent:myAgent}, function(){ ... }); 
+    http.get({host:'some_siteB.com', agent:myAgent}, function(){ ... }); 
+    
+// maxSockets / maxFreeSockets --------------------------------------------------------
+    myAgent.maxSockets                                                                 // -> 5      // agent can open maximum of 5 active sockets 
+    myAgent.maxFreeSockets                                                             // -> 2      // agent can have maximum of 2 free (keep-alive) sockets   
+    
+// sockets / freeSockets / destroy() --------------------------------------------------
+    myAgent.sockets;                                                                   // -> {'some_site.com': [Socket{ ... }]}           // sockets currently used by the agent 
+    myAgent.freeSockets;                                                               // -> { ... }                                      // agent's free sockets (keep-alive sockets)   
+    myAgent.destroy();                                                                 // destorys all of the agent's sockest (live and keep-alive sockets alike)   
+    
+// requests ---------------------------------------------------------------------------
+    myAgent.requests;                                                                  // -> {'some_siteA.com': [ClientRequest{ ... }]}   // pending request queue (requests not yet attached to sockets)    
+    
+// createConnection() -----------------------------------------------------------------
+    myAgent.createConnection(80, 'google.com', function(){                             // -> Socket{ ... } synchronously retuns a socket  // and attempts to create a connection  
+        this                                                                           // -> Socket{ ... } asynchronously                 // on successful connection the callback is called and the connected socket is returned again    
+    });                                                                                                                                   // -! the newly returned socket prevents the process from closing   
+    
+// getName() --------------------------------------------------------------------------
+    http.globalAgent.getName({host:'google.com', port:80, localAddress:'192.168.0.104', family:4});     // -> 'google.com:80:192.168.0.104:4'
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> using global Agent for multiple connections TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    
+    // client-1 -----------------------------------------------------------------------
+    var clent1 = http.get('http://www.erdelyivendeglatas.com/');
+    
+    // client-2 -----------------------------------------------------------------------
+    var clent2 = http.get('http://www.salinapraid.ro/arak');
+    
+    // client-3 -----------------------------------------------------------------------
+    var clent3 = http.get('http://zetelaka.ro/koronavirus');
+    
+    new Promise(function(res, rej){
+        res( http.globalAgent );
+    }).then((res) => console.log( res.sockets ));                                      // returns the sockets connected to each sites 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/10 using global Agent for multiple connections TEST$ node client
+    {
+    'www.erdelyivendeglatas.com:80:': [
+        Socket {
+        connecting: true,
+        _hadError: false,
+        _parent: null,
+        _host: 'www.erdelyivendeglatas.com',
+        _readableState: [ReadableState],
+        _events: [Object: null prototype],
+        _eventsCount: 9,
+        _maxListeners: undefined,
+        _writableState: [WritableState],
+        allowHalfOpen: false,
+        _sockname: null,
+        _pendingData: 'GET / HTTP/1.1\r\n' +
+            'Host: www.erdelyivendeglatas.com\r\n' +
+            'Connection: close\r\n' +
+            '\r\n',
+        _pendingEncoding: 'latin1',
+        server: null,
+        _server: null,
+        parser: [HTTPParser],
+        _httpMessage: [ClientRequest],
+        [Symbol(asyncId)]: 2,
+        [Symbol(kHandle)]: [TCP],
+        [Symbol(kSetNoDelay)]: false,
+        [Symbol(lastWriteQueueSize)]: 0,
+        [Symbol(timeout)]: null,
+        [Symbol(kBuffer)]: null,
+        [Symbol(kBufferCb)]: null,
+        [Symbol(kBufferGen)]: null,
+        [Symbol(kCapture)]: false,
+        [Symbol(kBytesRead)]: 0,
+        [Symbol(kBytesWritten)]: 0
+        }
+    ],
+    'www.salinapraid.ro:80:': [
+        Socket {
+        connecting: true,
+        _hadError: false,
+        _parent: null,
+        _host: 'www.salinapraid.ro',
+        _readableState: [ReadableState],
+        _events: [Object: null prototype],
+        _eventsCount: 9,
+        _maxListeners: undefined,
+        _writableState: [WritableState],
+        allowHalfOpen: false,
+        _sockname: null,
+        _pendingData: 'GET /arak HTTP/1.1\r\nHost: www.salinapraid.ro\r\nConnection: close\r\n\r\n',
+        _pendingEncoding: 'latin1',
+        server: null,
+        _server: null,
+        parser: [HTTPParser],
+        _httpMessage: [ClientRequest],
+        [Symbol(asyncId)]: 6,
+        [Symbol(kHandle)]: [TCP],
+        [Symbol(kSetNoDelay)]: false,
+        [Symbol(lastWriteQueueSize)]: 0,
+        [Symbol(timeout)]: null,
+        [Symbol(kBuffer)]: null,
+        [Symbol(kBufferCb)]: null,
+        [Symbol(kBufferGen)]: null,
+        [Symbol(kCapture)]: false,
+        [Symbol(kBytesRead)]: 0,
+        [Symbol(kBytesWritten)]: 0
+        }
+    ],
+    'zetelaka.ro:80:': [
+        Socket {
+        connecting: true,
+        _hadError: false,
+        _parent: null,
+        _host: 'zetelaka.ro',
+        _readableState: [ReadableState],
+        _events: [Object: null prototype],
+        _eventsCount: 9,
+        _maxListeners: undefined,
+        _writableState: [WritableState],
+        allowHalfOpen: false,
+        _sockname: null,
+        _pendingData: 'GET /koronavirus HTTP/1.1\r\nHost: zetelaka.ro\r\nConnection: close\r\n\r\n',
+        _pendingEncoding: 'latin1',
+        server: null,
+        _server: null,
+        parser: [HTTPParser],
+        _httpMessage: [ClientRequest],
+        [Symbol(asyncId)]: 9,
+        [Symbol(kHandle)]: [TCP],
+        [Symbol(kSetNoDelay)]: false,
+        [Symbol(lastWriteQueueSize)]: 0,
+        [Symbol(timeout)]: null,
+        [Symbol(kBuffer)]: null,
+        [Symbol(kBufferCb)]: null,
+        [Symbol(kBufferGen)]: null,
+        [Symbol(kCapture)]: false,
+        [Symbol(kBytesRead)]: 0,
+        [Symbol(kBytesWritten)]: 0
+        }
+    ]
+    }
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/10 using global Agent for multiple connections TEST$    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> custom Agent TEST </u></h4>
+    <pre>
+    var http = require('http');
+        
+    http.globalAgent.keepAlive = true;                                                 // global agent configured to keep connections alive for 2 seconds
+    http.globalAgent.options.timeout = 4000;                                    
+    
+var myAgent = new http.Agent({keepAlive:true, timeout:8000});                          // custom agent configured to keep connections alive for 8 seconds 
+    
+// client-1 -----------------------------------------------------------------------------------------------------
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){                      // client-1 uses the custom agent 
+        incMsg.on('data', function(chunk){ console.log(chunk.toString()) });
+        incMsg.on('end', function(){ console.log('-- END OF MESSAGE --') });    
+        
+        this.socket.on('close', function(){ 
+            console.log( 'client-1 closed after ' + timer + ' seconds!' ) 
+        });
+    });
+
+// client-2 -----------------------------------------------------------------------------------------------------
+    http.get({host:'localhost', /*agent:undefined*/}, function(incMsg){                // client-2 uses the global agent 
+        incMsg.on('data', function(chunk){ console.log(chunk.toString()) });
+        incMsg.on('end', function(){ console.log('-- END OF MESSAGE --') });    
+        
+        this.socket.on('close', function(){ 
+            console.log( 'client-2 closed after ' + timer + ' seconds!' ) 
+        });
+    });
+    
+// client-3 -----------------------------------------------------------------------------------------------------
+    http.get({host:'localhost', agent:false}, function(incMsg){                        // client-3 uses the newly created default agent just for this connection (which does not keep the connections alive)   
+        incMsg.on('data', function(chunk){ console.log(chunk.toString()) });
+        incMsg.on('end', function(){ console.log('-- END OF MESSAGE --') });    
+        
+        this.socket.on('close', function(){ 
+            console.log( 'client-3 closed after ' + timer + ' seconds!' ) 
+        });
+    });
+    
+    
+    var timer = 1;                                                                     // timer 
+    setInterval(function(){
+        timer++;
+    }, 1000);    
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/11 custom Agent TEST$ node client
+    Server response Success!
+    -- END OF MESSAGE --
+    Server response Success!
+    -- END OF MESSAGE --
+    Server response Success!
+    -- END OF MESSAGE --
+    client-3 closed after 1 seconds!                                                   // connection time outs 
+    client-2 closed after 5 seconds!
+    client-1 closed after 8 seconds!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> custom Agent TEST </u></h4>
+    <p> - at the moment of request the agent opens 2 sockets and passes all 4 client request throug </p>
+    <p> - once the response is received the agent can keep alive only 1 socket, so the other socket is closed along with the connection </p>
+    <p> - I TESTED only on socket is open once the the connection falls back to keep-alive state </p>
+    <pre>
+    var http = require('http');
+    
+    var myAgent = new http.Agent({
+        keepAlive: true,                                                               // keeps connections alive 
+        maxFreeSockets: 1,                                                             // only 1 sockets is allowed in live connection state (keep connection alive after request)
+        maxSockets: 2                                                                  // agent uses up to 2 sockets to make all requests (all 4 clients uses these 2 sockets to connect)  
+    }); 
+    
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){
+        incMsg.on('data', (chunk)=>{ console.log(chunk) })
+        incMsg.on('end', ()=>{ console.log( "---END---" ) });
+        this.socket.on('close', ()=>{ console.log('client-1 disconnected!') });
+    });
+    
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){
+        incMsg.on('data', (chunk)=>{ console.log(chunk) })
+        incMsg.on('end', ()=>{ console.log( "---END---" ) });
+        this.socket.on('close', ()=>{ console.log('client-2 disconnected!') });
+    });
+    
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){
+        incMsg.on('data', (chunk)=>{ console.log(chunk) })
+        incMsg.on('end', ()=>{ console.log( "---END---" ) });
+        this.socket.on('close', ()=>{ console.log('client-3 disconnected!') });
+    });
+    
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){
+        incMsg.on('data', (chunk)=>{ console.log(chunk) })
+        incMsg.on('end', ()=>{ console.log( "---END---" ) });
+        this.socket.on('close', ()=>{ console.log('client-4 disconnected!') });
+    });
+    
+    global.setInterval(()=>{}, 5000);                                                  // this is just for keeping the process running    
+     </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/12 Agent socket limit TEST$ node client
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    ---END---
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    ---END---
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    ---END---
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    ---END---
+    client-2 disconnected!                                                             // client 2 and 4 connection is closed along the socket which is shut down   
+    client-4 disconnected!
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>maxSockets</mark> / <mark>maxFreeSockets</mark> / <mark>sockets</mark> / <mark>freeSockets</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+    var myAgent = new http.Agent({keepAlive:true});
+    
+    myAgent.maxSockets = 500;
+    myAgent.maxFreeSockets = 10;
+    
+    console.log( myAgent.maxSockets );                                                 // -> 500
+    console.log( myAgent.maxFreeSockets );                                             // -> 10
+    
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){
+        incMsg.on('data', (chunk)=>{ console.log( chunk )});
+        incMsg.on('end', ()=>{ console.log( '--- END ---' )});
+    });
+    
+    console.log( myAgent.sockets );                                                    // open socket is here because it is active used by the client 
+    console.log( myAgent.freeSockets );                                                // there is no incative socket 
+    
+    setTimeout(function(){                                                             // after 1 second the connection is finished so the socket is moved to the inactive pool   
+        console.log( myAgent.sockets );
+        console.log( myAgent.freeSockets );
+    },1000);
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/13 maxSockets maxFreeSockets sockets freeSockets destroy() TEST$ node client
+    500                                                                                // myAgent.maxSockets;
+    10                                                                                 // myAgent.maxFreeSockets;
+    {                                                                                  // myAgent.sockets
+    'localhost:80:': [
+        Socket {
+            // ...
+        }
+    ]
+    }
+    {}                                                                                 // myAgent.freeSockets
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    --- END ---
+    {}                                                                                 // myAgent.sockets           // -! after 1 second
+    {                                                                                  // myAgent.freeSockets
+    'localhost:80:': [
+        Socket {
+            // ...
+        }
+    ]
+    }
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/13 maxSockets maxFreeSockets sockets freeSockets destroy() TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>destroy()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    
+// destroing active sockets -----------------------------------------------------------
+    var myAgent = new http.Agent({keepAlive:true});
+    
+    http.get({host:'localhost', agent:myAgent}, function(incMsg){
+        incMsg.on('data', function(chunk){ console.log(chunk) });
+        incMsg.on('end', function(){ console.log('--MESSAGE END--') });
+    }).on('error', function(err){ if(err) console.log(err.message) });                 // error thrown because the socket 'hang up'
+    
+    myAgent.destroy();                                                                 // destroys all agent sockets so far  
+    
+// destroying free sockets-- ----------------------------------------------------------
+    var myAgent2 = new http.Agent({keepAlive:true});
+    
+    http.get({host:'localhost', agent:myAgent2}, function(incMsg){                     // client connection keep-alive
+        incMsg.on('data', function(chunk){ console.log(chunk) });
+        incMsg.on('end', function(){ console.log('--MESSAGE END--') });
+        
+        myAgent2.destroy();                                                            // once the request is finished we destroy all of the agent sockets 
+    }).on('error', function(err){ if(err) console.log(err.message) }); 
+    
+    setTimeout(()=> console.log(myAgent2.freeSockets), 1000);                          // -> {}     // after 1 second we can see that no more sockets are open 
+    </pre>
+    <pre class='cmd'>
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/14 destroy() TEST$ node client
+    socket hang up                                                                     // client-1 throws an error 
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    --MESSAGE END--
+    {}                                                                                 // myAgent2.freeSockets      // after 1 second   
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/14 destroy() TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>requests</mark> TEST </u></h4>
+    <pre>
+var http = require('http');
+    
+http.globalAgent.maxSockets = 1;                                                       // only 1 socket is allowed so the 2nd request (and more) will be queued  
+    
+var client = http.get({host:'localhost'}, function(incMsg){
+    incMsg.on('data', function(chunk){ console.log(chunk) });
+    incMsg.on('end', function(){ console.log('--MESSAGE END--') });
+}).on('error', function(err){ if(err) console.log(err.message) });
+
+var client = http.get({host:'localhost'}, function(incMsg){
+    incMsg.on('data', function(chunk){ console.log(chunk) });
+    incMsg.on('end', function(){ console.log('--MESSAGE END--') });
+}).on('error', function(err){ if(err) console.log(err.message) });
+
+console.log( http.globalAgent.requests );                                              // -> clientRequest object of the 2nd request 
+                                                                                       // only the first request is asigned to the opened socket at this point 
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/15 requests TEST$ node client
+    {                                                                                  // http.globalAgent.requests         // 2nd clientRequest object which is queued up 
+      'localhost:80:': [
+        ClientRequest {
+          _events: [Object: null prototype],
+          _eventsCount: 3,
+          _maxListeners: undefined,
+          outputData: [Array],
+          outputSize: 59,
+          writable: true,
+          destroyed: false,
+          _last: true,
+          chunkedEncoding: false,
+          shouldKeepAlive: true,
+          useChunkedEncodingByDefault: false,
+          sendDate: false,
+          _removedConnection: false,
+          _removedContLen: false,
+          _removedTE: false,
+          _contentLength: 0,
+          _hasBody: true,
+          _trailer: '',
+          finished: true,
+          _headerSent: true,
+          socket: null,
+          _header: 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n',
+          _onPendingData: [Function: noopPendingOutput],
+          agent: [Agent],
+          socketPath: undefined,
+          method: 'GET',
+          maxHeaderSize: undefined,
+          insecureHTTPParser: undefined,
+          path: '/',
+          _ended: false,
+          res: null,
+          aborted: false,
+          timeoutCb: null,
+          upgradeOrConnect: false,
+          parser: null,
+          maxHeadersCount: null,
+          reusedSocket: false,
+          [Symbol(kCapture)]: false,
+          [Symbol(kNeedDrain)]: false,
+          [Symbol(corked)]: 0,
+          [Symbol(kOutHeaders)]: [Object: null prototype]
+        }
+      ]
+    }
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;   // both requests are successful through 1 socket 
+    --MESSAGE END--
+    &lt;Buffer 53 65 72 76 65 72 20 72 65 73 70 6f 6e 73 65 20 53 75 63 63 65 73 73 21&gt;
+    --MESSAGE END--
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/15 requests TEST$ 
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>createConnection()</mark> / <mark>keepSocketAlive()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+    var net = require('net');
+    
+    var myAgent = new http.Agent({keepAlive:false});
+    
+    console.log( myAgent.createConnection === net.createConnection );                  // -> true          // same objects
+    console.log( myAgent.createConnection === net.connect );                           // -> true          // same objects
+    console.log( net.createConnection === net.connect );                               // -> true          // same objects
+    
+    
+    var socket = myAgent.createConnection(80, 'localhost', function(){
+        console.log( socket.localPort );                                               // -> 60718         // the newly returned socket is connected which     keeps the process alive   
+    });
+            
+    console.log( socket.localPort );                                                   // -> undefined     // the returned socket is not yet connected 
+    
+    myAgent.keepSocketAlive(socket);                                                   // method makes the socket to allow the process to be closed   
+    </pre>
+    <pre class="cmd">
+Connection() keepSocketAlive() TEST$ node client
+    true                                                                               // myAgent.createConnection === net.createConnection
+    true                                                                               // myAgent.createConnection === net.connect
+    true                                                                               // net.createConnection === net.connect
+    undefined                                                                          // socket.localPort          // synchronous call
+    60718                                                                              // socket.localPort          // asynchronous call 
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/16 createConnection() keepSocketAlive() TEST$
+    </pre>
+<hr>
+<!------------------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>reuseSocket()</mark> / <mark>getName()</mark> TEST </u></h4>
+    <pre>
+    var http = require('http');
+        
+// reuseSocket() ----------------------------------------------------------------------
+    let client = http.request({host:'localhost'}, function(incMsg){
+        incMsg.on('data', (chunk)=>{ console.log(chunk) });
+        incMsg.on('end', ()=>{ console.log("---END---") });
+    });
+    // client.end();                                                                   // request not setn but the connection is estabilished 
+    
+    setTimeout(function(){
+        http.globalAgent.keepSocketAlive(client.socket);                               // the socket allow the process to be closed (unref()) 
+        http.globalAgent.reuseSocket(client.socket, client);                           // the socket does not allow the process to be closed (ref())
+    }, 1000);
+    
+// getName() --------------------------------------------------------------------------
+    console.log(                                                                       // -> 'google.com:80:192.168.0.104:4'
+        http.globalAgent.getName({
+            host: 'google.com',
+            port: 80,
+            localAddress: '192.168.0.104',
+            family: 4
+        })
+    );
+    
+    console.log(
+        http.globalAgent.getName({})                                                   // -> 'localhost::'
+    );  
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/HTTP/17 reuseSocket() getName() TEST$ node client
+    google.com:80:192.168.0.104:4
+    localhost::
+                                                                                       // the socket prevents the process from being closed 
+    </pre>
+</details>
+    
+</body>
+</html>

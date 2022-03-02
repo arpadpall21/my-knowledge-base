@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> Canvas </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" href="../Assets/stylesPages.css">
+    <script src="../Assets/scriptPages.js"></script>
+</head>    
+<body>
+<h1> Canvas (ver 2.9) </h1>
+    <p> Updated ( 2018-11-05 / 2018-11-29 )</p>
+    <p class="sitenav"> <a href="../index.html">MySite></a> Canvas </p>
+    <p class="subSite"><a href="Drawing Shapes/index.html"> Drawing Shapes > </a></p>
+    <p class="subSite"><a href="Styling/index.html"> Styling > </a></p>
+    <p class="subSite"><a href="Text/index.html"> Text > </a></p>
+    <p class="subSite"><a href="Image and Pixel Manipulation/index.html"> Image and Pixel Manipulation > </a></p>
+    <p class="subSite"><a href="Transformation/index.html"> Transformation > </a></p>
+<table class="table">
+<caption> the <mark>&lt;canvas&gt;</mark> tag </caption>    
+    <tr>
+        <th> Attribute </th>
+        <th> Value </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> height </td>
+        <td> <strong>nr</strong> <span style="color:blue;">(pixels)</span> </td>
+        <td> specifies the height of the element </td>
+    </tr>
+    <tr>
+        <td> width </td>
+        <td> <strong>nr</strong> <span style="color:blue;">(pixels)</span> </td>
+        <td> specifies the width of the element </td>
+    </tr>
+</table><br>
+<table class="table">
+<caption> properties and methods </caption>    
+    <tr>
+        <th> Property / Method </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <prot>HTMLCanvasElement</prot>.getContext("<strong>context</strong>", <i>attribute</i>) </td>
+        <td> provides methods an properties to draw the canvas </td>
+    </tr>
+    <tr>
+        <td> <prot>HTMLCanvasElement</prot>.toDataURL("<i>type</i>", <i>quality(0 - 1)</i>) </td>
+        <td> returns a "dataURL" of the current canvas (resolution 96 dpi) <a href="../01 HTML/Encoded Data in HTML/index.html#url"> dataURL [link]</a></td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.restore() </td>
+        <td> restores the previously saved context state </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.save() </td>
+        <td> saves the current context state (context styles like lineWidht ect.. / clipping region / transformation matrix / dash list) </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Rectangle </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.clearRect(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>) </td>
+        <td> clears (makes transparent) the canvas on the set rectangle area </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.fillRect(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>) </td>
+        <td> draws a "filled" rectangle <u>shape</u> (stroke cannot be added) </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.rect(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>) <br>
+            <prot>canvasCtx2D.path2DObj</prot>.rect(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> creates a rectangle </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.strokeRect(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>) </td>
+        <td> draws a "stroke" rectangle <u>shape</u> (fill cannot be added) </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Paths </td>
+    </tr>
+    <tr>
+        <td> <strong>var path2DObj = </strong>new Path2D() </td>
+        <td> returns a "path2D" object which is used create and store a path for later use, the <mark>fill()</mark> and <mark>stroke()</mark> methods take it as argument and draw it on the canvas </td>
+    </tr>
+    <tr>
+        <td> <prot>canvasCtx2D.path2DObj</prot>.addPath(<strong>path2dObj</strong>, <i>SVGMatrix</i>) </td>
+        <td> adds another "path2DObj" to the current "path2DObj" (merges them) <u style="color:orangered;">(no IE / EDGE support!)</u> </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.arc(<strong>x</strong>, <strong>y</strong>, <strong>radius</strong>, <strong>startAng(radian)</strong>, <strong>endAng(radian)</strong>, <i>antiClockWhise_boolean</i>) <br>
+            <prot>canvasCtx2D.path2DObj</prot>.arc(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> creates an arc/curve (has its own starting coordintes) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.arcTo(<strong>xCp</strong>, <strong>yCp</strong>, <strong>xDir</strong>, <strong>yDir</strong>, <strong>radius</strong>) <br>
+        <prot>canvasCtx2D.path2DObj</prot>.arc(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td>  creates an arc/curve between two tangent (first tangent extended if needed) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.beginPath() </td>
+        <td> resets the "sub-path" list (creates a new shape) </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.bezierCurveTo(<strong>x1Cp</strong>, <strong>y1Cp</strong>, <strong>x2Cp</strong>, <strong>y2Cp</strong>, <strong>xEnd</strong>, <strong>yEnd</strong>) <br>
+            <prot>canvasCtx2D.path2DObj</prot>.bezierCurveTo(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> creates a "cubic Bézier" curve between two points </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.clip() </td>
+        <td> clips the current shape's region (all further drawings are limited to this region only) </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.closePath() <br>
+            <prot>canvasCtx2D.path2DObj</prot>.closePath()
+        </td>
+        <td> closes the current path from the current point to the starting point (creates the last <u>closing</u> stroke of the path) </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.ellipse(<strong>x</strong>, <strong>y</strong>, <strong>xRadius</strong>, <strong>yRadius</strong>, <strong>rotation(radian)</strong>, <strong>startAng(radian)</strong>, <strong>endAng(radian)</strong>, <i>antiClockWhise_boolean</i>) <br>
+            <prot>canvasCtx2D.path2DObj</prot>.ellipse(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> creates an ellipse (has its own starting coordintes) <span style="color:orangered;">(no IE Support)</span> </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.fill(<i>path2DObj</i>, <i>"nonzero/evenodd"</i>) </td>
+        <td> fills the current path (optionally the path from the path object), (optionally can fill every second sub-path nested shapes) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.isPointInPath(<strong>x</strong>, <strong>y</strong>) </td>
+        <td> returns a boolean value indicating if the given coordinates are in the current path </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>canvasCtx2D</strong>.lineTo(<strong>x</strong>, <strong>y</strong>) <br>
+            <prot>canvasCtx2D.path2DObj</prot>.lineTo(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> creates a line from the last point to the specified point </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.moveTo(<strong>x</strong>, <strong>y</strong>) <br> 
+            <prot>canvasCtx2D.path2DObj</prot>.moveTo(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> specifies a point without creating a line </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.quadraticCurveTo(<strong>xCp</strong>, <strong>yCp</strong>, <strong>xEnd</strong>, <strong>yEnd</strong>) <br>
+            <prot>canvasCtx2D.path2DObj</prot>.quadraticCurveTo(<span style="color:#04a200;"> &uarr; same as above &uarr;</span>)
+        </td>
+        <td> creates a "quadratic Bézier" curve between two points (same as "cubic Bézier" curve but it has only 1 control point) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.stroke(<i>path2DObj</i>) </td>
+        <td> draws the current path (optionally the path from the path object) </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Styling </td>
+    </tr>
+    <tr>
+        <td> <prot>canvasCtx2D.canvasGradient</prot>.addColorStop(<strong>colorStop_nr(0.0 - 1.0)</strong>, "<strong>colorCSS</strong>") </td>
+        <td> specifies the color and the color stop in a canvasGradient object </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.createLinearGradient(<strong>xStart</strong>, <strong>yStart</strong>, <strong>xEnd</strong>, <strong>yEnd</strong>) </td>
+        <td> returns a linearGradientCanvas object with the linear coordinates set (opaque object) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.createPattern(<strong>media</strong>, "<strong>repeat</strong>") </td>
+        <td> creates a canvasPatternObject by using a Picture, Video or Canvas element </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.createRadialGradient(<strong>xInnerCircle</strong>, <strong>yInnerCircle</strong>, <strong>radiusInnerCircle</strong>, <strong>xOuterCircle</strong>, <strong>yOuterCircle</strong>, <strong>radiusOuterCircle</strong>) </td>
+        <td> returns a radialGradientCanvas object with the radial coordinates set (opaque object) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.fillStyle = <strong>"colorCSS"/gradient/pattern</strong> </td>
+        <td> gets or sets the fill style of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.getLineDash() </td>
+        <td> returns the line dash patern as an Array of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.globalAlpha = <strong>opacityValueCSS</strong> </td>
+        <td> gets or sets the transparency of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.globalCompositeOperation = "<strong>compositionValue</strong>" 
+            (<a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation" target="_blank">MDN Values [link]</a>)
+        </td>
+        
+        <td> gets or sets the overlapping or <u>blending</u> style between the previous and new spahes (images) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.lineCap = "<strong>butt/round/square</strong>" </td>
+        <td> gets or sets the line ending cap (edge) style of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.lineDashOffset = <strong>nr(px)</strong> </td>
+        <td> gets or sets the "offset" of the dashed line (moves "off" [ex: horizontal line moves dashed line to the left on its frame]) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.lineJoin = "<strong>miter/round/bevel</strong>" </td>
+        <td> gets or sets the type of corner created when two lines meet of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.lineWidth = <strong>nr(px)</strong> </td>
+        <td> gets or sets the line width of the canvas context (line width is split by half/half around shapes) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.miterLimit = <strong>nr(px)</strong> </td>
+        <td> gets or sets the maximum miter length (default <mark>10</mark>), if the mitter is bigger than the set limit value (<mark>(lineWidth / 2 ) / miterLength</mark>) line join set to <mark>"blunt"</mark> (only works if the lineJoin is set to "miter") </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.setLineDash([<i>line_nr(px)</i>, <i>space_nr(px)</i>, <i>...</i>]) </td>
+        <td> sets the line dash pattern of the canvas context (no value = no line dash / 1 value = 1line and 1space (repeat)) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.shadowBlur = <strong>nr(blurValue)</strong> </td>
+        <td> gets or sets the shadow blur value of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.shadowColor = "<strong>colorCSS</strong>" </td>
+        <td> gets or sets the shadow color of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.shadowOffsetX = <strong>nr(px)</strong> </td>
+        <td> gets or sets the horizontal distance of the shadow from the shape of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.shadowOffsetY = <strong>nr(px)</strong> </td>
+        <td> gets or sets the vertical distance of the shadow from the shap of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.strokeStyle = <strong>"colorCSS"/gradient/pattern</strong> </td>
+        <td> gets or sets the stroke style of the canvas context </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Text </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.fillText("<strong>text</strong>", <strong>x</strong>, <strong>y</strong>, <i>max_width(nr)</i>) </td>
+        <td> draws a filled text on the canvas </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.font = "<strong>CSS_font("font" shorthand property)</strong>" </td>
+        <td> gets or sets the font style of the canvas context (font-size and font-family minimum required!) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.measureText("<strong>text</strong>") </td>
+        <td> returns the <mark>TextMetrics</mark> object which has the <mark>width</mark> property containing the given text length (in pixels) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.strokeText("<strong>text</strong>", <strong>x</strong>, <strong>y</strong>, <i>max_width(nr)</i>) </td>
+        <td> draws a stroke (not filled) text on the canvas </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.textAlign = "<strong>start(default)/end/left/right/center</strong>" </td>
+        <td> gets or sets the horizontal position to the text <u>compared to the set</u> text coordinates of the canvas context </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.textBaseline = "<strong>alphabetic(default)/top/bottom/middle/ideographic/hanging</strong>" </td>
+        <td> gets or sets the vertical (baseline) position of the text of the canvas context </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Image and Pixel Manipulation </td>
+    </tr>
+    <tr>
+        <td> new ImageData(<i>Uint8ClampedArray</i>, <strong>width</strong>, <strong>height</strong>) <br>
+             new ImageData(<strong>ImageData</strong>)
+        </td>
+        <td> returns an <mark>imageData</mark> object (properties : <mark>width</mark> / <mark>height</mark> / <mark>data</mark>), the <mark>data</mark> property contains a "Uint8ClampedArray" which describles the image as imageData </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>canvasCtx2D</strong>.createImageData(<strong>width</strong>, <strong>height</strong>) <br>
+            <strong>canvasCtx2D</strong>.createImageData(<strong>imageDataObj</strong>)
+        </td>
+        <td> returns an <mark>imageData</mark> object (properties : <mark>width</mark> / <mark>height</mark> / <mark>data</mark>), the <mark>data</mark> property contains a "Uint8ClampedArray" which describles the image as imageData  </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.drawImage(<strong>media</strong>, <i>xSlice</i>, <i>ySlice</i>, <i>sliceWidth</i>, <i>sliceHeight</i>, <strong>x</strong>, <strong>y</strong>, <i>width</i>, <i>height</i>) </td>
+        <td> draws (Image, Video, SVG or Canvas) onto the canvas element (can slice part of the source / increas or decrease the size) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.getImageData(<strong>x</strong>, <strong>y</strong>, <strong>width</strong>, <strong>height</strong>) </td>
+        <td> returns an <mark>imageData</mark> object from the targeted <u>canvas area</u> (does not work on cross origin images) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.imageSmoothingEnabled = <strong>boolean</strong> </td>
+        <td> gets or sets the image smoothing protocol for the canvas context (default <mark>true</mark>) <span style="color:orangered;">(Experimental Technology [2018-11-18])</span> </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.putImageData(<strong>imageDataObj</strong>, <strong>x</strong>, <strong>y</strong>, <i>xSlice</i>, <i>ySlice</i>, <i>sliceWidth</i>, <i>sliceHeight</i>) </td>
+        <td> draws an <mark>imageData</mark> object onto the canvas (can slice part from it) </td>
+    </tr>
+    <tr>
+        <td> <prot>ImageData.prototype</prot>.data </td>
+        <td> returns a <mark>Uint8ClampedArray</mark> <u>typed array</u> which holds the image data (every 4 values represent a pixel (rgba)) </td>
+    </tr>
+    <tr>
+        <td> <prot>ImageData.prototype</prot>.height </td>
+        <td> returns the height of the "imageData" object </td>
+    </tr>
+    <tr>
+        <td> <prot>ImageData.prototype</prot>.width </td>
+        <td> returns the width of the "imageData" object </td>
+    </tr>
+    <tr>
+        <td colspan="2"> Transformation </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.resetTransform() </td>
+        <td> resets the current tranformation matrix (equal to <mark>setTransform(1, 0, 0, 1, 0, 0)</mark>) <u style="color:orangered;">(no EDGE support [2018-11-19])</u> </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.rotate(<strong>radian</strong>) </td>
+        <td> rotates <u>the canvas grid</u> arround the <mark>0, 0</mark> (top left corner) matrix center point of the canvas </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.scale(<strong>x</strong>, <strong>y</strong>) </td>
+        <td> scales <u>the canvas grid</u> arround the <mark>0, 0</mark> (top left corner) (default size is <mark>1</mark> / negative values are allowed they  create mirror effects) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.setTransform(<strong>xScale</strong>, <strong>xSkew</strong>, <strong>ySkew</strong>, <strong>yScale</strong>, <strong>xMove</strong>, <strong>yMove</strong>) </td>
+        <td> resets the transformation matrix to default values than scales, skews, translates, rotates <u>the canvas grid (transformation matrix) <b>again</b></u>  (rotation is achivable (90 degrees maximum) by using the 2 skew values in oposite direction) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.transform(<strong>xScale</strong>, <strong>xSkew</strong>, <strong>ySkew</strong>, <strong>yScale</strong>, <strong>xMove</strong>, <strong>yMove</strong>) </td>
+        <td> scales, skews, translates, rotates <u>the canvas grid (transformation matrix)</u> (rotation is achivable (90 degrees maximum) by using the 2 skew values in oposite direction) </td>
+    </tr>
+    <tr>
+        <td> <strong>canvasCtx2D</strong>.translate(<strong>x</strong>, <strong>y</strong>) </td>
+        <td> oves <u>the canvas grid</u> on the "x" and "y" axis relative to the <mark>0, 0</mark> (top left corner) coordinates </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank"> MDN Canvas API </a></p>
+    <p><a href="https://www.w3schools.com/graphics/canvas_reference.asp" target="_blank"> W3Schools Canvas Reference </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - the canvas object cannot be created by using constructor (like <mark>new Canvas()</mark>), you must use or create a <mark>canvas</mark> HTML tag </p>
+    <ol> - to save up performance 
+        <li>) draw images off canvas as cash images rather than scale them which uses considerable resources </li>
+        <li>) you can use multiple canvas elements as layers (like in games [background, UI, game layer]) to prevent rendering unnecessary regions </li>
+        <li>) turn off canvas transparencey by using <mark>canvasContext2D.getContext("2d", {alpha:false})</mark> attribute </li>
+    </ol>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>&lt;canvas&gt;</mark> tag has no drawing abillities on its own! but provides a container (by default 300 X 150 pixels) to draw graphics on the fly via scripting (usually JavaScript) </p>
+    <p> - the canvas API is a <u>Drawing Interface (bit-map)</u> once is drawn the only way to manipulate it is to redraw the canvas </p>
+    <p> - the canvas object cannot be created by using constructor (like <mark>new Canvas()</mark>), you must use or create a <mark>canvas</mark> HTML tag </p>
+    <p> - the <mark>getContext()</mark> method returns an object which provides methods and properties to draw the canvas </p>
+    <pre class="syntax">
+SYNTAX :    &lt;canvas id="<strong>canvasId"</strong>&gt;&lt;/canvas&gt;
+
+            &lt;script&gt;
+                var <strong>canvas</strong> = document.getElementById("<strong>canvasId</strong>");          // get the canvas element as JS object
+                var <strong>contextId</strong> = <strong>canvas</strong>.getContext("<strong>context</strong>", <i>attribute</i>)    // the <strong>contextId</strong> provides methods and properties to draw the canvas 
+            &lt;/script&gt;
+            
+    <span style="color:darkgray;">// ---------------------------------------------------------------------- </span>
+            <prot>HTMLCanvasElement</prot>.getContext("<strong>context</strong>", <i>attribute</i>)
+                - "<strong>context</strong>" : sets the drawing interface context (<mark>"2d"</mark> / <mark>...</mark>) 
+                - <i>attribute</i> : context attribute (<mark>{alpha:false}</mark> sets the 2d context fully opaque = default canvas background black <u>(performance upgrade)</u> <span style="color:orange;">(no EDGE / IE support)</span>)
+            
+            <prot>HTMLCanvasElement</prot>.toDataURL("<i>type</i>", <i>quality(0 - 1)</i>)            // returns a "dataURL" of the current canvas (resolution 96 dpi) <a href="../01 HTML/Encoded Data in HTML/index.html#url"> dataURL [link]</a>
+                - "<i>type</i>" : image format (default "image/png")
+                - <i>quality(0 - 1)</i> : image quality (default <mark>0.92</mark>)
+                
+            <strong>canvasCtx2D</strong>.save()                                             // saves the current context state (context styles like lineWidht ect.. / clipping region / transformation matrix / dash list)  
+            <strong>canvasCtx2D</strong>.restore()                                          // restores the previously saved context state 
+    </pre>
+    <p> - the <mark>{alpha:false}</mark> 2d context attribute sets the canvas to fully opaque (background color black), this is intended to speed up performance </p>
+    <pre>
+    &lt;canvas id="canvas1"&gt;
+        &lt;img src="backupImage.jpg" alt=""&gt;                                 // -> backup image specified in case canvas is not supported
+    &lt;/canvas&gt;
+    &lt;canvas id="canvas2"&gt;
+&lt;script&gt;
+    var myCanvas = document.getElementById('canvas1');
+    ctx = canvas1.getContext("2d");                                        // creating a "2d" drawing context
+    ctx.save();                                                            // save the current (default) canvas state
+// create and style the desired line  
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "green";
+    ctx.moveTo(0, 0);
+    ctx.lineTo(300, 150);
+// draw the actual line    
+    ctx.stroke();
+    
+    ctx.restore();                                                         // context state restored (all further context style reset to default [to previously saved state])
+
+// {alpha:false} attribute
+    var ctx2 = document.getElementById('canvas2').getContext("2d", {alpha:false});      // canvas fully opaque (canvas background color black)
+    ctx.strokeStyle = "green";                                             // line color set because of the black canvas background 
+    ctx.moveTo(0, 0);
+    ctx.lineTo(300, 150);
+    ctx.stroke();
+&lt;script&gt;    
+    </pre>
+    <p> - convert canvas to "dataURL" that use as image soruce </p>
+    <pre>
+    &lt;canvas id="demo"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var ctx = document.getElementById("demo").getContext("2d");
+        // script to draw the canvas (we pretend that the canvas is drawn!)
+    
+    var imageDataURL = canvas.toDataURL("image/jpeg", 1);                  // canvas converted to a "dataURI" (image type "jpeg", full quality "1")
+    
+    document.getElementById("demoImage").src = imageDataURL;               // image printed by using the "dataURL" as source
+&lt;/script&gt;
+    </pre>
+<details class="example">
+    <summary> Example : </summary>
+<h4><u> my first basic canvas </u></h4>    
+    <canvas id="myFirstCanvas" style="border:double 1px black;"></canvas>
+    <canvas id="myFirstCanvas2" style="border:double 1px black;"></canvas>
+<script>
+    var canvas1 = document.getElementById('myFirstCanvas');
+    ctx = canvas1.getContext("2d");
+    ctx.moveTo(10, 10);
+    ctx.lineTo(290, 140);
+    ctx.moveTo(290, 10);
+    ctx.lineTo(10, 140);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.arc(150, 74, 50, 0, 2 * Math.PI);
+    ctx.moveTo(70, 40);
+    ctx.stroke();
+    
+// canvas2    
+    var canvas2 = document.getElementById("myFirstCanvas2").getContext("2d");
+    canvas2.beginPath();
+    canvas2.arc(150, 74, 50, 0, 2 * Math.PI);
+    canvas2.stroke();
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="myFirstCanvas" style="border:double 1px black;"&gt;&lt;/canvas&gt;
+    &lt;canvas id="myFirstCanvas2" style="border:double 1px black;"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var canvas1 = document.getElementById('myFirstCanvas');
+    ctx = canvas1.getContext("2d");
+    ctx.moveTo(10, 10);
+    ctx.lineTo(290, 140);
+    ctx.moveTo(290, 10);
+    ctx.lineTo(10, 140);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.arc(150, 74, 50, 0, 2 * Math.PI);
+    ctx.moveTo(70, 40);
+    ctx.stroke();
+    
+// canvas2    
+    var canvas2 = document.getElementById("myFirstCanvas2").getContext("2d");
+    canvas2.beginPath();
+    canvas2.arc(150, 74, 50, 0, 2 * Math.PI);
+    canvas2.stroke();
+&lt;/script&gt;   
+        </pre>
+        </details>
+<h4><u> simple canvas TEST 2 </u></h4>    
+    <canvas style="border:solid 1px black;" id="canvas2"></canvas>
+<script>
+    var ctx2 = document.getElementById("canvas2").getContext("2d");
+    ctx2.beginPath();
+    ctx2.moveTo(20, 20);
+    ctx2.lineTo(40, 40);
+    ctx2.lineTo(40, 20);
+    ctx2.lineWidth = 5;
+    ctx2.stroke();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas style="border:solid 1px black;" id="canvas2"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var ctx2 = document.getElementById("canvas2").getContext("2d");
+    ctx2.beginPath();
+    ctx2.moveTo(20, 20);
+    ctx2.lineTo(40, 40);
+    ctx2.lineTo(40, 20);
+    ctx2.lineWidth = 5;
+    ctx2.stroke();
+&lt;/script&gt;        
+        </pre>
+        </details>
+<h4><u> backup image Test </u></h4>    
+    <p> - if browser has no canvas support like IE the actual image will be displayed </p>
+    <canvas id="supportTEST" style="border:solid 1px black">
+        <img src="No Canvas Support.jpg" alt="no Canvas Support">           <!-- backup image set -->
+    </canvas>
+<script>
+    var supportCanvasTest = function() {
+        var ctx = document.getElementById("supportTEST").getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = "green";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 5;
+        ctx.moveTo(150, 25);
+        ctx.lineTo(200, 130);
+        ctx.lineTo(100, 130);
+        ctx.closePath();                    // the "closePath()" creates the last closing line, if you style the line before closing the path the last line won't be styled! 
+        ctx.fill();
+        ctx.stroke();
+    }
+    
+    supportCanvasTest();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="supportTEST" style="border:solid 1px black"&gt;
+        &lt;img src="No Canvas Support.jpg" alt="no Canvas Support"&gt;           <!-- backup image set -->
+    &lt;/canvas&gt;
+&lt;script&gt;
+    var supportCanvasTest = function() {
+        var ctx = document.getElementById("supportTEST").getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = "green";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 5;
+        ctx.moveTo(150, 25);
+        ctx.lineTo(200, 130);
+        ctx.lineTo(100, 130);
+        ctx.closePath();                    // the "closePath()" creates the last closing line, if you style the line before closing the path the last line won't be styled! 
+        ctx.fill();
+        ctx.stroke();
+    }
+    
+    supportCanvasTest();
+&lt;/script&gt;       
+        </pre>
+        </details>
+<h4><u> <mark>.getContext("2d", {alpha:false})</mark> TEST </u></h4>
+    <p> - the context attribute <mark>{alpha:false}</mark> sets the canvas of opaque (never shows what's under it), this is intended to speed up performance</p>
+    <canvas id="alphaFalse" style="border:solid 2px black; position:absolute; background-color:rgba(255, 255, 255, 0.5);"></canvas>
+    <canvas id="alphaFalse2" style="border:solid 2px black; position:absolute; left:350px; background-color:rgba(255, 255, 255, 0.5);"></canvas>
+    <p> - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST </p>
+    <p> - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST </p>
+    <p> - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST </p>
+    <p> - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST </p>
+    <p> - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST </p>
+<script>
+    var fullyOpaqueCanvas = function() {
+        var ctx = document.getElementById("alphaFalse").getContext("2d");
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "blue";
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.moveTo(0, 150);
+        ctx.lineTo(300, 0);
+        ctx.stroke();
+    }
+    fullyOpaqueCanvas();
+    
+    var fullyOpaqueCanvas2 = function() {
+        var ctx = document.getElementById("alphaFalse2").getContext("2d", {alpha:false});       // canvas element is fully opaque 
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "blue";
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.moveTo(0, 150);
+        ctx.lineTo(300, 0);
+        ctx.stroke();
+    }
+    fullyOpaqueCanvas2();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="alphaFalse" style="border:solid 2px black; position:absolute; background-color:rgba(255, 255, 255, 0.5);"&gt;&lt;/canvas&gt;
+    &lt;canvas id="alphaFalse2" style="border:solid 2px black; position:absolute; left:350px; background-color:rgba(255, 255, 255, 0.5);"&gt;&lt;/canvas&gt;        // background color never applied
+    &lt;p&gt; - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST &lt;/p&gt;
+    &lt;p&gt; - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST &lt;/p&gt;
+    &lt;p&gt; - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST &lt;/p&gt;
+    &lt;p&gt; - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST &lt;/p&gt;
+    &lt;p&gt; - TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST &lt;/p&gt;
+&lt;script&gt;
+    var fullyOpaqueCanvas = function() {
+        var ctx = document.getElementById("alphaFalse").getContext("2d");
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "blue";
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.moveTo(0, 150);
+        ctx.lineTo(300, 0);
+        ctx.stroke();
+    }
+    fullyOpaqueCanvas();
+    
+    var fullyOpaqueCanvas2 = function() {
+        var ctx = document.getElementById("alphaFalse2").getContext("2d", {alpha:false});               // canvas element is fully opaque 
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "blue";
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 150);
+        ctx.moveTo(0, 150);
+        ctx.lineTo(300, 0);
+        ctx.stroke();
+    }
+    fullyOpaqueCanvas2();
+&lt;/script&gt; 
+        </pre>
+        </details>
+<h4><u> <mark>save()</mark> / <mark>restore()</mark> TEST </u></h4>    
+    <canvas id="saveRestore" style="border:solid 1px black"></canvas>
+<script>
+    var saveRestoreFn = function() {
+        var ctx = document.getElementById("saveRestore").getContext('2d');
+        ctx.save();                             // saves the current context state (default styles)
+        
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.moveTo(20, 10);
+        ctx.lineTo(20, 140);
+        ctx.stroke();
+        
+        ctx.save();                             // curent context state saved 
+        
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "orange";
+        ctx.beginPath();
+        ctx.moveTo(40, 10);
+        ctx.lineTo(40, 140);
+        ctx.stroke();
+        
+        ctx.beginPath();                        // same styles used here too
+        ctx.moveTo(60, 10);
+        ctx.lineTo(60, 140);
+        ctx.stroke();
+        
+        ctx.restore();                          // previously saved context state restored
+        
+        ctx.beginPath();                        
+        ctx.moveTo(80, 10);
+        ctx.lineTo(80, 140);
+        ctx.stroke();
+        
+        ctx.restore();                          // previously saved context (default) state restored
+        
+        ctx.beginPath();                        
+        ctx.moveTo(100, 10);
+        ctx.lineTo(100, 140);
+        ctx.stroke();
+    }
+    saveRestoreFn();
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="saveRestore" style="border:solid 1px black"&gt;&lt;/canvas&gt;
+&lt;script&gt;
+    var saveRestoreFn = function() {
+        var ctx = document.getElementById("saveRestore").getContext('2d');
+        ctx.save();                             // saves the current context state (default styles)
+        
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.moveTo(20, 10);
+        ctx.lineTo(20, 140);
+        ctx.stroke();
+        
+        ctx.save();                             // curent context state saved 
+        
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "orange";
+        ctx.beginPath();
+        ctx.moveTo(40, 10);
+        ctx.lineTo(40, 140);
+        ctx.stroke();
+        
+        ctx.beginPath();                        // same styles used here too
+        ctx.moveTo(60, 10);
+        ctx.lineTo(60, 140);
+        ctx.stroke();
+        
+        ctx.restore();                          // previously saved context state restored
+        
+        ctx.beginPath();                        
+        ctx.moveTo(80, 10);
+        ctx.lineTo(80, 140);
+        ctx.stroke();
+        
+        ctx.restore();                          // previously saved context (default) state restored
+        
+        ctx.beginPath();                        
+        ctx.moveTo(100, 10);
+        ctx.lineTo(100, 140);
+        ctx.stroke();
+    }
+    saveRestoreFn();
+&lt;/script&gt;    
+        </pre>
+        </details>
+<!------------------------------------------------------------------------------------------------------------------------------------------>
+<h4><u> <mark>dataURL()</mark> method TEST </u></h4>    
+    <p> Tested with Edge because the <mark>toDataURL()</mark> method doesn't allow to get cross origin <u>images</u> (if there is no image used in canvas this problem does not persist!) and Chrome sees local sites as cross origin [2018-11-18] </p>
+    <canvas id="imageData_getIt" style="border:solid 1p black;"></canvas>
+    <img id="dataSource" alt="dataUrl source Test">
+<script>
+    var getImageDataFn = function() {
+        var ctx = document.getElementById("imageData_getIt").getContext("2d");
+        var img = new Image();
+        img.src = "Pictures/camaro.jpg";
+        
+        img.onload = function() {
+            ctx.drawImage(img, 140, 80, 300, 150, 0, 0, 300, 150);
+            var dataURLimage = document.getElementById("imageData_getIt").toDataURL();      // canvas returned as data URL 
+            document.getElementById("dataSource").src = dataURLimage;                       // image source dataURL printed 
+        }
+    }
+    getImageDataFn();
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;canvas id="imageData_getIt" style="border:solid 1p black;"&gt;&lt;/canvas&gt;
+    &lt;img id="dataSource" alt="dataUrl source Test"&gt;
+&lt;script&gt;
+    var getImageDataFn = function() {
+        var ctx = document.getElementById("imageData_getIt").getContext("2d");
+        var img = new Image();
+        img.src = "Pictures/camaro.jpg";
+        
+        img.onload = function() {
+            ctx.drawImage(img, 140, 80, 300, 150, 0, 0, 300, 150);
+            var dataURLimage = document.getElementById("imageData_getIt").toDataURL();      // canvas returned as data URL 
+            document.getElementById("dataSource").src = dataURLimage;                       // image source dataURL printed 
+        }
+    }
+    getImageDataFn();
+&lt;/script&gt;    
+        </pre>
+</details>
+</details> 
+
+    
+    
+    
+    
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
+</body>
+</html>

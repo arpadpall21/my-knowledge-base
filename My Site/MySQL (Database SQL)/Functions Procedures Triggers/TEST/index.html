@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> TEST </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css"></script> 
+    <script src="../../../Assets/scriptPages.js"></script> 
+</head>
+<body>
+<h1> TEST </h1>
+    <p class="sitenav"> 
+        <a href="../index.html"> &lt; Back  </a> 
+    </p>
+<h2 style="color:darkblue;"><u> Running <mark>SELECT</mark> / <mark>UPDATE</mark> / <mark>INSERT INTO</mark> / <mark>DELETE</mark> statement in function body </u></h2>
+    <p STYLE="color:green; font-size:1.1em;"> <u>Allowed :</u> <mark>UPDATE</mark> / <mark>INSERT INTO</mark> / <mark>DELETE</mark> </p>
+    <p STYLE="color:orangered; font-size:1.1em;"> <u>Not Allowed :</u> <mark>SELECT</mark> </p>
+    <pre class="cmd">
+// DELETE -----------------------------------------------------------------------------
+    mysql> SELECT * FROM Students;
+    +------------+------------+-----------+---------------------+
+    | student_id | first_name | last_name | birth_date          |
+    +------------+------------+-----------+---------------------+
+    |          1 | Pall       | Arpad     | 1985-04-12 12:12:12 |
+    |          2 | Biro       | Biro      | 1974-02-14 02:54:00 |
+    |          3 | Gyula      | Szolosi   | 1963-03-14 07:04:00 |
+    |          4 | Feri       | Gaspar    | 1958-09-16 09:38:00 |
+    |          5 | Lui        | Lukacs    | 1976-05-30 01:59:52 |
+    |          7 | Ferenc     | Gaspar    | 1995-04-23 00:00:00 |
+    |          8 | Lukacs     | Levente   | 1962-08-14 21:21:21 |
+    |          9 | Kati       | Jo        | 1998-12-12 23:00:07 |
+    |         10 | Feri       | Kaszas    | 1978-07-12 12:31:00 |
+    |         11 | Kaszas     | Ferenc    | 2000-01-01 00:00:00 |
+    |         12 | Gyurcsany  | Ferenc    | 1985-07-11 12:31:00 |
+    |         13 | Orban      | Victor    | 1961-04-11 17:41:00 |
+    |         14 | Balasi     | Szabolcs  | 1988-05-14 00:00:00 |
+    +------------+------------+-----------+---------------------+
+    13 rows in set (0.00 sec)
+    
+    mysql> DELIMITER $$
+    mysql> CREATE FUNCTION del_()
+        ->   RETURNS VARCHAR(30)
+        ->     BEGIN
+        ->       DELETE FROM Students WHERE student_id=14;
+        ->       RETURN 'OK';
+        ->     END$$
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> DELIMITER ;
+    mysql> SELECT del_();
+    +--------+
+    | del_() |
+    +--------+
+    | OK     |
+    +--------+
+    1 row in set (0.00 sec)
+    
+    mysql> SELECT * FROM Students;
+    +------------+------------+-----------+---------------------+
+    | student_id | first_name | last_name | birth_date          |
+    +------------+------------+-----------+---------------------+
+    |          1 | Pall       | Arpad     | 1985-04-12 12:12:12 |
+    |          2 | Biro       | Biro      | 1974-02-14 02:54:00 |
+    |          3 | Gyula      | Szolosi   | 1963-03-14 07:04:00 |
+    |          4 | Feri       | Gaspar    | 1958-09-16 09:38:00 |
+    |          5 | Lui        | Lukacs    | 1976-05-30 01:59:52 |
+    |          7 | Ferenc     | Gaspar    | 1995-04-23 00:00:00 |
+    |          8 | Lukacs     | Levente   | 1962-08-14 21:21:21 |
+    |          9 | Kati       | Jo        | 1998-12-12 23:00:07 |
+    |         10 | Feri       | Kaszas    | 1978-07-12 12:31:00 |
+    |         11 | Kaszas     | Ferenc    | 2000-01-01 00:00:00 |
+    |         12 | Gyurcsany  | Ferenc    | 1985-07-11 12:31:00 |
+    |         13 | Orban      | Victor    | 1961-04-11 17:41:00 |                      // record 14 deleted 
+    +------------+------------+-----------+---------------------+
+    12 rows in set (0.01 sec)
+    
+// SELECT -----------------------------------------------------------------------------
+    mysql> CREATE FUNCTION show_()
+        ->   RETURNS CHAR(3)
+        ->     BEGIN
+        ->       SELECT * FROM Students;
+        ->       RETURN 'OK';
+        ->     END$$
+    ERROR 1415 (0A000): Not allowed to return a result set from a function             // -! SELECT statement not allowed in function body   
+    mysql> 
+    
+// INSERT INTO ------------------------------------------------------------------------
+    mysql> DELIMITER $$
+    mysql> CREATE FUNCTION ins()
+        ->   RETURNS CHAR(2)
+        ->     BEGIN
+        ->       INSERT INTO Students VALUES(14, 'Balasi', 'Szabolcs', '1987-07-16');
+        ->       RETURN 'OK';
+        ->     END$$
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> DELIMITER ;
+    mysql> SELECT ins();
+    +-------+
+    | ins() |
+    +-------+
+    | OK    |
+    +-------+
+    1 row in set (0.01 sec)
+    
+    mysql> SELECT * FROM Students;
+    +------------+------------+-----------+---------------------+
+    | student_id | first_name | last_name | birth_date          |
+    +------------+------------+-----------+---------------------+
+    |          1 | Pall       | Arpad     | 1985-04-12 12:12:12 |
+    |          2 | Biro       | Biro      | 1974-02-14 02:54:00 |
+    |          3 | Gyula      | Szolosi   | 1963-03-14 07:04:00 |
+    |          4 | Feri       | Gaspar    | 1958-09-16 09:38:00 |
+    |          5 | Lui        | Lukacs    | 1976-05-30 01:59:52 |
+    |          7 | Ferenc     | Gaspar    | 1995-04-23 00:00:00 |
+    |          8 | Lukacs     | Levente   | 1962-08-14 21:21:21 |
+    |          9 | Kati       | Jo        | 1998-12-12 23:00:07 |
+    |         10 | Feri       | Kaszas    | 1978-07-12 12:31:00 |
+    |         11 | Kaszas     | Ferenc    | 2000-01-01 00:00:00 |
+    |         12 | Gyurcsany  | Ferenc    | 1985-07-11 12:31:00 |
+    |         13 | Orban      | Victor    | 1961-04-11 17:41:00 |
+    |         14 | Balasi     | Szabolcs  | 1987-07-16 00:00:00 |                      // value inserted by the function   
+    +------------+------------+-----------+---------------------+
+    13 rows in set (0.00 sec)
+    
+// UPDATE -----------------------------------------------------------------------------
+    mysql> DELIMITER $$
+    mysql> CREATE FUNCTION modify_()
+        ->   RETURNS CHAR(2)
+        ->     BEGIN
+        ->       UPDATE Students SET first_name='Balazsi' WHERE student_id=14;
+        ->       RETURN 'OK';
+        ->     END$$
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> DELIMITER ;  
+    mysql> SELECT modify_();
+    +-----------+
+    | modify_() |
+    +-----------+
+    | OK        |
+    +-----------+
+    1 row in set (0.01 sec)
+    
+    mysql> SELECT * FROM Students;
+    +------------+------------+-----------+---------------------+
+    | student_id | first_name | last_name | birth_date          |
+    +------------+------------+-----------+---------------------+
+    |          1 | Pall       | Arpad     | 1985-04-12 12:12:12 |
+    |          2 | Biro       | Biro      | 1974-02-14 02:54:00 |
+    |          3 | Gyula      | Szolosi   | 1963-03-14 07:04:00 |
+    |          4 | Feri       | Gaspar    | 1958-09-16 09:38:00 |
+    |          5 | Lui        | Lukacs    | 1976-05-30 01:59:52 |
+    |          7 | Ferenc     | Gaspar    | 1995-04-23 00:00:00 |
+    |          8 | Lukacs     | Levente   | 1962-08-14 21:21:21 |
+    |          9 | Kati       | Jo        | 1998-12-12 23:00:07 |
+    |         10 | Feri       | Kaszas    | 1978-07-12 12:31:00 |
+    |         11 | Kaszas     | Ferenc    | 2000-01-01 00:00:00 |
+    |         12 | Gyurcsany  | Ferenc    | 1985-07-11 12:31:00 |
+    |         13 | Orban      | Victor    | 1961-04-11 17:41:00 |
+    |         14 | Balazsi    | Szabolcs  | 1987-07-16 00:00:00 |                      // record updated by the function 
+    +------------+------------+-----------+---------------------+
+    13 rows in set (0.00 sec)
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Function and Procedure scope TEST </u></h2>
+    <pre class="cmd">
+// Function scoping -------------------------------------------------------------------
+    mysql> CREATE FUNCTION set_()
+        ->   RETURNS CHAR(2)
+        ->     RETURN @myVar;
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> SELECT set_();
+    +--------+
+    | set_() |
+    +--------+
+    | 21     |
+    +--------+
+    1 row in set (0.00 sec)
+    
+    mysql> DELIMITER $$
+    mysql> CREATE FUNCTION set_2()
+        ->   RETURNS CHAR(2)
+        ->     BEGIN
+        ->       SET @myVar = 22;
+        ->       RETURN 'OK';
+        ->     END$$
+    Query OK, 0 rows affected (0.01 sec)
+
+    mysql> DELIMITER ;
+    mysql> SELECT set_2();
+    +---------+
+    | set_2() |
+    +---------+
+    | OK      |
+    +---------+
+    1 row in set (0.00 sec)
+    
+    mysql> SELECT @myVar;
+    +--------+
+    | @myVar |
+    +--------+
+    |     22 |
+    +--------+
+    1 row in set (0.00 sec)
+    
+// Procedure scoping ------------------------------------------------------------------
+    mysql> DELIMITER $$
+    mysql> CREATE PROCEDURE proc_1()
+        ->   BEGIN
+        ->     SELECT @myVar;
+        ->     SET @myVar = 33;
+        ->   END$$
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> DELIMITER ;
+    mysql> CALL proc_1();
+    +--------+
+    | @myVar |
+    +--------+
+    |     22 |
+    +--------+
+    1 row in set (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> SELECT @myVar;
+    +--------+
+    | @myVar |
+    +--------+
+    |     33 |
+    +--------+
+    1 row in set (0.00 sec)
+    </pre>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <br><br>
+</body>
+</html>

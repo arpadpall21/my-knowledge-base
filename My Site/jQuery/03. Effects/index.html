@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title> jQuery Effects </title>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.js"></script>
+    <link href="../../Assets/stylesPages.css" type="text/css" rel="stylesheet">
+    <script src="../../Assets/scriptPages.js" type="application/javascript"></script>
+</head>
+<body>
+<h1> jQuery Effects (ver 2.9) </h1>
+    <p> Updated ( 2018-05-01 / 2018-06-02 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html"> jQuery> </a> Effects 
+    </p>
+<table class="table">
+    <tr>
+        <th> Effect </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.animate({<strong>property:"value"</strong>, <i>property:"value"</i>, <i>...</i>}, <i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> animates an element of a set of CSS properties (cannot animate string values [need jQuery UI]) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.clearQueue(<i>"queueName"</i>) </td>
+        <td> stops the all further animation but finishes the current state (can remove any generig jQuery queue items) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.delay(<i>speed</i>, <i>"queueName"</i>) </td>
+        <td> sets a delay in a jQuery queue </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.dequeue(<i>"queueName"</i>) </td>
+        <td> must be used after the <mark>queue()</mark> method in order to fire the next state in the jQuery queue </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.fadeIn(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> animates the oppacity of the selected element from <mark>0.00</mark> to <mark>1.00</mark> (works on elements fadeOut with jQuery) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.fadeOut(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> animates the oppacity level of the selected element to <mark>0.00</mark> than set the element to <mark>display:none;</mark> </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.fadeTo(<strong>speed</strong>, <strong>oppacity_NR</strong>, "<i>easing</i>", <i>function</i>) </td>
+        <td> animates the element's oppacity level to the set value (cannot fade back!) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.fadeToggle(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> toggles between <mark>fadeIn()</mark> and <mark>fadeOut()</mark> </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.finish(<i>"queueName"</i>) </td>
+        <td> stops the animation and jumps at the of the queue </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.hide(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> animates the size of the selected element than set <mark>display:none;</mark> </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.queue(<i>function</i>)<br>
+        <strong>jQ_obj</strong>.queue(<i>"queueName"</i>)</td>
+        <td> - executes a function in the queue<br>
+            - gets information about a queue </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.show(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> animates the size of the selected element and shows the hidden element (works only on elements hidden by jQuery) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.slideDown(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> shows a jQuery hidden element by "sliding down" (animates the height) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.slideToggle(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> toggles between <mark>slideDown()</mark> and <mark>slideUp()</mark> </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.slideUp(<i>speed</i>, "<i>easing</i>", <i>function</i>) </td>
+        <td> set the element to <mark>display:none</mark> by "sliding up" (animates the height) </td>
+    </tr>
+    <tr>
+        <td> <strong>jQ_obj</strong>.stop(<i>stopAllAnim_boolean</i>, <i>endCurrentState_boolean</i>) </td>
+        <td> can stop any jQuery effects </td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>jQ_obj</strong>.toggle(<i>speed</i>, "<i>easing</i>", <i>function</i>) 
+            <strong>jQ_obj</strong>.toggle(<strong>show_boolean</strong>)
+        </td>
+        <td> toggles between <mark>hide()</mark> and <mark>show()</mark> methods (can permanently show / hide element) </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a class="important-link" href="http://api.jquery.com/category/effects/" target="_blank"> jQuery Effects (official site) </a></p>
+    <p><a href="https://www.w3schools.com/jquery/jquery_ref_effects.asp" target="_blank"> W3School jQuery Effect Methods</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - by default the jQuery cannot animate non-numeric type properties (string values) except <mark>show</mark> / <mark>hide</mark> / <mark>toggle</mark>, so we need to add jQuery UI in order to access these properties! </p>
+    <p> - element must be set to <mark>position:relative/absolute/fixed;</mark> in order to animate in jQuery </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 class="headerExtra"><u> delay action <mark>delay()</mark></u></h2>    
+    <p> - the <mark>delay()</mark> method sets a delay in jQuery queue </p>
+    <pre class="syntax">
+SYNTAX :        <strong>jQ_obj</strong>.delay(<i>speed</i>, <i>"queueName"</i>)
+                    - <i>speed</i> : delay speed, possible values : <mark>milliseconds</mark> or <mark>slow</mark>/<mark>fast</mark> (default 400ms)
+                    - <i>"queName"</i> : specifies the name of the queue (default is <mark>"fx"</mark>)
+    </pre>
+    <pre>
+    &lt;p id="demo" style="display:inline; position:relative;"&gt; Click &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#demo").click(function(){
+            $("#demo").animate({left:"1000px"}, 1000);
+            $("#demo").delay(1500);                                         // delay set between animation states
+            $("#demo").animate({left:"0"}, 1000);
+        });    
+    });
+&lt;/script&gt;
+    </pre>
+<details class="example">    
+<summary> Example : </summary>    
+<h4><u> TEST </u></h4>
+    <p id="fade_delay"> Click (dealy set between toggle) </p>
+<script>
+    $(document).ready(function(){
+        $("#fade_delay").click(function(){
+            $(this).fadeOut("slow").delay(1500).fadeIn("slow");             // delay between two jQuery method set
+        });
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="fade_delay"&gt; Click (dealy set between toggle) &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#fade_delay").click(function(){
+            $(this).fadeOut("slow").delay(1500).fadeIn("slow");             // delay between two jQuery method set
+        });
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>    
+<!---------------------------------------------------------------------------------------------------------------------------------->   
+<hr>   
+<h2 class="headerExtra"><u> <mark>hide()</mark> / <mark>show()</mark> / <mark>toggle()</mark> elements </u></h2>
+    <p> - the <mark>hide()</mark> method animates the size of the selected element than set <mark>display:none;</mark></p>
+    <p> - the <mark>show()</mark> method  animates the size of the selected element and shows the hidden element (works only on elements hidden by jQuery) </p>
+    <p> - the <mark>toggle()</mark> method toggles between <mark>hide()</mark> and <mark>show()</mark> methods (can permanently show / hide element)</p>
+    <pre class="syntax">
+SYNTAX :    <strong>jQ_obj</strong>.hide(<i>speed</i>, "<i>easing</i>", <i>function</i>) 
+            <strong>jQ_obj</strong>.show(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+            
+            <strong>jQ_obj</strong>.toggle(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+            <strong>jQ_obj</strong>.toggle(<strong>show_boolean</strong>)
+                - <i>speed</i> : specifies the speed of the effect, possible values : <mark>milliseconds</mark> or <mark>slow</mark>/<mark>fast</mark> (default 400ms)
+                - "<i>easing</i>" : specifies the easing possible values : <mark>swing</mark>(default)/<mark>linear</mark> (more effects are availables with plugins)
+                - <i>function</i> : function to be executed after the method is completed
+                - <strong>show_boolean</strong> : permanently show/hides the element 
+    </pre>
+    <pre>
+    &lt;p id="click_hide"&gt; Click to Hide and Seek &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#click_hide").click(function(){
+            $(this).hide(2500, "linear").show("fast", "swing");             // when you click on the element it will hide and show 
+        });    
+    // toggle show/hide --------------------    
+        $("#click_hide").click(function(){
+            $(this).toggle(slow, "swing");                                  // show/hide element on each click 
+        });
+    // permanently show/hide --------------------        
+        $("#click_hide").click(function(){
+            $(this).toggle(false);                                          // hides the element permanently () 
+        });
+    });
+&lt;/script&gt;
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4><u> <mark>show()</mark> / <mark>hide()</mark> demo </u></h4>
+    <button id="show_hide"> Hide Text </button>
+    <button> Show Text </button>
+    <span> Element Status = DISPLAYED </span>
+    <p> Ta Daaa! I'm Displayed </p>
+<script>
+    $(document).ready(function(){
+        $("#show_hide").click(function(){
+            $("#show_hide + + + p").hide(2000, "linear", function(){
+                $("#show_hide + + span").text(" Element Status = HIDDEN ");
+            });
+        });
+        $("#show_hide + button").click(function(){
+            $("#show_hide + + +").show("slow", "swing", function(){
+                $("#show_hide + + span").text(" Element Status = DISPLAYED ");
+            });
+        });
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button id="show_hide"&gt; Hide Text &lt;/button&gt;
+    &lt;button&gt; Show Text &lt;/button&gt;
+    &lt;span&gt; Element Status = DISPLAYED &lt;/span&gt;
+    &lt;p&gt; Ta Daaa! I'm Displayed &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#show_hide").click(function(){
+            $("#show_hide + + + p").hide(2000, "linear", function(){
+                $("#show_hide + + span").text(" Element Status = HIDDEN ");
+            });
+        });
+        $("#show_hide + button").click(function(){
+            $("#show_hide + + +").show("slow", "swing", function(){
+                $("#show_hide + + span").text(" Element Status = DISPLAYED ");
+            });
+        });
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4><u> <mark>toggle()</mark> demo with boolean value </u></h4>
+    <p id="demo"> myParagraph </p>
+    <button id="demo_click"> Toggle Paragraph </button>
+<script>
+    $(document).ready(function(){
+        $("#demo_click").mouseup(function(){
+            $("#demo").toggle(false);                // always hide!
+        });
+    });
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="demo"&gt; myParagraph &lt;/p&gt;
+    &lt;button id="demo_click"&gt; Toggle Paragraph &lt;/button&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#demo_click").mouseup(function(){
+            $("#demo").toggle(false);                // always hide!
+        });
+    });
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>   
+    
+    
+    
+    
+<!---------------------------------------------------------------------------------------------------------------------------------->   
+<hr>
+<h2 class="headerExtra"><u> fade elements <mark>fadeIn()</mark> / <mark>fadeOut()</mark> / <mark>fadeToggle()</mark> / <mark>fadeTo()</mark></u></h2>
+    <p> - the <mark>fadeOut()</mark> method animates the oppacity level of the selected element to <mark>0.00</mark> than set the element to <mark>display:none;</mark> </p>
+    <p> - the <mark>fadeIn()</mark> method animates the oppacity of the selected element from <mark>0.00</mark> to <mark>1.00</mark> (works on elements fadeOut with jQuery) </p>
+    <p> - the <mark>fadeToggle()</mark> method toggles between <mark>fadeIn()</mark> and <mark>fadeOut()</mark> </p>
+    <p> - the <mark>fadeTo()</mark> method animates the element's oppacity level to the set value (cannot fade back!) </p>
+    <pre class="syntax">
+SYNTAX :    <strong>jQ_obj</strong>.fadeOut(<i>speed</i>, "<i>easing</i>", <i>function</i>) 
+            <strong>jQ_obj</strong>.fadeIn(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+            <strong>jQ_obj</strong>.fadeToggle(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+            <strong>jQ_obj</strong>.fadeTo(<strong>speed</strong>, <strong>oppacity_NR</strong>, "<i>easing</i>", <i>function</i>)
+                - <i>speed</i>/<strong>speed</strong> : specifies the speed of the effect, possible values : <mark>milliseconds</mark> or <mark>slow</mark>/<mark>fast</mark> (default 400ms)
+                - "<i>easing</i>" : specifies the easing possible values : <mark>swing</mark>(default)/<mark>linear</mark> (more effects are availables with plugins)
+                - <i>function</i> : function to be executed after the method is completed 
+                - <strong>oppacity_NR</strong> : specifies the oppacity to fade to (from <mark>1.00</mark> to <mark>0.00</mark>)
+    </pre>
+    <pre>
+// fadeTo -------------------------------------------  
+    &lt;p id="demo"&gt; Fade To &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#demo").click(function(){
+            $(this).fadeTo(2000, 0.5, "linear", function(){                 // element will be faded on click 
+                $(this).css({"color":"darkBlue", "fontWeight":"bold"})      // after the fade effect is finished css style applies
+            });
+        }); 
+    });
+&lt;/script&gt;
+    
+// fadeOut / fadeIn ---------------------------------
+    &lt;p id="demo"&gt; Fade &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#demo").click(function(){
+            $(this).fadeOut(1800, "linear").fadeIn(800, "swing");           // on click the element will be faded out and back in
+        });
+    });
+&lt;/script&gt;
+    
+// fadeToggle ---------------------------------------
+    &lt;button id="click_demo"&gt; Fade Toggle &lt;/button&gt;
+    &lt;p id="demo"&gt; Fade &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#click_demo").click(function(){
+            $("#demo").fadeToggle(700, "linear", function(){                // on click the elment will fade (toggle)
+                $("#click_demo").text(" Fade Toggle (Toggled) ");           // once clicked the text on the button will be changed
+            });    
+        });        
+    });
+&lt;/script&gt; 
+    </pre>
+<details class="example">
+        <summary> Example </summary> 
+<h4><u> TEST </u></h4>    
+    <button id="fadeOut_"> Fade Out </button>
+    <button id="fadeIn_"> Fade In </button>
+    <button id="fadeToggle_"> Fade Toggle </button>
+    <button id="fadeTo_"> Fade to Half </button>
+    <span id="fade_message"> Element Status = READY </span>
+    <p id="fade"> I'm faded :)</p>
+   
+<script>
+    $(function(){
+        $("#fadeOut_").click(function(){
+            $("#fade").fadeOut("slow", "linear", function(){
+                $("#fade_message").text(" Element Status = FADED OUT ");
+            });
+        });
+        $("#fadeIn_").click(function(){
+            $("#fade").fadeIn("fast", "swing", function(){
+                $("#fade_message").text(" Element Status = FADED IN ");    
+            });    
+        });
+        $("#fadeToggle_").click(function(){
+            $("#fade").fadeToggle(2000, "linear", function(){
+                $("#fade_message").text(" Element Status = FADED TOGGLE ");    
+            });    
+        });
+        $("#fadeTo_").click(function(){
+            $("#fade").fadeTo(1000, 0.3, function(){
+                $("#fadeTo_").css({"backgroundColor":"red", "color":"white", "fontWeight":"bold"});
+                $("#fadeTo_").text(" Fade to Half ");
+            });    
+        });
+    });
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;button id="fadeOut_"&gt; Fade Out &lt;/button&gt;
+    &lt;button id="fadeIn_"&gt; Fade In &lt;/button&gt;
+    &lt;button id="fadeToggle_"&gt; Fade Toggle &lt;/button&gt;
+    &lt;button id="fadeTo_"&gt; Fade to Half &lt;/button&gt;
+    &lt;span id="fade_message"&gt; Element Status = READY &lt;/span&gt;
+    &lt;p id="fade"&gt; I'm faded :)&lt;/p&gt;
+&lt;script&gt;
+    $(function(){
+        $("#fadeOut_").click(function(){
+            $("#fade").fadeOut("slow", "linear", function(){
+                $("#fade_message").text(" Element Status = FADED OUT ");
+            });
+        });
+        $("#fadeIn_").click(function(){
+            $("#fade").fadeIn("fast", "swing", function(){
+                $("#fade_message").text(" Element Status = FADED IN ");    
+            });    
+        });
+        $("#fadeToggle_").click(function(){
+            $("#fade").fadeToggle(2000, "linear", function(){
+                $("#fade_message").text(" Element Status = FADED TOGGLE ");    
+            });    
+        });
+        $("#fadeTo_").click(function(){
+            $("#fade").fadeTo(1000, 0.3, function(){
+                $("#fadeTo_").css({"backgroundColor":"red", "color":"white", "fontWeight":"bold"});
+                $("#fadeTo_").text(" Fade to Half ");
+            });    
+        });
+    });
+&lt;/script&gt;   
+        </pre>
+        </details>
+</details>    
+    
+    
+<!---------------------------------------------------------------------------------------------------------------------------------->   
+<hr>
+<h2 class="headerExtra"><u> slide elements <mark>slideUp()</mark> / <mark>slideDown()</mark> / <mark>slideToggle()</mark></u></h2>    
+    <p> - the <mark>slideUp()</mark> method set the element to <mark>display:none</mark> by "sliding up" (animates the height) </p>
+    <p> - the <mark>slideDown()</mark> method shows a jQuery hidden element by "sliding down" (animates the height) </p>
+    <p> - the <mark>slideToggle()</mark> method toggles between <mark>slideDown()</mark> and <mark>slideUp()</mark> </p>
+    <pre class="syntax">
+SYNTAX :    <strong>jQ_obj</strong>.slideUp(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+            <strong>jQ_obj</strong>.slideDown(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+            <strong>jQ_obj</strong>.slideToggle(<i>speed</i>, "<i>easing</i>", <i>function</i>)
+                - <i>speed</i> : specifies the speed of the effect, possible values : <mark>milliseconds</mark> or <mark>slow</mark>/<mark>fast</mark> (default 400ms)
+                - "<i>easing</i>" : specifies the easing possible values : <mark>swing</mark>(default)/<mark>linear</mark> (more effects are availables with plugins)
+                - <i>function</i> : function to be executed after the method is completed 
+    </pre>
+    <pre>
+    &lt;button id="demo_click"&gt; slide Toggle &lt;/button&gt;
+    &lt;p id="demo"&gt; Click to Slide &lt;/p&gt;
+&lt;script&gt;
+    $(function(){
+        $("#demo").click(function(){                                        // on click element will slide up than down and changes its content
+            $(this).slideUp(1500, "linear", function(){                     // fires on slide up
+                $(this).text(" Slided Up ");
+            }).slideDown(1500, "linear", function(){                        // fires on slide down
+                $(this).text(" Slided Down ")    
+            });    
+        }); 
+    // slide toggle ------------
+        $("#demo_click").click(function(){
+            $("#demo").slideToggle(1500, "linear", function(){              // slide toggle animation (same as above)
+                $(this).text(" Slide Toggle active ");                      // after slide effect is finished element's content will change
+            });    
+        });
+    });
+&lt;/script&gt;
+    </pre>
+<details class="example">
+    <summary> Example : </summary>    
+<h4><u> TEST </u></h4>
+    <button id="slide_U"> Slide Up </button>
+    <button id="slide_D"> Slide Down </button>
+    <button id="slide_T"> Slide Toggle </button>
+    <span> Element Satus = READY </span>
+    <p id="slide_"> Elements to Slide </p>
+<script>
+    $(document).ready(function(){
+        $("#slide_U").click(function(){
+            $("#slide_").slideUp(1500, "linear", function(){
+                $("#slide_T + span").text(" Element Satus = SLIDED UP ");    
+            });    
+        }); 
+        $("#slide_D").click(function(){
+            $("#slide_").slideDown(2000, "linear", function(){
+                $("#slide_T + span").text(" Element Satus = SLIDED DOWN ")    
+            });    
+        });
+        $("#slide_T").click(function(){
+            $("#slide_").slideToggle("slow", "swing", function(){
+                $("#slide_T + span").text(" Element Satus = SIDE TOGGLE ")      
+            });    
+        });
+    });
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;button id="slide_U"&gt; Slide Up &lt;/button&gt;
+    &lt;button id="slide_D"&gt; Slide Down &lt;/button&gt;
+    &lt;button id="slide_T"&gt; Slide Toggle &lt;/button&gt;
+    &lt;span&gt; Element Satus = READY &lt;/span&gt;
+    &lt;p id="slide_"&gt; Elements to Slide &lt;/p&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        $("#slide_U").click(function(){
+            $("#slide_").slideUp(1500, "linear", function(){
+                $("#slide_T + span").text(" Element Satus = SLIDED UP ");    
+            });    
+        }); 
+        $("#slide_D").click(function(){
+            $("#slide_").slideDown(2000, "linear", function(){
+                $("#slide_T + span").text(" Element Satus = SLIDED DOWN ")    
+            });    
+        });
+        $("#slide_T").click(function(){
+            $("#slide_").slideToggle("slow", "swing", function(){
+                $("#slide_T + span").text(" Element Satus = SIDE TOGGLE ")      
+            });    
+        });
+    });
+&lt;/script&gt;
+    </pre>
+    </details>
+</details>    
+<!---------------------------------------------------------------------------------------------------------------------------------->   
+<hr>
+<h2 class="headerExtra"><u> jQuery animation <mark>animate()</mark> / <mark>stop()</mark> / <mark>clearQueue()</mark> / <mark>finish()</mark> / <mark>queue()</mark> / <mark>dequeue()</mark> </u></h2>
+    <p><u> - element must be set to <mark>position:relative/absolute/fixed;</mark> in order to animate in jQuery </u></p>
+    <p> - the <mark>animate()</mark> method animates an element of a set of CSS properties (cannot animate string values [need jQuery UI]) </p>
+    <p> - the <mark>stop()</mark> method can stop any jQuery effects </p>
+    <p> - the <mark>clearQueue()</mark> stops the all further animation but finishes the current state (can remove any generig jQuery queue items) </p>
+    <p> - the <mark>finish()</mark> method stops the animation and jumps at the of the queue </p>
+    <p> - the <mark>queue()</mark> method executes a function in the que or gets information about the queue </p>
+    <p> - the <mark>dequeue()</mark> must be used after the <mark>queue()</mark> method in order to fire the next state in the jQuery queue </p>
+    <pre class="syntax">
+SYNTAX :        <strong>jQ_obj</strong>.animate({<strong>property:"value"</strong>, <i>property:"value"</i>, <i>...</i>}, <i>speed</i>, "<i>easing</i>", <i>function</i>)
+                    - {<strong>property:"value"</strong>, <i>property:"value"</i>, <i>...</i>} : properties to animate
+                    - <i>speed</i> : specifies the speed of the effect, possible values : <mark>milliseconds</mark> or <mark>slow</mark>/<mark>fast</mark> (default 400ms)
+                    - "<i>easing</i>" : specifies the easing possible values : <mark>swing</mark>(default)/<mark>linear</mark> (more effects are availables with plugins)
+                    - <i>function</i> : function to be executed after the method is completed 
+                    
+                <strong>jQ_obj</strong>.stop(<i>stopAllAnim_boolean</i>, <i>endCurrentState_boolean</i>)
+                    - <i>stopAllAnim_boolean</i> : stop or not all animation of the element (default : <mark>false</mark>)
+                    - <i>endCurrentState_boolean</i> : jump or not at the end of current animation state (default : <mark>false</mark>)
+             
+                <strong>jQ_obj</strong>.clearQueue(<i>"queueName"</i>)
+                <strong>jQ_obj</strong>.finish(<i>"queueName"</i>)
+                    - <i>"queName"</i> : specifies the name of the queue (default is <mark>"fx"</mark>)
+                
+                <strong>jQ_obj</strong>.queue(<i>"queueName"</i>)                                   // gets infromation
+                <strong>jQ_obj</strong>.queue(<i>function</i>)                                      // sets information 
+                <strong>jQ_obj</strong>.dequeue(<i>"queueName"</i>)
+                    - <i>"queName"</i> : specifies the name of the queue (default is <mark>"fx"</mark>)
+                    - <i>function</i> : function to be executed 
+    </pre>
+    <pre>
+    &lt;p id="demo" style="position:relative; display:inline;"&gt; Animation (click)&lt;/p&gt;&lt;br&gt;
+    &lt;button id="click_demo"&gt; Stop &lt;/button&gt;
+    &lt;span id="demo_state"&gt; Number of States = &lt;/span&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        var box = $("#demo");                                               // load an element in a variable with jQuery (only jQuery method can use it!)
+        // box.style.color = "red";                                         // this DOES NOT WORK!
+        box.click(function(){
+            box.animate({left:"100px"}, 1500, "swing");                     // animation queue  
+            box.animate({left:"50px"},1000, "swing");
+            box.animate({left:"1000px"}, 800);
+            box.queue(function(){                                           // add an extra function in the queue
+                box.css("color", "white");
+                box.dequeue();                                              // exits from "queue()" and fire the next queue state
+            });
+            box.delay(1000);
+            box.animate({left:"0"}, 2000, "linear");
+            $("#demo_state").text(" Number of States = " +         
+                                  box.queue().length);                      // reads the que length
+        });
+        $("#click_demo").click(function(){
+            
+// stop() -------------------------------------------------------
+            box.stop();   // (this is "box.stop(false, false))              // stops the current que state of the animation but continues from the next one, 
+            box.stop(true);                                                 // stops all further animation
+            box.stop(true, true);                                           // stops all further animation but jumps at the end of the current animation state!
+            
+// clearQueue() -------------------------------------------------
+            box.clearQueue();                                               // stops all further animation but fishes the current animation state
+
+// finish() -----------------------------------------------------
+            box.finish();                                                   // ends all animation and jumps at the end of the last animation state
+        });
+    });
+&lt;/script&gt;
+    </pre>
+<details class="example">    
+<summary> Example : </summary>    
+<h4><u> Example : </u></h4>
+    <p id="count_queue"> Queue length = </p>
+    <button id="anim_start"> Start Animation </button><br>
+    <button id="end_animation"> End and Complete Animation </button><br>
+    <button id="stop_A"> Skip Curent State </button>
+    <button id="stop_B"> Pause Animation </button>
+    <button id="stop_C"> Stop Animation (jump at the end of the current state)  </button><br>
+    <button id="clear_queue"> Clear Queue (finish current state and clear the queue) </button>
+    <div style="width:35px; height:35px; background-color:yellow; position:relative; left"></div>
+<script>
+    $(document).ready(function(){
+        var anim = $("[style^=width]");
+        $("#anim_start").click(function(){                                              // animation 
+            anim.animate({top: "20px", "backgroundColor": "red"}, 1000, "linear"); 
+            anim.animate({left: "700"}, 2000, "swing");
+            anim.queue(function(){
+                anim.css("backgroundColor", "green");
+                anim.dequeue();
+            }); 
+            anim.animate({top: "0", backgroundColor: "white"}, 1000, "linear");
+            anim.animate({left:"0", backgroundColor:"yellow", width:"+=20px", height:"+=20px"}, 2000, "swing");     // box gets bigger every time the animation is completed
+            $("#count_queue").text( " Queue length = " + anim.queue().length);          // read information about the queue
+        });
+        $("#end_animation").click(function(){
+            anim.finish();
+        });
+        $("#stop_A").click(function(){                                                  // skips the current animation running
+            anim.stop();                    // this only stops the current animation state (but next state will fire)
+        });
+        $("#stop_B").click(function(){                                                  // stops the animation 
+            anim.stop(true);                // this stops all element animations
+        });
+        $("#stop_C").click(function(){                                                  // stop the animation at the end of the current state
+            anim.stop(true, true);          // second argument specifies if the current animation state should be finished 
+        });
+        $("#clear_queue").click(function(){
+            anim.clearQueue();    
+        });
+    });        
+</script>    
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="count_queue"&gt; Queue length = &lt;/p&gt;
+    &lt;button id="anim_start"&gt; Start Animation &lt;/button>&lt;br&gt;
+    &lt;button id="end_animation"&gt; End and Complete Animation &lt;/button>&lt;br&gt;
+    &lt;button id="stop_A"&gt; Skip Curent State &lt;/button&gt;
+    &lt;button id="stop_B"&gt; Pause Animation &lt;/button&gt;
+    &lt;button id="stop_C"&gt; Stop Animation (jump at the end of the current state) &lt;/button&gt;&lt;br&gt;
+    &lt;button id="clear_queue"&gt; Clear Queue (finish current state and clear the queue) &lt;/button&gt;
+    &lt;div style="width:35px; height:35px; background-color:yellow; position:relative; left">&lt;/div&gt;
+&lt;script&gt;
+    $(document).ready(function(){
+        var anim = $("[style^=width]");
+        $("#anim_start").click(function(){                                                                          // animation 
+            anim.animate({top: "20px", "backgroundColor": "red"}, 1000, "linear"); 
+            anim.animate({left: "700"}, 2000, "swing");
+            anim.queue(function(){
+                anim.css("backgroundColor", "green");
+                anim.dequeue();
+            }); 
+            anim.animate({top: "0", backgroundColor: "white"}, 1000, "linear");
+            anim.animate({left:"0", backgroundColor:"yellow", width:"+=20px", height:"+=20px"}, 2000, "swing");     // box gets bigger every time the animation is completed
+            $("#count_queue").text( " Queue length = " + anim.queue().length);                                      // read information about the queue
+        });
+        $("#end_animation").click(function(){
+            anim.finish();
+        });
+        $("#stop_A").click(function(){                                                                              // skips the current animation running
+            anim.stop();                    // this only stops the current animation state (but next state will fire)
+        });
+        $("#stop_B").click(function(){                                                                              // stops the animation 
+            anim.stop(true);                // this stops all element animations
+        });
+        $("#stop_C").click(function(){                                                                              // stop the animation at the end of the current state
+            anim.stop(true, true);          // second argument specifies if the current animation state should be finished 
+        });
+        $("#clear_queue").click(function(){
+            anim.clearQueue();    
+        });
+    });        
+&lt;/script&gt;    
+        </pre>
+        </details>
+</details>    
+<!---------------------------------------------------------------------------------------------------------------------------------->   
+<hr>
+<h2 class="headerExtra"><u> jQuery UI </u></h2>
+    <p> jQuery UI is a framework built on top of jQuery, (collection of plugins and widgets) </p>
+    
+    <br><br>
+</body>
+</html>

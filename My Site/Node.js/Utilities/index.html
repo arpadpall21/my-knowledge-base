@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Utilities </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Utilities (ver 4.0.0) </h1>
+    <p> Updated ( 2019-11-24 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Utilities  
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            <strong>util</strong>.callbackify(<strong class="openable">asyncFn<div>
+                <p> - async function or a function that returns a Promise </p>
+            </div></strong>) </td>
+        <td> 
+            - transforms and returns the passed <strong>asyncFn</strong> to an 'error-first callback style' callback based function (method) (the callback is always the <u>last argument</u> and it's asynchronous) <br>
+            - the first argument in the callback function holds the value of the rejected promise returned by <strong>asyncFn</strong> (returns <mark>null</mark> if the <strong>asyncFn</strong> returns a resolved promise) (<mark>null</mark> as rejected promise value will be wrapped in an Error object and thrown) <br>
+            - the second argument in the callback function holds the value of the resolved promise returned by <strong>asyncFn</strong>
+            <span id="browserSupport" title="updated : 2019-12-01">
+                <span><i class="fab fa-node-js"></i> 8.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>util</strong>.debuglog(<strong class="openable">envVarVal:str<div>
+            <p> - environment Variable Value </p>
+            <p> - the universal asterisk sign <mark>*</mark> is suppored </p>
+        </div></strong>) </td>
+        <td> 
+            - returns a 'logging function' which will emit its argument to <mark>stderr</mark> if this process uppon start recognizes the <mark>NODE_DEBUG=<strong>envVal</strong></mark> environment variable (universal sign <mark>*</mark> suppored in environment variable values)
+            <span id="browserSupport" title="updated : 2019-11-28">
+                <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>util</strong>.deprecate(<strong>fn</strong>, <strong>deprMsg:str</strong>, <i>deprCode:str</i>) </td>
+        <td> 
+            - returns a 'deprecation function' which is when called emits a deprecation warning by using the 'warning' event (asynchronous) and prints the <strong>depMsg</strong> to <mark>stderr</mark> (deprecation and warning flags affect this function) <br> 
+            - first emits the deprecation warning (asynchronous), then invokes the passed function (1st argument) <u>(only one warning emitted per deprecation code <i>depCode</i>)</u>  
+            <span id="browserSupport" title="updated : 2019-11-28">
+                <span><i class="fab fa-node-js"></i> 0.8.0 </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 one warning per deprecation code </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> 
+            <strong>util</strong>.format(<strong class="openable">printf:str<div>
+                <p> %s - <mark>String</mark> used to convert all values, objects are formated with <mark>util.inspect()</mark> </p>
+                <p> %d - <mark>Number</mark> used to convert all values except Symbol and BigIng </p>
+                <p> %i - <mark>parseInt(value, 10)</mark> used to convert all values except Symbol and BigInt </p>
+                <p> %f - <mark>parseFloat(value)</mark> used to convert all values except Symbol and BigInt </p>
+                <p> %j - <mark>JSON</mark> replaced with the string '[Circular]' if the argument contains circular references [NOT TESTED: 2019-12-02] </p>
+                <p> %O - <mark>Object</mark> uses the <mark>util.inspect()</mark> method, formats the full object excluding non-enumerable properties and proxies </p>
+                <p> %o - <mark>Object</mark> uses the <mark>util.inspect()</mark> method, formats the full object including non-enumerable properties and proxies </p>
+            </div></strong>, <i>data:any</i>, <i>...</i>) 
+        </td>
+        <td> 
+            - formats the <i>data</i> according to the <strong>printf</strong> string and returns the result in one string <br>
+            
+            
+            <span id="browserSupport" title="updated : 2019-12-01">
+                <span><i class="fab fa-node-js"></i> 0.5.3 </span>
+                <span><i class="fab fa-node-js"></i> 8.4.0 <mark>'%o'|'%O'</mark> support </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>util</strong>.getSystemErrorName(<strong>err:nr</strong>) </td>
+        <td> - returns the system error name of the error code (<strong>err</strong>) in a string (error comming from a Node.js API) (error codes and names are platform-dependent)
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 9.7.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>util</strong>.getSystemErrorMap(<strong>err:nr</strong>) </td>
+        <td> 
+            - returns a JS <strong>map</strong> object which contains node.js error codes mapped to their names (error codes comming from a Node.js API) (error codes and names are platform-dependent)    
+            <span id="browserSupport" title="updated : 2021-05-20">
+                <span><i class="fab fa-node-js"></i> 16.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>util</strong>.inherits(<strong>Constructor|Class</strong>, <strong>super(Constructor|Class)</strong>) </td>
+        <td> 
+            - inherits prototype methods from one constructor|class into another one <u>(discouraged to use, use ES6 <mark>extends</mark> mechanism instead)</u>
+            <span id="browserSupport" title="updated : 2019-12-01">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+                <span><i class="fab fa-node-js"></i> 5.0.0 ES6 class </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            <strong>util</strong>.inspect(<strong>data:any</strong>, <i class="openable">option:obj<div>
+                <p> showHidden: <strong>bol</strong> - show non-enumerable symbols and properties and includes WeakMap and WeakSet entries (Default: <mark>false</mark>) </p>
+                <p> depth: <strong>nr</strong> - recurse time while formating object (object depth level) (Default: <mark>2</mark> / null = full depth)  </p>
+                <p> colors: <strong>bol</strong> - styles the output with ANSI colors (Defalut:false) (can be changed through the util.inspect.colors property) </p>
+                <p> customInspect: <strong>bol</strong> - invokes the [util.inspect.custom](depth, opts) function (Default: <mark>false</mark>) </p>
+                <p> showProxy: <strong>bol</strong> - Proxy inspection includes target and handler objects (Default: <mark>false</mark>) </p> 
+                <p> maxArrayLength: <strong>nr</strong> - maximum number of Array items to inspect (Default: <mark>100</mark> / null = all items) </p>
+                <p> breakLength: <strong>nr</strong> - if the length of a key/value pair toghether is longer than this value, each value is displayed in a new line (Default: <mark>80</mark>) </p>   
+                <p> compact: <strong>bol|nr</strong> - <mark>false</mark> = each object key displayed on a new line (Defalut: <mark>3</mark>) [NOT fully tested!] </p>
+                <p> sorted: <strong>bol|fn</strong> - sort object properties (Default: false), we can use a compare function to make a custom sort </p>
+                <p> getters: <strong>bol:str</strong> - <mark>true</mark> = getter property values are inspected (Default:<mark>false</mark>) [NOT fully tested!] </p>
+            </div></i>) </td>
+        <td> 
+            - maps the passed data (primitive or object) and returns a formated string about it
+            <span id="browserSupport" title="updated : 2019-12-01">
+                <span><i class="fab fa-node-js"></i> 0.3.0 </span>
+                <span><i class="fab fa-node-js"></i> 6.1.0 <mark>showProxy</mark> | <mark>maxArrayLength</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 6.3.0 <mark>breakLength</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 9.9.0 <mark>compact</mark> option </span>
+                <span><i class="fab fa-node-js"></i> 10.0.0 <mark>WeakMap</mark> | <mark>WeakSet</mark> support </span>
+                <span><i class="fab fa-node-js"></i> 10.12.0 <mark>sorted</mark> option </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            <strong>util</strong>.isDeepStrictEqual(<strong>val:any</strong>, <strong>val:any</strong>) 
+        </td>
+        <td> - deeply compares the equality between the 2 arguments (can compare objects), returns <mark>true</mark> if they are equal <mark>false</mark> otherwise <br>   
+             - primitive values are compared with the "Same Value Equality" <mark>===</mark> operator <br>
+             - only enumerable own properties are considered <br>
+             - compared enumerable own Symbol properties - Error names and messages are alwasy compared, even if they aren't enumerable properties <br>
+             - Object wrappers are compared both as objects and unwrapped values <br>
+             - Object / Map / Set properties|items are compared unordered <br>
+             - compares prototypes by using  the "Same Value Comparison" <mark>===</mark> operator   
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 9.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> 
+            <strong>util</strong>.promisify(<strong class="openable">fnErr1st<div>
+                <p> - a Node.js error first callback style method (like <mark>fs.write</mark>) </p>
+            </div></strong>) </td>
+        <td> 
+            - returns a function which is when called returns a promise based API version of the passed 'error-first callback style' Node.js function (mainly used to transform built-in asynchronous methods (like: <mark>fs.write</mark>) into a promise based API)  
+            <span id="browserSupport" title="updated : 2019-12-02">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Data Type Checking <mark>util.types</mark> 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>    
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>util</strong><em>.types</em>.isAnyArrayBuffer(<strong>val:any</strong>) </td>
+        <td> 
+            - returns <mark>true</mark> if the <strong>val</strong> is either an <mark>ArrayBuffer</mark> or a <mark>SharedArrayBuffer</mark> instance,, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <strong>util</strong><em>.types</em>.isArgumentsObject(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>arguments</mark> object, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> <strong>util</strong><em>.types</em>.isArrayBuffer(<strong>val:any</strong>) </td>
+        <td> 
+            - returns <mark>true</mark> if the <strong>val</strong> is an <mark>ArrayBuffer</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="21.01">
+        <td> <strong>util</strong><em>.types</em>.isAsyncFunction(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a async function, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.10">
+        <td> <strong>util</strong><em>.types</em>.isBigInt64Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>BigInt64Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.11">
+        <td> <strong>util</strong><em>.types</em>.isBigUint64Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>BigUint64Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.04">
+        <td> <strong>util</strong><em>.types</em>.isBooleanObject(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a boolean object, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>util</strong><em>.types</em>.isBoxedPrimitive(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a boxed primitive value, (primitive value created and wrapped by object (ex: <mark>new String()</mark>)), otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.04">
+        <td> <strong>util</strong><em>.types</em>.isDataView(<strong>val:any</strong>) </td>
+        <td> 
+            - returns <mark>true</mark> if the <strong>val</strong> is a <mark>DataView</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>util</strong><em>.types</em>.isDate(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>Date</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.02">
+        <td> <strong>util</strong><em>.types</em>.isExternal(<strong>val:any</strong>) </td>
+        <td> - [NOT TESTED: 2019-12-03] no usage example in Node.js docs and I cant' figure out what's this!
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.09">
+        <td> <strong>util</strong><em>.types</em>.isFloat32Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>Float32Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.12">
+        <td> <strong>util</strong><em>.types</em>.isFloat64Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>Float64Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="21.02">
+        <td> <strong>util</strong><em>.types</em>.isGeneratorFunction(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a generator function, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="21.03">
+        <td> <strong>util</strong><em>.types</em>.isGeneratorObject(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a generator object (object returned by a generator function), otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>util</strong><em>.types</em>.isInt8Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Int8Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.05">
+        <td> <strong>util</strong><em>.types</em>.isInt16Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Int16Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr class="10.07">
+        <td> <strong>util</strong><em>.types</em>.isInt32Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Int32Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.01">
+        <td> <strong>util</strong><em>.types</em>.isMap(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>Map</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.05">
+        <td> <strong>util</strong><em>.types</em>.isMapIterator(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an iterator object returned by a <mark>Map</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.01">
+        <td> <strong>util</strong><em>.types</em>.isModuleNameSpace(<strong>val:any</strong>) </td>
+        <td> - [NOT TESTED: 2019-12-03] it does something with ES6 module which is not natively supported right now
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.05">
+        <td> <strong>util</strong><em>.types</em>.isNativeError(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a built-in JavaScript Error instance (ex: <mark>new TypeError()</mark>), otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <strong>util</strong><em>.types</em>.isNumberObject(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a number object, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.04">
+        <td> <strong>util</strong><em>.types</em>.isPromise(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a promise, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.03">
+        <td> <strong>util</strong><em>.types</em>.isProxy(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>Proxy</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>util</strong><em>.types</em>.isRegExp(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>RegExp</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.02">
+        <td> <strong>util</strong><em>.types</em>.isSet(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>Set</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.06">
+        <td> <strong>util</strong><em>.types</em>.isSetIterator(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an iterator object returned by a <mark>Set</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.03">
+        <td> <strong>util</strong><em>.types</em>.isSharedArrayBuffer(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>SharedArrayBuffer</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>util</strong><em>.types</em>.isStringObject(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a string object, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.05">
+        <td> <strong>util</strong><em>.types</em>.isSymbolObject(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a symbol object (ex: <mark>Object(Symbol())</mark>), otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>util</strong><em>.types</em>.isTypedArray(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>TypedArray</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>util</strong><em>.types</em>.isUint8Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Uint8Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> <strong>util</strong><em>.types</em>.isUint8ClampedArray(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Uint8ClampedArray</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>  
+    <tr class="10.06">
+        <td> <strong>util</strong><em>.types</em>.isUint16Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Uint16Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.08">
+        <td> <strong>util</strong><em>.types</em>.isUint32Array(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is an <mark>Uint32Array</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.03">
+        <td> <strong>util</strong><em>.types</em>.isWeakMap(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>WeakMap</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.04">
+        <td> <strong>util</strong><em>.types</em>.isWeakSet(<strong>val:any</strong>) </td>
+        <td> - returns <mark>true</mark> if the <strong>val</strong> is a <mark>WeakSet</mark> instance, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.03">
+        <td> <strong>util</strong><em>.types</em>.isWebAssemblyCompiledModule(<strong>val:any</strong>) </td>
+        <td> - [NOT TESTED: 2019-12-03] returns <mark>true</mark> if the <strong>val</strong> is a <mark>WebAssembly.Module</mark> instance
+            <span id="browserSupport" title="updated : 2019-12-03">
+                <span><i class="fab fa-node-js"></i> 10.0.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Text Encoder (WHATWG Encoder API) 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>    
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="01.01">
+        <td colspan="2"> TextEncoder </td>
+    </tr>
+    <tr class="01.02">
+        <td> new <strong>util</strong>.TextEncoder() </td>
+        <td> 
+            - returns a <strong>textEncoder</strong> object which is used encode a string into an <mark>Uint8Array</mark> <u>(supports only UTF-8 encoding)</u> (implements the WHATWG Encoding Standard)
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+                <span><i class="fab fa-node-js"></i> 11.0.0 available in global object </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02.01">
+        <td> <strong>textEncoder</strong>.encode(<strong>str</strong>) </td>
+        <td> - encodes the passed string as Uint8 format and returns the result in an <strong>Uint8Array</strong> 
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02.02">
+        <td> <strong>textEncoder</strong>.encodeInto(<strong>data:str</strong>, <strong>targ:Uint8Array</strong>) </td>
+        <td> 
+            - encodes the passed string as Uint8 format and stores the result in the passed <strong>targ</strong> Uint8Array <br>
+            - returns a feedback object about the operation <mark class="openable">{read, written}<div>
+              <p> read: <strong>nr</strong> - the number of unicode code points read from src </p>
+              <p> written: <strong>nr</strong> - the number of utf-8 bytes written to target </p>
+            </div></mark>
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.01">
+        <td> <strong>textEncoder</strong>.encoding </td>
+        <td> - returns <mark>'utf-8'</mark>, the only encoding format supported by the textEncoder
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td colspan="2"> TextDecoder </td>
+    </tr>
+    <tr class="10.02">
+        <td> 
+            new <strong>util</strong>.TextDecoder(<i class="openable">encode:str<div>
+                <p> - encoding format (Default: <mark>utf-8</mark>) </p>
+                <p> - available encodings <a href="https://nodejs.org/dist/latest-v16.x/docs/api/util.html#util_whatwg_supported_encodings" target="_blank">[link]</a></p>
+            </div></i>, <i class="openable">option:obj<div>
+                <p> fatal: <strong>bol</strong> - throws a TypeError if an error occurs during decoding (no error thrown otherwise) (Default: <strong>false</strong>) (no support if ICU (Internationalization) is disabled) </p>
+                <p> ignoreBOM: <strong>bol</strong> - ignores the BOM (byte order mark) character at the beginning of the returned string (Default: <mark>false</mark>) (available only for <mark>utf-8</mark>, <mark>utf-16le</mark> and <mark>utf-16be</mark> encodings) </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - returns a <strong>textDecoder</strong> object which is used to decode binary data into string (implements the WHATWG encoding standards)  
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+                <span><i class="fab fa-node-js"></i> 11.0.0 available in global object </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="11.01">
+        <td> 
+            <strong>textDecoder</strong>.decode(<strong class="openable">data:ArrayBuffer|...<div>
+            <p> - <strong>ArrayBuffer|DataView|TypedArray</strong> </p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> stream: <strong>bol</strong> - stores undecodable trailing bytes in the internal decoder buffer and returns them at the next call (Default: <mark>false</mark>) </p>
+            </div></i>) 
+        </td>
+        <td> - decodes the passed <strong>data</strong> into a string and returns it 
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="12.02">
+        <td> <strong>textDecoder</strong>.fatal </td>
+        <td> 
+            - returns value of the decoder's <mark>fatal</mark> option 
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="12.01">
+        <td> <strong>textDecoder</strong>.encoding </td>
+        <td> 
+            - returns the encoding format used by the decoder 
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="12.03">
+        <td> <strong>textDecoder</strong>.ignoreBOM </td>
+        <td> 
+            - returns value of the decoder's <mark>ignoreBOM</mark> option 
+            <span id="browserSupport" title="updated : 2019-12-04">
+                <span><i class="fab fa-node-js"></i> 8.3.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v13.x/docs/api/util.html" target="_blank"> Node.js Utilities </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the util module is designed to support Node.js internal APIs, it's a sort of 'support' kind of module </p>
+    <p> - the util module is not really designed for production codes, some methods might have some impacts on the performance! </p>
+<h2 style="color:darkblue;"><u> The <mark>inherits()</mark> / <mark>isDeepStrictEqual()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// inherits() -------------------------------------------------------------------------
+    const util = require('util');
+        
+    function Const1() { }                                                              // (ES6 class supported as well)
+    function Const2() { }
+        Const2.prototype.testProp = 'testVal';                                         // prototype property added to the constructor   
+        
+    util.inherits(Const1, Const2);                                                     // Const2 becomes superClass (superConstructor) of Const1
+    
+    var testObj = new Const1();
+    testObj.testProp;                                                                  // -> 'testVal'          // object inherits the 'testProp' prototype property from the super constructor (Const2)    
+    
+// isDeepStrictEqual() ----------------------------------------------------------------
+    var obj_A = {propA:415, probB:{subPropA:441, subPropB:[342, 543]}}
+    var obj_B = {propA:415, probB:{subPropA:441, subPropB:[342, 543]}};
+    
+    util.isDeepStrictEqual('975', '975');                                              // -> true                           // values are strictly equal (same value same type )
+    util.isDeepStrictEqual(obj_A, obj_B);                                              // -> true                           // objects are strictly equal  
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>inherits()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+console.log( 'Constructor function test -------------------------------------' );
+    function Constructeur1() { }
+        Constructeur1.prototype.testProp = 'some value';                               // adding a property to the prototype chain 
+        
+    function Constructeur2() { }
+    
+    util.inherits(Constructeur2, Constructeur1);                                       // Constructeur2 inherits from Constructer1 
+    
+    var testObj = new Constructeur2();
+    console.log( testObj.testProp );                                                   // -> "some value"          // property inherited from the super constructor (from Constructeur2)   
+    
+console.log( 'ES6 class test ------------------------------------------------' );
+    class Class1{                                                                      // supports ES6 Classes
+        get testProp() { return 'some value'; }
+    }
+    class Class2{}
+    
+    util.inherits(Class2, Class1);
+    
+    var testObj2 = new Class2();
+    console.log( testObj2.testProp );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\04 - inherits() TEST> node main
+        Constructor function test -------------------------------------
+        some value
+        ES6 class test ------------------------------------------------
+        some value
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\04 - inherits() TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>isDeepStrictEqual()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+    var myObj1 = {p1:'string', p2:{subP1:'subVal'}, p3:[1, 2, 3, [11, 13, [415]]]};
+    var myObj2 = {p1:'string', p2:{subP1:'subVal'}, p3:[1, 2, 3, [11, 13, [415]]]};
+    
+    console.log( util.isDeepStrictEqual(myObj1, myObj2) );                             // -> true
+    
+    function MyConstructor() {}
+    Object.setPrototypeOf(myObj2, MyConstructor);                                      // myObj2 has different constructor than myObj1
+    
+    console.log( util.isDeepStrictEqual(myObj1, myObj2) );                             // -> false         // because objects does not have the same constructor
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\10 - isDeepStrictEqual() TEST> node main
+        true
+        false
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\10 - isDeepStrictEqual() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>callbackify()</mark> / <mark>promisify()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+const util = require('util');
+const fs = require('fs');
+     
+// callbackify() ----------------------------------------------------------------------
+    async function testBol(bol) {                                                      // returns a resolved or rejected promise based on the passed argument (can be any function that returns a promise)   
+        if( bol ) return Promise.resolve('boolean value is true');
+        return Promise.reject('boolean value is false');                               // -! passing null as rejected value would be wrapped in an Error object and thrown in calbackified version   
+    }
+    
+    var testBolCalbacked = util.callbackify(testBol);                                  // basically returns a function with an 'error-first style' callback as its last argument of the above async function    
+    
+    testBolCalbacked(true, (err, val) => {                                             // first argument is passed to 'testBol' function directly  // -! the asynchronous callback function argumets values are based on the returned promise by the 'testBol' async function    
+        err;                                                                           // -> null                                                  // would return 'boolean value is false' if the 'testBol' async function returned a rejected promise    
+        val;                                                                           // -> 'boolean value is true'
+    });     
+    
+// promisify() ------------------------------------------------------------------------
+    var readdirPromise = util.promisify(fs.readdir);                                   // makes a promise based API of the fs.readdir built-in method        
+        
+    readdirPromise('./')                                                               // -> Promise                                               // promisify function returns a promise  
+        .then(res => console.log(res))                                                 // -> ['index.html', 'main.js', 'styles.css']               // consuming the promise   
+        .catch(res => console.log(res));
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>callbackify()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+// resolved async --------------------------------------------------------------------
+    async function resAsync(){                                                         // returns a resolved promise with the value of 'resolved value'
+        return 'resolved value';    
+    }
+    
+    var callbacked1 = util.callbackify(resAsync);                                      // returns an asynchronous function with an 'error-first style' callback as last argument  
+        
+    callbacked1(function(err, val){                                                    // the first argument of the callback 'err' is the rejected promise value 
+        console.log( '----- resolved callback -----' );
+        console.log( err );                                                            // -> null
+        console.log( val );                                                            // -> 'resolved value'
+    });
+    
+// rejected async --------------------------------------------------------------------
+    async function rejAsync(){                                                         // returns a rejected promise with the value 'rejected value'
+        throw 'rejected value'
+    }
+    
+    var callbacked2 = util.callbackify(rejAsync);                                      // returns an asynchronous function with an 'error-first style' callback as last argument  
+    
+    callbacked2(function(err, val){                                                    // the second argument of the callback 'val' is the resolved promise value 
+        console.log( '----- rejected callback -----' );
+        console.log( err );                                                            // -> 'rejected value'
+        console.log( val );                                                            // -> undefined
+    });
+    
+// callbackified function arguments --------------------------------------------------
+    async function checkCallback(a, b) {                                               // the final callbackified function passes its arguments here 
+        if (a + b < 10 ) {
+            return Promise.resolve('less than 10')
+        } else {
+            return Promise.reject('bigger than 10');
+        }
+    }
+    
+    var check10 = util.callbackify(checkCallback);                                     // the returned calbackified function will have 3 arguments (the last is always the callback)   
+    
+    check10(3, 5, function(err, val){                                                  // calling with less than 10 as sum of the passed first two arguments 
+        console.log( '----- callbackified function arguments (less than 10) -----' );
+        console.log( err );                                                            // -> null
+        console.log( val );                                                            // -> 'less than 10'
+    });
+    
+    check10(5, 5, function(err, val){                                                  // calling with more or equal than 10 as sum of the passed first two arguments 
+        console.log( '----- callbackified function arguments (more than 10) -----' );
+        console.log( err );                                                            // -> 'bigger than 10'
+        console.log( val );                                                            // -> undefined
+    });
+    
+// null as rejected promise value ----------------------------------------------------
+    var rejCallback = function(){
+        return Promise.reject(null);                                                   // null as rejected promise value 
+    }
+    
+    var tester = util.callbackify(rejCallback);
+    
+    tester((err, val) => {
+        console.log( '----- null as rejected promie value -----' );
+        console.log( err );                                                            // -> null is wrapped in an Error object  
+        console.log( val );
+    });
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\05 - callbackify() TEST> node main
+        ----- resolved callback -----
+        null
+        resolved value
+        ----- rejected callback -----
+        rejected value
+        undefined
+        ----- null as rejected promie value -----
+        Error [ERR_FALSY_VALUE_REJECTION]: Promise was rejected with falsy value
+            at processTicksAndRejections (internal/process/task_queues.js:80:21) {
+          reason: null,
+          code: 'ERR_FALSY_VALUE_REJECTION'
+        }
+        undefined
+        ----- callbackified function arguments (less than 10) -----
+        null
+        less than 10
+        ----- callbackified function arguments (more than 10) -----
+        bigger than 10
+        undefined
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\05 - callbackify() TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>promisify()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+const util = require('util');
+const fs = require('fs');
+    
+// manualy created error-first callback style function --------------------------------
+    async function addAgrs(a, b) {
+        if(typeof a !== 'number' || typeof b !== 'number' ) {
+            throw new Error('passed argument is not a number');
+        } else {
+            return Promise.resolve(a + b);
+        }
+    }
+    
+    var addArgsAsync = util.callbackify(addAgrs);                                      // callbackified version of the above async function 
+    
+    var addArgsPromise = util.promisify(addArgsAsync);                                 // callbackified function is transformet into a promise based API
+        
+    addArgsPromise(46, 476)                                                            // returns a promise 
+        .then(res => console.log(res))                                                 // -> 522
+        .catch(rej => console.log(rej));
+    
+// transforming a built-in asynchronous method to promise based API -------------------
+    var statPromisified = util.promisify(fs.stat);                                     // transforms the passed 'error-first callback style' method into a promise based method and returns it  
+    
+    var statPromise = statPromisified('./main.js', {bigint:true});                 
+    
+    statPromise
+        .then(res => console.log(res))                                                 // -> BigIntStats {...}     // stats object returned here   
+        .catch(rej => console.log(rej))
+    
+// passing a normal function as argumet to the promisify method -----------------------
+    var someFunc = function(a, b) {
+        return a + b;
+    }
+    
+    var addIt = util.promisify(someFunc);                                              // tries to hanlde the last argument as an 'error-first style' callback 
+    
+    // console.log( addIt(3, 2) );
+    
+    addIt(3, 2)                                                     
+        .then(res => console.log(res))                                                 // -> nothing is returned because the passed function is not an 'error-first callback style' method 
+        .catch(rej => console.log(rej));
+        </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\06 - promisify() TEST> node main
+        522
+        BigIntStats {
+          dev: 3535051015n,
+          mode: 33206n,
+          nlink: 1n,
+          uid: 0n,
+          gid: 0n,
+          rdev: 0n,
+          blksize: 4096n,
+          ino: 6755399441083485n,
+          size: 1998n,
+          blocks: 8n,
+          atimeMs: 1575228043377n,
+          mtimeMs: 1575296838023n,
+          ctimeMs: 1575296838023n,
+          birthtimeMs: 1575228043377n,
+          atimeNs: 1575228043377493100n,
+          mtimeNs: 1575296838023333100n,
+          ctimeNs: 1575296838023333100n,
+          birthtimeNs: 1575228043377493100n,
+          atime: 2019-12-01T19:20:43.377Z,
+          mtime: 2019-12-02T14:27:18.023Z,
+          ctime: 2019-12-02T14:27:18.023Z,
+          birthtime: 2019-12-01T19:20:43.377Z
+        }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\06 - promisify() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>inspect()</mark> / <mark>format()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const util = require('util');
+    
+// inspect() --------------------------------------------------------------------------
+    var testObj = {p1:'myString', p2:32, p3:{subP1:'val'}, p4:[34, '234']}
+        
+    util.inspect(testObj, {colors:true, showHiddden:true});                            // -> { p1: 'myString', p2: 32, p3: { subP1: 'val' }, p4: [ 34, '234' ] }    // inspect string will be formated with ASCII colors and non-enumeralbe properties are shown    
+                                                                                       // the returned string is basically a formated data map about inspected object   
+// format() ---------------------------------------------------------------------------
+    util.format('%i', '4145.41',);                                                     // -> '4145'
+    util.format('%i', '4145.41', '4154.14');                                           // -> '4145 4154.14'         // -! the second argument is not formated because there is no second formatf string     
+    util.format('%i%f%d', '4145.41', '4154.14', true);                                 // -> '41454154.141'         // all 3 arguments are formated in the order of the printf strings
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>inspect()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+    var mySymbol = Symbol('testSymbol');
+    var myObj = {
+        p3:'string', 
+        p2:324n, 
+        p1:32, 
+        p4:false, 
+        p5:undefined, 
+        p6:null, 
+        p7:mySymbol,
+        get p9_get(){ return 'getter property value'}, 
+        set p9_1_set(val){ }, 
+        p8:{
+            subP1:[1, 3, 4, 5, 6, 7, 2, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            subP2:{
+                subChildP1:'string', 
+                subChildP2:['egy', 'ketto', 'harom']
+                  }
+            }    
+        }
+        
+    console.log( 
+        util.inspect(myObj, {
+            showHidden:true,                        // show non-enumerable properties and symbols 
+            depth:null,                             // objects are inspected in full depth 
+            colors:true,                            // values are colored according to ASCII colors 
+            maxArrayLength:15,                      // up to 15 Array items are shown 
+            breakLength:100,                        // if a key/value pair is is less than 100 long it will be printed in one line  
+            sorted:true,                            // object properties are sorted in order 
+            getters:true                            // getter value is inspected 
+            })
+    );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\07 - inspect() TEST> node main
+        {
+          p1: 32,
+          p2: 324n,
+          p3: 'string',
+          p4: false,
+          p5: undefined,
+          p6: null,
+          p7: Symbol(testSymbol),
+          p8: {
+            subP1: [ 1, 3, 4, 5, 6, 7, 2, 8, 9, 10, 11, 12, 13, 14, 15, ... 5 more items, [length]: 20 ],
+            subP2: { subChildP1: 'string', subChildP2: [ 'egy', 'ketto', 'harom', [length]: 3 ] }
+          },
+          p9_1_set: [Setter],
+          p9_get: [Getter: 'getter property value']
+        }
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\07 - inspect() TEST>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>format()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+        
+console.log( '%s ------------------------------------------------------------------' );
+    console.log( util.format('%s', 676456n, {p1:'string', p2:32, p3:{subP1:'subVal', subSubObj:{suBBB:32}}}, -0) );
+
+console.log( '%d ------------------------------------------------------------------' );
+    console.log( util.format('%d', 2230498234n) );                                     // -> '2230498234n'     // BigInt not converted
+    console.log( util.format('%d', false) );                                           // -> 0         
+    
+console.log( '%i ------------------------------------------------------------------' );
+    console.log( util.format('%i', 3245n) );                                           // -> '3245n'           // BigInt not converted         
+    console.log( util.format('%i', '1452.325') );                                      // -> '1452'         
+    
+console.log( '%f ------------------------------------------------------------------' );
+    console.log( util.format('%f', '1452.325') );                                      // -> '1452.325'         
+    
+console.log( '%o / %O -------------------------------------------------------------' );
+    var myObj = {p1:'val1', p2:21, p3:{subP1:'subVal'}}
+        Object.defineProperty(myObj, 'p3', {enumerable:false});                        // setting the property non-enumerable 
+        
+    console.log( util.format('%O', myObj)  );                                          // -> non-enumerable property is not formated 
+    console.log( util.format('%o', myObj)  );                                          // -> all property is formated 
+    
+console.log( 'combining multiple fromatf ------------------------------------------' );
+    console.log( util.format('%i%f', '451.354', '451.354' ) );                         // -> '451451.354'      // formatf order formats arguments in order 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\08 - format() TEST> node main
+        %s ------------------------------------------------------------------
+        676456n {
+          p1: 'string',
+          p2: 32,
+          p3: { subP1: 'subVal', subSubObj: { suBBB: 32 } }
+        } -0
+        %d ------------------------------------------------------------------
+        2230498234n
+        0
+        %i ------------------------------------------------------------------
+        3245n
+        1452
+        %f ------------------------------------------------------------------
+        1452.325
+        %o / %O -------------------------------------------------------------
+        { p1: 'val1', p2: 21 }
+        { p1: 'val1', p2: 21, [p3]: { subP1: 'subVal' } }
+        combining multiple fromatf ------------------------------------------
+        451451.354
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\08 - format() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>debuglog()</mark> / <mark>deprecate()</mark> methods </u></h2>
+
+<details class="example">
+<summary> DEMO </summary>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+// debuglog() -------------------------------------------------------------------------
+    var logFunc = util.debuglog('testVal');                                            // returns the logging function 
+    logFunc('my debug message');                                                       // emits the message to stderr if this process recognizes the NODE_DEBUG="testVal" environment varialbe uppon start    
+    
+// deprecate() ------------------------------------------------------------------------
+    var myFunc = function() { console.log('myFunc executed!') }
+    
+    var deprecateFunc = util.deprecate(myFunc, 'myFunc is deprecated', 'DEP-CODE1');   // returns a deprecation function 
+      deprecateFunc();                                                                 // emits a deprecation warning with the passed message to stderr (asynchronously) then invokes the passed function (myFunc)    
+    
+    var deprecateFunc_A = util.deprecate(myFunc, 'myFunc is deprecated', 'DEP-CODE2');
+    var deprecateFunc_B = util.deprecate(myFunc, 'myFunc is deprecated', 'DEP-CODE2');
+      deprecateFunc_A();                                                               // deprecation warning emitted only once, because both deprecattion functions have the same deprecation code ('DEP-CODE2')    
+      deprecateFunc_B();    
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+// debuglog() -------------------------------------------------------------------------
+    > $env:NODE_DEBUG="testVal" ; node main.js                                         // (2 separated commands) 1st command sets the environment varialbe / 2nd command executes node file    
+    > $env:NODE_DEBUG="t*"                                                             // universal sign supported in environment varialbe values (at least one character must be present apparently still)    
+        TESTVAL 10872: my debug message                                                // printed message on stderr (contains the process id)    
+    
+// deprecate() ------------------------------------------------------------------------
+   > node main.js
+        myFunc executed!
+        myFunc executed!
+        myFunc executed!
+        (node:10844) [DEP-CODE1] DeprecationWarning: myFunc is deprecated              // deprecation message asynchronous 
+        (node:10844) [DEP-CODE2] DeprecationWarning: myFunc is deprecated              // only one deprecation message is printed for 'DEP-CODE2' deprecation code    
+    >
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>debuglog()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+        const util = require('util');
+
+        var debuglogWarn = util.debuglog('test');                                      // returns the logging function
+
+        debuglogWarn('debuglog executed!');                                            // this logging function passes its message to the stderr if this process founds the NODE_DEBUG environment variable with the 'test' value
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\01 - debuglog() TEST> $Env:NODE_DEBUG='test'; node main.js    // -! we set the NODE_DEBUG environment variable
+        TEST 28536: debuglog executed!                                                 // -! message generated by the logging function
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\01 - debuglog() TEST>
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>debuglog()</mark> TEST-2 </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+        
+    var logFunc = util.debuglog('test');
+        
+    logFunc('debug logging function executed!');
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\02 - debuglog() TEST-2> $env:NODE_DEBUG='t*'; node main.js   // -! universal sign can be used to set value (after at least one character)    
+        TEST 1588: debug logging function executed!
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\02 - debuglog() TEST-2>    
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>deprecate()</mark> TEST-2 </u></h4>
+    <p> - the returned deprecation function first emits the deprecation warning then invokes the wrapped function, but the deprecation warning is asynchronous that's why it seems that the wrapped function is invoked first! </p>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+console.log( 'test-1 ----------------------------------------------------------------------' );
+    var depFn1 = util.deprecate(testFunc, 'this function is deprecated!', 'DEP-CODE1');
+
+    function testFunc(){
+        console.log( 'test function executed!' ); 
+    }
+
+    depFn1();                                                                          // emits the deprecation warning by printing the message to stderr then invokes the testFunc 
+                                                                                       // deprecation message is emitted by the 'warning' envent which is asynchronous 
+console.log( 'test-2 ----------------------------------------------------------------------' );
+    var depFn2 = util.deprecate(testFunc, 'deprecation warning 2', 'DEP-CODE2');       // all 4 has the same deprecation code, only one deprecation warning is emitted for for the first time!
+    var depFn3 = util.deprecate(testFunc, 'deprecation warning 3', 'DEP-CODE2');
+    var depFn4 = util.deprecate(testFunc, 'deprecation warning 4', 'DEP-CODE2');
+    var depFn5 = util.deprecate(testFunc, 'deprecation warning 5', 'DEP-CODE2');
+    
+    depFn2();                                                                          // deprecation warning emitted here only  
+    depFn3();                                                                          // no further deprecation warnings emitted 
+    depFn4();                                                                          // no further deprecation warnings emitted 
+    depFn5();                                                                          // no further deprecation warnings emitted 
+    
+console.log( 'end of module -----------' );
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\03 - deprecate() TEST> node main
+        test-1 ----------------------------------------------------------------------
+        test function executed!
+        test-2 ----------------------------------------------------------------------
+        test function executed!
+        test function executed!
+        test function executed!
+        test function executed!
+        end of module -----------
+        (node:5612) [DEP-CODE1] DeprecationWarning: this function is deprecated!      // -! deprecation warnings are asynchronous
+        (node:5612) [DEP-CODE2] DeprecationWarning: deprecation warning 2             // -! only one deprecation warning is emitted for the same deprecation code!
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\03 - deprecate() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>getSystemErrorName()</mark> / <mark>getSystemErrorMap()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const util = require('util');
+    
+// getSystemErrorName() ---------------------------------------------------------------
+    util.getSystemErrorName(-3010);                                                    // -> 'EAI_SERVICE'                  // returns the name of the passed system error number   
+    util.getSystemErrorName(-2999);                                                    // -> 'Unknown system error -2999'   // no a valid system error number 
+    
+// getSystemErrorMap() ----------------------------------------------------------------
+    util.getSystemErrorMap();                                                          // -> Map{7 -> ['E2BIG', 'argument list too long'], ...}     // Map object    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>getSystemErrorName()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    const fs = require('fs');
+    
+    fs.open('nonExixtingFile.txt', (err, val) => {                                     // non existing file 
+        console.log( 'get error name ---------------------------------------' );
+        console.log( util.getSystemErrorName(err.errno) );                             // -> ENOENT            // error name of the referenced error number 
+        console.log( err.errno ) ;      // -> ENOENT                                   // error name of the referenced error number 
+    });
+    
+console.log( 'map possible errors ----------------------------------' );
+    var systemErrorFrom = -10000;                                                      // checking error from -10000 error code 
+    var systemErrorCollection = new Map();
+    
+    while(-1 > systemErrorFrom) {
+        if( !/^Unknown system error/.test(util.getSystemErrorName(systemErrorFrom)) ) {   // true if a valid system error found
+            systemErrorCollection.set(systemErrorFrom, util.getSystemErrorName(systemErrorFrom));
+        }
+        systemErrorFrom++;
+    }
+        
+    console.log( systemErrorCollection );                                              // print the collected error codes     
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\09 - getSystemErrorName() TEST> node main
+        map possible errors ----------------------------------
+        Map {
+          -4095 => 'EOF',
+          -4094 => 'UNKNOWN',
+          -4093 => 'E2BIG',
+          -4092 => 'EACCES',
+          -4091 => 'EADDRINUSE',
+          -4090 => 'EADDRNOTAVAIL',
+          -4089 => 'EAFNOSUPPORT',
+          -4088 => 'EAGAIN',
+          -4084 => 'EALREADY',
+          -4083 => 'EBADF',
+          -4082 => 'EBUSY',
+          -4081 => 'ECANCELED',
+          -4080 => 'ECHARSET',
+          -4079 => 'ECONNABORTED',
+          -4078 => 'ECONNREFUSED',
+          -4077 => 'ECONNRESET',
+          -4076 => 'EDESTADDRREQ',
+          -4075 => 'EEXIST',
+          -4074 => 'EFAULT',
+          -4073 => 'EHOSTUNREACH',
+          -4072 => 'EINTR',
+          -4071 => 'EINVAL',
+          -4070 => 'EIO',
+          -4069 => 'EISCONN',
+          -4068 => 'EISDIR',
+          -4067 => 'ELOOP',
+          -4066 => 'EMFILE',
+          -4065 => 'EMSGSIZE',
+          -4064 => 'ENAMETOOLONG',
+          -4063 => 'ENETDOWN',
+          -4062 => 'ENETUNREACH',
+          -4061 => 'ENFILE',
+          -4060 => 'ENOBUFS',
+          -4059 => 'ENODEV',
+          -4058 => 'ENOENT',
+          -4057 => 'ENOMEM',
+          -4056 => 'ENONET',
+          -4055 => 'ENOSPC',
+          -4054 => 'ENOSYS',
+          -4053 => 'ENOTCONN',
+          -4052 => 'ENOTDIR',
+          -4051 => 'ENOTEMPTY',
+          -4050 => 'ENOTSOCK',
+          -4049 => 'ENOTSUP',
+          -4048 => 'EPERM',
+          -4047 => 'EPIPE',
+          -4046 => 'EPROTO',
+          -4045 => 'EPROTONOSUPPORT',
+          -4044 => 'EPROTOTYPE',
+          -4043 => 'EROFS',
+          -4042 => 'ESHUTDOWN',
+          -4041 => 'ESPIPE',
+          -4040 => 'ESRCH',
+          -4039 => 'ETIMEDOUT',
+          -4038 => 'ETXTBSY',
+          -4037 => 'EXDEV',
+          -4036 => 'EFBIG',
+          -4035 => 'ENOPROTOOPT',
+          -4034 => 'ERANGE',
+          -4033 => 'ENXIO',
+          -4032 => 'EMLINK',
+          -4031 => 'EHOSTDOWN',
+          -4030 => 'EREMOTEIO',
+          -4029 => 'ENOTTY',
+          -4028 => 'EFTYPE',
+          -4027 => 'EILSEQ',
+          -3014 => 'EAI_PROTOCOL',
+          -3013 => 'EAI_BADHINTS',
+          -3011 => 'EAI_SOCKTYPE',
+          -3010 => 'EAI_SERVICE',
+          -3009 => 'EAI_OVERFLOW',
+          -3008 => 'EAI_NONAME',
+          -3007 => 'EAI_NODATA',
+          -3006 => 'EAI_MEMORY',
+          -3005 => 'EAI_FAMILY',
+          -3004 => 'EAI_FAIL',
+          -3003 => 'EAI_CANCELED',
+          -3002 => 'EAI_BADFLAGS',
+          -3001 => 'EAI_AGAIN',
+          -3000 => 'EAI_ADDRFAMILY'
+        }
+        get error name ---------------------------------------
+        ENOENT
+        -4058
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\09 - getSystemErrorName() TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> Data Type Checking <mark>util.types</mark> </u></h2>
+<h3 style="color:darkblue;"><u> The <mark>isAnyArrayBuffer()</mark> / <mark>isArrayBuffer()</mark> / <mark>isSharedArrayBuffer()</mark> / <mark>isDataView()</mark> / <mark>isTypedArray()</mark> / <mark>isInt8Array()</mark> / <mark>isUint8Array()</mark> / <mark>isUint8ClampedArray()</mark> / <mark>isInt16Array()</mark> / <mark>isUint16Array()</mark> / <mark>isInt32Array()</mark> / <mark>isUint32Array()</mark> / <mark>isFloat32Array()</mark> / <mark>isBigInt64Array()</mark> / <mark>isBigUint64Array()</mark> / <mark>isFloat64Array()</mark> / <mark>isArgumentObject()</mark> / <mark>isAsyncFunction()</mark> / <mark>isGeneratorFunction()</mark> / <mark>isGeneratorObject()</mark> / <mark>isBoxedPrimitive()</mark> / <mark>isStringObject()</mark> / <mark>isNumberObject()</mark> / <mark>isBooleanObject()</mark> / <mark>isSymbolObject()</mark> / <mark>isDate()</mark> / <mark>isRegExp()</mark> / <mark>isPromise()</mark> / <mark>isNativeError()</mark> / <mark>isMap()</mark> / <mark>isSet()</mark> / <mark>isWeakMap()</mark> / <mark>isWeakSet()</mark> / <mark>isMapIterator()</mark> / <mark>isSetIterator()</mark> / <mark>isModuleNameSpace()</mark> / <mark>isExternal()</mark> / <mark>isWebAssemblyCompiledModule()</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const util = require('util');
+    
+    util.types.isAnyArrayBuffer(new SharedArrayBuffer());                              // -> true           // the passed value is an ArrayBuffer or SharedArrayBuffer instance   
+    util.types.isTypedArray(new BigUint64Array(1));                                    // -> true           // TypedArray instance 
+    
+    var testFunc = function(){
+        util.types.isArgumentsObject(arguments);                                       // -> true           // arguments object 
+    }();
+    
+    util.types.isBoxedPrimitive( new String('myString') );                             // -> true           // boxed primitive 
+    util.types.isBoxedPrimitive( Object(Symbol('testSymbol')) );                       // -> true           // boxed primitive 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>util.types</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    
+console.log( 'isAnyArrayBuffer() / isArrayBuffer() / isSharedArrayBuffer() / isDataView() ------------------------------' );
+    console.log( util.types.isAnyArrayBuffer(new SharedArrayBuffer()) );               // -> true
+    console.log( util.types.isAnyArrayBuffer(new SharedArrayBuffer()) );               // -> true
+    console.log( util.types.isAnyArrayBuffer(new ArrayBuffer()) );                     // -> true
+    
+    console.log( util.types.isArrayBuffer(new ArrayBuffer()) );                        // -> true
+    console.log( util.types.isSharedArrayBuffer(new SharedArrayBuffer()) );            // -> true
+    
+        var myArrayBuffer = new ArrayBuffer(8);
+        var myDataView = new DataView(myArrayBuffer);
+    console.log( util.types.isDataView(myDataView) );                                  // -> true
+    
+console.log( 'isTypedArray() -------------------------------------------------------------------------------------------' );
+console.log( 'isInt8Array() / isUint8Array() / isUint8ClampedArray() ---------------------------------------------------' );
+console.log( 'isInt16Array() / isUint16Array() -------------------------------------------------------------------------' );
+console.log( 'isInt32Array() / isUint32Array() / isFloat32Array() ------------------------------------------------------' );
+console.log( 'isInt64Array() / isUint64Array() / isFloat64Array() ------------------------------------------------------' );
+    console.log( util.types.isTypedArray(new Float64Array()) );                        // -> true
+    console.log( util.types.isTypedArray(new Uint8ClampedArray()) );                   // -> true
+    
+    console.log( util.types.isInt8Array(new Int8Array(2)) );                           // -> true 
+    console.log( util.types.isUint8Array(new Uint8Array()) );                          // -> true
+    console.log( util.types.isUint8ClampedArray(new Uint8ClampedArray()) );            // -> true
+    
+    console.log( util.types.isInt16Array(new Int16Array()) );                          // -> true
+    console.log( util.types.isUint16Array(new Uint16Array()) );                        // -> true
+    
+    console.log( util.types.isInt32Array(new Int32Array()) );                          // -> true
+    console.log( util.types.isUint32Array(new Uint32Array()) );                        // -> true 
+    console.log( util.types.isFloat32Array(new Float32Array()) );                      // -> true 
+    
+    console.log( util.types.isBigInt64Array(new BigInt64Array()) );                    // -> true
+    console.log( util.types.isBigUint64Array(new BigUint64Array()) );                  // -> true
+    console.log( util.types.isFloat64Array(new Float64Array()) );                      // -> true 
+    
+console.log( 'isArgumentsObject() --------------------------------------------------------------------------------------' );
+    var testFn = function(){
+        console.log( util.types.isArgumentsObject(arguments) );                        // -> true
+    }();
+    
+console.log( 'isAsyncFunction() / isGeneratorFunction() / isGeneratorObject() ------------------------------------------' );
+    console.log( util.types.isAsyncFunction(async function myAsync(){}) );             // -> true
+    console.log( util.types.isGeneratorFunction(function* genFunc(){}) );              // -> true
+    
+        var generatorObject = function* genFunc(){}();
+    console.log( util.types.isGeneratorObject(generatorObject) );                      // -> true
+    
+console.log( 'isBoxedPrimitive() / isStringObject() / isNumberObject() / isBooleanObject() / isSymbolObject() ----------' );
+    console.log( util.types.isBoxedPrimitive(new String('myStr')) );                   // -> true
+    console.log( util.types.isBoxedPrimitive(new Object(Symbol('testSymbol'))) );      // -> true
+        
+    console.log( util.types.isStringObject(new String()) );                            // -> true
+    console.log( util.types.isNumberObject(new Number()) );                            // -> true
+    console.log( util.types.isBooleanObject(new Boolean()) );                          // -> true
+    console.log( util.types.isSymbolObject(new Object(Symbol('tester'))) );            // -> true
+    
+console.log( 'isDate() / isRegExp() / isProxy() / isPromise() / isNativeError() ----------------------------------------' );
+    console.log( util.types.isDate(new Date()) );                                      // -> true
+    console.log( util.types.isRegExp(/ /) );                                           // -> true 
+    console.log( util.types.isRegExp(new RegExp()) );                                  // -> true
+    console.log( util.types.isPromise(new Promise((res, rej) => {})) );                // -> true
+        
+        var proxyTarget = {}
+    console.log( util.types.isProxy(new Proxy(proxyTarget, {})) );                     // -> true
+    
+    console.log( util.types.isNativeError(new Error()) );                              // -> true
+    console.log( util.types.isNativeError(new SyntaxError()) );                        // -> true
+    
+console.log( 'isMap() / isSet() / isWeakMap() / isWeakSet() / isMapIterator() / isSetIterator() ------------------------' );
+    console.log( util.types.isMap(new Map()) );                                        // -> true
+    console.log( util.types.isSet(new Set()) );                                        // -> true
+    
+    console.log( util.types.isWeakMap(new WeakMap()) );                                // -> true
+    console.log( util.types.isWeakSet(new WeakSet()) );                                // -> true
+    
+    console.log( util.types.isMapIterator(new Map().entries()) );                      // -> true
+    console.log( util.types.isSetIterator(new Set().values()) );                       // -> true
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\11 - util.types TEST> node main
+        isAnyArrayBuffer() / isArrayBuffer() / isSharedArrayBuffer() / isDataView() ------------------------------
+        true
+        true
+        true
+        true
+        true
+        true
+        isTypedArray() -------------------------------------------------------------------------------------------
+        isInt8Array() / isUint8Array() / isUint8ClampedArray() ---------------------------------------------------
+        isInt16Array() / isUint16Array() -------------------------------------------------------------------------
+        isInt32Array() / isUint32Array() / isFloat32Array() ------------------------------------------------------
+        isInt64Array() / isUint64Array() / isFloat64Array() ------------------------------------------------------
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        isArgumentsObject() --------------------------------------------------------------------------------------
+        true
+        isAsyncFunction() / isGeneratorFunction() / isGeneratorObject() ------------------------------------------
+        true
+        true
+        true
+        isBoxedPrimitive() / isStringObject() / isNumberObject() / isBooleanObject() / isSymbolObject() ----------
+        true
+        true
+        true
+        true
+        true
+        true
+        isDate() / isRegExp() / isProxy() / isPromise() / isNativeError() ----------------------------------------
+        true
+        true
+        true
+        true
+        true
+        true
+        true
+        isMap() / isSet() / isWeakMap() / isWeakSet() / isMapIterator() / isSetIterator() ------------------------
+        true
+        true
+        true
+        true
+        true
+        true
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\11 - util.types TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> Text Encoder (WHATWG Text Encoder API) <mark>util.textEncoder()</mark> </u></h2>
+    <p> - this API implements the WHATWG text encoder standards </p>
+<h2 style="color:darkblue;"><u> Text Encoder <mark>util.TextEncoder()</mark> / <mark>encode()</mark> / <mark>encodeInto()</mark> / <mark>encoding</mark> methods and properties </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const util = require('util');
+        
+// TextEncoder() ----------------------------------------------------------------------
+    var encoder = new util.TextEncoder();                                              // returns a text encored object (utf-8 encoding supported only)
+    
+ // encode() --------------------------------------------------------------------------
+    encoder.encode('Páll');                                                            // -> Uint8Array [80, 195, 161, 108, 108]    // encodes the passed string into an Uint8Array 
+    
+ // encodeInto() ----------------------------------------------------------------------
+    var contUint8Array = new Uint8Array(7);                                            // -> Uint8Array [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    
+    encoder.encodeInto('Páll', contUint8Array);                                        // -> {read:4, written:5}                    // encodes the passed string and stores the result in the 'contUint8Array' uint8Array (TypedArray)    
+    
+    contUint8Array;                                                                    // -> Uint8Array [80, 195, 161, 108, 108, 0, 0, 0, 0, 0]
+    
+ // encoding --------------------------------------------------------------------------
+    encoder.encoding;                                                                  // -> 'utf-8'                                // encoding format used by the text encoder object (only supported format)    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>util.TextEncoder</mark> / <mark>encode()</mark> / <mark>encodeInto()</mark> / <mark>encoding</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const util = require('util');
+    const TextEncoder = util.TextEncoder;                                              // after Node.js 11.0.0 no need to be required 
+    
+    var textEncoder = new TextEncoder();                                               // text encoder supports only 'utf-8' encoding ()
+    
+console.log( 'encode() ----------------------------------------------------------------------' );
+    console.log( textEncoder.encode("Kicsi Kutya Tarka") );                            // -> UintArray [...]            // encodes the passed string into an Uint8Array and returns it (uses 'utf-8' encoding)   
+    
+console.log( 'encodeInto() ------------------------------------------------------------------' );
+    var storeUint8Array = new Uint8Array(25);
+    
+    console.log( textEncoder.encodeInto('my name is Páll', storeUint8Array) );         // -> {read:15, written:16}      // the 'á' is encoded in 2 bytes
+    
+    console.log(storeUint8Array);                                                      // -> Uint8Array [...]           // only the necessary bytes are filled 
+    
+console.log( 'encoding ----------------------------------------------------------------------' );
+    console.log( textEncoder.encoding );                                               // -> 'utf-8'
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\12 - util.TextEncoder TEST> node main
+        encode() ----------------------------------------------------------------------
+        Uint8Array [
+          75, 105,  99, 115, 105, 32,
+          75, 117, 116, 121,  97, 32,
+          84,  97, 114, 107,  97
+        ]
+        encodeInto() ------------------------------------------------------------------
+        { read: 15, written: 16 }
+        Uint8Array [
+          109, 121, 32, 110,  97, 109, 101,  32,
+          105, 115, 32,  80, 195, 161, 108, 108,
+            0,   0,  0,   0,   0,   0,   0,   0,
+            0
+        ]
+        encoding ----------------------------------------------------------------------
+        utf-8
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\12 - util.TextEncoder TEST>    
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Text Decoder <mark>util.TextDecoder</mark> / <mark>decode()</mark> / <mark>encoding</mark> / <mark>fatal</mark> / <mark>ignoreBOM</mark> methods and properties </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const util = require('util');
+    
+// TextDecoder() ----------------------------------------------------------------------
+    var decoder = new TextDecoder('utf-8', {                                           // returns a text decoder object (will decode utf-8 encoded data)    
+        fatal:true,                                                                    // if decoding fails throws a TypeError is thrown    
+        ignoreBOM:true });                                                             // ignores the Byte Order Mark character from the beginning of the decoded string 
+    
+// decode() ---------------------------------------------------------------------------
+    var pall = new Uint8Array([239, 187, 191, 80, 195, 161, 108, 108, 195])            // the 3 first bytes is the UTF-8 BOM character (239, 187, 191)    // -! the last byte (195) alone cannot be interpreted in UTF-8 code poin 
+    
+    decoder.decode(pall);                                                              // -> '�Páll'    // the BOM character is included in the beginning of the string     
+    
+    
+    var a1stHalf = new Uint8Array([195]);                                              // the 'á' character is encoded as [195 161] utf-8 Uint8Array 
+    var a2ndHalf = new Uint8Array([161]); 
+    
+    decoder.decode(a1stHalf, {stream:true});                                           // the decoder object keeps trailing bytes in the internal buffer when finishes 
+    decoder.decode(a2ndHalf, {stream:true});                                           // -> 'á'         // the trailing byte is used here first (so [195, 161] will build the á character)     
+    
+// decoding / fatal / ignoreBOM -------------------------------------------------------
+    decoder.encoding;                                                                  // -> 'utf-8'     // decoder object encoding format 
+    decoder.fatal;                                                                     // -> true        // throws a TypeError uppon decode failure 
+    decoder.ignoreBOM;                                                                 // -> true        // returns the BOM character at the beginning of the decoded string (if any)   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>util.TextDecoder</mark> / <mark>decode()</mark> / <mark>encoding</mark> / <mark>fatal</mark> / <mark>ignoreBOM</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const TextEncoder = require('util').TextEncoder;
+    const TextDecoder = require('util').TextDecoder;
+    
+console.log( '----- fatal option enabled ----------------------------------------------------------' );
+    var decoder = new TextDecoder('utf8', {                                            // decoder object returned  
+        fatal:true})                                                                   // throws a TypeError if an error occurs during the decoding
+        
+    var testDataSrc = new Uint8Array([0x4a, 0xf4, 0x12, 0x9c, 0x7c, 0xee, 0x00]);      // some random TypedArray
+    
+    try {
+        decoder.decode(testDataSrc)                                                    // TypeError thrown and caught because 
+    } catch(err) {
+        console.log( err.code );                                                       // -> ERR_ENCODING_INVALID_ENCODED_DATA
+    }
+    
+console.log( '----- enableBOM option enabled ------------------------------------------------------' );
+    var decoderWithBOM = new TextDecoder('utf-8', {ignoreBOM:true});
+    var decoderWithoutBOM = new TextDecoder('utf-8', {ignoreBOM:false});
+        
+        // data contains a UTF-8 BOM (Byte Order Mark = zero with no break space character) at the beginning of the data () 
+    var dataWithBOM = new Uint8Array([0xEF, 0xBB, 0xBF, 75, 105,  99, 115, 105, 32, 75, 117, 116, 121,  97, 32, 84,  97, 114, 107,  97]);
+    
+    var decodedData1 = decoderWithBOM.decode(dataWithBOM);
+        console.log( decodedData1 );                                                   // -> '�Kicsi Kutya Tarka'     // contains the BOM character at the beginning of the string 
+        console.log( decodedData1.length );                                            // -> 18
+    
+    var decodedData2 = decoderWithoutBOM.decode(dataWithBOM);
+        console.log( decodedData2 );                                                   // -> 'Kicsi Kutya Tarka'       // BOM character ignored
+        console.log( decodedData2.length );                                            // -> 17
+    
+console.log( '----- decode() ----------------------------------------------------------------------' );
+    var simpleDecoder = new TextDecoder();          
+    
+        // the trailing byte cannot be interpreted in utf-8 
+    var someData = new Uint8Array([75, 105,  99, 115, 105, 32, 75, 117, 116, 121,  97, 32, 84,  97, 114, 107,  97, 241]);
+    var emptyData = new Uint8Array([75]);
+    
+    var decodedData3 = simpleDecoder.decode(someData, {stream:false});                 // returns undecodable trailing bytes 
+        console.log( decodedData3 );                                                   // -> 'Kicsi Kutya Tarka�'     // undecodable trailing byte returned 
+    
+    var decodedData4 = simpleDecoder.decode(someData, {stream:true});                  // undecodable trailing bytes stored in the internal decoder buffer for the next call
+        console.log( decodedData4 );                                                   // -> 'Kicsi Kutya Tarka'       // undecodable trailing byte not returned (stored in the internal buffer of the decoder for the next call)
+        
+        console.log( simpleDecoder.decode(emptyData) );                                // -> '�K'                     // the stored byte is inserted at the beginning of the string 
+    
+console.log( '----- fatal / ignoreBOM / encoding --------------------------------------------------' );
+    var testDecoder = new TextDecoder('x-cp1255', {fatal:true, ignoreBOM:false});
+    
+    console.log( testDecoder.encoding );                                               // -> 'windows-1255'            // encoding format used by the decoder 
+    console.log( testDecoder.fatal );                                                  // -> true                      // fatal option enabled 
+    console.log( testDecoder.ignoreBOM );                                              // -> true                      // ignoreBOM option enabled 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\13 - util.TextDecoder TEST> node main
+        ----- fatal option enabled ----------------------------------------------------------
+        ERR_ENCODING_INVALID_ENCODED_DATA
+        ----- enableBOM option enabled ------------------------------------------------------
+        �Kicsi Kutya Tarka
+        18
+        Kicsi Kutya Tarka
+        17
+        ----- decode() ----------------------------------------------------------------------
+        Kicsi Kutya Tarka�
+        Kicsi Kutya Tarka
+        �K
+        ----- fatal / ignoreBOM / encoding --------------------------------------------------
+        windows-1255
+        true
+        false
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\utilities\13 - util.TextDecoder TEST>    
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

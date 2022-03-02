@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Path </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Path (ver 4.0.0) </h1>
+    <p> Updated ( 2019-09-09 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Path
+    </p>
+    <pre class="syntax">
+                        <em>┌─────────────────────┬────────────┐</em>                                   <em>┌─────────────────────┬────────────┐</em>
+            on POSIX :  <em>│          dir        │    base    │</em>                   on Windows :    <em>│          dir        │    base    │</em>
+                        <em>├──────┬              ├──────┬─────┤</em>                                   <em>├──────┬              ├──────┬─────┤</em>
+                        <em>│ root │              │ name │ ext │</em>                                   <em>│ root │              │ name │ ext │</em>
+                        "  /    home/user/dir / file  .txt "                                   " C:\      path\dir   \ file  .txt "
+                        <em>└──────┴──────────────┴──────┴─────┘</em>                                   <em>└──────┴──────────────┴──────┴─────┘</em>
+    </pre>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr class="10.02">
+        <td> 
+            <strong>path</strong>.basename(<strong>path:str</strong>, <i class="openable">exclude:str<div>
+                <p> - this string part will be excluded from the <u>end</u> returned result </p>
+            </div></i>) 
+        </td>
+        <td> - returns the last portion of the <strong>path</strong> (part after the last path segment separator)
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.1.25 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.02">
+        <td> <strong>path</strong>.delimiter </td>
+        <td> - returns the <u>path-delimiter</u> in a string for the current platform (windows = <mark>;</mark> | posix = <mark>:</mark>)
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.9.3 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>path</strong>.dirname(<strong>filePath:str</strong>) </td>
+        <td> - returns the directory path of the passed <u>file path</u> in a string (Ex: file path = <mark>C:/Program Files/node/node.js</mark>)
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.1.16 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>path</strong>.extname(<strong>filePath:str</strong>) </td>
+        <td> returns the file extension in a string of the <strong>filePath</strong> (portion after the <u>last</u> <mark>.</mark>(period) character in the last portions of the path)  
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.1.25 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> 
+            <strong>path</strong>.format(<i class="openable">option:obj<div>
+                <p> dir: <strong>str</strong> - if provided <mark>root</mark> ignored </p>
+                <p> root: <strong>str</strong> </p>
+                <p> base: <strong>str</strong> - if provided <mark>name</mark> and <mark>ext</mark> ignored </p>
+                <p> name: <strong>str</strong> </p>
+                <p> ext: <strong>str</strong> </p>
+            </div></i>) 
+        </td>
+        <td> - returns a path string from the passed object's elements <br>
+             - opposite of the <mark>parse()</mark> method 
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>path</strong>.isAbsolute(<strong>path:str</strong>) </td>
+        <td> - returns <mark>true</mark> if the passed path is an absolute path, otherwise returns <mark>false</mark> (<mark>""</mark>(zero-length string) = <mark>false</mark>)
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 0.11.2 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>path</strong>.join(<i>path:str, ...</i>) </td>
+        <td> - joins path segments together by using the platform specific path segment separator <br>
+             - normalizes the joined path with the <mark>normalize()</mark> method 
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 0.1.16 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>path</strong>.normalize(<strong>path:str</strong>) </td>
+        <td> - normalizes (resolves) the <mark>..</mark> character as parent directory and the <mark>.</mark> character as current directory (<mark>""</mark>(zero-length string) same as <mark>.</mark>) <br>
+             - multiple path segment separators will be reduced to one platform specific (<mark>/</mark> on POSIX and <mark>\</mark> on windows) <br>
+             - trailing separators are preserved  
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 0.1.23 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>path</strong>.parse(<strong>path:str</strong>) </td>
+        <td> - returns an object whose properties represent the passed path's elements (object properties : <mark>dir</mark> / <mark>root</mark> / <mark>base</mark> / <mark>name</mark> / <mark>ext</mark>) <br>
+             - opposite of the <mark>format()</mark> method
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> <strong>path</strong>.posix<strong>.pathMethod</strong> </td>
+        <td> - implements the following method for posix platforms
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+                <span class="openable"> more... <div>
+                    <p> 15.3.0 </p>
+                    <p> - directly can be required as <mark>path/posix</mark> </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>path</strong>.relative(<strong>fromPath:str</strong>, <strong>toPath:str</strong>) </td>
+        <td> 
+            - returns the path from the <strong>fromPath</strong> to the <strong>toPath</strong> location in a string (<mark>""</mark>(zero-length string) = current directory)  
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <strong>path</strong>.resolve(<i>path:str, ...</i>) </td>
+        <td> - joins path segments together by resolving them into an <u>absolute path</u> (trailing path segment separators are removed) <br>
+             - path segments are processed from left to right until an absolute path is constructed <br>
+             - if no arguments are passed the current absolute path will be returned <br>
+             - normalizes the returned absolute path with the <mark>normalize()</mark> method
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.01">
+        <td> <strong>path</strong>.sep </td>
+        <td> - returns the <u>path segment separator</u> in a string for the current platform (windows = <mark>\</mark> | posix = <mark>/</mark>)
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.7.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.03">
+        <td> <strong>path</strong>.toNamespacedPath(<strong>path:str</strong>) </td>
+        <td> - returns the equivalent namespace-prefixed path for the given path, <u>(only for Windows systems! on POSIX returns the path unmodified)</u>  
+            <span id="browserSupport" title="updated : 2019-09-11">
+                <span><i class="fab fa-node-js"></i> 9.0.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>path</strong>.win32<strong>.pathMethod</strong> </td>
+        <td> - implements the following method for windows platforms  
+            <span id="browserSupport" title="updated : 2019-09-10">
+                <span><i class="fab fa-node-js"></i> 0.11.15 </span>
+                <span class="openable"> more... <div>
+                    <p> 15.3.0 </p>
+                    <p> - directly can be required as <mark>path/win32</mark> </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+<br>    
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v12.x/docs/api/path.html" target="_blanc"> Node.js path module </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - <u>POSIX uses <mark>/</mark>(slash)</u> and <u>windows uses both <mark>/</mark>(slash) and <mark>\</mark>(backslash)</u> as path segment separator </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the path module provides utilities for working with file and directory paths </p>
+    <p> - Windows and POSIX uses different path forms, Node.js detects the current platform and uses the current platform specific path methods </p>
+    <p> - we can explicitly use windows specific methods through the <mark>win32</mark> property and POSIX specific methods through the <mark>posix</mark> property </p>
+<h2 class="headerExtra"><u> Methods and Properties </u></h2>
+<h2 style="color:darkblue;"><u> The <mark>win32</mark> / <mark>posix</mark> / <mark>sep</mark> / <mark>delimiter</mark> properties </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const path = require('path');
+    
+// win32 / posix ----------------------------------------------------------------
+    path.isAbsolute('d:\\Safe\\CODE +\\My Site\\');                              // -> true         // detected platform = windows 
+    path.win32.isAbsolute('d:\\Safe\\CODE +\\My Site\\');                        // -> true         // this is an absolute path on windows 
+    path.posix.isAbsolute('d:\\Safe\\CODE +\\My Site\\');                        // -> false        // not an absolute path on posix (because the path is windows specific)   
+    
+// sep / delimiter --------------------------------------------------------------
+    path.win32.sep;                                                              // -> '\'          // windows path segment separator 
+    path.posix.sep;                                                              // -> '/'          // posix path segment separator   
+    
+    path.win32.delimiter                                                         // -> ';'          // windows path delimiter 
+    path.posix.delimiter                                                         // -> ':'          // posix path delimiter 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>win32</mark> / <mark>posix</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const path = require('path');
+    const assert = require('assert');
+    
+    console.log( path.delimiter );                                               // windows platform detected so the 'delimiter' property is implemented for windows platform 
+    console.log( path.win32.delimiter );                                         // property implemented for windows platform 
+    console.log( path.posix.delimiter );                                         // property implemented for posix platform  
+    
+    assert.strictEqual(path.delimiter, path.win32.delimiter);                    // assertion error is not thrown = uses the same property 
+    </pre>   
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\01 win32 poxis TEST> node main
+        ;                                                                        // -! path.delimiter               // platform automatically detected 
+        ;                                                                        // -! path.win32.delimiter         // property implemented for windows platfroms
+        :                                                                        // -! paht.posix.delimiter         // property implemented for posix platforms
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\01 win32 poxis TEST>
+    </pre>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>sep</mark> / <mark>delimiter</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const path = require('path');
+    
+// sep -------------------------------------------------------------------------
+    console.log( path.win32.sep );                                              // windows platform specific path segment separator returned 
+    console.log( path.posix.sep );                                              // posix platform specific path segment separator returned 
+    
+// delimiter -------------------------------------------------------------------
+    console.log( path.win32.delimiter );                                        // windows platform specific path-delimiter returned 
+    console.log( path.posix.delimiter );                                        // posix platform specific path-delimiter returned 
+    </pre>   
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\02 sep delimiter TEST> node main            
+        \                                                                       // -! path.win32.sep    
+        /                                                                       // -! path.posix.sep
+        ;                                                                       // -! path.win32.delimiter 
+        :                                                                       // -! path.posix.delimiter 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\02 sep delimiter TEST>    
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>dirname()</mark> / <mark>basename()</mark> / <mark>extname()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const path = require('path');
+    
+// dirname() -------------------------------------------------------------------- 
+    path.win32.dirname('C:\\Program Files\\node\\node.js');                      // -> 'C:\Program Files\node'          // directy path of the passed file path returned    
+    path.win32.dirname('C:\\Program Files\\node\\');                             // -> 'C:\Program Files'               // -! not a file path = previous directory path returned 
+    
+    path.posix.dirname('/dev/node/node.js');                                     // -> '/dev/node'
+    path.posix.dirname('/dev/node/npm/color_module/bin');                        // -> '/dev/node/npm/color_module'     // -! not a file path = previous directory path returned 
+    
+// basename() -------------------------------------------------------------------
+    path.win32.basename('C:\\Program Files\\nodeFolder\\node.js');               // -> 'node.js'                        // returns the last portion of the path  
+    path.win32.basename('C:\\Program Files\\nodeFolder');                        // -> 'nodeFolder'
+    path.win32.basename('C:\\Program Files\\nodeFolder\\node.js', '.js');        // -> 'node'                           // removes the extension of the returned result 
+    path.win32.basename('C:\\Program Files\\nodeFolder', 'er');                  // -> 'nodeFold'                       // the 2nd argument is basically removed from the end of the returned result   
+    
+    path.posix.basename('/dev/nodeFolder/node.js');                              // -> 'node.js'
+    path.posix.basename('/dev/nodeFolder');                                      // -> 'nodeFolder'
+    path.posix.basename('/dev/nodeFolder/node.js', '.js');                       // -> 'node'
+    path.posix.basename('/dev/nodeFolder', 'deFolder');                          // -> 'no'                             // the 2nd argument is basically removed from the end of the returned result   
+    
+// extname() --------------------------------------------------------------------
+    path.win32.extname('C:/Program Files/nodeFolder/node.js');                   // -> '.js'                            // returns the file extension 
+    path.win32.extname('C:/Program.Files/node.Folder');                          // -> '.Folder'                        // basically returns the string portion after the '.'(period) character in the last portion of the path    
+    
+    path.posix.extname('dev/nodeFolder/node.js');                                // -> '.js'
+    path.posix.extname('dev/Program.Files');                                     // -> '.Files'
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>dirname()</mark> / <mark>basename()</mark> / <mark>extname()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const path = require('path');
+    
+    var winUrl = 'd:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\Path\\index.html';
+    var posixUrl = '/Safe/CODE +/My Site/03 Improuve/Learn WebDesign/04 Node.js/Path/index.html';
+    
+// dirname() --------------------------------------------------------------------
+    console.log( path.win32.dirname(winUrl) );                                   // returns the path to the last directory 
+    console.log( path.posix.dirname(posixUrl) ); 
+    
+// basename() -------------------------------------------------------------------
+    console.log( path.win32.basename(winUrl) );
+    console.log( path.win32.basename(winUrl, '.html') );
+    console.log( path.posix.basename(posixUrl) );
+    console.log( path.posix.basename(posixUrl, 'ex.html') );
+    
+// extname() --------------------------------------------------------------------
+    console.log( path.win32.extname(winUrl) );
+    console.log( path.posix.extname(posixUrl) );
+    console.log( path.win32.extname('c:\\some.file') );
+    console.log( path.posix.extname('c:\\another.extra stuff') );
+    </pre>   
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\03 dirname() basename() extname() TEST> node main             
+// dirname() --------------------------------------------------------------------
+        d:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Path       // -! path.win32.dirname(winUrl)
+        /Safe/CODE +/My Site/03 Improuve/Learn WebDesign/04 Node.js/Path         // -! path.posix.dirname(posixUrl)
+// basename() -------------------------------------------------------------------
+        index.html                                                               // -! path.win32.basename(winUrl);
+        index                                                                    // -! path.win32.basename(winUrl, '.html');
+        index.html                                                               // -! path.posix.basename(posixUrl);
+        ind                                                                      // -! path.posix.basename(posixUrl, 'ex.html');        // basically the second argument removes the last part of the returned result   
+// extname() --------------------------------------------------------------------
+        .html                                                                    // -! path.win32.extname(winUrl);                      
+        .html                                                                    // -! path.posix.extname(posixUrl);  
+        .file                                                                    // -! path.win32.extname('c:\\some.file');             // returns the the protion after the '.'(period) character of the last part of the path   
+        .extra stuff                                                             // -! path.posix.extname('c:\\another.extra stuff');  
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\03 dirname() basename() extname() TEST>
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>parse()</mark> / <mark>format()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const path = require('path');
+    
+// parse() ----------------------------------------------------------------------
+    path.win32.parse('D:\\serv\\html\\index.html')                               // -> {root:'D:\\', dir:'D:\\serv\\html', base:'index.html', ext:'.html', name:'index'}
+    path.posix.parse('/srv/html/index.html');                                    // -> {root:'/', dir:'/srv/html', base:'index.html', ext:'.html', name:'index'}
+    
+// format() ---------------------------------------------------------------------
+    path.win32.format({dir:'D:\\serv\\html',                                     // -> 'D:\serv\html\index.html'
+                       root:'D:\\', 
+                       base:'index.html', 
+                       name:'index', 
+                       ext:'.html'});
+    
+    path.posix.format({dir:'/serv/html',                                         // -> '/serv/html/index.html'      // -! the 'dir' property overrides the 'root' property 
+                       root:'\\',                                                                                   // this is ignored 
+                       base:'index.html',                                                                           // -! the 'base' property overrides the 'name' and 'ext' properties   
+                       name:'something other',                                                                      // this is ignored
+                       ext:'.css'})                                                                                 // this is ignored
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>parse()</mark> / <mark>format()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const path = require('path');
+    
+// parse() ----------------------------------------------------------------------
+    var winURL = 'D:\\server\\html\\mySite\\index.html';
+    var posixURL = '/serv/html/mySite/index.html';
+    
+    console.log( path.win32.parse(winURL) );                                     // creates a path object from the passed path
+    console.log( path.posix.parse(posixURL) );
+    
+// format() ---------------------------------------------------------------------
+    var winURL_obj = {dir:'C:\\Program Files\\Call of Duty', base:'run.exe'}     // these two minimum required properties are overriding the other 3 if provided 
+    var posixURL_obj = {root:'/', dir:'/dev/Call of Duty', name:'run', ext:'.exe', base:'run.exe'};
+    
+    console.log( path.win32.format(winURL_obj) );                                // returns a path from the passed path object 
+    console.log( path.posix.format(posixURL_obj) );
+    </pre>   
+    <pre class="cmd" style="margin-top:1px;">
+    S D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\04 parse() format() TEST> node main 
+// parse() ----------------------------------------------------------------------        
+        {                                                                        // -! path.win32.parse(winURL)  
+        root: 'D:\\',
+        dir: 'D:\\server\\html\\mySite',
+        base: 'index.html',
+        ext: '.html',
+        name: 'index'
+        }
+        {                                                                        // -! path.posix.parse(posixURL)
+        root: '/',
+        dir: '/serv/html/mySite',
+        base: 'index.html',
+        ext: '.html',
+        name: 'index'
+        }
+// format() ---------------------------------------------------------------------
+        C:\Program Files\Call of Duty\run.exe                                    // -! path.win32.format(winURL_obj);
+        /dev/Call of Duty/run.exe                                                // -! path.posix.format(posixURL_obj);
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\04 parse() format() TEST>
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>normalize()</mark> / <mark>join()</mark> / <mark>resolve()</mark> methods </u></h2>
+    <p style="color:yellow;"> - <mark>join()</mark> simply joins path segments together VS <mark>resolve()</mark> resolves path segments into an absolute path </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const path = require('path');
+    
+// normalize() ------------------------------------------------------------------
+    path.win32.normalize('C:\\Program Files\\Call of Duty\\..');                 // -> 'C:\Program Files'                           // normalized to the parent directory 
+    path.win32.normalize('C:\\Program Files\\Call of Duty\\.');                  // -> 'C:\Program Files\Call of Duty'              // normalized to the current directory  
+    path.win32.normalize('C:////Program Files\\\\Call of Duty///');              // -> 'C:\Program Files\Call of Duty\'             // multiple path segment separators are reduces (normalized) to one platform specific and trailing allowed   
+    
+    path.posix.normalize('dev/appliatons/Call of Duty/..');                      // -> 'dev/appliatons'                             // normalized to the parent directory 
+    path.posix.normalize('dev/appliatons/Call of Duty/.');                       // -> 'dev/appliatons/Call of Duty'                // normalized to the current directory  
+    path.posix.normalize('dev///applications/////Call of Duty//');               // -> 'dev/applications/Call of Duty/'             // multiple path segment separators are reduces (normalized) to one platform specific and trailing allowed   
+    
+// join() -----------------------------------------------------------------------
+    path.win32.join('/D:', '//Program Files\\\\', 'Call of Duty', 'run.exe//');  // -> '\D:\Program Files\Call of Duty\run.exe\'    // joins path segments together then uses the 'normalize()' method on the final result 
+    
+    path.posix.join('/dev', '//Program Files////', 'Call of Duty', 'run.exe//'); // -> '/dev/Program Files/Call of Duty/run.exe/'   // joins path segments together then uses the 'normalize()' method on the final result 
+    
+// resolve() --------------------------------------------------------------------
+    path.win32.resolve('\\', 'Program File', 'Call of Duty', 'run.exe');         // -> 'D:\Program File\Call of Duty\run.exe'       // resolves to an absolute path then uses the 'normalize' method on the final result 
+    path.win32.resolve('C:', 'Program File\\', 'Call of Duty', 'run.exe//');     // -> 'C:\Program File\Call of Duty\run.exe'       // no segment separator trailing (obviously this is an absolute path)   
+    path.win32.resolve();                                                        // -> 'current absolute path'                      // if no arguments are passed the current absolute path will be returned  
+    
+    path.posix.resolve('/srv', '/dev', 'app', 'Call of Duty', 'run.exe');        // -> '/dev/app/Call of Duty/run.exe'              // -! on posix the last path segment starting with the '/'(backslash) character will be the root 
+    path.posix.resolve('/srv', '/dev', 'app', 'Call of Duty', 'run.exe////');    // -> '/dev/app/Call of Duty/run.exe'              // no segment separator trailing (obviously this is an absolute path)   
+    path.posix.resolve();                                                        // -> 'current absolute path'                      // if no arguments are passed the current absolute path will be returned   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>normalize()</mark> / <mark>join()</mark> / <mark>resolve()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const path = require('path');
+    
+// normalize() -----------------------------------------------------------------------------
+    console.log( path.win32.normalize('C:\\Program Files\\Call of Duty\\..') );             // normalizes to the parent directory   
+    console.log( path.win32.normalize('C:\\Program Files\\Call of Duty\\.') );              // normalizes to the current directory 
+    console.log( path.win32.normalize('C:\\Program Files\\Call of Duty\\') );               // keeps path segment separator trailing   
+    console.log( path.win32.normalize('C:\/\///Program Files////Call of Duty') );           // path segement separators are normalized to desired platform ('\' on windows )
+
+    console.log( path.posix.normalize('/dev/driveC/myFile/..') );                           // normalizes to the parent directory   
+    console.log( path.posix.normalize('dev/driveC/myFile/.') );                             // normalizes to the current directory 
+    console.log( path.posix.normalize('dev/driveC/myFile/') );                              // keeps path segment separator trailing   
+    console.log( path.posix.normalize('dev/driveC///myFile///////') );                      // path segement separators are normalized to desired platform ('\' on windows )
+    
+// join() ----------------------------------------------------------------------------------
+    console.log( path.win32.join('d:', 'Program Files', '///Call of Duty', '\\run.exe') );  // joins path parts and normalizes path segment separators 
+    console.log( path.win32.join('d:', 'Program Files', '///Call of Duty', '\\..') );       // normalizes the joined path string (parent directory)
+    console.log( path.win32.join('d:', 'Program Files', '///Call of Duty', '\\') );         // keeps path segment saparator trailing 
+    console.log( path.posix.join('///', '/', '/dev', 'drive', '////////myFile') );          // joins path parts and normalizes path segment separators
+    console.log( path.posix.join('///', '/', '/dev', 'drive', '////////myFile', '') );      // normalizes the joined path string (current directory)
+    console.log( path.posix.join('///', '/', '/dev', 'drive', '////myFile', '.', '///') );  // keeps path segment saparator trailing 
+    
+// resolve() -------------------------------------------------------------------------------
+    console.log( path.win32.resolve('someFolder', 'C:\\', '//Program Files//', 'nodeJS') ); // resolves to an absolute path (not just joins path segments together like the 'join()' method)
+    console.log( path.win32.resolve() );                                                    // no arguments are passed = current absolute path returned 
+    console.log( path.win32.resolve('D:\\', 'server', 'html', 'mySite\\\\') );              // no path segment separator alowed because the result must be an absolute path 
+    console.log( path.posix.resolve('someFolder', '/srv', 'html', 'mySite') );              
+    console.log( path.posix.resolve() );                                                    // no arguments are passed = current absolute path returned
+    console.log( path.posix.resolve('/', '/someFolder', '/', 'srv', 'html', 'mySite') );    // on POSIX apparently it takes the absolute path from the last '/'(slash)   
+    </pre>   
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\05 normalize() join() resolve() TEST> node main       
+// normalize() -----------------------------------------------------------------
+        C:\Program Files                                                        // -! path.win32.normalize('C:\\Program Files\\Call of Duty\\..');
+        C:\Program Files\Call of Duty                                           // -! path.win32.normalize('C:\\Program Files\\Call of Duty\\.');
+        C:\Program Files\Call of Duty                                           // -! path.win32.normalize('C:\\Program Files\\Call of Duty\\');    
+        C:\Program Files\Call of Duty                                           // -! path.win32.normalize('C:\/\///Program Files////Call of Duty');
+        /dev/driveC                                                             // -! path.posix.normalize('/dev/driveC/myFile/..');     
+        dev/driveC/myFile                                                       // -! path.posix.normalize('dev/driveC/myFile/.');       
+        dev/driveC/myFile/                                                      // -! path.posix.normalize('dev/driveC/myFile/');        
+        dev/driveC/myFile/                                                      // -! path.posix.normalize('dev/driveC///myFile///////');
+// join() ----------------------------------------------------------------------
+        d:\Program Files\Call of Duty\run.exe                                   // -! path.win32.join('d:', 'Program Files', '///Call of Duty', '\\run.exe');
+        d:\Program Files                                                        // -! path.win32.join('d:', 'Program Files', '///Call of Duty', '\\..');     
+        d:\Program Files\Call of Duty\                                          // -! path.win32.join('d:', 'Program Files', '///Call of Duty', '\\');       
+        /dev/drive/myFile                                                       // -! path.posix.join('///', '/', '/dev', 'drive', '////////myFile');        
+        /dev/drive/myFile                                                       // -! path.posix.join('///', '/', '/dev', 'drive', '////////myFile', '');    
+        /dev/drive/myFile/                                                      // -! path.posix.join('///', '/', '/dev', 'drive', '////myFile', '.', '///');
+// resolve() -------------------------------------------------------------------
+        C:\Program Files\nodeJS                                                                                     // -! path.win32.resolve('someFolder', 'C:\\', '//Program Files//', 'nodeJS');
+        D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\05 normalize() join() resolve() TEST     // -! path.win32.resolve();
+        D:\server\html\mySite                                                                                       // -! path.win32.resolve('D:\\', 'server', 'html', 'mySite\\\\');
+        /srv/html/mySite                                                                                            // -! path.posix.resolve('someFolder', '/srv', 'html', 'mySite');       
+        D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\05 normalize() join() resolve() TEST     // -! path.posix.resolve();     
+        /srv/html/mySite                                                                                            // -! path.posix.resolve('/', '/someFolder', '/', 'srv', 'html', 'mySite');
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\05 normalize() join() resolve() TEST> 
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> The <mark>relative()</mark> / <mark>isAbsolute()</mark> / <mark>toNamespacedPath()</mark> methods </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    const path = require('path');
+    
+// relative() ------------------------------------------------------------------
+    path.win32.relative('C:\\Program Files\\Call of Duty', 'C:\\');              // -> '../..'                       // returns the relative path between the passed paths assuming the 1st argument as current directory   
+    path.win32.relative('C:\\Program Files', 'C:\\Program Files\\Call of Duty\\mode');  // -> 'Call of Duty\\mode'
+    path.win32relative('', 'C:\\');                                              // -> '..'                          // the ''(zero-length string) is assumed as current directory (we are in 'C:\\windows')   
+    path.win32.relative('C:\\Program Files', 'C:\\server');                      // -> '..\server'                   // -! navigates back to the root directory then to the target path 
+    path.win32.relative('C:\\Program Files', 'D:\\server');                      // -> 'D:\\server'                  // -! because the root elements are different the target path is returned 
+        
+    path.posix.relative('/dev/app', '/');                                        // -> '../../'                      // returns the relative path between the passed paths assuming the 1st argument as current directory   
+    path.posix.relative('/dev/app', '/dev/app/Mario/level1');                    // -> 'Mario/level1'
+    path.posix.relative('', '/');                                                // -> '../'                         // the ''(zero-length string) is assumed as current directory (we are in '/srv')   
+    path.posix.relative('/dev/some folder', '/srv');                             // -> '../../srv'                   // -! navigates back to the root directory then to the target path 
+    
+// isAbsolute() -----------------------------------------------------------------
+    path.win32.isAbsolute('C:\\Program Files\\Call of Duty');                    // -> true             
+    path.win32.isAbsolute('Program Files\\Call of Duty');                        // -> false
+                
+    path.posix.isAbsolute('/dev/Call of Duty');                                  // -> true
+    path.posix.isAbsolute('dev/Call of Duty');                                   // -> false 
+    
+// toNamespacedPath() -----------------------------------------------------------
+    path.win32.toNamespacedPath('C:\\Program Files\\Call of Duty');              // -> '\\?\C:\Program Files\Call of Duty'
+    path.win32.toNamespacedPath('Program Files\\Call of Duty');                  // -> '\\?\C:\windows\Program Files\Call of Duty'     // if a relative path is provided it returns the current directory path (we are in 'C:\\windows') with the passed path at the end   
+    
+    path.posix.toNamespacedPath('/dev/app/Call of Duty');                        // -> '/dev/app/Call of Duty'                         // on POSIX systems returns the passed argument as it is   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>relative()</mark> / <mark>isAbsolute()</mark> / <mark>toNamespacedPath()</mark> TEST </u></h4>
+    <pre style="margin-bottom:1px;">
+    const path = require('path');
+    
+// relative() --------------------------------------------------------------------------------------------------------------------------
+    console.log( path.win32.relative('C:\\Program Files\\Call of Duty\\', 'C:\\') );                                                    
+    console.log( path.win32.relative('C:\\Program Files\\Call of Duty\\', 'C:\\Program Files\\Call of Duty\\bin\\mode1\\graph') );
+    console.log( path.win32.relative('C:\\Program Files\\Call of Duty\\', 'D:\\Serv\\html\\mySite') );                                  // the last argument is returned because the root element isn't the same 
+    console.log( path.win32.relative('C:\\windows\\Call of Duty\\', 'D:\\Serv\\html\\mySite') );                                         
+    console.log( path.win32.relative('D:\\', '') );                                                                                     // the ""(zero-fill string) is treated as current directory absolute path   
+    console.log( path.win32.relative('', 'D:\\') );
+    
+    console.log( path.posix.relative('/dev/driveC/Call of Duty', '/') );
+    console.log( path.posix.relative('/dev/driveC/Call of Duty', '/dev/driveC/Call of Duty/bin/mode1/graph') );
+    console.log( path.posix.relative('/dev/driveC/Call of Duty', '/serv/html/mySite') );                                                // naviages back to the root element form the 1st argument path then navigates to the 2nd argument path  
+    console.log( path.posix.relative('dev/driveC/Call of Duty', '/serv/html/mySite') );
+    
+// isAbsolute() ------------------------------------------------------------------------------------------------------------------------    
+    console.log( path.win32.isAbsolute('C:\\Program Files\\Call of Duty') );
+    console.log( path.win32.isAbsolute('Program Files\\Call of Duty') );
+    console.log( path.win32.isAbsolute("") );
+    console.log( path.win32.isAbsolute('.') );
+    
+    console.log( path.posix.isAbsolute('/dev/Call of Duty') );
+    console.log( path.posix.isAbsolute('dev/Call of Duty') );
+    console.log( path.posix.isAbsolute("") );
+    console.log( path.posix.isAbsolute(".") );
+    
+// toNamespacedPath() ------------------------------------------------------------------------------------------------------------------   
+    console.log( path.win32.toNamespacedPath('C:\\Program Files\\Call of Duty\\run.exe') );
+    
+    console.log( path.posix.toNamespacedPath('/dev/apps/Call of Duty') );                                                               // on POSIX this method has no effect 
+    </pre>
+    <pre class="cmd" style="margin-top:1px;">
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\06 relative() isAbsolute toNamespacedPath() TEST> node main           
+// relative() ------------------------------------------------------------------
+        ..\..                                                                   // -! path.win32.relative('C:\\Program Files\\Call of Duty\\', 'C:\\');
+        bin\mode1\graph                                                         // -! path.win32.relative('C:\\Program Files\\Call of Duty\\', 'C:\\Program Files\\Call of Duty\\bin\\mode1\\graph');   
+        D:\Serv\html\mySite                                                     // -! path.win32.relative('C:\\Program Files\\Call of Duty\\', 'D:\\Serv\\html\\mySite');     // the last argument is returned the root element isn't the same  
+        D:\Serv\html\mySite                                                     // -! path.win32.relative('C:\\windows\\Call of Duty\\', 'D:\\Serv\\html\\mySite');
+        safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\06 relative() isAbsolute toNamespacedPath() TEST    // -! path.win32.relative('D:\\', '');            // the ""(zero-fill string) is treated as current directory absolute path   
+        ..\..\..\..\..\..\..\..                                                                                             // -! path.win32.relative('', 'D:\\');
+        ../../../                                                               // -! path.posix.relative('/dev/driveC/Call of Duty', '/');
+        bin/mode1/graph                                                         // -! path.posix.relative('/dev/driveC/Call of Duty', '/dev/driveC/Call of Duty/bin/mode1/graph');
+        ../../../serv/html/mySite                                               // -! path.posix.relative('/dev/driveC/Call of Duty', '/serv/html/mySite');                   // naviages back to the root element form the 1st argument path then navigates to the 2nd argument path   
+        ../../../../serv/html/mySite                                            // -! path.posix.relative('dev/driveC/Call of Duty', '/serv/html/mySite');
+// isAbsolute() ----------------------------------------------------------------
+        true                                                                    // -! path.win32.isAbsolute('C:\\Program Files\\Call of Duty');
+        false                                                                   // -! path.win32.isAbsolute('Program Files\\Call of Duty');
+        false                                                                   // -! path.win32.isAbsolute("");
+        false                                                                   // -! path.win32.isAbsolute('.');
+        true                                                                    // -! path.posix.isAbsolute('/dev/Call of Duty');
+        false                                                                   // -! path.posix.isAbsolute('dev/Call of Duty');
+        false                                                                   // -! path.posix.isAbsolute("");
+        false                                                                   // -! path.posix.isAbsolute(".");
+// toNamespacedPath() ----------------------------------------------------------
+        \\?\C:\Program Files\Call of Duty\run.exe                               // -! path.win32.toNamespacedPath('C:\\Program Files\\Call of Duty\\run.exe');
+        /dev/apps/Call of Duty                                                  // -! path.posix.toNamespacedPath('/dev/apps/Call of Duty');                                  // on POSIX this method has no effect 
+    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\path\06 relative() isAbsolute toNamespacedPath() TEST>      
+    </pre>
+</details>
+    
+    <br><br>
+</body>
+</html>

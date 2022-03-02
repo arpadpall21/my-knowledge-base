@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> HTTPS </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> HTTPS (ver 3.4.1) </h1>
+    <p> Updated ( 2020-06-29 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> HTTPS  
+    </p>
+    <pre class="syntax">
+    <span style="color:deepskyblue;">------- incomming traffic -------> </span>
+    
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> tls.Socket <span style="color:deepskyblue;">-></span> https.ClientRequest
+      <span style="color:deepskyblue;">---></span>  net.Socket <span style="color:deepskyblue;">-></span> tls.Socket <span style="color:deepskyblue;">-></span> net.Server <span style="color:deepskyblue;">-></span> tls.Server <span style="color:deepskyblue;">-></span> https.Server
+    </pre>
+<table class="table">
+<caption> HTTPS Client <a href="../HTTP/HTTP Client/index.html#client" target="_blank">(works the same way as HTTP Client)</a> </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>https</strong>.request(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - any <mark>tls.connect()</mark> options <a href="../TLS/index.html#TLS_Client" target="_blank">[link]</a> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>) <br>
+            <strong>https</strong>.request(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - any <mark>tls.connect()</mark> options <a href="../TLS/index.html#TLS_Client" target="_blank">[link]</a> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously issues a request to a secure server <br>
+            - return a clientRequest object which is a writable stream, <u>it must be written at least with the <mark>end()</mark> method in order to issue the request</u>
+            <span class="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.5.0 - <i>option</i> argument can be a WHATWG URL object </p>
+                    <p> - 10.9.0 - <strong>url</strong> can be passed allong with the <mark>option</mark> argument </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>https</strong>.get(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - any <mark>tls.connect()</mark> options <a href="../TLS/index.html#TLS_Client" target="_blank">[link]</a> </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>) <br>
+            <strong>https</strong>.get(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - any <mark>tls.connect()</mark> options <a href="../TLS/index.html#TLS_Client" target="_blank">[link]</a> </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously issues a GET request to a secure server <br>
+            - return a clientRequest object which is a writable stream, <u>the <mark>end()</mark> method is automatically called on it</u> <br>
+            - it does the same as the <mark>request()</mark> method with 2 differences (1) issues a GET request) (2) the <mark>end()</mark> method is automatically called on the returend clientRequest object)
+            <span class="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.3.6 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 7.5.0 - <i>option</i> argument can be a WHATWG URL object </p>
+                    <p> - 9.3.0 - <mark>clientCertEngine</mark> option supported </p>
+                    <p> - 10.9.0 - <strong>url</strong> can be passed allong with the <mark>option</mark> argument </p>
+                    <p> - 14.1.0 - <mark>highWaterMark</mark> option supported </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> TLS Agent <a href="../HTTP/HTTP Client/index.html#agent" target="_blank">(works the same way as HTTP Agent)</a> </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td> <strong>https</strong>.globalAgent </td>
+        <td> returns the global agent which is the default agent for all HTTPS client requests
+            <span class="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td>  
+            new <strong>https</strong>.Agent(<i class="openable">options:obj<div> 
+                <p> keepAlive: <strong>bol</strong> - allows http clients to keep their connections open (live connection) (Default: <mark>false</mark>) </p>
+                <p> keepAliveMsecs: <strong>nr:ms</strong> - initial delay for TCP Keep-Alive packets (only when <mark>keepAlive:true</mark>) </p>
+                <p> maxCachedSessions: <strong>nr</strong> - maximum number of caches TLS sessions (<mark>0</mark> = disable TLS caching) (Default: <mark>100</mark>) </p>
+                <p> maxSockets: <strong>nr</strong> - maximum number of active sockets allowed (when the agent makes the requests) (multiple http client can connect through the same socket) (Default: <mark>Infinity</mark>) </p> 
+                <p> maxFreeSockets: <strong>nr</strong> - maximum number of socket allowed in free state (connection keep-alive state) (only when <mark>keepAlive:true</mark>)(Default: <mark>256</mark>) </p>
+                <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication) request (hostname not IP), this is how the client indicates which certificate and content requests from an SNI server (server having multiple domains routed) (usually is the same as the requested domain name) </p>
+                <p> timeout: <strong>nr:ms</strong> - destroys open sockets after this time (only when <mark>keepAlive:true</mark>) (Default: <mark>0</mark> = no timeout)</p>
+            </div></i>)
+        </td>
+        <td> 
+            - the returned agent instance manages the connections for its HTTPS clients <br>
+            - deals with pending requests, live connections, TLS sessions, destroys|reuse sockets <br>
+            - when the agent is set to keep-alive its HTTPS clients connections, the <mark>Connection: Keep-Alive</mark> header is automatically sent in the client's request header  
+            <span class="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 0.4.5 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 2.5.0 - <mark>maxCachedSessions</mark> options support </p>
+                    <p> - 5.3.0 - <mark>0</mark> disables <mark>maxCachedSessions</mark> </p>
+                    <p> - 12.5.0 - do not automatically sets the servername if the target host was specified by an IP address </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> events </td>
+    </tr>
+    <tr>
+        <td>  
+            <strong>https.listener</strong>('keylog', <strong>fn(<strong class="openable">keyMat<div>
+                <p> - <strong>buf</strong> - ASCII text in NSS SSL KEYLOGFILE format </p>
+            </div></strong>, tlsSocket)</strong>)
+        </td>
+        <td> emitted when key matterial is generated or received <u style="color:orangered">(NOT working throws a TypeError [TESTED: 2020-06-29])</u>
+            <span class="browserSupport" title="updated : 2020-06-29">
+                <span><i class="fab fa-node-js"></i> 12.16.0 / 13.2.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> HTTTS Server <a href="../HTTP/HTTP Server/index.html#server" target="_blank">(works the same way as HTTP Server)</a> </caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr>
+        <td>  
+            <strong>https</strong>.createServer(<i class="openable">option:obj<div>
+                <p> IncomingMessage: <strong>obj</strong> - specifies the IncomingMessage class to be used (Default: <mark>IncomingMessage</mark>) </p>
+                <p> ServerResponse: <strong>obj</strong> - specifies the ServerResponse class to be used (Default: <mark>ServerResponse</mark>) </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - invalid HTTP parser used which accept invalid HTTP headers (Default: <mark>false</mark>) <u style="color:orangered;"> [TESTED: 2020-04-29] not working! custom headers can be passed with or without this option to be switched!</u> </p> 
+                <p> maxHeaderSize: <strong>nr</strong> - allowed maximum request header size in bytes (Default: <mark>16384</mark>) <u>(Overrides the <mark>--max-http-header-size</mark> CLI option) </u></p>
+                <p> - all <mark>tls.createServer()</mark> options can be used </p>
+                <p> - all <mark>tls.createSecureContext()</mark> options can be used </p>
+            </div></i>, <i class="openable">fn(incMsg, srvResp)<div>
+        <p> - <mark>request</mark> listener callback </p>
+    </div></i>)
+        </td>
+        <td> creates and returns an HTTPS server (object) (HTTP server over TLS), the returned httpSecureServer object is extension of <mark>EventEmitter</mark> and <mark>tls.Server</mark> classes    
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr>     
+    <tr>
+        <td> <strong>httpSecureSrv</strong>.close(<i>fn(err)</i>) </td>
+        <td> 
+            - stops the server listening for new connections <u>(keeps pending connections)</u> <br>
+            - the server is finally closed when all connections are ended <br>
+            - when the server is closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback argument throws if this method is called on a closed server) <br>
+            - returns this <strong>httpSecureSrv</strong> object 
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
+            </span>
+        </td>
+    </tr> 
+    <tr>
+        <td> <strong>httpSecureSrv</strong>.headersTimeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the parser waits to receive the complete message headers (Default: <mark>60000</mark> / <mark>0</mark> = infinity) <br>
+            - timer starts from the first recieved byte till the end of the message header <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 11.3.0 </span>
+            </span>
+        </td>
+    </tr> 
+    <tr>
+        <td> <strong>httpSecureSrv</strong>.keepAliveTimeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event for <span class="openable">requested 'keep-alive' connections<div>
+                <p> - for normal connections the server drops the connection after responding with the <mark>end()</mark> method </p>
+                <p> - if the client requests a keep-alive connection (client Agent has the <mark>keepAlive</mark> set) the server <u>doesn't drop the connection after responding with the <mark>end()</mark> method</u> </p> 
+                <p> - this timer kicks-in once the server responded with the <mark>end()</mark> method to a keep-alive request </p> 
+                <p> - if the server receives new data from the client before this timeout expires the <mark>timeout</mark> and <mark>setTimeout()</mark> rules apply! </p>
+            </div></span> (Default: <mark>5000</mark> / <mark>0</mark> = infinity) <br>
+            - counter starts after the server responds to a keep-alive request with <u>the <mark>end()</mark> method</u> <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 8.0.0 </span>
+            </span>
+        </td>
+    </tr> 
+    <tr>
+        <td>  
+            <strong>httpSecureSrv</strong>.listen(<i>port:nr, host:str,</i> <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn(srvResp)<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>) <br>
+            <strong>httpSecureSrv</strong>.listen({port:<strong>nr</strong>, host:<strong>srt</strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>}, <i class="openable">fn(srvResp)<div>  
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)
+        </td>
+        <td> 
+            - asynchronously starts the server listening for connections <br>
+            - makes the server emit the <mark>listening</mark> event (if the server is successfully started) <br>
+            - can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method <br>
+            - returns this <strong>httpSecureSrv</strong> object
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr> 
+    <tr>
+        <td> <strong>httpSecureSrv</strong>.maxHeadersCount </td>
+        <td> number of request headers parsed by the parser (Default: <mark>2000</mark>) <u style="color:orangered">(returns <mark>null</mark> instead of <mark>2000</mark> bug maybe [TESTED: 2020-06-29])</u>  
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.3.4 </span>
+            </span>
+        </td>
+    </tr> 
+    <tr>
+        <td>  
+            <strong>httpSecureSrv</strong>.setTimeout(<i class="openable">nr:ms, fn(socket)<div>
+                <p> - <i>nr:mr</i> - set timeout (Default: <mark>120000</mark>) </p>
+                <p> - <i>fn(socket)</i> <mark>timeout</mark> event's callback function (the <mark>socket</mark> argument references the timed out socket </p> 
+            </div></i>)
+        </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default timeout: <mark>0</mark> / <mark>0</mark> = infinity) <br>
+            - counter reset each time the server receives a new data from the client <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event (which is the 2nd argument) is not listened the connection is dropped)</u> 
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.11.2 </span>
+            </span>
+        </td>
+    </tr> 
+    <tr>
+        <td> <strong>httpSecureSrv</strong>.timeout </td>
+        <td> 
+            - gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default: <mark>0</mark> / <mark>0</mark> = infinity) <br>
+            - counter reset each time the server receives a new data from the client <br>
+            - on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <span class="browserSupport" title="updated : 2020-06-30">
+                <span><i class="fab fa-node-js"></i> 0.11.2 </span>
+                <span><i class="fab fa-node-js"></i> 13.0.0 Default <mark>0</mark> (was <mark>120000</mark>) </span>
+            </span>
+        </td>
+    </tr> 
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v14.x/docs/api/https.html" target="_blank"> HTTPS (nodejs.org) </a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>https</mark> module is basically <mark>http</mark> protocol working on top of <mark>tls</mark>, <mark>https</mark> works pretty much the same way as <mark>http</mark> but uses secure connections (HTTP/1.1 over TLS)</p>
+    <p> - <u>all underlying <mark>http</mark> methods and properties can be used</u> for <mark>https</mark> as well </p>  
+<hr>
+<!----------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTPS Client <mark>request()</mark> / <mark>get()</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>http</strong>.request(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - all <mark>tls.connect()</mark> options can be used </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                   // asynchronously issues a request to a secure server   
+                <strong>http</strong>.request(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - all <mark>tls.connect()</mark> options can be used </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                                   return a clientRequest object which is a writable stream, <u>it must be written at least with the <mark>end()</mark> method in order to issue the request</u>    
+            
+            <strong>http</strong>.get(<strong class="openable">url:str|urlObj<div>
+                <p> - WHATWG URL object or a URL string, <u>(the string is automatically parsed by <mark>new URL()</mark>)</u> </p>
+                <p><u> - if both the url argument and the option object specifies the target host they are merged and if there is a confclit the object takes the precedence</u></p>
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - all <mark>tls.connect()</mark> options can be used </p>
+            </div></i>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                       // asynchronously issues a GET request to a secure server   
+                <strong>http</strong>.get(<strong class="openable">option:obj<div>
+                <p> agent: <strong>agent</strong>|undefined|<strong>bol</strong> - cotrols the Agent behaviour (Default: <mark>https.globalAgent</mark>) (<mark>undefined</mark> = uses the <mark>https.globalAgent</mark>) (<mark>false</mark> = new Agent with default values) (<strong>agent</strong> = customised Agent passed) </p>
+                <p> auth: <strong>str</strong> - basic authentication (user, password) to compute Authorization header </p>
+                <p> createConnection: <strong>fn</strong> - overrides the <mark>agent.createConnection()</mark> method, function must return a Duplex stream </p>
+                <p> defaultPort: <strong>nr</strong> - default port <u>for the protocol</u> (Default: <mark>agent.defaultPort</mark> if an agent is used or <mark>undefined</mark> if not) </p>
+                <p> family: <strong>nr</strong> - IP address family when resolving <mark>host</mark> or <mark>hostname</mark> (valid values = <mark>4</mark>|<mark>6</mark>) <u>(Both used when unspecified)</u></p>
+                <p> headers: <strong>obj</strong> - request headers to pass </p>
+                <p> host: <strong>str</strong> - domain name or IP address to issue the request to (Default: <mark>localhost</mark>) </p>
+                <p> hostname: <strong>str</strong> - alias for <mark>host</mark> (to support <mark>url.parse()</mark> which is deprecated since the WHATWG URL object), only used when both <mark>host</mark> and <mark>hostname</mark> properties are specified </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - accepts invalid HTTP headres when set <mark>true</mark> (Default: <mark>false</mark>) <u style="color:orangered;">[TESTED: 2020-05-05] not working! custom http headers can be sent from server to client or vice versa, this option doesn't seems to do anything!</u> </p>
+                <p> localAddress: <strong>str</strong> - local interface to bind for network connections </p>
+                <p> lookup: <strong>fn</strong> - custom DNS lookup function (Default: <mark>dns.lookup()</mark>) </p>
+                <p> maxHeaderSize: <strong>nr:bytes</strong> - max http header size for the received response in bytes (Default: <mark>16384</mark>) <u>(overrides the <mark>--max-http-header-size</mark> option) </u></p> 
+                <p> method: <strong>str</strong> - http request method (Default: <mark>'GET'</mark>) </p>
+                <p> path: <strong>str</strong> - request path which <u>should include the query string</u> (Default: <mark>/</mark>) </p>
+                <p> port: <strong>nr</strong> - port of the remote server (Default: <mark>443</mark>) </p>
+                <p> protocol: <strong>str</strong> - protocol to use (Default: <mark>'https'</mark>) </p>
+                <p> setHost: <strong>bol</strong> - automatically add the <mark>Host</mark> header (Default: <mark>true</mark>) </p>
+                <p> socketPath: <strong>str</strong> - Unix Domain socket (cannot be used if <mark>host</mark> or <mark>hostname</mark> is specified because those are TCP sockets) </p>
+                <p> timeout: <strong>nr:ms</strong> - after this time the client emits the <mark>timeout</mark> event <u>(this does NOT destroy the socket or drops the connection! it's simply a timeout indication for the client)</u> </p>
+                <p> - all <mark>tls.connect()</mark> options can be used </p>
+            </div></strong>, <i class="openable">fn(incMsg)<div>
+                <p> - <mark>response</mark> event listener's callback (called once) </p>
+            </div></i>)                                       return a clientRequest object which is a writable stream, <u>the <mark>end()</mark> method is automatically called on it</u>    
+                                                                                          it does the same as the <mark>request()</mark> method with 2 differences (1) issues a GET request) (2) the <mark>end()</mark> method is automatically called on the returend clientRequest object)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+// request() --------------------------------------------------------------------------
+    var client = https.request({port:1000, host:'localhost', method:'POST', ca:fs.readFileSync('pallCer.cer')});   // POST method used    
+    client.end('client data sent to the server!');                                     // writing data to the server 
+    
+    client.on('response', function(incMsg){
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );                                           // -> server response 
+        });
+    });
+    
+// get() ------------------------------------------------------------------------------
+    var client = https.get('https://www.google.com');                                  // get request to google.com
+    
+    client.on('response', function(incMsg){
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );                                           // -> requested website
+        });
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>get()</mark> TEST </u></h4>
+    <pre>
+    var https = require('https');
+    var dns = require('dns');
+    
+    var client = https.get('https://www.google.com');                                  // secure host requested 
+    
+    client.on('response', function(incMsg){
+        console.log( incMsg.socket.getPeerCertificate() );                             // -> getting the server's certificate 
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );                                           // -> google website 
+        });
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>request()</mark> TEST </u></h4>
+    <p> Client </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var client = https.request({port:1000, host:'localhost', method:'POST', ca:fs.readFileSync('pallCer.cer')});   // POST method used    
+    client.end('client data sent to the server!');                                     // writing data to the server 
+    
+    client.on('response', function(incMsg){
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );                                           // -> 'server response' 
+        });
+    });
+    </pre>
+    <p> Server </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var server = https.createServer({key:fs.readFileSync('pallKey.pem'), cert:fs.readFileSync('pallCer.cer')});
+    server.listen(1000, 'localhost', ()=>{console.log('https server listening!')});
+    
+    server.on('request', function(incMsg, srvResp){
+        incMsg.on('data', (chunk)=>{console.log(chunk.toString())});
+        
+        srvResp.write('server response!');
+    });
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTPS <mark>Agent</mark> / <mark>globalAgent</mark> </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>keylog</mark> </u></h3>
+    <pre class="syntax">
+SYNTAX:     <strong>https</strong>.globalAgent                                                          // returns the global agent which is the default agent for all HTTPS client requests    
+            
+            new <strong>https</strong>.Agent(<i class="openable">options:obj<div> 
+                <p> keepAlive: <strong>bol</strong> - allows http clients to keep their connections open (live connection) (Default: <mark>false</mark>) </p>
+                <p> keepAliveMsecs: <strong>nr:ms</strong> - initial delay for TCP Keep-Alive packets (only when <mark>keepAlive:true</mark>) </p>
+                <p> maxCachedSessions: <strong>nr</strong> - maximum number of caches TLS sessions (<mark>0</mark> = disable TLS caching) (Default: <mark>100</mark>) </p>
+                <p> maxSockets: <strong>nr</strong> - maximum number of active sockets allowed (when the agent makes the requests) (multiple http client can connect through the same socket) (Default: <mark>Infinity</mark>) </p> 
+                <p> maxFreeSockets: <strong>nr</strong> - maximum number of socket allowed in free state (connection keep-alive state) (only when <mark>keepAlive:true</mark>)(Default: <mark>256</mark>) </p>
+                <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication) request (hostname not IP), this is how the client indicates which certificate and content requests from an SNI server (server having multiple domains routed) (usually is the same as the requested domain name) </p>
+                <p> timeout: <strong>nr:ms</strong> - destroys open sockets after this time (only when <mark>keepAlive:true</mark>) (Default: <mark>0</mark> = no timeout)</p>
+            </div></i>)                                              // the returned agent instance manages the connections for its HTTPS clients   
+                                                                                          deals with pending requests, live connections, TLS sessions, destroys|reuse sockets 
+                                                                                          when the agent is set to keep-alive its HTTPS clients connections, the <mark>Connection: Keep-Alive</mark> header is automatically sent in the client's request header    
+            
+    <span style="color:darkgray">// Events -------------------------------------------------------------------------</span>
+            <strong>https.listener</strong>('keylog', <strong>fn(<strong class="openable">keyMat<div>
+                <p> - <strong>buf</strong> - ASCII text in NSS SSL KEYLOGFILE format </p>
+            </div></strong>, tlsSocket)</strong>)                           // emitted when key matterial is generated or received <u style="color:orange">(NOT working throws a TypeError [TESTED: 2020-06-29])</u>  
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var https = require('https');
+    
+    var myAgent = new https.Agent({maxCachedSessions: 10});                            // custom TLS Agent 
+    
+    var client = https.get('https://www.jofogas.hu', {agent:myAgent});                 // custom TLS Agent used 
+    client.on('response', (incMsg)=>{});
+    
+// keylog (event) ---------------------------------------------------------------------
+    myAgent.on('keylog', function(keyMat, tlsSocket){                                  // emitted when key matterials are recevied or generated    // -! NOT working throws a TypeError [TESTED: 2020-06-29 Node v14.4.0]    
+        keyMat;                                                                          // -> &lt;Buffer ...&gt;       // key matterial ASCII text in NSS SSL KEYLOGFILE format     
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> TLS Agent and <mark>keylog</mark> event TEST </u></h4>
+    <pre>
+    var https = require('https');
+    
+    var myAgent = new https.Agent({maxCachedSessions: 10});                            // custom TLS Agent 
+    
+    var client = https.get('https://www.jofogas.hu', {agent:myAgent});                 // agent used 
+    
+    client.on('response', function(incMsg){
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );   
+        });
+        
+    });
+    
+    // myAgent.on('keylog', function(keyMat, tlsSocket){                               // -! throws a TypeError [TESTED: 2020-06-29 Node v14.4.0]
+    //     console.log( keyMat );
+    // });
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> HTTPS Server <mark>createServer()</mark> / <mark>listen()</mark> / <mark>close()</mark> / <mark>maxHeadersCount</mark> / <mark>headersTimeout</mark> / <mark>timeout</mark> / <mark>setTimeout()</mark> / <mark>keepAliveTimeout</mark> </u></h2>
+    <pre class="syntax">
+SYNTAX:     <strong>https</strong>.createServer(<i class="openable">option:obj<div>
+                <p> IncomingMessage: <strong>obj</strong> - specifies the IncomingMessage class to be used (Default: <mark>IncomingMessage</mark>) </p>
+                <p> ServerResponse: <strong>obj</strong> - specifies the ServerResponse class to be used (Default: <mark>ServerResponse</mark>) </p>
+                <p> insecureHTTPParser: <strong>bol</strong> - invalid HTTP parser used which accept invalid HTTP headers (Default: <mark>false</mark>) <u style="color:orangered;"> [TESTED: 2020-04-29] not working! custom headers can be passed with or without this option to be switched!</u> </p> 
+                <p> maxHeaderSize: <strong>nr</strong> - allowed maximum request header size in bytes (Default: <mark>16384</mark>) <u>(Overrides the <mark>--max-http-header-size</mark> CLI option) </u></p>
+                <p> - all <mark>tls.createServer()</mark> options can be used </p>
+                <p> - all <mark>tls.createSecureContext()</mark> options can be used </p>
+            </div></i>, <i class="openable">fn(incMsg, srvResp)<div>
+        <p> - <mark>request</mark> listener callback </p>
+    </div></i>)                      // creates and returns an HTTPS server (object) (HTTP server over TLS), the returned httpSecureServer object is extension of <mark>EventEmitter</mark> and <mark>tls.Server</mark> classes    
+            
+            <strong>httpSecureSrv</strong>.listen(<i>port:nr, host:str,</i> <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>, <i class="openable">fn(srvResp)<div>
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)        // asynchronously starts the server listening for connections    
+            <strong>httpSecureSrv</strong>.listen({port:<strong>nr</strong>, host:<strong>srt</strong>, <i class="openable">backlog:nr<div>
+                <p> - maximum allowed pending connections (defined by the OS) (Default: <mark>511</mark>) </p>
+            </div></i>}, <i class="openable">fn(srvResp)<div>  
+                <p> - <mark>listening</mark> event listener's callback </p>
+            </div></i>)          makes the server emit the <mark>listening</mark> event (if the server is successfully started)   
+                                                                                          can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method     
+                                                                                          returns this <strong>httpSecureSrv</strong> object    
+                                                                                          
+            <strong>httpSecureSrv</strong>.maxHeadersCount                                              // number of request headers parsed by the parser (Default: <mark>2000</mark>) <u style="color:orange">(returns <mark>null</mark> instead of <mark>2000</mark> bug maybe [TESTED: 2020-06-29])</u>    
+            <strong>httpSecureSrv</strong>.close(<i>fn(err)</i>)                                               // stops the server listening for new connections <u>(keeps pending connections)</u> 
+                                                                                          the server is finally closed when all connections are ended     
+                                                                                          when the server is closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback argument throws if this method is called on a closed server)    
+                                                                                          returns this <strong>httpSecureSrv</strong> object 
+            
+            <strong>httpSecureSrv</strong>.headersTimeout                                               // gets or sets how much time (milliseconds) the parser waits to receive the complete message headers (Default: <mark>60000</mark> / <mark>0</mark> = infinity)    
+                                                                                          timer starts from the first recieved byte till the end of the message header  
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            
+            <strong>httpSecureSrv</strong>.timeout                                                      // gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default: <mark>0</mark> / <mark>0</mark> = infinity)  
+                                                                                          counter reset each time the server receives a new data from the client    
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+            <strong>httpSecureSrv</strong>.setTimeout(<i class="openable">nr:ms, fn(socket)<div>
+                <p> - <i>nr:mr</i> - set timeout (Default: <mark>120000</mark>) </p>
+                <p> - <i>fn(socket)</i> <mark>timeout</mark> event's callback function (the <mark>socket</mark> argument references the timed out socket </p> 
+            </div></i>)                               // gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event after receiving the last data piece from the client (Default timeout: <mark>0</mark> / <mark>0</mark> = infinity)  
+                                                                                          counter reset each time the server receives a new data from the client    
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event (which is the 2nd argument) is not listened the connection is dropped)</u>               
+            
+            <strong>httpSecureSrv</strong>.keepAliveTimeout                                             // gets or sets how much time (milliseconds) the server emits the <mark>timeout</mark> event for <span class="openable">requested 'keep-alive' connections<div>
+                <p> - for normal connections the server drops the connection after responding with the <mark>end()</mark> method </p>
+                <p> - if the client requests a keep-alive connection (client Agent has the <mark>keepAlive</mark> set) the server <u>doesn't drop the connection after responding with the <mark>end()</mark> method</u> </p> 
+                <p> - this timer kicks-in once the server responded with the <mark>end()</mark> method to a keep-alive request </p> 
+                <p> - if the server receives new data from the client before this timeout expires the <mark>timeout</mark> and <mark>setTimeout()</mark> rules apply! </p>
+            </div></span> (Default: <mark>5000</mark> / <mark>0</mark> = infinity)    
+                                                                                          counter starts after the server responds to a keep-alive request with <u>the <mark>end()</mark> method</u>    
+                                                                                          on expiration the server emits the <mark>timeout</mark> event <u>(if the <mark>timeout</mark> event is not listened the connection is dropped)</u>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var server = https.createServer({key:fs.readFileSync('pallKey.pem'), cert:fs.readFileSync('pallCer.cer')});
+    server.listen(1000, 'localhost', ()=>{});                                          // server listening 
+    
+    server.on('request', function(incMsg, srvResp){
+        srvResp.end('server response!');
+    });
+    
+// close() ----------------------------------------------------------------------------
+    server.close(function(err){                                                        // gracefully closes the server (waits for all connections to finis but does not accept new connections)   
+        err;                                                                             // -> err          // thrown if this method is called on an already closed server 
+    });                                                                                  // callback invoked if the server is finally closed   
+    
+// maxHeadersCount / headersTimeout ---------------------------------------------------
+    server.maxHeadersCount;                                                            // -> null           // -! this suppose to be 2000 bug maybe [TESTED: 2020-06-30]   
+    server.headersTimeout;                                                             // -> 60000          // server waits up to 1 minute to receive the complete message header then emits the timeout event 
+                                                                                                            // -! if the timeout event is not listened the connection is dropped    
+    
+// timeout / setTimeout() -------------------------------------------------------------
+    server.timeout = 10000;                                                            // the server emits the timeout event after 10 seconds counted from the last received data piece from the client   
+                                                                                       // -! if the timeout event is not listened the connection is dropped    
+    
+    server.setTimeout(10000, function(socket){                                         // this method is doing the same as above but it has a bult-in 'timeout' listener callback   
+        socket;                                                                          // -> socket which times out   
+    });
+    
+// keepAliveTimeout -------------------------------------------------------------------
+    server.keepAliveTimeout = 10000;                                                   // the client request a keep-alive connection (server does not drop the connection after responding with the 'end()' method)    
+                                                                                       // once the server responds with the 'end()' method this timer kicks-in, after 10 seconds emits the timeout event 
+                                                                                       // -! if the timeout event is not listened the connection is dropped    
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>listen()</mark> / <mark>maxHeadersCount</mark> / <mark>close()</mark> TEST </u></h4>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var server = https.createServer({key:fs.readFileSync('pallKey.pem'), cert:fs.readFileSync('pallCer.cer')});
+    
+    server.listen(1000, 'localhost', function(){                                       // server listening 
+        console.log('https server listening!');
+    });
+    
+    console.log( server.maxHeadersCount );                                             // -> null              // -! suppose to return 2000 (I'm not sure that this is working properly)  
+    server.maxHeadersCount = 2000;                                                     // setting the maximum parsed headers 
+    console.log( server.maxHeadersCount );                                             // -> 2000
+    
+    server.on('request', function(incMsg, srvResp){
+        srvResp.write('server response!');
+    });
+    
+    setTimeout(function(){
+        server.close();                                                                // server gracefully closes after 15 seconds (if there's no pending connection)   
+    }, 15000);
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>timeout</mark> / <mark>setTimeout()</mark> TEST </u></h4>
+    <p> Server-1 with <mark>timeout</mark> </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var server = https.createServer({key:fs.readFileSync('pallKey.pem'), cert:fs.readFileSync('pallCer.cer')});
+    
+    server.listen(1000, 'localhost', function(){                                       // server listening 
+        console.log('https server listening!');
+    });
+    
+    server.on('request', function(incMsg, srvResp){
+        incMsg.on('data', (chunk)=>{ console.log(chunk.toString()) });
+    });
+    
+    console.log( server.timeout );                                                     // -> 0 
+    server.timeout = 5000;                                                             // server emits the 'timeout' event or dropt the connection after the last piece of     data received 
+    console.log( server.timeout );                                                     // -> 5000
+    
+    server.on('timeout', function(){                                                   // emitted 5 seconds after the server receives some data from the connected client 
+        console.log('timeout event emitte');
+    });
+    </pre>
+    <p> Server-2 with <mark>setTimeout</mark> </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var server = https.createServer({key:fs.readFileSync('pallKey.pem'), cert:fs.readFileSync('pallCer.cer')});
+    
+    server.listen(1000, 'localhost', function(){                                       // server listening 
+        console.log('https server listening!');
+    });
+    
+    server.on('request', function(incMsg, srvResp){
+        incMsg.on('data', (chunk)=>{ console.log(chunk.toString()) });
+    });
+    
+    server.setTimeout(5000, function(){                                                // server waits 5 seconds 
+        console.log( 'timeout event emitted!' );
+    });
+    </pre>
+    <p> Client </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var client = https.request({port:1000, host:'localhost', ca:fs.readFileSync('pallCer.cer'), method:'POST'});     
+    client.write('client data');
+    client.write('client data 2');                                                     // client doesn't end the stream (keeps the connection pending)
+    
+    client.on('response', function(incMsg){
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );                                           // -> 'server response' 
+        });    
+    });
+    </pre>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>keepAliveTimeout</mark> TEST </u></h4>
+    <p> Server </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    var server = https.createServer({key:fs.readFileSync('pallKey.pem'), cert:fs.readFileSync('pallCer.cer')});
+    
+    server.listen(1000, 'localhost', function(){                                       // server listening 
+        console.log('https server listening!');
+    });
+    
+    server.keepAliveTimeout;                                                           // -> 5000          // default keep alive timeout  
+    
+    server.on('request', function(incMsg, srvResp){
+        incMsg.on('data', (chunk)=>{ console.log(chunk.toString()) });
+        srvResp.end('server response!');                                               // server respond with the 'end()' method but the connection is still kept-alive because the server is requesting a 'keep-alive' connection
+    }); 
+    
+    server.on('timeout', function(){                            
+        console.log( 'timeout event emitted!' );
+    });    
+    </pre>
+    <p> Client </p>
+    <pre>
+    var https = require('https');
+    var fs = require('fs');
+    
+    https.globalAgent.keepAlive = true;                                                // clients request keep-alive connections (when the server respond with the 'end()' method the connection is still kept-alive)  
+    
+    var client = https.request({port:1000, host:'localhost', ca:fs.readFileSync('pallCer.cer'), method:'POST'});     
+    client.write('client data');
+    client.write('client data 2');
+    
+    client.on('response', function(incMsg){
+        incMsg.on('data', function(chunk){
+            console.log( chunk.toString() );                                           // -> 'server response' 
+        });    
+    });
+    </pre>
+</details>
+
+<br><br>
+</body>
+</html>

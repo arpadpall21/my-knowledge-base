@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Binary Data Handling </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Binary Data Handling (ver 4.0.0) </h1>
+    <p> Updated ( 2019-10-21 / 2020-07-01 / 2020-07-04 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">JavaScript></a> Binary Data Handling 
+    </p>
+<table class="table">
+<caption> 
+    <mark>ArrayBuffer</mark> and <mark>SharedArrayBuffer</mark> object 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr class=05.01>
+        <td colspan="2"> <mark>ArrayBuffer</mark> </td>
+    </tr>
+    <tr class=10.01>
+        <td> new ArrayBuffer(<strong>length:nr</strong>) </td>
+        <td> 
+            - creates a <mark>0</mark> filled ArrayBuffer object instance of the specified size <u>in bytes</u><br>
+             - the ArrayBuffer object represents a fixed length <u>RAW binary data</u> buffer <u>(called 'Byte Array' = 1 address represents 1 byte)</u><br>
+             - it cannot be modified directly (the <mark>DataView</mark> object can get and set it or use one of the <mark>TypedArray</mark>s)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> <em>ArrayBuffer</em>.isView(<strong>arg</strong>) </td>
+        <td> 
+            - returns <mark>true</mark> if the passed argument is eighter a <mark>TypedArray</mark> or a <mark>DataView</mark> object, otherwise returns <mark>false</mark>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> 29 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 11 </span>
+                <span><i class="fab fa-safari"></i> yes </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>arrayBuffer</strong>.byteLength </td>
+        <td> - returns the length of the ArrayBuffer in bytes
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>arrayBuffer</strong>.slice(<strong>st(inc):index</strong>, <i>end(exc):index</i>) </td>
+        <td> 
+            - returns a new ArrayBuffer object copy whose content is between the specified byte range (end omitted = all remaining data)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> yes </span>
+                <span><i class="fab fa-firefox"></i> 12 </span>
+                <span><i class="fab fa-opera"></i> yes </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 11 </span>
+                <span><i class="fab fa-safari"></i> 6 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td colspan="2"> <mark>SharedArrayBuffer</mark> </td>
+    </tr>
+    <tr class="25.02">
+        <td> new SharedArrayBuffer(<strong>length:nr</strong>) </td>
+        <td> 
+            - creates a <mark>0</mark> filled SharedArrayBuffer object instance of the specified size <u>in bytes</u> <br>
+            - the SharedArrayBuffer object represents a fixed length <u>RAW binary data</u> buffer <u>(called 'byte array' = 1 address represents 1 byte)</u> <br>
+            - it cannot be modified directly (the <mark>DataView</mark> object can get and set it or use one of the <mark>TypedArray</mark>s) <br>
+            - unlike the ArrayBuffer the SharedArrayBuffer <u class="openable">shares its memory between threads and cannot be transfered from one thread to another<div>
+                <p><b><u> SharedArrayBuffer </u></b></p>
+                <p> - shared memory (ex: <mark>main.js</mark> <mark>worker_1.js</mark> <mark>worker_2.js</mark> sees the same underlying memory 'SharedArrayBuffer') </p>
+                <p> - not transferable (ex: the SharedArrayBuffer cannot be transfered from <mark>main.js</mark> to <mark>worker_1.js</mark> only shared!) </p>
+                <p><b><u> ArrayBuffer </u></b></p>
+                <p> - cloned memory (ex: <mark>main.js</mark> <mark>worker_1.js</mark> <mark>worker_2.js</mark> gets individual copies 'clones' of the send ArrayBuffer) </p>
+                <p> - transferable memory (ex: the transfered ArrayBuffer from <mark>main.js</mark> to <mark>worker_1.js</mark> is moved so it won't be visible in <mark>main.js</mark> anymore) </p>
+            </div></u>    
+            <span id="browserSupport" title="updated : 2020-07-04">
+                <span><i class="fab fa-chrome"></i> 68 </span>
+                <span><i class="fab fa-firefox"></i> 79 </span>
+                <span><i class="fab fa-opera"></i> NO </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 8.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>sharedArrayBuffer</strong>.byteLength </td>
+        <td> 
+            - returns the length of the SharedArrayBuffer in bytes
+            <span id="browserSupport" title="updated : 2020-07-04">
+                <span><i class="fab fa-chrome"></i> 68 </span>
+                <span><i class="fab fa-firefox"></i> 79 </span>
+                <span><i class="fab fa-opera"></i> NO </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 8.10.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>sharedArrayBuffer</strong>.slice(<strong>st(inc):index</strong>, <i>end(exc):index</i>) </td>
+        <td> 
+            - returns a new SharedArrayBuffer object copy whose content is between the specified byte range (end omitted = all remaining data)
+            <span id="browserSupport" title="updated : 2020-07-04">
+                <span><i class="fab fa-chrome"></i> 68 </span>
+                <span><i class="fab fa-firefox"></i> 79 </span>
+                <span><i class="fab fa-opera"></i> NO </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 8.10.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    <mark>DataView</mark> object 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span> 
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> new DataView(<strong>arrayBuffer</strong>, <i>byteOffset:index</i>, <i>byteLength</i>) </td>
+        <td> 
+            - returns a <mark>DataView</mark> object which is a low-level interface for reading and writing an ArrayBuffer (or part of it)<br>
+             - converts integers, BigIntegers and floating point numbers to binary data and vice versa <u>(handles endianness regardless of the platform's architecture)</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> <strong>dataView</strong>.buffer </td>
+        <td> 
+            - returns the original ArrayBuffer object referenced by this DataView object
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td> <strong>dataView</strong>.byteLength </td>
+        <td> 
+            - returns the length <u>in bytes</u> of this DataView object
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> <strong>dataView</strong>.byteOffset </td>
+        <td> 
+            - returns the offset in bytes of this DataView object (index where the original ArrayBuffer is viewed from)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td colspan="2"> 8bit </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>dataView</strong>.getInt8(<strong>byteOffset:index</strong>) </td>
+        <td> 
+            - gets 8 bits of binary data at the specified byte position and interprets it as an <u>8bit Signed Integer value</u> (<mark>-128</mark> to <mark>127</mark>)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>dataView</strong>.setInt8(<strong>byteOffset:index</strong>, <strong>int:nr</strong>) </td>
+        <td> 
+            - sets 8 bits of binary data at the specified byte position as an <u>8bit Signed Integer value</u> (<mark>-128</mark> to <mark>127</mark>, (decimal values are floored)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.01">
+        <td> <strong>dataView</strong>.getUint8(<strong>byteOffset:index</strong>) </td>
+        <td> 
+            - gets 8 bits of binary data at the specified byte position and interprets it as an <u>8bit Unsigned Integer value</u> (<mark>0</mark> to <mark>255</mark>)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="16.02">
+        <td> <strong>dataView</strong>.setUint8(<strong>byteOffset:index</strong>, <strong>uint:nr</strong>) </td>
+        <td> 
+            - sets 8 bits of binary data at the specified byte position as an <u>8bit Unsigned Integer value</u> (<mark>0</mark> to <mark>255</mark>, (decimal values are floored)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td colspan="2"> 16bit </td>
+    </tr>
+    <tr class="20.02">
+        <td> <strong>dataView</strong>.getInt16(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 16 bits of birany data from the specified byte position and interprets it as a <u>16bit Signed Integer value</u> (<mark>-32768</mark> to <mark>32767</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.03">
+        <td> <strong>dataView</strong>.setInt16(<strong>byteOffset:index</strong>, <strong>int:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 16 bits of binary data at the specified byte position as a <u>16bit Signed Integer value</u> (<mark>-32768</mark> to <mark>32767</mark>, (decimal values are floored)) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u> 
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="21.01">
+        <td> <strong>dataView</strong>.getUint16(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 16 bits of binary data from the specified byte position and interprets it as <u>16bit Unsigned Integer value</u> (<mark>0</mark> to <mark>65535</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="21.02">
+        <td> <strong>dataView</strong>.setUint16(<strong>byteOffset:index</strong>, <strong>uint:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 16 bits of binary data at the specified byte position as a <u>16bit Unsigned Integer value</u> (<mark>0</mark> to <mark>65535</mark>, (decimal values are floored)) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td colspan="2"> 32bit </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>dataView</strong>.getInt32(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 32 bits of binary data from the specified byte position and interpretes it as <u>32bit Signed Integer value</u> (<mark>-2147483648</mark> to <mark>2147483647</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.03">
+        <td> <strong>dataView</strong>.setInt32(<strong>byteOffset:index</strong>, <strong>int:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 32 bits of binary data at the specified byte position as a <u>32bit Signed Integer value</u> (<mark>-2147483648</mark> to <mark>2147483647</mark>, (decimal values are floored)) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="26.01">
+        <td> <strong>dataView</strong>.getUint32(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 32 bits of binary data from the specified byte position and interpretes it as <u>32bit Unsigned Integer value</u> (<mark>0</mark> to <mark>4294967295</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="26.02">
+        <td> <strong>dataView</strong>.setUint32(<strong>byteOffset:index</strong>, <strong>uint:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 32 bits of binary data at the specified byte position as a <u>32bit Unsigned Integer value</u> (<mark>0</mark> to <mark>4294967295</mark>, (decimal values are floored)) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="27.01">
+        <td> <strong>dataView</strong>.getFloat32(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 32 bits of binary data from the specified byte position and interpretes it as <u>32bit Floating Point value</u> (<mark>1.2*10**-38</mark> to <mark>3.4*10**38</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="27.02">
+        <td> <strong>dataView</strong>.setFloat32(<strong>byteOffset:index</strong>, <strong>float:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 32 bits of binary data at the specified byte position as a <u>32bit Floating Point value</u> (<mark>1.2*10**-38</mark> to <mark>3.4*10**38</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td colspan="2"> 64bit </td>
+    </tr>
+    <tr class="30.02">
+        <td> <strong>dataView</strong>.getBigInt64(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 64 bits of binary data from the specified byte position and interpretes as <u>64bit Signed BigInteger value</u> (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 67 </span>
+                <span><i class="fab fa-firefox"></i> 68 </span>
+                <span><i class="fab fa-opera"></i> 54 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 10.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.03">
+        <td> <strong>dataView</strong>.setBigInt64(<strong>byteOffset:index</strong>, <strong>bigInt:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 64 bits of binary data at the specified byte position as a <u>64bit Signed BigInteger value</u> (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 67 </span>
+                <span><i class="fab fa-firefox"></i> 68 </span>
+                <span><i class="fab fa-opera"></i> 54 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 10.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="31.01">
+        <td> <strong>dataView</strong>.getBigUint64(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 64 bits of binary data from the specified byte position and interpretes as <u>64bit Unsigned BigInteger value</u> (<mark>0n</mark> to <mark>18446744073709551615n</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 67 </span>
+                <span><i class="fab fa-firefox"></i> 68 </span>
+                <span><i class="fab fa-opera"></i> 54 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 10.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="31.02">
+        <td> <strong>dataView</strong>.setBigUint64(<strong>byteOffset:index</strong>, <strong>bigUint:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 64 bits of binary data at the specified byte position as a <u>64bit Unsigned BigInteger value</u> (<mark>0n</mark> to <mark>18446744073709551615n</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 67 </span>
+                <span><i class="fab fa-firefox"></i> 68 </span>
+                <span><i class="fab fa-opera"></i> 54 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 10.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="32.01">
+        <td> <strong>dataView</strong>.getFloat64(<strong>byteOffset:index</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - gets 64 bits of binary data from the specified byte position and interpretes it as <u>64bit Floating Point value</u> (<mark>5*10**-324</mark> to <mark>1.8*10**308</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>))
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="32.02">
+        <td> <strong>dataView</strong>.setFloat64(<strong>byteOffset:index</strong>, <strong>float:nr</strong>, <i>endianness:bol</i>) </td>
+        <td> 
+            - sets 64 bits of binary data at the specified byte position as a <u>64bit Floating Point value</u> (<mark>5*10**-324</mark> to <mark>1.8*10**308</mark>) (Default Big endianness format (<i>endianness</i> = <mark>false</mark>)), <u>this modifies the referenced ArrayBuffer</u>
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 9 </span>
+                <span><i class="fab fa-firefox"></i> 15 </span>
+                <span><i class="fab fa-opera"></i> 12.1 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    TypedArray 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property  </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>TypedArray</strong> </td>
+        <td> 
+            - Array-like view of the underlying raw data (ArrayBuffer) <br>
+            - ex: <mark>Int8Array</mark> gets or sets the underlying raw data (ArrayBuffer) as 8bit Integers 
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> new <strong>TypedArray</strong>() </td>
+        <td>  
+            - empty (new in ES2017) 
+        </td>
+    </tr>
+        <tr class="05.03"><td></td><td></td></tr>
+    <tr class="05.04">
+        <td> new <strong>TypedArray</strong>(<strong>length:nr</strong>) </td>
+        <td>  
+            - item length (ex: <mark>new Int8Array(1)</mark> = allocates 1 byte / <mark>new Int32Array(1)</mark> = allocates 4 bytes)
+        </td>
+    </tr>
+        <tr class="05.05"><td></td><td></td></tr>
+    <tr class="05.06">
+        <td> new <strong>TypedArray</strong>(<strong>TypedArray</strong>) </td>
+        <td>  
+            - the passed TypedArray passes its items and not the underlying ArrayBuffer
+        </td>
+    </tr>
+        <tr class="05.07"><td></td><td></td></tr>
+    <tr class="05.08">
+        <td> new <strong>TypedArray</strong>(<strong>iterableObj</strong>) </td>
+        <td>  
+            - object impelmenting the 'iterable' symbol interface
+        </td>
+    </tr>
+        <tr class="05.09"><td></td><td></td></tr>
+    <tr class="05.10">
+        <td> new <strong>TypedArray</strong>(<strong>arrayBuffer</strong>, <i>byteOffset:index</i>, <i>elementLength:nr</i>) </td>
+        <td>  
+            - ArrayBuffer object <u>shares the memory</u> with the newly created TypedArray
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+                <span class="openable"> more... <div>
+                    <p> empty syntax <mark>new <strong>TypedArray</strong>()</mark> </p>
+                    <span id="browserSupport" title="updated : 2019-10-26">
+                        <span><i class="fab fa-chrome"></i> ? </span>
+                        <span><i class="fab fa-firefox"></i> 55 </span>
+                        <span><i class="fab fa-opera"></i> ? </span>
+                        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                        <span><i class="fab fa-safari"></i> ? </span>
+                        <span><i class="fab fa-node-js"></i> ? </span>
+                    </span>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td colspan="2"> <mark><strong>TypedArray</strong></mark> types </td>
+    </tr>
+    <tr class="10.02">
+        <td> Int8Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>8bit Signed Integer value</u> (<mark>-128</mark> to <mark>127</mark> (decimal numbers are floored when set)) (1 byte = 1 Array item)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.03">
+        <td> Uint8Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>8bit Unsigned Integer value</u> (<mark>0</mark> to <mark>255</mark> (decimal numbers are floored when set)) (1 byte = 1 Array item)
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> Uint8ClampedArray </td>
+        <td> 
+            - the underlying binary data is represented as <u>8bit Unsigned Integer value</u> (<mark>0</mark> to <mark>255</mark>) (1 byte = 1 Array item) <br>
+             - setting an off range value will be clamped to the closest valid value (ex: any negative will be set as <mark>0</mark>), decimal numbers are rounded when set
+            <span id="browserSupport" title="updated : 2019-10-25">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.05">
+        <td> Int16Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>16bit Signed Integer value</u> (<mark>-32768</mark> to <mark>32767</mark> (decimal numbers are floored when set)) (2 bytes = 1 Array item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.06">
+        <td> Uint16Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>16bit Unsigned Integer value</u> (<mark>0</mark> to <mark>65535</mark> (decimal numbers are floored when set)) (2 bytes = 1 Array item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.07">
+        <td> Int32Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>32 bit Signed Integer value</u> (<mark>-2147483648</mark> to <mark>2147483647</mark> (decimal numbers are floored when set)) (4 bytes = 1 Array item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.08">
+        <td> Uint32Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>32 bit Unsigned Integer value</u> (<mark>0</mark> to <mark>4294967295</mark> (decimal numbers are floored when set)) (4 bytes = 1 Array item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.09">
+        <td> Float32 </td>
+        <td> 
+            - the underlying binary data is represented as <u>32 bit Floating Point value</u> (<mark>1.2*10**38</mark> to <mark>3.4*10**308</mark>) (4 bytes = 1 Array Item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.10">
+        <td> BigInt64Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>64bit Signed BigInteger value</u> (<mark>-9223372036854775808n</mark> to <mark>9223372036854775807n</mark> (no decimals allowed)) (8bytes = 1 Array Item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 64 </span>
+                <span><i class="fab fa-firefox"></i> 68 </span>
+                <span><i class="fab fa-opera"></i> 54 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 10.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.11">
+        <td> BigUint64Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>64bit Unsigned BigInteger value</u> (<mark>0</mark> to <mark>18446744073709551615n</mark> (no decimals allowed)) (8bytes = 1 Array Item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 64 </span>
+                <span><i class="fab fa-firefox"></i> 68 </span>
+                <span><i class="fab fa-opera"></i> 54 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span>
+                <span><i class="fab fa-safari"></i> NO </span>
+                <span><i class="fab fa-node-js"></i> 10.4.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="10.12">
+        <td> Float64Array </td>
+        <td> 
+            - the underlying binary data is represented as <u>64bit Floating Point value</u> (<mark>5.0*10**-324</mark> to <mark>1.8*10**308</mark>) (8bytes = 1 Array Item)
+            <span id="browserSupport" title="updated : 2019-10-26">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td colspan="2"> Properties and Methods </td>
+    </tr>
+    <tr class="15.02">
+        <td> <strong>TypedArray(constructor)</strong>.BYTES_PER_ELEMENT </td>
+        <td> 
+            - returns a number indicating how many bytes are represented by one Array element
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="15.03">
+        <td> <strong>TypedArray(constructor)</strong>.name </td>
+        <td> - returns the constructor name in a string
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> <strong>typedArray.arrayMethod</strong> </td>
+        <td> 
+            - TypedArrays are basically Arrays, so any Array method works on them as well <a href="../../03 JS/Arrays/index.html#methods" target="_blank">Array methods [link]</a> 
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td>  <strong>typedArray</strong>.buffer </td>
+        <td> 
+            - returns the underlying binary data (<mark>ArrayBuffer</mark> object)
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> <strong>typedArray</strong>.byteLength </td>
+        <td> 
+            - returns the length <u>in bytes</u> of the typed array
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="30.01">
+        <td> <strong>typedArray</strong>.byteOffset </td>
+        <td> 
+            - returns the byte offset from the underlying ArrayBuffer (when TypedArray is created by an ArrayBuffer)
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> <strong>typedArray</strong>.length </td>
+        <td> 
+            - returns the length of the typed array (number of elements in the array)
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> yes </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="35.01">
+        <td> <strong>typedArray</strong>.set(<strong>iteralbeObj|typedArray</strong>, <i>stIndex(inc)</i>) </td>
+        <td> 
+            - sets multiple values (by using the passed object's values) from the specified index
+            <span id="browserSupport" title="updated : 2019-10-28">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> ? </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="40.01">
+        <td> <strong>typedArray</strong>.subarray(<i>stIndex(inc)</i>, <i>endIndex(exc)</i>) </td>
+        <td> 
+            - returns a <strong>typedArray</strong> which is a <u>view</u> (of the targeted region) of the TypedArray 
+            <span id="browserSupport" title="updated : 2019-11-10">
+                <span><i class="fab fa-chrome"></i> 7 </span>
+                <span><i class="fab fa-firefox"></i> 4 </span>
+                <span><i class="fab fa-opera"></i> 11.6 </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 10 </span>
+                <span><i class="fab fa-safari"></i> 5.1 </span>
+                <span><i class="fab fa-node-js"></i> 0.12 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+	<!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank">MDN ArrayBuffer</a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView" target="_blank">MDN DataVeiw</a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" target="_blank">MDN TypedArray</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - TypedArrays automatically use the platform's endianness </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - From ECMA 6 JavaScript can easily handle binary data by using various methods </p>
+<h2 class="headerExtra"><u> <mark>ArrayBuffer</mark> / <mark>SharedArrayBuffer</mark> / <mark>DataView</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var buffer = new ArrayBuffer(128);                                                 // we allocated 128 bytes of RAW data (empty = 0 filled)
+    var dataView1 = new DataView(buffer);                                              // this data view sees the full ArrayBuffer 
+    var dataView2 = new DataView(buffer, 4, 64);                                       // this one views the ArrayBuffer from 4th index (included) 64 bytes   
+    
+// (ArrayBuffer) isView() / byteLength / slice() --------------------------------------
+    ArrayBuffer.isView(dataView2);                                                     // -> true                 // passed object is a DataView or TypedArray 
+    buffer.byteLength;                                                                 // -> 128                  // ArrayBuffer contains 128 bytes 
+    newBuffer = buffer.slice(32, 64);                                                  // -> ArrayBuffer(32)      // slices 32 bytes from the ArrayBuffer and returns it in a new ArrayBuffer object   
+    
+// (DataView) buffer / byteLength / byteOffset ----------------------------------------
+    dataView2.buffer;                                                                  // -> ArrayBuffer(128)     // returns the referenced ArrayBuffer object (ArrayBuffer which will be read and written)   
+    dataView2.byteLength;                                                              // -> 64                   // the byte length of this data view 
+    dataView2.byteOffset;                                                              // -> 4                    // this dataView object views the referenced ArrayBuffer from 4th index  
+    
+// read / write the ArrayBuffer -------------------------------------------------------
+    dataView1.setUint8(0, 241);                                                        // writing the 1st 8 bits of the ArrayBuffer as Unsigned Integer value 
+    dataView1.getUint8(0);                                                             // -> 241                  // reads the 1st 8 bits of the ArrayBuffer as Unsigned Integer value (returns the set data)   
+    dataView1.getInt8(0);                                                              // -> -15                  // the same data is interpreted differently if we read as an 8bit Unsigned Integer  
+    
+    dataView1.setFloat64(1, 145.2244, true);                                           // writing 64 bits from the 2nd byte of the ArrayBuffer as 64bit Floating point    // -! written as little endianness 
+    dataView1.getFloat64(1, true);                                                     // -> 145.2244             // read the written data                                // -! read as little endianness 
+    
+    dataView2.setBigUint64(0, 6549874654165165n);                                      // writing 64 bits from the 4th byte of the ArrayBuffer as 64bit Big Integer       // -! as BigInt datatype  
+    dataView2.getBigUint64(0);                                                         // -> 6549874654165165n    // read the written data                                // -! as BigInt datatype  
+    
+// CAVEATS ----------------------------------------------------------------------------
+    dataView1.setUint16(0, -100);                                                      // writting an invalid value will give unexpected result (Unsigned Integer = 0 to 65535)    
+    dataView1.getUint16(0);                                                            // -> 65436                // unexpected value 
+    
+    dataView1.setUint16(0, 2.999);                                                     // decimal numbers will be floored if set as integers 
+    dataView1.getUint16(0);                                                            // -> 2                    // value floored 
+    </pre>
+    <p style="font-size:1.1em; text-decoration:underline; font-weight:bold;"> <mark>ArrayBuffer</mark> VS <mark>SharedArrayBuffer</mark> </p>
+    <pre>
+// ------------------------------------------------------------------------------------
+// main.js ----------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    var worker_1 = new workers.Worker('./worker_1.js');
+    
+    var shArrBuf = new SharedArrayBuffer(8);                                           // SharedArrayBuffer created 
+    new DataView(shArrBuf).setFloat64(0, 1111.1111);                                   // set data to the SharedArrayBuffer
+    
+    worker_1.postMessage(shArrBuf);                                                    // the posted SharedArrayBuffer memory is shared between threads (NOT cloned)
+        
+    setTimeout(function(){
+        console.log( new DataView(shArrBuf).getFloat64(0) );                           // -> 9999.9999     // -! since the SharedArrayBuffer memory is shared between threads modifications in 'worker_1.js' also visible here   
+    }, 1000);
+    
+// ------------------------------------------------------------------------------------
+// worker_1.js ------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    workers.parentPort.on('message', function(buf){
+        new DataView(buf).setFloat64(0, 9999.9999);                                    // modifying the received SharedArrayBuffer 
+    });
+    </pre>
+    <pre>
+// ------------------------------------------------------------------------------------
+// main.js ----------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    var worker_1 = new workers.Worker('./worker_1.js');
+    
+    var shArrBuf = new ArrayBuffer(8);                                                 // ArrayBuffer created 
+    new DataView(shArrBuf).setFloat64(0, 1111.1111);                                   // set data to the ArrayBuffer
+    
+    worker_1.postMessage(shArrBuf);                                                    // the thread receives a clone of this ArrayBuffer (NOT a shared memory)    
+    
+    setTimeout(function(){
+        console.log( new DataView(shArrBuf).getFloat64(0) );                           // -> 1111.1111     // -! since the ArrayBuffer is cloned each thread has a copy of this ArrayBuffer, so the ArrayBuffer in this trhead cannod be modified by another thread     
+    }, 1000);
+    
+// ------------------------------------------------------------------------------------
+// worker_1.js ------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    workers.parentPort.on('message', function(buf){
+        new DataView(buf).setFloat64(0, 9999.9999);                                    // modifying the received ArrayBuffer 
+    });
+    </pre>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>ArrayBuffer</mark> / <mark>isView()</mark> / <mark>byteLength</mark> / <mark>slice()</mark> TEST </u></h4>
+    <button onclick="runArrayBuffer()"> RUN ArrayBuffer test (result printed in console) </button>
+<script>
+var runArrayBuffer = function(){
+    var buffer = new ArrayBuffer(8);                                        // 8 zero bytes allocated for this buffer (this is RAW data)
+    var dataView = new DataView(buffer);
+    
+    dataView.setUint32(0, 4245791245);                                      // 32 bit integer set from the 1st (0) address(included) (takes the first 4 bytes)  
+    dataView.setUint32(4, 3245791245);                                      // 32 bit integer set from the 4th address(included) (takes 4 following bytes)  
+        console.log( buffer );                                              // -> ArrayBuffer(8) {Uint8Array:[253, 17, 162, 13, 193, 118, 216, 13]}
+    
+// isView() ----------------------------------------------------------------
+    console.log( ArrayBuffer.isView(buffer) );                              // -> false                 // ArrayBuffer is not a DataView or TypedArray object 
+    console.log( ArrayBuffer.isView(dataView) );                            // -> true 
+    
+// byteLength --------------------------------------------------------------
+    console.log( buffer.byteLength );                                       // -> 8                     // ArrayBuffer is 8 byte long
+    
+// slice() -----------------------------------------------------------------
+    var newBuffer = buffer.slice(2, 6);                                     // new ArrayBuffer copy is created from the old one (new ArrayBuffer's data is between the specified range)
+    console.log( newBuffer );                                               // -> ArrayBuffer(8) {Uint8Array:[162, 13, 193, 118]} 
+}   
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="runArrayBuffer()"> RUN ArrayBuffer tests (result printed in console) </button>
+<script>
+var runArrayBuffer = function(){
+    var buffer = new ArrayBuffer(8);                                        // 8 zero bytes allocated for this buffer (this is RAW data)
+    var dataView = new DataView(buffer);
+    
+    dataView.setUint32(0, 4245791245);                                      // 32 bit integer set from the 1st (0) address(included) (takes the first 4 bytes)  
+    dataView.setUint32(4, 3245791245);                                      // 32 bit integer set from the 4th address(included) (takes 4 following bytes)  
+        console.log( buffer );                                              // -> ArrayBuffer(8) {Uint8Array:[253, 17, 162, 13, 193, 118, 216, 13]}
+    
+// isView() ----------------------------------------------------------------
+    console.log( ArrayBuffer.isView(buffer) );                              // -> false                 // ArrayBuffer is not a DataView or TypedArray object 
+    console.log( ArrayBuffer.isView(dataView) );                            // -> true 
+    
+// byteLength --------------------------------------------------------------
+    console.log( buffer.byteLength );                                       // -> 8                     // ArrayBuffer is 8 byte long
+    
+// slice() -----------------------------------------------------------------
+    var newBuffer = buffer.slice(2, 6);                                     // new ArrayBuffer copy is created from the old one (new ArrayBuffer's data is between the specified range)
+    console.log( newBuffer );                                               // -> ArrayBuffer(8) {Uint8Array:[162, 13, 193, 118]} 
+}   
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Endianness when working with ArrayBuffer TEST </u></h4>
+    <button onclick="endiannessTest()">RUN Endianness test (result printed in console)</button>
+<script>
+var endiannessTest = function(){
+    var buffer = new ArrayBuffer(4);
+    var view = new DataView(buffer);
+    
+    view.setInt32(0, 1147483647);                                               // sets the number using big endianness architechure 
+    
+    console.log("Reading the underlying data as Big endianness");
+    console.log( view.getUint32(0) );
+    
+    console.log("Reading the underlying data as Little endianness");
+    console.log( view.getUint32(0, true) );
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+<script>
+var endiannessTest = function(){
+    var buffer = new ArrayBuffer(4);
+    var view = new DataView(buffer);
+    
+    view.setInt32(0, 1147483647);                                               // sets the 32bit number using big endianness architecture 
+    
+    console.log("Reading the underlying data as Big endianness");
+    console.log( view.getUint32(0) );
+    
+    console.log("Reading the underlying data as Little endianness");
+    console.log( view.getUint32(0, true) );
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Testing off values </u></h4>
+    <button onmouseup="offValue()"> RUN TEST (result printed in console)</button>
+<script>
+var offValue = function(){
+    var buffer = new ArrayBuffer(64);               
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt8(0, 128);                           // off value set (largest Unsigned Integer value 127)    
+    console.log( dataView.getInt8(0) );                 // -> -128      // false value returned 
+    
+    dataView.setInt8(0, 3.9);                           // decimal value will be floored 
+    console.log( dataView.getInt8(0) );                 // -> 3             
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onmouseup="offValue()"> RUN TEST (result printed in console)</button>
+<script>
+var offValue = function(){
+    var buffer = new ArrayBuffer(64);               
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt8(0, 128);                           // off value set (largest Unsigned Integer value 127)    
+    console.log( dataView.getInt8(0) );                 // -> -128      // false value returned 
+    
+    dataView.setInt8(0, 3.9);                           // decimal value will be floored 
+    console.log( dataView.getInt8(0) );                 // -> 3             
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>DataView</mark> / <mark>buffer</mark> / <mark>byteLength</mark> / <mark>byteOffset</mark> TEST </u></h4>
+    <button onclick="runDataView()">RUN DataView test (result printed in console) </button>
+<script>
+var runDataView = function(){
+    var buffer = new ArrayBuffer(16);                               // 16 bytes allocated
+    var dataView = new DataView(buffer, 4);                         // views bytes from the 4th index (included) of the ArrayBuffer 
+    
+    console.log( dataView.buffer );                                 // -> ArrayBuffer(16) {}    // original ArrayBuffer object returned  
+    console.log( dataView.byteLength );                             // -> 12                    // length in bytes of this DataView
+    console.log( dataView.byteOffset );                             // -> 4                     // the offset in bytes of this view 
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+<script>
+var runDataView = function(){
+    var buffer = new ArrayBuffer(16);                               // 16 bytes allocated
+    var dataView = new DataView(buffer, 4);                         // views bytes from the 4th index (included) of the ArrayBuffer 
+    
+    console.log( dataView.buffer );                                 // -> ArrayBuffer(16) {}    // original ArrayBuffer object returned  
+    console.log( dataView.byteLength );                             // -> 12                    // length in bytes of this DataView
+    console.log( dataView.byteOffset );                             // -> 4                     // the offset in bytes of this view 
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>getInt8()</mark> / <mark>setInt8()</mark> / <mark>getUint8()</mark> / <mark>setUint8()</mark> TEST </u></h4>
+    <button onclick="run8bit()">RUN TEST (result printed in console) </button>
+<script>
+var run8bit = function(){
+    var buffer = new ArrayBuffer(1);                    // 1 byte allocated 
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt8(0, -94);                           // sets the 1st byte of the ArrayBuffer as an 8bit Signed Integer value 
+    
+    console.log( dataView.getInt8(0) );                 // -> -94           // gets the 1st byte of this dataView object and interprets as 8bit Signed Integer value (as it was stored)   
+    console.log( dataView.getUint8(0));                 // -> 162           // gets the 1st byte of this dataView object and interprets as 8bit Unsigned Integer value   
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+<script>
+var run8bit = function(){
+    var buffer = new ArrayBuffer(1);                    // 1 byte allocated 
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt8(0, -94);                           // sets the 1st byte of the ArrayBuffer as an 8bit Signed Integer value 
+    
+    console.log( dataView.getInt8(0) );                 // -> -94           // gets the 1st byte of this dataView object and interprets as 8bit Signed Integer value (as it was stored)   
+    console.log( dataView.getUint8(0));                 // -> 162           // gets the 1st byte of this dataView object and interprets as 8bit Unsigned Integer value   
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>getInt16()</mark> / <mark>setInt16()</mark> / <mark>getUint16()</mark> / <mark>setUint16()</mark> TEST </u></h4>
+    <button onclick="run16bit()">RUN TEST (result printed in console) </button>
+<script>
+var run16bit = function(){
+    var buffer = new ArrayBuffer(4);                    // 4 bytes allocated 
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt16(0, -21000);                       // first 2 bytes set as 16bit Signed Integer value 
+    dataView.setUint16(2, 47612);                       // 3rd and 4th bytes set as 16bit Unsigned Integer value 
+    
+    console.log( dataView.getInt16(0) );                // -> -21000        // read 16 bits of data from the 0th index and interpret it as 16bit Signed Integer value gives back the value written the same way  
+    console.log( dataView.getUint16(1) );               // -> 63673         // read 16 bits of data from the 1st index and interpret it as 16bit Unsigned Integer value   
+    console.log( dataView.getUint16(2) );               // -> 47612         // read 16 bits of data from the 2nd index and interpret it as 16bit Unsigned Integer value    
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="run16bit()">RUN TEST (result printed in console) </button>
+<script>
+var run16bit = function(){
+    var buffer = new ArrayBuffer(4);                    // 4 bytes allocated 
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt16(0, -21000);                       // first 2 bytes set as 16bit Signed Integer value 
+    dataView.setUint16(2, 47612);                       // 3rd and 4th bytes set as 16bit Unsigned Integer value 
+    
+    console.log( dataView.getInt16(0) );                // -> -21000        // read 16 bits of data from the 0th index and interpret it as 16bit Signed Integer value gives back the value written the same way  
+    console.log( dataView.getUint16(1) );               // -> 63673         // read 16 bits of data from the 1st index and interpret it as 16bit Unsigned Integer value   
+    console.log( dataView.getUint16(2) );               // -> 47612         // read 16 bits of data from the 2nd index and interpret it as 16bit Unsigned Integer value    
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>getInt32()</mark> / <mark>setInt32()</mark> / <mark>getUint32()</mark> / <mark>setUint32()</mark> / <mark>getFloat32()</mark> / <mark>setFloat32()</mark> TEST </u></h4>
+    <button onclick="run32bit()">RUN TEST (result printed in console) </button>
+<script>
+var run32bit = function(){
+    var buffer = new ArrayBuffer(12);                           // 12 bytes allocated
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt32(0, -41);                                  // sets the first 4 bytes as 32bit Integer value 
+    dataView.setUint32(4, 41);                                  // sets the 5th 6th 7th 8th bytes as 32bit unsigned integer value  
+    dataView.setFloat32(8, 6.210);                              // sets the 9th 10th 11th 12th bytes as 32bit floating point value 
+    
+    console.log( dataView.getInt32(0) );                        // -> -41                       // retrieving the stored data  
+    console.log( dataView.getUint32(4) );                       // -> 41
+    console.log( dataView.getFloat32(8) );                      // -> 6.210000038146973         // normal floating point inaccuracy 
+    
+    console.log( dataView.getFloat32(6) );                      // -> 3.788491673613074e-39     // 6th 7th 8th 9th bits interpreted as 32bit floating point value
+}
+</script>
+<details>
+<summary> CODE : </summary>
+<pre>
+    <button onclick="run32bit()">RUN TEST (result printed in console) </button>
+<script>
+var run32bit = function(){
+    var buffer = new ArrayBuffer(12);                           // 12 bytes allocated
+    var dataView = new DataView(buffer);
+    
+    dataView.setInt32(0, -41);                                  // sets the first 4 bytes as 32bit Integer value 
+    dataView.setUint32(4, 41);                                  // sets the 5th 6th 7th 8th bytes as 32bit unsigned integer value  
+    dataView.setFloat32(8, 6.210);                              // sets the 9th 10th 11th 12th bytes as 32bit floating point value 
+    
+    console.log( dataView.getInt32(0) );                        // -> -41                       // retrieving the stored data  
+    console.log( dataView.getUint32(4) );                       // -> 41
+    console.log( dataView.getFloat32(8) );                      // -> 6.210000038146973         // normal floating point inaccuracy 
+    
+    console.log( dataView.getFloat32(6) );                      // -> 3.788491673613074e-39     // 6th 7th 8th 9th bits interpreted as 32bit floating point value
+}
+</script>
+</pre>
+</details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>getBigInt64()</mark> / <mark>setBigInt64()</mark> / <mark>getBigUint64()</mark> / <mark>setBigUint64()</mark> / <mark>getFloat64()</mark> / <mark>setFloat64()</mark> TEST </u></h4>
+    <button onclick="run64bit()">RUN TEST (result printed in console) </button>
+<script>
+var run64bit = function(){
+    var buffer = new ArrayBuffer(192);                          // 192 bytes allocated
+    var dataView = new DataView(buffer);
+    
+    dataView.setBigInt64(0, 9223372036854775807n);              // the first 64 bits set as Signed BigInt value 
+    dataView.setBigUint64(64, 18446744073709551615n);           // bits from 64 to 128 set as Unsigned BigInt value 
+    dataView.setFloat64(128, 41577.12544);
+    
+    console.log( dataView.getBigInt64(0) );                     // -> 9223372036854775807n          // retrieving the stored data 
+    console.log( dataView.getBigUint64(64) );                   // -> 18446744073709551615n
+    console.log( dataView.getFloat64(128) );                    // -> 41577.12544
+}
+</script>
+<details>
+<summary> CODE : </summary>
+<pre>
+    <button onclick="run64bit()">RUN TEST (result printed in console) </button>
+<script>
+var run64bit = function(){
+    var buffer = new ArrayBuffer(192);                          // 192 bytes allocated
+    var dataView = new DataView(buffer);
+    
+    dataView.setBigInt64(0, 9223372036854775807n);              // the first 64 bits set as Signed BigInt value 
+    dataView.setBigUint64(64, 18446744073709551615n);           // bits from 64 to 128 set as Unsigned BigInt value 
+    dataView.setFloat64(128, 41577.12544);
+    
+    console.log( dataView.getBigInt64(0) );                     // -> 9223372036854775807n          // retrieving the stored data 
+    console.log( dataView.getBigUint64(64) );                   // -> 18446744073709551615n
+    console.log( dataView.getFloat64(128) );                    // -> 41577.12544
+}
+</script>
+</pre>
+</details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>SharedArrayBuffer</mark> TEST (nodejs) </u></h4>
+    <pre>
+    var workers = require('worker_threads');
+    
+    var worker_1 = new workers.Worker('./worker_1.js');
+    
+// ArrayBuffer transfer ---------------------------------------------------------------
+    var arrBuf = new ArrayBuffer(8);
+    
+    console.log( arrBuf.byteLength );                                                  // -> 8
+    worker_1.postMessage(arrBuf, [arrBuf]);                                            // transfering the ArrayBuffer to the worker thread 
+    console.log( arrBuf.byteLength );                                                  // -> 0     // the ArrayBuffer is transfered to the worker (data not available in this thread)   
+    
+// SharedArrayBuffer transfer ---------------------------------------------------------
+    var sharedArrBuf = new SharedArrayBuffer(8);
+    
+    console.log( sharedArrBuf.byteLength );                                            // -> 8 
+    // worker_1.postMessage(sharedArrBuf, [sharedArrBuf])                              // -! this would thron an error because SharedArrayBuffers cannot be transfered 
+    console.log( sharedArrBuf.byteLength );                                            // -> 8
+    </pre>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>ArrayBuffer</mark> VS <mark>SharedArrayBuffer</mark> TEST (nodejs) </u></h4>
+    <p> SharedArrayBuffer </p>
+    <pre>
+// ------------------------------------------------------------------------------------
+// main.js ----------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    var worker_1 = new workers.Worker('./worker_1.js');
+    
+    var shArrBuf = new SharedArrayBuffer(8);                                           // SharedArrayBuffer created 
+    new DataView(shArrBuf).setFloat64(0, 1111.1111);                                   // set data to the SharedArrayBuffer
+    
+    worker_1.postMessage(shArrBuf);                                                    // the posted SharedArrayBuffer memory is shared between threads (NOT cloned)
+        
+    setTimeout(function(){
+        console.log( new DataView(shArrBuf).getFloat64(0) );                           // -> 9999.9999     // since the SharedArrayBuffer memory is hared between  threads modifications in 'worker_1.js' also visible here 
+    }, 1000);
+    
+// ------------------------------------------------------------------------------------
+// worker_1.js ------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    workers.parentPort.on('message', function(buf){
+        new DataView(buf).setFloat64(0, 9999.9999);                                    // modifying the received SharedArrayBuffer 
+    });
+    </pre>
+    <pre>
+// ------------------------------------------------------------------------------------
+// main.js ----------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    var worker_1 = new workers.Worker('./worker_1.js');
+    
+    var shArrBuf = new ArrayBuffer(8);                                                 // ArrayBuffer created 
+    new DataView(shArrBuf).setFloat64(0, 1111.1111);                                   // set data to the ArrayBuffer
+    
+    worker_1.postMessage(shArrBuf);                                                    // the thread receives a clone of this ArrayBuffer (NOT a shared memory)    
+    
+    setTimeout(function(){
+        console.log( new DataView(shArrBuf).getFloat64(0) );                           // -> 1111.1111     // since the ArrayBuffer is cloned each thread has a copy of this ArrayBuffer    
+    }, 1000);
+    
+// ------------------------------------------------------------------------------------
+// worker_1.js ------------------------------------------------------------------------
+    var workers = require('worker_threads');
+    
+    workers.parentPort.on('message', function(buf){
+        new DataView(buf).setFloat64(0, 9999.9999);                                    // modifying the received ArrayBuffer 
+    });
+    </pre>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>isView()</mark> <mark>byteLength</mark> <mark>slice()</mark> TEST (for <mark>SharedArrayBuffer</mark>) </u></h4>
+    <pre>
+    var workers = require('worker_threads');
+    
+// length -----------------------------------------------------------------------------
+    var shArr = new SharedArrayBuffer(32);
+    
+    console.log( shArr.byteLength );                                                   // -> 32 
+    
+// slice() ----------------------------------------------------------------------------
+    new DataView(shArr).setFloat32(0, 1111.1111);                     
+    
+    var shArr_2 = shArr.slice(0);
+    
+    new DataView(shArr).setFloat32(0, 9999.9999);                                      // original SharedArrayBuffer modified 
+    
+    console.log( new DataView(shArr_2).getFloat32(0));                                 // -> 1111.1111
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="headerExtra"><u> TypedArrays </u></h2>    
+    <p> - TypedArrays are Array-like view of the underlying binary data buffer (the underlying ArrayBuffer) </p>
+    <p> - there is not directy visible <mark>TypedArray</mark> constructor, instead there are global properties what implements typed Arrays for specific element types </p>
+    <p> - TypedArrays use the <u>platform's hardware endianness</u> to get or set the underlying ArrayBuffer </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    new Uint8ClampedArray(4);                                                    // -> Uint8ClampedArray[0, 0, 0, 0]    // new TypedArray created with the specified length (empty)  
+    
+    new Int16Array(new Int16Array([475, 1244, -474]))                            // -> Int16Array[475, 1244, -474]      // new TypedArray created by using another TypedArray  
+    
+    new Float32Array([415.1, 124.22, 142.03]);                                   // -> Float32[415.1, 124.22, 142.03]   // new TypedArray created by using an iterable object   
+    
+    new BigUint64Array(new ArrayBuffer(16));                                     // -> BigUint64Array[0n, 0n]           // new TypedArray created by passing an ArrayBuffer   
+    </pre>
+    <pre>
+    var uint8Clamped = new Uint8ClampedArray(4);
+    var float32 = new Float32Array([142.12, 12.4, 145.2]);
+    
+// set() / subarray() / other array methods ------------------------------------
+    uint8Clamped.set([-1454, 300, 32.8], 1);                                    // set to = [0, 0, 255, 33]             // sets the typedArray values from the 1st index (clamped array = clamps offset values and rounds decimals!)  
+    var subArr = uint8Clamped.subarray(1, 3);                                   // -> Uint8ClampedArray[0, 255]         // returns a view of the targeted region
+    subArr[1] = 0;                                                              // set TypedArray items through the view   
+    uint8Clamped;                                                               // -> Uint8ClampedArray[0, 0, 0, 33]    // original TypeArray is modified 
+    
+    uint8Clamped.includes(33);                                                  // -> true                              // all Array methods are available on TypedArrays as well!   
+    
+// BYTES_PER_ELEMENT / name / buffer / byteOffset / byteLength / length --------
+    BigUint64Array.BYTES_PER_ELEMENT;                                           // -> 8                                  // constructor builds a typedArray which contains 8 underlying bytes per array item    
+    BigUint64Array.name;                                                        // -> 'BigUint64Array'                   // constructor's name 
+       
+    float32.buffer;                                                             // -> ArrayBuffer(12){}                  // returns the underlying ArrayBuffer object (binary raw data)   
+    float32.byteOffset;                                                         // -> 0                                  // typedArray offset relative to the underlying ArrayBuffer    
+    
+    float32.length;                                                             // -> 3                                  // number of array items 
+    float32.byteLength;                                                         // -> 12                                 // number of bytes of the underlying binary data   
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Interpret ArrayBuffer Raw data with TypedArray TEST </u></h4>
+    <p style="color:yellow;"> - by CPU uses litlle endianness so the data must be stored as little endianness in the ArrayBuffer in order for a TypedArray to retrieve it correctly </p>
+    <button onclick="arrayInterpreter()"> RUN TEST (result printed in console) </button>
+<script>
+var arrayInterpreter = function(){
+console.warn(' 8bit -----------------------------------------' );    
+    var buffer1 = new ArrayBuffer(1);
+    var dataView1 = new DataView(buffer1);
+    dataView1.setUint8(0, 250);
+    
+    console.log( new Uint8Array(buffer1) );                     // -> UintArray [250]                   // ArrayBuffer interpreted correctly 
+        
+console.warn(' 32bit float ----------------------------------' );    
+    var buffer2 = new ArrayBuffer(4);
+    var dataView2 = new DataView(buffer2);
+    dataView2.setFloat32(0, 245.2455, true);                    // this platform uses little endianness so we have to store the data as little endiannes in the ArrayBuffer 
+    
+    console.log( new Float32Array(buffer2) );                   // -> FloatArray [245.24549865722656]   // ArrayBuffer interpreted correctly 
+    
+console.warn(' 64bit BigInt ---------------------------------' );    
+    var buffer3 = new ArrayBuffer(8);
+    var dataView3 = new DataView(buffer3);
+    dataView3.setBigInt64(0, 458795154878942547n, true);        // data set as little endianness (because of my hardware is implements little enndiannes)
+    
+    console.log( new BigInt64Array(buffer3) );
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="arrayInterpreter()"> RUN TEST (result printed in console) </button>
+<script>
+var arrayInterpreter = function(){
+console.warn(' 8bit -----------------------------------------' );    
+    var buffer1 = new ArrayBuffer(1);
+    var dataView1 = new DataView(buffer1);
+    dataView1.setUint8(0, 250);
+    
+    console.log( new Uint8Array(buffer1) );                     // -> UintArray [250]                   // ArrayBuffer interpreted correctly 
+        
+console.warn(' 32bit float ----------------------------------' );    
+    var buffer2 = new ArrayBuffer(4);
+    var dataView2 = new DataView(buffer2);
+    dataView2.setFloat32(0, 245.2455, true);                    // this platform uses little endianness so we have to store the data as little endiannes in the ArrayBuffer 
+    
+    console.log( new Float32Array(buffer2) );                   // -> FloatArray [245.24549865722656]   // ArrayBuffer interpreted correctly 
+    
+console.warn(' 64bit BigInt ---------------------------------' );    
+    var buffer3 = new ArrayBuffer(8);
+    var dataView3 = new DataView(buffer3);
+    dataView3.setBigInt64(0, 458795154878942547n, true);        // data set as little endianness (because of my hardware is implements little enndiannes)
+    
+    console.log( new BigInt64Array(buffer3) );
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> Create new TypedArrays TEST </u></h4>
+    <button onclick="newTypedArrays()"> RUN TEST (result printed in console) </button>
+<script>
+var newTypedArrays = function(){
+    console.log( new Float32Array() );                      // empty TypedArray created 
+    console.log( new Float32Array(4) );                     // zero-filled TypedArray created (128 bits long)  
+    
+console.warn( 'TypedArray created from another TypedArray --------------' );
+    var int32Array = new Int32Array(1);
+    int32Array[0] = -347483648;
+    
+    var float32Array = new Float32Array(int32Array);        // the passed TypedArray (int32Array) passes its value not the underlying ArrayBuffer object 
+    
+    console.log( int32Array.buffer );                       // underlying ArrayBuffer is different!
+    console.log( float32Array.buffer );
+    
+console.warn( 'Iterable Object -----------------------------------------' );
+    console.log( new Float32Array([48875.1154, 4415.221]) );
+    
+console.warn( 'ArrayBuffer ---------------------------------------------' );
+    var arrayBuffer = new ArrayBuffer(4);
+    var dataView = new DataView(arrayBuffer);
+    dataView.setUint32(0, 2294967295, true);                // litte endianness must be used because of my platform's endianness are little   
+    
+    console.log( new Uint32Array(arrayBuffer) );            // -> Uint32Array [2294967295]
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="newTypedArrays()"> RUN TEST (result printed in console) </button>
+<script>
+var newTypedArrays = function(){
+    console.log( new Float32Array() );                      // empty TypedArray created 
+    console.log( new Float32Array(4) );                     // zero-filled TypedArray created (128 bits long)  
+    
+console.warn( 'TypedArray created from another TypedArray --------------' );
+    var int32Array = new Int32Array(1);
+    int32Array[0] = -347483648;
+    
+    var float32Array = new Float32Array(int32Array);        // the passed TypedArray (int32Array) passes its value not the underlying ArrayBuffer object 
+    
+    console.log( int32Array.buffer );                       // underlying ArrayBuffer is different!
+    console.log( float32Array.buffer );
+    
+console.warn( 'Iterable Object -----------------------------------------' );
+    console.log( new Float32Array([48875.1154, 4415.221]) );
+    
+console.warn( 'ArrayBuffer ---------------------------------------------' );
+    var arrayBuffer = new ArrayBuffer(4);
+    var dataView = new DataView(arrayBuffer);
+    dataView.setUint32(0, 2294967295, true);                // litte endianness must be used because of my platform's endianness are little   
+    
+    console.log( new Uint32Array(arrayBuffer) );            // -> Uint32Array [2294967295]
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> 8bit Typed Arrays TEST </u></h4>
+    <button onclick="bit8TypedArrays()"> RUN TEST (result printed in console) </button>
+<script>
+function bit8TypedArrays() {
+console.warn( 'Int8Array --------------------------------------' );
+    var int8 = new Int8Array(2);
+    int8[0] = -120;
+    int8[1] = 210;                                              // off value will give unexpected result 
+    
+    console.log( int8 );
+    
+console.warn( 'Uint8Array --------------------------------------' );
+    var uint8 = new Uint8Array(4);
+    uint8[3] = 184.4415;                                        // value is floored to 184 when set 
+    
+    console.log( uint8 );
+    
+console.warn( 'Uint8ClampedArray -------------------------------' );
+    var uint8Clamped = new Uint8ClampedArray(4);
+    uint8Clamped[0] = -102;                                     // lower than allowed values are clamped to 0 
+    uint8Clamped[1] = 300;                                      // higher than allowed values are clamped to 255 
+    uint8Clamped[2] = 100.4;                                    // decimal numbers are rounded!
+    uint8Clamped[3] = 100.7;
+    
+    console.log( uint8Clamped );
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="bit8TypedArrays()"> RUN TEST (result printed in console) </button>
+<script>
+function bit8TypedArrays() {
+console.warn( 'Int8Array --------------------------------------' );
+    var int8 = new Int8Array(2);
+    int8[0] = -120;
+    int8[1] = 210;                                              // off value will give unexpected result 
+    
+    console.log( int8 );
+    
+console.warn( 'Uint8Array --------------------------------------' );
+    var uint8 = new Uint8Array(4);
+    uint8[3] = 184.4415;                                        // value is floored to 184 when set 
+    
+    console.log( uint8 );
+    
+console.warn( 'Uint8ClampedArray -------------------------------' );
+    var uint8Clamped = new Uint8ClampedArray(4);
+    uint8Clamped[0] = -102;                                     // lower than allowed values are clamped to 0 
+    uint8Clamped[1] = 300;                                      // higher than allowed values are clamped to 255 
+    uint8Clamped[2] = 100.4;                                    // decimal numbers are rounded!
+    uint8Clamped[3] = 100.7;
+    
+    console.log( uint8Clamped );
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> 16bit / 32bit / 64bit Typed Arrays TEST </u></h4>
+    <button onclick="bit16_32TypedArrays()"> RUN TEST (result printed in console) </button>
+<script>
+function bit16_32TypedArrays(){
+console.warn( '16bit -------------------------------------------------------' );
+    var int16 = new Int16Array([-30000, 30000]);
+        console.log( int16 );
+        
+    var uint16 = new Uint16Array([61000, 45, 4788.21]);             // decimal value floored 
+        console.log( uint16 );
+        
+console.warn( '32bit -------------------------------------------------------' );
+    var int32 = new Int32Array([2145789654, -46546834]);
+        console.log( int32 );
+        
+    var uint32 = new Uint32Array([4000000000])
+        console.log( uint32 );
+        
+    var float32 = new Float32Array([41554.1554, 1145.2111, 74551.01]);
+        console.log( float32 );
+        
+console.warn( '64bit -------------------------------------------------------' );
+    var bigInt64 = new BigInt64Array([23482934055n, -46654887n])
+        console.log( bigInt64 );
+        
+    var bigUint64 = new BigUint64Array([18446744073709551615n])
+        console.log( bigUint64 );
+        
+    var float64 = new Float64Array([145542.21548, - 144578.10255]);
+        console.log( float64 );
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="bit16_32TypedArrays()"> RUN TEST (result printed in console) </button>
+<script>
+function bit16_32TypedArrays(){
+console.warn( '16bit -------------------------------------------------------' );
+    var int16 = new Int16Array([-30000, 30000]);
+        console.log( int16 );
+        
+    var uint16 = new Uint16Array([61000, 45, 4788.21]);             // decimal value floored 
+        console.log( uint16 );
+        
+console.warn( '32bit -------------------------------------------------------' );
+    var int32 = new Int32Array([2145789654, -46546834]);
+        console.log( int32 );
+        
+    var uint32 = new Uint32Array([4000000000])
+        console.log( uint32 );
+        
+    var float32 = new Float32Array([41554.1554, 1145.2111, 74551.01]);
+        console.log( float32 );
+        
+console.warn( '64bit -------------------------------------------------------' );
+    var bigInt64 = new BigInt64Array([23482934055n, -46654887n])
+        console.log( bigInt64 );
+        
+    var bigUint64 = new BigUint64Array([18446744073709551615n])
+        console.log( bigUint64 );
+        
+    var float64 = new Float64Array([145542.21548, - 144578.10255]);
+        console.log( float64 );
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>BYTES_PER_ELEMENT</mark> / <mark>name</mark> / <mark>buffer</mark> / <mark>byteLength</mark> / <mark>byteOffset</mark> / <mark>length</mark> TEST </u></h4>
+    <button onclick="props()"> RUN TEST (result printed in console) </button>
+<script>
+function props() {
+console.warn( 'BYTES_PER_ELEMENT / name -----------------------------------------------');
+    console.log( Float64Array.BYTES_PER_ELEMENT );                              // -> 8                     // 1 Array element represents 8 underlying bytes 
+    console.log( Float64Array.name );                                           // -> 'Float64Array'        // constructor name 
+    
+console.warn( 'BYTES_PER_ELEMENT / name / length --------------------------------------');
+    var uint32 = new Uint32Array(1);
+    uint32[0] = 457784;
+                                                                                
+    console.log( uint32.buffer );                                               // -> ArrayBuffer(4)        // underlying binary data 
+    console.log( uint32.byteLength );                                           // -> 4                     // contains 4 bytes 
+    console.log( uint32.length );                                               // -> 1                     // 1 Array Item length 
+    
+console.warn( 'byteOffset -------------------------------------------------------------');
+    var buffer = new ArrayBuffer(8);
+    new DataView(buffer).setFloat64(0, 54814551454.12);
+    
+    var int16_ = new Int16Array(buffer, 4, 1);
+    console.log( int16_.byteOffset );                                           // -> 4 
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    <button onclick="props()"> RUN TEST (result printed in console) </button>
+<script>
+function props() {
+console.warn( 'BYTES_PER_ELEMENT / name -----------------------------------------------');
+    console.log( Float64Array.BYTES_PER_ELEMENT );                              // -> 8                     // 1 Array element represents 8 underlying bytes 
+    console.log( Float64Array.name );                                           // -> 'Float64Array'        // constructor name 
+    
+console.warn( 'BYTES_PER_ELEMENT / name / length --------------------------------------');
+    var uint32 = new Uint32Array(1);
+    uint32[0] = 457784;
+                                                                                
+    console.log( uint32.buffer );                                               // -> ArrayBuffer(4)        // underlying binary data 
+    console.log( uint32.byteLength );                                           // -> 4                     // contains 4 bytes 
+    console.log( uint32.length );                                               // -> 1                     // 1 Array Item length 
+    
+console.warn( 'byteOffset -------------------------------------------------------------');
+    var buffer = new ArrayBuffer(8);
+    new DataView(buffer).setFloat64(0, 54814551454.12);
+    
+    var int16_ = new Int16Array(buffer, 4, 1);
+    console.log( int16_.byteOffset );                                           // -> 4 
+}
+</script>
+    </pre>
+    </details>
+<!------------------------------------------------------------------------------------------->
+<hr>
+<h4 style="color:darkblue;"><u> <mark>set()</mark> / <mark>subarray()</mark> TEST </u></h4>
+    <button onmouseup="set_subarray()">RUN TEST (result printed in console)</button>
+<script>
+function set_subarray(){
+console.warn( 'set() --------------------------------------------------------' );
+    var uit16 = new Uint16Array(4);
+    uit16.set([47578, 12054.32], 1);                                            // 2nd and 3rd items are set in the Array 
+    uit16.set([45799], 3);                                                      // 4th item set in the TypedArray 
+    
+    console.log( uit16 );
+    
+console.warn( 'subarray() ---------------------------------------------------' );
+    var testTypedArray = new Int16Array([4578, -447, 4788, 1458, -748, 122, 0]);
+    var newTypedArray = testTypedArray.subarray(2);                             // new view returned  
+    var anotherTypedArray = newTypedArray.subarray(0, 2);                       // new view based on another view returned 
+    
+    console.log( newTypedArray );                                               // -> Int16Array[4788, 1458, -748, 122, 0]
+    console.log( anotherTypedArray );                                           // -> Int16Array[4788, 1458]
+    
+    anotherTypedArray.set([0, 0], 0);                                           // setting itmes (through the view)
+    console.log( testTypedArray );                                              // modifies the original TypedArray
+}
+</script>
+    <details>
+    <summary> CODE : </summary>
+    <pre>
+    &lt;button onmouseup="set_subarray()"&gt;RUN TEST (result printed in console)&lt;/button&gt;
+&lt;script&gt;
+function set_subarray(){
+console.warn( 'set() --------------------------------------------------------' );
+    var uit16 = new Uint16Array(4);
+    uit16.set([47578, 12054.32], 1);                                            // 2nd and 3rd items are set in the Array 
+    uit16.set([45799], 3);                                                      // 4th item set in the TypedArray 
+    
+    console.log( uit16 );
+    
+console.warn( 'subarray() ---------------------------------------------------' );
+    var testTypedArray = new Int16Array([4578, -447, 4788, 1458, -748, 122, 0]);
+    var newTypedArray = testTypedArray.subarray(2);                             // new view returned  
+    var anotherTypedArray = newTypedArray.subarray(0, 2);                       // new view based on another view returned 
+    
+    console.log( newTypedArray );                                               // -> Int16Array[4788, 1458, -748, 122, 0]
+    console.log( anotherTypedArray );                                           // -> Int16Array[4788, 1458]
+    
+    anotherTypedArray.set([0, 0], 0);                                           // setting itmes (through the view)
+    console.log( testTypedArray );                                              // modifies the original TypedArray
+}
+&lt;/script&gt;
+    </pre>
+    </details>
+</details>
+    
+    
+<br><br>
+</body>
+</html>

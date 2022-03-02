@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Programming Techniques </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Programming Techniques </h1>
+    <p> Updated ( 2021-04-26 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html" title="CSS">Computer Science></a> Programming Techniques
+    </p>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - when workin with dynamic programming (but in data structures and algorithms in general) we should <u>visualize</u> the problem (ex: recursion tree, tabulation table) so we can <u>see</u> the big picture </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 style="color:darkblue;"><u> Programming Paradigms </u></h2>
+    <p> - <b><u>Procedural</u></b> - Sequential series of execution steps (top to bottom) </p>
+    <p> - <b><u>Object-Oriented</u></b> - data and logic is stored in object properties and methods </p>
+    <p> - <b><u>Functional</u></b> - the code organized in functions, each function usually has a specific tasks </p>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Recursion </u></h2>
+    <p> - a function that calls itself to solve a problem </p>
+    <p> - a recursive function has 2 parts : </p>
+    <p style="text-indent:40px;"> - recursive case = the function will call itself again </p>
+    <p style="text-indent:40px;"> - base case = the function stops calling itself (will be the top of the recursive call stack) </p>
+    <img src="./Recursion.jpg" height="180">
+<details class="example">
+<summary> DEMO </summary>
+    <p> - factorials with recursion </p>
+    <pre>
+    var fact = function(n){
+        if (n >=1) {
+            return n * fact(n - 1);                                                    // recursive case    // the function will call itself again   
+        } else {
+            return 1;                                                                  // base case         // the function stops calling itself further   
+        }
+    }
+    
+    fact(3);                                                                           // -> 6              // 3! = 6
+    fact(5);                                                                           // -> 120            // 5! = 120
+    fact(8);                                                                           // -> 40320          // 5! = 40320
+    </pre>
+    <p> - get the nth fibonacci number with recursion </p>
+    <pre>
+    var fib = function(n){
+        if (n &lt;= 0) { 
+            return 'positive integer required!'                                        // base case 
+        } else if (n == 1 || n == 2) { 
+            return 1;                                                                  // base case 
+        } else { 
+            return fib(n - 1) + fib(n - 2)                                             // recursive case 
+        }
+    }
+    
+    fib(3);                                                                            // -> 2
+    fib(6);                                                                            // -> 8
+    fib(21);                                                                           // -> 10946
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h3 style="color:darkblue;"><u> sum all array elements with recursion TEST </u></h3>
+    <pre>
+    function sum(arr){
+        if (arr.length == 1) {
+            return arr[0]
+        } else {
+            return arr.shift() + sum(arr)
+        }
+    }
+    
+    console.log( sum([1, 2, 3, 4, 5]) );                                               // -> 15
+    </pre>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h3 style="color:darkblue;"><u> get the largest squares of a land with recursion TEST </u></h3>
+    <pre>
+    var land1 = {length:1680, width:640,};
+    var land2 = {length:500, width:200};
+    var land3 = {length:2000, width:3000};
+    var land4 = {length:2000, width:'x'};
+    
+    function getSquares(obj, count = 1){
+        if (obj.width &lt; obj.length){
+            obj.length -= obj.width;                                                   // calculates the remainig land space  
+            
+            obj[`square_${count}`] = {length:obj.width, width:obj.width};              // the current square what is taken off from the land   
+            
+            return getSquares(obj, count + 1);                                         // recursive call with the remaining land 
+        } else if (obj.width &gt; obj.length) {
+            obj.width -= obj.length;
+            
+            obj[`square_${count}`] = {length:obj.length, width:obj.length};
+            
+            return getSquares(obj, count + 1);
+        } else if (obj.width == obj.length) {
+            delete obj.length; delete obj.width;
+        
+            return obj
+        } else {
+            throw new Error('invalid argument! Expected: {length:nr, width:nr}')
+        }
+    }
+    
+    // land 1 can be divided into 6 squares
+    console.log( getSquares(land1) );                                                  // -> {
+                                                                                       //     square_1:{length:640, width:640}, 
+                                                                                       //     square_2:{length:640, width:640}, 
+                                                                                       //     square_3:{length:400, width:400}, 
+                                                                                       //     square_4:{length:240, width:240}, 
+                                                                                       //     square_5:{length:160, width:160}, 
+                                                                                       //     square_6:{length:80, width:80}
+                                                                                       //  }
+        
+    // land 2 can be divided into 3 squares 
+    console.log( getSquares(land2) );                                                  // -> {
+                                                                                       //     square_1: { length: 200, width: 200 },
+                                                                                       //     square_2: { length: 200, width: 200 },
+                                                                                       //     square_3: { length: 100, width: 100 }
+                                                                                       //  }
+    
+    // land 3 can be divided into 2 squares 
+    console.log( getSquares(land3) );                                                  // -> {
+                                                                                       //     square_1: { length: 2000, width: 2000 },
+                                                                                       //     square_2: { length: 1000, width: 1000 }
+                                                                                       //  }
+    
+    console.log( getSquares(land4) );                                                  // -> Error thrown 'invalid argument! Expected: {length:nr, width:nr}'
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Closure </u></h2>
+    <p> - a Closure is basically an isolated environemt (scope), in Javascript function bodies provide scopes (closures) </p>
+    <p> - code (variables, expressions, etc...) in the function body are isolated from the upper scope </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    function makeUser(user){
+        let user_ = user;
+        
+        function getUser(){                                                            // closure 
+            return user_;
+        }
+        
+        return getUser;                                                                // returns the closure   
+    }
+    
+    var steven = makeUser('Steven');                                                   // the parent function called and finished here 
+    
+    steven();                                                                          // -> 'Steven'               // the closure remembers its parent scope even when the parent function is finished     
+    </pre>
+    <p> - in JavaScript we can create a Module (code pattern) with closures </p>
+    <pre>
+    function makeClient(client){
+        let client_ = client;
+        let account = 0;
+        
+        function deposit(sum){
+            account += sum;
+        }
+        
+        function withdraw(sum){
+            account -= sum
+        }
+        
+        function getBalance(){
+            return account + 'Ft';
+        }
+        
+        return {                                                                       // an object returned with all closures  
+            client: client_,
+            deposit: deposit,
+            withdraw: withdraw,
+            getBalance: getBalance 
+        }
+    }
+    
+    var steven = makeClient('Steven');                                                 // creating the client 
+    
+    steven.client;                                                                     // -> 'Steven'    
+    steven.getBalance();                                                               // -> '0Ft'
+    
+    steven.deposit(1500);
+    steven.deposit(5000);
+    
+    steven.getBalance();                                                               // -> '6500Ft'
+    
+    steven.withdraw(3000);
+    
+    steven.getBalance();                                                               // -> '3500Ft'
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Higher-Order Function </u></h2>
+    <p> - a Higher-Order function is a function which returns a function, the function which return the function sits in 'higher-order' </p>
+    <pre class="syntax">
+SYNTAX :    function highOrd() {                                                       // function higher in the closure hierarchy has "Higher-Order" 
+                return function() {};
+            } 
+            
+            highOrd();                                                                 // -> function() {}       // returns the nested function  
+            highOrd()();                                                               // executes the nested function    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    function fnA(a) {
+        return function(b) {                                                           // enclosed function  
+            return b + " " + a;                                                        // enclosed function's return value     // -! the higher order function "encloses" its passed value in here 
+        };  
+    }
+    var fnB = fnA("Pie");                                                              // we "enclose" the "Pie" value here (the fnB holds the enclosed value) 
+    fnB("Apple");                                                                      // -> "Apple" Pie"                      // the enclosed value returned here (with another passed value)
+  // ---------------
+    fnA("Pie")("Apple");                                                               // we can call the enclosed function right away like this     
+    
+// Higher-Order Function calls an action  ---------------------------------------------
+    function fireAction(action) {                                                      // this is the "Higher-Order" function which is called first 
+        return action();                                                               // the "Lower-Order" function is returned and executed here 
+    }
+    function displayAlert() {                                                          // this function will be passed as the "action" argument of the function above (this is the "Lower-order" function)
+        alert("alert!");
+    }
+    
+    fireAction(displayAlert);                                                          // function is passed as argument here 
+    fireAction(() => {alert("alert!");});                                              // this does the same as the above call 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> simple counter with closure </u></h4>
+    <p id="closure"></p>
+<script>
+$(document).ready(function(){
+    function counterHost(){
+        var counter = 0;                // define collection container
+        return () => counter = counter + 1;
+    }
+    let count = counterHost();          // define closure
+    count();
+    count();
+    count();                            // no matter how many times the closure is called the parent function holds the value 
+// print
+    $("#closure").text("The result of the magical Closure is = " + count()); 
+});
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="closure"&gt;&lt;/p&gt;
+&lt;script&gt;
+$(document).ready(function(){
+    function counterHost(){
+        var counter = 0;                // define collection container
+        return () => counter = counter + 1;
+    }
+    let count = counterHost();          // define closure
+    count();
+    count();
+    count();                            // no matter how many times the closure is called the parent function holds the value 
+// print
+    $("#closure").text("The result of the magical Closure is = " + count()); 
+});
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4 style="color:darkblue;"><u> closure with multiple arguments </u></h4>
+    <p id="closureArg"></p>
+<script> 
+$(document).ready(function(){
+    function hostFn(a, b, c) {
+        return (d, e, f) => a + " " + b + " " + c + " " + d + " " + e + " " + f;    // both functions' arguments are passed and returned   
+    }
+    var closFn = hostFn("1", "2", "3");
+// print
+    $("#closureArg").text(closFn("4", "5", "6") );
+});    
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="closureArg"&gt;&lt;/p&gt;
+&lt;script&gt; 
+$(document).ready(function(){
+    function hostFn(a, b, c) {
+        return (d, e, f) => a + " " + b + " " + c + " " + d + " " + e + " " + f;    // both functions' arguments are passed and returned   
+    }
+    var closFn = hostFn("1", "2", "3");
+// print
+    $("#closureArg").text(closFn("4", "5", "6") );
+});    
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4 style="color:darkblue;"><u> repeat Acttion with Higher-Order a function </u></h4>
+    <p id="addCars"></p>
+<script>
+    let cars = [];
+    
+    function repeatAction(nr, action) {
+        for(let i = 0; i < nr; i++) {
+            action(i);                          // this is where "addArr_items" function executed a number of times the loop calls it
+        }                                       // the value is passed by the "repeatAction" function ! 
+    }
+    
+    function addArr_items(i) {                  // this is a simple function which pushes a new item in the targeted array
+        cars.push("Car" + (i + 1));
+    }
+    repeatAction(4, addArr_items);              // call the parent functions, the second value is the nested function
+                                                    // 4 new items are added to the array
+    
+    repeatAction(4, (i) => {cars.push("Car" + (i + 1));});
+                                                // we do the same thing here but on the spot with an arrow function 
+    
+    document.getElementById("addCars").innerHTML = cars;
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="addCars"&gt;&lt;/p&gt;
+&lt;script&gt;
+    let cars = [];
+    
+    function repeatAction(nr, action) {
+        for(let i = 0; i &lt; nr; i++) {
+            action(i);                          // this is where "addArr_items" function executed a number of times the loop calls it
+        }                                       // the value is passed by the "repeatAction" function ! 
+    }
+    
+    function addArr_items(i) {                  // this is a simple function which pushes a new item in the targeted array
+        cars.push("Car" + (i + 1));
+    }
+    repeatAction(4, addArr_items);              // call the parent functions, the second value is the nested function
+                                                    // 4 new items are added to the array
+    
+    repeatAction(4, (i) => {cars.push("Car" + (i + 1));});
+                                                // we do the same thing here but on the spot with an arrow function 
+    
+    document.getElementById("addCars").innerHTML = cars;
+&lt;/script&gt;
+        </pre>
+        </details>
+<h4 style="color:darkblue;"><u> Double Call </u></h4>
+    <p id="doubleCall"></p>
+<script>
+    var doubleCall = function(a, b) {
+        return (c, d) => a + b + c + d;
+    }
+    document.getElementById("doubleCall").innerHTML = doubleCall(4, 5)(3, 7);     
+</script>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    &lt;p id="doubleCall"&gt;&lt;/p&gt;
+&lt;script&gt;
+    var doubleCall = function(a, b) {
+        return (c, d) =&gt; a + b + c + d;
+    }
+    document.getElementById("doubleCall").innerHTML = doubleCall(4, 5)(3, 7);     
+&lt;/script&gt;
+        </pre>
+        </details>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Divide & Conquer </u></h2>
+    <p> - <u>by using recursion</u> breaking down a big problem into small pieces until this small piece can be solved with a base case, then rebuild the big solution from these small solutions </p>
+    <p> - ex: Merge Sort uses this aproach, we recursively split in half the array until the smallest arrays has only 2 elements, then we sort and rebuild recursively the sorted array </p>
+    <img src="./Divide & Conquer.png" height="150">
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Greedy (Aproximation) Algorithms </u></h2>
+    <p> - The Greedy programming technique is a simple approach to a complex problem, it's usually used when NP-complete problems encountered (problems that requires a lot of calculations to give right answer) </p>
+    <p> - Greedy algorithms don't give us the best solution but a 'good enough' solution </p>
+    <p> - Ex: the travelling sales person problem requires O(n!) time to solve, we could implement a greedy algorithm which chooses the shortest path from the current vertex every time, this wont' give us the best solution but (depending the context) this will be a good enough solution </p>
+<!---------------------------------------------------------------------------------------------------------->
+<hr>
+<h2 style="color:darkblue;"><u> Dynamic Programming </u></h2>
+    <p> - Dynamic programming is used to solve optimization and combinatorial problems, in other words it's used to solve problems where otherwise we should use the brute force approach (NP-complete) </p>
+    <p> - dynamic programming is applicable if the problem can be broken into small problems, which then build up to solve the big problem and these small problems are overlapping problems (repeat themselves) </p>
+    <p> - There are 2 dynamic programming techniques, <b>Memoization</b> and <b>Tabulation</b> </p> 
+    <p style='text-indent:20px'> <b><u>Memoization (Top-Down):</u></b> </p>
+    <p style='text-indent:40px'> - we use the recursive approach here but we implement a 'memo' object where we save the returned values </p>
+    <p style='text-indent:40px'> - if the recursion encounter an already performed recursion that value is returned from the memo instead doing the recurions again </p>
+    <p style='text-indent:40px'> - this approach basically makinkg sure that on the recursion tree 'overlapping' tasks are done only once </p>
+    <p style='text-indent:20px'> <b><u>Tabulation (Bottom-Up):</u></b> </p>
+    <p style='text-indent:40px'> - with tabulation we build a table (as an array or 2D array) which dynamically scales up based on a seed value </p>
+    <p style='text-indent:40px'> - for this technique we need some kind of formula which tell us how to build the table </p>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - the Gridd Traveller travles on a 2D grin, starts from the top left corner, <u>can move only right or down</u>, in how many ways can he travel to the bottom right corner? </p>
+    <pre>
+// normal recursive call (time complexity O(2^n+m) ------------------------------------
+    var gridTraveller = function(m, n){
+        if (m === 1 && n === 1) return 1;
+        if (m === 0 || n === 0) return 0;
+        return gridTraveller(m - 1, n) + gridTraveller(m, n - 1);
+    }
+    
+// Dynamic Programming memoization (Top Down) (time complexity O(n*m)) ----------------
+    var gridTraveller = function(m, n, memo = {}){
+        let key = m + "," + n; 
+        if(key in memo) return memo[key];                                              // if the result is already in the memo object return it!    
+        
+        if (m === 1 && n === 1) return 1;
+        if (m === 0 || n === 0) return 0;
+        
+        memo[key] = gridTraveller(m - 1, n, memo) + gridTraveller(m, n - 1, memo);
+        return memo;
+    }
+    
+// Dynamic Programming tabulation (Bottom-Up) (time complexity O(n*m)) ----------------
+    var gridTraveller3 = function(m, n){
+        var table = new Array(m + 1)
+            .fill()
+            .map(function(){ return Array(n + 1).fill(0)})
+            
+        table[1][1] = 1;
+        
+        for(let i = 0; i &lt;= m; i++){    
+            for(let j = 0; j &lt;= n; j++){
+                const current = table[i][j];
+                if (j + 1 &lt;= n) table[i][j + 1] += current;
+                if (i + 1 &lt;= m) table[i + 1][j] += current;
+            }
+        }
+        
+        return table[m][n];
+    }
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> Fibonacci sequence with Dynamic Programming </u></h4>
+    <p> - returns the <i>n</i>th number of the Fibonacci sequence </p>
+    <pre>
+// brute forece recursive approach (time complexity O(2^n) ----------------------------
+    var fib1 = function(n){ 
+        if (n &lt;= 2) return 1;        
+        return fib1(n-1) + fib1(n-2);   
+    }
+    
+    fib1(7);                                                                           // -> 13
+    fib1(10);                                                                          // -> 55
+    
+// Dynamic Programming memoization (Top Down) (time complexity O(n)) ------------------
+    var fib2 = function(n, memo = {}){ 
+        if (n in memo) return memo[n];                                                 // if the result is already in the memo object return it!    
+        if (n &lt;= 2) return 1;
+        
+        memo[n] = fib2(n-1, memo) + fib2(n-2, memo);                                   // recursive result is stored in the memo object 
+        return memo[n];
+    }
+    
+    fib2(7);                                                                           // -> 13
+    fib2(10);                                                                          // -> 55
+    
+    
+// Dynamic Programming tabulation (Bottom-Up) (time complexity O(n)) ------------------
+    function fib3(n){
+        let arr = new Array(n + 1).fill(0);
+        arr[1] = 1;
+        
+        for(let i = 0; i &lt;= n; i++){
+            arr[i + 1] += arr[i];
+            arr[i + 2] += arr[i];
+        }
+        
+        return arr[n];
+    }
+    
+    fib3(7);                                                                           // -> 13
+    fib3(10);                                                                          // -> 55
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Grid Traveller with Dynamic Programming </u></h4>
+    <p> - the Gridd Traveller travles on a 2D grin, starts from the top left corner, <u>can move only right or down</u>, in how many ways can he travel to the bottom right corner? </p>
+    <pre>
+// normal recursive call (time complexity O(2^n+m) ------------------------------------
+    var gridTraveller = function(m, n){
+        if (m === 1 && n === 1) return 1;
+        if (m === 0 || n === 0) return 0;
+        return gridTraveller(m - 1, n) + gridTraveller(m, n - 1);
+    }
+    
+// Dynamic Programming memoization (Top Down) (time complexity O(n*m)) ----------------
+    var gridTraveller = function(m, n, memo = {}){
+        let key = m + "," + n; 
+        if(key in memo) return memo[key];                                              // if the result is already in the memo object return it!    
+        
+        if (m === 1 && n === 1) return 1;
+        if (m === 0 || n === 0) return 0;
+        
+        memo[key] = gridTraveller(m - 1, n, memo) + gridTraveller(m, n - 1, memo);
+        return memo;
+    }
+    
+// Dynamic Programming tabulation (Bottom-Up) (time complexity O(n*m)) ----------------
+    var gridTraveller3 = function(m, n){
+        var table = new Array(m + 1)
+            .fill()
+            .map(function(){ return Array(n + 1).fill(0)})
+            
+        table[1][1] = 1;
+        
+        for(let i = 0; i &lt;= m; i++){    
+            for(let j = 0; j &lt;= n; j++){
+                const current = table[i][j];
+                if (j + 1 &lt;= n) table[i][j + 1] += current;
+                if (i + 1 &lt;= m) table[i + 1][j] += current;
+            }
+        }
+        
+        return table[m][n];
+    }
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> Can Sum? </u></h4>
+    <p> - out of an array numbers can we sum the target number (array members can be reused) (array have only posotive numbers) </p>
+    <pre>
+// normal recursive call (time complexity O(n^m) --------------------------------------
+    var canSum1 = function(target, arr){
+        if (target === 0) return true;
+        if (target &lt; 0) return false;
+        
+        for(let i of arr){
+            const reminder = target - i;
+            if (canSum1(reminder, arr) === true) return true;  
+        }
+        
+        return false;
+    }
+    
+    console.log( canSum1(7, [3, 2, 4]) );                                              // -> true
+    console.log( canSum1(7, [3, 6, 8]) );                                              // -> false
+    
+// Dynamic Programming memoization (Top Down) (time complexity O(n*m)) ----------------
+    var canSum2 = function(target, arr, memo = {}){
+        if (target in memo) return memo[target];
+        if (target === 0) return true;
+        if (target &lt; 0) return false;
+        
+        
+        for(let i of arr){
+            const reminder = target - i;
+            if (canSum2(reminder, arr, memo) === true) {
+                memo[target] = true;
+                return true;
+            } 
+        }
+        
+        memo[target] = false;
+        return false;
+    }
+    
+    console.log( canSum2(7, [3, 2, 4]) );                                              // -> true
+    console.log( canSum2(7, [3, 6, 8]) );                                              // -> false
+    
+// DP tabulation (time complexity O(n m) ----------------------------------------------
+    var canSum3 = function(target, nrBank){
+        let table = new Array(target + 1).fill(false);
+        table[0] = true;
+        
+        for(let i = 0; i &lt; table.length; i++){
+            if(table[i]){
+                for(let j = 0; j &lt; nrBank.length; j++){
+                    if (i + nrBank[j] &lt; table.length) {
+                        table[i + nrBank[j]] = true;
+                    }
+                }
+            }
+        }
+        
+        return table[target];
+    }
+    
+    console.log( canSum3(7, [3, 2, 4]) );                                              // -> true
+    console.log( canSum3(7, [3, 6, 8]) );                                              // -> false
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> How Sum? </u></h4>
+    <p> - out of an array numbers how we can we sum the target number (array members can be reused) (array have only positive numbers) </p>
+    <p> - returns an array which members sum is the target (one solution is enough), otherwise returns null </p>
+    <pre>
+// m = target
+// n = arr.length;
+// brute force recursive call (time complexity O(n^m * m) -----------------------------
+    var howSum1 = function(target, arr){
+        if (target === 0) return [];
+        if (target &lt; 0) return null;
+        
+        for (let num of arr){
+            let reminder = target - num;
+            let reminderRes = howSum1(reminder, arr);
+            
+            if(reminderRes){
+                return [...reminderRes, num]
+            }
+        }
+        
+        return null
+    }
+    
+    console.log( howSum1(7, [5, 3, 4]) );                                              // -> [4, 3]
+    console.log( howSum1(7, [2, 4]) );                                                 // -> null
+    console.log( howSum1(8, [2, 3, 5]) );                                              // -> [2, 2, 2, 2]
+    
+// DP memoize (time complexity O(n * m^m) ---------------------------------------------
+    var howSum2 = function(target, arr, memo = {}){
+        if (target in memo) return memo[target];
+        if (target === 0) return [];
+        if (target &lt; 0) return null;
+        
+        for (let num of arr){
+            let reminder = target - num;
+            let reminderRes = howSum2(reminder, arr, memo);
+            
+            if(reminderRes){
+                memo[target] = [...reminderRes, num];
+                return memo[target];
+            }
+        }
+        
+        memo[target] = null;
+        return null
+    }
+    
+    console.log( howSum2(7, [5, 3, 4]) );                                              // -> [4, 3]
+    console.log( howSum2(7, [2, 4]) );                                                 // -> null
+    console.log( howSum2(8, [2, 3, 5]) );                                              // -> [2, 2, 2, 2]
+    
+// DP tabulation (time complexity O(m^2 n) --------------------------------------------
+    var howSum3 = function(target, nrBank){
+        let table = new Array(target + 1).fill(null);
+        table[0] = [];
+        
+        for(let i = 0; i &lt; target; i++){
+            if(table[i] !== null){
+                for(let num of nrBank){
+                    table[i + num] = [ ...table[i], num ]
+                }
+            }
+        }
+        
+        return table[target];
+    }
+    
+    console.log( howSum3(7, [5, 3, 4]) );                                              // -> [4, 3]
+    console.log( howSum3(7, [2, 4]) );                                                 // -> null
+    console.log( howSum3(8, [2, 3, 5]) );                                              // -> [2, 2, 2, 2]
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> shortes target sum </u></h4>
+    <p> - out of an array numbers how we can we sum the target number (array members can be reused) (array have only positive numbers) </p>
+    <p> - returns an array which members are the sum of the target, otherwise returns null </p>
+    <p> - the returned combination is the shortest possible </p>
+    <pre>
+// m = target
+// n = arr.length;
+// brute force recursive call (time complexity O(n^m * m) -----------------------------
+    var bestSum1 = function(target, arr){
+        if (target === 0) return [];
+        if (target &lt; 0) return null;
+        
+        let shortestCombination = null;
+        
+        for (let num of arr){
+            let reminder = target - num;
+            let remCombination = bestSum1(reminder, arr);
+            
+            if(remCombination){
+                const combination =  [...remCombination, num];
+                
+                if (shortestCombination === null || combination.length &lt; shortestCombination.length){
+                    shortestCombination = combination;
+                }
+            }
+        }
+        
+        return shortestCombination;
+    }  
+    
+    console.log( bestSum1(7, [5, 3, 4]) );                                             // -> [4, 3]
+    console.log( bestSum1(7, [2, 4]) );                                                // -> null
+    console.log( bestSum1(8, [2, 3, 5]) );                                             // -> [3, 5]
+    
+// DP memoize (time complexity O(n * m^m) ---------------------------------------------
+    var bestSum2 = function(target, arr, memo = {}){
+        if (target in memo) return memo[target];
+        if (target === 0) return [];
+        if (target &lt; 0) return null;
+        
+        let shortestCombination = null;
+        
+        for (let num of arr){
+            let reminder = target - num;
+            let remCombination = bestSum2(reminder, arr, memo);
+            
+            if(remCombination){
+                const combination =  [...remCombination, num];
+                
+                if (shortestCombination === null || combination.length &lt; shortestCombination.length){
+                    shortestCombination = combination;
+                }
+            }
+        }
+        
+        memo[target] = shortestCombination;
+        return memo[target];
+    }
+    
+    console.log( bestSum2(7, [5, 3, 4]) );                                             // -> [4, 3]
+    console.log( bestSum2(7, [2, 4]) );                                                // -> null
+    console.log( bestSum2(8, [2, 3, 5]) );                                             // -> [3, 5]
+    
+// DP memoize (time complexity O(m^m) -------------------------------------------------
+    var bestSum3 = function(target, nrBank){
+        let table = new Array(target + 1).fill(null);
+        table[0] = [];
+        
+        for(let i = 0; i &lt; target; i++){
+            if(table[i] !== null){
+                for(let num of nrBank){
+                    let combination = [ ...table[i], num ];
+                    if (!table[i + num] || table[i + num].length > combination.length)
+                        table[i + num] = combination;
+                }
+            }
+        }
+        
+        return table[target];
+    }
+    
+    
+    console.log( bestSum3(7, [5, 3, 4]) );                                             // -> [4, 3]
+    console.log( bestSum3(7, [2, 4]) );                                                // -> null
+    console.log( bestSum3(8, [2, 3, 5]) );                                             // -> [3, 5]
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> canConstruct </u></h4>
+    <p> - from the given Array elements can we construct the target word (Array elements can be reused) </p>
+    <pre>
+// m = target.length
+// n = wordBank.length
+    
+// brute force recursive call (time complexity O(n^m * m) -----------------------------
+    var canConstruct1 = function(target, wordBank){
+        if (target === '') return true;
+        
+        for(let word of wordBank){
+            if (target.startsWith(word)){
+                const suffix = target.slice(word.length);
+                if(canConstruct1(suffix, wordBank)) return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    console.log( canConstruct1('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> true
+    console.log( canConstruct1('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> false
+    
+// DP memoize (time complexity O(n * m^2) ---------------------------------------------
+    var canConstruct2 = function(target, wordBank, memo = {}){
+        if (target in memo) return memo[target];
+        if (target === '') return true;
+        
+        for(let word of wordBank){
+            if (target.startsWith(word)){
+                const suffix = target.slice(word.length);
+                if(canConstruct2(suffix, wordBank, memo)) {
+                    memo[target] = true;
+                    return memo[target];
+                }
+            }
+        }
+        
+        memo[target] = false;
+        return memo[target];
+    }
+    
+    console.log( canConstruct2('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> true
+    console.log( canConstruct2('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> false
+    
+// DP tabulation (time complexity O(m^2 n) --------------------------------------------
+    var canConstruct3 = function(target, wordBank){
+        let table = Array(target.length + 1).fill(false);
+        table[0] = true;
+        
+        for(let i = 0; i &lt; target.length; i++){
+            if (table[i]){
+                for(let word of wordBank){
+                    if(target.slice(i, i + word.length) === word){
+                        table[i + word.length] = true;
+                    }
+                }
+            }
+        }
+        
+    // console.log( table );
+        return table[target.length];
+    }
+    
+    console.log( canConstruct3('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> true
+    console.log( canConstruct3('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> false
+    
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> canConstruct-2 </u></h4>
+    <p> - from the given Array elements how many ways we can construct the target word (Array elements can be reused) </p>
+    <pre>
+// m = target.length
+// n = wordBank.length
+// brute force recursive call (time complexity O(n^m * m) -----------------------------
+    var canConstruct1 = function(target, wordBank){
+        if (target === '') return 1;
+        
+        let totalCount = 0;
+        
+        for(let word of wordBank){
+            if (target.startsWith(word)){
+                const suffix = target.slice(word.length);
+                let numWasy = canConstruct1(suffix, wordBank);
+                totalCount += numWasy;
+            }
+        }
+        
+        return totalCount;
+    }
+    
+    console.log( canConstruct1('purple', ['purp', 'p', 'ur', 'le', 'purpl']) );                 // -> 2
+    console.log( canConstruct1('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> 1
+    console.log( canConstruct1('scateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> 0
+    
+    
+// DP memoize (time complexity O(n * m^2) ---------------------------------------------
+    var canConstruct2 = function(target, wordBank, memo = {}){
+        if (target in memo) return memo[target];
+        if (target === '') return 1;
+        
+        let totalCount = 0;
+        
+        for(let word of wordBank){
+            if (target.startsWith(word)){
+                const suffix = target.slice(word.length);
+                let numWasy = canConstruct2(suffix, wordBank, memo);
+                totalCount += numWasy;
+            }
+        }
+        
+        memo[target] = totalCount;
+        return totalCount;
+    }
+    
+    console.log( canConstruct2('purple', ['purp', 'p', 'ur', 'le', 'purpl']) );                 // -> 2
+    console.log( canConstruct2('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> 1
+    console.log( canConstruct2('scateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> 0
+    
+    
+// DP tabulation (time complexity O(m^2 n) --------------------------------------------
+    var canConstruct3 = function(target, wordBank){
+        const table = new Array(target.length + 1).fill(0);
+        table[0] = 1;
+        
+        for (let i = 0; i &lt; table.length; i++){
+            for(let word of wordBank){
+                if(target.slice(i, i + word.length) === word){
+                    table[i + word.length] += table[i];
+                }
+            }
+        }
+        
+        return table[target.length];
+    }
+    
+    
+    console.log( canConstruct3('purple', ['purp', 'p', 'ur', 'le', 'purpl']) );                 // -> 2
+    console.log( canConstruct3('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> 1
+    console.log( canConstruct3('scateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> 0
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> canConstruct-3 </u></h4>
+    <p> - from the given Array elements return all the ways we can construct the target word (Array elements can be reused) </p>
+    <pre>
+// m = target.length
+// n = wordBank.length
+// brute force recursive call (time complexity O(n^m) ---------------------------------
+    var allConstruct1 = function(target, wordBank){
+        if (target === '') return [[]];
+        
+        const result = [];
+        
+        for(let word of wordBank){
+            if (target.startsWith(word)){
+                const suffix = target.slice(word.length);
+                const suffixWays = allConstruct1(suffix, wordBank);
+                const targetWays = suffixWays.map(function(val){ return [word, ...val] });
+                result.push(...targetWays);
+            }
+        }
+        
+        return result;
+    }
+    
+    console.log( canConstruct1('purple', ['purp', 'p', 'ur', 'le', 'purpl']) );                 // -> [['purp', 'le'], ['p', 'ur', 'p', 'le']]
+    console.log( canConstruct1('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> [['abc', 'def']]
+    console.log( canConstruct1('scateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> []
+    
+    
+// DP memoize (time complexity O(n^m) -------------------------------------------------
+    var allConstruct2 = function(target, wordBank, memo = {}){
+        if (target in memo) return memo[target];
+        if (target === '') return [[]];
+        
+        const result = [];
+        
+        for(let word of wordBank){
+            if (target.startsWith(word)){
+                const suffix = target.slice(word.length);
+                const suffixWays = allConstruct2(suffix, wordBank, memo);
+                const targetWays = suffixWays.map(function(val){ return [word, ...val] });
+                result.push(...targetWays);
+            }
+        }
+        
+        memo[target] = result;
+        return result;
+    }
+    
+    console.log( canConstruct2('purple', ['purp', 'p', 'ur', 'le', 'purpl']) );                 // -> [['purp', 'le'], ['p', 'ur', 'p', 'le']]
+    console.log( canConstruct2('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> [['abc', 'def']]
+    console.log( canConstruct2('scateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> []
+    
+    
+// DP tabulation (time complexity O(n^m) ----------------------------------------------
+    var canConstruct3 = function(target, wordBank){
+        const table = new Array(target.length + 1)
+            .fill()
+            .map(() => []);
+        table[0] = [[]];
+        
+        for (let i = 0; i &lt; table.length; i++){
+            for(let word of wordBank){
+                if(target.slice(i, i + word.length) === word){
+                    const newCombinations = table[i].map(subArray => [...subArray, word]);
+                    table[i + word.length].push(...newCombinations); 
+                }
+            }
+        }
+        
+        return table[target.length];
+    }
+    
+    console.log( canConstruct3('purple', ['purp', 'p', 'ur', 'le', 'purpl']) );                 // -> [['purp', 'le'], ['p', 'ur', 'p', 'le']]
+    console.log( canConstruct3('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']) );                 // -> [['abc', 'def']]
+    console.log( canConstruct3('scateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']) );  // -> []
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> The Knapsack problem (recursion with brute force) </u></h4>
+    <p> - in a Knapsack with limited size, I can take with me a number of items </p>
+    <p> - each item has a value </p>
+    <p> - what is the maximum worth of stuff I can take with me? </p>
+    <pre>
+    var items = {
+        stereo: {weight:5, worth:50},
+        guitar: {weight:2, worth:35},
+        piano: {weight:10, worth:85},
+        mp3: {weight:1, worth:21},
+        cdPlayer: {weight:1, worth:15},
+        picture: {weight:2, worth:25},
+        laptop: {weight:3, worth:100},
+        tv: {weight:7, worth:97},
+        coffeMachine: {weight:4, worth:47},
+        vacuum: {weight:7, worth:61},
+        statue: {weight:12, worth:250},
+        doll: {weight:1, worth:5}
+    }
+    
+    function knapSack(sacCapacity, items){ 
+        if (sacCapacity &lt; 0 ) return false
+        if (Object.keys(items).length === 0) return true; 
+        
+        let currentBest = {items:[], totalWorth:0};                                    // returns the best option so far (at each level) 
+        
+        for(let item in items){
+            let spaceLeft = sacCapacity - items[item].weight;
+            let itemsLeft = {...items}
+                delete itemsLeft[item];
+            
+            let prevBest = knapSack(spaceLeft, itemsLeft);
+            if (typeof prevBest === 'object'){
+                prevBest.items.push(item);
+                prevBest.totalWorth += items[item].worth;
+                
+                if( prevBest.totalWorth > currentBest.totalWorth){
+                    Object.assign(currentBest, prevBest);
+                }
+            } else if (prevBest) {
+                currentBest.items.push(item);
+                currentBest.totalWorth = items[item].worth;
+            } 
+        }
+        
+        return currentBest;
+    }
+    
+    
+    console.log( knapSack(11, items) );
+        // -> { 
+        //      items: [ 'coffeMachine', 'laptop', 'cdPlayer', 'mp3', 'guitar' ],
+        //      totalWorth: 218
+        //    }
+        
+    console.log( knapSack(8, items) );
+        // -> { items: [ 'laptop', 'picture', 'mp3', 'guitar' ], totalWorth: 181 }
+
+    console.log( knapSack(21, items) );
+        // -> {
+        //      items: [ 'statue', 'laptop', 'picture', 'cdPlayer', 'mp3', 'guitar' ],
+        //      totalWorth: 446
+        //    }
+        
+    console.log( knapSack(17, items) );
+        // -> { items: [ 'statue', 'laptop', 'cdPlayer', 'mp3' ], totalWorth: 386 }
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> The Knapsack problem (Dynamic Programming memoize) </u></h4>
+    <p> - this memoized version runs 300 times faster than the original recursion version </p>
+    <pre>
+    var items = {
+        stereo: {weight:5, worth:50},
+        mp3: {weight:1, worth:26},
+        tv: {weight:7, worth:97},
+        guitar: {weight:2, worth:35},
+        piano: {weight:10, worth:85},
+        cdPlayer: {weight:1, worth:15},
+        picture: {weight:2, worth:25},
+        laptop: {weight:3, worth:100},
+        coffeMachine: {weight:4, worth:47},
+        vacuum: {weight:7, worth:61},
+        statue: {weight:12, worth:250},
+        doll: {weight:1, worth:5}
+    }
+    
+    function knapSack(sacCapacity, items, memo = {}){     
+        let key = Object.keys(items).join(',');
+        if (key in memo) return memo[key];                                             // already tried combinations returns true from memo   
+        if (sacCapacity &lt; 0 ) return false
+        if (Object.keys(items).length === 0) return true; 
+        
+        const currentBest = {items:[], totalWorth:0};  
+        
+        for(let item in items){
+            let spaceLeft = sacCapacity - items[item].weight;
+            let itemsLeft = {...items}
+                delete itemsLeft[item];
+            
+            let prevBest = knapSack(spaceLeft, itemsLeft, memo);
+            if (typeof prevBest === 'object'){
+                prevBest.items.push(item);
+                prevBest.totalWorth += items[item].worth;
+                
+                if( prevBest.totalWorth > currentBest.totalWorth){
+                    Object.assign(currentBest, prevBest);
+                }
+            } else if (prevBest) {
+                currentBest.items.push(item);
+                currentBest.totalWorth = items[item].worth;
+            } 
+        } 
+        
+        memo[key] = true;                                                              // tried combination is saved in memo here
+        return currentBest;
+    }
+    
+    console.log( knapSack(21, items) );
+        // -> {items: [ 'statue', 'laptop', 'picture', 'cdPlayer', 'guitar', 'mp3' ], totalWorth: 451} 
+    </pre>
+<hr>
+<!---------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> The Knapsack problem (Dynamic Programming tabulation) </u></h4>
+    <pre>
+    
+    var items = {
+        stereo: {weight:5, worth:50},
+        mp3: {weight:1, worth:26},
+        tv: {weight:7, worth:97},
+        guitar: {weight:2, worth:36},
+        piano: {weight:10, worth:85},
+        cdPlayer: {weight:1, worth:15},
+        picture: {weight:2, worth:25},
+        laptop: {weight:3, worth:100},
+        coffeMachine: {weight:4, worth:47},
+        vacuum: {weight:7, worth:61},
+        statue: {weight:12, worth:250},
+        doll: {weight:1, worth:5}
+    }
+
+    function knapSack(sackCapacity, items){
+        let table = new Array( Object.keys(items).length + 1 )
+            .fill()
+            .map(() => new Array(sackCapacity + 1).fill(0));
+        
+        let itemList = Object.keys(items);
+            itemList.unshift(null);
+        let itemWeight = new Array(itemList.length);
+        let itemPrice = new Array(itemList.length);
+            itemWeight[0] = null, itemPrice[0] = null;
+            
+        for(let i = 1; i &lt; itemList.length; i++){
+            itemWeight[i] = items[itemList[i]].weight;
+            itemPrice[i] = items[itemList[i]].worth;
+        }
+        
+        for(let i = 1; i &lt; Object.keys(items).length + 1; i++){
+            for(let j = 1; j &lt; sackCapacity + 1; j++){
+                
+                if (itemWeight[i] &lt;= j) {
+                    let offsetHandler = table[i - 1][j - itemWeight[i]] ? table[i - 1][j - itemWeight[i]] : 0;
+                    
+                    if (table[i - 1][j] > itemPrice[i] + offsetHandler) {
+                        table[i][j] = table[i - 1][j];
+                    } else{
+                        table[i][j] = itemPrice[i] + offsetHandler;
+                    } 
+                } else {
+                    table[i][j] = table[i - 1][j];
+                }
+            }
+        }
+        
+        let itemsTaken = itemsInBag(table, {itemList, itemWeight, itemPrice});
+        
+        return {items:itemsTaken, totalWorth:table[table.length - 1][table[0].length - 1]};
+    }
+
+
+    function itemsInBag(table, itemsObj){
+        let items = [];
+        let pointerX = table.length - 1;
+        let pointerY = table[0].length - 1;
+        
+        for(let i = 0; i &lt; itemsObj.itemList.length - 1; i++){
+            if (table[pointerX][pointerY] > table[pointerX - 1][pointerY]) {
+                items.push(itemsObj.itemList[pointerX]);
+                
+                pointerY -= itemsObj.itemWeight[pointerX];
+                pointerX--;
+            } else {
+                pointerX--;
+            }
+        }
+        
+        return items;
+    }
+
+
+    console.log( knapSack(5, items) );
+        // -> {items:['laptop', 'cdPlayer', 'mp3'], totalWorth:141}
+        
+    console.log( knapSack(11, items) );
+        // -> {items:['coffeMachine', 'laptop', 'cdPlayer', 'guitar', 'mp3'], totalWorth:224}
+        
+    console.log( knapSack(21, items) );
+        // -> {items: ['statue', 'laptop', 'picture', 'cdPlayer', 'guitar', 'mp3'], totalWorth: 452}
+        
+    console.log( knapSack(30, items) );
+        // -> {items: ['statue', 'coffeMachine', 'laptop', 'cdPlayer', 'guitar', 'tv', 'mp3'], totalWorth: 571}
+    </pre>
+</details>
+
+
+
+    <br><br>
+</body>
+</html>

@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Git </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../Assets/stylesPages.css"> 
+    <script src="../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Git (ver 4.0.0) </h1>
+    <p> Updated ( 2020-04-14 / 2020-07-21)</p>  
+    <p class="sitenav"> <a href="../index.html">MySite></a> Git </p>
+<table class="table">
+<caption>
+    Git CLI 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Command </th>
+        <th> Description </th>
+    </tr>
+    <tr class="00.01">
+        <td colspan="2"> install Git </td>
+    </tr>
+    <tr class="00.02">
+        <td> <em>apt install</em> git </td>
+        <td> - installs Git on the system </td>
+    </tr>
+    <tr class="01.01">
+        <td colspan="2"> Initializing Git Repositories </td>
+    </tr>
+    <tr class="02.01">
+            <td> <em>git</em> config <small>[--global]</small> user.name <i>userName</i> </td>
+            <td> - gets or sets (configures) the user's name for the local Git repository (or globally) (required when connecting to the remote repo) </td>
+    </tr>
+        <tr class="02.02"><td></td><td></td></tr>
+    <tr class="02.03">
+        <td> <em>git</em> config <small>[--global]</small> user.email <i>userEmail</i> </td>
+        <td> 
+            - gets or sets (configures) the user's email for the local Git repository (or globally) (required when connecting to the remote repo) <br>
+            - global Git configurations are used if there's no local configurations set
+        </td>
+    </tr>
+    <tr class="01.02">
+        <td> <em>git</em> init <i>dirPath</i> </td>
+        <td> - initializes the current or the specified directory as a Git Repository (places a <mark>.git</mark> directory inside) </td>
+    </tr>
+    <tr class="04.01">
+        <td> <em>git</em> log <small>[--oneline]</small> </td>
+        <td> - list the version history (commits) of the current branch (optionally in short = one line per commit) </td>
+    </tr>
+        <tr class="04.02"><td></td><td></td></tr>
+    <tr class="04.03">
+        <td> <em>git</em> log <small>[--oneline]</small> --follow <strong>filePath</strong> </td>
+        <td> - tracks the version history of the specified file (optionally in short = one line per commit) </td>
+    </tr>
+        <tr class="04.04"><td></td><td></td></tr>
+    <tr class="04.05">
+        <td> <em>git</em> log --oneline --all --graph </td>
+        <td> - displays the Git Tree of the Git history </td>
+    </tr>
+    
+    <tr class="05.01">
+        <td> <em>git</em> reflog </td>
+        <td> 
+             - displays the git command history log 
+        </td>
+    </tr>
+    <tr class="03">
+        <td> <em>git</em> status </td>
+        <td> 
+             - checks the status for the Modified Area (files modified after the last commit) and the Stagin Area <br>
+             - also returns the current branch we are on, if the HEAD is detached etc...
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td colspan="2"> Staging Area and Commit Management </td>
+    </tr>
+    <tr class="20.02">
+        <td> <em>git</em> add <small>[-p] [--]</small> <strong>path</strong> </td>
+        <td> 
+             - add files from the Modified area <u>(or untracked files)</u> to the Staging area (cannot add deleted file status, use the <mark>rm</mark> command for that) <u>([TESTED: 2020-05-06] adds deleted files to the stagin area too!)</u> <br>
+             - (<small>--</small>) avoid conflicts when files contain <mark>-</mark> (<mark>git add -- *</mark> = will add all files to the staging area without problem) <br>
+             - (<small>-p</small>) display file content differences between the last commit and the Modified Area (uses the <mark>diff</mark> command) <u>(does not add untracked files to the Stagin Area)</u>
+        </td>
+    </tr>
+        <tr class="20.03"><td></td><td></td></tr>
+    <tr class="20.04">
+        <td> <em>git</em> add --all </td>
+        <td>
+            - adds <u>all changes</u> from the Modified area to the Staging area 
+        </td>
+    </tr>
+    <tr class="27.01">
+        <td> <em>git</em> cherry-pick <strong>commitId</strong> </td>
+        <td>
+            - pircks the specified <strong>commitId</strong> and put at the top of the current branch  
+        </td>
+    </tr>
+    <tr class="24.01">
+        <td> <em>git</em> checkout <small>master</small><strong>|branchName|tagName|commitId</strong> </td>
+        <td> 
+             - navigates to the specified branch or commit point (files at that commit point are on the file system now, on the Git Tree <u>the <mark>HEAD</mark> indicates where you are</u>) <br>
+             - if you are not on the top of the branch file modifications cannot be commited, only stashed or put in a new branch 
+        </td>
+    </tr>
+        <tr class="24.02"><td></td><td></td></tr> 
+    <tr class="24.03">
+        <td> <em>git</em> checkout -b <strong>branchName</strong> </td>
+        <td> 
+            - creates a new branch (from the current commit) and navigates to it 
+        </td>
+    </tr> 
+    <tr class="22.01">
+        <td> <em>git</em> commit <small>[-a] [-m <strong>message</strong>]</small> </td>
+        <td> 
+             - (no option) adds a new commit to the Git Tree from the files in the Stagin Area (opens the default text editor to input the commit message) <br>
+             - (<small>-a</small>) also commits files from the Modified Area <u>(Untracked files are not commited)</u> <br>
+             - (<small>-m <strong>message</strong>)</small> adds a commit message directly (without opening the text editor) 
+        </td>
+    </tr>
+        <tr class="22.02"><td></td><td></td></tr>
+    <tr class="22.03">
+        <td> <em>git</em> commit --amend <small>[-m <strong>message</strong>]</small> </td>
+        <td> 
+             - deletes all changes in the modified and staging area (removes all modification after the current commit) <br>
+             - (<small>-m <strong>message</strong></small>) modifies <u>the most recent</u> commit's message (opens the default text editor to input the commit message) 
+        </td>
+    </tr>
+    <tr class="26.00">
+        <td> <em>git</em> reflog </td>
+        <td> 
+             - prints the git history log, we can use the <mark>git restet <strong>commitId</strong></mark> to move back on the git history
+        </td>
+    </tr>
+    <tr class="26.1">
+        <td> <em>git</em> reset <small>[--hard]</small> <strong>tagName|commitId</strong> </td>
+        <td> 
+             - (no option) removes all commits on the branch <u>aftert the specified <strong>tagName|commitId</strong></u> <u>(commits are removed and modifications placed back in the Modified Area)</u> <br>
+             - (<small>--hard</small>) completely destroys commits and any file modifications after the specified commit <br>
+             - also can be used to undo changes from the <mark>git reflog</mark> list 
+        </td>
+    </tr>
+        <tr class="26.2"><td></td><td></td></tr>
+    <tr class="26.3">
+        <td> <em>git</em> reset --hard <strong>remoteVar</strong>/<strong>branch</strong> </td>
+        <td> 
+             - pulls the branch from the remote repository and <u>overwrites</u> the current branch 
+        </td>
+    </tr>
+        <tr class="26.4"><td></td><td></td></tr>
+    <tr class="26.5">
+        <td> <em>git</em> reset <small>[--hard]</small> <i>path</i> </td>
+        <td> 
+            - empties the Staging Area by putting files back to their previoues place (or only the specified file) <br>
+            - (<small>--hard</small>) completely destroys files in the Staging Area 
+        </td>
+    </tr>    
+    <tr class="25">
+        <td> <em>git</em> revert <strong>tagName|commitId</strong> </td>
+        <td> 
+             - reverts (disables) the specified commit by addin a new 'revert commit' (careful about conflicts) <br>
+             - we can reanable a reverted (disabled) commit by reveting the revert commit again 
+        </td>
+    </tr>
+    <tr class="21.01">
+        <td> <em>git</em> rm <small>[-r]</small> <strong>path</strong> </td>
+        <td> 
+             - <u>removes the specified item from the file system</u> and puts the deleted status in the Staging Area <br>
+             - puts the deleted status of already deleted items to the Stagin Area 
+        </td>
+    </tr>
+        <tr class="21.02"><td></td><td></td></tr>
+    <tr class="21.03">
+        <td> <em>git</em> rm <small>[-r]</small> --cached <strong>path</strong> </td>
+        <td> 
+             - untracks the specified item(s) and puts as deleted status in the Stagin Area (Git won't track this file any more) <br>
+             - (<small>-r</small>) resursively removes files from directories  
+        </td>
+    </tr>
+    <tr class="23.01">
+        <td> <em>git</em> tag <strong>tagName</strong> <i>commitId</i> </td>
+        <td> - adds a tag (tag name) to the most recent commit (or to the specified one) </td>
+    </tr>
+        <tr class="23.02"><td></td><td></td></tr>
+    <tr class="23.03">
+        <td> <em>git</em> tag -d <strong>tagName</strong> </td>
+        <td> 
+            - deletes the specified tag (tag name) 
+        </td>
+    </tr>
+<tr class="30.01">
+            <td colspan="2"> Stash </td>
+</tr>
+<tr class="33">
+<td> 
+            <em>git</em> stash apply <i>stashId</i> 
+</td>
+<td> 
+            - copies the most recent (or the specified) stash entry files back to the Modified Area (careful about conflicts) <u>(stash entry not removed)</u> 
+</td>
+</tr>
+<tr class="34">
+<td> 
+            <em>git</em> stash drop <i>stashId</i> 
+</td>
+<td> 
+            - deletes the most recent (or the specified) stash entry 
+</td>
+</tr>
+<tr class="31">
+<td> 
+            <em>git</em> stash list 
+</td>
+<td> 
+            - returns the stash list 
+</td>
+</tr>
+<tr class="32">
+<td> 
+            <em>git</em> stash pop <i>stashId</i> 
+</td>
+<td> 
+            - moves the most recent (or the specified) stash entry files to the Modified Area (careful about conflicts) 
+</td>
+</tr>
+<tr class="30.03">
+<td> 
+            <em>git</em> stash push <small>[-m <i>stashName</i>]</small>  <strong>filePath</strong> 
+</td>
+<td> 
+            - moves only the specified file (<strong>filePath</strong>) in the stash <br>
+            (<small>-m</small> <i>stashName</i>) adds a stash name to this stash 
+</td>
+</tr>
+<tr class="30.02">
+<td> 
+            <em>git</em> stash save <small>[-u] [-p]</small> <i>message</i> 
+</td>
+<td> 
+             - (no option) moves all files from the Modified and the Staging areas to the Stash <u>(the Stash is NOT pushed to the remote repo)</u> <br>
+             - (<small>-u</small>) untracked files are moved to the Stash too <br>
+             - (<small>-p</small>) copy files instead of moving them and uses the <mark>diff</mark> command to compare differences between the last commit and the current status 
+</td>
+</tr>
+<tr class="40.01">
+<td colspan="2"> 
+            Branches and Merging Branches 
+</td>
+</tr>
+<tr class="40.02">
+<td> 
+            <em>git</em> branch <small>[-a] [-D <strong>branchName</strong>]</small> 
+</td>
+<td> 
+             - (no options) lists all local branches <br>
+             - (<small>-a</small>) remote branches are also listed <br>
+             - (<small>-D <strong>branchName</strong></small>) deletes the specified local branch 
+</td>
+</tr>
+<tr class="40.03"><td></td><td></td></tr>
+<tr class="40.04"><td>    
+            <em>git</em> branch <strong>branchName</strong> <i>commitId|tag</i> 
+</td><td>        
+            - creates a new branch from the current commit (or from the specified commit) 
+</td></tr>
+<tr class="40.05"><td></td><td></td></tr>
+<tr class="40.06"><td>    
+            <em>git</em> branch -m <i>oldBranchName</i> <strong>newBranchName</strong>
+</td><td>        
+            - renames the specified <i>oldBranchName</i> branch (if <i>oldBranchName</i> is omitted the current branch is renamed)
+</td></tr>
+<tr class="40.07"><td></td><td></td></tr>
+<tr class="40.08"><td>    
+            <em>git</em> push -d <strong>remoteVar</strong> <strong>branch</strong>
+</td><td>        
+            - deletes the specified <strong>branch</strong> from the specified <strong>remoteVar</strong> repo 
+</td></tr>
+<tr class="41.01"><td> 
+            <em>git</em> diff <small>[--staged]</small> 
+</td><td> 
+             - (no option) prints file differences between the previous Commit and the Modified Area <br>
+             - (<small>--staged</small>) prints file differences between the previous Commit and the Staging Area   
+</td></tr>
+<tr class="41.02"><td></td><td></td></tr>
+<tr class="41.03"><td> 
+            <em>git</em> diff <strong>branch|commitId</strong> <strong>branch|commitId</strong>   
+</td><td> 
+             - displays the differences between the two branches or commits 
+</td></tr>
+<tr class="42.01"><td> 
+            <em>git</em> merge <strong>branchName</strong> <small>[-m <strong>message</strong>]</small> 
+</td><td> 
+            - merges the specified branch into the current branch and creates a new 'merge' commit on the current branch (if there is no conflict) <br>
+            - <u>conficts are prompted</u> and written in the actual file(s) and <u>must be resolved</u> before we can make a new 'merge' commit (if there is any conflict) <br>
+            - if the branches are not separated the current commit is alligned with the specified one (moved on the top) 
+</td></tr><tr class="42.2"><td></td><td></td></tr><tr class="42.3"><td> 
+            <em>git</em> merge --abort 
+</td><td> 
+            - aborts the merge conflict <u>(merge conflits must be either resolved and commited or aborted)</u> 
+</td></tr>
+<tr class="43.01">
+<td> 
+            <em>git</em> rebase <small>[-i]</small> <strong>branch</strong> 
+</td>
+<td> 
+            - <span class="openable">rebases<div>
+              <p> 1) the tail where this branch is derived from is taken to the top of the <strong>branch</strong> </p>
+              <p> 2) rebasing -> now git check if there's any conflicts or changes, once the rebase is successfully done git recalculates git commit hashes </p>
+            </div></span> the current branch on top of the specified <strong>branch</strong>  <br>
+            - <u>conficts are prompted</u> and written in the actual file(s) and <u>must be resolved</u> before we can finish the rebase (if there is any conflict) <br>
+            - (<small>-i</small>) interactive mode will open a text editor and we can specify how to want to rebase (what commits to include, etc...)
+</td>    
+</tr>
+<tr class="43.02"><td></td><td></td></tr>
+<tr class="43.03">
+<td> 
+            <em>git</em> rebase --abort|--continue 
+</td>
+<td>        - aborts or continues the rebase conflict <u>(rebase conflicts must be either resolved and continued or aborted)</u> 
+</td>
+</tr>
+<tr class="50.01">
+<td colspan="2"> 
+            Remote Repo (on GitHub) 
+</td>
+</tr>
+<tr class="50.02">
+<td> 
+            <em>git</em> clone <strong>repoUrl</strong> 
+</td>
+<td>        
+            - clones the remote repository in the current local directory 
+</td>
+</tr>
+<tr class="60.01">
+<td> 
+            <em>git</em> fetch <i>remoteVar</i> 
+</td>
+<td>        
+            - fetches branches and commits from the remote repository <u>without making any changes to the local repos</u> <br>
+            - basically syncs the local tree with the remote tree   
+</td>
+</tr>
+<tr class="54">
+<td> 
+            <em>git</em> pull <strong>URL|remoteVar</strong> 
+</td>
+<td> 
+            - downloads all commits and branches from the remote repo and updates the local repo 
+</td>
+</tr>
+<tr class="52.01">
+<td> 
+            <em>git</em> push <strong>URL|remoteVar</strong> <small>[-f]</small> <strong>branch</strong>|--all 
+</td>
+<td> 
+             -uploads the specified branch or all branches to the remote repo <u>(If there's a conflict between the local and remote repo the push is rejected)</u> <br>
+             - (<small>-f</small>) the local branch version history overwirtes the remote branch 
+</td>
+</tr>
+<tr class="52.02"><td></td><td></td></tr>
+<tr class="52.03">
+<td> 
+            <em>git</em> push <strong>URL|remoteVar</strong> --delete <strong>branchName</strong> 
+</td>
+<td> 
+            - deletes the branch from the remote repository (does not delete the local branch) 
+</td>
+</tr>
+<tr class="51.01">
+<td> 
+            <em>git</em> remote <small>[-v]</small> 
+</td>
+<td> 
+             - (no option) lists remote repository variables <u>(remote variables are stored in the local repository namespace)</u> <br>
+             - (<small>-v</small>) variables are printed with their URLs (the <mark>origin</mark> is the default and set when the repo is cloned)  
+</td>
+</tr>
+<tr class="51.02">
+<td> 
+            <em>git</em> remote add <strong>remoteVar URL</strong> 
+</td>
+<td> 
+            - sets a remote variable 
+</td>
+</tr>
+<tr class="51.04">
+<td> 
+            <em>git</em> remote remove <strong>remoteVar</strong> 
+</td>
+<td>        - deletes the specified remote variable 
+</td>
+</tr>
+<tr class="51.03">
+<td> 
+            <em>git</em> remote rename <strong>oldVar newVar</strong> 
+</td>
+<td> 
+            - renames the specified remote variable 
+</td>
+</tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - already tracked files cannot be ignored by <mark>.gitignore</mark> </p>
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 class="headerExtra"><u> GitHub </u></h2>
+    <p> - GitHub is a hosting service for Git repositories and Gists, on GitHub we can manage our repositories just like we do locally with Git (we can get 1GB free space apparently [2020-04-19])</p>
+    <p> - a GitHub repo is called 'remote repo', team members working on the same project connect to and synchronize this repository </p>
+    <p> - a <b>Gits</b> is a code snippet on GitHub, GitHub Gist service is a lightweight hosting service to distribute and version control code snippets </p>
+    <p> - <b>Forking</b> on GitHub is basically making an open source repo copy to our account </p>
+    <p> - a <b>Pull Request</b> is requesting the original owner of the project to merge our feature to his project </p>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 class="headerExtra"><u> Git </u></h2>
+    <p> - Git is a distributed version control system, it tracks and stores repository history during the developement stages </p>
+    <p> - Git has many GUIs and built in IEDs <u>(VScode and Atom has pretty effective Git support)</u>, but the Git CLI is the most reliable! </p>
+    <p> - a Git Commit is basically a project status, when you 'chechout' a commit <u>Git shows you the files at that commit stage on the file system</u> </p>
+    <p> - in the Git system files can be in 1 of 4 places </p>
+    <p style="text-indent:20px;"> &#9676; <b>Modified</b> - modified files <u>since the last commit</u> </p>
+    <p style="text-indent:20px;"> &#9676; <b>Staging Area</b> - files in here will be commited (area between Modified and Commited)  </p>
+    <p style="text-indent:20px;"> &#9676; <b>Committed</b> - saved in a commit (point) on the Git tree </p>
+    <p style="text-indent:20px;"> &#9676; <b>Stashed</b> - stashed files can be moved from the Modified and Staging Area for temporary storage </p>
+    <img src="Git Tree.jpg" height=250>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Initializing Git Repositories <mark>init</mark> / <mark>config</mark> / <mark>status</mark> / <mark>log</mark>  </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cmd">
+// init -----------------------------------------------------------------------------------
+    $ git init                                                                             // initializes the current directory as a Git repo
+    $ git init /home/someUser/gitProject                                                   // initializes the specified directory as a Git repo 
+    
+// config ---------------------------------------------------------------------------------
+    $ git config --global user.name Faszagyerek                                            // configures the global Git user name 
+    $ git config user.email                                                                // returns the local (current Git project) email     // -! if there isn't any local config the global configurations will be used    
+        user@gmail.com  
+        
+// status ---------------------------------------------------------------------------------
+    $ git status                                                                           // checks the status of the files (display if Modified or Staged) 
+        On branch master
+        nothing to commit, working tree clean
+    
+// log ------------------------------------------------------------------------------------
+    $ git log --oneline                                                                    // returns the version history of the current branch 
+        0088d40 (HEAD -> master) css file modified                                         // -! HEAD means this is where we are on the Git Tree  
+        11e1676 (origin/master, origin/HEAD) index file modified                           // -! remote repository HEAD (displayed red in terminal)    
+        600f577 Initial
+        
+    $ git log --oneline --follow index.html                                                // tracks the version history of the specified file
+        11e1676 (origin/master, origin/HEAD) index file modified                              
+        600f577 Initial
+        
+    pall@ryzen:~/testRepo$ git log --oneline --all --graph                                 // tree-like visualisation of the whole Git tree  
+        * 0088d40 (HEAD -> master) css file modified
+        | * 5b698d5 (origin/feature1) featerue added
+        |/  
+        * 11e1676 (origin/master, origin/HEAD) index file modified
+        * 600f577 Initial
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>init</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git init                                                        // initializes the current directory as Git Repo 
+        Initialized empty Git repository in /home/pall/testRepo/.git/
+    pall@ryzen:~/testRepo$ ls -la
+        total 12
+        drwxr-xr-x  3 pall pall 4096 Apr 19 18:20 .
+        drwxr-xr-x 27 pall pall 4096 Apr 19 18:20 ..
+        drwxr-xr-x  7 pall pall 4096 Apr 19 18:20 .git                                     // .git directory placed, this is where Git stores tracking data 
+    pall@ryzen:~/testRepo$     
+    
+// initializing specified directory -------------------------------------------------------
+    pall@ryzen:/$ git init /home/pall/testRepo                                             // initializes the specified directory 
+        Initialized empty Git repository in /home/pall/testRepo/.git/
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>config</mark> TEST </u></h4>
+    <p> - same goes for the user email configurations </p>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git config user.name Pall                                       // configures the user name for the local Git repo
+    pall@ryzen:~/testRepo$ git config user.name                                            // returns the local Git repositorie's user name 
+        Pall
+    pall@ryzen:~/testRepo$ git config --global user.name                                   // returns the global Git user name 
+        arapdPall21                                                                        // -! if there's no local Git configuration than global configurations will be used  
+    pall@ryzen:~/testRepo$    
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>status</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        No commits yet                                                                     // there isn't any commit yet
+    
+        Changes to be committed:
+        (use "git rm --cached &lt;file&gt;..." to unstage)
+    
+            new file:   index.html                                                         // file in the Modied Area (modified after the last commit)    
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            styles.css                                                                     // file in the Staging Area (file will be commited with the commit command)    
+            
+    pall@ryzen:~/testRepo$ git status
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>log</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git log --oneline
+        0088d40 (HEAD -> master) css file modified                                         // version history of the master branch  
+        11e1676 (origin/master, origin/HEAD) index file modified                           // -! status of the remote repository (displayed red in the terminal)   
+        600f577 Initial
+    pall@ryzen:~/testRepo$ git log --oneline --follow styles.css                           // tracks the version history of the specified file 
+        0088d40 (HEAD -> master) css file modified
+        600f577 Initial
+    pall@ryzen:~/testRepo$ git log --oneline --all --graph                                 // tree-like visualisation of the whole Git tree  
+        * 0088d40 (HEAD -> master) css file modified
+        | * 5b698d5 (origin/feature1) featerue added
+        |/  
+        * 11e1676 (origin/master, origin/HEAD) index file modified
+        * 600f577 Initial
+    pall@ryzen:~/testRepo$ 
+    </pre>
+</details>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Stagin Area and Commit management <mark>add</mark> / <mark>rm</mark> / <mark>commit</mark> / <mark>tag</mark> / <mark>checkout</mark> / <mark>revert</mark> / <mark>reset</mark> </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cmd">
+// add ------------------------------------------------------------------------------------
+    $ git add *                                                                            // add all files (including nested onces) from the Modified Area to the Stagin Area      // -! also adds untracket files    
+    $ git add -p *                                                                         // add all files (including nested onces) from the Modified Area to the Stagin Area      // -! does not add untracked files 
+        diff --git a/index.html b/index.html                                                 // the above command compares the Previous Commit to the Modified Area by using the diff command automatically  
+            // file comparison here ...
+    
+// rm -------------------------------------------------------------------------------------
+    $ git rm -r SomeFeature                                                                // -! recursively removes the directory and all its itmes from the file system and puts them as deleted in the Stagin Area (also works on already deleted files)  
+    $ git rm --cached someFile                                                             // untracks the 'someFile' file (Git won't track it any more) and marks it as deleted in the Stagin Area    
+    
+// commit ---------------------------------------------------------------------------------
+    $ git commit -m "commit message"                                                       // commits files form the Stagin Area (creates a new commit with a commit message) 
+    $ git commit -a -m "commit message"                                                    // commits files from the Stagin Area and the Modified Area too! (creates a new commit with a commit message)   
+    $ git commit --amend -m 'new commit message'                                           // modifies the most recent commit's message   
+    
+// tag ------------------------------------------------------------------------------------
+    $ git tag myTagName 6e6d51c                                                            // tags the specified commit (adds a tagname to it)  
+    $ git tag -d myTagName                                                                 // removes the specified tag from the commit   
+    
+// checkout -------------------------------------------------------------------------------
+    $ git checkout branch1                                                                 // navigates to the branch specified as 'branch1' (we can see 'branch1' files on the file system now)    
+    $ git checkout 0088d40                                                                 // navigates to the specified commit (this commit's files are on the file system now) 
+                                                                                             // -! if we are not on the top of the branch here we can only stash or put in a new brach modifications from here (we cannot coomit)   
+    
+    $ git checkout -b branch2                                                              // creates a new branch 'branch2' from the current commit and navigates to it    
+    
+// revert ---------------------------------------------------------------------------------
+    $ git revert 0088d40                                                                   // adds a new commit which reverts (disables) this commit 
+                                                                                           // if we want to reenable the reverted commit we just revert the revert commit 
+// reset ----------------------------------------------------------------------------------
+    git reset 11e1676                                                                      // removes all commits after this one on the branch     // -! file modifications after this commit are kept in the Modified Area   
+    git reset --hard 11e1676                                                               // -! destorys all commits and file modifications after this one on the branch   
+    
+    git reset HEAD                                                                         // empties the Stagin Area by placing files back to their previous place 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>add</mark>  TEST </u></h4>
+    <p> - using the <mark>git add *</mark> woluld simply add both files to the Stagin Area in the below example </p>
+    <pre class="cmd">
+    all@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   index.html                                                         // tracked file in Modified Areaa 
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            script.js                                                                      // Untracket file (created after the last commit) 
+    
+        no changes added to commit (use "git add" and/or "git commit -a")
+    pall@ryzen:~/testRepo$ git add -p                                                      // -! add tracket files to the Staging area 
+        diff --git a/index.html b/index.html                                               // the above command '-p' uses the 'diff' command to print the file content difference between the last commit and the Modified Area    
+        index 4a17951..07dffdf 100644
+        --- a/index.html
+        +++ b/index.html
+        @@ -8,7 +8,8 @@
+        &lt;body&gt;
+            &lt;h1&gt; Title &lt;/h1&gt;
+            
+        -    &lt;p&gt; paragraph 1 &lt;/p&gt;
+        +    &lt;p&gt; paragraph one &lt;/p&gt;
+        +    &lt;p&gt; paragraph two &lt;/p&gt;
+            
+            
+            
+        Stage this hunk [y,n,q,a,d,e,?]? a                                                 // accept changes 
+    
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            modified:   index.html                                                         // modified file in the Stagin Area 
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            script.js                                                                      // -! file still untracked because we used the '-p' option above 
+    
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>rm</mark>  TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git rm -r TEST                                                  // removes files recursively from the file system and puts the deleted status in the Stagin Area    
+        rm 'TEST/feature1.js'
+        rm 'TEST/feature2.js'
+    pall@ryzen:~/testRepo$ git status
+    On branch master
+        
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            deleted:    TEST/feature1.js                                                   // deleted status in the Stagin Area   
+            deleted:    TEST/feature2.js
+        
+    pall@ryzen:~/testRepo$ 
+    
+// rm --cached ----------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git rm -r --cached *                                            // untracks all files recursively   
+        rm 'TEST/feature1.js'
+        rm 'TEST/feature2.js'
+        rm 'index.html'
+        rm 'styles.css'
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+        Your branch is ahead of 'origin/master' by 3 commits.
+        (use "git push" to publish your local commits)
+    
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            deleted:    TEST/feature1.js                                                   // -! in the Stagin Area they are marked as deleted 
+            deleted:    TEST/feature2.js
+            deleted:    index.html
+            deleted:    styles.css
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+
+            TEST/                                                                          // files are not tracket any more 
+            index.html
+            styles.css
+    
+    pall@ryzen:~/testRepo$ ls
+        index.html  styles.css  TEST                                                       // -! files are not deleted just untracked by Git  
+    pall@ryzen:~/testRepo$         
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>commit</mark>  TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+            modified:   index.html                                                         // Stagin Area 
+    
+    pall@ryzen:~/testRepo$ git commit -m 'modified html'                                   // commit created with a message 
+        [master bf28768] modified html
+        1 file changed, 2 insertions(+)
+    pall@ryzen:~/testRepo$ 
+    
+// commit -a  -----------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+        modified:   index.html                                                             // Modified Area (NOT Stagin Area) 
+    
+        no changes added to commit (use "git add" and/or "git commit -a")
+    pall@ryzen:~/testRepo$ git commit -a                                                   // files commited directly from the Modified Area 
+        [master d776293] modified file
+        1 file changed, 1 insertion(+)
+    pall@ryzen:~/testRepo$ git status
+    
+// git commit --ammend --------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git commit --amend -m 'new commit message'                      // modifies the last commit's message 
+        [master 0043cd1] new commit message
+        Date: Mon Apr 20 19:01:09 2020 +0300
+        1 file changed, 1 insertion(+)
+    pall@ryzen:~/testRepo$ git log --oneline
+        0043cd1 (HEAD -> master) new commit message                                        // commit message changed 
+        bf28768 modified html
+        18d399f TEST directory added with a few files
+        973bebd basic HTML page
+        0088d40 css file modified
+        11e1676 (origin/master, origin/HEAD) index file modified
+        600f577 Initial
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>tag</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git tag tag1                                                    // adds a tag name to the most recent commit  
+    pall@ryzen:~/testRepo$ git log --oneline
+        0043cd1 (HEAD -> master, tag: tag1) new commit message                             // tagname added 
+        bf28768 modified html
+        18d399f TEST directory added with a few files
+        973bebd basic HTML page
+        0088d40 css file modified
+        11e1676 (origin/master, origin/HEAD) index file modified
+        600f577 Initial
+    pall@ryzen:~/testRepo$ git tag Initial 600f577                                         // adds a tag name to the specified commit 
+    pall@ryzen:~/testRepo$ git log --oneline
+        0043cd1 (HEAD -> master, tag: tag1) new commit message
+        bf28768 modified html
+        18d399f TEST directory added with a few files
+        973bebd basic HTML page
+        0088d40 css file modified
+        11e1676 (origin/master, origin/HEAD) index file modified
+        600f577 (tag: Initial) Initial
+    pall@ryzen:~/testRepo$ 
+    
+// delete tag -----------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git tag -d tag1                                                 // deletes the specified tag 
+        Deleted tag 'tag1' (was 0043cd1)
+    pall@ryzen:~/testRepo$ git log --oneline
+        0043cd1 (HEAD -> master) new commit message                                        // tag name removed 
+        bf28768 modified html
+        18d399f TEST directory added with a few files
+        973bebd basic HTML page
+        0088d40 css file modified
+        11e1676 (origin/master, origin/HEAD) index file modified
+        600f577 (tag: Initial) Initial
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>checkout</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git checkout feature1                                           // navigation to the 'feature1' branch  
+        Switched to branch 'feature1'
+    pall@ryzen:~/testRepo$ git checkout basicHTML                                          // navigation to the basicHTML tagged branch 
+      Note: checking out 'basicHTML'.
+    pall@ryzen:~/testRepo$ git log --oneline --all --graph
+        * 0043cd1 (master) new commit message
+        * bf28768 modified html
+        * 18d399f TEST directory added with a few files
+        * 973bebd (HEAD, tag: basicHTML) basic HTML page                                   // !! we actually se project files at this commit state now, BUT if we modify them we cannot make a new commit! modifications can be stashed or put in a new branch from here    
+        * 0088d40 css file modified
+        | * 5b698d5 (origin/feature1, feature1) featerue added
+        |/  
+        * 11e1676 index file modified
+        * 600f577 Initial
+    pall@ryzen:~/testRepo$ git checkout master                                             // navigates back to the master branch 
+        Previous HEAD position was 973bebd basic HTML page
+        Switched to branch 'master'
+    pall@ryzen:~/testRepo$ git checkout -b feature2                                        // creates a new branch (from the current) and navigates to it 'feature2'    
+        Switched to a new branch 'feature2'
+    pall@ryzen:~/testRepo$ git log --all --graph --oneline
+        * 0043cd1 (HEAD -> feature2, master) new commit message                            // we are on the 'feature2' branch now
+        * bf28768 modified html
+        * 18d399f TEST directory added with a few files
+        * 973bebd (tag: basicHTML) basic HTML page
+        * 0088d40 css file modified
+        | * 5b698d5 (origin/feature1, feature1) featerue added
+        |/  
+        * 11e1676 index file modified
+        * 600f577 Initial
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>revert</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git log --oneline --graph --all
+        * 768628c (HEAD -> master) paragraphs are removed
+        * efec648 (tag: addScript) script added                                            // this commit will be reverted 
+        * 0043cd1 (origin/master, origin/HEAD) new commit message
+        * bf28768 modified html
+        * 18d399f TEST directory added with a few files
+        * 973bebd (tag: basicHTML) basic HTML page
+        * 0088d40 css file modified
+        | * 5b698d5 (origin/feature1, feature1) featerue added
+        |/  
+        * 11e1676 index file modified
+        * 600f577 Initial
+    pall@ryzen:~/testRepo$ git revert addScript                                            // revert (disable) the specified commit 
+        [master 58d2929] Revert "script added"
+        2 files changed, 2 deletions(-)
+        delete mode 100644 script.js
+    pall@ryzen:~/testRepo$ git log --oneline --graph --all
+        * 58d2929 (HEAD -> master) Revert "script added"                                   // commit reverted by creating a revert commit 
+        * 768628c paragraphs are removed
+        * efec648 (tag: addScript) script added
+        * 0043cd1 (origin/master, origin/HEAD) new commit message
+        * bf28768 modified html
+        * 18d399f TEST directory added with a few files
+        * 973bebd (tag: basicHTML) basic HTML page
+        * 0088d40 css file modified
+        | * 5b698d5 (origin/feature1, feature1) featerue added
+        |/  
+        * 11e1676 index file modified
+        * 600f577 Initial
+    pall@ryzen:~/testRepo$ git revert master                                               // -! revert the revert commit in order to reanable it 
+        [master b807d96] Revert "Revert "script added"  
+        2 files changed, 2 insertions(+)
+        create mode 100644 script.js
+    pall@ryzen:~/testRepo$ git log --oneline --graph --all
+        * b807d96 (HEAD -> master) Revert "Revert "script added""                          // a new commit revert the reverted commmit  
+        * 58d2929 Revert "script added"
+        * 768628c paragraphs are removed
+        * efec648 (tag: addScript) script added
+        * 0043cd1 (origin/master, origin/HEAD) new commit message
+        * bf28768 modified html
+        * 18d399f TEST directory added with a few files
+        * 973bebd (tag: basicHTML) basic HTML page
+        * 0088d40 css file modified
+        | * 5b698d5 (origin/feature1, feature1) featerue added
+        |/  
+        * 11e1676 index file modified
+        * 600f577 Initial
+    pall@ryzen:~/testRepo$ google-chrome-stable index.html
+    </pre>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>reset</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git log --oneline
+        b807d96 (HEAD -> master) Revert "Revert "script added""
+        58d2929 Revert "script added"
+        768628c paragraphs are removed
+        efec648 (tag: addScript) script added
+        0043cd1 (origin/master, origin/HEAD) new commit message
+        bf28768 modified html
+        18d399f TEST directory added with a few files
+        973bebd (tag: basicHTML) basic HTML page
+        0088d40 css file modified
+        11e1676 index file modified
+        600f577 Initial
+    pall@ryzen:~/testRepo$ git reset addScript                                             // removes commit points only    // -! does not remove file modifications 
+        Unstaged changes after reset:
+        M	index.html
+    pall@ryzen:~/testRepo$ git log --oneline
+        efec648 (HEAD -> master, tag: addScript) script added                              // everything modified after is kept in the Modified Area    
+        0043cd1 (origin/master, origin/HEAD) new commit message
+        bf28768 modified html
+        18d399f TEST directory added with a few files
+        973bebd (tag: basicHTML) basic HTML page
+        0088d40 css file modified
+        11e1676 index file modified
+        600f577 Initial
+    pall@ryzen:~/testRepo$ git status
+    On branch master
+    
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   index.html                                                         // files modified after the reset commit point keep their modifications  
+    
+        no changes added to commit (use "git add" and/or "git commit -a")
+    pall@ryzen:~/testRepo$ 
+    
+// hard reset -----------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git reset --hard 600f577                                        // !! destroys all file modifications after the reset point! 
+        HEAD is now at 600f577 Initial
+    pall@ryzen:~/testRepo$ git log --oneline
+        600f577 (HEAD -> master) Initial
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+        nothing to commit, working tree clean                                              // hard reset destorys all file modification after this point   
+        
+// empty Staging Area ---------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            modified:   index.html                                                         // file are in the Stagin Area 
+            new file:   script.js
+    
+    pall@ryzen:~/testRepo$ git reset HEAD                                                  // reset staging area 
+        Unstaged changes after reset:
+        M   index.html
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes not staged for commit:                                                     // Staging Area empty = files put back to their previous state   
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   index.html
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            script.js
+    
+        no changes added to commit (use "git add" and/or "git commit -a")
+    pall@ryzen:~/testRepo$ 
+    </pre>
+    
+    
+</details>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Stash <mark>stash save</mark> / <mark>stash list</mark> / <mark>stash pop</mark> / <mark>stash apply</mark> / <mark>stash drop</mark> </u></h2>
+    <p> - the Stash is an area where you can put modifications aside, so this clears the Modified and Stagin areas (for someting else) </p>
+    <p> - we can have multiple stash entries and recall them when we need them, <u>the Stash cannot be pushed to the remote repository</u></p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cmd">
+// stash save -----------------------------------------------------------------------------
+    git stash save                                                                         // moves all files to the Stash from the Modified and the Stagin areas   
+    git stash save -u                                                                      // does the same as above but also moves untracket files    
+    
+    git stash -p                                                                           // -! copies all files to the Stash from the Modified and the Stagin areas (uses the diff program to compare brevious commit changes to the current ones)    
+    
+// stash list -----------------------------------------------------------------------------
+    git list                                                                               // returns the stash list   
+    
+// stash pop  / stash apply ---------------------------------------------------------------
+    git stash pop                                                                          // moves the most recent stash files to the Modified Area    
+    git stash apply stash@{1}                                                              // copies the 2nd stash entry files to the Modified Area    
+    
+// stash drop -----------------------------------------------------------------------------
+    git stash drop stash@{3}                                                               // deletes the 4th stash entry 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>stash</mark> / <mark>stash list</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            modified:   index.html                                                         // file in the Stagin Area
+    
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   styles.css                                                         // file in the Modified Area 
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            script.js                                                                      // untracked file 
+    
+    pall@ryzen:~/testRepo$ git stash 'my stash message'                                    // stashes file from the Modified Area and the Stagin Area   
+        Saved working directory and index state WIP on master: 973bebd basic HTML page
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            script.js                                                                      // -! untracked file is NOT stashed 
+    
+        nothing added to commit but untracked files present (use "git add" to track)
+    pall@ryzen:~/testRepo$ git stash list
+        stash@{0}: WIP on master: 973bebd my stash message                                 // stash 
+    pall@ryzen:~/testRepo$ 
+    
+// stash untracked files as well ----------------------------------------------------------
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            modified:   index.html                                                         // file in the Stagin Area
+    
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   styles.css                                                         // file in the Modified Area 
+    
+        Untracked files:
+        (use "git add &lt;file&gt;..." to include in what will be committed)
+    
+            script.js                                                                      // untracked file 
+    
+    pall@ryzen:~/testRepo$ git stash -u                                                    // -! stashes untracked files and files from the Modified Area and the Stagin Area   
+        Saved working directory and index state WIP on master: 973bebd basic HTML page
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+        nothing to commit, working tree clean                                              // untracked files are put in the Stash too! 
+    pall@ryzen:~/testRepo$ git stash list
+        stash@{0}: WIP on master: 973bebd basic HTML page                                  // stash 
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>pop</mark> / <mark>apply</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git stash list                                                  // list current stash 
+        stash@{0}: On master: styles.css file modified
+        stash@{1}: On master: index file modified
+    pall@ryzen:~/testRepo$ git stash pop stash@{1}                                         // moves the specified stash entry file back to their previous place   
+        On branch master
+        
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   index.html
+    
+        no changes added to commit (use "git add" and/or "git commit -a")
+        Dropped stash@{1} (0eb10c64046c7db2fdcb6847b63fc60b52d67ede)
+    pall@ryzen:~/testRepo$ git stash apply                                                 // copies the specified stash entry file back to their previous place   
+        On branch master
+        
+        Changes not staged for commit:
+        (use "git add &lt;file&gt;..." to update what will be committed)
+        (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+    
+            modified:   index.html
+            modified:   styles.css
+    
+        no changes added to commit (use "git add" and/or "git commit -a")
+    pall@ryzen:~/testRepo$ git stash list
+        stash@{0}: On master: styles.css file modified                                     // the applied entry is still in the stash list 
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>drop</mark> TEST </u></h4>
+    <pre class="cmd">
+    all@ryzen:~/testRepo$ git stash list
+        stash@{0}: On master: script.js file added                                         // 3 stash entries 
+        stash@{1}: On master: index.html file modified
+        stash@{2}: On master: styles.css file modified
+    pall@ryzen:~/testRepo$ git stash drop stash@{1}                                        // deletes the specified stash entry  
+        Dropped stash@{1} (94bd48b0a7dfb06b9edcabfbd97f632a67421d0c)
+    pall@ryzen:~/testRepo$ git stash list
+        stash@{0}: On master: script.js file added
+        stash@{1}: On master: styles.css file modified
+    pall@ryzen:~/testRepo$     
+    </pre>
+</details>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Branches and Merging Branches <mark>branch</mark> / <mark>diff</mark> / <mark>merge</mark> / <mark>rebase</mark> </u></h2>
+    <p> - commit hashes are basically computed from the content of the commit, every commit contains the hash which is ahead of it, this is how they form the commit chain (or tree) </p>
+    <p> - rebasing is basically going back to a specific commit then comparing the commits ahead, so git recomputes the hashes and check if there's any change compared to the content what it has now </p>
+    <img src="Merge VS Rebase.jpg" height="250">
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cmd">
+// branch ---------------------------------------------------------------------------------
+    git branch -a                                                                          // lists all local and remote branches (remote branches are listed red)   
+    git branch feature1 6d667f8                                                            // creates the 'feature1' branch from the 6d667f8 commit  
+    git branch -D feature1                                                                 // deletes the 'feature1' branch   
+    
+// diff -----------------------------------------------------------------------------------
+    git diff --staged                                                                      // compares and prints file differences between the last commit and the Modified and Staging areas    
+    
+// merge ----------------------------------------------------------------------------------
+    git merge 'feature1' -m 'feature1 merged'                                              // merges the 'feature1' branch into the current branch and creates a new merge commit (if there's no prompt the merge is successful)   
+                                                                                           // -! if there's a merge conflict it has to be resolved and commited or aborted   
+    git merge --abort                                                                      // aborts a pending merge conflict    
+    
+// rebase ---------------------------------------------------------------------------------
+    git rebase master                                                                      // moves the current branch on top of the master branch 
+                                                                                           // -! if there's a rebase conflict it has to be resolved and continued or aborted   
+    git rebase --continue                                                                  // continues a pending rebase conflict  
+    git rebase --abort                                                                     // aborts a pending rebase conflict    
+    
+// top the current branch with another one ------------------------------------------------// !! in this case branches are not separated branches, the 'master' is simply behind the the 'feature1' on the same branch    
+    git merge 'feature1'                                                                   // moves the current 'master' branch on the same level as 'feature1' 
+    git rebase 'feature1'                                                                  // moves the current 'master' branch on the same level as 'feature1' 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>branch</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git branch                                                      // list local branches only 
+        feature1
+        * master
+    pall@ryzen:~/testRepo$ git branch -a                                                   // list all branches (including remote onces) 
+        feature1
+        * master
+        remotes/origin/HEAD -> origin/master
+        remotes/origin/feature1
+        remotes/origin/master
+    pall@ryzen:~/testRepo$     
+    
+// delete branch --------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git branch -D feature1                                          // deletes the 'feature1' branch
+        Deleted branch feature1 (was 5b698d5).
+    pall@ryzen:~/testRepo$     
+    
+// creating branches ----------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git branch b2 Init                                              // adds a new branch from the 'Init' tagged commit  
+    pall@ryzen:~/testRepo$ git log --oneline
+        973bebd (HEAD -> master, origin/master, origin/HEAD) basic HTML page
+        0088d40 css file modified
+        11e1676 index file modified
+        600f577 (tag: Init, b2) Initial                                                    // 'b2' branch added here 
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>diff</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git diff                                                        // prints file differences between the previous commit and the Modified Area    
+        diff --git a/index.html b/index.html
+        index 4a17951..762e0cf 100644
+        --- a/index.html
+        +++ b/index.html
+        @@ -9,6 +9,8 @@
+            &lt;h1&gt; Title &lt;/h1&gt;
+            
+            &lt;p&gt; paragraph 1 &lt;/p&gt;
+        +    &lt;p&gt; paragraph 2 &lt;/p&gt;
+        +    &lt;p&gt; paragraph 3 &lt;/p&gt;
+            
+            
+            
+        diff --git a/styles.css b/styles.css
+        index dda2cdf..16b919b 100644
+        --- a/styles.css
+        +++ b/styles.css
+        @@ -1,3 +1,4 @@
+        h1 {
+            color: green;
+        +    text-decoration: underline;
+        }
+    pall@ryzen:~/testRepo$ git add *                                                       // moving files to the Stagin Area 
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+    
+        Changes to be committed:
+        (use "git reset HEAD &lt;file&gt;..." to unstage)
+    
+            modified:   index.html                                                         // files are in the Stagin Area 
+            modified:   styles.css
+    
+    pall@ryzen:~/testRepo$ git diff                                                        // does not compare file differences in the Stagin Area   
+    pall@ryzen:~/testRepo$ git diff --staged                                               // prints file differences between the previous commit and the Staging Area    
+        diff --git a/index.html b/index.html
+        index 4a17951..762e0cf 100644
+        --- a/index.html
+        +++ b/index.html
+        @@ -9,6 +9,8 @@
+            &lt;h1&gt; Title &lt;/h1&gt;
+            
+            &lt;p&gt; paragraph 1 &lt;/p&gt;
+        +    &lt;p&gt; paragraph 2 &lt;/p&gt;
+        +    &lt;p&gt; paragraph 3 &lt;/p&gt;
+            
+            
+            
+        diff --git a/styles.css b/styles.css
+        index dda2cdf..16b919b 100644
+        --- a/styles.css
+        +++ b/styles.css
+        @@ -1,3 +1,4 @@
+        h1 {
+            color: green;
+        +    text-decoration: underline;
+        }
+    pall@ryzen:~/testRepo$     
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>merge</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git log --oneline --graph --all
+        * 24a3001 (origin/feature1, feature1) feature1 added
+        | * c133fed (HEAD -> master, origin/master) paragraphs added and styled
+        |/  
+        * 4774734 Initial
+    pall@ryzen:~/testRepo$ git merge feature1                                              // merege the 'feature1' branch to the master branch
+        Auto-merging index.html
+        Merge made by the 'recursive' strategy.
+        index.html | 2 +-
+        script.js  | 1 +
+        2 files changed, 2 insertions(+), 1 deletion(-)
+        create mode 100644 script.js
+    pall@ryzen:~/testRepo$ git log --oneline --graph --all
+        *   0238b1b (HEAD -> master) Merge branch 'feature1'                               // new merge commit created 
+        |\  
+        | * 24a3001 (origin/feature1, feature1) feature1 added
+        * | c133fed (origin/master) paragraphs added and styled
+        |/  
+        * 4774734 Initial
+    pall@ryzen:~/testRepo$ git status
+        On branch master
+        nothing to commit, working tree clean                                              // Modified and Staging areas are clear   
+    pall@ryzen:~/testRepo$ 
+    
+// conflict -------------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git log --oneline --graph --all
+        * a33a59d (HEAD -> feature1) different paragraphs
+        * 24a3001 (origin/feature1) feature1 added
+        | * c133fed (origin/master, master) paragraphs added and styled
+        |/  
+        * 4774734 Initial
+    pall@ryzen:~/testRepo$ git merge feature1
+        Auto-merging index.html
+        CONFLICT (content): Merge conflict in index.html                                   // -! there is a conflict between files 
+        Automatic merge failed; fix conflicts and then commit the result.
+    pall@ryzen:~/testRepo$ git status
+    On branch master
+        You have unmerged paths.
+        (fix conflicts and run "git commit")
+        (use "git merge --abort" to abort the merge)
+    
+        Changes to be committed:
+    
+            new file:   script.js
+    
+        Unmerged paths:
+        (use "git add &lt;file&gt;..." to mark resolution)
+    
+            both modified:   index.html                                                    // -! confilcts are written in the file and needs to be resolved before we can commit 
+    
+    pall@ryzen:~/testRepo$ 
+    
+// abort conflict --------------------------------------------------------------------------
+    pall@ryzen:~/testRepo$ git merge --abort                                               // abort conflicted merge 
+    pall@ryzen:~/testRepo$ git status
+        On branch master                                                                   // status clean = conflict aborted   
+        nothing to commit, working tree clean
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>rebase</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo3$ log --oneline --all --graph
+        * be6f32d (HEAD -> style) st2                                                      // there are 2 separate branches 
+        * 7d57f54 st1
+        | * 2868d41 (master) p3 added
+        | * 8834808 p2 added
+        |/  
+        * 7f47516 Initial
+    pall@ryzen:~/testRepo3$ git checkout style  
+        Already on 'style'                                                                 // we are on the 'style' branch 
+    pall@ryzen:~/testRepo3$ git rebase master                                              // we move the current branch 'style' on the top of the master branch 
+        First, rewinding head to replay your work on top of it...
+        Applying: st1
+        Applying: st2
+    pall@ryzen:~/testRepo3$ log --oneline --all --graph
+        * 9ed77ab (HEAD -> style) st2                                                      // the 'style' branch is moved on the top the master branch 
+        * f579cdc st1
+        * 2868d41 (master) p3 added
+        * 8834808 p2 added
+        * 7f47516 Initial
+    pall@ryzen:~/testRepo3$ git checkout master                                            // switch to the master branch
+        Switched to branch 'master'
+    pall@ryzen:~/testRepo3$ git rebase style                                               // we align the master branch with the style branch here  
+        First, rewinding head to replay your work on top of it...
+        Fast-forwarded master to style.
+    pall@ryzen:~/testRepo3$ log --oneline --all --graph
+        * 9ed77ab (HEAD -> master, style) st2                                              // master placed at the top 
+        * f579cdc st1
+        * 2868d41 p3 added
+        * 8834808 p2 added
+        * 7f47516 Initial
+    pall@ryzen:~/testRepo3$ 
+    </pre>
+</details>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> Remote Repository (no GitHub) <mark>clone</mark> / <mark>remote</mark> / <mark>push</mark> / <mark>pull</mark> / <mark>fetch</mark></u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cmd">
+// clone ----------------------------------------------------------------------------------
+    git clone git@github.com:gulpjs/gulp.git                                               // clones the Gulp repo into the current local direcoty 
+    
+// remote ---------------------------------------------------------------------------------
+    git remote -v                                                                          // list remote repository variables // -! set for the local repository   
+    git remote add backup https://github.com/arpadpall21/backup.git                        // sets the 'backup' remote repo varialbe 
+    git remote rename backup pallBackup                                                    // renames the remote variable   
+    git remote remove pallBackup                                                           // deletes the remote variable 
+    
+// push -----------------------------------------------------------------------------------
+    git push origin --all                                                                  // uploads all local branches to the 'origin' remote repository    
+    git push origin --delete feature2                                                      // deletes the 'feature2' branch in the 'origin' remote repository (does not delete the branch locally)    
+    
+// fetch ----------------------------------------------------------------------------------
+    git fetch origin                                                                       // fetches the commits from the remote (origin) repository  
+    git diff master origin/master                                                          // displays the difference between the local master and the remote master branches 
+    
+    git merge                                                                              // merges the fetched commints into the local branch  
+    
+// pull -----------------------------------------------------------------------------------
+    git pull origin                                                                        // downloads and updates all branches from the 'origin' remote repository   
+                                                                                           // pull = fetch + merge commands 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>clone</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~$ git clone https://github.com/gulpjs/gulp.git                             // clones the gulp repo in the current directory  
+    Cloning into 'gulp'...
+        remote: Enumerating objects: 23, done.
+        remote: Counting objects: 100% (23/23), done.
+        remote: Compressing objects: 100% (20/20), done.
+        remote: Total 4889 (delta 6), reused 9 (delta 2), pack-reused 4866
+        Receiving objects: 100% (4889/4889), 1.04 MiB | 1.63 MiB/s, done.
+        Resolving deltas: 100% (3010/3010), done.
+    pall@ryzen:~$ ls
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>remote</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git remote -v                                                   // list remote repo variables with their URLs
+        origin  https://github.com/arpadpall21/testRepo.git (fetch)
+        origin  https://github.com/arpadpall21/testRepo.git (push)
+    pall@ryzen:~/testRepo$ git remote add testRepo https://github.com/arpadpall21/testRepo.git      // sets a new remote variable    
+    pall@ryzen:~/testRepo$ git remote add testRepo2 https://github.com/arpadpall21/testRepo2.git    // sets a new remote variable    
+    pall@ryzen:~/testRepo$ git remote -v
+        origin  https://github.com/arpadpall21/testRepo.git (fetch)
+        origin  https://github.com/arpadpall21/testRepo.git (push)
+        testRepo    https://github.com/arpadpall21/testRepo.git (fetch)                    // new remote variables are set 
+        testRepo    https://github.com/arpadpall21/testRepo.git (push)
+        testRepo2   https://github.com/arpadpall21/testRepo2.git (fetch)
+        testRepo2   https://github.com/arpadpall21/testRepo2.git (push)
+    pall@ryzen:~/testRepo$ git remote remove origin                                        // delete the origin remote varialbe 
+    pall@ryzen:~/testRepo$ git remote -v
+        testRepo    https://github.com/arpadpall21/testRepo.git (fetch)                    // origin deleted 
+        testRepo    https://github.com/arpadpall21/testRepo.git (push)
+        testRepo2   https://github.com/arpadpall21/testRepo2.git (fetch)
+        testRepo2   https://github.com/arpadpall21/testRepo2.git (push)
+    pall@ryzen:~/testRepo$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>push</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@ryzen:~/testRepo$ git push origin --all                                           // pushes all branches to the specified remote repository   
+        Username for 'https://github.com': arpadpall21
+        Password for 'https://arpadpall21@github.com': 
+        Enumerating objects: 11, done.
+        Counting objects: 100% (11/11), done.
+        Delta compression using up to 12 threads
+        Compressing objects: 100% (6/6), done.
+        Writing objects: 100% (6/6), 640 bytes | 640.00 KiB/s, done.
+        Total 6 (delta 1), reused 0 (delta 0)
+        remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+        To https://github.com/arpadpall21/testRepo.git
+        24a3001..a463adb  feature1 -> feature1
+        c133fed..cd75640  master -> master
+    pall@ryzen:~/testRepo$ git log --oneline --all --graph
+        * a463adb (HEAD -> feature1, origin/feature1) extra feature added
+        * 24a3001 feature1 added
+        | * cd75640 (origin/master, master) new modif
+        | * c133fed paragraphs added and styled
+        |/  
+        * 4774734 Initial
+    pall@ryzen:~/testRepo$     
+    
+// delete remote branch -------------------------------------------------------------------
+    pall@Ryzen:~/Test/testRepo3$ git push origin --delete style                            // deletes the 'style' branch from the remote repository    
+        Username for 'https://github.com': arpadpall21
+        Password for 'https://arpadpall21@github.com': 
+        To https://github.com/arpadpall21/testRepo3.git
+        - [deleted]         style
+    pall@Ryzen:~/Test/testRepo3$ git branch 
+        master
+        * style                                                                            // -! the branch is not deleted locally 
+    pall@Ryzen:~/Test/testRepo3$ 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>pull</mark> TEST </u></h4>
+    <pre class="cmd">
+    pall@Ryzen:~/Test/testRepo3$ git log --all --oneline --graph
+        * 7f47516 (HEAD -> master, style) Initial                                          // locally we have 1 commit with 2 branches 
+    pall@Ryzen:~/Test/testRepo3$ git pull origin                                           // all remote commits and branches are downloaded and the local project is updated 
+        remote: Enumerating objects: 7, done.
+        remote: Counting objects: 100% (7/7), done.
+        remote: Compressing objects: 100% (5/5), done.
+        remote: Total 6 (delta 0), reused 0 (delta 0), pack-reused 0
+        Unpacking objects: 100% (6/6), done.
+        From https://github.com/arpadpall21/testRepo3
+        * [new branch]      feature1   -> origin/feature1
+        Updating 7f47516..ec8a728
+        Fast-forward
+        index.html | 6 +++++-
+        1 file changed, 5 insertions(+), 1 deletion(-)
+    pall@Ryzen:~/Test/testRepo3$ git log --all --oneline --graph
+        * 03a3974 (origin/feature1) script.js file updated                                 // local repo updated 
+        * bdfec4f script.js file added
+        | * ec8a728 (HEAD -> master, origin/master, origin/HEAD) 4, 5 paragraphs added
+        | * e02e911 Updated index.html file
+        |/  
+        | * 118dbb0 (origin/style) Updated styles.css
+        | * 762ed08 Update styles.css
+        |/  
+        * 7f47516 (style) Initial
+    pall@Ryzen:~/Test/testRepo3$ 
+    </pre>
+</details>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>.gitignore</mark> and <mark>.gitkeep</mark> files </u></h2>
+    <p> - the <mark>.gitignore</mark> file is placed in the root your repo, it describes <u>files (git does not track directories)</u> which are <u>NOT tracked by Git</u> </p>
+    <p> - file paths are described by using <a href="../../My Site/Bash (Linux Terminal)/index.html#wildcards_globs" target="_blanc">globbing rules</a> line by line, <u>but there are some shitty exceptions and differences between <mark>.dockerignore</mark> and <mark>.gitignore</mark> (see below)</u> </p>
+    <p><u> - already tracked files cannot be ignored by <mark>.gitignore</mark> </u></p>
+    <p> - git does not track directories, so if we want an empty directory to be tracked we place a <mark>.gitkeep</mark> file inside it </p>
+    <pre class="syntax">
+<span style="color:darkgray;">// .gitignore (file) </span>
+    # <strong>comment</strong>
+    
+    <strong>glob</strong>
+    <i>...</i>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - <mark>.gitignore</mark> file </p>
+    <pre>
+    // glob                               // ignored file                                  // tracked file 
+// ----------------------------------------------------------------------------------------
+    **/logs                               logs/debug.log
+                                          logs/monday/foo.bar
+                                          build/logs/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    **/logs/debug.log                     logs/debug.log                                   logs/build/debug.log
+                                          build/logs/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    *.log                                 debug.log
+                                          foo.log
+                                          .log
+                                          logs/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    *.log                                 debug.log                                        important.log
+    !important.log                        trace.log                                        logs/important.log
+                                          
+// ----------------------------------------------------------------------------------------
+    *.log                                 debug.log                                        important/debug.log
+    !important/*.log                      important/trace.log
+    trace.*
+    
+// ----------------------------------------------------------------------------------------
+    logs/                                                                                  logs/debug.log           // !! due to performance reasons it is impossible to negate globs from a root folder (in .gitignore)
+    !logs/important.log                                                                    logs/important.log
+    
+// ----------------------------------------------------------------------------------------
+    /debug.log                            debug.log                                        logs/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    debug.log                             debug.log                                                                 // -! relative path will match any sub directories (in .gitignore)    
+                                          logs/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    debug?.log                            debug0.log                                       debug10.log
+                                          debugg.log
+    
+// ----------------------------------------------------------------------------------------
+    debug[0-9].log                        debug0.log                                       debug10.log
+                                          debug1.log
+    
+// ----------------------------------------------------------------------------------------
+    debug[01].log                         debug0.log                                       debug2.log
+                                          debug1.log                                       debug01.log
+    
+// ----------------------------------------------------------------------------------------
+    debug[!01].log                        debug2.log                                       debug0.log
+                                                                                           debug1.log
+                                                                                           debug01.log
+    
+// ----------------------------------------------------------------------------------------
+    debug[a-z].log                        debuga.log                                       debug1.log
+                                          debugb.log
+    
+// ----------------------------------------------------------------------------------------
+    logs                                  logs                                             
+                                          logs/debug.log
+                                          logs/latest/foo.bar
+                                          build/logs
+                                          build/logs/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    logs/                                 logs/debug.log
+                                          logs/latest/foo.bar
+                                          build/logs/foo.bar
+                                          build/logs/latest/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    logs/**/debug.log                     logs/debug.log
+                                          logs/monday/debug.log
+                                          logs/monday/pm/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    logs/*day/debug.log                   logs/monday/debug.log                            /logs/latest/debug.log
+                                          logs/tuesday/debug.log
+    
+// ----------------------------------------------------------------------------------------
+    logs/debug.log                        logs/debug.log                                   debug.log
+                                                                                           build/logs/debug.log
+    </pre>
+    <p> - <mark>.gitkeep</mark> file </p>
+    <pre>
+    // original path                      // tracked by Git 
+// ---------------------------------------
+    logs/mondaylog1.log                   yes
+    logs/mondaylog2.log                   yes
+    logs/tuesday/.gitkeep                 yes         // directory tracked because there's a .gitkeep file inside it (not empty)
+    logs/wednesday/                       no          // all empty directories are ignored by Git 
+    </pre>
+</details>
+<!----------------------------------------------------------------------------------------------------->    
+<hr>
+<h3 style="color:darkblue;"><u> <mark>.dockerignore</mark> VS <mark>.gitignore</mark> </u></h3>
+    <p> - Git and Docker do fundamentally different thins, Git track only files (for version control) VS Docker deals with directory structures for container file system managament </p>
+    <p> - this is one of the reasons why globs are used differently in these files! But there are other tricky things around globs as well </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    // -! in .gitignore golb files and directories are recursively checked, if there's a match the WHOLE PATH IS IGNORED (because git tracks only files)
+    // -! in .dockerignore there's no recursive check and only the matching part of the path is ignored (because docker copies directory structures)
+    
+    // glob (in ignore file)        // original path                // file ignored by Git          // watched parth by Docker           // ignored part by Docker 
+// --------------------------------------------------------------------------------------------------------------------------------------
+    **/logs                         logs/debug.log                  yes                                                                  logs/debug.log    
+                                    logs/monday/foo.bar             yes                                                                  logs/monday/foo.bar    
+                                    logs                            yes                                                                  logs 
+                                    build/logs/debug.log            yes                             build/                               logs/debug.log    
+                                    test/build/logs                 yes                             test/build                           logs
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    logs                            logs/debug.log                  yes                                                                  logs/debug.log 
+                                    logs/monday/foo.bar             yes                                                                  logs/monday/foo.bar 
+                                    logs                            yes                                                                  logs
+                                    build/logs/debug.log            yes                             build/logs/debug.log
+                                    test/build/logs                 yes                             test/build/logs 
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    *.log                           debug.log                       yes                                                                  debug.log
+                                    logs/debug.log                  yes                             logs/debug.log  
+                                    test/build/some.log             yes                             test/build/some.log  
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+    // -! in .gitignore its tricky to negate globs, we can negate entire file content but not individual files from a directory 
+    // -! in .dockerignore glob negation works but we have to be specific when negating paths 
+    
+    // glob (in ignore file)        // original path                // file ignored by Git          // watched parth by Docker           // ignored part by Docker 
+// --------------------------------------------------------------------------------------------------------------------------------------
+    // -! from this kind of glob in .gitignore we cannot negate at all
+    logs                            logs/monday/log1.log            yes                             logs/monday/log1.log
+    !logs/monday                    logs/monday/log2.log            yes                             logs/monday/log2.log
+    !logs/tuesday/log1.log          logs/tuesday/log1.log           yes                             logs/tuesday/log1.log
+    !logs/overall.log               logs/tuesday/log2.log           yes                                                                  logs/tuesday/log2.log
+                                    logs/overall.log                yes                             logs/overall.log
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    logs/*                          logs/monday/log1.log            no                              logs/monday/log1.log                                              // -! in .gitignore we cannot negate specific files only entire directories from an already ignored directory    
+    !logs/monday                    logs/monday/log2.log            no                              logs/monday/log1.log    
+    !logs/tuesday/log1.log          logs/tuesday/log1.log           yes                             logs/tuesday/log1.log
+    !logs/overall.log               logs/tuesday/log2.log           yes                                                                  logs/tuesday/log2.log 
+                                    logs/overall.log                no                              logs/overall.log
+    
+// --------------------------------------------------------------------------------------------------------------------------------------
+    logs/monday/*                   logs/monday/stage1/log1.log     yes                             logs/monday/                         stage1/log1.log 
+    !logs/monday/stage1/log2.log    logs/monday/stage1/log2.log     yes                             logs/monday/stage1/log2.log
+    !logs/monday/stage2             logs/monday/stage2/log1.log     no                              logs/monday/stage2/log1.log
+                                    logs/monday/stage2/log2.log     no                              logs/monday/stage2/log2.log
+                                    logs/monday/log1.log            yes                             logs/monday/                         log1.log    
+                                    logs/monday/log2.log            yes                             logs/monday/                         log2.log    
+                                    logs/tuesday/log1.log           no                              logs/tuesday/log1.log   
+                                    logs/tuesday/log2.log           no                              logs/tuesday/log2.log   
+                                    logs/overall.log                no                              logs/overall.log        
+    </pre>
+</details>
+<hr>
+<!--------------------------------------------------------------------------------------------------->
+<h2 class="headerExtra"><u> Git LFS (Large File Storage) </u></h2>
+    
+    
+    
+<details class="example" open>
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>clone</mark> TEST </u></h4>
+    <pre class="cmd">
+    $ git init
+        Initialized empty Git repository in /home/apall/Documents/Pall's Stuff/CodePlus/.git/
+    $ git lfs install                                                                      // after initializing git we set up git LFS 
+        Updated git hooks.
+        Git LFS initialized.
+    
+    
+    
+    
+    </pre>
+</details>
+    
+    <!--
+        - store files in a separate place while using special pointers (Git LFS pointer) on your git project that sees as part of the project 
+        - files are tracked separately so any change if the file ist not tracked by git (Fuck you! this is the main reason MFs)
+        - git lfs is not part of git 
+        - very important, trak large files with git lfs before git, because once git track files thye are added to .git 
+        - git lfs tracked files are stored in .git/lfs directory but they do not travel with .git it is a separate 
+        - once git lfs is set up you don't see any difference when working with git
+        - git cannot merge binary files 
+        - you only download the current version belonging this commit is downloaded (not the whole history of the file)
+        - files are downloaded during checking not cloning (TEST this!)
+        - Git FLS is seamles (you dont really see it, just use git as normal LFS does its stuff in the backgraound once set up)
+        - this thing shines when storing large binary files, because git generates diffs between files, and diffs between binaries have no sense, Git LFS does not do diffs simply sotres the actual version of the file and shows us the actual version 
+        - because we checkout only the current commit version of the file, it's faster to pull because only the current version is downloaded 
+        - LFS lives in Git, Bitbucket, just files are handled 'differently'
+        - because the in your actual project LFS files are just tiny pointers, your project's .git size can stay small an sexy 
+        - for using Git LFS you need a Git LFS aware host like GitHub, Bitbucket, and the Git LFS CLI installed  
+        - a repo containign LFS files are cloned automatically 
+        - uses the same globs as .gitignore (but does not support negative globs!)
+        - git LFS creates a .gitattributes file on the root of your repo (when running git lfs track -> this file's content is displayed basically -> TEST it!)
+        - we use git commands as normal just wee see information when Git LFS kicks in 
+        
+        
+        
+        
+        - to create git LFS aware repo we have to run `git lfs install` before (this updates pre-push hook)
+        
+        - git lfs track path:str (path must be specified as string here!)
+                  - list tracked files (directory paths)
+                  - can I track files here?
+        
+        - git lfs untrack 'pathGlob'
+                  - removes LFS tracking paths from .gitattributes 
+        
+        - git lfs status
+                  - lfs status (files that will be pushed)
+        
+        
+        - git lfs fetch [--recent] [--all]
+                  - download lfs files from remote 
+                  - (--recent) downloads recent (no more than 7 days) LFS file history to local 
+                  - (--all) downloads the whole LFS file history to local 
+        
+        
+        - git lfs clone 
+                  - when a project has a lot of LFS files this offerst a better performance than git clone 
+        
+        - git lfs pull  
+                  - downloads FLS files (just LFS files => when example download fails)
+    
+        - git lfs prune [--dry-run]
+                  - deletes old FLS files from local storage 
+                      - LFS files not belonging to this commit
+                      - older than 7 days (older than recent)
+                      - LFS files not yet commited 
+                  - (--dry-run) will display what files will be pruned when runnig this command 
+        
+        
+        
+---------------------------------------------------------
+    - where LFS files are stored?
+    - git lfs stores large files in a separate repo???
+    - what happens if I clone a project having git lfs pointers ???
+    - is there a .git-like file somewhere for git lfs ?
+    - what happens when you clone a repo having lfs files (apparently clones down large files directly)
+    - create a small image where you displya that only LFS files in the current commit is present 
+    
+    
+    - TEST 
+        - changing the content of a file then checkig out in different commits 
+    
+    
+    
+    
+    
+    - already tracked files cannot be ignored by .gitignore
+        -> whell I'm not sure about this -> I suppose these files won't be tracked from now on 
+    -->
+    
+    
+    
+    <br><br>
+</body>
+</html>

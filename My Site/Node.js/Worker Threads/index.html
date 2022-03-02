@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> Worker Threads </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> Worker Threads (ver 4.0.0) </h1>
+    <p> Updated ( 2020-07-01 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Node.js></a> Worker Threads  
+    </p>
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="00">
+        <td> <strong>workerMd</strong> </td>
+        <td>  
+            - the worker module required as <mark>worker_threads</mark> (ex: <mark>require('worker_threads')</mark>)
+        </td>
+    </tr>
+    <tr class="01.01">
+        <td> <strong>workerMd</strong>.isMainThread </td>
+        <td> 
+            - returns <mark>true</mark> if this method is NOT running in a Worker thread (main thread), for Worker threads returns <mark>false</mark>    
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.01">
+        <td>  
+            <strong>workerMd</strong>.markAsUntransferable(<strong class="openable">obj<div>
+                <p> - useful for <mark>ArrayBuffer</mark> | <mark>FileHandle</mark> | <mark>MessagePort</mark> objects </p>
+            </div></strong>)
+        </td>
+        <td> 
+            - marks the passed <strong>obj</strong> as undetachable from this thread (ex: passing an ArrayBuffer makes undetachable from this thread)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05">
+        <td> 
+            <strong>workerMd</strong>.moveMessagePortToContext(<strong>msgPort</strong>, <strong>vmContext:obj</strong>)
+        </td>
+        <td> 
+            - moves a message port (<strong>msgPort</strong>) in V8 Virtual Machine context (<strong>vmContext</strong>) <br>
+            - returns an object which is the moved message port (<strong>msgPort</strong>) <u>in the VM context</u>    
+            <span class="browserSupport" title="updated : 2020-12-16">
+                <span><i class="fab fa-node-js"></i> 11.13.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02.01">
+        <td> <strong>workerMd</strong>.parentPort </td>
+        <td> 
+            - if running in a Worker thread returns a <strong>msgPort</strong> (object) what can be used to post messages to the parent thread (ex: <mark><strong>workerMd</strong>.parentPort.postMessage('some message')</mark>) <br>
+            - if this is not a Worker thread returns <mark>null</mark> 
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02.02">
+        <td> <strong>workerMd</strong>.receiveMessageOnPort(<strong>msgPort</strong>) </td>
+        <td> 
+            - returns an <span class="openable">object which contains the next received message<div>
+                <p> retunrs <mark>{message:<strong>msg</strong>}</mark> - message property contains the received message </p>
+                <p> returns <mark>undefined</mark> = no message </p>
+            </div></span> on the passed <strong>msgPort</strong> <br>
+            - the <strong>msgPort</strong> does not emit the <mark>message</mark> event in this case 
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 12.3.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="01.03">
+        <td> <strong>workerMd</strong>.resourceLimits </td>
+        <td> 
+            - returns an <span class="openable">object of the set JS engine resource constraints<div>
+                <p> maxOldGenerationSizeMb: <strong>nr</strong> - the maximum size of the main heap (in MB) </p>
+                <p> maxYoungGenerationSizeMb: <strong>nr</strong> - the maximum size of a heap space for recently created objects (in MB) </p>
+                <p> codeRangeSizeMb: <strong>nr</strong> - the size of the pre-allocated memory range used for generating code (in MB) </p>
+                <p> stackSizeMb: <strong>nr</strong> - the default maximum stack size for the thread (in MB) </p>
+            </div></span> for <u>this Worker thread (works only if used inside a worker thread, in main thread returns an empty object)</u>
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 12.16.0 / 13.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.02">
+        <td> <strong>workerMd</strong>.SHARE_ENV </td>
+        <td> 
+            - can be passed as <mark>env</mark> option when a new Worker is created, when doing so the parent thread and the Worker thread will share the same environment varialbes 
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 11.14.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="01.02">
+        <td> <strong>workerMd</strong>.threadId </td>
+        <td> 
+            - returns a unique Identifier (number) of this thread 
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.01">
+        <td> <strong>workerMd</strong>.workerData </td>
+        <td> 
+            - ontains a <span class="openable">clone of the data<div>
+                <p> - uses the same HTML structured clone algorithm as the <mark>posteMessage()</mark> method when creating a data clone </p>
+            </div></span> what was passed to the <mark>workerData</mark> option when the this Worker was created (when called inside the created Worker thread)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    Worker 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>    
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="01.01">
+        <td>  
+            new <strong>workerMd</strong>.Worker(<strong class="openable">filePath:str|urlObj<div>
+                <p> - for relative paths the <mark>./</mark> or <mark>../</mark> must be used </p>
+                <p> - if WHATWG URL object is passed it must use the <mark>file:</mark> protocol </p> 
+            </div></strong>, <i class="openable">option:obj<div>
+                <p> argv: <strong>[any, ...]</strong> - a list of arguments which will be stringified and appended to <mark>process.argv</mark> in this created worker </p>
+                <p> env: <strong>obj</strong> - if specified the passed object will be available in <mark>process.env</mark> in this created worker (if the <mark><strong>workerMd</strong>.SHARE_ENV</mark> is passed, the worker and the parent share their environment variables, in this case changing the threads <mark>process.evn</mark> will affect environment varialbes in both threads) (Default: <mark>process.env</mark>) </p>
+                <p> eval: <strong>bol</strong> - if <mark>true</mark> interprets the first argument (<strong>filePath</strong>) as JavaScript code and runs when the worker initiated (Default: <mark>false</mark>) </p>
+                <p> execArgv: <strong>[option:str, ...]</strong> - Command Line options for the worker thread, if specified options will be available in <mark>process.execArgv</mark> in this created worker (Default: inherits options from the parent) </p>
+                <p> stdin: <strong>bol</strong> - if <mark>true</mark> enables the <mark>stdin</mark> worker property as writable stream, data written on it can be read inside the worker thread <mark>process.stdin</mark> (Default: <mark>false</mark> = <mark>stdin</mark> property undefined) </p>
+                <p> stdout: <strong>bol</strong> - (if <mark>false</mark> data written inside the worker thread <mark>process.stdout</mark> is piped to both the parent <mark>stdout</mark> and <mark><strong>worker</strong>.stdout</mark> property) (if <mark>true</mark> data written inside the worker thread <mark>process.stdout</mark> is only written to <mark><strong>worker</strong>.stdout</mark> property) (Default: <mark>false</mark>) </p>
+                <p> stderr: <strong>bol</strong> - (if <mark>false</mark> data written inside the worker thread <mark>process.stderr</mark> is piped to both the parent <mark>stderr</mark> and <mark><strong>worker</strong>.stderr</mark> property) (if <mark>true</mark> data written inside the worker thread <mark>process.stderr</mark> is only written to <mark><strong>worker</strong>.stderr</mark> property) (Default: <mark>false</mark>) </p>
+                <p> workerData: <strong>any</strong> - the data passed here is cloned and the copy is available in the worker thread <mark><strong>workerMd</strong>.workerData</mark> (uses HTML structured clone algorithm) </p>
+                <p> transferList: <strong>[obj, ...]</strong> - if one or more <mark>MessagePort</mark>-like object is passed in the <mark>workerData</mark>, a transferList is required for those objects (same mechanism as the <strong>transferList</strong> in the <mark>postMessage()</mark> method) </p>
+                <p> resourceLimits: <strong>{maxOldGenerationSizeMb:nr, maxYoungGenerationSizeMb:nr, codeRangeSizeMb:nr, stackSizeMb:nr}</strong> - sets the resource limits for the new JavaScript engine instance, <u>if these limits are reached the Worker will be terminated</u> (<mark>maxOldGenerationSizeMb</mark> = the maximum size of the main heap in MB) (<mark>maxYoungGenerationSizeMb</mark> = the maximum size of a heap space for recently created objects) (<mark>codeRangeSizeMb</mark> = the size of the pre-allocated memory range used for generated code) (<mark>stackSizeMb</mark> = the default maximum stack size for the thread (Default: <mark>4</mark>)) </p>
+            </div></i>)
+        </td>
+        <td> - returns a <strong>worker</strong> object which represents an independent JavaScript execution thread <br>
+            - <span class="openable">in Worker threads most JS API are available<div>
+                <p> - <mark>process.stdin</mark> / <mark>process.stdout</mark> / <mark>process.stderr</mark> are redirected to the parent thread by default </p>
+                <p> - <mark>process.exit()</mark> stops only the thread not the whole program </p>
+                <p> - <mark>process.abort()</mark> is not available </p>
+                <p> - <mark>process.chdir()</mark> and process methods that set users or groups are not available </p>
+                <p> - <mark>process.env</mark> is a copy of the parent thread by default </p>
+                <p> - <mark>process.title</mark> cannot be modified </p>
+                <p> - signals are not delivered through <mark>process.on('signal')</mark></p>
+                <p> - IPC channels from parent process are not accessible </p>
+                <p> - <mark>trace_events</mark> module is not supported </p>
+            </div></span>
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 13.4.0 / 12.16.0 - <mark>argv</mark> / <mark>resourceLimits</mark> options </p>
+                    <p> - 13.12.0 - WHATWG URL object support </p>
+                    <p> - 14.0.0 - <mark>transferlist</mark> option </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.03">
+        <td> <strong>worker</strong>.getHeapSnapshot() </td>
+        <td> 
+            - returns a promise which is when resolved resolves in a readable stream containing the Worker's current V8 heap snapshot <br>
+            - if the worker is not running the the promise is rejected <u>(may occur before the <mark>exit</mark> event)</u>  
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 13.9.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02.01">
+        <td> 
+            <strong>worker</strong>.postMessage(<strong class="openable">val<div>
+                <p> - may contain circular reference </p>
+                <p> - may contain builtin JS types (ex: <mark>RegExp</mark>, <mark>Map</mark>, etc...) </p>
+                <p> - may contain typed arrays <mark>ArrayBuffer</mark> <mark>SharedArrayBuffer</mark> </p>
+                <p> - may contain <mark>WebAssembly.Module</mark> instances </p>
+            </div></strong>, <i class="openable">[obj, ...]<div>
+                <p> - this is called 'Transfer List' object passed here are <u>removed from this thread</u> </p>
+                <p> - only <mark>ArrayBuffer</mark> <mark>MessagePort</mark> and <mark>FileHandle</mark> objects can be passed <u><mark>SharedArrayBuffer</mark> is not allowed because it is not transferable</u> </p> 
+                <p style="color:orangered;"> - if the <mark>ArrayBuffer</mark> was created by a <mark>Buffer</mark> method (<mark>Buffer.from()</mark> <mark>Buffer.alloc()</mark>) it <u>CANNOT be transfered</u> </p>
+                <p style="font-weight:bold; font-size:1.1em; text-decoration:underline;"> Example : </p>
+                <p> - <mark>worker_1.postMessage(arrBuf_1, [arrBuf_1])</mark> = the <mark>arrBuff_1</mark> ArrayBuffer is moved to the worker (not available in this thread anymore) </p>
+                <p> - <mark>worker_1.postMessage(null, [arrBuf_1])</mark> = the <mark>arrBuff_1</mark> ArrayBuffer is removed from this thread (not available in the worker either) [TESTED: 2020-07-04] </p>
+            </div></i>) 
+        </td>
+        <td> 
+            - sends a message to the worker (the communication protocol is <span class="openable">compatible with HTML structured clone algorithm<div> 
+                <p> - non-enurable properties, property accessors, and object prototypes are NOT preserverd (<mark>Buffer</mark> will be read as plain <mark>Uint8Array</mark> on the receiving side) </p>
+            </div></span>)     
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> <strong>worker</strong>.ref() </td>
+        <td> 
+            - (re)attaches this <strong>worker</strong> in the event loop, so this <strong>worker</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.02">
+        <td> <strong>worker</strong>.resourceLimits </td>
+        <td> 
+            - returns an <span class="openable">object of the set JS engine resource constraints<div>
+                <p> maxOldGenerationSizeMb: <strong>nr</strong> - the maximum size of the main heap (in MB) </p>
+                <p> maxYoungGenerationSizeMb: <strong>nr</strong> - the maximum size of a heap space for recently created objects (in MB) </p>
+                <p> codeRangeSizeMb: <strong>nr</strong> - the size of the pre-allocated memory range used for generating code (in MB) </p>
+                <p> stackSizeMb: <strong>nr</strong> - the default maximum stack size for the thread (in MB) </p>
+            </div></span> for this Worker thread
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 12.16.0 / 13.2.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.03">
+        <td> <strong>worker</strong>.stderr </td>
+        <td> 
+            - readable stream, data written to <mark>process.stderr</mark> inside the worker thread is readable here (regardless the <mark>stderr</mark> option set or not)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.01">
+        <td> <strong>worker</strong>.stdin </td>
+        <td> 
+            - <u>if the <mark>stdin</mark> option is <mark>false</mark> (Default)</u> when the worker is created this property is <mark>undefined</mark> <br>
+            - <u>if the <mark>stdin</mark> option is <mark>true</mark></u> when the worker is created this is a writable stream (writing data on it is available in the worker thread <mark>process.stdin</mark>)    
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.02">
+        <td> <strong>worker</strong>.stdout </td>
+        <td> 
+            - readable stream, data written to <mark>process.stdout</mark> inside the worker thread is readable here (regardless the <mark>stdout</mark> option set or not)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.01">
+        <td> <strong>worker</strong>.terminate() </td>
+        <td> 
+            - stops all JavaScript execution in the worker thread as soon as possible <br>
+            - returns a promise which is fulfilled when the <mark>exit</mark> event is emitted (resolved with the exit code)   
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.01">
+        <td> <strong>worker</strong>.threadId </td>
+        <td> 
+            - returns the unique Identifier (number) of the worker thread 
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>worker</strong>.unref() </td>
+        <td> 
+            - removes this <strong>worker</strong> from the event loop, so this <mark>worker</mark> does not prevent the process from closing
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="07.01">
+        <td colspan="2"> events </td>
+    </tr>
+    <tr class="09.01">
+        <td> <strong>worker.listener</strong>('error', <strong>fn(err)</strong>) </td>
+        <td> 
+            - emitted when the worker thread throws an uncaught exception (worker terminated)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="08.01">
+        <td> <strong>worker.listener</strong>('exit', <strong>fn(exitCode)</strong>) </td>
+        <td> 
+            - emitted when the worker has stopped (final event emitted by the worker)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="07.03">
+        <td> <strong>worker.listener</strong>('message', <strong>fn(msg)</strong>) </td>
+        <td> 
+            - emitted when a message is received from this worker
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="09.02">
+        <td> <strong>worker.listener</strong>('messageerror', <strong>fn(err)</strong>) </td>
+        <td> 
+            - emitted when deserializing the message is failed
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="07.02">
+        <td> <strong>worker.listener</strong>('online', <strong>fn</strong>) </td>
+        <td> 
+            - emitted when the worker thread starts executing JavaScript code
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption> 
+    MessageChannel and MessagePort 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>    
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+    </tr>
+    <tr class="01.01">
+        <td> new <strong>workerMd</strong>.MessageChannel() </td>
+        <td> 
+            - creates and returns a new <strong>msgChannel</strong> (<mark>MessageChannel</mark>) object which <span class="openable">represents an asynchronous two-way communication channel<div>
+            <p> - uses HTML structured clone algorithms when transfering data </p>
+            <p> - FIFO (First In First Out) mechanism </p>
+            <p> - when a Worker thread is created a <mark>MessageChannel</mark> instance is automatically created which links the 2 threads by keeping one port in the main thread and transfering the other port to the Worker thread </p>
+            <p> - in the main thred the port can be reched directly on the Worker instance (ex: <mark><strong>worker_1</strong>.postMessage('some message')</mark>) </p>
+            <p> - in the Worker thread the port can be reached through the <mark>parentPort</mark> property (ex: <mark><strong>workerMd</strong>.parentPort.postMessage('some message')</mark>) </p>
+        </div></span> <br>
+            - the returned <strong>msgChannel</strong> object has 2 properties <mark>port1</mark> and <mark>port2</mark> what represent the communication endpoints of this channel (MessagePorts) 
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="02.01">
+        <td> <strong>msgPort</strong> </td>
+        <td> 
+            - represents one endpoint (one side) of a <strong>msgChannel</strong> (matches the browser <mark>MessagePort</mark>) <br>
+            - automatically created when a new <strong>msgChannel</strong> is created 
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="04.01">
+        <td> <strong>msgPort</strong>.close() </td>
+        <td> 
+            - disables further message sending on either side of the channel, when called the <mark>close</mark> event is emited on either side of the channel
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="03.01">
+        <td>  
+            <strong>msgPort</strong>.postMessage(<strong class="openable">val<div>
+                <p> - may contain circular reference </p>
+                <p> - may contain builtin JS types (ex: <mark>RegExp</mark>, <mark>Map</mark>, etc...) </p>
+                <p> - may contain typed arrays <mark>ArrayBuffer</mark> <mark>SharedArrayBuffer</mark> </p>
+                <p> - may contain <mark>WebAssembly.Module</mark> instances </p>
+            </div></strong>, <i class="openable">[obj, ...]<div>
+                <p> - this is called 'Transfer List' object passed here are <u>removed from this thread</u> </p>
+                <p> - only <mark>ArrayBuffer</mark> <mark>MessagePort</mark> and <mark>FileHandle</mark> objects can be passed <u><mark>SharedArrayBuffer</mark> is not allowed because it is not transferable</u> </p> 
+                <p style="color:orangered;"> - if the <mark>ArrayBuffer</mark> was created by a <mark>Buffer</mark> method (<mark>Buffer.from()</mark> <mark>Buffer.alloc()</mark>) it <u>CANNOT be transfered</u> </p>
+                <p style="font-weight:bold; font-size:1.1em; text-decoration:underline;"> Example : </p>
+                <p> - <mark>worker_1.postMessage(arrBuf_1, [arrBuf_1])</mark> = the <mark>arrBuff_1</mark> ArrayBuffer is moved to the worker (not available in this thread anymore) </p>
+                <p> - <mark>worker_1.postMessage(null, [arrBuf_1])</mark> = the <mark>arrBuff_1</mark> ArrayBuffer is removed from this thread (not available in the worker either) [TESTED: 2020-07-04] </p>
+            </div></i>)
+        </td>
+        <td> 
+            - sends a message to the receiving side of this channel (the communication protocol is <span class="openable">compatible with HTML structured clone algorithm<div> 
+                <p> - non-enurable properties, property accessors, and object prototypes are NOT preserverd (<mark>Buffer</mark> will be read as plain <mark>Uint8Array</mark> on the receiving side) </p>
+            </div></span>)
+            <span class="browserSupport" title="updated : 2020-07-06">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                    <p> - 14.5.0 - <mark>FileHandle</mark> can be transfered (2nd argument) </p>
+                    <p> - 14.5.0 - <mark>KeyObject</mark> can be passed as value (cloned to the other side) </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> <strong>msgPort</strong>.ref() </td>
+        <td> 
+            - (re)attaches this <strong>msgPort</strong> in the event loop, so this <strong>msgPort</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)   
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="06.01">
+        <td> <strong>msgPort</strong>.start() </td>
+        <td> 
+            - <u>[Internally called]</u> when the <mark>message</mark> event is attached or when the <mark>.onmessage</mark> property is attached to the <strong>msgPort</strong> <br>
+            - method exist for parity with the Web <mark>MessagePort</mark> API   
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> <strong>msgPort</strong>.unref() </td>
+        <td> 
+            - removes this <strong>msgPort</strong> from the event loop, so this <strong>msgPort</strong> does not prevent the process from closing
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="07.01">
+        <td colspan="2"> events </td>
+    </tr>
+    <tr class="08.01">
+        <td> <strong>msgPort.listener</strong>('close', <strong>fn</strong>) </td>
+        <td> 
+            - emitted once when either side of the channel is disconnected
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="07.02">
+        <td> <strong>msgPort.listener</strong>('message', <strong>fn(msg)</strong>) </td>
+        <td> 
+            - emitted when a message is received on this MessagePort
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 10.5.0 </span>
+            </span>
+        </td>
+    </tr>
+    <tr class="09.01">
+        <td> <strong>msgPort.listener</strong>('messageerror', <strong>fn</strong>) </td>
+        <td> 
+            - emitted when deserializing the message is failed
+            <span class="browserSupport" title="updated : 2020-07-07">
+                <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+<h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v14.x/docs/api/worker_threads.html" target="_blank">Worker Threads (nodejs.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - a Worker is a separate JavaScript thread running in parallel <u>(within the same process)</u>, Workers are used for CPU intensive tasks (not useful for I/O operations) </p>
+    <p> - Workers mainly communicate by sharing memory (<mark>ArrayBuffer</mark> or <mark>SharedArrayBuffer</mark>) </p> 
+    <p> - creating Worker within Worker is possible </p>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>isMainThread</mark> / <mark>threadid</mark> / <mark>resourceLimits</mark> / <mark>parentPort</mark> / <mark>receiveMessageOnPort()</mark> / <mark>workerData</mark> / <mark>SHARE_ENV</mark> / <mark>markAsUntransferable()</mark> / <mark>moveMessagePortToContext()</mark> methods and properties </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - <mark>main.js</mark> (file) (Main) </p>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+// SHARE_ENV / workerData -------------------------------------------------------------
+    var worker_1 = new workerMd.Worker('./worker_1.js', {evn:SHARE_ENV, workerData:'some data'});   // the created Worker thread and this parent thread will share the same environment variables (changing one affect the other thread's evnironment variable as well)    
+    
+// isMainThread / threadId / resourceLimits -------------------------------------------
+    workerMd.isMainThread;                                                             // -> true          // this is not a worker thread 
+    workerMd.threadId;                                                                 // -> 0 
+    workerMd.resourceLimits;                                                           // -> {}            // empty object because this in not a worker thread 
+    
+// markAsUntransferable() -------------------------------------------------------------
+    var arrBuf_1 = new ArrayBuffer(4);
+    var arrBuf_2 = new ArrayBuffer(4);
+    
+    workerMd.markAsUntransferable(arrBuf_2);                                           // after this the 'arrBuf_2' cannot be detached from this thread 
+    
+    worker_1.postMessage(arrBuf_1, [arrBuf_1]);                                        // the 'arrBuf_1' ArrayBuffer is moved (detached) from this thread to the Worker
+    worker_1.postMessage(arrBuf_2, [arrBuf_2]);                                        // -! the 'arrBuf_2' ArrayBuffer is not removed (detached) from this thread (both thread will have a copy of the 'arrBuf_2' ArrayBuffer)    
+    </pre>
+    <p> - <mark>worker_1.js</mark> (file) (Worker thread) </p>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+// isMainThread / threadId / resourceLimits -------------------------------------------
+    workerMd.isMainThread;                                                             // -> false         // this is a Worker thread 
+    workerMd.threadId;                                                                 // -> 1
+    workerMd.resourceLimits;                                                           // -> {maxYoungGenerationSizeMb:48, maxOldGenerationSizeMb:4096, codeRangeSizeMb:0, stackSizeMb:4}   // resource limits of this worker   
+    
+// parentPort / workerData -------------------------------------------------------------
+    workerMd.parentPort.postMessage("some message");                                   // 'parentPort' is the default MessagePort to the parent thread  
+    
+    workerMd.workerData;                                                               // -> 'some data'    // the data what was passed as 'workderData' option when this Worker thread was created    
+    </pre>
+    <hr>
+<h4 style="color:darkblue;"><u> Demo <mark>moveMessagePortToContext()</mark> </u></h4>
+    <p> - this technology is a little bit vague, this is the closes I could make it work [TESTED: 2020-12-16] </p>
+    <pre>
+    var workerMd = require('worker_threads');
+    var vm = require('vm');
+    
+    var ctx_1 = {x:21};
+    vm.createContext(ctx_1);                                                           // V8 Virtual Machine context   
+    
+    var msgChannel = new workerMd.MessageChannel();
+    var ctxPort = workerMd.moveMessagePortToContext(msgChannel.port2, ctx_1);          // moves 'port2' of 'msgChannel' in 'ctx_1' context (the returned 'ctxPort' is an object (port2) in 'ctx_1' VM context)    
+    
+// post / receive message on this 'global' context ------------------------------------
+    msgChannel.port1.postMessage('message from global context');
+    
+    msgChannel.port1.on('message', function(msg){
+        msg;                                                                           // -> 'message from "ctx_1" vm context   
+    });
+    
+// post / receive message on 'ctx_1' VM context ---------------------------------------
+    ctxPort.postMessage('message from "ctx_1" vm context');    
+    
+    // ctxPort.on('message', function(msg){ console.log(msg) });                       // -! would throw a TypeError because there's no EventTarget API in 'ctx_1' VM context 
+    workerMd.receiveMessageOnPort(ctxPort);                                            // -> {message:'message from global context'}   // received message on 'port2' which is in 'ctx_1' VM context    
+    </pre>
+    <hr>
+<h4 style="color:darkblue;"><u> Demo <mark>receiveMessageOnPort()</mark> </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var channel = new workerMd.MessageChannel();                                       // creating a message channel 
+    
+    channel.port1.postMessage('first message');                                        // sending serveral messages on port1
+    channel.port1.postMessage('second message');
+    channel.port1.postMessage('third message');
+    
+    workerMd.receiveMessageOnPort(channel.port2);                                      // -> {messsge:'first message'}         // returns the first message piece only 
+    workerMd.receiveMessageOnPort(channel.port2);                                      // -> {messsge:'second message'}        // and so on...
+    workerMd.receiveMessageOnPort(channel.port2);                                      // -> {messsge:'third message'}
+    workerMd.receiveMessageOnPort(channel.port2);                                      // -> undefined                         // no message piece left in the message channel    
+    
+    channel.port2.on('message', (msg)=>{ msg });                                       // -! the 'message' event is not emmitted in this case 
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>isMainThread</mark> / <mark>threadId</mark> / <mark>resourceLimits</mark> TEST </u></h4>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', {stdout:false});  
+    
+    console.log( workerMd.isMainThread );                                              // -> true      
+    console.log( workerMd.threadId );                                                  // -> 0         // main thread 
+    
+    console.log( workerMd.resourceLimits );                                            // -> { }       // in the main returns an empty object    
+    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    console.log( workerMd.isMainThread );                                              // -> false  
+    console.log( workerMd.threadId );                                                  // -> 1  
+    
+    console.log( workerMd.resourceLimits );                                            // -> { resource limits... }
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>parentPort</mark> TEST </u></h4>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+
+    var worker_1 = new workerMd.Worker('./worker_1.js', {stdout:false});  
+        
+    console.log( workerMd.parentPort );                                                // -> null             
+
+    worker_1.on('message', function(msg){
+        console.log( msg );                                                            // -> 'some message to the main thread'
+    });    
+    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    workerMd.parentPort.postMessage('some message to the main thread');                // posting a message to the main thread 
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>receiveMessageOnPort()</mark> TEST </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var channel = new workerMd.MessageChannel();
+    
+    channel.port1.postMessage('first message');                                        // sending serveral messaged 
+    channel.port1.postMessage('second message');
+    channel.port1.postMessage('third message');
+    
+    console.log( workerMd.receiveMessageOnPort(channel.port2) );                       // -> {messsge:'first message'}         // returns the first message piece only 
+    console.log( workerMd.receiveMessageOnPort(channel.port2) );                       // -> {messsge:'second message'}
+    console.log( workerMd.receiveMessageOnPort(channel.port2) );                       // -> {messsge:'third message'}
+    console.log( workerMd.receiveMessageOnPort(channel.port2) );                       // -> undefined                         // no message piece left in the message channel     
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>workerData</mark> TEST </u></h4>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', {workerData:new Float64Array([5555.5555])});        // passing data to the workerData option    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    console.log( workerMd.workerData );                                                // -> Float64Array[5555.5555]    // data what was passed to the 'workerData' option when this Worker was created    
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>SHARE_ENV</mark> TEST </u></h4>
+    <p> - without <mark>SHARE_ENV</mark> passed to the <mark>evn</mark> option </p>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    process.env.PALL = 'pall';                                                         // sets a new environment variable 
+    console.log( process.env.PALL );                                                   // -> 'pall'       // the set environment variable value 
+    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+
+    console.log( process.env.PALL );                                                   // -> undefined    // because the Worker does not share environment variables with the parent thread
+    </pre>
+    <p> - with <mark>SHARE_ENV</mark> passed to the <mark>evn</mark> option </p>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', {env:workerMd.SHARE_ENV});
+    
+    process.env.PALL = 'pall';                                                         // sets a new environment variable 
+    console.log( process.env.PALL );                                                   // -> 'pall'        // the set environment variable value 
+    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    console.log( process.env.PALL );                                                   // -> 'pall'         // the Worker share environment variables with the parent thread
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>markAsUntransferable()</mark> TEST </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', {env:workerMd.SHARE_ENV});
+    
+    var arrBuf_1 = new ArrayBuffer(4);
+        new DataView(arrBuf_1).setFloat32(0, 11.11)
+    var arrBuf_2 = new ArrayBuffer(4);
+        new DataView(arrBuf_2).setFloat32(0, 22.22)
+    
+    workerMd.markAsUntransferable(arrBuf_2);                                           // marks the ArrayBuffer as untransferable 
+    
+    worker_1.postMessage(arrBuf_1, [arrBuf_1]);                                        // moving (transfering) the ArrayBuffer 
+    console.log( arrBuf_1 );                                                           // -> ArrayBuffer{ detached }           // detached (moved) to the Worker thread
+    
+    worker_1.postMessage(arrBuf_2, [arrBuf_2]);                                        // 'arrBuf_2' cannot be detached because it was marked as untransferable  
+    console.log( arrBuf_2 );                                                           // -> ArrayBuffer{ &lt;41 b1 c2 8f&gt; }      // still available (not moved to the worker thread)
+                                                                                       // the 'worker_1.js' still gets a clone of this ArrayBuffer     
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>moveMessagePortToContext()</mark> TEST </u></h4>
+    <p> - I don't really see how this could be useful (spent quite a bit of time testing) </p>
+    <pre>
+    var workerMd = require('worker_threads');
+    var vm = require('vm');
+    
+    var ctx_1 = {x:21};
+    vm.createContext(ctx_1);                                                           // V8 Virtual Machine context   
+    
+    var msgChannel = new workerMd.MessageChannel();
+    var ctxPort = workerMd.moveMessagePortToContext(msgChannel.port2, ctx_1);          // 'port2' of 'msgChannel' is moved to 'ctx_1' context 
+                                                                                       // the returned 'ctxPort' is acutally an object (port2) in ctx_1' context      
+    
+// post and receive message on this 'global' context ----------------------------------
+    msgChannel.port1.postMessage('message from global context');
+    
+    msgChannel.port1.on('message', function(msg){
+        console.log( msg );                                                            // -> 'message from "ctx_1" vm context   
+    });
+    
+// post / receive message on 'ctx_1' VM context ---------------------------------------
+    ctxPort.postMessage('message from "ctx_1" vm context');    
+    
+    // ctxPort.on('message', function(msg){ console.log(msg) });                       // -! would throw a TypeError because there's no EventTarget API in 'ctx_1' VM context 
+    console.log( workerMd.receiveMessageOnPort(ctxPort) );                             // -> {message:'message from global context'}   // received message on 'port2' which is in 'ctx_1' VM context    
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>Worker()</mark> / <mark>postMessage()</mark> / <mark>terminate()</mark> / <mark>stdin</mark> / <mark>stdout</mark> / <mark>stdout</mark> / <mark>unref()</mark> / <mark>ref()</mark> / <mark>threadId</mark> / <mark>resourceLimits</mark> / <mark>getHeapSnapshot()</mark> methods and properties </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>online</mark> / <mark>message</mark> / <mark>exit</mark> / <mark>error</mark> / <mark>messageerror</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');  
+    
+// postMessage() ----------------------------------------------------------------------
+    worker_1.postMessage('some message');                                              // the worker receives a clone of the string 
+    worker_1.postMessage(someArrayBuffer);                                             // the worker receives a clone of the ArrayBuffer
+    worker_1.postMessage(someSharedArrayBuffer);                                       // the SharedArrayBuffer is shared between the main and the worker threads (both see the same underlying memory)    
+    
+    worker_1.postMessage(someArrayBuffer, [someArrayBuffer]);                          // the ArrayBuffer is moved to the Worker (not available in this thread anymore)   
+    worker_1.postMessage(null, [someArrayBuffer]);                                     // this simply removes the ArrayBuffer   
+    worker_1.postMessage(someSharedArrayBuffer, [someSharedArrayBuffer]);              // -! this throws an error because the SharedArrayBuffer cannot be removed from the current thread    
+    
+// terminate() ------------------------------------------------------------------------
+    var terminate = worker_1.terminate()                                               // terminates the worker and returns a promise 
+    
+    terminate                                                                          // promise is fulfilled when the 'exit' event is emitted   
+        .then((res)=>{ console.log(res)})                                              // -> 1         // exit code 
+        .catch((rej)=>{ console.log(rej)});
+    
+// threadId / resourceLimits / getHeapSnapshot() --------------------------------------
+    worker_1.threadId;                                                                 // -> 1          // unique Identifier of this worker 
+    
+    worker_1.resourceLimits;                                                           // -> {maxYoungGenerationSizeMb:48, maxOldGenerationSizeMb:4096, codeRangeSizeMb:0, stackSizeMb:4}   // resource limits if this worker 
+    
+    var heapSnap = worker_1.getHeapSnapshot();                                         // returns a promise 
+    heapSnap
+        .then((res)=>{ res })                                                          // resolved promise resolves into a ReadablStream which is when read contains the v8 heap snapshot of the Worker   
+        .catch((rej)=>{ rej })                                                         // promise is rejected when the Worker is not running   
+    
+// unref()  / ref() -------------------------------------------------------------------
+    worker_1.unref();                                                                  // this Worker won't prevent the process from closing (removed from the event loop)
+    worker_1.ref();                                                                    // this Worker will prevent the process from closing (reattached to the event loop)   
+    
+// online / message (events) ----------------------------------------------------------
+    worker_1.on('online', ()=>{});                                                     // emitted when the Worker starts executing JavaScript code 
+    worker_1.on('message', function(msg){                                              // emitted when this (parent) thread receives some data from the Worker thread    
+        msg;
+    });
+    
+// exit (event) -----------------------------------------------------------------------
+    worker_1.on('exit', function(exitCode){                                            // emitted when the worker exits 
+        exitCode;                                                                      // -> 0  
+    });
+    
+// error / messageerror (events) ------------------------------------------------------
+    worker_1.on('error', function(err){                                                // emitted when the worker thread throws an error 
+        err;                                                                           // -> error thrown  
+    });
+    worker_1.on('messageerror', function(err){                                         // emitted when deserializing the received message fails  
+        err;                                                                           // -> error thrown  
+    });
+    </pre>
+    <p> - <mark>stdin</mark> <mark>stdout</mark> <mark>stderr</mark> - </p>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', {stdin:false, stdout:false, stderr:false});             // Default settings Worker std I/O are disabled 
+    
+    worker_1.stdin.write('in data');                                                   // -! this throw an error because the stdin property is not enabled   
+    
+    process.stdout.on('data', (chunk)=>{ chunk.toString() });                          // -> 'out data'         // the streamed data is received on the parent stdout
+    worker_1.stdout.on('data', (chunk)=>{ chunk.toString() });                         // -> 'out data'         // the streamed data is received on the stdout property 
+    
+    process.stderr.on('data', (chunk)=>{ chunk.toString() });                          // -> 'err data'         // the streamed data is received on the parent stderr
+    worker_1.stderr.on('data', (chunk)=>{ chunk.toString() });                         // -> 'err data'         // the streamed data is received on the stderr property 
+    
+    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    process.stdin.on('data', (chunk)=>{ chunk });                                      // no data received here  
+    
+    process.stdout.write('out data');                                                  // writing data to stdout
+    process.stderr.write('err data');                                                  // writing data to stderr
+    </pre>
+    <pre>
+// main.js (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', {stdin:true, stdout:true, stderr:true});                // Worker std I/O are enabled 
+    
+    worker_1.stdin.write('in data');                                                   // streams data to the worker's process.stdin    
+    
+    process.stdout.on('data', (chunk)=>{ chunk.toString() });                          // -> no data received   // worker stdout is not piped to the parent stdout 
+    worker_1.stdout.on('data', (chunk)=>{ chunk.toString() });                         // -> 'out data'         // the streamed data is received on the stdout property 
+    
+    process.stderr.on('data', (chunk)=>{ chunk.toString() });                          // -> no data received   // worker stderr is not piped to the parent stderr 
+    worker_1.stderr.on('data', (chunk)=>{ chunk.toString() });                         // -> 'err data'         // the streamed data is received on the stderr property 
+    
+    
+// worker_1.js (file) -----------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    process.stdin.on('data', (chunk)=>{ chunk });                                      // 'in data'             // streaming data received 
+    
+    process.stdout.write('out data');                                                  // writing data to stdout
+    process.stderr.write('err data');                                                  // writing data to stderr
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>stdin</mark> / <mark>stdout</mark> / <mark>stderr</mark> properties and Worker options TEST </u></h4>
+    <p> main.js</p>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var option = {
+        stdin: true,                                                                   // enables the worker stdin
+        stdout: true,                                                                  // enables the worker stdout
+        stderr: true                                                                   // enables the worker stderr 
+    }
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js', option);
+    
+    worker_1.stdin.write('some data');                                                 // streaming data to the worker's stdin
+    
+    worker_1.stdout.on('data', (chunk)=>{ console.log(chunk.toString()) });            // -> 'worker data on stdout'  // worker stdout data
+    
+    worker_1.stderr.on('data', (chunk)=>{ console.log(chunk.toString()) });            // -> 'worker data on stderr'  // worker stderr data    
+    </pre>
+    <p> worker_1.js</p>
+    <pre>
+    process.stdin.on('data', (chunk)=>{ console.log(chunk.toString()) });              // -> 'some data'
+    
+    process.stdout.write('worker data on stdout');
+    process.stderr.write('worker data on stderr');
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>postMessage()</mark> simple data TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    worker_1.postMessage('simple string');
+    worker_1.postMessage({p1:1, p2:'ketto', p3:false, p4:41542n});
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+
+    workerMd.parentPort.on('message', function(msg){
+        console.log(msg);                                                              // -> 'simple string'  |  {p1:1, p2:'ketto', p3:false, p4:41542n}
+    });
+
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>postMessage()</mark> post <mark>ArrayBuffer</mark> and <mark>SharedArrayBuffer</mark> TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    var arrBuf = new ArrayBuffer(4);
+    var shArrBuf = new SharedArrayBuffer(4);
+    
+    new DataView(arrBuf).setFloat32(0, 1111.1111);
+    new DataView(shArrBuf).setFloat32(0, 1111.1111);
+    
+    worker_1.postMessage(arrBuf);                                                      // the Worker will receive a clone of the ArrayBuffer 
+    worker_1.postMessage(shArrBuf);                                                    // the Worker will share the SharedArrayBuffer with the main thread 
+    
+    setTimeout(function(){
+        console.log( new DataView(arrBuf).getFloat32(0) );                             // -> 1111.1111     // not changed because the worker has an individual copy of the ArrayBuffer 
+        console.log( new DataView(shArrBuf).getFloat32(0) );                           // -> 5555.5555     // changed because the SharedArrayBuffer memory is shared between the main thread and the worker    
+    }, 1000);    
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    workerMd.parentPort.on('message', function(msg){
+        new DataView(msg).setFloat32(0, 5555.5555);                                    // sets the received raw data 
+    });
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>postMessage()</mark> transfer data TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    var arrBuf = new ArrayBuffer(4);
+    new DataView(arrBuf).setFloat32(0, 1111.1111);
+    
+    var arrBuf2 = new ArrayBuffer(4);
+    new DataView(arrBuf2).setFloat32(0, 1111.1111);
+    
+    worker_1.postMessage(arrBuf, arrBuf);                                              // ArrayBufer transfered 
+    worker_1.postMessage(null, arrBuf2);                                               // this ArrayBuffer is only removed from this thread 
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    workerMd.parentPort.on('message', function(msg){
+        console.log( msg );                                                            // ArrayBuffer {...} | null      // -! the 2nd ArrayBuffer not received here   
+    });
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>terminate()</mark> / <mark>exit</mark> / <mark>online</mark> (events) TEST </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    worker_1.postMessage('some message to worker_1');
+    
+    worker_1.on('online', function(){                                                  // emitted when JS starts executing the worker 
+        console.log( 'worker_1 is online');
+    });
+    
+    worker_1.on('exit', function(exitCode){                                            // emitted when the worker is terminated 
+        console.log( `worker_1 exited with the exit code = ${exitCode}` );
+    });
+    
+    setTimeout(function(){
+        var terminate = worker_1.terminate()                                           // terminate the worker and returns a promise 
+        
+        terminate                                                                      // terminate promise is fulfilled when the 'exit' event is emitted   
+            .then((res)=>{ console.log(res)})                                          // -> 1         // exit code 
+            .catch((rej)=>{ console.log(rej)});
+    }, 2000);    
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>ref()</mark> / <mark>unref()</mark>  TEST </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');  
+    worker_1.postMessage('some message to worker_1');
+    
+    setTimeout(function(){
+        worker_1.unref();                                                              // worker removed from the event loop so the process can be closed 
+        worker_1.ref();                                                                // worker reatached to the event loop so it prevents the process from closing 
+        worker_1.unref();                                                              // again worker removed from the event loop so the process can be closed 
+    }, 2500);
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>threadId</mark> / <mark>resourceLimits</mark> / <mark>getHeapSnapshot()</mark> TEST </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+    var v8 = require('v8');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');  
+    var worker_2 = new workerMd.Worker('./worker_2.js');  
+        
+// threadId ---------------------------------------------------------------------------
+    console.log( worker_1.threadId );                                                  // -> 1
+    console.log( worker_2.threadId );                                                  // -> 2
+    
+// resourceLimits ---------------------------------------------------------------------
+    console.log( worker_1.resourceLimits );                                            // -> {JS resource constrants for this thread}
+    
+// getHeapSnapshot() ------------------------------------------------------------------
+    setTimeout(function(){                                                             // must use a timer because the worker is not yet running here 
+        var heapSnap = worker_1.getHeapSnapshot();                                     // returns a promise 
+        heapSnap
+            .then((res)=>{ res.pipe(process.stdout) })                                 // resolved promise contains the v8 heap snapshot 
+            .catch((rej)=>{console.log(rej)})
+    }, 1000);
+    </pre>
+    <pre class="cmd">
+pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/Worker Threads/TEST$ node main
+    1                                                                                  // worker_1.threadId
+    2                                                                                  // worker_2.threadId
+    {                                                                                  // worker_1.resourceLimits
+      maxYoungGenerationSizeMb: 48,
+      maxOldGenerationSizeMb: 4096,
+      codeRangeSizeMb: 0,
+      stackSizeMb: 4
+    }
+    "%14",                                                                             // worker_1.getHeapSnapshot()   // v8 heap snapshot (resolved promise )
+    .....
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>error</mark> / <mark>messageError</mark> (events) TEST </u></h4>
+    <pre>
+// main.js ----------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');  
+
+    worker_1.on('error', function(err){                                                // emitted when the worker thread throws
+        console.log( err.message );                                                    // -> 'myError'
+    });
+    
+    worker_1.on('messageError', function(err){                                         // emitted when deserializing the message is failed 
+        console.log(err);
+    })    
+    
+// worker_1.js ------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    throw new Error('myError');                                                        // throwing error in the worker thread 
+    </pre>
+</details>
+<hr>
+<!----------------------------------------------------------------------------------------------------------------->
+<h2 style="color:darkblue;"><u> The <mark>MessageChannel()</mark> / <mark>MessagePort()</mark> / <mark>postMessage()</mark> / <mark>close()</mark> / <mark>unref()</mark> / <mark>ref()</mark> / <mark>start()</mark> methods and properties </u></h2>
+<h3 style="color:darkblue;"><u> Events: <mark>message</mark> / <mark>close</mark> / <mark>messageerror</mark> </u></h3>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// -! 'worker.js' (file) this is a worker thread --------------------------------------
+    var workerMd = require('worker_threads');
+    
+// MessageChannel / MessagePort -------------------------------------------------------
+    var msgChannel = new workerMd.MessageChannel();                                    // creates a new MessageChannel  
+    
+    msgChannel.port1;                                                                  // MessagePort-1 (one side of the channel)
+    msgChannel.port2;                                                                  // MessagePort-2 (other side of the channel)
+    
+    workerMd.parentPort;                                                               // default MessagePort to the parent thread 
+    
+// postMessage() / close() ------------------------------------------------------------
+    workerMd.parentPort.postMessage('some message');                                   // sends a message to the other side of the channel (which is in the parent thread)   
+    
+    workerMd.parentPort.close();                                                       // closes the MessagePort on both sides (closes the channel)   
+    
+// unref() / ref() --------------------------------------------------------------------
+    workerMd.parentPort.unref();                                                       // removes this port from the event loop so the process can be closed (even if this port has som work pending)  
+    workerMd.parentPort.ref();                                                         // (re)attaches this port int the event loop (port will prevent the process from closing if it has some work pending)  
+    
+// message / close / messageerror -----------------------------------------------------
+    workerMd.parentPort.on('message', function(msg){                                   // emitted when a message is received on the port 
+        msg;                                                                             // -> received message 
+    });
+    
+    workerMd.parentPort.on('close', ()=>{});                                           // emitted when either sides of this channel are closed        
+    
+    workerMd.parentPort.on('messageerror', function(err){                              // emitted when deserializing the message is failed 
+        err;                                                                             // -> error 
+    });
+    </pre>
+</details>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> <mark>postMessage()</mark> TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    worker_1.on('message', function(msg){
+        console.log( msg );                                                            // -> Uint8Array    // because of the HTML structured algorithm the Buffer looses its prototype     so it is received as Uint8Array in this side 
+    });    
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var myBuffer = Buffer.from('Kicsi Kutya tarka se fule se farka');
+    
+    workerMd.parentPort.postMessage(myBuffer);
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>MessageChannel</mark> / <mark>MessagePort</mark> / <mark>message</mark> (event) TEST </u></h4>
+    <pre>
+    var workerMd = require('worker_threads');
+        
+    var arrBuf = new ArrayBuffer(8);
+    new BigInt64Array(arrBuf).set([654132431657698465465n]);
+        
+    var channel_1 = new workerMd.MessageChannel();                                     // MessageChannel created 
+    
+    channel_1.port1.postMessage('some message');                                       // posting messages on 'port1' MessagePort
+    channel_1.port1.postMessage(arrBuf, [arrBuf]);
+    channel_1.port1.postMessage(21);
+    
+    channel_1.port2.on('message', function(msg){                                       // receiving messages on 'port1' MessagePort
+        console.log( msg );                                                            // -> 'someMessage'  |  ArrayBuffer{&lt;b9 16 9a bb d9 3c e9 75&gt;}  |  21
+    });
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> transfer a <mark>MessagePort</mark> to another thread and use it TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+        
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    var myChannel = new workerMd.MessageChannel();                                     // creating a new channel 
+    
+    worker_1.postMessage(myChannel.port2, [myChannel.port2]);                          // transfering on side of the channel to the other side 
+    
+    myChannel.port1.postMessage('message posted through the custom channel');          // sending message on port1     
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var {message} = workerMd.receiveMessageOnPort(workerMd.parentPort);                // receiving the posed MessagePort 
+    
+    message.on('message', function(msg){                                               // listening messages on port2
+        console.log( msg );
+    });
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>close()</mark> / <mark>close</mark> (event) TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+        
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    workerMd.parentPort.on('close', function(){                                        // emitted when when both sides of this cahnnel are disconnected 
+        console.log( 'Worker_1 is closed!' );
+    });
+    
+    setTimeout(function(){
+        workerMd.parentPort.close();                                                   // closes the channel (after 2.5 seconds)
+    }, 2500);
+    </pre>
+<hr>
+<!--------------------------------------------------------------------------------------------------------------->
+<h4 style="color:darkblue;"><u> <mark>ref()</mark> / <mark>unref()</mark> TEST </u></h4>
+    <pre>
+// 'main.js' (file) -------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+    
+    var worker_1 = new workerMd.Worker('./worker_1.js');
+    
+    worker_1.postMessage('some message');
+    
+// 'worker_1.js' (file) ---------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    var workerMd = require('worker_threads');
+        
+    workerMd.parentPort.on('message', function(msg){
+        console.log( msg );
+    });
+    
+    workerMd.parentPort.unref();                                                       // this port allows the thread to be closed (removed from the event loop)  
+    workerMd.parentPort.ref();                                                         // reataches this port to the elvent loop so this port will prevent the process from closing 
+    workerMd.parentPort.unref();                                                       // again this port allows the thread to be closed (removed from the event loop)  
+    </pre>
+</details>
+
+<br><br>
+</body>
+</html>
