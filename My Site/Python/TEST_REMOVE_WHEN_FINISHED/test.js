@@ -1,5 +1,6 @@
-let myArray = [1, 2, 3, 4, 5]
+'use strict'
 
-console.log( myArray[-4] )
+console.log( '🐴👟' )
 
+console.log( '\241' )
 
