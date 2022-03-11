@@ -1,6 +1,7 @@
-'use strict'
-
-console.log( '🐴👟' )
-
-console.log( '\241' )
-
+class TestClass {
+    #private;
+    
+    getPrivate(){
+        return this#private
+    }
+}
