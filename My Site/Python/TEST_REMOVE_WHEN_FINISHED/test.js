@@ -1,24 +1,15 @@
-class TestClass {
-    method(){ return 'stMethod-val' };
-
-    prop = 'stProp1-val';
+class BaseClass {
+    constructor(){
+        this.p1 = 21
+    }
 }
 
-class SubClass extends TestClass{}
+class TestClass extends BaseClass {
+    constructor(){
+        super()
+    }
+}
 
+const myObj = new TestClass()
 
-testObj = new TestClass()
-subObj = new SubClass()
-
-console.log( testObj.prop )
-console.log( subObj.prop )
-console.log( testObj.method() )
-console.log( subObj.method() )
-
-// console.log( TestClass.stProp )
-// console.log( TestClass.stMethod() )
-
-// console.log( SubClass.stProp )
-// console.log( SubClass.stMethod() )
-
-
+console.log( myObj )

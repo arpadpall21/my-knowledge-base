@@ -295,7 +295,7 @@ SYNTAX :    function <strong>Const</strong> (<i>arg1, arg2, ...</i>) {          
 </details>
 <!-------------------------------------------------------------------------------------------------------------------------------->
 <hr>
-<h2 style="color:darkblue;"><u> <i class="fab fa-js">6</i> The <mark>class</mark> declaration <mark>class</mark> /  <mark>constructor(){}</mark> / <mark>static</mark> / <mark>get</mark> / <mark>set</mark> / <mark>super</mark> / <mark>extends</mark>             
+<h2 style="color:darkblue;"><u> <i class="fab fa-js">6</i> The <mark>class</mark> declaration <mark>class</mark> /  <mark>constructor(){}</mark> / <mark>static</mark> / <mark>get</mark> / <mark>set</mark> / <mark>super</mark> / <mark>extends</mark> 
     <span id="browserSupport">
         <span><i class="fab fa-chrome"></i> 49 </span>
         <span><i class="fab fa-firefox"></i> 45 </span>
@@ -308,76 +308,76 @@ SYNTAX :    function <strong>Const</strong> (<i>arg1, arg2, ...</i>) {          
     <p> - JavaScript classes are basically a new enhanced Constructor versions from ES6, they provide improuved functionalities and better readability over constructor functions </p>
     <p> - <mark style="background-color:yellow;">class declarations are not hoisted</mark> (unlike Constructor Functions) and the code inside it runs <u>in strict mode</u> </p>
     <pre class="syntax">
-    class <i>ClassId_1</i> {                                                                  // class declaration (we can use class expressions as well ( let <i>ClassId</i> = class {} )
-        constructor(<i>arg1, ...</i>) {                                                       // initializes object instance properties <u>(assign value to object properties)</u>
-            this.<i>prop1</i> = <i>arg1</i>                                                          // initializing properties
-            <i>...</i>
-        }
+    class <strong>ClassId_1</strong> {                                                                  // class declaration (we can use class expressions as well ( let <i>ClassId</i> = class {} )
+        <small>constructor(<i>arg1, ...</i>) {</small>                                                       // initializes instance properties and methods, (if omitted the default (super) constructor is called)      
+            this;                                                                        // references the instance that will be created 
+        <small>}</small>
                 
-<span style="color:darkgray">// public fields and methods ----------------------------------------------------------</span>
-        <strong>methodId</strong>() {};                                                                 // available on the prototype chain (all sub instances inherit it) (present on <mark><i>ClassId_1</i>.prototype</mark>)
+<span style="color:darkgray">// public methods and fields ----------------------------------------------------------</span>
+        <strong>methodId</strong>() {                                                                   // available on the prototype chain (all instances including sub instances inherit it) (present on <mark><strong>ClassId_1</strong>.prototype</mark>)
+            this;                                                                        // references the instance that will be created 
+        }
             
-                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-12"> <span><i class="fab fa-chrome"></i> 72 </span><span><i class="fab fa-firefox"></i> 69 </span><span><i class="fab fa-opera"></i> 60 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span><span><i class="fab fa-safari"></i> 14.1 </span><span><i class="fab fa-node-js"></i> 12.0.0 </span></span>                
-        <strong>propId</strong> <i>= val</i>                                                      // Public Instance Field <u>(writable, enumerable, configurable)</u>   
-                                                                                          object instances will be initialized with this property <u>(Not accessible through the prototype chain)</u>    
-                                                                          writable, enumerable, configurable
-    
-    get|set
-    
-    
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-12"> <span><i class="fab fa-chrome"></i> 72 </span><span><i class="fab fa-firefox"></i> 69 </span><span><i class="fab fa-opera"></i> 60 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span><span><i class="fab fa-safari"></i> 14.1 </span><span><i class="fab fa-node-js"></i> 12.0.0 </span></span>    
+        <strong>propId</strong> <i>= val</i>                                                                   // will be owned by instances <u>(including sub instances)</u>, but not present on the prorotype chain (not present on <mark><strong>ClassId_1</strong>.prototype</mark>) (writable, enumerable, configurable)    
+        get|set <strong>propId</strong>(<i>val</i>) {                                                          // can be declared as getter or setter property  
+            this;                                                                        // references the instance that will be created    
+        }
     
     <span style="color:darkgray">// static -------------------------------------------------------------------------</span>
-        static <strong>methodId</strong>() {};                                                          // available on this class <u>and all subclasses</u>, NOT inherited by instances | NOT present in prototype chain
-                
+        static <strong>methodId</strong>() {                                                            // available on this class <u>and on all subclasses</u>
+            this;                                                                        // references this class (<mark><strong>ClassId_1</strong></mark>) 
+        };
+            
                                                                                         <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-12"> <span><i class="fab fa-chrome"></i> 72 </span><span><i class="fab fa-firefox"></i> 69 </span><span><i class="fab fa-opera"></i> 60 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span><span><i class="fab fa-safari"></i> 14.1 </span><span><i class="fab fa-node-js"></i> 12.0.0 </span></span>                
-        static <strong>propId</strong> <i>= val</i>                                                            // available on this class <u>and all any subclasses</u>, NOT inherited by instances | NOT present in prototype chain
-                                                                                          writable, enumerable, configurable 
+        static <strong>propId</strong> <i>= val</i>                                                            // available on this class <u>and on all subclasses</u> (writable, enumerable, configurable) 
+        static get|set <strong>propId</strong>(<i>val</i>) {                                                   // can be declared as getter or setter static property  
+            this;                                                                        // references this class (<mark><strong>ClassId_1</strong></mark>) 
+        };
+                                                                                          
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-15"> <span><i class="fab fa-chrome"></i> 94 </span><span><i class="fab fa-firefox"></i> 93 </span><span><i class="fab fa-opera"></i> 80 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 94 </span><span><i class="fab fa-safari"></i> NO </span><span><i class="fab fa-node-js"></i> 16.11.0 </span></span>                
+        static {                                                                       // static initialization block (multiple allowed) (used to perform some logic when initializing static properties)   
+            this;                                                                        // references this class (<mark><strong>ClassId_1</strong></mark>)     
+        }; 
+        
+<span style="color:darkgray">// private methods and fields ---------------------------------------------------------</span> 
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-15"> <span><i class="fab fa-chrome"></i> 84 </span><span><i class="fab fa-firefox"></i> 90 </span><span><i class="fab fa-opera"></i> 70 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 84 </span><span><i class="fab fa-safari"></i> 15 </span><span><i class="fab fa-node-js"></i> 14.6.0 </span></span>                
+        #<strong>methodId</strong>() {                                                                  // only available inside this class (<mark><strong>ClassId_1</strong></mark>), accessible as <mark>this.#<strong>methodId</strong>()</mark> where <mark>this</mark> references the instance that will be created    
+            this;                                                                        // references an object which prototype is <mark><strong>ClassId_1</strong>.prototype</mark> (the same <mark>this</mark> is shared between private function bodies)   
+        };
+        
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-15"> <span><i class="fab fa-chrome"></i> 74 </span><span><i class="fab fa-firefox"></i> 90 </span><span><i class="fab fa-opera"></i> 62 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span><span><i class="fab fa-safari"></i> 14.1 </span><span><i class="fab fa-node-js"></i> 12.0.0 </span></span>                
+        #<strong>propId</strong> <i>= val</i>                                                                  // only available inside this class (<mark><strong>ClassId_1</strong></mark>), accessible as <mark>this.#<strong>propId</strong></mark> where <mark>this</mark> references the instance that will be created     
+        get|set #<strong>propId</strong>(<i>val</i>) {                                                            can be declared as getter or setter property   
+            this;                                                                        // references an object which prototype is <mark><strong>ClassId_1</strong>.prototype</mark> (the same <mark>this</mark> is shared between private function bodies)   
+        };
+        
+    <span style="color:darkgray">// static -------------------------------------------------------------------------</span>
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-15"> <span><i class="fab fa-chrome"></i> 84 </span><span><i class="fab fa-firefox"></i> 90 </span><span><i class="fab fa-opera"></i> 70 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 84 </span><span><i class="fab fa-safari"></i> 15 </span><span><i class="fab fa-node-js"></i> 14.6.0 </span></span>                
+        static #<strong>methodId</strong>() {                                                           // only available inside this class (<mark><strong>ClassId_1</strong></mark>), accessible as <mark>this.#<strong>methodId</strong>()</mark> where <mark>this</mark> references this class (<mark><strong>ClassId_1</strong></mark>)    
+            this;                                                                        // references this class (<mark><strong>ClassId_1</strong></mark>) 
+        };
+            
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-12"> <span><i class="fab fa-chrome"></i> 72 </span><span><i class="fab fa-firefox"></i> 69 </span><span><i class="fab fa-opera"></i> 60 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 79 </span><span><i class="fab fa-safari"></i> 14.1 </span><span><i class="fab fa-node-js"></i> 12.0.0 </span></span>                
+        static #<strong>propId</strong> <i>= val</i>                                                           // only available inside this class (<mark><strong>ClassId_1</strong></mark>), accessible as <mark>this.#<strong>propId</strong></mark> where <mark>this</mark> references this class (<mark><strong>ClassId_1</strong></mark>)    
+        static get|set #<strong>propId</strong>(<i>val</i>) {                                                  // can be declared as getter or setter static property  
+            this;                                                                        // references this class (<mark><strong>ClassId_1</strong></mark>) 
+        };
         
         
+<span style="color:darkgray">// ------------------------------------------------------------------------------------</span>
+<span style="color:darkgray">// sub-class --------------------------------------------------------------------------</span>
+    class <strong>ClassId_2</strong> extends <strong>ClassId_1</strong> {                                                // creates a subclass (<strong>ClassId_1</strong> prototype of <strong>ClassId_2</strong>)   
+        <small>constructor(<i>arg, ...</i>) {</small>                                                 
+            super(<i>arg, ...</i>)                                                            <span style="color:orange;">// required <u>as first method</u> inside the subclasse's <mark>constructor</mark> statement (if present)</span>, it basically references the superclasse's <mark>constructor</mark> statement here    
+        <small>}</small> 
         
-                
-                
-                
-                
-                
-            
-            
-            
-            
-            <span style="color:darkgray">// private fields and method ----------------------------------------------</span>
-                <span style="color:orange;"> privateFields and privateMethods are badly supported right now (TC39 stage 3 (candidate)) [TESTED PARTIALLY: 2019-12-09] (<mark>#privateField</mark> | <mark>#privateMethod()</mark>)</span>   <span id="browserSupport" style="color:yellow;" title="Updated: 2019-12-09"> <span><i class="fab fa-chrome"></i> 72 </span><span><i class="fab fa-firefox"></i> NO </span><span><i class="fab fa-opera"></i> 62 </span><span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> NO </span><span><i class="fab fa-safari"></i> NO </span><span><i class="fab fa-node-js"></i> 12.0.0 </span></span>    
-                    <span style="color:orange;">they are only available inside the class block </span>
-                    <span style="color:orange;">I've tried but they throw some weird syntax errors so I thing it's too early to learn these   </span>
-                    
-                    
-                    
-                    
-            
-            
-            // cannot deleted with <mark>delete</mark>  
-            // private fields are accessible only inside <mark>constructor(){}</mark> (must be declared before)
-            
-            
-            ----------------------------------------
-            // what happens when we extend ?
-            
-            
-            
-            
-            
-            }    
-            
-            
-    <span style="color:darkgray">// sub-class ----------------------------------------------------------------------</span>
-            class <i>ClassId_2</i> extends <i>ClassId_1</i> {                                        // creates a subclass (<i>ClassId_2</i>) by setting the superclass (<i>ClassId_1</i>) as its prototype   
-                <small>constructor(<i>arg, ...</i>) {</small>                                                // NOT required in subclass <u>(if omitted the superclass <mark>constructor</mark> statement inherited as it is)</u>    
-                    super(<i>arg, ...</i>)                                                    <span style="color:orange;">// required <u>as first method</u> inside the subclasse's <mark>constructor</mark> statement (if present)</span>, it basically references the superclasse's <mark>constructor</mark> statement here    
-                <small>}</small> 
-                
-                super                                                                  // references the super-class prototype ( <mark><i>ClassId_1</i>.prototype</mark> ) 
-            }
+        <strong>fn(){</strong>  
+            super<strong>.prop|method</strong>                                                          // references the super-class property|method (<mark><strong>ClassId_1</strong>.prototype<strong>.prop|method</strong></mark>), available where <mark>this</mark> references the instance that will be created 
+        <strong>}</strong>  
+    }
     </pre>  
-<details class="example" open> 
+<details class="example"> 
 <summary> DEMO </summary> 
     <pre>
     let myObj = new MyClass(1, 2);                                                     // -! this throws a ReferenceError (because classes are NOT hoisted like Constructor Functions) 
@@ -387,17 +387,7 @@ SYNTAX :    function <strong>Const</strong> (<i>arg1, arg2, ...</i>) {          
             this.a = a;                                                                // the this keyword refers to the object instance 
             this.b = b;
         }
-        publicField = 'public field value';                                            // Public Instance Field (object instances will be initialized with it NOT present in prototype chain)     
         publicMethod(){ return 'public method returned value'; }                       // Public Instance Method (object instances are NOT initialized with it, present in the prototype chain)    
-        
-        static staticProperty = "Static Property";                                     // Public Static Field (accessible as class property only) 
-        static staticMethod(){ return "Static method"; };                              // Public Static Method (accessible as class method only)    
-        
-        get publicField2() { return this.a };                                          // Public Instance Getter Property (accessible through the prototype chain)     
-        set publicField2(val) { this.a = val };                                        // Public Instance Setter Property (accessible through the prototype chain)
-                                                                                           // the this keyword refers to the object instance
-        static get staticProperty2() { return this.staticProperty };                   // Public Static Getter Property (runs this function when we get this Static Property)     
-        static set staticProperty2(val) { this.staticProperty = val };                 // Public Static Setter Property (runs this function and passes the assigned value to it when we set this Static Property)   
     }                                                                                      // the this keyword refers to this class (MyClass)
     
     class SubClass extends MyClass{                                                    // sub-class created as 'MyClass' class as its prototype 
@@ -408,39 +398,37 @@ SYNTAX :    function <strong>Const</strong> (<i>arg1, arg2, ...</i>) {          
         getSuperClassMethod(){ return super.publicMethod() }                           // the super keyword refers to the super-class prototype (MyClass.prototype)
     }
     
+    
 // object instances -------------------------------------------------------------------
-    var myObj = new MyClass(1, 2);                                                     // -> {a:1, b:2, publicField:'public field value'}           // initialized object instances    
-    var mySubObj = new SubClass(1, 2, 3);                                              // -> {a:1, b:2, c:3, publicField:'public field value'}      // initialized object instances     
+    var myObj = new MyClass(1, 2);                                                     // creates instances    
+    var subObj = new SubClass(1, 2, 3);
     
-// class (Constructor) methods and properties available in the prototype chain --------// these class (Constructor) properties and methods are accessible through the prototype chain   
-    MyClass.prototype;                                                                 // -> {constructor:fn, publicMethod:fn, publicField2:(...)}  // the 'publicField2' is a getter or setter property   
-    SubClass.prototype;                                                                // -> {constructor:fn, getSuperClassMethod:fn} 
+    myObj;                                                                             // -> {a:1, b:2}
+    subObj;                                                                            // -> {a:1, b:2, c:3}
     
-    mySubObj.publicField2;                                                             // -> 1                               // the SubClass instance can access all the above prototype methods or properties because they are in the prototype chain    
-    mySubObj.getSuperClassMethod();                                                    // -> 'public method returned value'  // prototype method references the super-class prototype through the super keyword 
-    
-// static method and property ---------------------------------------------------------
-    MyClass.staticProperty;                                                            // -> "Static Property"               // static property is basically a class property    
-    MyClass.staticMethod();                                                            // -> "Static Method"                 // static method is basically a class method    
-    MyClass.staticProperty2;                                                           // -> "Static Property"               // static property called as getter    
-    
-    SubClass.staticMethod();                                                           // -> "Static Method"                 // sub-classes inherit static methods and properties from their super-class   
     
 // compatible with Constructor Functions ----------------------------------------------
     function MyConstructor(a, b) { this.a = a; this.b = b; };                          // constructor function 
     
     class SubClass_ extends MyConstructor {};                                          // we can extend constructor functions (compatible) 
     </pre>  
-    
-    
+    <p> - static public fields and methods </p>
     <pre>
-// public static fields ---------------------------------------------------------------
     class TestClass {
         static stMethod(){ return 'stMethod-val' };
         static stProp = 'stProp-val';
     }
     
-    class SubClass extends TestClass{}                                                 // static methods are available on subclasses as well    
+    class SubClass extends TestClass{                                                  // static methods are available on subclasses as well    
+        static subStProp = '!';
+        static {                                                                       // static initialization block used to perform some logic on static properties    
+            const suProp = super.stProp;
+            this.subStProp = suProp.toUpperCase() + this.subStProp;
+        }
+    }                                                 
+    
+    Object.getOwnPropertyNames(TestClass.prototype)                                    // -> ['constructor']                      // static properties or methods are not on the prototype chain     
+    Object.getOwnPropertyNames(SubClass.prototype)                                     // -> ['constructor']    
     
     
     testObj = new TestClass()
@@ -454,23 +442,99 @@ SYNTAX :    function <strong>Const</strong> (<i>arg1, arg2, ...</i>) {          
     TestClass.stProp                                                                   // -> 'stMethod-val'                       // available on the class itslef 
     TestClass.stMethod()                                                               // -> 'stProp-val'
     
-    SubClass.stProp                                                                    // -> 'stMethod-val'                       // -! also available on any subclasses   
+    SubClass.stProp                                                                    // -> 'stMethod-val'                       // -! also available on all subclasses   
     SubClass.stMethod()                                                                // -> 'stProp-val'
+    
+    SubClass.subStProp                                                                 // -> 'STPROP-VAL!'                        // initialized with the static initialization block   
     </pre>
-    
-    
-    
-    
-    
-    
-    
+    <p> - public fields and methods </p>
     <pre>
-// private fields ---------------------------------------------------------------------
+    class TestClass {
+        method(){ return 'method-val' };                                               // present in the prototype chain, instances will inherit this method but won't own it    
     
+        prop = 'prop-val';                                                             // not present in the prototype chain, but instances (including sub instances) will own this property   
+    }
+    
+    class SubClass extends TestClass{}
+    
+    obj = new TestClass() 
+    subObj = new SubClass() 
+    
+    
+  // properties -----------------------------------------------------------------------
+    Object.getOwnPropertyNames(TestClass.prototype)                                    // -> ['constructor', 'method']            // only public methods are present on the prototype chain    
+    Object.getOwnPropertyNames(SubClass.prototype)                                     // -> ['constructor']    
+    
+    obj.prop                                                                           // -> 'prop-val'
+    subObj.prop                                                                        // -> 'prop-val'
+    
+    obj.hasOwnProperty('prop')                                                         // -> true                                 // property own by all instances  
+    subObj.hasOwnProperty('prop')                                                      // -> true                                 // -! including sub-instances
+    
+    subObj.prop = 'new-val'                                                                                                       // set
+    subObj.prop                                                                        // -> 'new-val'                            // get
+    
+    
+  // methods --------------------------------------------------------------------------
+    Object.getOwnPropertyNames(TestClass.prototype)                                    // -> ['constructor', 'method']            // only public methods are present on the prototype chain    
+    Object.getOwnPropertyNames(SubClass.prototype)                                     // -> ['constructor']    
+    
+    obj.method()                                                                       // -> 'method-val'                         // method present in the prorotype chain 
+    subObj.method()                                                                    // -> 'method-val'
+    
+    obj.hasOwnProperty('method')                                                       // -> false                                // only inherited not own by instances      
+    subObj.hasOwnProperty('method')                                                    // -> false
     </pre>
-    
-    
-    
+    <p> - careful when declaring getter or setter properties </p>
+    <pre>
+    class TestClass {
+        get pubProp1(){};                                                              // the right way to declare getter|setter public property
+        set pubProp1(val){}
+        
+        pubProp2 = 21; 
+        get pubProp2(){};                                                              // -! never triggers because the property is already been declared    
+        get pubProp2(val){};                                                           // -! never triggers because the property is already been declared    
+    }
+    </pre>
+    <p> - private method and properties </p>
+    <pre>
+    class TestClass {
+// private methods and properties -----------------------------------------------------
+        #privMethod() { return 'privMethod-val' };                                     // available only inside this class body    
+        #privProp = 'privProp-val';
+        
+        constructor(){
+            this.#privMethod();                                                        // accessible where <mark>this</mark> references the instance that will be created    
+            this.#privProp;
+        }
+        
+        someMethod(){
+            this.#privMethod();                                                        // accessible where <mark>this</mark> references the instance that will be created    
+            this.#privProp;
+        }
+        
+// this keyword in private method bodies ----------------------------------------------
+        #privMethod2() { return this }
+        #privMethod3() { 
+            this.#privMethod2() === this;                                              // -> true                                 // the <mark>this</mark> keyword is the same object in all private function body 
+        }
+        
+        
+// static private methods and properties ----------------------------------------------
+        static #privStaticMethod() { return 'privaStaticMethod-val' };                 // available only inside this class body    
+        static #privStaticProp = 'privaStaticProp-val';
+        
+        static someStaticMethod() {
+            this.#privStaticMethod()                                                   // accessible where <mark>this</mark> references this class (<mark>TestClass</mark>)    
+            this.#privStaticProp
+        }
+        
+        static {
+            this.#privStaticMethod()                                                   // accessible where <mark>this</mark> references this class (<mark>TestClass</mark>)    
+            this.#privStaticProp
+        }
+    }
+    </pre>
 </details>
 <details class="example">
     <summary> Example : </summary> 
