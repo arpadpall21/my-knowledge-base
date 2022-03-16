@@ -1,15 +1,7 @@
-class BaseClass {
-    constructor(){
-        this.p1 = 21
-    }
-}
-
-class TestClass extends BaseClass {
-    constructor(){
-        super()
-    }
+class TestClass {
+    prop = 'prop-val'
 }
 
 const myObj = new TestClass()
 
-console.log( myObj )
+console.log( Object.getOwnPropertyNames(myObj) )

@@ -1,19 +1,19 @@
-class BaseClass1:
-    def __init__(self):
-        self.p1 = 21
+class BaseClass:
+    def __init__(self, a):
+        self.a = a
     
-    def someMethod():
-        return 'someMethod-val'
+    baseProp = 100
     
-class BaseClass2:
-    def __init__(self):
-        self.p2 = 22
-    
-class TestClass(BaseClass1):
-    def __init__(self):
-        # super()
-        self.p3 = 23
+    def baseMethod(cls):
+        return 201
+
+class TestClass(BaseClass):
+    def __init__(self, a, b):
+        super(self, a)
+        self.b = b
     
     
-myObj = TestClass()
-print( myObj.p3 )
+myObj = TestClass('a', 'b')
+
+
+print( myObj.__dict__ )
