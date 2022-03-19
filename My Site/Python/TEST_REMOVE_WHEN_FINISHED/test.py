@@ -1,19 +1,26 @@
-class BaseClass:
-    def __init__(self, a):
-        self.a = a
+class D:
+    pass
     
-    baseProp = 100
+class C:
+    pass
     
-    def baseMethod(cls):
-        return 201
-
-class TestClass(BaseClass):
-    def __init__(self, a, b):
-        super(self, a)
-        self.b = b
+class B:
+    pass
     
+class A(B, C):
+    pass
     
-myObj = TestClass('a', 'b')
+obj = A()
 
 
-print( myObj.__dict__ )
+print( issubclass(A, B) )
+print( issubclass(A, C) )
+print( issubclass(C, A) )
+
+print( issubclass(D, (A, B, C)) )
+
+
+# print( type(obj) )
+# print( obj.__class__ )
+
+

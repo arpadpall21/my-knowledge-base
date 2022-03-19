@@ -22,29 +22,74 @@
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
 </caption>
     <tr>
-        <th style="width:30%;"> Method / Property / statement ect... </th>
+        <th style="width:30%;"> Attribute / Method </th>
         <th> Description </th>
     </tr>
-    <tr class="0">
+    <tr class="05.01">
         <td> 
-            demo prop 
+            <strong>class</strong>.__bases__
         </td>
         <td> 
-            - demo description 
-            <span class="browserSupport" title="updated : yyyy-mm-dd">
-                <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-                <span><i class="fab fa-firefox"></i>  </span>
-                <span><i class="fab fa-opera"></i>  </span>
-                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i>  </span>
-                <span><i class="fab fa-safari"></i>  </span>
-                <span><i class="fab fa-node-js"></i>  </span>
-            </span>
+            - returns the direct parent classes of this class in a tuple (left-to-right order)
         </td>
     </tr>
-
-
-
-
+    <tr class="15.02">
+        <td> 
+            <strong>val</strong>.__class__
+        </td>
+        <td> 
+            - returns the <strong>val</strong>'s direct parent class 
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            <strong>class</strong>.__mro__
+        </td>
+        <td> 
+            - returns all parent classes of this class in a tupe, in inheritance lookup order (method resolution order)
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            isinstance(<strong>val:any</strong>, <strong>class</strong>)
+        </td>
+        <td> 
+            - returns <mark>True</mark> if <strong>val</strong> appears anywhere in the inheritance chain of <strong>class</strong>(es), otherwise returns <mark>False</mark>   
+        </td>
+    </tr>
+        <tr class="10.02"><td></td><td></td></tr>
+    <tr class="10.03">
+        <td> 
+            isinstance(<strong>val:any</strong>, (<strong>class</strong><i>, ...</i>))
+        </td>
+        <td> 
+            
+        </td>
+    </tr>
+    <tr class="10.04">
+        <td> 
+            issuclass(<strong>class_A</strong>, <strong>class_B</strong>)
+        </td>
+        <td> 
+            - returns <mark>True</mark> if <strong>class_A</strong> is direct subclass of <strong>class_B</strong><i>, ...</i>, otherwise returns <mark>False</mark>
+        </td>
+    </tr>
+        <tr class="10.05"><td></td><td></td></tr>
+    <tr class="10.06">
+        <td> 
+            issuclass(<strong>class_A</strong>, (<strong>class_B</strong><i>, ...</i>))
+        </td>
+        <td> 
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            type(<strong>val:any</strong>)
+        </td>
+        <td> 
+            - returns the <strong>val</strong>'s direct parent class 
+        </td>
+    </tr>
 </table>
     <br>
     <details class="example" id="notes">
@@ -54,57 +99,382 @@
 <h2 style="color:green;"><u> Useful Links : </u></h2>
     
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    
+    <p> - private attributes and methods are not enforced by Python (they still can be accessed from outside somehow) </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Python is a class-based programming language where classes can have multiple base classes </p>
+    <p> - the <mark>object</mark> class sits on the top of the inheritance chain </p>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> Multiple Inheritance <mark>__mro__</mark> / <mark>__bases__</mark>  </h2>
+    <p> - Python supports multiple inheritance (a class can have multiple base classes) </p>
+    <p> - Python uses depth-first left-to-right algorithm when looks up in the class inheritance chain </p>
+    <pre>
+       G        // class lookup    A -> B -> C -> D -> E -> F -> G -> H -> object
+       |        // class A has 3 base classes (B, D, H)
+  C  E F        // B, D, H classes are sibling classes to each other 
+  |  |/        
+  B  D  H
+    \|/
+     A
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    class G:                                                                           // the above class inheritance graph 
+        pass
+        
+    class C:
+        pass
+    
+    class E:
+        pass
+    
+    class F(G):
+        pass
+    
+    class B(C):
+        pass
+    
+    class D(E, F):
+        pass
+    
+    class H:
+        pass
+    
+    class A(B, D, H):
+        pass
+    
+                                                                                       // returns the class lookup path 
+    A.__mro__                                                                          // -> (&lt;class '__main__.A'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.C'&gt;, &lt;class '__main__.D'&gt;, &lt;class '__main__.E'&gt;, &lt;class '__main__.F'&gt;, &lt;class '__main__.G'&gt;, &lt;class '__main__.H'&gt;, &lt;class 'object'&gt;)
+    C.__mro__                                                                          // -> (&lt;class '__main__.C'&gt;, &lt;class 'object'&gt;)
+    D.__mro__                                                                          // -&gt; (&lt;class '__main__.D'&gt;, &lt;class '__main__.E'&gt;, &lt;class '__main__.F'&gt;, &lt;class '__main__.G'&gt;, &lt;class 'object'&gt;)
+    
+                                                                                       // returns the direct parent classes of this class   
+    A.__bases__                                                                        // -> (&lt;class '__main__.B'&gt;, &lt;class '__main__.D'&gt;, &lt;class '__main__.H'&gt;)
+    D.__bases__                                                                        // -> (&lt;class '__main__.E'&gt;, &lt;class '__main__.F'&gt;)
+    G.__bases__                                                                        // -> (&lt;class 'object'&gt;)
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> Classes <mark>class</mark> </h2>
+    <pre class="syntax">
+    class <strong>ClassId_1</strong>:
+        <i>docString:str</i>                                                                  // document string (docstring) is readable by <mark><strong>ClassId_1</strong>.__doc__</mark> (used to document the class)
+        
+        <small>def __init__(<i>self, arg, ...</i>):</small>                                                  // initializes instance attributes and methods 
+            self                                                                       // references the instance that will be created (always the 1st argument) 
+    
+<span style="color:darkgray;">// public methods and attributes ------------------------------------------------------</span>
+        def <strong>methodId</strong>(self, <i>arg, ...</i>):                                                  // owned by this class and accessible by classes and instances on the prototype chain    
+            self                                                                       // references the instance that will be created (always the 1st argument) 
 
+        <strong>attrId</strong><i> = val</i>                                                                   // owned by this class and accessible by classes and instances on the prototype chain    
+                                                                                          <span style="color:orange;">if it holds a mutable data, members who inherit it can modify its value </span>
+    
+    <span style="color:darkgray;">// class methods ------------------------------------------------------------------</span>
+        <em>@classmethod</em>
+        def <strong>methodId</strong>(cls, <i>arg, ...</i>):                                                   // (method called on the class directly) owned by this class and accessible by classes and instances on the prototype chain  
+            cls                                                                        // references the class in the inheritance chain that calls this method  
 
+        <em>@staticmethod</em>
+        def <strong>methodId</strong>(<i>arg, ...</i>):                                                        // same as <mark>@classmethod</mark> but does not get the class as its 1st argument  
+    
+    
+<span style="color:darkgray;">// private methods and attributes -----------------------------------------------------</span>
+        def __<strong>methodId</strong>(self, <i>arg, ...</i>):                                                // callable only inside this class (not prensent in the inheritance chain)
+            self                                                                       // references the instance that will be created (always the 1st argument)   
 
-
-
+        __<strong>attrId</strong><i> = val</i>                                                                 // accessible only inside this class (not prensent in the inheritance chain)
+        
+        def <strong>someFn</strong>(self):
+            self.__<strong>attrId</strong>                                                              // accessing private attribute 
+            self.__<strong>methodId</strong>()                                                          // calling private method  
+    
+    
+<span style="color:darkgray;">// not so private ---------------------------------------------------------------------</span>
+    def _<strong>methodId</strong>(self):                                                               // <mark>_</mark> (single underscore) prefixed attributes|methods are not private, but it's a convertion to use them privately    
+    
+    _<strong>attrId</strong><i> = val</i>
+    
+    
+<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
+<span style="color:darkgray;">// sub-class --------------------------------------------------------------------------</span>
+    class <strong>ClassId_2</strong><small>(<i>ClassId_1, ...</i>)</small>:                                                   // multiple base classes can be passed    
+        <em>def __init__(self, <i>arg, ...</i>):</em>
+            super().__init__(<i>arg, ...</i>)                                                 // this is how we call the super object initialization    
+        
+        <em>def <strong>methodId</strong>(self):</em>
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-19"> <span><i class="fab fa-python"></i> 3.0 </span></span>                
+            super().<strong>attr|method</strong>                                                        // references the <u>first-found</u> class attribute|method in the inheritance chain 
+                                                                                        <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-19"> <span><i class="fab fa-python"></i> 2.7 </span></span>                
+            super(<strong>ClassId_2</strong>, self).<strong>attr|method</strong>                                         // references the <u>first-found</u> class attribute|method in the inheritance chain 
+    
+    
+<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
+<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
+    <strong>class</strong>.__doc__                                                                      // returns the class's docstring (<i>docString</i>)     
+    
+    del <strong>class</strong>.<strong>method|attr</strong>                                                              // deletes the specified class method or attribute   
+    
+    <strong>class</strong>.<strong>someMethod</strong>(<strong>obj</strong>, <i>arg, ...</i>)                                                    // same as calling <mark><strong>obj</strong>.<strong>someMethod</strong>(<i>arg, ...</i>)</mark>   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    class B():
+        def __init__(self, a):
+            self.a = a
+        
+    class A(B):
+        def __init__(self, a, b):
+            super().__init__(a)                                                        // references the super initializator function with an argument   
+            self.b = b
+    
+    obj = A('a', 'b')                                                                  // creates an object 
+    obj.__dict__                                                                       // -> {'a': 'a', 'b': 'b'}
+    </pre>
+    <p> - method and attribute inheritance </p>
+    <pre>
+    class B():
+        attr1 = 'val'                                                                  // attributes owned by this class an present in the inheritance chain 
+        attr2 = [1, 2]                                                                   // -! carerul mutable data can be modified by those who inherit it 
+        
+        def method(self):                                                              // method owned by this class and present in the inheritance chain 
+            return 'method-val'
+        
+    class A(B):
+        pass
+    
+    
+    obj = A()
+    
+    A.attr1                                                                            // -> 'val'            // inherited by all subclasses 
+    A.method(obj)                                                                      // -> 'method-val'
+    obj.attr1                                                                          // -> 'val'            // inherited by all instance 
+    obj.method()                                                                       // -> 'method-val
+    
+    obj.attr2.append(3)                                                                // -! inherited mutable data can be modified 
+    B.attr2                                                                            // -> [1, 2, 3]  
+    
+    obj.__dict__                                                                       // -> {}
+    obj.attr1 = 'new-val'                                                              // object creates its own attribute (does not set the inherited data)   
+    obj.__dict__                                                                       // -> {'attr1': 'new-val'}  
+    A.attr1                                                                            // -> 'val;            // inheritable data not modified
+    </pre>
+    <p> - <mark>@classmethod</mark> / <mark>@staticmethod</mark> </p>
+    <pre>
+    class B:
+        @classmethod
+        def clsMethod(cls, a):                                                         // called on this or on any sub-classes 
+            cls                                                                        // -> class B  | class A   // references the class that calls this method    
+            return a
+        
+        @staticmethod
+        def stMethod(a):                                                               // does the same as <mark>@classmethod</mark>, but does not have the class as its 1st argument    
+            return a
+    
+    class A(B):
+        pass
+    
+    
+     B.clsMethod('x')                                                                  // -> 'x'
+     B.stMethod('x')                                                                   // -> 'x'
+    
+     A.clsMethod('x')                                                                  // -> 'x'              // inherited from the super class   
+    </pre>
+    <p> - private methods and attributes </p>
+    <pre>
+    class B:
+        __privateAttr = 'privAttr-val'                                                 // only accessible inside this class 
+        
+        def __privateMethod(self):                                                     // only callable inside this class 
+            return 'privMethod-val'
+        
+        def getPrivates(self):
+            prvAttr = self.__privateAttr                                               // this is how we access privates 
+            prvMethod = self.__privateMethod()
+            
+            return prvAttr, prvMethod                                                  // making private values public 
+        
+        def setPrivates(self):
+            self.__privateAttr = 'new-attr-val'                                        // we can reassign privates like this 
+            self.__privateMethod = lambda: 'new-method-val'
+    
+    class A(B):
+        pass
+    
+    obj = A()
+    
+    B.__privateAttr                                                                    // -> AttributeError    // privates are not accessible from outside their class at all 
+    A.__privateAttr                                                                    // -> AttributeError 
+    obj.__privateAttr                                                                  // -> AttributeError
+    
+    obj.getPrivates()                                                                  // -> ('privAttr-val', 'privMethod-val')
+    obj.setPrivates()  
+    obj.getPrivates()                                                                  // -> ('new-attr-val', 'new-method-val')
+    </pre>
+    <p> - <mark>super()</mark> </p>
+    <pre>
+    class C:
+        def someMethod(self):                                                          // never reached (there's a <mark>someMethod</mark> method closer to the caller)    
+            return 'class-C method'
+        
+        someAttr = 'class-C attr'
+        
+    class B:
+        def someMethod(self):
+            return 'class-B method'
+    
+    class A(B, C):
+        def getSupers(self):
+            super().someMethod()                                                       // -> 'class-B method'     // references the first-found super class method 
+            super().someAttr                                                           // -> 'class-C attr'       // references the first-found super class attribute    
+    
+    obj = A()
+    obj.getSupers()
+    
+    A.__mro__                                                                          // -> (&lt;class '__main__.A'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.C'&gt;, &lt;class 'object'&gt;)   // inheritance chain order  
+    </pre>
+    <p> - <mark>__doc__</mark> / <mark>del</mark> / calling method on the class </p>
+    <pre>
+    class A:
+        'some class description'
+        
+        attr = 'someAttrVal'
+        
+        def method(self, a):
+            return a
+    
+// docstring --------------------------------------------------------------------------
+    A.__doc__                                                                          // -> 'some class description'   
+    
+    
+// calling method on the class --------------------------------------------------------
+    obj = A()
+    
+    obj.method('x')                                                                    // -> 'x'
+    A.method(obj, 'x')                                                                 // -> 'x'    // does the same as above 
+    
+// deleteting class attributes and methods --------------------------------------------
+    hasattr(A, 'attr')                                                                 // -> True 
+    hasattr(A, 'method')                                                               // -> True 
+    
+    del A.attr                                                                         // deletes the class attribute  
+    del A.method                                                                       // deletes the class method   
+    
+    hasattr(A, 'attr')                                                                 // -> False 
+    hasattr(A, 'method')                                                               // -> False 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> The <mark>isinstance()</mark> / <mark>issubclass()</mark> / <mark>type()</mark> / <mark>__class__</mark> methods and attribute </h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    class D:
+        pass
+        
+    class C:
+        pass
+        
+    class B:
+        pass
+        
+    class A(B, C):
+        pass
+        
+    obj = A()
+    
+// isinstance() -----------------------------------------------------------------------
+    isinstance(obj, A)                                                                 // -> True           // object appears anywere on the inheritance chain of class A  
+    isinstance(obj, object)                                                            // -> True
+    isinstance(obj, D)                                                                 // -> False
+    
+    isinstance(obj, (A, B, C, D))                                                      // -> Ture           // object appears anywere on the inheritance chain of one of the listed classes 
+    
+    
+// issubclass() -----------------------------------------------------------------------
+    isubclass(A, B)                                                                    // -> True           // class A is direct subclass of class B  
+    issubclass(A, C)                                                                   // -> True
+    issubclass(C, A)                                                                   // -> False
+    
+    issubclass(D, (A, B, C))                                                           // -> False          // class D is not subclass of any of the listed classes   
+    
+    
+// type() / __class__ -----------------------------------------------------------------
+    type(obj)                                                                          // -> class A        // returns the instance's class 
+    obj.__class__                                                                      // -> class A
+    </pre>
+</details>
+    
+    
+    
+    
+    
+    
+    
 <!--
 ---------------------------------------------------------------------------------------------
 WRITE DOWN EVERYTHING NEW
 ---------------------------------------------------------------------------------------------
-
-
-- Classes/Objects
-    - in python an object is not a dictionary!!! (obj.key VS dict["key"])
-    - python is OOP 
-    - the 'self' = parameter does not have to be called self
-    - parent|child class 
-    - object properties are caled attributes here 
-    - dict(obj)    - to print as dictionary
-    - passing self as 1st argument won't count in the final object as 1st argument 
-    - class MyClass(ParentClass)    -> extend 
-    - super() 
-    - allows to have multiple base classes 
-    - the first argument represents the object that will be created (self)
     - objects are immubable 
     - del deletes object attributes 
-    - <obj>.__dict__  - dictionary of the object's own attributes 
-    - we also have docstring here (like functions do) (printalbel with __doc__ - like functions do)
-    - both public property and function are inherited by instances (not owned) 
-    - Class() - creates a new object instance 
-    - the __init__(self) - like constructor 
-    - we call 'data attribute' and 'method' 
-    - calling <instance>.method() is the same as calling <Class>.method(<instance>) 
-    - when the called a method or attribute is not found in the object instance then it is searched in its class 
-    - static methods are specified with @classmethod or @staticmethod 
-    - static attributes are accessible directly (apparently) -> <Class>.prop (so static attibutes are not that static => whell they are accessible by instances but instances cannot modify it, => yes they can when immutabl, => so instance will create their own if the static is immutable but modify the classes static attribute if it it's immutable)
-    - <val>.__class__ - returns the direct class of the data 
-    - isinstance(obj, class)              <- True if instance of class (class is on the prototype chain) 
-    - issubclass(parentClass, class)      <- True if class is somewhere subclass of parntClass
-    - multiple inheritance allowed (in this calse the lokup is from left-to-right) - depth-first search (searches fully the first class )
-    - in <Class>(...) we can specify expression to compute a class 
-    - because there are diamond paths (for example the object class can be accessed on multiple routes the dynamic class order algorithm ordert the class access path that the object class is accessed only once but preservers the depth-first search left-to right way to do shit)
+    - no object literals here 
+    
+    
+    
+    
+    
+    
+    
+    - <Class>.__mro__ 
+                  - (Method Resolution Order) - prints the class resolution path 
+    - <Class>.__bases__ 
+                  - returns the direct parent classes of this class  
+    - isinstance(obj, class) 
+                  - True if instance of class (class is on the prototype chain) 
+    - issubclass(parentClass, class) 
+                  - True if class is somewhere subclass of parntClass
+    - type(val) 
+                  - returns the <val>'s direct class 
+    - <val>.__class__ 
+    
+    
+    
+                  - returns the direct class of the data 
+    - <obj>.__dict__  
+                  - dictionary of the object's own attributes 
+    - getattr(<obj>, attr:str)
+                  - returns the attribute's value (raises an AttributeError if the attribute is not found)
+    - hasattr(<obj>, attr:str)
+                  - return True if the object has the specified attribute 
+    - setattr(<obj>, attr:str, val:any)
+                  - sets a new attribute to the object 
+    - delattr(<obj>, attr:str)
+    del <obj>.<attr>
+                  - deletes the specified attribute (raises an AttributeError if the attribute is not found)
+    - dir(<obj>)
+                  - returns the available attributes of the current scope (no <obj>)
+                  - returns the available attributes of (<obj>)
+                  - available attribute => all attribute that are reachable on the object 
+    
+    
+    
+    
+    
+    
+    
     
     
     
     
 - iterators and generators 
+    - well this is cool and all but it's better to use generator functions for this goal 
     - iterators implement the __iter__() and __next__()
     - the iter(<iterable>) returns an iterator then we can use the next() on the iterator object to get the next value 
-    - the for loop actually creates an iterator and execute the next() method for each loop 
+    - the for loop actually creates an iterator and execute the next() method for each cycle
     - calling the next() on the iteration is over will rise an exception
     - this essentially creates a generator 
     - StopIteration statement stops the iteration 
@@ -113,17 +483,67 @@ WRITE DOWN EVERYTHING NEW
         - the generator function returns a generator ojbect on which we can call the iter() or loop through it
 
 
+    <obj>.__iter__
+                - object having it is iterable (ex: hasattr(<obj>, __iter__))
+    i for i in <iterable>
+                - creates a generator object from <iterable>
+
+
+
+
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
     - abstract class 
-    - is there any object shorhand object initialization?
+    - is there any object shorhand object initialization? => NOPE!
     - what about global scope 
     - where can I see on the class which attributes are present on the prototype chain (<Class>.prototype in JavaScript)
     
+    
 -->
 
+
+
+<!--
+    - in python an object is not a dictionary!!! (obj.key VS dict["key"])
+    - python is OOP (but not prototype-based language)
+    - the 'self' = parameter does not have to be called self
+    - parent|child class 
+    - object properties are caled attributes here 
+
+
+    - dict(obj)    - to print as dictionary
+    - passing self as 1st argument won't count in the final object as 1st argument 
+    - class MyClass(ParentClass)    -> extend 
+    - super() 
+    - allows to have multiple base classes 
+    - the first argument represents the object that will be created (self) 
+- Classes/Objects
+    - we also have docstring here (like functions do) (printalbel with __doc__ - like functions do)
+
+    - both public property and function are inherited by instances (not owned) 
+    - Class() - creates a new object instance 
+    - the __init__(self) - like constructor 
+    - we call 'data attribute' and 'method' 
+    - when the called a method or attribute is not found in the object instance then it is searched in its class 
+    - static methods are specified with @classmethod or @staticmethod 
+        - transform the method into classmethod (first argument will be this class) 
+        - classmethod can be called on the instance as well (but the received 1st argument is the class) 
+    - static attributes are accessible directly (apparently) -> <Class>.prop (so static attibutes are not that static => whell they are accessible by instances but instances cannot modify it, => yes they can when immutabl, => so instance will create their own if the static is immutable but modify the classes static attribute if it it's immutable)
+    - calling <instance>.method() is the same as calling <Class>.method(<instance>) 
+    - multiple inheritance allowed (in this calse the lokup is from left-to-right) - depth-first search (searches fully the first class )
+    - because there are diamond paths (for example the object class can be accessed on multiple routes the dynamic class order algorithm ordert the class access path that the object class is accessed only once but preservers the depth-first search left-to right way to do shit)
+    - references the upper class (perform a class lookup to find the searched class attribute or class method) (gets the first found)
+    - no private variable but the convention is prefixing with __ (double underscore) (data attribute, or method)
+    
+    - super() syntax from version 3.0
+    - super(<thisClass>, <self>) -> 2.7
+    - the super() always tries to find its own classe's super 
+    
+    
+    
+-->
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr><hr><hr><hr><hr>
