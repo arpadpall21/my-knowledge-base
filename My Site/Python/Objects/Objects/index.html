@@ -10,7 +10,7 @@
 </head>
 <body>
 <h1> Object (ver 4.0.0) </h1>
-    <p> Updated ( 2022-03-18 )</p>
+    <p> Updated ( 2022-03-20 )</p>
     <p class="sitenav"> <a href="../../../index.html">MySite></a>
         <a href="../../index.html">Python></a> 
         <a href="../index.html">Objects></a> Object
@@ -27,24 +27,66 @@
     </tr>
     <tr class="0">
         <td> 
-            demo prop 
+            <strong>obj</strong>.__dict__
         </td>
         <td> 
-            - demo description 
-            <span class="browserSupport" title="updated : yyyy-mm-dd">
-                <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-                <span><i class="fab fa-firefox"></i>  </span>
-                <span><i class="fab fa-opera"></i>  </span>
-                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i>  </span>
-                <span><i class="fab fa-safari"></i>  </span>
-                <span><i class="fab fa-node-js"></i>  </span>
-            </span>
+            - returns a dictionary which holds the object's own attributes (called mappingproxy) <br>
+            - gives full access to the object's attributes (we can get|set object attributes through it)
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            getattr(<strong>obj</strong>, <strong>attr:str</strong>)
+        </td>
+        <td> 
+            - returns the object's attribute value 
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            hasattr(<strong>obj</strong>, <strong>attr:str</strong>)
+        </td>
+        <td> 
+            - returns <mark>True</mark> if the object has the specified attribute, return <mark>False</mark> otherwise  
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            setattr(<strong>obj</strong>, <strong>attr:str</strong>, <strong>val:any</strong>)
+        </td>
+        <td> 
+            - sets the specified attribute to the object 
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            delattr(<strong>obj</strong>, <strong>attr:str</strong>)
+        </td>
+        <td> 
+            - deletes the specified attribute from the object 
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            del <strong>obj.attr</strong>
+        </td>
+        <td> 
+            - deletes the object's attribute 
         </td>
     </tr>
 
 
 
 
+
+    <tr class="0">
+        <td> 
+            
+        </td>
+        <td> 
+            - 
+        </td>
+    </tr>
 </table>
     <br>
     <details class="example" id="notes">
@@ -56,28 +98,179 @@
 <h2 style="color:green;"><u> Remember This : </u></h2>
     
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <pre class="syntax">
+    <strong>class</strong>()                                                                            // creates a new object instance of <strong>class</strong> type   
+    
+    <strong>obj.attr</strong><i> = val:any</i>                                                                 // gets or sets the object's attribute   
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    class Object(object):
+        pass
+    
+    obj = Object()
+    
+    obj.attr = 21                                                                      // setting attribute value 
+    obj.method = lambda x : x**2
+    
+    obj.attr                                                                           // -> 21         // get attribute value 
+    obj.method(3)                                                                      // -> 9
+    
+    del obj.method                                                                     // delete object attribute   
+    hasattr(obj, 'method')                                                             // -> False 
+    
+    
+// instances derived directly from the <mark>object</mark> class cannot have attributes ------------
+    obj = object()                                                                     // instance cannot have any attributes   
+    
+    obj.attr = 21                                                                      // -! raises an AttributeError 
+    
+    
+// objects are mutable ----------------------------------------------------------------
+    class Object(object):
+        pass
+        
+    obj1 = Object()
+    obj1.attr = 21
+    
+    obj2 = obj1                                                                        // <mark>obj2</mark> and <mark>obj1</mark> varialbes point to the same underlying data (objects are mutalbe)
+    
+    obj2.attr = 22
+    obj1.__dict__attr                                                                  // -> {'attr': 22}
+    obj2.__dict__attr                                                                  // -> {'attr': 22}
+    
+  // primitives are immutable -----------------
+    prm1 = 21
+    prm2 = prm1                                                                        // <mark>prm2</mark> creates its own copy from <mark>prm1</mark> (primitives are immutable)  
+    
+    prm2 = 22
+    prm1                                                                               // -> 21
+    prm2                                                                               // -> 22
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> The <mark>__dict__</mark> / <mark>getattr()</mark> / <mark>hasattr()</mark> / <mark>setattr()</mark> / <mark>delattr()</mark> / <mark>dir()</mark> / <mark>globals()</mark> attribute and methods </h2>
+<details class="example" open>
+<summary> DEMO </summary>
+    <p> - <mark>__dict__</mark> </p>
+    <pre>
+    class Object(object):
+        pass
+        
+    obj1 = Object()
+    obj1.attr = 21 
+    
+    obj1.__dict__                                                                      // -> {'attr': 21}         // basically gives full access to the object's attributes as dictionary   
+    
+    obj1.__dict__["attr2"] = 22                                                        // setts a new object attribute through the mapping proxy 
+    obj1.__dict__                                                                      // -> {'attr': 21, 'attr2': 22}
+    
+    del obj1.__dict__["attr"]                                                          // deleting object attributes   
+    del obj1.__dict__["attr2"]
+    
+    obj1.__dict__                                                                      // -> {}
+    
+    
+// on classes -------------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
+    
+    </pre>
+    <p> - <mark>getattr()</mark> / <mark>hasattr()</mark> / <mark>setattr()</mark> / <mark>delattr()</mark> / <mark>del</mark> </p>
+    <pre>
+    class Object(object):
+        pass
+        
+    obj1 = Object()
+
+    setattr(obj1, 'attr1', 21)                                                         // sets new attributes 
+    setattr(obj1, 'attr2', 22)
+    
+    getattr(obj1, 'attr1')                                                             // -> 21                   // returns the object attribute's value    
+    
+    hasattr(obj1, 'attr2')                                                             // -> True                 // check if the object has the specified attribute    
+    hasattr(obj1, 'attr3')                                                             // -> False
+    
+    delattr(obj1, 'attr1')                                                             // deletes the specified attribute   
+    del obj1.attr2 
+    
+    obj1.__dict__                                                                      // -> {}
+    
+    
+    
+    
+    </pre>
+</details>
 
 
 
 
 
 <!--
----------------------------------------------------------------------------------------------
-WRITE DOWN EVERYTHING NEW
----------------------------------------------------------------------------------------------
-
-
-
-
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
+    - dir([obj])
+                  - (no argument) 
+                        - returns the current scope's attributes 
+                  - (object)
+                        - returns the available attributes of (<obj>) in a list 
+                        - available attribute => all attribute that are reachable on the object 
+                  - (class)
+                        - returns the available attributes of (class) in a list 
+                        - available attribute => all attribute that are reachable on the object 
     
     
+    
+    - vars([obj])
+                  - does the same as __dict__ when object passed 
+                  - 
+    
+    
+                  - if not <obj> specified acts as local()
+    - globals()
+                  - ???
+    - locals()
+
+
+
+
+
+
+
+
+
+
+
+
+    - objects are immubable 
+    - del deletes object attributes 
+    - no object literals here 
+    
+    
+    - <obj>.__dict__  
+                  - dictionary that holds the object's own attirbutes (we can get set this dictionalry to modify the objects attributes)
+                  - called mappintproxy of the object 
+                  - we have full access in dictionary form 
+    - getattr(<obj>, attr:str)
+                  - returns the attribute's value (raises an AttributeError if the attribute is not found)
+    - hasattr(<obj>, attr:str)
+                  - return True if the object has the specified attribute 
+    - setattr(<obj>, attr:str, val:any)
+                  - sets a new attribute to the object 
+    - delattr(<obj>, attr:str)
+    del <obj>.<attr>
+                  - deletes the specified attribute (raises an AttributeError if the attribute is not found)
+
+
 -->
 
 
+
+    
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr><hr><hr><hr><hr>
     

@@ -1,26 +1,24 @@
-class D:
+class TestClass:
     pass
     
-class C:
-    pass
+def method(self):
+    return 22
     
-class B:
-    pass
+def privMethod(self):
+    return 22
     
-class A(B, C):
-    pass
-    
-obj = A()
+TestClass.attr = 21
+TestClass.method = method
 
+TestClass._TestClass__privAttr = 31
+TestClass._TestClass__privMethod = privMethod
 
-print( issubclass(A, B) )
-print( issubclass(A, C) )
-print( issubclass(C, A) )
+obj = TestClass()
 
-print( issubclass(D, (A, B, C)) )
+print( obj.attr )
+print( obj.method() )
 
-
-# print( type(obj) )
-# print( obj.__class__ )
+print( obj.attr )
+print( obj.method() )
 
 

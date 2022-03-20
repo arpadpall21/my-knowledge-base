@@ -10,13 +10,11 @@
 </head>
 <body>
 <h1> Classes and Prototypes (ver 4.0.0) </h1>
-    <p> Updated ( 2022-03-11 )</p>
+    <p> Updated ( 2022-03-18 )</p>
     <p class="sitenav"> <a href="../../../index.html">MySite></a>
         <a href="../../index.html">Python></a> 
         <a href="../index.html">Objects></a> Classes and Prototypes
     </p>
-    
-    
 <table class="table">
 <caption>
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
@@ -99,10 +97,11 @@
 <h2 style="color:green;"><u> Useful Links : </u></h2>
     
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    <p> - private attributes and methods are not enforced by Python (they still can be accessed from outside somehow) </p>
+    <p> - private attributes and methods are not enforced by Python (in my tests I cannot acceess privates outside the class [TESTED: 2022-03-19 v3.10.2]) </p>
+    <p> - object instances derived directly from the <mark>object</mark> class cannot have any attributes </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - Python is a class-based programming language where classes can have multiple base classes </p>
-    <p> - the <mark>object</mark> class sits on the top of the inheritance chain </p>
+    <p> - the <mark>object</mark> class sits on the top of the inheritance chain <u>(instances directly derived from the <mark>object</mark> class cannot have attributes)</u> </p>
 <!---------------------------------------------------------------------------------------------->
 <hr>
 <h2 class="header"> Multiple Inheritance <mark>__mro__</mark> / <mark>__bases__</mark>  </h2>
@@ -408,209 +407,6 @@
     obj.__class__                                                                      // -> class A
     </pre>
 </details>
-    
-    
-    
-    
-    
-    
-    
-<!--
----------------------------------------------------------------------------------------------
-WRITE DOWN EVERYTHING NEW
----------------------------------------------------------------------------------------------
-    - objects are immubable 
-    - del deletes object attributes 
-    - no object literals here 
-    
-    
-    
-    
-    
-    
-    
-    - <Class>.__mro__ 
-                  - (Method Resolution Order) - prints the class resolution path 
-    - <Class>.__bases__ 
-                  - returns the direct parent classes of this class  
-    - isinstance(obj, class) 
-                  - True if instance of class (class is on the prototype chain) 
-    - issubclass(parentClass, class) 
-                  - True if class is somewhere subclass of parntClass
-    - type(val) 
-                  - returns the <val>'s direct class 
-    - <val>.__class__ 
-    
-    
-    
-                  - returns the direct class of the data 
-    - <obj>.__dict__  
-                  - dictionary of the object's own attributes 
-    - getattr(<obj>, attr:str)
-                  - returns the attribute's value (raises an AttributeError if the attribute is not found)
-    - hasattr(<obj>, attr:str)
-                  - return True if the object has the specified attribute 
-    - setattr(<obj>, attr:str, val:any)
-                  - sets a new attribute to the object 
-    - delattr(<obj>, attr:str)
-    del <obj>.<attr>
-                  - deletes the specified attribute (raises an AttributeError if the attribute is not found)
-    - dir(<obj>)
-                  - returns the available attributes of the current scope (no <obj>)
-                  - returns the available attributes of (<obj>)
-                  - available attribute => all attribute that are reachable on the object 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-- iterators and generators 
-    - well this is cool and all but it's better to use generator functions for this goal 
-    - iterators implement the __iter__() and __next__()
-    - the iter(<iterable>) returns an iterator then we can use the next() on the iterator object to get the next value 
-    - the for loop actually creates an iterator and execute the next() method for each cycle
-    - calling the next() on the iteration is over will rise an exception
-    - this essentially creates a generator 
-    - StopIteration statement stops the iteration 
-    - generator function 
-        - function having the yield keyword automatically becomes a generator function 
-        - the generator function returns a generator ojbect on which we can call the iter() or loop through it
-
-
-    <obj>.__iter__
-                - object having it is iterable (ex: hasattr(<obj>, __iter__))
-    i for i in <iterable>
-                - creates a generator object from <iterable>
-
-
-
-
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - abstract class 
-    - is there any object shorhand object initialization? => NOPE!
-    - what about global scope 
-    - where can I see on the class which attributes are present on the prototype chain (<Class>.prototype in JavaScript)
-    
-    
--->
-
-
-
-<!--
-    - in python an object is not a dictionary!!! (obj.key VS dict["key"])
-    - python is OOP (but not prototype-based language)
-    - the 'self' = parameter does not have to be called self
-    - parent|child class 
-    - object properties are caled attributes here 
-
-
-    - dict(obj)    - to print as dictionary
-    - passing self as 1st argument won't count in the final object as 1st argument 
-    - class MyClass(ParentClass)    -> extend 
-    - super() 
-    - allows to have multiple base classes 
-    - the first argument represents the object that will be created (self) 
-- Classes/Objects
-    - we also have docstring here (like functions do) (printalbel with __doc__ - like functions do)
-
-    - both public property and function are inherited by instances (not owned) 
-    - Class() - creates a new object instance 
-    - the __init__(self) - like constructor 
-    - we call 'data attribute' and 'method' 
-    - when the called a method or attribute is not found in the object instance then it is searched in its class 
-    - static methods are specified with @classmethod or @staticmethod 
-        - transform the method into classmethod (first argument will be this class) 
-        - classmethod can be called on the instance as well (but the received 1st argument is the class) 
-    - static attributes are accessible directly (apparently) -> <Class>.prop (so static attibutes are not that static => whell they are accessible by instances but instances cannot modify it, => yes they can when immutabl, => so instance will create their own if the static is immutable but modify the classes static attribute if it it's immutable)
-    - calling <instance>.method() is the same as calling <Class>.method(<instance>) 
-    - multiple inheritance allowed (in this calse the lokup is from left-to-right) - depth-first search (searches fully the first class )
-    - because there are diamond paths (for example the object class can be accessed on multiple routes the dynamic class order algorithm ordert the class access path that the object class is accessed only once but preservers the depth-first search left-to right way to do shit)
-    - references the upper class (perform a class lookup to find the searched class attribute or class method) (gets the first found)
-    - no private variable but the convention is prefixing with __ (double underscore) (data attribute, or method)
-    
-    - super() syntax from version 3.0
-    - super(<thisClass>, <self>) -> 2.7
-    - the super() always tries to find its own classe's super 
-    
-    
-    
--->
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr><hr><hr><hr><hr>
-    
-    
-<h2 class="headerExtra"><u> Title 1 </u></h2>
-<h2 class="header"> Title 1.1 </h2>
-<h3 class="header"> Title 1.1.1 </h3>
-<h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-        <p> - red background block means not learned or not tested information! </p>
-        <p> - </p>
-    </div>
-    
-    <pre class="syntax">
-SYNTAX :    main syntax
-            <em>literally used </em>
-            <small>literally used optional </small>
-            <prot style="color:#049500;">prototype chain</prot>
-            <strong>required value </strong>
-            <i>optional value </i>
-                - some descriptions will come here (like arguments)
-                - ??? (3 question marks) in syntax means not tested or not learned yet
-                
-            <span class="openable"> this is an openable element<div>
-                <p> - openable elements listed here in paragraphs </p>
-                <p> - </p>
-            </div></span>
-    </pre>
-    
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    examples of the current lessons 
-    
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
-</details>
-    
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-<details class="example">
-<summary> Example : </summary>
-<h4 style="color:darkblue;"><u> example title </u></h4>
-    <p> - live tests will come here </p>
-        <details>
-        <summary> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-        </details>
-</details>
-<!---------------------------------------------------------------------------------------------------------------------------------->    
-<hr>
-    
-<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
     
     
     <br><br>

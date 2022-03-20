@@ -98,6 +98,45 @@
     <br>
 <table class="table">
 <caption>
+    Global Function
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Function </th>
+        <th> Description </th>
+    </tr>
+    <tr class="0">
+        <td> 
+            sorted(<strong>iterable</strong>, <small class="openable">key=<i>fn</i><div>
+                <p> Default: <mark>None</mark> </p>
+                <p> - function takes 1 argument and must return a number </p>
+                <p> - the returned number is bound to the checked item, then the sort order is defined according to the bound numbers order </p> 
+                <p> ex: </p>
+    <pre>
+    someList = ['xxxx', 'x', 'xx']
+    sorted(key=len)             // the len global function returns the length for each element 
+                                // len('xxxx') -> 4  |  len('x') -> 1  |  len('xx') -> 2
+                                // the sort order is defined by the returned numbers -> 1 | 2 | 4
+                                // -> ['x', 'xx', 'xxxx']
+    </pre>
+              </div></small>, <small class="openable">reverse=<i>bol</i><div>
+                <p> Default: <mark>False</mark> </p>
+                <p> - sorts the list in descending order </p>
+            </div></small>)
+        </td>
+        <td> 
+            - sorts the passed <strong>iterable</strong>'s items and returns the result in a new list (does not modify the passed <strong>iterable</strong>) <br>
+            - cannot sort iterables containing mixed data types, (ex: when the list contains stirngs and numbers = raises an error) <br>
+            - strings are sorted based on ASCII translation order 
+            <span id="browserSupport" title="updated : 2022-02-28">
+                <span><i class="fab fa-python"></i> 2.4 </span>
+            </span>
+        </td>
+    </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
     List
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
 </caption>
@@ -900,6 +939,52 @@
     rest                                                                               // -> ['p3', 'p4']
     </pre>
 </details>
+<hr>
+<!-------------------------------------------------------------------------------------------->
+<h2 class="header"> The <mark>sorted()</mark> global function </h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// sorted() ---------------------------------------------------------------------------
+    myList1 = [111, 1, 3, 15, 1.1]
+    sorted(myList1)                                                                    // -> [1, 1.1, 3, 15, 111]    
+    myList1                                                                            // -> [111, 1, 3, 15, 1.1]                 // original not modified 
+    
+    myTuple = ['kcp', 'AB', 'ab', 'kac', 'KCP']
+    sorted(myTuple)                                                                    // -> ['AB', 'KCP', 'ab', 'kac', 'kcp']    // sort strings in ASCII transition order   
+    
+    myString = 'developer'
+    sorted(myString)                                                                   // -> ['d', 'e', 'e', 'e', 'l', 'o', 'p', 'r', 'v']    
+    
+    myList2 = ['kcp', 111, 1, 'AB', 3, 15, 'ab', 'kac', 'KCP']
+    sorted(myList2)                                                                    // -! raises a TypeError because the sort does not support sort between strings and numbers    
+    
+    myList3 = [[11, 22], [3, 4], [1, 2]]
+    sorted(myList3)                                                                    // -> [[1, 2], [3, 4], [11, 22]]
+    
+    myList4 = [{'p33':33}, {"p1":1, "p3":3}]
+    sorted(myList4)                                                                    // -! raises a TypeError because the sort does not support sort between dictionaries     
+    
+    myTuple2 = ('Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing')
+    sorted(myTuple2, key=len)                                                          // -> ['sit', 'amet', 'Lorem', 'ipsum', 'dolor', 'adipiscing', 'consectetur']    
+                                                                                       // items are sorted by length (the <mark>len</mark> function returns the length for each string)    
+    myTuple3 = (4, 145, 844, 2, 12, 10, -4)
+    def sort10(nr):                                                                    // custom sort function, sort numbers lower than 10 left, larger than 10 right   
+        if nr &lt; 10:
+            return -1
+        elif nr > 10:
+            return 1
+        else:
+            return 0
+    sorted(myTuple3, key=sort10)                                                       // -> [4, 2, -4, 10, 145, 844, 12]    
+    
+    myTuplew = (4, 145, 844, 2, 12, 10, -4)
+    sorted(myTuplew, reverse=True)                                                     // -> [844, 145, 12, 10, 4, 2, -4]
+                                                                                       // sorts the list in descending order     
+    </pre>
+</details>
+<hr>
+<!-------------------------------------------------------------------------------------------->
 <h2 class="headerExtra"> Lists </h2>
     <p> - a lists is an indexed collection data type which is ordered, changable and allow duplicate members </p>
 <hr>
@@ -1492,6 +1577,7 @@
     myDict                                                                             // -> {}
     </pre>
 </details>
+    
     
     <br><br>
 </body>

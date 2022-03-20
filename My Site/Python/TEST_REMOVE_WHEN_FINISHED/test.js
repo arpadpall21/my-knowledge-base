@@ -1,19 +1,6 @@
-class GrandpaClass {
-    prop = []
+class NotArray extends Array {}
 
-    grandpaMethod(){
-        return 'grandpa method-val'
-    }
-}
+const myArray = new NotArray(1, 2, 3)
 
-class Parent extends GrandpaClass {}
-
-class TestClass extends Parent{
-    method(){
-        console.log( super.grandpaMethod )
-    }
-}
-
-const myObj = new TestClass()
-
-myObj.method()
+console.log( myArray )
+console.log( typeof myArray )
