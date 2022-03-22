@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title> Classes and Prototypes </title> 
+    <title> Classes </title> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
     <script src="../../../Assets/scriptPages.js"></script>
 </head>
 <body>
-<h1> Classes and Prototypes (ver 4.0.0) </h1>
+<h1> Classes (ver 4.0.0) </h1>
     <p> Updated ( 2022-03-18 )</p>
     <p class="sitenav"> <a href="../../../index.html">MySite></a>
         <a href="../../index.html">Python></a> 
-        <a href="../index.html">Objects></a> Classes and Prototypes
+        <a href="../index.html">Objects></a> Classes
     </p>
 <table class="table">
 <caption>
@@ -97,7 +97,7 @@
 <h2 style="color:green;"><u> Useful Links : </u></h2>
     
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    <p> - private attributes and methods are not enforced by Python (in my tests I cannot acceess privates outside the class [TESTED: 2022-03-19 v3.10.2]) </p>
+    <p> - private attributes and methods are NOT PRIVATE, they are just well hidden, we can access them as <mark>_<strong>class</strong>__<strong>attr</strong></mark> </p>
     <p> - object instances derived directly from the <mark>object</mark> class cannot have any attributes </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - Python is a class-based programming language where classes can have multiple base classes </p>
@@ -181,20 +181,11 @@
     
     
 <span style="color:darkgray;">// private methods and attributes -----------------------------------------------------</span>
-        def __<strong>methodId</strong>(self, <i>arg, ...</i>):                                                // callable only inside this class (not prensent in the inheritance chain)
-            self                                                                       // references the instance that will be created (always the 1st argument)   
-
-        __<strong>attrId</strong><i> = val</i>                                                                 // accessible only inside this class (not prensent in the inheritance chain)
+        def __<strong>methodId</strong>(self, <i>arg, ...</i>):                                                // inteded to be used privately, but they are <u>NOT PRIVATE, just well hidden</u> from outside this class we can access as <mark>_<strong>thisClass</strong>__<strong>attr</strong></mark> (ex: <mark>TestClass._TestClass__privAttr</mark>)
+        __<strong>attrId</strong><i> = val</i>                                                                 // owned by this class and accessible by classes and instances on the prototype chain 
         
-        def <strong>someFn</strong>(self):
-            self.__<strong>attrId</strong>                                                              // accessing private attribute 
-            self.__<strong>methodId</strong>()                                                          // calling private method  
-    
-    
-<span style="color:darkgray;">// not so private ---------------------------------------------------------------------</span>
-    def _<strong>methodId</strong>(self):                                                               // <mark>_</mark> (single underscore) prefixed attributes|methods are not private, but it's a convertion to use them privately    
-    
-    _<strong>attrId</strong><i> = val</i>
+        def _<strong>methodId</strong>(self):                                                           // <mark>_</mark> (single underscore) prefixed attributes|methods have no special behaviour, it's just a naming convertion to use them privately    
+      _ <strong>attrId</strong><i> = val</i>
     
     
 <span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
@@ -208,10 +199,10 @@
             super().<strong>attr|method</strong>                                                        // references the <u>first-found</u> class attribute|method in the inheritance chain 
                                                                                         <span id="browserSupport" style="color:yellow;" title="Updated: 2022-03-19"> <span><i class="fab fa-python"></i> 2.7 </span></span>                
             super(<strong>ClassId_2</strong>, self).<strong>attr|method</strong>                                         // references the <u>first-found</u> class attribute|method in the inheritance chain 
-    
-    
-<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
-<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
+    </pre>
+    <pre class="syntax">
+    <strong>class</strong>.<strong>attr = val</strong>                                                                   // set the attributes on the class   
+      
     <strong>class</strong>.__doc__                                                                      // returns the class's docstring (<i>docString</i>)     
     
     del <strong>class</strong>.<strong>method|attr</strong>                                                              // deletes the specified class method or attribute   
@@ -232,6 +223,31 @@
     
     obj = A('a', 'b')                                                                  // creates an object 
     obj.__dict__                                                                       // -> {'a': 'a', 'b': 'b'}
+    </pre>
+    <p> - setting class attributes on existing class </p>
+    <pre>
+    class TestClass:
+        pass
+        
+    def method(self):
+        return 'method-val'
+        
+    def privMethod(self):
+        return 'priv-method-val'
+    
+    TestClass.attr = 'attr-val'                                                        // setting attributes on existing classes is allowed   
+    TestClass.method = method
+    TestClass._TestClass__privAttr = 'priv-attr-val'
+    TestClass._TestClass__privMethod = privMethod
+    
+    obj = TestClass()
+    
+    obj.attr                                                                           // -> 'attr-val'
+    obj.method()                                                                       // -> 'method-val'
+    obj._TestClass__privAttr                                                           // -> 'priv-attr-val'
+    obj._TestClass__privMethod()                                                       // -> 'priv-method-val'
+    
+    TestClass.__dict__["newAttr"] = 'new-val'                                          // -! TypeError        // setting class attributes through mappingproxy is not allowed  
     </pre>
     <p> - method and attribute inheritance </p>
     <pre>
@@ -285,33 +301,31 @@
     <p> - private methods and attributes </p>
     <pre>
     class B:
-        __privateAttr = 'privAttr-val'                                                 // only accessible inside this class 
+        __privateAttr = 'privAttr-val' 
         
-        def __privateMethod(self):                                                     // only callable inside this class 
+        def __privateMethod(self): 
             return 'privMethod-val'
         
         def getPrivates(self):
-            prvAttr = self.__privateAttr                                               // this is how we access privates 
-            prvMethod = self.__privateMethod()
-            
-            return prvAttr, prvMethod                                                  // making private values public 
-        
-        def setPrivates(self):
-            self.__privateAttr = 'new-attr-val'                                        // we can reassign privates like this 
-            self.__privateMethod = lambda: 'new-method-val'
+            self.__privateAttr                                                         // -> 'privAttr-val'     // accessed as normal attributes from inside their class   
+            self.__privateMethod()                                                     // -> 'privAttr-val'
     
     class A(B):
         pass
     
     obj = A()
     
-    B.__privateAttr                                                                    // -> AttributeError    // privates are not accessible from outside their class at all 
-    A.__privateAttr                                                                    // -> AttributeError 
-    obj.__privateAttr                                                                  // -> AttributeError
     
-    obj.getPrivates()                                                                  // -> ('privAttr-val', 'privMethod-val')
-    obj.setPrivates()  
-    obj.getPrivates()                                                                  // -> ('new-attr-val', 'new-method-val')
+    B._B__privateAttr                                                                  // accessing private attribute or method ouside their clas   
+    A._B__privateAttr       
+    obj._B__privateAttr     
+    
+    B._B__privateAttr = 'new-privAttr-val'                                             // we can set privates like this (as expetect)    
+    obj._B__privateAttr                                                                // -> 'new-privAttr-val'   
+    
+    B.__privateAttr                                                                    // -! AttributeError    // privates are not accessible 'in the normal way'   
+    A.__privateAttr                                                                    // -! AttributeError 
+    obj.__privateAttr                                                                  // -! AttributeError
     </pre>
     <p> - <mark>super()</mark> </p>
     <pre>

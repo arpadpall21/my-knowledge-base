@@ -1,24 +1,29 @@
-class TestClass:
-    pass
+class MyIterator:
+    def __init__(self, data):
+        self.data = data
+        self.index = 0
+        self.end = len(data)
     
-def method(self):
-    return 22
+    def __iter__(self):
+        return self
     
-def privMethod(self):
-    return 22
-    
-TestClass.attr = 21
-TestClass.method = method
+    def __next__(self):
+        if self.index >= self.end:
+            raise StopIteration
+        item = self.data[self.index]
+        self.index += 1
+        return item
 
-TestClass._TestClass__privAttr = 31
-TestClass._TestClass__privMethod = privMethod
+iteratorInstance = MyIterator('abc')
 
-obj = TestClass()
+iteratorObj = iter(iteratorInstance)
 
-print( obj.attr )
-print( obj.method() )
+print( next(iteratorObj) )
+print( next(iteratorObj) )
+print( next(iteratorObj) )
+# print( next(iteratorObj) )
 
-print( obj.attr )
-print( obj.method() )
+for i in iteratorInstance:
+    print( i )
 
 

@@ -15,8 +15,6 @@
         <a href="../../index.html">Python></a> 
         <a href="../index.html">Objects></a> Object
     </p>
-    
-    
 <table class="table">
 <caption>
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
@@ -25,66 +23,94 @@
         <th style="width:30%;"> Method / Property / statement ect... </th>
         <th> Description </th>
     </tr>
-    <tr class="0">
+    <tr class="05.01">
         <td> 
-            <strong>obj</strong>.__dict__
+            <strong>obj|class</strong>.__dict__
         </td>
         <td> 
-            - returns a dictionary which holds the object's own attributes (called mappingproxy) <br>
-            - gives full access to the object's attributes (we can get|set object attributes through it)
-        </td>
-    </tr>
-    <tr class="0">
-        <td> 
-            getattr(<strong>obj</strong>, <strong>attr:str</strong>)
-        </td>
-        <td> 
-            - returns the object's attribute value 
+            - returns the mappingproxy of the object|class (a dictionary which holds the object|class own attributes) <br>
+            - on objects gives full access to the object's attributes (we can get|set object attributes through it) <br>
+            - on classes we can only get class attributes (raises a TypeError on attribute set attempt)
         </td>
     </tr>
-    <tr class="0">
+    <tr class="30.02">
         <td> 
-            hasattr(<strong>obj</strong>, <strong>attr:str</strong>)
+            del <strong>obj|class.attr</strong>
         </td>
         <td> 
-            - returns <mark>True</mark> if the object has the specified attribute, return <mark>False</mark> otherwise  
-        </td>
-    </tr>
-    <tr class="0">
-        <td> 
-            setattr(<strong>obj</strong>, <strong>attr:str</strong>, <strong>val:any</strong>)
-        </td>
-        <td> 
-            - sets the specified attribute to the object 
+            - if attribute found deletes it <br>
+            - if attribute not found raises an AttributeError   
         </td>
     </tr>
-    <tr class="0">
+    <tr class="30.01">
         <td> 
-            delattr(<strong>obj</strong>, <strong>attr:str</strong>)
+            delattr(<strong>obj|class</strong>, <strong>attr:str</strong>)
         </td>
         <td> 
-            - deletes the specified attribute from the object 
-        </td>
-    </tr>
-    <tr class="0">
-        <td> 
-            del <strong>obj.attr</strong>
-        </td>
-        <td> 
-            - deletes the object's attribute 
+            - if attribute found deletes it <br>
+            - if attribute not found raises an AttributeError   
         </td>
     </tr>
-
-
-
-
-
-    <tr class="0">
+    <tr class="10.01">
         <td> 
-            
+            dir(<i>obj|class</i>)
         </td>
         <td> 
-            - 
+            - (no argument) returns the attribute keys of the current scope in a list <br>
+            - in a list returns the passed <i>obj|class</i> all available attribute keys <u>(including inherited onces)</u> 
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td> 
+            getattr(<strong>obj|class</strong>, <strong>attr:str</strong>)
+        </td>
+        <td> 
+            - if attribute found returns its value <br>
+            - if attribute not found raises an AttributeError   
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            globals()
+        </td>
+        <td> 
+            - returns the mappingproxy of the global scope (a dictionary holding the global scope's attributes) <br>
+            - through the returned mappingproxy we can get|set the global scope 
+        </td>
+    </tr>
+    <tr class="20.02">
+        <td> 
+            hasattr(<strong>obj|class</strong>, <strong>attr:str</strong>)
+        </td>
+        <td> 
+            - returns <mark>True</mark> if the object|class has the specified attribute, return <mark>False</mark> otherwise  
+        </td>
+    </tr>
+    <tr class="15.02">
+        <td> 
+            locals()
+        </td>
+        <td> 
+            - returns the mappingproxy of the local scope (a dictionary holding the local scope's attributes) <br>
+            - through the returned mappingproxy we can get|set the local scope 
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> 
+            setattr(<strong>obj|class</strong>, <strong>attr:str</strong>, <strong>val:any</strong>)
+        </td>
+        <td> 
+            - sets the specified attribute to the object|class  
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            vars(<i>obj|class</i>)
+        </td>
+        <td> 
+            - (no argument) return the mappingproxy of the current scope (a dictionary which holds the object|class own attributes) <br>
+            - on object, returns its mappingproxy which gives full access to the object's attributes (we can get|set object attributes through it) <br>
+            - on class, returns its mappingproxy but we can only get class attributes (raises a TypeError on attribute set attempt)
         </td>
     </tr>
 </table>
@@ -151,44 +177,95 @@
 </details>
 <!---------------------------------------------------------------------------------------------->
 <hr>
-<h2 class="header"> The <mark>__dict__</mark> / <mark>getattr()</mark> / <mark>hasattr()</mark> / <mark>setattr()</mark> / <mark>delattr()</mark> / <mark>dir()</mark> / <mark>globals()</mark> attribute and methods </h2>
-<details class="example" open>
+<h2 class="header"> The <mark>__dict__</mark> / <mark>vars()</mark> / <mark>dir()</mark> / <mark>globals()</mark> / <mark>locals() </mark> /  attribute and methods </h2>
+<details class="example">
 <summary> DEMO </summary>
-    <p> - <mark>__dict__</mark> </p>
+    <p> - <mark>__dict__</mark> / <mark>vars()</mark> </p>
     <pre>
     class Object(object):
         pass
+    
+    obj = Object()
+    obj.attr = 21 
+    
+    obj.__dict__                                                                       // -> {'attr': 21}     // the mappingproxy basically gives full access to the object's attributes as dictionary   
+    vars(obj)                                                                          // -> {'attr': 21}
+    
+    obj.__dict__["attr2"] = 22                                                         // setts a new object attribute through the mapping proxy 
+    vars(obj)["attr3"] = 23
+    obj.__dict__                                                                       // -> {'attr': 21, 'attr2': 22, 'attr3': 23}    
+    
+    del obj.__dict__["attr2"]                                                          // deleting object attributes   
+    del vars(obj)["attr3"]
+    
+    obj.__dict__                                                                       // -> {'attr': 21}
+    
+    
+// on class ---------------------------------------------------------------------------
+    class TestClass:
+        someAttr = 'val'
         
-    obj1 = Object()
-    obj1.attr = 21 
+    TestClass.__dict__["someAttr"]                                                     // -> 'val'
+    vars(TestClass)["someAttr"]                                                        // -> 'val'
     
-    obj1.__dict__                                                                      // -> {'attr': 21}         // basically gives full access to the object's attributes as dictionary   
+    TestClass.__dict__["newAttr"] = 'new-val'                                          // -! TypeError        // setting class attributes through mappingproxy is not allowed  
+    vars(TestClass)["someAttr"] = 'new-val'                                            // -! TypeError        // setting class attributes through mappingproxy is not allowed  
     
-    obj1.__dict__["attr2"] = 22                                                        // setts a new object attribute through the mapping proxy 
-    obj1.__dict__                                                                      // -> {'attr': 21, 'attr2': 22}
+// vars() without argument ------------------------------------------------------------
+    vars()                                                                             // -> {'__name__': '__main__', '__doc__': ... }      // returns the mappingproxy of the current scope (global scope in this situation)    
     
-    del obj1.__dict__["attr"]                                                          // deleting object attributes   
-    del obj1.__dict__["attr2"]
-    
-    obj1.__dict__                                                                      // -> {}
-    
-    
-// on classes -------------------------------------------------------------------------
-    
-    
-    
-    
-    
-    
-    
+    vars()["attr"] = 'new-val'                                                         // sets a new variable on the global scope through its mapping proxy 
     </pre>
-    <p> - <mark>getattr()</mark> / <mark>hasattr()</mark> / <mark>setattr()</mark> / <mark>delattr()</mark> / <mark>del</mark> </p>
+    <p> - <mark>dir()</mark> </p>
+    <pre>
+    class Object:
+        classAttr = 'cls-attr-val'
+    
+    
+    obj = Object()
+    obj.objAttr = 'obj-attr-val'
+    
+    dir(obj)                                                                           // -> ['classAttr', 'objAttr', '__class__' ... ]         // returns all available object attribute keys in a list (inherited keys included)    
+
+    dir(Object)                                                                        // -> ['classAttr', '__class__', '__delattr__', ... ]    // returns all available class attribute keys in a list (inherited keys included)     
+    
+// no argument ------------------------------------------------------------------------
+    dir()                                                                              // -> ['Object', 'obj', '__annotations__', ... ]         // returns the attribute keys of the current scope 
+    
+    def testFn():
+        loc1 = 'loc-val'
+        dir()                                                                          // -> ['loc1']                                           // returns the attribute keys of the current scope 
+    </pre>
+    <p> - <mark>globals()</mark> / <mark>locals()</mark> </p>
+    <pre>
+    def testFn():
+        loc1 = 'loc-val'
+        
+        globals()                                                                      // -> {'__name__': '__main__', '__doc__': None, ... }    // returns the mappingproxy of the global scope 
+        locals()                                                                       // -> {'loc1': 'loc-val'}                                // returns the mappingproxy of the local scope 
+        
+        globals()["glob"] = 'glob-val'                                                 // sets a new variable to the global scope 
+        globals()["loc2"] = 'loc2-val'                                                 // sets a new variable to the local scope 
+        
+        loc2                                                                           // -> 'loc2-val'                                         // new local variable set 
+        
+        
+    testFn()
+    
+    glob                                                                               // -> 'globa-val'                                        // new global variable set 
+      </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"> The  <mark>getattr()</mark> / <mark>hasattr()</mark> / <mark>setattr()</mark> / <mark>delattr()</mark> / <mark>del</mark> / methods </h2>
+<details class="example">
+<summary> DEMO </summary>
     <pre>
     class Object(object):
         pass
         
     obj1 = Object()
-
+    
     setattr(obj1, 'attr1', 21)                                                         // sets new attributes 
     setattr(obj1, 'attr2', 22)
     
@@ -203,140 +280,28 @@
     obj1.__dict__                                                                      // -> {}
     
     
+// on class ---------------------------------------------------------------------------
+    class TestClass:
+        someAttr = 'val'
     
+    getattr(TestClass, 'someAttr')                                                     // -> 'val'
+    getattr(TestClass, 'noAttr')                                                       // -! AttributeError         // class has no such attribute 
     
+    hasattr(TestClass, 'someAttr')                                                     // -> True
+    hasattr(TestClass, 'noAttr')                                                       // -> False
+    
+    setattr(TestClass, 'newAttr', 'newAttrVal')                                        // sets a new class attribute 
+    getattr(TestClass, 'newAttr')                                                      // -> 'newAttrVal'  
+    
+    delattr(TestClass, 'newAttr')                                                      // deletes the class attribute   
+    hasattr(TestClass, 'newAttr')                                                      // -> False 
+    delattr(TestClass, 'noAttr')                                                       // -! AttributeError         // class has no such attribute 
+    
+    del TestClass.someAttr                                                             // deletes the class attribute   
+    hasattr(TestClass, 'someAttr')                                                     // -> False 
+    del TestClass.noAttr                                                               // -! AttributeError         // class has no such attribute  
     </pre>
 </details>
-
-
-
-
-
-<!--
-    - dir([obj])
-                  - (no argument) 
-                        - returns the current scope's attributes 
-                  - (object)
-                        - returns the available attributes of (<obj>) in a list 
-                        - available attribute => all attribute that are reachable on the object 
-                  - (class)
-                        - returns the available attributes of (class) in a list 
-                        - available attribute => all attribute that are reachable on the object 
-    
-    
-    
-    - vars([obj])
-                  - does the same as __dict__ when object passed 
-                  - 
-    
-    
-                  - if not <obj> specified acts as local()
-    - globals()
-                  - ???
-    - locals()
-
-
-
-
-
-
-
-
-
-
-
-
-    - objects are immubable 
-    - del deletes object attributes 
-    - no object literals here 
-    
-    
-    - <obj>.__dict__  
-                  - dictionary that holds the object's own attirbutes (we can get set this dictionalry to modify the objects attributes)
-                  - called mappintproxy of the object 
-                  - we have full access in dictionary form 
-    - getattr(<obj>, attr:str)
-                  - returns the attribute's value (raises an AttributeError if the attribute is not found)
-    - hasattr(<obj>, attr:str)
-                  - return True if the object has the specified attribute 
-    - setattr(<obj>, attr:str, val:any)
-                  - sets a new attribute to the object 
-    - delattr(<obj>, attr:str)
-    del <obj>.<attr>
-                  - deletes the specified attribute (raises an AttributeError if the attribute is not found)
-
-
--->
-
-
-
-    
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr><hr><hr><hr><hr>
-    
-    
-<h2 class="headerExtra"><u> Title 1 </u></h2>
-<h2 class="header"> Title 1.1 </h2>
-<h3 class="header"> Title 1.1.1 </h3>
-<h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-        <p> - red background block means not learned or not tested information! </p>
-        <p> - </p>
-    </div>
-    
-    <pre class="syntax">
-SYNTAX :    main syntax
-            <em>literally used </em>
-            <small>literally used optional </small>
-            <prot style="color:#049500;">prototype chain</prot>
-            <strong>required value </strong>
-            <i>optional value </i>
-                - some descriptions will come here (like arguments)
-                - ??? (3 question marks) in syntax means not tested or not learned yet
-                
-            <span class="openable"> this is an openable element<div>
-                <p> - openable elements listed here in paragraphs </p>
-                <p> - </p>
-            </div></span>
-    </pre>
-    
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    examples of the current lessons 
-    
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
-</details>
-    
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-<details class="example">
-<summary> Example : </summary>
-<h4 style="color:darkblue;"><u> example title </u></h4>
-    <p> - live tests will come here </p>
-        <details>
-        <summary> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-        </details>
-</details>
-<!---------------------------------------------------------------------------------------------------------------------------------->    
-<hr>
-    
-<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
     
     
     <br><br>

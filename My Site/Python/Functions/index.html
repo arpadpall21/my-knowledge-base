@@ -174,54 +174,6 @@
     someLambda2(a=1, b=2)                                                              // -> {'a':1, 'b':2}
     </pre>
 </details>
-<!---------------------------------------------------------------------------------------------->
-<hr>
-<h2 class="header"> The Generator (function) </h2>
-    <pre class="syntax">
-    def genFunc():                                                                     // function having the <mark>yield</mark> keyword becomes a generator function 
-        yield <strong>exp</strong>                                                                      // calling the <mark>next()</mark> method on the <strong>genObj</strong> object will return the value after the <mark>yield</mark> keyword <u>then pauses the execution of the generator function body until the <mark>next()</mark> is called again</u>    
-        <i>...</i>                                                                            // the last <mark>yield</mark> value is the last item in the generation (no the <mark>return</mark> value)
-        
-        return <strong>val</strong>                                                                     // the <mark>return</mark> value is raised as <mark>StopIteration</mark> error value if the <strong>genObj</strong> is overcalled 
-    
-    
-    <strong>genObj</strong> = genFunc()                                                                 // the generator function creates and return a generator object   
-    
-<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
-                                                                                          <span id="browserSupport" style="color:yellow;" title="Updated: 2022-02-20"><span><i class="fab fa-python"></i> 3.x </span></span>
-    <strong>genObj</strong>.__next__()                                                                  // returns the next <mark>yield</mark> value from the <strong>genObj</strong> (raises a <mark>StopIteration</mark> error if overcalls the <strong>genObj</strong>)
-                                                                                          <span id="browserSupport" style="color:yellow;" title="Updated: 2022-02-20"><span><i class="fab fa-python"></i> 2.x </span></span>
-    <strong>genObj</strong>.next()                                                                      // returns the next <mark>yield</mark> value from the <strong>genObj</strong> (raises a <mark>StopIteration</mark> error if overcalls the <strong>genObj</strong>)
-    
-                                                                                          <span id="browserSupport" style="color:yellow;" title="Updated: 2022-02-20"><span><i class="fab fa-python"></i> 2.6 </span></span>
-    next(<strong>genObj</strong>, <i>defVal:any</i>)                                                           // returns the next <mark>yield</mark> value from the <strong>genObj</strong> (raises a <mark>StopIteration</mark> error if overcalls the <strong>genObj</strong>)
-                                                                                       // returns the default value (<i>defVal</i>) instead of raising a <mark>StopIteration</mark> error (when <strong>genObj</strong> is overcalled)    
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    def genFn():
-        yield 'one'
-        yield 'two'
-        return 'three'                                                                 // the return value is not part of the generated values   
-    
-    genObj = genFn()                                                                   // returns a generator object    
-    
-// looping through the generator object -----------------------------------------------
-    for i in genObj:
-        i                                                                              // -> 'one'  |  'two'
-    
-// .next() ----------------------------------------------------------------------------
-    genObj.__next__()                                                                  // -> 'one'
-    genObj.__next__()                                                                  // -> 'two'
-    genObj.__next__()                                                                  // -! raises <mark>StopIteration: three</mark> error (the generator function return value is the error value here)    
-    
-// next() -----------------------------------------------------------------------------
-    next(genObj, 'defVal')                                                             // -> 'one'
-    next(genObj, 'defVal')                                                             // -> 'two'
-    next(genObj, 'defVal')                                                             // -> 'defVal'     // return the default value instead of raising the StopIteration error   
-    </pre>
-</details>
     
     
     <br><br>

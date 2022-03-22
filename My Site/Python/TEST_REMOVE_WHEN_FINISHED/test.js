@@ -1,6 +1,5 @@
-class NotArray extends Array {}
+const obj1 = {p1:21}
+const obj2 = {p1:21}
+const obj3 = obj1
 
-const myArray = new NotArray(1, 2, 3)
-
-console.log( myArray )
-console.log( typeof myArray )
+console.log( obj1 == obj3 )
