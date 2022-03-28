@@ -1,29 +1,12 @@
-class MyIterator:
-    def __init__(self, data):
-        self.data = data
-        self.index = 0
-        self.end = len(data)
-    
-    def __iter__(self):
-        return self
-    
-    def __next__(self):
-        if self.index >= self.end:
-            raise StopIteration
-        item = self.data[self.index]
-        self.index += 1
-        return item
+import module1 
 
-iteratorInstance = MyIterator('abc')
+print( module1.a )
+print( module1.b )
 
-iteratorObj = iter(iteratorInstance)
+def importModule():
+    import module2
 
-print( next(iteratorObj) )
-print( next(iteratorObj) )
-print( next(iteratorObj) )
-# print( next(iteratorObj) )
+    print( module2.x )
+    print( module2.y )
 
-for i in iteratorInstance:
-    print( i )
-
-
+importModule()

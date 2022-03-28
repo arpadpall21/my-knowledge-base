@@ -2,83 +2,248 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title> Demo </title> 
+    <title> Modules </title> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    
-    <link rel="stylesheet" href="  "> 
-    <script src="   "></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <script src="../../Assets/scriptPages.js"></script>
 </head>
 <body>
-<h1> Demo (ver 4.0.0) </h1>
-    <p> Updated ( yyyy-mm-dd )</p>
-    <p class="sitenav"> <a>site navigation></a>
-        <a>site navigation></a>
-    </p>    
-    
-    
-    <p class="subSite"><a href=""> SubSite > </a></p>
-    
+<h1> Modules (ver 4.0.0) </h1>
+    <p> Updated ( 2022-03-23 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite></a>
+        <a href="../index.html">Python></a> Modules
+    </p>
     
 <table class="table">
 <caption>
+    Global Variables 
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
 </caption>
     <tr>
-        <th style="width:30%;"> Method / Property / statement ect... </th>
+        <th style="width:30%;"> Attribute / Method </th>
         <th> Description </th>
     </tr>
-    <tr class="0">
+    <tr class="05.01">
         <td> 
-            demo prop 
+            __name__
         </td>
-        <td> 
-            - demo description 
-            <span class="browserSupport" title="updated : yyyy-mm-dd">
-                <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-                <span><i class="fab fa-firefox"></i>  </span>
-                <span><i class="fab fa-opera"></i>  </span>
-                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i>  </span>
-                <span><i class="fab fa-safari"></i>  </span>
-                <span><i class="fab fa-node-js"></i>  </span>
-            </span>
+        <td>
+            - returns the module's name (filename) (in main modules this is always <mark>__main__</mark>)  
         </td>
     </tr>
-
-
-
-
+    <tr class="05.01">
+        <td> 
+            __file__
+        </td>
+        <td>
+            - returns the absolute path of this file  
+        </td>
+    </tr>
+    
+    
+    
+    
+    
 </table>
+
+
     <br>
     <details class="example" id="notes">
     <summary> Notes :</summary>
         <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
     </details>
 <h2 style="color:green;"><u> Useful Links : </u></h2>
-    
+    <p> <a href="https://docs.python.org/3/tutorial/modules.html" target="_blank">Python Modules (docs.python.org)</a></p>
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    
+    <p> - use <mark>export PYTHONDONTWRITEBYTECODE=1</mark> (not <mark>PYTHONDONTWRITEBYTECODE=1</mark>) because the <mark>export</mark> also sets environment varialbes for child processes, and python is a child process in this shell </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Python can load <mark>.py</mark> files as modules, the module name will be the file name, except the main module whose name is <mark>__main__</mark> (the very first module that start the program) </p>
+    <p> - the imported module's all global variables are available in the current module (not explicit export here) </p>
+    <p> - modules can be imported dynamically as well (except when using <mark>*</mark> in imports) </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// main.py (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    import module1 
+    
+    module1.a                                                                          // -> 21                  // the imported module's all global variables are available here   
+    module1.b                                                                          // -> 22
+    
+    def importModule():
+        import module2                                                                 // module dynamically imported   
+    
+        module1.a                                                                      // -> 201                 // the imported module's all global variables are available here   
+        module2.y                                                                      // -> 202
+    
+    importModule()
+    
+    
+// module1.py (file) ------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    a = 21                                                                             // global variables 
+    b = 22
+    
+    
+// module2.py (file) ------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    x = 201                                                                            // global variables 
+    y = 202 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"><u> The <mark>__name__</mark> and <mark>__file__</mark> attributes </u></h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// main.py (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    import module1 
+    import module2 
+    
+    __name__                                                                           // -> '__main__'          // -! the main module name is always <mark>__main__</mark>
+    __file__                                                                           // -> '/workdir/main.py'  // absolute path of this file  
+    
+    
+// module1.py (file) ------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    __name__                                                                           // -> 'module1'
+    __file__                                                                           // -> '/workdir/module1.py'
+    
+    
+// module2.py (file) ------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    __name__                                                                           // -> 'module2'
+    __file__                                                                           // -> '/workdir/module2.py'
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"><u> Module caching, <mark>importlib.reload()</mark> / <mark>PYTHONDONTWRITEBYTECODE</mark> environment variable / <mark>-B</mark> CLI flag /  </u></h2>
+    <p> - Python caches loaded modules in the <mark>__pycache__</mark> directory where modules are located </p>
+    <p> - once the module is loaded never imported again, if we want to explicitly import the module we can use <mark>importlib.reload()</mark> </p>
+    <p> - if we want to prevent the creation of <mark>__pycache__</mark> directories we can use the <mark>PYTHONDONTWRITEBYTECODE=1</mark> environment variable or start python with <mark>-B</mark> flag </p>
+    <pre class="syntax">
+    <strong>python_module_directory</strong>
+        |- __pycache__                                                                 // directory where modules are cached in the current folder (modules are cached in binary format)    
+        |- <strong>module</strong>.py 
+        |- <i>..</i>
+    </pre>
+<details class="example" open>
+<summary> DEMO </summary>
+    <pre class="cmd">
+    
+    
+    
+    
+    </pre>
+</details>
 
+<!--
+- general explanaition module name and extenstion 
+
+- module cache and all its shit 
+- lokup path (this is where I document the syntax)
+- package explanation 
+
+---------------------------------------------------------------------------------------------
+WRITE DOWN EVERYTHING NEW
+---------------------------------------------------------------------------------------------
+    
+    
+    - the module is imported only once and chached, if we want to import again we must use import importlib; importlib.reload(module)
+    
+    
+- syntax (imports and binds to local name)
+    - from <module> import [var, ...]
+    - from <module> *
+                - import all variables from the module (except underscoe prefixed onces)
+    - import <module> as <alias>
+    - import .<module>
+                - . is used in the init file . root of the init file 
+    - __path__ 
+                - returns the absolute path of the current file 
+    
+    
+    
+    - module lokup path 
+        -> buildin module 
+        -> sys.path 
+            - list contains directories where python loosk for modules (in the specified order) -> we can modify it to change lokup order and shit 
+            - the current directory is automatically added 
+        - from the given path we can reference a module by dots => like ojbect.attribute.attribute
+        - PYTHONPATH environment variable (apparently the path is defined the same way as for PATH => TEST this!)
+        
+        
+        
+        
+
+    - __pycache__ 
+        - python stores the cached module version in this directory 
+        - the cached files are bytecode compiled => for faster module loading 
+        - (PYTHONDONTWRITEBYTECODE=1 python test.py) -> to perevent the creation of __pycache__
+        - you have to export PYTHONDONTWRITEBYTECODE=1 otherwise does not because the environment var is not passed further down 
+        - python -B test.py -> another way to prevent the creation of __pycache__ 
+        
+        
+    - builtin or (standard modules)
+    - import builtins 
+            - list of builtin function and variables (does not include those who has to be imported)
+    
+    - in the __init__ we can define our package so re reference the directoy where the __init__.py is and the __init__.py will group all we need 
+    - the __all__ = [] contains a module list when import * is used 
+    - can we bypass __init__.py ??? (I'm sure we can but let's test it!)
+    - relative imports (. = current dir) (.. parent) (..<dir> )
+    - what about the __init__ file 
+        -> it's a package 'creator, when you import a directory containing the __init__ file, the init file's stuff is imported, you we can nicely create a package in the directory where the __init__ file is placed 
+    - the __init__.py file can contain any regular python code 
+    - in __init__.py file we have to import stuff? 
+          => yep, in the __init__.py file we organize what and how to import 
+    - it's commont to use relative paths in __init__.py becasue usually at that level there's no sys.path 
+    
+    
+    - regular packages and namespaced packages 
+        - regular package     -> directory containing an __init__.py file (makes a directroy a package)
+            - package level initialization 
+        - namespace package   -> dependencies are everywhere (network, picked from specific directories, etc..)
+            - directory without __init__.py 
+            - from Python 3.3 
+            - we add the path to sys.path so the bare specifier can find the package 
+    
+*** It’s important to keep in mind that all packages are modules, but not all modules are packages. Or put another way, packages are just a special kind of module. Specifically, any module that contains a __path__ attribute is considered a package
+    
+    - relative imports are pretty shitty!!!
+        - available only below the level of the main module => WTF 
+    
+    - mention that you cannot search upwards when loading module 
+    
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    
+    
+    
+-->
 
 
 
 
 <!--
----------------------------------------------------------------------------------------------
-WRITE DOWN EVERYTHING NEW
----------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+    - can we import dynamically ???
+        => yes we can (but cannot use *)
 
-
-
-
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
+- module 
+    - <moduleFile>.py is a python module the __name__ returns the module's name 
+    - here any variable on the module is automatically exported 
+    - built-in moudles can be imported as 
+    - explain that ther's not export shit here 
 
 -->
-
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr><hr><hr><hr><hr>
