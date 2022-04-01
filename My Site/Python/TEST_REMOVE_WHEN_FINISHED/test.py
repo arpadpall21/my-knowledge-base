@@ -1,12 +1,9 @@
-import module1 
+# from Python.TEST_REMOVE_WHEN_FINISHED import pyModules
 
-print( module1.a )
-print( module1.b )
 
-def importModule():
-    import module2
+from .pyModules import *
+from .pyModules.module1 import *
 
-    print( module2.x )
-    print( module2.y )
-
-importModule()
+import pyModules
+# from sibling import sib
+# import sibling as sib

@@ -17,7 +17,6 @@
     
 <table class="table">
 <caption>
-    Global Variables 
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
 </caption>
     <tr>
@@ -40,12 +39,135 @@
             - returns the absolute path of this file  
         </td>
     </tr>
+    <tr class="10.01">
+        <td> 
+            importlib.reload(<strong>modulePath</strong>)
+        </td>
+        <td>
+            - explicitly imports the specified module (even if the module is already imported) (<mark>importlib</mark> is a standard (built in) module)
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            sys.path
+        </td>
+        <td>
+            - settable <strong>list</strong> which contains directory paths where python will search for modules (<mark>sys</mark> is a standard (built in) module)
+        </td>
+    </tr>
     
     
     
     
     
 </table>
+    <br>
+<table class="table">
+<caption>
+    CLI 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Attribute / Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            <em>export</em> PYTHONDONTWRITEBYTECODE=1
+        </td>
+        <td>
+            - (environment variable) prevent python instances in this shell to create <mark>__pycache__</mark> folder for its modules   
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            <em>python</em> -B <strong>pyFile.py</strong>
+        </td>
+        <td>
+            - (flag) prevents this python instance to create <mark>__pycache__</mark> folder for its modules   
+        </td>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            <em>export</em> PYTHONPATH=<i>absPath:...</i>
+        </td>
+        <td>
+            - (environment variable) sets module paths that will be prepended (at the beginning) on the <mark>sys.path</mark> for module path resolution  
+        </td>
+    </tr>
+    
+    
+    
+    
+    
+    
+    
+</table>
+    <br>
+<table class="table">
+<caption>
+    Import statement 
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Attribute / Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            import <strong class="openable">modulePath<div>
+    <strong>dir|file</strong>.<i>dir|file</i>.<i>...</i>
+    <p> - path resolution start from one of the listed directory path in <mark>sys.path</mark> </p>
+            </div></strong> <small>[as <i>alias</i>]</small>
+        </td>
+        <td>
+            - imports the specified file or directory in the current module <br>
+            - if <strong>modulePath</strong> is a <mark>.py</mark> file, that file is imported as python module <br>
+            - if <strong>modulePath</strong> is a directory, python will search for a <mark>__init__.py</mark> in that directory which will be loaded (as <span class="openable">regular package<div>
+    <p> basically the <mark>__init__.py</mark> global variables are imported </p>
+            </div></span>)
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td>
+            from <strong class="openable">modulePath<div>
+    <strong>dir|file</strong>.<i>dir|file</i>.<i>...</i>
+    <p> - path resolution start from one of the listed directory path in <mark>sys.path</mark> </p>
+    <hr>
+    <p> .<strong>dir|file</strong>.<i>dir|file</i>.<i>...</i> (<mark>.</mark> => current directory / <mark>..</mark> => parnet directory / etc...) </p>
+    <p> - relative path can be used from modules that are located <u>1 level lower</u> than the entry module </p>
+    <p> - relative paths cannot target files|directories that are located higher or at the same level as the entry package </p>            
+        </div></strong> import <strong>var <small>[as <i>alias</i>]</small>, <i>...</i>
+        </td>
+        <td>
+            - imports specified variables from the targeted file or directory in the current module<br>
+            - if <strong>modulePath</strong> is a <mark>.py</mark> file, that file is imported as python module <br>
+            - if <strong>modulePath</strong> is a directory, python will search for a <mark>__init__.py</mark> in that directory which will be loaded (as <span class="openable">regular package<div>
+    <p> basically the <mark>__init__.py</mark> global variables are imported </p>
+            </div></span>)
+        </td>
+    </tr>
+        <tr class="05.03"><td></td><td></td></tr>
+    <tr class="05.02">
+        <td>
+            from <strong class="openable">modulePath<div>
+    <strong>dir|file</strong>.<i>dir|file</i>.<i>...</i>
+    <p> - path resolution start from one of the listed directory path in <mark>sys.path</mark> </p>
+    <hr>
+    <p> .<strong>dir|file</strong>.<i>dir|file</i>.<i>...</i> (<mark>.</mark> => current directory / <mark>..</mark> => parnet directory / etc...) </p>
+    <p> - relative path can be used from modules that are located <u>1 level lower</u> than the entry module </p>
+    <p> - relative paths cannot target files|directories that are located <u>higher or at the same level</u> as the entry package is located </p> 
+        </div></strong> import *
+        </td>
+        <td>
+            - imports all variables from the targeted file or directory and dumps them in the current module's global scope <br>
+            - <u>on name confclit the imported variable overwrites the local one </u> <br>
+            - this syntax does not support dynamic imports 
+        </td>
+    </tr>
+</table>
+
+
 
 
     <br>
@@ -56,11 +178,11 @@
 <h2 style="color:green;"><u> Useful Links : </u></h2>
     <p> <a href="https://docs.python.org/3/tutorial/modules.html" target="_blank">Python Modules (docs.python.org)</a></p>
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    <p> - use <mark>export PYTHONDONTWRITEBYTECODE=1</mark> (not <mark>PYTHONDONTWRITEBYTECODE=1</mark>) because the <mark>export</mark> also sets environment varialbes for child processes, and python is a child process in this shell </p>
+    <p> - use <mark>export PYTHONDONTWRITEBYTECODE=1</mark> (not <mark>PYTHONDONTWRITEBYTECODE=1</mark>) because the <mark>export</mark> also sets environment variables for child processes, and python is a child process in this shell </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - Python can load <mark>.py</mark> files as modules, the module name will be the file name, except the main module whose name is <mark>__main__</mark> (the very first module that start the program) </p>
-    <p> - the imported module's all global variables are available in the current module (not explicit export here) </p>
     <p> - modules can be imported dynamically as well (except when using <mark>*</mark> in imports) </p>
+    <p> - the imported module's all global variables are accessible from the current module (not explicit export here) </p>
 <details class="example">
 <summary> DEMO </summary>
     <pre>
@@ -121,7 +243,7 @@
 </details>
 <!---------------------------------------------------------------------------------------------->
 <hr>
-<h2 class="header"><u> Module caching, <mark>importlib.reload()</mark> / <mark>PYTHONDONTWRITEBYTECODE</mark> environment variable / <mark>-B</mark> CLI flag /  </u></h2>
+<h2 class="header"><u> Module caching, <mark>importlib.reload()</mark> / <mark>PYTHONDONTWRITEBYTECODE</mark> environment variable / <mark>-B</mark> CLI flag </u></h2>
     <p> - Python caches loaded modules in the <mark>__pycache__</mark> directory where modules are located </p>
     <p> - once the module is loaded never imported again, if we want to explicitly import the module we can use <mark>importlib.reload()</mark> </p>
     <p> - if we want to prevent the creation of <mark>__pycache__</mark> directories we can use the <mark>PYTHONDONTWRITEBYTECODE=1</mark> environment variable or start python with <mark>-B</mark> flag </p>
@@ -131,31 +253,205 @@
         |- <strong>module</strong>.py 
         |- <i>..</i>
     </pre>
-<details class="example" open>
+<details class="example">
 <summary> DEMO </summary>
     <pre class="cmd">
+// PYTHONDONTWRITEBYTECODE ------------------------------------------------------------
+    $ export PYTHONDONTWRITEBYTECODE=1                                                 // python starting in this shell won't create <mark>__pycache__</mark> directories for its modules   
+    $ python test.py
     
     
+//  -B (flag) -------------------------------------------------------------------------
+    $ python -B test.py                                                                // this python instance won't create <mark>__pycache__</mark> directories for its modules    
+    </pre>
+    <p> - <mark>importlib.reload()</mark> </p>
+    <pre>
+    import pyModules.module1 
+    import pyModules.module1                                                           // module won't be imported again 
+    import pyModules.module1 
     
+    import importlib
     
+    importlib.reload(pyModules.module1)                                                // forces the module loader to import the module again  
+    </pre>
+    <pre class="cmd">
+    $ python -B test.py
+      Hello from module1
+      Hello from module1                                                               // the <mark>importlib.reload()</mark> forces the module loader to import the module again    
     </pre>
 </details>
-
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"><u> Module path resolution <mark>sys.path</mark> / <mark>PYTHONPATH</mark> </u></h2>
+    <p> - on module import Python first check if the module is a standard (built in) module (like <mark>sys</mark>), then searches the <mark>sys.path</mark> list</p>
+    <p> - the <mark>sys.path</mark> contains a settable lists of directory paths where python searches for modules (the first found module is imported)</p>
+    <p> - directory paths (value) of the <mark>PYTHONPATH</mark> environment variable is automatically added to the <mark>sys.path</mark> (at the beginning) </p>
+    <p> - the <mark>__main__</mark> module directory path is also automatically added to the <mark>sys.path</mark> (always the first directory search path) </p>
+<details class="example">
+<summary> DEMO </summary>
+    <pre class="cli">
+    $ export PYTHONPATH='/workdir/pyModules:/workdir/pyModules/subModules'             // adds directory paths to the <mark>sys.path</mark>   
+    </pre>
+    <pre>
+    import sys                                                                         // imports the standard <mark>sys</mark> module     // -! the <mark>sys.py</mark> module in the current directory never imported because Python searches standard modules first   
+    import pyModules.sys                                                               // however we can import a nested <mark>./pyModules/sys.py</mark> module like this 
+    
+    sys.path                                                                           // -> ['/workdir', '/workdir/pyModules', '/workdir/pyModules/subModules', ...]
+                                                                                       // the current directory path is the 1st item, then the 2 paths of the <mark>PYTHONPATH</mark> environment variable   
+    
+    sys.path.append('/workdir/pyModules')                                              // adding a new directory to the module search path 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"><u> Importing modules <mark>import</mark> / <mark>from</mark> </u></h2>
+    <p> - in Python we can only import modules at the same directory level or lower levels <u>but never higher</u> relative to the directory path (package) in <mark>sys.path</mark> </p>
+<details class="example" open>
+<summary> DEMO </summary>
+    <p> - this is the directory structure for the below examples </p>
+    <pre class="syntax">
+    test.py                                                                            &lt;- entry (__main__ module)
+    sibling.py
+    <span style="color:yellow;">[pyModules]</span>
+        |- __inint__.py
+        |- module1.py
+        <span style="color:yellow;">|- [subModules]</span>
+            |- __inint__.py
+            |- subModule.py
+    </pre>
+    <p> - <mark>import</mark> </p>
+    <pre>
+// <mark>./test.py</mark> (file) -------------------------------------------------------------------
+    import sibling                                                                     // imports the <mark>./sibling.py</mark>  
+    import pyModules                                                                   // imports the <mark>./pyModules/__init__.py</mark>                  // directory targeted   
+    import pyModules.module1 as mod1                                                   // imports the <mark>./pyModules/module1.py</mark>                   // -! this also calls the <mark>./pyModules/__init__.py</mark> but does not import it!   
+    import pyModules.subModules as sub                                                 // imports the <mark>./pyModules/subModules/__init__.py</mark>       // -! this also calls the <mark>./pyModules/__init__.py</mark> but does not import it!   
+    import pyModules.subModules.subModule as subMod                                    // imports the <mark>./pyModules/subModules/subModule.py</mark>      // -! this also calls the <mark>./pyModules/__init__.py</mark> and <mark>./pyModules/subModules/__init__.py</mark> but does not import them!    
+    
+                                                                                       // we are basically importing the global scope or the targeted file in an object (name space)
+    sibling.sibling                                                                    // -> 'sibling'
+    pyModules.initPyModules                                                            // -> 'initPyModules'
+    mod1.module1                                                                       // -> 'module1'
+    sub.initSubModules                                                                 // -> 'initSubModules'
+    subMod.subModule                                                                   // -> 'subModule'
+    
+    
+// <mark>./sibling.py</mark> (file) ----------------------------------------------------------------
+    sibling = 'sibling'
+    
+    
+// <mark>./pyModules/__init__.py</mark> (file) -----------------------------------------------------
+    import subModules.subModule                                                        // -! raises a <mark>ModuleNotFound</mark> error because the this directory path is not present in <mark>sys.path</mark>    
+    from .subModules.submodule import *                                                  <span style="color:darkgray;">// we should use relative path instead </span>
+    
+    initPyModules = 'initPyModules'
+    
+    
+// <mark>./pyModules/module1.py</mark> (file) ------------------------------------------------------
+    module1 = 'module1'    
+    
+// <mark>./pyModules/subModules/__init__.py</mark> (file) ------------------------------------------
+    initSubModules = 'initSubModules'
+    
+    
+// <mark>./pyModules/subModules/subModule.py</mark> (file) -----------------------------------------
+    subModule = 'subModule'    
+    </pre>
+    <p> - <mark>from... import</mark> </p>
+    <pre>
+// <mark>./test.py</mark> (file) -------------------------------------------------------------------
+    sibling = 'localVar'
+    from sibling import sibling                                                        // imports a variable from the targeted module 
+    sibling                                                                            // -> 'sibling'                     // -! imported variables overwrite local variables on conflict   
+    
+    initPyModules = 'localVar'
+    from pyModules import initPyModules as initPyMod                                   // aliases the imported variable  
+    initPyModule                                                                       // -> 'localVar'                    // variable name conflict avoided 
+    initPyMod                                                                          // -> 'initPyMOdules'
+    
+    from pyModules.module1 import module1 as mod1, module2 as mod2                     // multiple variables are imported  
+    mod1                                                                               // -> 'module1'
+    mod2                                                                               // -> 'module2'
+    
+    from pyModules.subModules import *                                                 // imports all variables in the current module and dupms them on the global scope of this module (careful about name conflicts)   
+    initSubModules1                                                                    // -> 'initSubModules'    
+    initSubModules2                                                                    // -> 'initSubModules'    
+    
+    subModule = 'localVar'
+    from pyModules.subModules.subModule import *
+    subModule                                                                          // -> 'subModule'                   // -! local variable overwritten   
+    
+    
+// <mark>./sibling.py</mark> (file) ----------------------------------------------------------------
+    sibling = 'sibling'
+    
+    
+// <mark>./pyModules/__init__.py</mark> (file) -----------------------------------------------------
+    initPyModules = 'initPyModules'
+    
+// <mark>./pyModules/module1.py</mark> (file) ------------------------------------------------------
+    module1 = 'module1'
+    module2 = 'module2'
+    
+// <mark>./pyModules/subModules/__init__.py</mark> (file) ------------------------------------------
+    initSubModules1 = 'initSubModules'
+    initSubModules2 = 'initSubModules'
+    
+    
+// <mark>./pyModules/subModules/subModule.py</mark> (file) -----------------------------------------
+    subModule = 'subModule'    
+    </pre>
+    <p> - using relative paths <mark>from... import</mark> </p>
+    <pre>
+// <mark>./test.py</mark> (file) -------------------------------------------------------------------
+    from .pyModules import *                                                           // -! raises a <mark>ImportError</mark> error because we cannot use relative imports from the main module   
+    from .pyModules.module1 import * 
+    
+    
+// <mark>./sibling.py</mark> (file) ----------------------------------------------------------------
+    
+    
+    
+    
+// <mark>./pyModules/__init__.py</mark> (file) -----------------------------------------------------
+    import subModules.subModule                                                        // -! raises a <mark>ImportError</mark> error because the this directory path is not present in <mark>sys.path</mark>    
+    from .subModules.submodule import *                                                  <span style="color:darkgray;">// we should use relative path instead </span>
+    
+    initPyModules = 'initPyModules'
+    
+    
+// <mark>./pyModules/module1.py</mark> (file) ------------------------------------------------------
+    module1 = 'module1'    
+    
+// <mark>./pyModules/subModules/__init__.py</mark> (file) ------------------------------------------
+    initSubModules = 'initSubModules'
+    
+    
+// <mark>./pyModules/subModules/subModule.py</mark> (file) -----------------------------------------
+    subModule = 'subModule'    
+    </pre>
+    
+    
+    
+    
+</details>
+    
+    
+    
+    
+    
+    
 <!--
 - general explanaition module name and extenstion 
 
 - module cache and all its shit 
 - lokup path (this is where I document the syntax)
+    - explain the modulePath
 - package explanation 
 
 ---------------------------------------------------------------------------------------------
 WRITE DOWN EVERYTHING NEW
 ---------------------------------------------------------------------------------------------
-    
-    
-    - the module is imported only once and chached, if we want to import again we must use import importlib; importlib.reload(module)
-    
-    
 - syntax (imports and binds to local name)
     - from <module> import [var, ...]
     - from <module> *
@@ -177,17 +473,6 @@ WRITE DOWN EVERYTHING NEW
         - PYTHONPATH environment variable (apparently the path is defined the same way as for PATH => TEST this!)
         
         
-        
-        
-
-    - __pycache__ 
-        - python stores the cached module version in this directory 
-        - the cached files are bytecode compiled => for faster module loading 
-        - (PYTHONDONTWRITEBYTECODE=1 python test.py) -> to perevent the creation of __pycache__
-        - you have to export PYTHONDONTWRITEBYTECODE=1 otherwise does not because the environment var is not passed further down 
-        - python -B test.py -> another way to prevent the creation of __pycache__ 
-        
-        
     - builtin or (standard modules)
     - import builtins 
             - list of builtin function and variables (does not include those who has to be imported)
@@ -204,7 +489,7 @@ WRITE DOWN EVERYTHING NEW
     - it's commont to use relative paths in __init__.py becasue usually at that level there's no sys.path 
     
     
-    - regular packages and namespaced packages 
+    - regular packages and namespaced packages and standard modules 
         - regular package     -> directory containing an __init__.py file (makes a directroy a package)
             - package level initialization 
         - namespace package   -> dependencies are everywhere (network, picked from specific directories, etc..)
@@ -222,7 +507,7 @@ WRITE DOWN EVERYTHING NEW
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    
+    - what happens on import variable conflict ???
     
     
 -->
@@ -234,6 +519,19 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 --------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------
+    
+    
+    
+    - __pycache__ 
+        - python stores the cached module version in this directory 
+        - the cached files are bytecode compiled => for faster module loading 
+        - (PYTHONDONTWRITEBYTECODE=1 python test.py) -> to perevent the creation of __pycache__
+        - you have to export PYTHONDONTWRITEBYTECODE=1 otherwise does not because the environment var is not passed further down 
+        - python -B test.py -> another way to prevent the creation of __pycache__ 
+    
+    
+    - the module is imported only once and chached, if we want to import again we must use import importlib; importlib.reload(module)
+    
     - can we import dynamically ???
         => yes we can (but cannot use *)
 

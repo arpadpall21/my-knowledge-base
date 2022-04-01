@@ -1,3 +1,4 @@
-from .subPackage.subModule import *
-# from ..module1 import *
-print( 'hello from module1' )
+print( 'Hello from module1' )
+
+module1 = 'module1'
+module2 = 'module2'

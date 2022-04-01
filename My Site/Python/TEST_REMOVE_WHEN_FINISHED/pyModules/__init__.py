@@ -1,4 +1,6 @@
-from .module1 import *
-from .module2 import *
+# import subModules.subModule
+from .subModules.subModule import *
 
-x = 10
+print( 'hello from __init__.py' )
+
+initPyModules = 'initPyModules'
