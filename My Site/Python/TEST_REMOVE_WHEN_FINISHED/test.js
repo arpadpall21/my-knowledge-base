@@ -1,3 +1,3 @@
-console.log(
-    module.paths
+console.log( 
+    0 ** 0
 )

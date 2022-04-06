@@ -14,7 +14,6 @@
     <p class="sitenav"> <a href="../../index.html">MySite></a>
         <a href="../index.html">Python></a> Modules
     </p>
-    
 <table class="table">
 <caption>
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
@@ -23,20 +22,29 @@
         <th style="width:30%;"> Attribute / Method </th>
         <th> Description </th>
     </tr>
+    <tr class="20.01">
+        <td> 
+            __all__ = [<strong>varName:str</strong>, <i>...</i> ]
+        </td>
+        <td>
+            - lists variables that will be exported when the importing module uses the <mark>from <strong>modulePath</strong> import *</mark> syntax <br>
+            - when the importing module uses the <mark>from <strong>modulePath</strong> import <strong>var</strong></mark> or <mark>import <strong>modulePath</strong></mark> syntax this has no effect at all 
+        </td>
+    </tr>
+    <tr class="05.02">
+        <td> 
+            __file__
+        </td>
+        <td>
+            - returns the absolute path of this file  
+        </td>
+    </tr>
     <tr class="05.01">
         <td> 
             __name__
         </td>
         <td>
             - returns the module's name (filename) (in main modules this is always <mark>__main__</mark>)  
-        </td>
-    </tr>
-    <tr class="05.01">
-        <td> 
-            __file__
-        </td>
-        <td>
-            - returns the absolute path of this file  
         </td>
     </tr>
     <tr class="10.01">
@@ -55,11 +63,6 @@
             - settable <strong>list</strong> which contains directory paths where python will search for modules (<mark>sys</mark> is a standard (built in) module)
         </td>
     </tr>
-    
-    
-    
-    
-    
 </table>
     <br>
 <table class="table">
@@ -79,15 +82,7 @@
             - (environment variable) prevent python instances in this shell to create <mark>__pycache__</mark> folder for its modules   
         </td>
     </tr>
-    <tr class="05.01">
-        <td> 
-            <em>python</em> -B <strong>pyFile.py</strong>
-        </td>
-        <td>
-            - (flag) prevents this python instance to create <mark>__pycache__</mark> folder for its modules   
-        </td>
-    </tr>
-    <tr class="05.01">
+    <tr class="10.01">
         <td> 
             <em>export</em> PYTHONPATH=<i>absPath:...</i>
         </td>
@@ -95,13 +90,14 @@
             - (environment variable) sets module paths that will be prepended (at the beginning) on the <mark>sys.path</mark> for module path resolution  
         </td>
     </tr>
-    
-    
-    
-    
-    
-    
-    
+    <tr class="05.02">
+        <td> 
+            <em>python</em> -B <strong>pyFile.py</strong>
+        </td>
+        <td>
+            - (flag) prevents this python instance to create <mark>__pycache__</mark> folder for its modules   
+        </td>
+    </tr>
 </table>
     <br>
 <table class="table">
@@ -118,25 +114,26 @@
             import <strong class="openable">modulePath<div>
     <strong>dir|file</strong>.<i>dir|file</i>.<i>...</i>
     <p> - path resolution start from one of the listed directory path in <mark>sys.path</mark> </p>
-            </div></strong> <small>[as <i>alias</i>]</small>
+            </div></strong><i>, ...</i> <small>[as <i>alias</i>]</small>
         </td>
         <td>
             - imports the specified file or directory in the current module <br>
+            - on multiple import only the last imported module can be aliased <br>
             - if <strong>modulePath</strong> is a <mark>.py</mark> file, that file is imported as python module <br>
             - if <strong>modulePath</strong> is a directory, python will search for a <mark>__init__.py</mark> in that directory which will be loaded (as <span class="openable">regular package<div>
     <p> basically the <mark>__init__.py</mark> global variables are imported </p>
             </div></span>)
         </td>
     </tr>
-    <tr class="05.02">
+    <tr class="10.01">
         <td>
             from <strong class="openable">modulePath<div>
     <strong>dir|file</strong>.<i>dir|file</i>.<i>...</i>
     <p> - path resolution start from one of the listed directory path in <mark>sys.path</mark> </p>
     <hr>
     <p> .<strong>dir|file</strong>.<i>dir|file</i>.<i>...</i> (<mark>.</mark> => current directory / <mark>..</mark> => parnet directory / etc...) </p>
-    <p> - relative path can be used from modules that are located <u>1 level lower</u> than the entry module </p>
-    <p> - relative paths cannot target files|directories that are located higher or at the same level as the entry package </p>            
+    <p> - relative path can be used from modules that are located <u>1 level lower</u> than the entry (<mark>__main__</mark>) module </p>
+    <p> - relative paths cannot target files|directories that are located <u>higher or at the same level</u> as the entry module is located </p> 
         </div></strong> import <strong>var <small>[as <i>alias</i>]</small>, <i>...</i>
         </td>
         <td>
@@ -147,29 +144,25 @@
             </div></span>)
         </td>
     </tr>
-        <tr class="05.03"><td></td><td></td></tr>
-    <tr class="05.02">
+        <tr class="10.02"><td></td><td></td></tr>
+    <tr class="10.03">
         <td>
             from <strong class="openable">modulePath<div>
     <strong>dir|file</strong>.<i>dir|file</i>.<i>...</i>
     <p> - path resolution start from one of the listed directory path in <mark>sys.path</mark> </p>
     <hr>
     <p> .<strong>dir|file</strong>.<i>dir|file</i>.<i>...</i> (<mark>.</mark> => current directory / <mark>..</mark> => parnet directory / etc...) </p>
-    <p> - relative path can be used from modules that are located <u>1 level lower</u> than the entry module </p>
-    <p> - relative paths cannot target files|directories that are located <u>higher or at the same level</u> as the entry package is located </p> 
+    <p> - relative path can be used from modules that are located <u>1 level lower</u> than the entry (<mark>__main__</mark>) module </p>
+    <p> - relative paths cannot target files|directories that are located <u>higher or at the same level</u> as the entry module is located </p> 
         </div></strong> import *
         </td>
         <td>
             - imports all variables from the targeted file or directory and dumps them in the current module's global scope <br>
             - <u>on name confclit the imported variable overwrites the local one </u> <br>
-            - this syntax does not support dynamic imports 
+            - this syntax is not supported as dynamic import
         </td>
     </tr>
 </table>
-
-
-
-
     <br>
     <details class="example" id="notes">
     <summary> Notes :</summary>
@@ -180,9 +173,9 @@
 <h2 style="color:green;"><u> Remember This : </u></h2>
     <p> - use <mark>export PYTHONDONTWRITEBYTECODE=1</mark> (not <mark>PYTHONDONTWRITEBYTECODE=1</mark>) because the <mark>export</mark> also sets environment variables for child processes, and python is a child process in this shell </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-    <p> - Python can load <mark>.py</mark> files as modules, the module name will be the file name, except the main module whose name is <mark>__main__</mark> (the very first module that start the program) </p>
-    <p> - modules can be imported dynamically as well (except when using <mark>*</mark> in imports) </p>
-    <p> - the imported module's all global variables are accessible from the current module (not explicit export here) </p>
+    <p> - Python can load <mark>.py</mark> files and directories as modules, the module name will be the file or directory name, except the main module whose name is <mark>__main__</mark> (the very first module that start the program) </p>
+    <p> - Python supports dynamic modules loading (except when the <mark>from <strong>modulePath</strong> import *</mark> syntax is used) </p>
+    <p> - the imported module's entire global scope is imported along with is variables in the importing module (there are not explicit export or private variables here) </p>
 <details class="example">
 <summary> DEMO </summary>
     <pre>
@@ -198,6 +191,10 @@
     
         module1.a                                                                      // -> 201                 // the imported module's all global variables are available here   
         module2.y                                                                      // -> 202
+    
+        // -------------------------------------
+        from module2 import x, y                                                      // the <mark>from... import</mark> also works  
+        from module2 import *                                                         // -! raises a <mark>SyntaxError</mark> because the <mark>*</mark> is not allowed for relative imports  
     
     importModule()
     
@@ -216,7 +213,7 @@
 </details>
 <!---------------------------------------------------------------------------------------------->
 <hr>
-<h2 class="header"><u> The <mark>__name__</mark> and <mark>__file__</mark> attributes </u></h2>
+<h2 class="header"><u> The <mark>__name__</mark> / <mark>__file__</mark> / <mark>__all__</mark> attributes </u></h2>
 <details class="example">
 <summary> DEMO </summary>
     <pre>
@@ -239,6 +236,37 @@
 // ------------------------------------------------------------------------------------
     __name__                                                                           // -> 'module2'
     __file__                                                                           // -> '/workdir/module2.py'
+    </pre>
+    <p> - <mark>__all__</mark> </p>
+    <pre>
+// main.py (file) ---------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    from module1 import *                                                              // the <mark>__all__</mark> attribute in the exporting module is valid only for this import syntax 
+    
+    x                                                                                  // -> 21
+    y                                                                                  // -> 22
+    x                                                                                  // -! raises a <mark>NameError</mark> because the <mark>x</mark> varialbe is not imported in this case 
+    
+    
+    from module1 import x, y, z                                                        // other import statements ignore the <mark>__all__</mark> attribute in the exporting module   
+    import module1 
+    
+    x                                                                                  // -> 21
+    y                                                                                  // -> 22
+    x                                                                                  // -> 23
+    
+    module1.x                                                                          // -> 21
+    module1.y                                                                          // -> 22
+    module1.z                                                                          // -> 23
+    
+    
+// module1.py (file) ------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+    x = 21
+    y = 22
+    z = 23
+    
+    __all__ = ['x', 'y']                                                               // only the <mark>x</mark> and <mark>y</mark> variables are exported when the <mark>from &lt;modulePath&gt; import *</mark> import syntax is used by the importing module   
     </pre>
 </details>
 <!---------------------------------------------------------------------------------------------->
@@ -306,11 +334,12 @@
 <hr>
 <h2 class="header"><u> Importing modules <mark>import</mark> / <mark>from</mark> </u></h2>
     <p> - in Python we can only import modules at the same directory level or lower levels <u>but never higher</u> relative to the directory path (package) in <mark>sys.path</mark> </p>
-<details class="example" open>
+    <p> - relative import path is allowed but only for navigating 1 level lower than the entry (main) module </p>
+<details class="example">
 <summary> DEMO </summary>
     <p> - this is the directory structure for the below examples </p>
     <pre class="syntax">
-    test.py                                                                            &lt;- entry (__main__ module)
+    main.py                                                                            &lt;- entry (__main__ module)
     sibling.py
     <span style="color:yellow;">[pyModules]</span>
         |- __inint__.py
@@ -321,7 +350,7 @@
     </pre>
     <p> - <mark>import</mark> </p>
     <pre>
-// <mark>./test.py</mark> (file) -------------------------------------------------------------------
+// <mark>./main.py</mark> (file) -------------------------------------------------------------------
     import sibling                                                                     // imports the <mark>./sibling.py</mark>  
     import pyModules                                                                   // imports the <mark>./pyModules/__init__.py</mark>                  // directory targeted   
     import pyModules.module1 as mod1                                                   // imports the <mark>./pyModules/module1.py</mark>                   // -! this also calls the <mark>./pyModules/__init__.py</mark> but does not import it!   
@@ -359,7 +388,7 @@
     </pre>
     <p> - <mark>from... import</mark> </p>
     <pre>
-// <mark>./test.py</mark> (file) -------------------------------------------------------------------
+// <mark>./main.py</mark> (file) -------------------------------------------------------------------
     sibling = 'localVar'
     from sibling import sibling                                                        // imports a variable from the targeted module 
     sibling                                                                            // -> 'sibling'                     // -! imported variables overwrite local variables on conflict   
@@ -403,212 +432,90 @@
     </pre>
     <p> - using relative paths <mark>from... import</mark> </p>
     <pre>
-// <mark>./test.py</mark> (file) -------------------------------------------------------------------
+// <mark>./main.py</mark> (file) -------------------------------------------------------------------
     from .pyModules import *                                                           // -! raises a <mark>ImportError</mark> error because we cannot use relative imports from the main module   
     from .pyModules.module1 import * 
     
     
 // <mark>./sibling.py</mark> (file) ----------------------------------------------------------------
-    
-    
+    from .pyModules.module1 import *                                                   // -! raises a <mark>ImportError</mark> because this module (<mark>sibling.py</mark>) is at the same level as the __main__ module therefore relative imports are not allowed    
     
     
 // <mark>./pyModules/__init__.py</mark> (file) -----------------------------------------------------
-    import subModules.subModule                                                        // -! raises a <mark>ImportError</mark> error because the this directory path is not present in <mark>sys.path</mark>    
-    from .subModules.submodule import *                                                  <span style="color:darkgray;">// we should use relative path instead </span>
+    from .module1 import *                                                             // files or directories can be imported that are located lower than the main module 
+    from .subModules.subModule import *
     
-    initPyModules = 'initPyModules'
+    from ..sibling import *                                                            // -! raises a <mark>ImportError</mark> because this targeted module (<mark>sibling.py</mark>) is located at the same level as the __main__ module 
     
     
 // <mark>./pyModules/module1.py</mark> (file) ------------------------------------------------------
-    module1 = 'module1'    
+    
     
 // <mark>./pyModules/subModules/__init__.py</mark> (file) ------------------------------------------
-    initSubModules = 'initSubModules'
+    from .subModule import *
+    from ..module1 import *                                                            // parent modules can be relatively imported (because they are not at the main module level)
+    from ..subModules.subModule import *                                               // even spaghetti like this is allowed 
+    
+    from ...sibling import *                                                           // -! raises a <mark>ImportError</mark> because this targeted module (<mark>sibling.py</mark>) is located at the same level as the __main__ module 
     
     
 // <mark>./pyModules/subModules/subModule.py</mark> (file) -----------------------------------------
-    subModule = 'subModule'    
     </pre>
-    
-    
-    
-    
 </details>
-    
-    
-    
-    
-    
-    
-<!--
-- general explanaition module name and extenstion 
-
-- module cache and all its shit 
-- lokup path (this is where I document the syntax)
-    - explain the modulePath
-- package explanation 
-
----------------------------------------------------------------------------------------------
-WRITE DOWN EVERYTHING NEW
----------------------------------------------------------------------------------------------
-- syntax (imports and binds to local name)
-    - from <module> import [var, ...]
-    - from <module> *
-                - import all variables from the module (except underscoe prefixed onces)
-    - import <module> as <alias>
-    - import .<module>
-                - . is used in the init file . root of the init file 
-    - __path__ 
-                - returns the absolute path of the current file 
-    
-    
-    
-    - module lokup path 
-        -> buildin module 
-        -> sys.path 
-            - list contains directories where python loosk for modules (in the specified order) -> we can modify it to change lokup order and shit 
-            - the current directory is automatically added 
-        - from the given path we can reference a module by dots => like ojbect.attribute.attribute
-        - PYTHONPATH environment variable (apparently the path is defined the same way as for PATH => TEST this!)
-        
-        
-    - builtin or (standard modules)
-    - import builtins 
-            - list of builtin function and variables (does not include those who has to be imported)
-    
-    - in the __init__ we can define our package so re reference the directoy where the __init__.py is and the __init__.py will group all we need 
-    - the __all__ = [] contains a module list when import * is used 
-    - can we bypass __init__.py ??? (I'm sure we can but let's test it!)
-    - relative imports (. = current dir) (.. parent) (..<dir> )
-    - what about the __init__ file 
-        -> it's a package 'creator, when you import a directory containing the __init__ file, the init file's stuff is imported, you we can nicely create a package in the directory where the __init__ file is placed 
-    - the __init__.py file can contain any regular python code 
-    - in __init__.py file we have to import stuff? 
-          => yep, in the __init__.py file we organize what and how to import 
-    - it's commont to use relative paths in __init__.py becasue usually at that level there's no sys.path 
-    
-    
-    - regular packages and namespaced packages and standard modules 
-        - regular package     -> directory containing an __init__.py file (makes a directroy a package)
-            - package level initialization 
-        - namespace package   -> dependencies are everywhere (network, picked from specific directories, etc..)
-            - directory without __init__.py 
-            - from Python 3.3 
-            - we add the path to sys.path so the bare specifier can find the package 
-    
-*** It’s important to keep in mind that all packages are modules, but not all modules are packages. Or put another way, packages are just a special kind of module. Specifically, any module that contains a __path__ attribute is considered a package
-    
-    - relative imports are pretty shitty!!!
-        - available only below the level of the main module => WTF 
-    
-    - mention that you cannot search upwards when loading module 
-    
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - what happens on import variable conflict ???
-    
-    
--->
-
-
-
-
-<!--
---------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------
-    
-    
-    
-    - __pycache__ 
-        - python stores the cached module version in this directory 
-        - the cached files are bytecode compiled => for faster module loading 
-        - (PYTHONDONTWRITEBYTECODE=1 python test.py) -> to perevent the creation of __pycache__
-        - you have to export PYTHONDONTWRITEBYTECODE=1 otherwise does not because the environment var is not passed further down 
-        - python -B test.py -> another way to prevent the creation of __pycache__ 
-    
-    
-    - the module is imported only once and chached, if we want to import again we must use import importlib; importlib.reload(module)
-    
-    - can we import dynamically ???
-        => yes we can (but cannot use *)
-
-- module 
-    - <moduleFile>.py is a python module the __name__ returns the module's name 
-    - here any variable on the module is automatically exported 
-    - built-in moudles can be imported as 
-    - explain that ther's not export shit here 
-
--->
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr><hr><hr><hr><hr>
-    
-    
-<h2 class="headerExtra"><u> Title 1 </u></h2>
-<h2 class="header"> Title 1.1 </h2>
-<h3 class="header"> Title 1.1.1 </h3>
-<h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-        <p> - red background block means not learned or not tested information! </p>
-        <p> - </p>
-    </div>
-    
-    <pre class="syntax">
-SYNTAX :    main syntax
-            <em>literally used </em>
-            <small>literally used optional </small>
-            <prot style="color:#049500;">prototype chain</prot>
-            <strong>required value </strong>
-            <i>optional value </i>
-                - some descriptions will come here (like arguments)
-                - ??? (3 question marks) in syntax means not tested or not learned yet
-                
-            <span class="openable"> this is an openable element<div>
-                <p> - openable elements listed here in paragraphs </p>
-                <p> - </p>
-            </div></span>
-    </pre>
-    
+<!---------------------------------------------------------------------------------------------->
+<hr>
+<h2 class="header"><u> Namespaced VS Regular (<mark>__init__.py</mark>) packages  </u></h2>
+    <p> - Namespaced package is basically an ordinary <mark>.py</mark> file which import the necessary dependencies for the package </p>
+    <p> - Regular package is a directory that contains an <mark>__init__.py</mark> file, this file contains ordinary Python code which imports the necessary dependencies for the package </p>
+    <p style="text-indent:25px;"> - when the import path targets a directory Python looks for the <mark>__inint__.py</mark> file in that directory (that directory contains a regular package)</p>
 <details class="example">
 <summary> DEMO </summary>
+    <p> - this is the directory structure for the below examples </p>
+    <pre class="syntax">
+    main.py 
+    <span style="color:yellow;">[randomNameGenerator]</span>                                                              &lt;- regular package (directory having <mark>__init__.py</mark> file)   
+        |- __inint__.py
+        |- randomNameGenerator.py                                                      &lt;- namespaced package  
+        <span style="color:yellow;">|- [dependencies]</span>
+            |- names.py
+            |- randomNumber.py
+    </pre>
     <pre>
-    examples of the current lessons 
+// <mark>./main.py</mark> (file) -------------------------------------------------------------------
+    import randomNameGenerator.randomNameGenerator as nameGenerator1                   // imports namespaced package  
+    import randomNameGenerator as nameGenerator2                                       // imports regular package (directory targeted)    
     
-// -----------------------------------------
-
-// -----------------------------------------
+    nameGenerator1.generateRandomName()                                                // -> 'Joe'            // returns a random name  
+    nameGenerator2.generateRandomName()                                                // -> 'Cecilia'
+    
+    
+// <mark>./randomNameGenerator/__init__.py</mark> (file) -------------------------------------------
+    from .dependencies.names import names
+    from .dependencies.randomNumber import genRandomNumber
+    
+    def generateRandomName():
+        return names[genRandomNumber(len(names))]
+    
+    
+// <mark>./randomNameGenerator/randomNameGenerator.py</mark> (file) --------------------------------
+    from .dependencies.names import names
+    from .dependencies.randomNumber import genRandomNumber
+    
+    def generateRandomName():
+        return names[genRandomNumber(len(names))]
+    
+    
+// <mark>./randomNameGenerator/dependencies/names.py</mark> (file) ---------------------------------
+    names = ['Janus', 'Joe', 'Stewe', 'Bob', 'Veronica', 'Luisa', 'Celilia', 'Arnold']
+    
+    
+// <mark>./randomNameGenerator/dependencies/randomNumber.py</mark> (file) --------------------------
+    import random
+    
+    def genRandomNumber(len):
+        return random.randint(0, len - 1)
     </pre>
 </details>
-    
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-<details class="example">
-<summary> Example : </summary>
-<h4 style="color:darkblue;"><u> example title </u></h4>
-    <p> - live tests will come here </p>
-        <details>
-        <summary> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-        </details>
-</details>
-<!---------------------------------------------------------------------------------------------------------------------------------->    
-<hr>
-    
-<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
     
     
     <br><br>

@@ -1,9 +1,9 @@
-# from Python.TEST_REMOVE_WHEN_FINISHED import pyModules
+myInt = '19'
+myInt2 = -19
+
+import sys, math as x
+
+print( x )
 
 
-from .pyModules import *
-from .pyModules.module1 import *
 
-import pyModules
-# from sibling import sib
-# import sibling as sib
