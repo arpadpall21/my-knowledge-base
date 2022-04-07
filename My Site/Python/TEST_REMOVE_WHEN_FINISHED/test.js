@@ -1,3 +1,1 @@
-console.log( 
-    0 ** 0
-)
+binary = '0b11111111'

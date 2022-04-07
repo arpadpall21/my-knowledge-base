@@ -1,9 +1,15 @@
-myInt = '19'
-myInt2 = -19
+myInt = 256
+myInt2 = -255
 
-import sys, math as x
+print(
+    # myInt.to_bytes(1, byteorder='big', signed=False)        # OverflowError 
+)
 
-print( x )
+print(
+    myInt.to_bytes(2, byteorder='big', signed=False)   
+)
 
-
+print(
+    myInt2.to_bytes(1, byteorder='big', signed=True)   
+)
 
