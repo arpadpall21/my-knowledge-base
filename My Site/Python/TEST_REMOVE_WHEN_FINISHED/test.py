@@ -1,6 +1,5 @@
-myComplex = 32.5+45.0021j
+print( divmod(0.98, 0.21) )
 
-print( myComplex.real )
-print( myComplex.imag )
+print( 0.98 // 0.21 )
+print( 0.98 % 0.21 )
 
-print( myComplex.conjugate() )
