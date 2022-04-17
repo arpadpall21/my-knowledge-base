@@ -1,5 +1,8 @@
-print( divmod(0.98, 0.21) )
-
-print( 0.98 // 0.21 )
-print( 0.98 % 0.21 )
-
+with open('test2.txt', 'w') as f:
+    f.write('Test')
+    f.write('Test')
+    f.write('Test')
+    f.write('Test')
+    
+    f.seek(4)
+    f.write('----')
