@@ -26,23 +26,176 @@
     </tr>
     <tr class="0">
         <td> 
+            open(<strong class="openable">filePath:str|fd:nr<div>
+                <p> - file path or file descriptor </p>
+            </div></strong>, <i class="openable">accMode:str<div>
+                <p> - multiple access modes can be combined (Default <mark>r</mark>) </p>
+                <p> <mark>r</mark> - read-only (handler at file content start) (Default) </p>
+                <p> <mark>w</mark> - write-only (handler at file content start), completely overwrites file content (creates the file if not exist) </p>
+                <p> <mark>a</mark> - append (handler at file content end), appends data to the content (creates the file if not exist) </p>
+                <p> <mark>+</mark> - updating (combined with other modes) (<mark>r+</mark> = read and write) (<mark>w+</mark> write and read) (<mark>a+</mark> append and read) </p>
+                <p> <mark>x</mark> - create only (error if file exist)
+                <p> <mark>t</mark> - text mode (open file for text read|write operations) </p>
+                <p> <mark>b</mark> - binary mode (open file for binary read|write operations) </p>
+            </div></i>, <small class="openable">buffering=<i>nr</i><div>
+                <p> <mark>-1</mark> - default buffering (for binary mode uses the <mark>io.DEFAULT_BUFFER_SIZE</mark> usually 4096 or 8192 bytes) (for text mode uses line buffering) </p>
+                <p> <mark>0</mark> - buffering off (for binary mode only) </p>
+                <p> <mark>1</mark> - line buffering (for text mode only) </p>
+                <p> <mark>>1</mark> - bytes to read (buffer chunk size) </p>
+            </div></small>, <small class="openable">encoding=<i>str</i><div>
+                <p> - text encoding (for text mode only) (Default: <mark>locale.getpreferredencoding()</mark> platform's default encoding) </p>
+            </div></small>, <small class="openable">errors=<i>str</i><div>
+                <p> - how to handle encoding|decoding errors (Default: <mark>None</mark>) </p>
+                <p> <mark>'strict'</mark> - to raise a <mark>ValueError</mark> exception if there is an encoding error (same as <mark>None</mark>) </p>
+                <p> <mark>'ignore'</mark> - ignores errors. Note that ignoring encoding errors can lead to data loss </p>
+                <p> <mark>'replace'</mark> - causes a replacement marker (such as '?') to be inserted where there is malformed data </p>
+                <p> <mark>'surrogateescape'</mark> - will represent any incorrect bytes as low surrogate code units ranging from <mark>U+DC80</mark> to <mark>U+DCFF</mark>. These surrogate code units will then be turned back into the same bytes when the surrogateescape error handler is used when writing data. This is useful for processing files in an unknown encoding </p>
+                <p> <mark>'xmlcharrefreplace'</mark> - is only supported when writing to a file. Characters not supported by the encoding are replaced with the appropriate XML character reference <mark>&#nnn;</mark> </p>
+                <p> <mark>'backslashreplace'</mark> - replaces malformed data by Python backslashed escape sequences</p>
+                <p> <mark>'namereplace'</mark> - supported when writing, replaces unsupported characters with <mark>\N{...}</mark> escape sequences </p>
+            </div></small>, <small class="openable">newline=<i>str</i><div>
+                <p> - Default: <mark>None</mark> </p>
+                <hr>
+                <p><b> In text mode </b></p>
+                <p> <mark>None</mark> - universal new line mode (<mark>\n</mark>, <mark>\r</mark>, <mark>\n\r</mark> translated to <mark>\n</mark>) </p>
+                <p> <mark>''</mark> - no translation </p>
+                <hr>
+                <p><b> In binary mode </b></p>
+                <p> <mark>None</mark> - <mark>\n</mark> characters are translated to system default (<mark>os.linesep</mark>) </p>
+                <p> <mark>''</mark> or <mark>\n</mark> - no translation </p>
+            </div></small>, <small class="openable">closefd=<i>bol</i><div>
+                <p> - closes the file description when the <mark>fileObj</mark> is closed (Default: <mark>True</mark>) </p>
+                <p> - only when the 1st argument is <strong>fd</strong> (file descriptor) </p>
+            </div></small>, <small class="openable">opener=<i>fn</i><div>
+                <p> - function that receives the <strong>path</strong> and <strong>flags</strong> as argument </p>
+                <p> - must return a file descriptor (<mark>os.open()</mark>) </p>
+            </div></small>)
+        </td>
+        <td> 
+            - opens the file for the specified operations (<i>accMode</i>) <br>
+            - returns a <strong>fileObj</strong> which is an <span class="openable">appropriate class instance<div>
+                <p> - <mark>io.TextIOWrapper</mark> for text operations </p>
+                <p> - <mark>io.BufferedReader</mark>, <mark>io.BufferedWriter</mark>, <mark>io.BufferedRandom</mark> for binary operations </p>
+                <p> - <mark>io.RawIOBase</mark>, <mark>io.FileIO</mark> when buffering is disabled </p>
+            </div></span> for the desired file operation
+            <span id="browserSupport" title="updated : 2022-04-18">
+                <span class="openable"><i class="fab fa-python"></i>more...<div>
+                <p><b> v3.3 </b></p>
+                <p> - <mark>x</mark> mode added (raises a <mark>FileExistsError</mark> if file creation fails </p></p>
+                <p> - <strong>opener</strong> parameter added </p>
+                <hr>
+                <p><b> v3.4 </b></p>
+                <p> - <mark>U</mark> mode deprecated </p>
+                <hr>
+                <p><b> v3.5 </b></p>
+                <p> - <mark>namereplace</mark> added for <strong>errors</strong> argument </p>
+                <hr>
+                <p><b> v3.10 </b></p>
+                <p> - <mark>U</mark> removed </p>
+                </div></span>
+            </span>
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            for line in <strong>fileObj</strong>:
+        </td>
+        <td> 
+            - the <mark>for</mark> loop at each iteration returns data chunks between <mark>\n</mark> characters (which are lines in text files) <br>
+            - this way the file's full content is not loaded in memory
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.close()
+        </td>
+        <td> 
+            - closes the file object (closes the underlying file descriptor)
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.closed
+        </td>
+        <td> 
+            - returns <mark>True</mark> if the <strong>fileObj</strong> is closed, <mark>False</mark> otherwise
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.name
+        </td>
+        <td> 
+            - returns the file's name referenced by the <strong>fileObj</strong>
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.mode
+        </td>
+        <td> 
+            - returns the <strong>fileObj</strong> file access mode (<mark>open()</mark> method 2nd argument value)
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.encoding
+        </td>
+        <td> 
+            - returns the <strong>fileObj</strong> encoding (<mark>open()</mark> method <mark>encoding</mark> argument value)
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.tell()
+        </td>
+        <td> 
+            - gets the handle position in the file's content 
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.seek(<strong>idx:int</strong>)
+        </td>
+        <td> 
+            - sets the handle position in the file's content 
+        </td>
+    </tr>
+    <tr class="0">
+        <td colspan=2> Read </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.read(<i>char:int|byte:int</i>)
+        </td>
+        <td> 
+            - (no argument) reads the full content of the file (text mode returns <strong>str</strong>) (binary mode returns <strong>bytes</strong>) <br>
+            - reads <i>int</i> characters in text mode, bytes in binary mode 
+        </td>
+    </tr>
+    <tr class="0">
+        <td> 
+            <strong>fileObj</strong>.readline(<i>char:int|byte:int</i>)
+        </td>
+        <td> 
+            - (no argument) returns data chunks between new line characters (lines in text mode) (text mode returns <strong>str</strong>) (binary mode returns <strong>bytes</strong>) <br>
+            - returns <i>int</i> characters in text mode, bytes in binary mode <u>form the returned data chunk (never goes to the next data chunk)</u>
+        </td>
+    </tr>
+    
+    
+    <tr class="0">
+        <td colspan=2> Write </td>
+    </tr>
+    <tr class="0">
+        <td> 
             demo prop 
         </td>
         <td> 
             - demo description 
-            <span class="browserSupport" title="updated : yyyy-mm-dd">
-                <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-                <span><i class="fab fa-firefox"></i>  </span>
-                <span><i class="fab fa-opera"></i>  </span>
-                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i>  </span>
-                <span><i class="fab fa-safari"></i>  </span>
-                <span><i class="fab fa-node-js"></i>  </span>
-            </span>
         </td>
     </tr>
-
-
-
+    
 
 </table>
     <br>
@@ -55,6 +208,92 @@
 <h2 style="color:green;"><u> Remember This : </u></h2>
     
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>open()</mark> API is a high level file interface which greatly simplifies reading & writing files <u style="background-color:red;">[low level file interfaces link] for os low level file APIs</u></p> 
+    <p> - with this tool we can easily read & write text or binary files, without worrying what's going on underneath </p>
+    <p> - this API's handle is basically a pointer in the opened file where the read|write operation will be performed (<mark>tell()</mark> = get handle, <mark>seek()</mark> = set handle) </p>
+<details class="example" open>
+<summary> DEMO </summary>
+    <pre>
+    f = open('test.txt')
+    f                                                                                  // -> io.TextIOWrapper           // io subclass for text io operations    
+    
+    f2 = open('testw.txt', 'br+')
+    f2                                                                                 // -> io.BufferedRandom          // io subclass for binary io operations    
+    
+    f.close()                                                                          // don't forget to close 
+    f2.close()
+    
+// use <mark>with</mark> statement -----------------------------------------------------------------// -! the <mark>with</mark> statement is highly recommended to use for this API   
+    with open('test.txt') as txt, open('test.txt', 'br+') as bin:                      
+        txt                                                                            // -> io.TextIOWrapper           // file objects are available in the <mark>with</mark> block
+        bin                                                                            // -> io.BufferedRandom 
+    
+    txt.closed                                                                         // -> True                       // the <mark>with</mark> statement closes the file objects (even on exception)
+    bin.closed                                                                         // -> True
+    </pre>
+    <p> - using file descriptor </p> 
+    <pre>
+    import os
+    
+    fd = os.open('test.txt', 6)                                                        // file descriptor 
+    
+    with open(fd, 'a+') as file:
+        file.write('\ntest')
+        file.seek(0)
+        file.read()
+    </pre>
+    <p> - using for loop to read lines </p>
+    <pre>
+    with open('test.txt') as file:
+        for line in file:                                                              // basically returns data cunks between <mark>\n</mark> characters (for both text and binary modes)
+            line                                                                       // -> returns each line in file at each iterations 
+    </pre>
+    <p> - <mark>closed</mark> / <mark>name</mark> / <mark>mode</mark> / <mark>encoding</mark> / <mark>tell()</mark> / <mark>seek()</mark> </p>
+    <pre>
+    with open('test.txt') as file:
+        file.name                                                                      // -> 'test.txt'
+        file.mode                                                                      // -> 'r'
+        file.encoding                                                                  // -> 'UTF-8'
+        file.closed                                                                    // -> False
+        
+        file.tell()                                                                    // -> 0                          // handle at 0 index 
+        file.read()
+        file.tell()                                                                    // -> 90                         // handle at 90 index (after reading)
+        
+        file.seek(0)                                                                   // setting handle back to 0 index in order to read the content again 
+        file.read()                                                                    // read the content again   
+        
+    file.closed                                                                        // -> True                       // file object closed after the <mark>with</mark> block   
+    </pre>
+    <p> - reading </p>
+    <pre>
+// text mode --------------------------------------------------------------------------
+    with open('test.txt') as textFile:
+    // read() -------------------------------------------------------------------------
+        textFile.read()                                                                // -> 'test test test test...'   // reads the full content and returns in a string 
+        textFile.read(10)                                                              // -> 'test test '               // reads the next 10 characters and returns in a string 
+    
+    // readline() ---------------------------------------------------------------------
+        textFile.readline()                                                            // -> 'test'                     // returns the next line (content between new line characters)
+        textFile.readLine(2)                                                           // -> 'te'                       // returns 2 charactes from the line (never goes to the next line)
+        
+        
+        
+// binary mode ------------------------------------------------------------------------
+    with open('google.png', 'br') as binFile:
+    // read() -------------------------------------------------------------------------
+        binFile.read()                                                                 // -> b'\x89PNG\r\n\x1a\n\x0...  // reads the full content and returns in a bytes object  
+        binFile.read(10)                                                               // -> b'\x89PNG\r'               // reads the next 10 bytes and returns in a bytes object  
+        
+    // readline() ---------------------------------------------------------------------
+        binFile.readline()                                                             // -> b'\x89PNG\r\n'             // returns data chunks betwen new line characters
+        binFile.readline(2)                                                            // -> b'\x89P'                   // returns 2 bytes from this chunk (never goes to the next chunk)
+
+    </pre>
+    
+    
+    
+</details>
 
 
 
@@ -64,52 +303,156 @@
 ---------------------------------------------------------------------------------------------
 WRITE DOWN EVERYTHING NEW 
 ---------------------------------------------------------------------------------------------
-    open(filePath, accMode:str)                          - opens the file for the specified operation and returns a    file object 
-    r, w, a 
-    w -> creates the file 
-    b -> binary 
+    fileObj.tell()                                    - current operator pointer in the text 
+    fileOjb.seek(idx:nr)                              - sets the operator pointer in the text 
     
+    fileObj.read(char:len|nbytes:nr)                  - reads and returns the full content of the file 
+    fileObj.readline(lines:nr)                        - reads the next line of the file 
+    fileObj.readlines()                               - reads and returns the full content of the line by line in a list 
+    
+    fileObj.write(str)                                - writes to the file 
+    fileObj.writelines([str, ...])                    - writes line 
+                                                          - does this work with bytes??
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    - the r before the stirng (ex: r'\temp\') means raw string 
+        - the \ character is not used as escape in the string 
+    
+    
+    
+    
+    
+    
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+- print() and with statement once this is done 
+-----------------------------------------------------------------------------------
+        - what else can we use the with statement -> finisth the opne() first!, then we'll ckech that too
+        - study print() method too
+            https://docs.python.org/3/library/functions.html#print
+    
+    with <openFile> as alias:                         - opens the file and the file object is available in the block 
+        <code block>                                  - automatically closes the file on block exit or exception 
+
+    
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    * get file size somehow 
+        - not with this API => os.path.getsize(filePath)
+    
+    * with open('a', 'w') as a, open('b', 'w') as b:
+        - does this work? -> yes it does!
+    
+    * how and if can I create file descriptors in python
+        - os.open() -> but I'll lear that with os
+    
+    - I'm pretty shure that the len(str) retunrs how many characters the string has but TEST it!
+-->
+
+
+
+
+<!--
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+
+
+
+
+
+
+
     fileObj.name                                      - returns the file's name 
     fileObj.mode                                      - returns the file's opening mode 
     fileObj.encoding                                  - returns the file's encoding 
     fileObj.closed                                    - returns True if the fileObject is closed, returns False if the fileObject is open 
     
     fileObj.close()                                   - closes the file object 
-    
-    fileObj.read(char:len)                            - reads and returns the full content of the file 
-    fileObj.readline()                                - reads the next line of the file 
-    fileObj.readlines()                               - reads and returns the full content of the line by line in a list 
-    fileObj.tell()                                    - current operator pointer in the text 
-    fileOjb.seek(idx:nr)                              - sets the operator pointer in the text 
-    
-    - we can use the for loop to read the file line by line (this won't load the file's content into memory)
-    
-    fileObj.write()                                   - writes to the file 
-    fileObj.writelines()                              - writes line 
-                                                          - does this work with bytes??
-    
-    
-    
-    with <openFile> as alias:                         - opens the file and the file object is available in the block 
-        <code block>                                  - automatically closes the file on block exit or exception 
-    
-    
-    
-    
+
+
+
+
+
+    - I think the for loop returns the data by buffer chunks 
+    with open("log.txt") as infile:                   - this is how  we read large files (reads one line at the time only)
+        for line in infile:
+            do_something_with(line)
+
+
     - unusedFile objects should be closed (to avoid memory leaks and using fd unnecessarily)
+    - explain what is the handle -> pointer where the operation starts 
 
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - what else can we use the with statement 
+
+
+
+
+
+    - this is a high level file API which greatly simplifies file operations 
+
+
+
+
+
+
+    open(filePath, accMode:str, buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)                          - opens the file for the specified operation and returns a    file object
+        - filePath
+            - paht or file descriptor number 
+        - accessMode
+            r     -> read only (default) (handle start of the file)
+            w     -> write only (overwrites the file, creates the file) (handle start of the file) (already truncates the file)
+            a     -> append only (appends data to a file, creates a new file if not exist) (handle end of the file)
+            x     -> create only (fails if file exist)
+            b     -> binary mode
+            t     -> text mode (default)
+            +     -> open for updating (r+, w+, a+) -> TEST!!!
+        - buffering
+            - -1  -> buffering
+                        - for binary files uses the io.DEFAULT_BUFFER_SIZE (usually 4096 or 8192 bytes)
+                        - for text files uses line buffering 
+            - 0   -> buffering of (only in binary mode)
+            - 1   -> line buffering
+            - >1  -> howmany bites to read (buffer chunk size)
+        - encoding
+            - for text encoding (default uses the platform's default encoding) the returned value of 'locale.getpreferredencoding()'
+            - for binary operation this should be left unused 
+        - errors
+            - how encoding|decoding errors are handled (only in text mode)
+            - there's a list for that => document it!
+        - newline
+            - how to treat new line caracters
+            - possible values => None, '', '\n', '\r', '\r\n'
+                - in text mode 
+                    - None universal new line mode ('\n', '\r', '\n\r') translated to '\n'
+                    - '' universal new line mode on but there's no translation
+                - in binary mode
+                    - None '\n' characters are translated to the system default (os.linesep)
+                    - '' or '\n' -> no translation 
+                    - for other values -> any '\n' caracters are translated to the given value 
+        - closefd
+            - closes the file descriptor when the close() method is called on the returned fileObj (if False the file descriptor stays open => TEST!!!)
+            - if file path passed this value must be True
+        - opener
+            - a custom opener can be passed 
+            - a function that receives path and flags as argument (must return a file descriptor)
     
-    - study print() method too
-        https://docs.python.org/3/library/functions.html#print
+        - 3.3 x mode added , opener parameter added, FileExistsError raised if file creation with x exist 
+        - 3.4 the 'U' mode is depcreated (3.10 'U' mode is removed)
+        - 3.5 namereplace for error argument 
+        - 
     
-    - get file size somehow 
-    
+    - this method returns all adequate classes to perform the operation but I call here fileObj -> document this on the open down menu shit 
+
 -->
-
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr><hr><hr><hr><hr>

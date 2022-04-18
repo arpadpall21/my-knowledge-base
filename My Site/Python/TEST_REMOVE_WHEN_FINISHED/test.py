@@ -1,8 +1,5 @@
-with open('test2.txt', 'w') as f:
-    f.write('Test')
-    f.write('Test')
-    f.write('Test')
-    f.write('Test')
-    
-    f.seek(4)
-    f.write('----')
+with open('test.txt') as textFile:
+    print( textFile.readlines(7) )
+
+with open('google.png', 'br') as binFile:
+    print( binFile.readlines(21) )
