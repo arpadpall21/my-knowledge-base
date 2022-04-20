@@ -529,13 +529,13 @@
         <th> Description </th>
     </tr> 
     <tr class="05.01">
-        <td> \<strong>char</strong> </td>
+        <td> '\<strong>char</strong>' </td>
         <td> 
             - character following a backslash is escaped
         </td>
     </tr> 
     <tr class="10.01">
-        <td> \<strong>escapeChar</strong> </td>
+        <td> '\<strong>escapeChar</strong>' </td>
         <td> 
             - any <span class="openable">escape character<div>
                 <p> <mark>\t</mark> - Insert a tab in the text at this point </p>
@@ -550,23 +550,29 @@
         </td>
     </tr> 
     <tr class="15.01">
-        <td> \u<strong>HexHexHexHex</strong> </td>
+        <td> '\u<strong>HexHexHexHex</strong>' </td>
         <td> 
             - references a unicode UTF-16 character by a <u>4</u> hexadecimal notation (hex => <mark>[0123456789abcdef]</mark>) <u>(can reference only 2 byte long characters)</u>
         </td>
     </tr> 
     <tr class="15.03">
-        <td> \x<strong>HexHex</strong> </td>
+        <td> '\x<strong>HexHex</strong>' </td>
         <td> 
             - references a latin1 (ISO-8859-1) character by a <u>2</u> hexadecimal notation (hex => <mark>[0123456789abcdef]</mark>)
         </td>
     </tr> 
     <tr class="15.04">
-        <td> \<strong>Oct....</strong> </td>
+        <td> '\<strong>Oct....</strong>' </td>
         <td> 
             - references a latin1 (ISO-8859-1) character by a <u>1 to 3</u> octal notation (octal => <mark>[01234567]</mark>) 
         </td>
-    </tr> 
+    </tr>
+    <tr class="21.01">
+        <td> r'<strong>str</strong>' </td>
+        <td> 
+            - the <mark>r</mark> before a string literal disables escape notations 
+        </td>
+    </tr>
 </table>
     <br>
     <details class="example" id="notes">
@@ -576,10 +582,10 @@
 <h2 style="color:green;"><u> Useful Links : </u></h2>
     
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - Python encodes strings in UTF-8 (uses 1 to 4 bytes to encode 1 character) </p>
     <p> - strings are iterable, so we can use iterator tools on them (ex: for loop, <mark>in</mark> keyword, etc...) </p>
+        <p> - the <mark>len()</mark> returns the number of characters the string contains (not number of 2bytes like <mark>length</mark> in JS) </p>
     <pre class="syntax">
     '<strong>string</strong>'                                                                           // single or double quotes can be used 
     "<strong>string</strong>"
@@ -590,6 +596,14 @@
       <strong>string</strong>
     '''
     </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    txt = 'a❤𩸽'                                                                       // some characters need 4 bytes to encode  
+    
+    len(txt)                                                                           // -> 3         // number of characters (not underlying bytes)
+    </pre>
+</details>
 <hr>
 <!-------------------------------------------------------------------------------------------->
 <h2 class="header"> escape notation <mark>\</mark> </h2>
@@ -618,6 +632,10 @@
     // -! the 💔 character is referenced as <mark>d83ddc94</mark> hexadecimal or <mark>3627932820</mark> decimal in the unicode table (encoded in 4 bytes), so the below tools cannot reference it because they are limited to reference only 2 byte characters   
     '/ud83ddc94'                                                                       // -> '/ud83ddc94'
     chr(3627932820)                                                                    // -! raises an OverflowError  
+    
+// disabling <mark>\</mark> (escape notation) ------------------------------------------------------
+    r'\u1fa7'                                                                          // -> '\u1fa7'   // the <mark>r</mark> before string literal disables the escape notaions 
+    r'\x21'                                                                            // -> '\x21'
     </pre>
 </details>
 <hr>

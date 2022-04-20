@@ -43,6 +43,34 @@
     </tr>
 </table>
     <br>
+<table class="table">
+<caption>
+    Methods
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="0">
+        <td> 
+            print(<strong>data:any</strong>, <i>...</i>, <small class="openable">sep=<i>str</i><div>
+                <p> - separator between printed <strong>data</strong> (Default: <mark>''</mark>) </p>
+            </div></small>, <small class="openable">end=<i>str</i><div>
+                <p> - end string after the printed <strong>data</strong> (Default: <mark>'\n'</mark>) </p>
+            </div></small>, <small class="openable">file=<i>obj</i><div>
+                <p> - an object having <mark>write(<strong>out</strong>)</mark> can be passed (the <strong>out</strong> argument receives the <strong>data</strong>, <strong>sep</strong> and <strong>end</strong> <u>serialized</u>) (Default: <mark>sys.stdout</mark>) </p>
+            </div></small>, <small class="openable">flush=<i>bol</i><div>
+                <p> - <mark>False</mark> (Default) - buffer used </p>
+                <p> - <mark>True</mark> - no buffer used (data flushed directly to the output) </p>
+            </div></small>)
+        </td>
+        <td>
+            - serializes the passed <strong>data</strong> (can be multiline) and outputs to <mark>stdout</mark> (by Default)
+        </td>
+    </tr>
+</table>
+    <br>
     <details class="example" id="notes">
     <summary> Notes :</summary>
     </details>
@@ -64,7 +92,7 @@
     <strong>statement</strong>                                                                           // if we want the code block to be empty we have to use the <mark>pass</mark> keyword   
         pass
     </pre>
-<details class="example" open>
+<details class="example">
 <summary> DEMO </summary>
     <pre>
     def fn1():
@@ -78,7 +106,7 @@
 </details>
 <!---------------------------------------------------------------------------------------------->
 <hr>
-    <h2 class="header"> Comments </h2>
+<h2 class="header"> Comments </h2>
     <pre class="syntax">
     # <strong>some comment</strong>                                                                      // lines start with <mark>#</mark> are not parsed => comment   
     
@@ -89,9 +117,9 @@
     </pre>
 <!---------------------------------------------------------------------------------------------->
 <hr>
-    <h2 class="header"> Variables and Scoping (<mark>global</mark> / <mark>nonlocal</mark>) </h2>
+<h2 class="header"> Variables and Scoping (<mark>global</mark> / <mark>nonlocal</mark>) </h2>
     <p> - python is case-sensitive, variable names can contain <mark>A-z</mark> <mark>0-9</mark> <mark>_</mark> but cannot start with any number </p>
-    <p> - there are 2 scope types in Python, global scope and function scope (local scope) </p>
+    <p> - there are 2 scope types in Python, global scope and function scope (local scope), because of the Python syntax if we want to set upper scope variables we must use the <mark>nonlocal</mark> or <mark>global</mark> keywords </p>
     <p> - each module has its own global scope (there's not shared global scope here like in JavaScript's <mark>global</mark> or <mark>window</mark>) </p>
     <pre class="syntax">
 <span style="color:darkgray;"> // variables --------------------------------------------------------------------------</span>
@@ -138,17 +166,16 @@
     y = 1
     
     def fn():
-        x = 11
-        x                                                                               // -> 11     // the local varialbe's value 
-        y                                                                               // -> 1      // globa variable's value 
+        x                                                                               // -> 0      // we have access to the upper scope's variable 
+        x = 11                                                                          // !! new local variable declared (this does not set upper scope's variable)
+        x                                                                               // -> 11
         
-    x
     fn() 
     
 // global keyword -----------------------------------------------------------------------
     def fn():
         def nestFn():
-            global x                                                                     // from now on the x variable references the global x variable    
+            global x                                                                     // from now on the x variable references the global x variable (this is how we set upper scope variables)    
             x = "I'm global"                                                             // assing value to the global variable 
         nestFn()
     fn()
@@ -161,7 +188,7 @@
         x = 'local-1'
         
         def nestFn():
-            nonlocal x                                                                   // from now on the x variable references the the parent scope's x variable    
+            nonlocal x                                                                   // from now on the x variable references the the parent scope's x variable (this is how we set upper scope variables)    
             x                                                                            // -> 'local-1'
         nestFn()
     fn()
@@ -190,8 +217,23 @@
 </details>
 <!---------------------------------------------------------------------------------------------->
 <hr>
+<h2 class="header"> The <mark>print()</mark> method </h2>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    print( {"p1":1}, ({1, 2},), sep=' - ', end=" |end|")                                // -> {'p1': 1} - ({1, 2},) |end|
+    
+// -------------------------------------------------------------------------------------
+    class CustomWrite():
+        def write(self, data):
+            data                                                                        // -> '{"p1":1}'  |  ' - ' |  '({1, 2},)'  |  ' |end|'        // receives the <mark>obj</mark>, <mark>sep</mark> and <mark>end</mark> serialized  
+    
+    print( {"p1":1}, ({1, 2},), sep=' - ', end=" |end|", file=CustomWrite())            // file arugment can have an object having <mark>write()</mark> method 
+    </pre>
+</details>
+<!---------------------------------------------------------------------------------------------->
+<hr>
 <h2 class="header" style="background-color:red;"> Type Annotation <span id="browserSupport" title="Updated: 2022-03-20"><span><i class="fab fa-python"></i> 3.5 </span></span>  </h2>
-
 <!---------------------------------------------------------------------------------------------->
 <hr>
 <h2 class="header"> CLI </h2>
