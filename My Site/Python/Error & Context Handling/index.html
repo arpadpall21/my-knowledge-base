@@ -9,28 +9,29 @@
     <script src="../../Assets/scriptPages.js"></script>
 </head>
 <body>
-<h1> Error Handling (ver 4.0.0) </h1>
+<h1> Error & Context Handling (ver 4.0.0) </h1>
     <p> Updated ( 2022-02-20 )</p>
     <p class="sitenav"> <a href="../../index.html">MySite></a>
-        <a href="../index.html">Python></a> Error Handling    
+        <a href="../index.html">Python></a> Error & Context Handling 
     </p>
 <table class="table">
 <caption>
+    Error Handling
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
 </caption>
     <tr>
         <th style="width:30%;"> Error Classes </th>
         <th> Description </th>
     </tr>
-    <tr class="0">
+    <tr class="05.01">
         <td> 
             BaseException
         </td>
         <td> 
-            - exception class sits on the top of the exception chain, all exception classes inherit from this class 
+            - exception class sits on top of the exception chain, all exception classes inherit from this class 
         </td>
     </tr>
-    <tr class="0">
+    <tr class="05.02">
         <td> 
             Exception
         </td>
@@ -47,7 +48,7 @@
         </td>
         
     </tr>
-    <tr class="0">
+    <tr class="10.01">
         <td> 
             <a href="https://www.w3schools.com/python/python_ref_exceptions.asp" target="_blank" style="color:lightcoral;">ExceptionClass [link]</a>
         </td>
@@ -55,7 +56,7 @@
             - exception classes inherited from <mark>BaseException</mark> class (<mark>BaseException</mark> -> <mark>Exception</mark> -> <strong>ExceptionClass</strong>)
         </td>
     </tr>
-    <tr class="0">
+    <tr class="15.01">
         <td> 
             RuntimeError
         </td>
@@ -63,6 +64,29 @@
             - exception that does not belong to any specific exception   
         </td>
     </tr>
+</table>
+    <br>
+<table class="table">
+<caption>
+    Context Management
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Error Classes </th>
+        <th> Description </th>
+    </tr>
+    <tr class="0">
+        <td> 
+        </td>
+        <td> 
+            -
+        </td>
+    </tr>
+    
+    
+    
+    
+    
 </table>
     <br>
     <details class="example" id="notes">
@@ -74,6 +98,7 @@
 <h2 style="color:green;"><u> Remember This : </u></h2>
     
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+<h2 class="headerExtra"> Error Handling </h2>
     <p> - in compile time when something goes wrong Python raises a syntax error (and stops compiling)</p>
     <p> - in runtime when something goes wrong Python raises a logical error (and stops running)</p>
 <hr>
@@ -179,7 +204,7 @@
     try:
         <strong>codeRaisesAnError</strong>
     except <strong>ExceptionClass</strong> as <strong>var</strong>:
-        raise                                                                           // raises the handled exception to the upper <mark>try</mark> statement     
+        raise                                                                           // raises the handled exception to the upper context    
     </pre>
 <details class="example">
 <summary> DEMO </summary>
@@ -197,7 +222,101 @@
         print( 'finally' )
     </pre>
 </details>
+<hr>
+<!-------------------------------------------------------------------------------------------->
+<h2 class="headerExtra"> Context Management </h2>
+    <p> - Python context management is a mechanic which features a setup and teardown logic </p>
+    <p> - the setup logic executes before entering the context, the teardown logic executes when exiting or when the context raises an exception </p>
+    <p> - any object can support context management (ex: <mark>open()</mark> file API), but we also can implement our own context management logic </p>
     
+    
+    
+    
+    
+<hr>
+<!-------------------------------------------------------------------------------------------->
+<h2 class="header"> <mark>with</mark> (context manager) Statement </h2>
+    <pre class="syntax">
+    with <strong>ctxManagerObj</strong> <small>as <i>alias</i></small>:
+        <span style="color:darkgray;">// context management context</span>
+    </pre>
+
+
+
+
+
+<!--
+---------------------------------------------------------------------------------------------
+WRITE DOWN EVERYTHING NEW 
+---------------------------------------------------------------------------------------------
+    - context manager handles automatically the setup and teardown external resources (file, lock, network connection) when dealing with external resources 
+    - we do this to avoid resource leaks
+    - teardown examples, close file descriptor, close connection, flush the last chunk from buffer (an error might prevent proper teardown)
+    - we can use try ... finally or with statements 
+    - context manager (with statement) controls environment by defining __enter__() and __exit__() methods 
+    
+    - the with statement creates a runtime context 
+    - the passed object must return an object having the __enter__() and __exit__() methods which are part of the context management protocol (setup and teardown)
+    - 'context manager object' (or objects that supports the context management protocol)
+    - the open() is highli recommended to use with the 'with' statement to make setup and teardown resoruces easy 
+    
+    - the with statement also supports async (ex: async with)
+    - the asynchronous context manager implements a context manager object that have the __aenter__() and __aexit__() methods 
+    
+    
+    
+    with <openFile> as alias:                         - opens the file and the file object is available in the block 
+        <code block>                                  - automatically closes the file on block exit or exception 
+    
+    - class-based context managers (write a solid demo for async version as well!)
+    - single class can have __enter__() __aenter__() etc... -> demo it like this!
+    class CtxManager:
+        def __enter__(self):
+            print( '__enter__ called!' )
+            return 'test return value'
+
+        def __exit__(self, exc_type, exc_val, exc_tb):        // if return True the code will continue after the with statement, if False (Default) the exception is propagated outside the context manager context 
+            print( '__exit__ called!' )
+            print( exc_type )
+            print( exc_val )
+            print( exc_tb )
+    
+    - function-basec context managers
+        from contextlib import contextmanager
+
+        @contextmanager
+        def ctxmanager():
+            print('setup---------')
+            yield "Hello World!"
+            print('teardown------')
+
+        with ctxmanager() as alias:
+            print('ctx manger context ->')
+            print( alias )
+    
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    
+    
+    
+-->
+
+
+    
+    
+    
+    
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
     <br><br>
 </body>
 </html>
