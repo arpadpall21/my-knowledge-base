@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title> Error Handling </title> 
+    <title> Error & Context Handling </title> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
@@ -16,7 +16,7 @@
     </p>
 <table class="table">
 <caption>
-    Error Handling
+    Errors
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
 </caption>
     <tr>
@@ -64,29 +64,6 @@
             - exception that does not belong to any specific exception   
         </td>
     </tr>
-</table>
-    <br>
-<table class="table">
-<caption>
-    Context Management
-    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
-</caption>
-    <tr>
-        <th style="width:30%;"> Error Classes </th>
-        <th> Description </th>
-    </tr>
-    <tr class="0">
-        <td> 
-        </td>
-        <td> 
-            -
-        </td>
-    </tr>
-    
-    
-    
-    
-    
 </table>
     <br>
     <details class="example" id="notes">
@@ -204,7 +181,7 @@
     try:
         <strong>codeRaisesAnError</strong>
     except <strong>ExceptionClass</strong> as <strong>var</strong>:
-        raise                                                                           // raises the handled exception to the upper context    
+        raise                                                                           // raises the handled exception outside this <mark>try</mark> statement    
     </pre>
 <details class="example">
 <summary> DEMO </summary>
@@ -224,99 +201,150 @@
 </details>
 <hr>
 <!-------------------------------------------------------------------------------------------->
-<h2 class="headerExtra"> Context Management </h2>
-    <p> - Python context management is a mechanic which features a setup and teardown logic </p>
+<h2 class="headerExtra"> Context Management (<mark>with</mark> statement) </h2>
+    <p> - Python context management is a mechanic which features a setup and teardown logic (basically any object having the <mark>__enter__()</mark> and <mark>__exit__()</mark> methods) </p>
     <p> - the setup logic executes before entering the context, the teardown logic executes when exiting or when the context raises an exception </p>
     <p> - any object can support context management (ex: <mark>open()</mark> file API), but we also can implement our own context management logic </p>
-    
-    
-    
-    
-    
-<hr>
-<!-------------------------------------------------------------------------------------------->
-<h2 class="header"> <mark>with</mark> (context manager) Statement </h2>
+    <p> - the <mark>with</mark> is the context management statement what code block is basically the context environment </p>
     <pre class="syntax">
-    with <strong>ctxManagerObj</strong> <small>as <i>alias</i></small>:
-        <span style="color:darkgray;">// context management context</span>
+    class <strong>className</strong>:                                                                    // creates an object that supports Python context management protocol 
+        def __enter__(self)                                                             // called when the before the <mark>with</mark> code block starts    
+            return <i>val:any</i>                                                              // value received by <mark>with as <strong>alias</strong></mark>
+        
+        def __exit__(self, errType, errMsg, errTb)                                      // called at the end of the <mark>with</mark> code block    
+            errType, errMsg, errTb                                                      // holds the exception type, message, traceback info (if exception occurs in the <mark>with</mark> block (<mark>None</mark> otherwise))  
+            
+            return <strong>bol</strong>                                                                  // if we return <mark>False</mark> (Default) the exception (if any) is propagated outside the <mark>with</mark> block   
+                                                                                        // if we return <mark>True</mark> the exception (if any) is not propagated outside the <mark>with</mark> block (so the code will continue after the <mark>with</mark> statement    
+    
+        <span style="color:darkgray;">// for <mark>async with</mark>---------------------------------------------------------------</span>// does the same as above but for asynchronous context management    
+        async def __aenter__(self)
+            return <i>val:any</i>
+        
+        async def __aexit__(self, errType, errMsg, errTb)
+            errType, errMsg, errTb
+            return <strong>bol</strong>
+            
+    
+<span style="color:darkgray;">// generator function supporting context management ------------------------------------</span>
+    <em>from contextlib import contextmanager</em>
+
+    <em>@contextmanager</em>
+    def <strong>fn</strong>():
+        <i>...</i>                                                                             // part before <mark>yield</mark> runs in setup phase   
+        yield <strong>val:any</strong>                                                                   // value received by the <mark>with as <strong>alias</strong></mark>
+        <i>...</i>                                                                             // part after <mark>yield</mark> runs in teardown phase
+                                                                                        // exception (if any) in the <mark>with</mark> block is propageted outside the <mark>with</mark> block
     </pre>
-
-
-
-
-
-<!--
----------------------------------------------------------------------------------------------
-WRITE DOWN EVERYTHING NEW 
----------------------------------------------------------------------------------------------
-    - context manager handles automatically the setup and teardown external resources (file, lock, network connection) when dealing with external resources 
-    - we do this to avoid resource leaks
-    - teardown examples, close file descriptor, close connection, flush the last chunk from buffer (an error might prevent proper teardown)
-    - we can use try ... finally or with statements 
-    - context manager (with statement) controls environment by defining __enter__() and __exit__() methods 
-    
-    - the with statement creates a runtime context 
-    - the passed object must return an object having the __enter__() and __exit__() methods which are part of the context management protocol (setup and teardown)
-    - 'context manager object' (or objects that supports the context management protocol)
-    - the open() is highli recommended to use with the 'with' statement to make setup and teardown resoruces easy 
-    
-    - the with statement also supports async (ex: async with)
-    - the asynchronous context manager implements a context manager object that have the __aenter__() and __aexit__() methods 
+    <pre class="syntax">
+    with <strong>ctxObj</strong> <small>as <i>alias</i></small>:                                                               // <strong>ctxObj</strong> = object having the <mark>__enter__()</mark> and <mark>__exit__()</mark> methods for setup and teardown   
+        <span style="color:darkgray;">code block...</span>                                                                     // before the code block the <mark><strong>ctxObj</strong>.__enter__()</mark> is called    
+        <span style="color:darkgray;">...</span>                                                                               // if an error is raised the <mark><strong>ctxObj</strong>.__exit__(errType, errMsg, errTb)</mark> is called and receives the error type, message and traceback
+        <span style="color:darkgray;">...</span>                                                                               // at the end of the clode block the <mark><strong>ctxObj</strong>.__exit__()</mark> is called    
     
     
-    
-    with <openFile> as alias:                         - opens the file and the file object is available in the block 
-        <code block>                                  - automatically closes the file on block exit or exception 
-    
-    - class-based context managers (write a solid demo for async version as well!)
-    - single class can have __enter__() __aenter__() etc... -> demo it like this!
-    class CtxManager:
+<span style="color:darkgray;">// async context -----------------------------------------------------------------------</span>
+    async with <strong>ctxObj</strong> <small>as <i>alias</i></small>:                                                         // <strong>ctxObj</strong> = object having the <mark>__aenter__()</mark> and <mark>__aexit__()</mark> methods for setup and teardown   
+        <span style="color:darkgray;">code block (supports async code)...</span>                                               // before the code block the <mark><strong>ctxObj</strong>.__aenter__()</mark> is called    
+        <span style="color:darkgray;">...</span>                                                                               // if an error is raised the <mark><strong>ctxObj</strong>.__aexit__(errType, errMsg, errTb)</mark> is called and receives the error type, message and traceback
+        <span style="color:darkgray;">...</span>                                                                               // at the end of the clode block the <mark><strong>ctxObj</strong>.__aexit__()</mark> is called    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    class Ctx:
+        def __init__(self):
+            self.status = "Outside context"
+        
         def __enter__(self):
-            print( '__enter__ called!' )
-            return 'test return value'
-
-        def __exit__(self, exc_type, exc_val, exc_tb):        // if return True the code will continue after the with statement, if False (Default) the exception is propagated outside the context manager context 
-            print( '__exit__ called!' )
-            print( exc_type )
-            print( exc_val )
-            print( exc_tb )
+            self.status = 'In context'
+            return 'Hello Context'
+        
+        def __exit__(self, errTyp, errMsg, errTb):
+            self.status = "Outside context"
     
-    - function-basec context managers
-        from contextlib import contextmanager
-
-        @contextmanager
-        def ctxmanager():
-            print('setup---------')
-            yield "Hello World!"
-            print('teardown------')
-
-        with ctxmanager() as alias:
-            print('ctx manger context ->')
-            print( alias )
+    ctxObj = Ctx()
+    ctxObj.status                                                                       // -> 'Outside context'
     
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
+    with ctxObj as val:
+        val                                                                             // -> 'Hello Context'         // context setup logic called before the <mark>with</mark> block (the <mark>__enter__()</mark> returned value received here)
+        ctxObj.status                                                                   // -> 'Inside Context'
+        
+    ctxObj.status                                                                       // -> 'Outside context'       // context teardown logic called after the <mark>with</mark> block   
+    </pre>
+    <p> - context creation with generator function 
+    <pre>
+    from contextlib import contextmanager
+    
+    class DbConnection:                                                                 // some db connection   
+        def __init__(self):
+            self.url = None
+            self.connected = False
+        
+        def connect(self, url):
+            self.url = url
+            self.connected = True
+        
+        def disconnect(self):
+            self.url = None
+            self.connected = False
+    
+    @contextmanager
+    def connectDb(db, url):                                                             // creates a context manager object 
+        db.connect(url)                                                                 // context setup logic 
+        yield db                                                                        // value received by <mark>with as <strong>alias</strong></mark>   
+        db.disconnect()                                                                 // context teardown 
+        
+    dbInstance = DbConnection()
+    dbInstance.url                                                                      // -> None      // not connected 
+    dbInstance.connected                                                                // -> None
+    
+    with connectDb(dbInstance, 'myUrl') as db:
+        db                                                                              // db connection instance 
+        db.url                                                                          // -> 'myUrl'   // connected 
+        db.connected                                                                    // -> True
+    
+    dbInstance.url                                                                      // -> None      // disconnected (teardown logic disconnects at the end of the with block)
+    dbInstance.connected                                                                // -> None
+    </pre>
+    <p> - context error handling </p>
+    <pre>
+    class Ctx:
+        def __enter__(self):
+            pass
+        
+        def __exit__(self, errTyp, errMsg, errTb):
+            errTyp                                                                      // -> Exception class     // error datas received 
+            errMsg                                                                      // -> 'somme exception'
+            errTb                                                                       // -> traceback infromations... 
+            return False                                                                // exception will be propagated outside the <mark>with</mark> block (Default behaviour)
+    
+    ctxObj = Ctx()
+    
+    with ctxObj as val:
+        raise Exception('some exception')
+        
+    'after with'                                                                        // -! code won't execute further the <mark>with</mark> block, becasue the exception is propagated outside   
     
     
+// -------------------------------------------------------------------------------------
+    class Ctx:
+        def __enter__(self):
+            pass
+        
+        def __exit__(self, errTyp, errMsg, errTb):
+            return True                                                                 // exception won't be propagated outside the <mark>with</mark> block 
     
--->
-
-
+    ctxObj = Ctx()
+    
+    with ctxObj as val:
+        raise Exception('some exception')
+        
+    'after with'                                                                        // -! code executed further the <mark>with</mark> block, becasue the exception is not propagated outside   
+    </pre>
+</details>
     
     
-    
-    
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
     <br><br>
 </body>
 </html>

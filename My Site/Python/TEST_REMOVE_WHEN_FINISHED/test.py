@@ -1,15 +1,13 @@
-from contextlib import contextmanager
+class Ctx:
+    def __enter__(self):
+        pass
+    
+    def __exit__(self, errTyp, errMsg, errTb):
+        return True
 
-@contextmanager
-def ctxmanager():
-    print('setup---------')
-    yield "Hello World!"
-    print('teardown------')
-    return True
+ctxObj = Ctx()
 
-with ctxmanager() as alias:
-    print('ctx manger context ->')
-    print( alias )
-    raise Exception('my exception')
-
-print( '---------------------------after with')
+with ctxObj as val:
+    raise Exception('some exception')
+    
+print( 'after with' )

@@ -127,7 +127,11 @@
     <pre class="syntax">
     <strong>class</strong>()                                                                            // creates a new object instance of <strong>class</strong> type   
     
-    <strong>obj.attr</strong><i> = val:any</i>                                                                 // gets or sets the object's attribute   
+    <strong>obj.attr</strong><i> = val:any</i>                                                                 // gets or sets object attribute    
+    <strong>obj.method</strong><i> = fn</i>                                                                    // gets or sets object method    
+    
+    <strong>obj.attr.attr|method</strong><i> = val</i>                                                         <span style="color:darkorange;">// attributes cannot have other attributes or methods (raises an <mark>AttributeError</mark>)</span>    
+    <strong>obj.method.attr|method</strong><i> = val</i>                                                       // methods can have other attributes or methods 
     </pre>
 <details class="example">
 <summary> DEMO </summary>
@@ -173,6 +177,23 @@
     prm2 = 22
     prm1                                                                               // -> 21
     prm2                                                                               // -> 22
+    </pre>
+    <p> - additional attributes or methods on object attributes </p>
+    <pre>
+    class TestCls(object):
+        pass
+    
+    myObj = TestCls()
+    myObj.attr = 'attrVal'
+    myObj.method = lambda : 'methodVal'
+    
+    myObj.attr.newAttr = 'newAttrVal'                                                  // -! raises a <mark>AttributeError</mark> (attribute cannot have other attribute or method)
+    myObj.method.newAttr = 'newAttrVal'                                                // this is fine, method can have other attribute or method
+    myObj.method.newMethod = lambda : 'newMethodVal'
+    
+    myObj.method()                                                                     // -> 'methodVal'
+    myObj.method.newAttr                                                               // -> 'newAttrVal'
+    myObj.method.newMethod()                                                           // -> 'newMethodVal'
     </pre>
 </details>
 <!---------------------------------------------------------------------------------------------->
