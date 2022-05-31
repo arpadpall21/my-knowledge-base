@@ -1,21 +1,19 @@
-import asyncio
+myint = 255
+mybites = b'lskdjf'
+mybites2 = b'\xff\x00'
+mybites3 = bytes('ááááééóöüúő', 'utf-8', 'ERROR')
 
-def someFn():
-    return 'function result'
+mybites4 = bytes.fromhex('00 fa c8 55 11   ')
 
-# async def delay(delay, error=False):
-#     await asyncio.sleep(delay)
-#     print( f'Delayed {delay} seconds')
-    
-#     if error:
-#         raise Exception('some errror')
-    
-#     return f'OK delay {delay}'
-
-def main():
-    
-
-async def main():
+# print( mybites2 )
+# print( mybites2[1] )
+# print( mybites.hex('-', 2) )
 
 
-asyncio.run(main())
+mybitesX = bytes(mybites2)
+
+print( mybitesX )
+print( mybites2 )
+
+del mybites2
+print( mybitesX )
