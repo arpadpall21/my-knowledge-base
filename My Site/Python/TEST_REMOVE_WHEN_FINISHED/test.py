@@ -1,9 +1,19 @@
 import datetime
-import os
 import time
+import os
 
-date = datetime.date(2022, 6, 8)
+# os.environ['TZ'] = 'Europe/Budapest'
+# time.tzset()
 
-print( date.year )
-print( date.month )
-print( date.day )
+class Timezone(datetime.tzinfo):
+    pass
+
+myTz = Timezone()
+
+today = datetime.datetime.today()
+now = datetime.datetime.now(tz=myTz)
+utcnow = datetime.datetime.utcnow()
+
+print( today )
+print( now )
+print( utcnow )

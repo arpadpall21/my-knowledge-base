@@ -72,7 +72,16 @@
     print( timedelta )                // -> returns a time object (passed time)
     print( timeNow + timedelta )      // -> the returned object is the current time added to the passed time (timedelta)
     </pre>
-
+    <p> - proleptic Gregorian ordinal <mark>fromordinal()</mark> / <mark>toordinal()</mark> </p>
+    <pre>
+    import datetime
+    
+    date1 = datetime.date.fromordinal(1)
+    print( date1 )                    // -> 0001-01-01  // date object 
+    
+    today = datetime.date.today()
+    print( today.toordinal())         // -> 738314    // 738314 elpased since 1st of January year 0
+    </pre>
 </details>
 
 <!--
@@ -83,7 +92,8 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 - aware VS naive objects 
     - awaire = can locate itself relative to other time (timezone is specified = not <mark>None</mark>)
     - naive = cannot locate itself relative to other time (timezone is no specified = is <mark>None</mark>)
-- arithmetic operations between time objects is supported (ex we can add times together)
+- arithmetic operations between time objects is supported (ex we can add times together) (that's the idea behind the <mark>timedelta</mark> object)
+
 
 
 - CLASSES
@@ -99,17 +109,40 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
     - returns a date object from the passed iso date format
 - <em>datetime.date</em>.fromisocalendar(<strong>year:int</strong>, <strong>week:int</strong>, <strong>day:int</strong>)
     - returns a date object from the passed iso calendar format
+- <em>datetime.date</em>.fromordinal(<strong>ordinal:int</strong>)
+    - returns a date object from the proleptic Gregorian ordinal (days counted from January 1st year 0)
+
 
 - <strong>date</strong>.min
     - returns the minimal representable date 
 - <strong>date</strong>.man
     - returns the maximal representable date 
 - <strong>date</strong>.year
-    - returns the year of the date object 
+    - returns the year of the date object (read-only)
 - <strong>date</strong>.month
-    - returns the month of the date object 
+    - returns the month of the date object (read-only)
 - <strong>date</strong>.day
-    - returns the day of the date object 
+    - returns the day of the date object (read-only)
+- <strong>date</strong>.replace(<small>year=<i>int</i></small>, <small>month=<i>int</i></small>,<small>day=<i>int</i></small>)
+    - returns a new date object, optionally replaces the specified parameter in the new date object 
+- <strong>date</strong>.timetuple()
+    - returns the date in <strong>struct_time</strong> format 
+- <strong>date</strong>.toordinal()
+    - returns the proleptic Gregorian ordinal of the date (days counted from January 1st year 0)
+- <strong>date</strong>.weekday()
+    - returns the weekday of the object (<mark>0</mark> = monday)
+- <strong>date</strong>.isoweekday()
+    - returns the weekday of the object (<mark>1</mark> = monday)
+- <strong>date</strong>.isocalendar()
+    - returns a tuple with 3 components year, month and day (named tuple from v3.9) (<mark>1</mark> = monday)
+- <strong>date</strong>.ctime()
+    - returns a string date (<mark>Wed Jun  8 00:00:00 2022</mark>) from the date object 
+- <strong>date</strong>.strftime(<strong>format</strong>)
+    - returns a date string formated according the <strong>format</strong> argument 
+- <strong>date</strong>.__format__(<strong>format</strong>)
+    - returns a date string formated according the <strong>format</strong> argument 
+
+
 
 
 
@@ -117,11 +150,29 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 - datetime.time
     - attributes: hour / minute / second / microsecond / tzinfo
     - immutable, hashable and supports efficien picking (can be converted to bytestream)
-- datetime.datetime
-    - combination of date and time 
-    - attributes: year / month / day / hour / minute / second / microsecond / tzinfo
+
+
+
+
+
+
+
+- datetime.datetime(<strong>year</strong>, <strong>month</strong>, <strong>day</strong>, <small>hour=<i>int</i></small>, <small>minute=<i>int</i></small>, <small>second=<i>int</i></small>, <small>microsecond=<i>int</i></small>, <small>tzinfo=<i>tzinfo</i></small>, <small>fold=<i>int</i></small>)
+    - returns a datetime object which contains both date and time 
     - abstract sub class of <mark><strong>datetime</strong>.date</mark>
-    - immutable, hashable and supports efficien picking (can be converted to bytestream)
+    - immutable, hashable and supports efficient picking (can be converted to bytestream)
+
+- <em>datetime.datetime</em>.today()
+    - returns a datetime object of the current local datetime 
+- <em>datetime.datetime</em>.now(<small>tz=<i>tzinfo</i></small>)
+    - returns a datetime object of the current local datetime 
+
+
+
+
+
+
+
 
 
 - datetime.timedelta(<small>days=<i>int|float</i></small>, <small>seconds=<i>int|float</i></small>, <small>microseconds=<i>int|float</i></small>, <small>milliseconds=<i>int|float</i></small>, <small>minutes=<i>int|float</i></small>, <small>hours=<i>int|float</i></small>, <small>weeks=<i>int|float</i></small>)
