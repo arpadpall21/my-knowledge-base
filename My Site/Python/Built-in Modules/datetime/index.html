@@ -48,13 +48,18 @@
 <h2 style="color:green;"><u> Useful Links : </u></h2>
     <p><a href="https://docs.python.org/3/library/datetime.html" target="_blank"> datetime (docs.python.org) </a></p>
 <h2 style="color:green;"><u> Remember This : </u></h2>
-    
+<p> - in Python the local time is controlled by the <mark>TZ</mark> system variable, we manually set the <mark>TZ</mark> value which tells python the local timezone (remember using <mark>time.tzset()</mark> to 'activate' the new timezone) </p>
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-
-
-
-
-<details class="example" open>
+    <p> - arithmetic and comparison operations are supported betwen datetime objects </p>
+    <p> - datetime object can be 'naive' or 'awaire' </p>
+    <p style="text-indent:20px;"> <b><u>'naive'</u></b> datetime objects don't contain timezone informations </p>
+    <p style="text-indent:20px;"> <b><u>'awaire'</u></b> datetime objects contain timezone informations </p>
+    <p style="text-indent:40px;"> - the <mark>time</mark> and <mark>datetime</mark> objects can be awaire, we basically pass timezone informations (as <mark>tzinfo</mark> implementation) on creation into them (as <mark>tz</mark> or <mark>timezone</mark> argument) </p>
+<h2 class="header"> Creating awaire datetime objects </h2>
+    <p> - we can implement our own tzinfo by creating a subclass of the <mark>tzinfo</mark> class and implement the <mark>utcoffset()</mark> / <mark>dst()</mark> / <mark>tzname()</mark> methods on it </p>
+    <p> - we can also create tzinfo implementation by using the <mark>timezone</mark> class (that's the cheapest way) </p>
+    <p> - then the created tzinfo implementation is passed as argument in <mark>datetime.datetime</mark> or <mark>datetime.time</mark> classes on creation so they are 'awaire' of the implemented timezone </p>
+<details class="example">
 <summary> Example : </summary>
     <p> - <mark>datetime.timedelta()</mark> </p>
     <pre>
@@ -82,29 +87,42 @@
     today = datetime.date.today()
     print( today.toordinal())         // -> 738314    // 738314 elpased since 1st of January year 0
     </pre>
+    <p> - creating awaire time object </p>
+    <pre>
+    import datetime
+    import time
+    
+    tz = datetime.timezone( datetime.timedelta(hours=10), name="some tz name")
+    t = datetime.time(20, 51, 00, tzinfo=tz)
+    
+    print( t.utcoffset() )      // -> 10:00:00  // timedelta object 
+    print( t.tzname() )         // -> 'some tz name'
+    </pre>
 </details>
+
+
 
 <!--
 ---------------------------------------------------------------------------------------------
 WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND EVERYTHING!!!
 ---------------------------------------------------------------------------------------------
-- suplies classes for manipulating dates and times 
-- aware VS naive objects 
-    - awaire = can locate itself relative to other time (timezone is specified = not <mark>None</mark>)
-    - naive = cannot locate itself relative to other time (timezone is no specified = is <mark>None</mark>)
-- arithmetic operations between time objects is supported (ex we can add times together) (that's the idea behind the <mark>timedelta</mark> object)
-
-
-
-- CLASSES
+========================================================================================================
+========================================================================================================
 - <em>datetime</em>.date(<strong>year</strong>, <strong>month</strong>, <strong>day</strong>)
-    - returns a <strong>date</strong> object which represents a date
+    - returns a <strong>date</strong> object which represents a date <br>
     - immutable, hashable and supports efficien picking (can be converted to bytestream)
 
 - <em>datetime.date</em>.today()
-    - returns the current <u>local</u> date 
+    - returns a <strong>date</strong> object of the current <u>local</u> date 
+
+
+
+
+
+
+
 - <em>datetime.date</em>.fromtimestamp(secs:int)
-    - returns the date from the passed POSIX timestamps (secons since epoch)
+    - returns a the date from the passed POSIX timestamps (secons since epoch)
 - <em>datetime.date</em>.fromisoformat(<strong>'YYYY-MM-DD'</strong>)
     - returns a date object from the passed iso date format
 - <em>datetime.date</em>.fromisocalendar(<strong>year:int</strong>, <strong>week:int</strong>, <strong>day:int</strong>)
@@ -144,19 +162,46 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 
 
 
-
-
-
-- datetime.time
-    - attributes: hour / minute / second / microsecond / tzinfo
+========================================================================================================
+========================================================================================================
+- datetime.time(<small>hour=<i>int</i></small>, <small>minute=<i>int</i></small>, <small>second=<i>int</i></small>, <small>microsecond=<i>int</i></small>, <small>tzinfo=<i>tzinfo</i></small>, <small>fold=<i>int</i></small>)
+    - represents the local time of the day 
     - immutable, hashable and supports efficien picking (can be converted to bytestream)
 
+- <strong>time</strong>.min
+    - returns a time object of the minimal time 
+- <strong>time</strong>.max
+    - returns a time object of the maximal time 
+- <strong>time</strong>.hour
+    - retunrns the hours of the time object 
+- <strong>time</strong>.minute
+    - retunrns the minutes of the time object 
+- <strong>time</strong>.second
+    - retunrns the seconds of the time object 
+- <strong>time</strong>.microsecond
+    - retunrns the microseconds of the time object 
+- <strong>time</strong>.tzinfo
+    - retunrns the tzinfo value of the time object 
+- <strong>time</strong>.fold
+    - retunrns the fold value of the time object 
+
+- <strong>time</strong>.fromisoformat(<storng>time:str</strong>)
+    - returns a time object form the passed iso formated time string <mark>'20:00:00'</mark>
+- <strong>time</strong>.replace(<small>hour=<i>int</i></small>, <small>second=<i>int</i></small>, <small>microsecond=<i>int</i></small>, <small>tzinfo=<i>tzinfo</i></small>, <small>fold=<i>int</i></small>)
+    - creates and returns a new time object (optionally replaces the specified parameter in the new time object)
+- <strong>time</strong>.isoformat()
+    - returns an ISO8601 formated string of the time object value
+- <strong>time</strong>.strftime(<strong>format</strong>)
+    - returns a time string formated according the <strong>format</strong> argument 
+- <strong>time</strong>.__format__(<strong>format</strong>)
+    - returns a time string formated according the <strong>format</strong> argument 
 
 
 
 
 
-
+========================================================================================================
+========================================================================================================
 - datetime.datetime(<strong>year</strong>, <strong>month</strong>, <strong>day</strong>, <small>hour=<i>int</i></small>, <small>minute=<i>int</i></small>, <small>second=<i>int</i></small>, <small>microsecond=<i>int</i></small>, <small>tzinfo=<i>tzinfo</i></small>, <small>fold=<i>int</i></small>)
     - returns a datetime object which contains both date and time 
     - abstract sub class of <mark><strong>datetime</strong>.date</mark>
@@ -165,19 +210,80 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 - <em>datetime.datetime</em>.today()
     - returns a datetime object of the current local datetime 
 - <em>datetime.datetime</em>.now(<small>tz=<i>tzinfo</i></small>)
-    - returns a datetime object of the current local datetime 
+    - returns a datetime object of the current local datetime (we can provide our tzinfo implementation)
+- <em>datetime.datetime</em>.utcnow()
+    - returns a datetime object of the current utc datetime 
+- <em>datetime.datetime</em>.fromtimestamp(<strong>timestamp</strong>, <small>tz=<i>tzinfo</i></small>)
+    - returns a datetime object from the passed POSIX timestamp (local time)
+- <em>datetime.datetime</em>.utcfromtimestamp(<strong>timestamp</strong>)
+    - returns a datetime object from the passed POSIX timestamp (UTC time)
+- <em>datetime.datetime</em>.fromordinal(<strong>ordinal:int</strong>)
+    - returns a datetime object from the Gregorian ordinal date (days counted from January 1st year 0)
+- <em>datetime.datetime</em>.combine(<strong>date|datetime</strong>, <strong>time</strong>, <small>tzinfo=<i>tzinfo</i></small>)
+    - combines the passed date and time and returns the result in a new datetime object 
+- <em>datetime.datetime</em>.fromisoformat(<strong>isoTime:str</strong>)
+    - returns a datetime object from the passed iso style datetime <mark>2000-04-21T20:00:00</mark>
+- <em>datetime.datetime</em>.iscalendar(<strong>year:int</strong>, <strong>week:int</strong>, <strong>day:int</strong>)
+    - returns a datetime object from the passed isocalendar format (<mark>1</mark> = Monday)
+    
+    
+- <strong>datetime</strong>.min
+    - returns a datetime object of the minimal representable date 
+- <strong>datetime</strong>.max
+    - returns a datetime object of the maximal representable date 
+- <strong>datetime</strong>.year
+    - returns the year of the datetime object
+- <strong>datetime</strong>.month
+    - returns the month of the datetime object
+- <strong>datetime</strong>.day
+    - returns the day of the datetime object
+- <strong>datetime</strong>.hour
+    - returns the hours of the datetime object
+- <strong>datetime</strong>.minute
+    - returns the minutes of the datetime object
+- <strong>datetime</strong>.second
+    - returns the seconds of the datetime object
+- <strong>datetime</strong>.microsecond
+    - returns the microseconds of the datetime object
+- <strong>datetime</strong>.tzinfo
+    - returns the tzinfo value of the datetime object
+- <strong>datetime</strong>.fold
+    - returns the fold of the datetime object
+
+- <strong>datetime</strong>.date()
+    - returns a <strong>date</strong> object from the datetime 
+- <strong>datetime</strong>.time()
+    - returns a <strong>time</strong> object from the datetime 
+- <strong>datetime</strong>.replace(<small>year=<i>int</i></small>, <small>month=<i>int</i></small>, <small>day=<i>int</i></small>, <small>hour=<i>int</i></small>, <small>minute=<i>int</i></small>, <small>second=<i>int</i></small>, <small>microsecond=<i>int</i></small>, <small>tzinfo=<i>tzinfo</i></small>, <small>fold=<i>int</i></small>)
+    - returns a new datetime object (optionally modifies the specified parameter in the new datetime)
+- <strong>datetime</strong>.timetuple()
+    - returns a <strong>struct_time</strong> fo the datetime object 
+- <strong>datetime</strong>.toordinal()
+    - returns the Gregorian ordinal date (days counted from January 1st year 0) of the dateobject 
+- <strong>datetime</strong>.timestamp()
+    - returns the POSIX timestamp value of the dateobject 
+- <strong>datetime</strong>.isoweekday()
+    - returns the isoweekday of the dateobject (Monday = 1)
+- <strong>datetime</strong>.isocalendary()
+    - returns the isocalendar of the dateobject (tupple with year, week, day)
+- <strong>datetime</strong>.isoformat(<small>sep=<i>str</i></small>, <small>timespec=<i>str</i></small>)
+    - returns an ISO8601 formated string of the dateobject 
+- <strong>datetime</strong>.ctime()
+    - returns a datetime string <mark>Thu Jun  9 08:39:16 2022</mark> of the datetime object 
+- <strong>datetime</strong>.strptime(<strong>format</format>)
+    - returns a formated string (according to <strong>format</strong>) of the date object 
+- <strong>datetime</strong>.__format__(<strong>format</format>)
+    - returns a formated string (according to <strong>format</strong>) of the date object 
 
 
 
 
 
-
-
-
-
+========================================================================================================
+========================================================================================================
 - datetime.timedelta(<small>days=<i>int|float</i></small>, <small>seconds=<i>int|float</i></small>, <small>microseconds=<i>int|float</i></small>, <small>milliseconds=<i>int|float</i></small>, <small>minutes=<i>int|float</i></small>, <small>hours=<i>int|float</i></small>, <small>weeks=<i>int|float</i></small>)
     - creates a passed time object (represents a specified passed time) <br>
-    - used for arithmetic operations to another time object to calculate future|past time 
+    - can be used in arithmetic operations to calculate future|past time or in timezones
 
     <strong>timedelta</strong>.min
         - returns the smalles possible timedelta time 
@@ -197,12 +303,23 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 
 
 
-
+========================================================================================================
+========================================================================================================
 - datetime.tzinfo
-    - used by the <mark>datetime</mark> and <mark>time</mark> classes to provide time zone adjustement 
-- datetime.timezone
-    - abstract sub class of <mark><strong>datetime</strong>.tzinfo</mark>
+    - used by the <mark>datetime</mark> and <mark>time</mark> classes to provide time zone adjustement <br>
+    - should not be instantantated directly, it's a base class we should create our own subclass then implement our own timezone info <br>
+    - the subclass should implement the <mark>utcoffset()</mark> / <mark>dst()</mark> / <mark>tzname()</mark> / <mark>fromutc()</mark> methods
+- datetime.timezone(<strong>offset:timedelta</strong>, <small>name=<i>tzName:str</i></small>)
+    - abstract sub class of <mark><strong>datetime</strong>.tzinfo</mark> <br>
+    - used to create awaire time objects (<strong>time</strong> and <strong>datetime</strong>) <br>
     - immutable, hashable and supports efficien picking (can be converted to bytestream)
+
+- <strong>timezone</strong>.utcoffest()
+    - returns the UTC offest value 
+- <strong>timezone</strong>.tzname()
+    - returns the timezone name  
+- <strong>timezone</strong>.dst()
+    - always <mark>None</mark>
 
 
 
@@ -213,6 +330,9 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
+- awaire date object VS TZ environment variable 
+- explain the tzinfo shit 
+
 
 -->
 
