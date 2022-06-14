@@ -1,15 +1,14 @@
-import datetime
-import time
-import os
+from abc import ABC, abstractclassmethod
 
-# ts = time.time()
+class AbcCls(ABC):
+    @abstractclassmethod
+    def baseMethod(self):
+        return 'base value'
 
-# os.environ['TZ'] = 'Europe/Budapest'
-# time.tzset()
 
-t1 = datetime.time(20, 0, 0)
-t2 = datetime.time(20, 0, 1)
-t3 = datetime.time(20, 0, 0)
-
-print( t1 > t2)
-print( t1 == t3)
+class TestClass(AbcCls):
+    def baseMethod(self):
+        return super().baseMethod()
+        
+inst = TestClass()
+print( inst.baseMethod() )
