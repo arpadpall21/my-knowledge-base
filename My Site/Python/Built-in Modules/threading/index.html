@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title> io </title> 
+    <title> threading </title> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../../Assets/stylesPages.css"> 
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
     <script src="../../../Assets/scriptPages.js"></script>
 </head>
 <body>
-<h1> io </h1>
-    <p> Updated ( 2022-06-13 )</p>
+<h1> threading </h1>
+    <p> Updated ( 2022-07-12 )</p>
     <p class="sitenav"> <a href="../../../index.html">MySite></a>
         <a href="../../index.html">Python></a>
-        <a href="../index.html">Built-in modules></a> io
+        <a href="../index.html">Built-in modules></a> threading
     </p>
+    
+    
+    
+    
 <table class="table">
 <caption>
     <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
@@ -23,19 +27,26 @@
         <th style="width:30%;"> Method / Property / statement ect... </th>
         <th> Description </th>
     </tr>
-    
-    
-    
-    
-    
     <tr class="0">
         <td> 
-            
+            demo prop 
         </td>
         <td> 
-            
+            - demo description 
+            <span class="browserSupport" title="updated : yyyy-mm-dd">
+                <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
+                <span><i class="fab fa-firefox"></i>  </span>
+                <span><i class="fab fa-opera"></i>  </span>
+                <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i>  </span>
+                <span><i class="fab fa-safari"></i>  </span>
+                <span><i class="fab fa-node-js"></i>  </span>
+            </span>
         </td>
     </tr>
+
+
+
+
 </table>
     <br>
     <details class="example" id="notes">
@@ -43,11 +54,11 @@
         <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
     </details>
 <h2 style="color:green;"><u> Useful Links : </u></h2>
-        <p><a href="https://docs.python.org/3/library/io.html?highlight=io#module-io" target="_blank"> io (docs.python.org) </a></p>
-
-
+    <p><a href="https://docs.python.org/3/library/threading.html" target="_blank">Threading (docs.python.org)</a></p>
+    <p><a href="https://docs.python.org/3/library/concurrent.futures.html" target="_blank"> TreadPoolExecutor (docs.python.org) </a></p>
+    <p><a href="https://realpython.com/intro-to-python-threading/" target="_blank">Threading (realpython.com)</a></p>
 <h2 style="color:green;"><u> Remember This : </u></h2>
-
+    
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
 
 
@@ -56,12 +67,79 @@
 
 <!--
 ---------------------------------------------------------------------------------------------
-WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND EVERYTHING!!!
 ---------------------------------------------------------------------------------------------
-- 3 main types of I/O : text, binary, raw
-    - Text I/O uses data encoding decoding 
-    - Binary I/O (also called buffered I/O) does not uses any encoding mechanisms
-    - Raw I/O  (also called unbuffered I/O)
+stage 1: high level overview 
+    - read through 
+    - create notes 
+    - deciede what exactly will you document down 
+    
+stage 2:  low level overview
+    - deeper understanding of all what you've taken down in stage 1
+    
+stage 3 : 
+    - organize and document down everything 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+- parallel programming 
+- threads run parallel but not speed up program, its useful when threads needs to wait for some outside events (they don't block each other), but for cpu intensive task we do not gain (this is because of CPython GIL implementation )
+- for cpu intensive task use multiprocessing instead 
+- the main thread will waif for all threads to finish before exiting, however thread daemons are independent from the main thread 
+
+
+- <em>treading</em>.Thread(<small class="openable">group=None<div>
+    <p> - not yet implemented argument (v3.10) </p>
+</div></small>, <small class="openable">target=<i>fn</i><div>
+    <p> - function executed by the thread (Default: <mark>None</mark>) </p>
+</div></small>, <small class="openable">args=<i>iterable</i><div>
+    <p> - arguments passed to the target function (iterable format) </p>
+</div></small>, <small>kwargs=<i>dict</i><div>
+    <p> - arguments passed to the target function (dictionary format) </p>
+</div></small>, <small class="openable">daemon=<i>bol</i><div>
+    <p> - thread runs as daemon (separate background process) </p>
+    <p> - the main thread won't wait for this thread end because this thread will run in the background </p>
+</div></daemon>)
+
+
+
+- <strong>thread</strong>.join()
+    - waits untill the thread terminates
+
+- <strong>thread</strong>.start()
+    - stats the thred 
+
+
+
+
+
+- <em>threading</em>.active_count()
+    - returns the number of threads currently running (main thread including)
+- <em>threading</em>.active_enumerate()
+    - returns all running <strong>thread</strong> objects in a list
+
+
+- <em>threading</em>.current_thread()
+    -  returns the current <strong>thread</strong> object 
+
+
+- <em>threading</em>.get_ident()
+    - return the thred identifier (nonzero integer) 
+    <span id="browserSupport" title="updated : 2022-07-18">
+        <span><i class="fab fa-python"></i> 3.3 </span>
+    </span>
+- <em>threading</em>.get_native_id()
+    - return the thred identifier (nonzero integer) <u>thread id assigned by the kernel</u>
+    <span id="browserSupport" title="updated : 2022-07-18">
+        <span><i class="fab fa-python"></i> 3.8 </span>
+    </span>
+
+
+- <em>threading</em>.main_thread()
+    - returns the main <strong>thread</strong> object
+
+
+
+
 
 
 
@@ -69,7 +147,7 @@ WRITE DOWN EVERYTHING NEW !!!START DOCUMENTING ONLY IF YOU TESTED AND UNDERSTAND
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-
+  - daemon thread ???
 -->
 
 
