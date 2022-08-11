@@ -15,6 +15,8 @@ $(document).ready(function(){
             testLine = testLine.replace(/\/\/ -&gt;.{1,}/, "$&".fontcolor("cornflowerblue"));   // color the line if starts by the specified regExp 
             testLine = testLine.replace(/\/\/ [^-].{1,}/, "$&".fontcolor("grey"));
             testLine = testLine.replace(/\/\/ --.{1,}/, "$&".fontcolor("grey"));
+            testLine = testLine.replace(/# [^-].{1,}/, "$&".fontcolor("grey"));
+            testLine = testLine.replace(/# --.{1,}/, "$&".fontcolor("grey"));
             testLine = testLine.replace(/\/\/ -! .{1,}/, "$&".fontcolor("#e19a00"));
             testLine = testLine.replace(/\/\/ !! .{1,}/, "$&".fontcolor("orangered"));
             

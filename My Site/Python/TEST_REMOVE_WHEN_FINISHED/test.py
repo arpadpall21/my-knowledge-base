@@ -1,55 +1,3 @@
-# import threading
-# import time
-
-# USE_DAEMON = False
-
-# r = 10000000
-# start = time.time()
-
-# def countrange(name, len):
-#     for i in range(len + 1):
-#         if i == r / 4:
-#             print( f"{name}: {i}" )
-#         elif i == r / 2:
-#             print( f"{name}: {i}" )
-#         elif i == r / 4 * 3:
-#             print( f"{name}: {i}" )
-#         elif i == r:
-#             print( f"{name}: {i}" )
-
-# def th(name):
-#     print(f'{name} started')
-#     countrange(name, r)
-#     print(f'{name} end!')
-
-
-# a = threading.Thread(target=th, args=["Thread-1"], daemon=USE_DAEMON)
-# b = threading.Thread(target=th, args=["Thread-2"], daemon=USE_DAEMON)
-# c = threading.Thread(target=th, args=["Thread-2"], daemon=USE_DAEMON)
-# d = threading.Thread(target=th, args=["Thread-2"], daemon=USE_DAEMON)
-
-# a.start()
-# b.start()
-# c.start()
-# d.start()
-
-# a.join()
-# b.join()
-# c.join()
-# d.join()
-
-# # countrange("Main", r)
-
-
-
-# print( f"Running time: {time.time() - start}" )
-
-
-
-###############################################################################################
-###############################################################################################
-###############################################################################################
-
 # import concurrent.futures
 # import time
 
@@ -113,23 +61,6 @@
 ###############################################################################################
 ###############################################################################################
 
-# deadlock 
-
-# import threading 
-
-# lock = threading.Lock()
-
-# print("before first acquire")
-# lock.acquire()
-# print("before second acquire")
-# lock.acquire()                        # -! program will hang because tries to acquire the locked lock (this is why using the context protocol is highli advised)
-# print("acquired lock twice")
-
-
-###############################################################################################
-###############################################################################################
-###############################################################################################
-
 # import threading
 
 # s = threading.Semaphore(0)
@@ -144,22 +75,6 @@
 # # bs.release()
 # # bs.release()
 # print( bs._value )
-
-
-###############################################################################################
-###############################################################################################
-###############################################################################################
-
-# import threading
-
-# def countrange():
-#     print( threading.enumerate() )
-#     print( threading.active_count() )
-#     for i in range(10000000):
-#         pass
-
-# t = threading.Timer(5, countrange)
-# t.start()
 
 
 ###############################################################################################
@@ -192,16 +107,50 @@
 ###############################################################################################
 ###############################################################################################
 
+# import threading
+
+# barrier = threading.Barrier(3) #, timeout=2)
+
+# def count(name, len, barrier):
+#     for i in range(len):
+#         pass
+#     barrier.wait()
+#     print( f'{name} thread end!')
+
+# threading.Thread(target=count, args=['th1', 10000000, barrier]).start()
+# threading.Thread(target=count, args=['th2', 100000, barrier]).start()
+# threading.Thread(target=count, args=['th3', 1000000000, barrier]).start()
+
+# print( barrier.parties )
+# print( barrier.n_waiting )
+
+
+###############################################################################################
+###############################################################################################
+###############################################################################################
+
+# deadlock 
+
 import threading
 
-barrier = threading.Barrier(3, timeout=2)
+lock = threading.Lock()
 
-def count(name, len, barrier):
-    for i in range(len):
-        pass
-    barrier.wait()
-    print( f'{name} thread end!')
+print( lock.acquire(blocking=False) )
 
-threading.Thread(target=count, args=['th1', 10000000, barrier]).start()
-threading.Thread(target=count, args=['th2', 100000, barrier]).start()
-threading.Thread(target=count, args=['th3', 1000000000, barrier]).start()
+print( lock.locked() )
+print( lock.acquire(blocking=False) )
+print( lock.locked() )
+
+
+
+
+
+# print("before first acquire")
+# with lock:
+#     lock.acquire(timeout=2)
+# print("before second acquire")
+# lock.acquire()                        # -! program will hang because tries to acquire the locked lock (this is why using the context protocol is highly advised)
+# print("acquired lock twice")
+
+
+# print( lock.locked() )
