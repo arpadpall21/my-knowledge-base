@@ -147,57 +147,87 @@
         <th style="width:30%;"> Method </th>
         <th> Description </th>
     </tr>
-    <tr class="00.00">
+    <tr class="05.01">
+        <td colspan="2"> <mark>Lock</mark> simple lock </td>
+    </tr>
+    <tr class="05.02">
         <td> 
             <em>threading</em>.Lock()
         </td>
         <td> 
-            - creates and returns a <strong>lock</strong> object which can be <span class="openable">locked only once<div>
-                <p> - once this lock is acquired further calls to <mark>acquire()</mark> are blocked untill the lock is released </p>
-            </div></span> <br>
-            - supports the context management protocol (acqured when entering | released when exiting the context)
+            - creates and returns a <strong>simpleLock</strong> <br>
+            - can be locked|unlocked only once by any threads <br>
+            - supports the context management protocol (<strong>simpleLock</strong> <mark>acquire()</mark> when entering | <mark>release()</mark> when exiting the context)
         </td>
     </tr>
-    <tr class="00.00">
+    <tr class="10.01">
         <td> 
-            <em>threading</em>.RLock()
-        </td>
-        <td> 
-            <!-- - creates and returns a <strong>lock</strong> object which can be locked only once <br>
-            - supports the context management protocol (acqured when entering | released when exiting the context) -->
-        </td>
-    </tr>
-    <tr class="00.00">
-        <td> 
-            <strong>lock</strong>.acquire(<small class="openable">blocking=<i>bol</i><div>
+            <strong>simpleLock</strong>.acquire(<small class="openable">blocking=<i>bol</i><div>
                 <p> - blocks furter execution when the <strong>lock</strong> is already acquired (Default: <mark>True</mark>)
+            </div></small>, <small class="openable">timeout=<i>float</i><div>
+                <p> - after this delay the lock is unlocked (Default: <mark>-1</mark> = no delay) </p>
             </div></small>)
         </td>
         <td> 
-            - acquires (closes) the lock 
+            - acquires (locks) the lock <br>
+            - if the <strong>simpleLock</strong> is alread locked blocs further executions untill the lock is released 
         </td>
     </tr>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <tr class="10.02">
+        <td> 
+            <strong>simpleLock</strong>.release()
+        </td>
+        <td> 
+            - releases (unlocks) the lock
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td> 
+            <strong>simpleLock</strong>.locked()
+        </td>
+        <td> 
+            - returns <mark>True</mark> if the <strong>simpleLock</strong> is locked, otherwise returns <mark>False</mark>
+        </td>
+    </tr>
+    <tr class="20.01">
+        <td colspan="2"> <mark>RLock</mark> reental lock </td>
+    </tr>
+    <tr class="20.02">
+        <td> 
+            <em>threading</em>.RLock()
+        </td>
+        <td>
+            - creates and returns a <strong>reentalLock</strong> <br>
+            - thread awaire, the thread that locks it only that thread can unlock it again <br>
+            - can be unlocked multiple times within the same thread (must be locked as many times as it was unlocked in order to release the lock) <br>
+            - supports the context management protocol (<strong>simpleLock</strong> <mark>acquire()</mark> when entering | <mark>release()</mark> when exiting the context)
+        </td>
+    </tr>
+    <tr class="25.01">
+        <td> 
+            <strong>reentalLock</strong>.acquire(<small class="openable">blocking=<i>bol</i><div>
+                <p> - blocks furter execution when the <strong>lock</strong> is already acquired (Default: <mark>True</mark>)
+            </div></small>, <small class="openable">timeout=<i>float</i><div>
+                <p> - after this delay the lock is unlocked (Default: <mark>-1</mark> = no delay) </p>
+            </div></small>)
+        </td>
+        <td> 
+            - acquires (locks) the lock in this thead <br>
+            - within the same thread unlock the lock several times <br>
+            - if the <strong>reentalLock</strong> is locked by another thread block further execution untill the lock is released by the thred that locked it
+        </td>
+    </tr>
+    <tr class="25.02">
+        <td> 
+            <strong>reentalLock</strong>.release()
+        </td>
+        <td> 
+            - releases (unlocks) the lock <br>
+            - only the thread that locked the <strong>reentalLock</strong> can unlock it again
+        </td>
+    </tr>
 </table>
     <br>
-
-
-
     <details class="example" id="notes">
     <summary> Notes :</summary>
         <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
@@ -250,12 +280,18 @@
     th2.start()
     </pre>
 </details>
-<h2 class="header"> Lock, Semaphore, Barrier </h2>
-    <p> - these are tools to handle race conditions </p>
-    <p> - a Lock can be locked or unlocked, the idea is that several threads use the same lock but only one of them unlock it, other threads wait until the lock unlocks again (ex: connecting to DB with this lock approach makes shure that there's only one query at a time) </p>
-    
-    
-<details class="example" open>
+<hr>
+<!--------------------------------------------------------------------------------->
+<h2 class="header"> Communication between threads </h2>
+    <p> - because threads run in the same process data in the main process is available for all threads (no need to use some communication channes like in <mark class="mark">multiprocessing</mark> </p>
+<hr>
+<!--------------------------------------------------------------------------------->
+<h2 class="header"> Locks </h2>
+    <p> - a simple <mark>Lock</mark> can be locked or unlocked, the idea is that several threads use the same lock but only one of them unlock it, other threads wait until the lock unlocks again (ex: connecting to DB with this lock approach makes shure that there's only one query at a time) </p>
+    <p> - the reental lock <mark>RLock</mark> has 2 advantages over the simple lock: </p>
+    <p style="text-indent:30px;"> - thread aware, meaning knows which thread acquired (locked) it and <u>only the acquiring thread can unlock it again</u> </p>
+    <p style="text-indent:30px;"> - within the same thread can be acquired (unlocked) several times (must be released (locked) as many times as it was arquired (locked) to release the lock) </p>
+<details class="example">
 <summary> DEMO </summary>
     <p> - <mark>Lock</mark> </p>
     <pre>
@@ -285,172 +321,75 @@
     print( lock.locked() )                                // -> True
     lock.acquire()                                        # program will hang because the lock is closed (this is called deadlock)
     </pre>
-    
-    
-</details>
-
-    
-    
-<!--
-    -
-    -
-
-
-
-
-
--->
-
-
-
-
-
-
-
-
-
-<!--
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-stage 1: high level overview 
-    - read through 
-    - create notes 
-    - deciede what exactly will you document down 
-    
-stage 2:  low level overview
-    - deeper understanding of all what you've taken down in stage 1
-    
-stage 3 : 
-    - organize and document down everything 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-
-- parallel programming 
-- threads run parallel but not speed up program, its useful when threads needs to wait for some outside events (they don't block each other), but for cpu intensive task we do not gain (this is because of CPython GIL implementation )
-- for cpu intensive task use multiprocessing instead 
-- the main thread will waif for all threads to finish before exiting, however thread daemons are independent from the main thread 
-
-- Timer()       - starts executing the function in a thread after the specified time 
-
-
-<em>threading</em>.Lock()
-    - creates and returns a <strong>lock</strong> object (can be unlocked only once)
-
-
-
-
-- Lock is a way to avoid race conditions, the idea is that the lock is owned by all running threads but can be unlocked by only one of them so other wait for the lock
-- the RLock can be unlocked by multiple threads (to avoid dead lock problem) but still garantees concurency 
-
-
-
-
-
-
-- Semaphore can control how many locks are released (supports context protocol)
-- Semaphore has no upper limit (each release adds more locks) VS BoundedSemaphore has upper limit which cannot be exceeded by release 
-
-- Barrier()     - number of patients must wait (at the barrier) to reach a point before all released at once 
-                - 
-
-
-- 
-     
-
-
-
-
-
-
-
-
-
-
-
-    </span>
-
-
-
-
-
-
-
-
-
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-  - daemon thread ???
--->
-
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr><hr><hr><hr><hr>
-    
-    
-<h2 class="headerExtra"><u> Title 1 </u></h2>
-<h2 class="header"> Title 1.1 </h2>
-<h3 class="header"> Title 1.1.1 </h3>
-<h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-        <p> - red background block means not learned or not tested information! </p>
-        <p> - </p>
-    </div>
-    
-    <pre class="syntax">
-SYNTAX :    main syntax
-            <em>literally used </em>
-            <small>literally used optional </small>
-            <prot style="color:#049500;">prototype chain</prot>
-            <strong>required value </strong>
-            <i>optional value </i>
-                - some descriptions will come here (like arguments)
-                - ??? (3 question marks) in syntax means not tested or not learned yet
-                
-            <span class="openable"> this is an openable element<div>
-                <p> - openable elements listed here in paragraphs </p>
-                <p> - </p>
-            </div></span>
-    </pre>
-    
-<details class="example">
-<summary> DEMO </summary>
+    <p> - <mark>RLock</mark> </p>
+    <p> - thread-1 acquires the lock and blocks thread-2 and thread-3 untill it releases the lock again </p>
     <pre>
-    examples of the current lessons 
+    import threading 
+    import time
     
-// -----------------------------------------
-
-// -----------------------------------------
+    lock = threading.RLock()
+    
+    def th(name):
+        print( f"{name} tread started")
+        
+        lock.acquire()
+        time.sleep(0.1)       # simulating some work
+        
+        print( f"{name} tread end")
+    
+    th1 = threading.Thread(target=th, args=[1])
+    th2 = threading.Thread(target=th, args=[2])
+    th3 = threading.Thread(target=th, args=[3])
+    
+    th1.start()
+    th2.start()
+    th3.start()
     </pre>
-</details>
-    
     <pre class="cmd">
-    command line demo 
+    1 tread started
+    2 tread started
+    3 tread started
+    1 tread end
     </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-<details class="example">
-<summary> Example : </summary>
-<h4 style="color:darkblue;"><u> example title </u></h4>
-    <p> - live tests will come here </p>
-        <details>
-        <summary> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-        </details>
-</details>
-<!---------------------------------------------------------------------------------------------------------------------------------->    
-<hr>
+    <p> - within the same thread the reental lock can be unlocked several times </p>
+    <pre>
+    import threading 
+    import time
     
-<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
+    lock = threading.RLock()
+    
+    def th(name):
+        print( f"{name} tread started")
+        
+        for i in range(3):
+            lock.acquire()        # acquired 3 times 
+            time.sleep(0.1)
+        
+        time.sleep(1)
+        for i in range(3):
+            lock.release()        # released as many times as it was arquired to unlock the lock  
+        
+        print( f"{name} tread end")
+    
+    th1 = threading.Thread(target=th, args=[1])
+    th2 = threading.Thread(target=th, args=[2])
+    th3 = threading.Thread(target=th, args=[3])
+    
+    th1.start()
+    th2.start()
+    th3.start()
+    </pre>
+    <pre class="cmd">
+    1 tread started
+    2 tread started
+    3 tread started
+    1 tread end
+    </pre>
+</details>
+<hr>
+<!--------------------------------------------------------------------------------->
+<h2 class="header"> Other tools to control race conditions </h2>
+    <p> - there are other tools to control race conditions as well such as <mark class="mark">Condition Objects</mark> <mark class="mark">Semaphore</mark> <mark class="mark">Barrier</mark> <mark class="mark">Events</mark> <a href="https://docs.python.org/3/library/threading.html#semaphore-objects" target="_blank">[link]</a> </p>
     
     
     <br><br>

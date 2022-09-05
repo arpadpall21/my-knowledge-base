@@ -1,4 +1,13 @@
-const myArr1 = [1, 2, 3]
-const myArr2 = [1, 2, 3]
+// let interval = setInterval(() => {
+//     console.log('Hello from nodejs!')
+    
+// }, 5000)
 
-console.log( false && laksdjfdsalkjaksdjflakdjsf )
+process.stdin.on('data', data => {
+    console.log( 'stdin --------------- ')
+    console.log( data )
+})
+
+console.log( 'test' )
+
+throw Error('test error')

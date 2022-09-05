@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> multiprocessing </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> multiprocessing </h1>
+    <p> Updated ( 2022-08-15 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Python></a>
+        <a href="../index.html">Built-in modules></a> multiprocessing
+    </p>
+<table class="table">
+<caption>
+    
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            
+        </td>
+        <td> 
+        
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://docs.python.org/3/library/multiprocessing.html?highlight=multiprocessing#module-multiprocessing" target="_blank">multiprocessing (docs.python.org)</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    
+<details class="example" open>
+<summary> DEMO </summary>
+    <pre>
+    
+    </pre>
+</details>
+    
+    
+    
+    
+<!--
+    - multiprocessing allows to spawn child processes, its API is similar to <mark class="mark">threading</mark> 
+    - multiprocessing is used to spread CPU intensive task in multiple subprocesses
+
+
+    - the multiprocessing module supports all race condition control tools as the threading module does <mark class="mark">Lock</mark>, <mark class="mark">RLock</mark>, <mark class="mark">Condition</mark>, <mark class="mark">Semaphore</mark>, <mark class="mark">Event</mark>, <mark class="mark">Barrier</mark> <a href="https://docs.python.org/3/library/multiprocessing.html?highlight=multiprocessing#multiprocessing.Barrier" target="_blank">[link]</a>
+
+
+    - create threading-like API
+
+
+
+    - 3 ways of starting a subprocess
+        - spawn 
+            - slower than fork and forkserver 
+            - only inherits the minimun necessary resources form the parent process 
+        - fork 
+            - when begins it identical to the parent process 
+            - all parent resources are inherited 
+            - forking can be problematic and unsafe
+        - fork server 
+            - a server process is started, then the parent requests the forkserver to create a subprocess
+            - the creates the subporcess with fork, but its safe becasue there are no unnecessary resources inhed 
+
+
+<em>multiprocessing</em>.set_start_method('spawn|fork|forkserver')
+    - sets the subprocess start method <br>
+    - should be called at most once and must be called inside <mark>if __name__ == "__main__"</mark> block 
+    <span id="browserSupport" title="updated : 2022-08-17">
+        <span><i class="fab fa-python"></i> 3.4 </span>
+    </span>
+
+<em>multiprocessing</em>.get_context('spawn|fork|forkserver')
+    - creates and returns a <strong>ctx</strong> (context) in which sets the subrocess start method <br>
+    - the returned <strong>ctx</strong> basically isolates the subporcess start method and has the same API as the <mark class="mark">multiprocessing</mark> module <br>
+    - must be called inside <mark>if __name__ == "__main__"</mark> block
+    <span id="browserSupport" title="updated : 2022-08-17">
+        <span><i class="fab fa-python"></i> 3.4 </span>
+    </span>
+
+
+
+
+
+
+
+- we can communicate between processes with Pipe() or Queue() 
+    -> Document these down
+
+
+
+- Shared memory between processes
+    - in real life is best to avoid using shared data between processes
+    - however the <mark class="mark">multiprocessing</mark> module has the <mark class="mark">Value</mark> and <mark class="mark">Array</mark> classes that are basically shared memory between processes
+
+
+<em>multiprocessing</em>.Value(<strong class="openable">typeCode<div>
+        <p> - supports the same types as the <mark class="mark">array</mark> module <a href="https://docs.python.org/3/library/array.html#module-array" target="_blanc"[link]</a></p>
+    </div></strong>, <i>initVal</i>, <small class="openable">lock=<i>bol</i><div>
+        <p> - internally creates a lock which makes sure that the data can be modified by only one process (Default: <mark>True</mark>) </p>
+    </div></small> )
+    - creates and returns a <strong>value</strong> object which is a shared data between processes
+
+<strong>value</strong>.value
+    - gets or sets the value of the <strong>value</strong> object
+
+<em>multiprocessing</em>.Array(<strong class="openable">typeCode<div>
+        <p> - supports the same types as the <mark class="mark">array</mark> module <a href="https://docs.python.org/3/library/array.html#module-array" target="_blanc"[link]</a></p>
+        <p> - this defines the type stored in the array </p>
+    </div></strong>, <i>arr|arrSize:int</i>, <small class="openable">lock=<i>bol</i><div>
+        <p> - internally creates a lock which makes sure that the data can be modified by only one process (Default: <mark>True</mark>) </p>
+    </div></small> )
+    - creates and returns an <strong>array</strong> object which is a shared data between processes (accessed as a normal list)
+
+
+<em>multiprocessing</em>.Manager()
+    - creates and returns a <strong>manager</strong> object which holds shared data between processes<br>
+    - in the background creates a manager server process, where the shared data is sotred, then childs processes are requesting this shared data<br>
+    - supports the context management protocol (calls <mark>shutdown()</mark> on context exit)<br>
+    - <a href="https://docs.python.org/3/library/multiprocessing.html?highlight=multiprocessing#multiprocessing.Manager" target="_blanc">[link]</a>
+
+
+<strong>manager</strong>.<strong class="openable">class<div>
+    <p> <mark class="mark">list</mark> <mark class="mark">dict</mark> <mark class="mark">Namespace</mark> <mark class="mark">Lock</mark> <mark class="mark">RLock</mark> <mark class="mark">Semaphore</mark> <mark class="mark">BoundedSemaphore</mark> <mark class="mark">Condition</mark> <mark class="mark">Event</mark> <mark class="mark">Barrier</mark> <mark class="mark">Queue</mark> <mark class="mark">Value</mark> <mark class="mark">Array</mark> </p>
+</div></strong>
+    - class return a manager object that holds the manager data
+
+<strong>manager</strong>.shutdown()
+    - stops the <strong>manager</strong> (shuts down the manager process) <br>
+    - does not shuts down any child processes (but the <strong>manager</strong>'s data is destroyed)
+
+<strong>manager</strong>.address
+    - returns the <strong>manager</strong>'s address
+
+
+
+- the <mark class="mark">multiprocessing</mark> module offer 2 way of channel communication, queue and pipe
+- the queue api is a near clone of the <mark class="mark">queue</mark> package [links here!!!!! for both sources]
+
+
+<em>multiprocessing</em>.Pipe(<i class="openable">duplex:bol<div>
+    <p> - bidirectional pipe (Default: <mark>True</mark>) </p>
+    <p> - <mark>False</mark> -> unidirectional pipe (<strong>conn2</strong> send -> <strong>conn1</strong> receives) </p>
+</div></i>)
+    - creates and return 2 connection objects <mark>(<strong>conn1</strong>, <strong>conn2</strong>) which are connected through this pipe
+
+<strong>conn</strong>.poll(<i class="openable">delay:float<div>
+    <p> - <u>if the pipe is empty</u> blocks further execution for the specified time or untill a data is put in the pipe (ex: <mark>1.5</mark> = 1.5 seconds) </p>
+    <p> - if the pipe is not empty block </p>
+    <p> - (Default: <mark>None</mark> =  no delay) </p>
+</div></i>)
+    - returns <mark>True</mark> if the pipe has any data in it, otherwise returns <mark>False</mark>
+
+<strong>conn</strong>.send(<strong>data:any</strong>)
+    - sends a chunk data down the pipe, the sent data must be serializable (pickable) up to 32MB
+
+<strong>conn</strong>.recv()
+    - returns the next data chunk from to pipe, <u>if the pipe has no data it will block untill the next data chunk is received</u>
+
+<strong>conn</strong>.fileno()
+    - returns the filedescriptor or handle used by the connection 
+
+<strong>conn</strong>.close()
+    - closes the connection, (automatically called when the conneciton is garbage collected)
+
+<strong>conn</strong>.send_bytes(<strong>bytes-like</strong>, <i class="openable">offsetIdx:int<div>
+    <p> - index from where the bytes-like object will be sent (Default: <mark>0</mark>) </p>
+</div></i>, <i class="openable">chunkLen:int<div>
+    <p> - the length of the chunk (ex: <mark><strong>conn</strong>.send_bytes(<strong>someBytes</strong>, 10, 5)</mark> = 5 bytes sent </p>
+</div></i>)
+    - sends a chunk data down the pipe, data size up to 32MB
+
+<strong>conn</strong>.recv_bytes_into(<i>maxLen:int</i>)
+    - returns the next data chunk from to pipe, <u>if the pipe has no data it will block untill the next data chunk is received</u> <br>
+    - if data chunk is bigger than <i>maxlen</i> then <mark>OSError</mark> is raised and the conneciton is no loger readable
+
+<strong>conn</strong>.recv_bytes_into(<strong>byte-like</strong>, <i>offsetIdx:int</i>)
+    - recevies the next data chunk from to pipe and writes it into the passed <mark>byte-like</strong>, <u>if the pipe has no data it will block untill the next data chunk is received</u> 
+
+
+
+
+
+-->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <br><br>
+</body>
+</html>
