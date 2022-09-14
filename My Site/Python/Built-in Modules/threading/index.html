@@ -190,22 +190,23 @@
         </td>
     </tr>
     <tr class="20.01">
-        <td colspan="2"> <mark>RLock</mark> reental lock </td>
+        <td colspan="2"> <mark>RLock</mark> reentral lock </td>
     </tr>
     <tr class="20.02">
         <td> 
             <em>threading</em>.RLock()
         </td>
         <td>
-            - creates and returns a <strong>reentalLock</strong> <br>
+            - creates and returns a <strong>reentralLock</strong> <br>
             - thread awaire, the thread that locks it only that thread can unlock it again <br>
             - can be unlocked multiple times within the same thread (must be locked as many times as it was unlocked in order to release the lock) <br>
-            - supports the context management protocol (<strong>simpleLock</strong> <mark>acquire()</mark> when entering | <mark>release()</mark> when exiting the context)
+            - supports the context management protocol (<strong>simpleLock</strong> <mark>acquire()</mark> when entering | <mark>release()</mark> when exiting the context) <br>
+            - <u> automatically released when the thread is killed </u>
         </td>
     </tr>
     <tr class="25.01">
         <td> 
-            <strong>reentalLock</strong>.acquire(<small class="openable">blocking=<i>bol</i><div>
+            <strong>reentralLock</strong>.acquire(<small class="openable">blocking=<i>bol</i><div>
                 <p> - blocks furter execution when the <strong>lock</strong> is already acquired (Default: <mark>True</mark>)
             </div></small>, <small class="openable">timeout=<i>float</i><div>
                 <p> - after this delay the lock is unlocked (Default: <mark>-1</mark> = no delay) </p>
@@ -214,16 +215,16 @@
         <td> 
             - acquires (locks) the lock in this thead <br>
             - within the same thread unlock the lock several times <br>
-            - if the <strong>reentalLock</strong> is locked by another thread block further execution untill the lock is released by the thred that locked it
+            - if the <strong>reentralLock</strong> is locked by another thread block further execution untill the lock is released by the thred that locked it
         </td>
     </tr>
     <tr class="25.02">
         <td> 
-            <strong>reentalLock</strong>.release()
+            <strong>reentralLock</strong>.release()
         </td>
         <td> 
             - releases (unlocks) the lock <br>
-            - only the thread that locked the <strong>reentalLock</strong> can unlock it again
+            - only the thread that locked the <strong>reentralLock</strong> can unlock it again
         </td>
     </tr>
 </table>
@@ -282,13 +283,9 @@
 </details>
 <hr>
 <!--------------------------------------------------------------------------------->
-<h2 class="header"> Communication between threads </h2>
-    <p> - because threads run in the same process data in the main process is available for all threads (no need to use some communication channes like in <mark class="mark">multiprocessing</mark> </p>
-<hr>
-<!--------------------------------------------------------------------------------->
-<h2 class="header"> Locks </h2>
+<h2 class="header"> Race Condition Control </h2>
     <p> - a simple <mark>Lock</mark> can be locked or unlocked, the idea is that several threads use the same lock but only one of them unlock it, other threads wait until the lock unlocks again (ex: connecting to DB with this lock approach makes shure that there's only one query at a time) </p>
-    <p> - the reental lock <mark>RLock</mark> has 2 advantages over the simple lock: </p>
+    <p> - the reentral lock <mark>RLock</mark> has 2 advantages over the simple lock: </p>
     <p style="text-indent:30px;"> - thread aware, meaning knows which thread acquired (locked) it and <u>only the acquiring thread can unlock it again</u> </p>
     <p style="text-indent:30px;"> - within the same thread can be acquired (unlocked) several times (must be released (locked) as many times as it was arquired (locked) to release the lock) </p>
 <details class="example">
@@ -351,7 +348,7 @@
     3 tread started
     1 tread end
     </pre>
-    <p> - within the same thread the reental lock can be unlocked several times </p>
+    <p> - within the same thread the reentral lock can be unlocked several times </p>
     <pre>
     import threading 
     import time
@@ -390,6 +387,16 @@
 <!--------------------------------------------------------------------------------->
 <h2 class="header"> Other tools to control race conditions </h2>
     <p> - there are other tools to control race conditions as well such as <mark class="mark">Condition Objects</mark> <mark class="mark">Semaphore</mark> <mark class="mark">Barrier</mark> <mark class="mark">Events</mark> <a href="https://docs.python.org/3/library/threading.html#semaphore-objects" target="_blank">[link]</a> </p>
+    
+    
+    
+    
+    
+    
+<hr>
+<!--------------------------------------------------------------------------------->
+<h2 class="header"> Communication between threads </h2>
+    <p> - because threads run in the same process data in the main process is available for all threads (no need to use some communication channes like in <mark class="mark">multiprocessing</mark>) </p>
     
     
     <br><br>
