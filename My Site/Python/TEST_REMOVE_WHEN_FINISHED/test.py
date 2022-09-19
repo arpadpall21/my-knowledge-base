@@ -90,3 +90,30 @@
 ###############################################################################################
 ###############################################################################################
 ###############################################################################################
+
+# import random
+
+# print( random.random() )        # if no seep specified the current system time is used as start seed value
+
+# random.seed(2.5)                # seeding random generation start value (further random generation will be deterministic)    
+# print( random.random() )        # 0.41877545666909954  
+
+
+# st = random.getstate()          # gets the current start value
+# random.setstate(st)             # setting a previously capture state (further random generation will be deterministic by using thi start value)
+
+# print( random.random() )        # 0.9404475600150654   
+
+###############################################################################################
+###############################################################################################
+
+import random
+
+random.seed(1)                        # deterministic random generation (start value set)
+
+print( random.randbytes(10) )         # b'\xf5\xb1e"JX\xb7\x91\xf1\xd8'   # random 10 byte sequence
+
+print( random.randrange(10) )         # 1     # random number picked from the range
+print( random.randrange(0, 10, 2) )   # 4     # random number picked from the range (step restricted)
+
+print( random.randint(0, 2) )         # 0     # random number picked from the range
