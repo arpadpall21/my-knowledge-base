@@ -1,96 +1,230 @@
-# import concurrent.futures
+# import asyncio
+
+# async def sayHi(name, delay):       # corutine
+#     await asyncio.sleep(delay)
+#     print( "Hello World!" )
+#     return f"{name} result"
+
+# async def main():
+#     result = await asyncio.gather(sayHi('one', 1), sayHi('two', 1.5))     # starts both corutines and awaits their results
+#     print( result )               # // -> ['one result', 'two result']
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def sayHi(name, delay):       # corutine
+#     await asyncio.sleep(delay)
+#     print( "Hello World!" )
+#     return f"{name} result"
+
+# async def main():
+#     task1 = asyncio.create_task(sayHi('one', 1))        # once tasks are created immediately starts executing its corutine in the background   
+#     task2 = asyncio.create_task(sayHi('two', 1.5))
+    
+#     print( await task1 )            # // -> "one result"    # awaiting task results 
+#     print( await task2 )            # // -> "two result"
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def listGen():
+#     yield 1
+#     yield 2
+#     yield 3
+
+# async def main():
+#     async for i in listGen():
+#         print( i )
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def listGen():
+#     yield 1
+#     yield 2
+#     yield 3
+
+# async def main():
+#     result = [i async for i in listGen()]
+#     print( result )
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def sayHi():
+#     await asyncio.sleep(5)
+#     return 'some result'
+
+# async def main():
+#     task1 = asyncio.create_task(sayHi())
+#     await asyncio.shield(task1)                 # shiled the task from cancellation
+    
+#     task1.cancel()                              # ignored because the task in shielded
+    
+#     print( await task1 )                        # // -> 'some result'
+
+# asyncio.run(main())
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def sayHi():
+#     await asyncio.sleep(1)
+#     return 'some result'
+
+# async def main():
+#     print( await asyncio.wait_for(sayHi(), timeout=2))    # // -> "some result"
+#     print( await asyncio.wait_for(sayHi(), timeout=.1))   # // -> asyncio.exceptions.TimeoutError
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def sayHi(name, delay):
+#     await asyncio.sleep(delay)
+#     return f"{name} result"
+
+# async def main():
+#     task1 = asyncio.create_task(sayHi('one', 1))
+#     task2 = asyncio.create_task(sayHi('two', 2))
+#     task3 = asyncio.create_task(sayHi('three', 3))
+#     result = await asyncio.wait([task1, task2, task3])
+
+    # for i in result[0]:           # finished tasks
+    #     print( await i )          # // -> "two result"  |  "one result"  |  "three result"
+
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def sayHi(name, delay):
+#     await asyncio.sleep(delay)
+#     return f"{name} result"
+
+# async def main():
+#     task1 = asyncio.create_task(sayHi('one', 1))
+#     task2 = asyncio.create_task(sayHi('two', 2))
+#     task3 = asyncio.create_task(sayHi('three', 3))
+#     result = asyncio.as_completed([task1, task2, task3])
+
+#     for i in result:              # genObj yields the result as soon as they finished
+#         print( await i )          # // -> "one result"  |  "two result"  |  "three result"
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
 # import time
 
-# r = 10000000
-# start = time.time()
+# def blockingIo(name, delay):
+#     print( f'blocking io {name} start' )
+#     time.sleep(delay)
+#     print( f'blocking io {name} end!' )
 
-# def countrange(name, len):
-#     for i in range(len + 1):
-#         if i == r / 4:
-#             print( f"{name}: {i}" )
-#         elif i == r / 2:
-#             print( f"{name}: {i}" )
-#         elif i == r / 4 * 3:
-#             print( f"{name}: {i}" )
-#         elif i == r:
-#             print( f"{name}: {i}" )
+#     return 'blocking io result'
 
-# def th(name, b):
-#     print(f'{name} started')
-#     countrange(name, r)
-#     print(f'{name} end!')
-#     print( f'2nd argument {b}')
+# async def main():
+#     print( await asyncio.to_thread(blockingIo, 'one', 1.2) )        # "blocking io result"
 
 
-
-# with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-#     executor.map(th, ['Thread-1', 'Thread-2', 'Thread-3'], ['x', 'y', 'z'])
+# asyncio.run(main())
 
 
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def someCoro(name, delay):
+#     await asyncio.sleep(delay)
+#     return f'coro {name} result'
+
+# async def main():
+#     task1 = asyncio.Task(someCoro('one', 1.3))
+
+#     print( await task1 )        # // -> "coro one result"
+
+# asyncio.run(main())
 
 
-# print( f"Running time: {time.time() - start}" )
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def someCoro(name, delay):
+#     await asyncio.sleep(delay)
+#     return f'coro {name} result'
+
+# async def main():
+#     task = asyncio.Task(someCoro('one', 1.3))
+
+#     print( await task )             # // -> "coro one result"
+
+#     print( task.cancelled() )       # // -> False
+#     print( task.result() )          # // -> "coro one result"
 
 
-###############################################################################################
-###############################################################################################
-###############################################################################################
+# asyncio.run(main())
 
-# from concurrent.futures import ThreadPoolExecutor
-# import threading
+########################################################################################
+########################################################################################
+########################################################################################
 
-# lock = threading.RLock()
-# threadpolExecutor = ThreadPoolExecutor(max_workers=5)
+import asyncio
 
-# def countrange(name, loop):
-#     if loop:
-#         for i in range(10000000):
-#             pass
-
-# def th(name, lock, loop=True):
-#     print(f'{name} started')
-#     with lock:                      # lock supports context protocol 
-#         countrange(name, loop)      # lock unlocket at the start of the context and locked at the end of it
-#     print(f'{name} end!')
-
-# threadpolExecutor.map(th, ['th-1', 'th-2', 'th-3', 'th-4', 'th-5'], [lock, lock, lock, lock, lock], [False, False, True, False, True])   # start threads
-# # threads run concurently but have to wait each other to finish
+async def someCoro(delay):
+    await asyncio.sleep(delay)
+    raise ValueError('some exception')
 
 
+async def main():
+    task = asyncio.Task(someCoro(1.3))
 
-###############################################################################################
-###############################################################################################
-###############################################################################################
+    print( task.exception() )
 
-# from concurrent.futures import ThreadPoolExecutor
-# import threading
-# import time
-
-# executor = ThreadPoolExecutor(max_workers=2)
-# b = threading.Barrier(2)
-
-# # def th():
-# #     print( 'th-1 start:' )
-# #     time.sleep(1)
-# #     b.wait()
-# #     print( 'th-1 end:' )
-
-# def th(name, wait):
-#     print( f'{name} start' )
-#     time.sleep(wait)
-#     b.wait()
-#     print( f'{name} end' )
-
-# executor.map(th, [1, 2, 3, 4, 5], [2, 5, 1.2, 1.1, 4.2])
-
-
-###############################################################################################
-###############################################################################################
-###############################################################################################
-###############################################################################################
-###############################################################################################
-###############################################################################################
-
-import argparse
-
-argParser = argparse.ArgumentParser()
+asyncio.run(main())

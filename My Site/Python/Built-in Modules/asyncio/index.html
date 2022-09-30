@@ -55,7 +55,8 @@
         <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
     </details>
 <h2 style="color:green;"><u> Useful Links : </u></h2>
-    
+    <p><a href="https://realpython.com/async-io-python/" target="_blank">async io (realpython.com)</a></p>
+    <p><a href="https://docs.python.org/3/library/asyncio.html" target="_blank">asyncio (docs.python.org)</a></p>
 <h2 style="color:green;"><u> Remember This : </u></h2>
     
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
@@ -65,49 +66,6 @@
 
 
 <!--
-
-For Company software proprietary reasons I cannot name packages or other tools used by my company, so I'll refer them as A, B, etc... in my description
-
-
-CV (Computer Vision) Description
-- It's a complete containerised solution specialized for image and video processing
-- supported features by CV: Document recognition, Human face recognition, face and hand gesture recognition (for liveness checking), reading id document for text recognition (text area cropping, text recognition), and more awesome CV tools that I developed but actualy cannot talk about here :)
-- the container includes Http servers, image storage solution, serveral image processing neural networks integrated in multiple processes
-- the supervisor supervises processes ruinning in the contianer, and the 'A' load distributor is responsible to balance the traffic load
-- within the container processes are comunicating with each other as rpc client|server
-- the video stream is handled by WebRtc, all incomming frames are stored by the storage solution in a specific way in order to not to overload the sotorage engine
-- the project also includes a manualtest frontend page which is half public for customer demo only
-- in one task severeal processes are included, ex: for the document text recognition pipeline included: the storeage process, the htttp rocess (obviously), a process including a neural netwrok making images 'more readable', another process which crop text areas using a specialized neural network, an another process which acually reads the text again with another neural network, on top of that there's custom text correction an area crop logig to correct potential mistakes
-
-My role for this project: 
-    - I develop new or optimalize existing features (according to requested tasks)
-    - Integrate and performance test neural netwokrs in the project 
-    - Updating tests to keep the code coverage above 80%
-    - besidese my direct supervisor and the company CTO I'm the only developer working in this project 
-
-
-Problem that I've solved in CV:
-    1) - when I received the project the test code coverage was below 70%, I successfully raised this above 80%, so all features are automatically tested new 
-    
-    2) - I received chunky task with multiple points where:
-        - all character recognition processes must be integrated in one sigle process
-        - a new customized character recognition neural network must be integrated (in order to swap the old character recognition package)
-        - the 'old' character recogtion package had to be completely removed from the project
-    Challenges are: 
-        - a CV task consist of multiple neural network layer, so how reorganize this in readable way
-        - the new characther recognition neural newtork is not a package as before, so the neural network model has to be booted in a separate process where it's used (performance reasons)
-        - another endpoint uses the 'old' character recognition package, so we need a way to use it with new character recognition neurla network 
-    Solutions, further problems and solutions:
-        - I came up with the solution to use the new character recognition process as a router for all character recogtion tasks, benefits of doing this: here we can boot up and use all character recognition neural newtroks, it's scalable if we want to use new or swap networks, in this process can import all dependencies that task pipelines need, the process number is scalable from the supervisor so it's easy to adjust all character recognition needs 
-        - swapping a package by a neural network present a new problem, it's easy to import a package and use it as we like, but a neural network has to be booted up first, so booting up a newural network and passing it all over the place it's just very ugly an unreadable, my solution was to integrate the new neural network in a class, this way once we create an instance the network is booted and it's always available in that instance, so methods on that instance always use the already booted netwrok, then this class is simply imported in the new process and the newtork is booted up once we create an instance
-        - the 'old' character recognition package had to be completely removed,the other endpoint had to be reorganized to use the new character recognitin neural netowrk, the 'old' way was to simply use the old package in the http process to perform the character recognition, but now we need to use the new network, for this I created an rpc request to the new process directly from the endpoint handler, the challenge here is that all the logic had to be rewriten partially in the new process partially in the endpoint handler 
-    Thinking further:
-        - It was not requested but I also integrated a grayscale image processing logic, it helps character recognition solutions to perform better, I did this in a configurable way for the main config file, this way we have the option to test which way the new network performs better
-
-
-
-
-
 ---------------------------------------------------------------------------------------------
 1
 ---------------------------------------------------------------------------------------------
@@ -125,74 +83,112 @@ stage 3 :
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
     
-    - included in Python 3.4    
+    - included in Python 3.4
     - 
     
+    async def <strong>fnName</strong>():              # creates and returns a <strong>corutine</strong>
+        <i>functionBody ...</i>
+        await <strong>awaitable</strong>              # awaits the <strong>corutine</strong>'s result (availabe only inside async function)
     
     
-    - asyncio allows us to run asynchronous code 
-    - def async fnName():
-        - returns a corutine object
     
+    - asyncio allows us to run asynchronous code (single-threated, single-process design allowing tasks to run concurrently, gives the look and feel of concurrency)
     
-    - future :
-        - low-level awaitable object 
-    - task: 
-        - passed corutine starts running when created (allows concurrent execution)
-        - corutine return value accessible in await 
-    - coroutine: 
-        - async function / awaitable 
+    - the asyncio is a light weight threading approach (mostly designed or non-blocking IO operations, as its name says asyncio)
+    
     - 3 awaitable objects, corutines, tasks, futures
+    - coroutine: 
+        - async function or awaitable object 
+        - it's a generator under the hood (run/pause interface)
+    - task: 
+        - the passed corutine immediately starts running when created in the background (allows concurrent execution)
+        - result can be awaited with "await"
+    - future :
+        - low-level awaitable object
     
     
-    - we have to use the await keyword to wait for corutines 
-    - the await keyword is only available inside async functions 
     
     
-    - asyncio.run(<corutine>())
-        - only one is allowed to run in one thread 
-        - creates an event loop and closes at the end 
-        - this is the main entry point 
-        - high level event loop which takes care about all low level stuff
-    - asyncio.sleep(<delay:secInt>, result=None) 
-        - corutine 
-        - creates a corutine that waits <sec> when called 
-        - returns the set result 
+<em>asyncio</em>.run(<strong>coro()</strong>, ...)
+    - high level event loop API management funciton (takes care of low level management of the asyncio event loop, finalizing asynchronous generators, and closing the threadpool)
+    - used as main entry point to the event loop (only one allowed)
+
+
+<em>asyncio</em>.sleep(<delaySec:int>, <small>result=<i>str</i></small>) 
+    - corutine suspends the execution for <strong>delay</strong> (execution is passed to somewhere else) <br>
+    - awaiting returns <small>result</small> <br>
+    - in long function we can use <mark>await asyncio.sleep(0)</mark> to momentarily pass the execution to somewhere else (to optimize resources)
+    - v3.7
     
-    - asyncio.create_task(coro, name=None)
-        - creates a task 
+    
+<em>asyncio</em>.create_task(<strong>coro()</strong>, <small>name=<i>str</i></small>)
+        - creates and returns a <strong>task</strong> (starts executing <strong>coro()</strong> in the background) <br>
+        - the returned <strong>task</strong> can be awaited later on for the <strong>coro</strong> result
         - Python 3.7 (before it was asyncio.ensure_future())
         - 3.8 name argument
-        - executes the corutine when called 
-        - where the heck the corutine value is returned => well in await
     
-    - asyncio.gather(coro|future, ..., return_exception=False)
-        - run tasks concurently 
-        - schedules all passed corutunes and futures as task and run them concurently 
-        - if all finished successfully their result is returned in a list fail otherwise 
-        - waits for all awaitable to finish before returning 
     
-    - asyncio.wait_for(awaitable, delay:sec)
-        - limits the wait time for the awaitable to comple
-        - if awaitable takes loger than <delay> this method raises a asyncio.exceptions.TimeoutError, if not everithing is fine 
-        - cancels awaitable when timeout occures
-        
-    - asyncio.wait(awaitable, ..., timeout=None, return_when=ALL_COMPLETED)
-        - does not cancel awaitables on timeout 
-        - timeout int or float <- for more precise time 
-        - what awaitable is deprecated here
+<em>asyncio</em>.gather(<strong>awaitable</strong>, ..., return_exception=False)
+        - corutine start executing all <strong>awaitable</strong>s concurently and awaits their result<br>
+        - the awaited result is a list of the <strong>awaitable</srong> result<br>
+        - <small>return_exception=False</small> -> first exception immediately propagated to the task that await this method<br>
+        - <small>return_exception=True</small> -> exceptions are threated as successful result 
     
-    - asyncio.shield(awaitable)
-        - prevents the awaitable from cancelling 
     
-    - asyncio.as_completed
+<em>asyncio.sheild(<strong>awaitable</strong>)
+        - protects the <strong>awaitable</strong> from being cancelled (calling <mark>cancel()</mark> on the <strong>awaitable</strong> will be ignored)
+    
+    
+<em>asyncio</em>.wait_for(<strong>awaitable</strong>, <strong>delaySec:float|int</strong>)
+    - corutine limits the await time for the <strong>awaitable</strong> to comple<br>
+    - if the <strong>awaitable</strong> takes longer than <delay> it is cancelled and  raises an <marK>asyncio.exceptions.TimeoutError</mark><br>
+    - await returns the <strong>awaitable</strong> result on success
+    
+    
+<em>asyncio</em>.wait([<strong>task</strong><i>, ...</i>], <small>timeout=<i>float</i></small>, <small class="openable">return_when=<i>str</i><div>
+    <p> <mark>ALL_COMPLETED</mark> - return when all futures are finished (Default) </p>
+    <p> <mark>FIRST_COMPLETED</mark> - return the first future is finished </p>
+    <p> <mark>FIRST_EXCEPTION</mark> - return the first future raises an exception </p>
+</div></small>)
+    - corutine awaits untill all <strong>task</strong>s are finished (or untill <small>timeout</small> by Default)<br>
+    - the awaited result is a tuple (index <mark>0</mark> -> a set of finished futures) (index <mark>1</mark> -> a set of unfinished futures)
+    
+    
+<em>asyncio</em>.as_completed([<strong>task</strong><i>, ...</i>], <small>timeout=<i>float</i></small>)
+    - returns a <strong>genObj</strong> which yields <strong>tasks</strong> as soon as they finished (when we start iterating the <strong>genObj</strong>) (does not block, not a corutine)
+    
+    
+<em>asyncio</em>.to_thread(<strong>fn</strong>, <i>arg1, ...</i>)
+    - runs the passed <strong>fn</strong> in a separate thread <br>
+    - returns a corutine which awaited result is the returned value of <strong>fn</strong>
+    - 3.9
+    
+    
+<em>asyncio</em>Task(<strong>coro()</strong> <small>loop=<i>evLoop</i></small>, <small>name=<i>str</i></small>)
+    - creates and returns a <strong>task</strong> (the passed <strong>coro</strong> starts running in the background) <u>(not recommended to use)</u>
+    
+<strong>task</strong>.cancel(<small>msg=<i>str</i></small>)
+    - cancells the <strong>task</strong> execution, passes a <mark>CancelledError</mark> in the warped <strong>coro</strong>
+    
+<strong>task</strong>.cancelled()
+    - returns <mark>True</strong> if the task is cancelled, <mark>False</mark> otherwise
+    
+<strong>task</strong>.result()
+    - returns the result of the <u>already awaited</u> <strong>task</strong> (error raised if the task is not yet awaited)
+    
+    
+    
     
     - concurrency !== parellelism 
     
+    - v3.6
+        - "for yield" keyword support in async def
+            - cannot use "return" or "yield from" in this corutine
+        - async of comprehension 
     
     
     
-    
+    https://stackoverflow.com/questions/57966935/asyncio-task-vs-coroutine
     
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
