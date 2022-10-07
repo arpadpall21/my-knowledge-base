@@ -215,16 +215,136 @@
 ########################################################################################
 ########################################################################################
 
+# import asyncio
+
+# async def someCoro(delay):
+#     await asyncio.sleep(delay)
+#     raise ValueError('some exception')
+
+
+# async def main():
+#     task = asyncio.Task(someCoro(1.3))
+
+#     try:
+#         await task
+#     except:
+#         print( task.exception() )     # // -> "some exception"
+
+# asyncio.run(main())
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def someCoro(name, delay):
+#     await asyncio.sleep(delay)
+#     return f"{name} corutine result"
+
+# def cb(task):
+#     print( task.result() )          # // -> "one corutine result"
+
+# async def main():
+#     task = asyncio.Task(someCoro("one" ,1.3))
+
+#     task.add_done_callback(cb)
+#     # task.remove_done_callback(cb)   # would remove cb
+    
+#     await asyncio.sleep(3)          # time to let the task finish
+
+# asyncio.run(main())
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def someCoro(name, delay):
+#     await asyncio.sleep(delay)
+#     return f"{name} corutine result"
+
+
+# async def main():
+#     task = asyncio.create_task(someCoro("one" ,1.3), name='myCoro')
+
+#     print( task.get_coro() )          # // -> someCoro corutine object 
+
+#     print( task.get_name() )          # // -> "myCoro"
+#     task.set_name('newCoroName')
+#     print( task.get_name() )          # // -> "newCoroName"
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def someCoro(name, delay):
+#     await asyncio.sleep(delay)
+#     return f"{name} corutine result"
+
+
+# async def main():
+#     myCorutine = someCoro('one', 1)
+
+#     print( asyncio.iscoroutinefunction(someCoro) )        # // -> True
+#     print( asyncio.iscoroutine(myCorutine) )              # // -> True
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+# import asyncio
+
+# async def test():
+#     return "OK"
+
+# async def main():
+#     coro = await test()
+#     task = asyncio.create_task(test())
+#     future = asyncio.Future()
+    
+    
+#     print( asyncio.isfuture(test) )           # // -> False
+#     print( asyncio.isfuture(coro) )           # // -> False
+#     print( asyncio.isfuture(task) )           # // -> True
+#     print( asyncio.isfuture(future) )         # // -> True
+
+# asyncio.run(main())
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
 import asyncio
 
-async def someCoro(delay):
-    await asyncio.sleep(delay)
-    raise ValueError('some exception')
-
-
 async def main():
-    task = asyncio.Task(someCoro(1.3))
+    await asyncio.create_subprocess_shell("ps")      # executes the command in shell, stdout and stderr are linked to the parent process    
+    
+    # process = await asyncio.create_subprocess_shell('echo test',
+    #     stdin=asyncio.subprocess.PIPE,
+    #     stdout=asyncio.subprocess.PIPE,
+    #     stderr=asyncio.subprocess.STDOUT,     # stderr redirected to stdout
+    #     limit=1
+    # )
+    
+    # stdout, stderr = await process.communicate(input=b'some in data')     # data sent to proces in stdin
+    
+    # print( stdout )         # // -> b'test\n'
+    
+    # print( process.stdin )  # // -> StreamWrite     # becasue of stdin=asyncio.subprocess.PIPE
+    
+    # print( process.pid )    # // -> 282       # process id 
+    # print( process.returncode )    # // -> 0 
 
-    print( task.exception() )
 
 asyncio.run(main())

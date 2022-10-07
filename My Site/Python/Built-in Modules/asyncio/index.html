@@ -101,10 +101,20 @@ stage 3 :
         - async function or awaitable object 
         - it's a generator under the hood (run/pause interface)
     - task: 
-        - the passed corutine immediately starts running when created in the background (allows concurrent execution)
+        - corutine wrapper which immediately starts running its corutine when created in the background (allows concurrent execution)
         - result can be awaited with "await"
     - future :
         - low-level awaitable object
+    
+    
+    - <mark class="mark">asyncio</mark> supports high level network connection tools [link]
+    - <mark class="mark">asyncio</mark> supports the same race condition control tools as <mark class="mark">threading</mark> does [link] [link]
+    - <mark class="mark">asyncio</mark> supports the same queue API as the <mark class="mark">queue</mark> does, however asyncio queues are not thread-safe and does not support any <mark>timeout</mark> arguments[link] [link]
+    - <mark class="mark">asyncio</mark> abstracts the event loop behind the <mark>run()</mark> method, however it also supports low-level event loop management tools [link]
+    
+    
+    
+    
     
     
     
@@ -176,13 +186,61 @@ stage 3 :
 <strong>task</strong>.result()
     - returns the result of the <u>already awaited</u> <strong>task</strong> (error raised if the task is not yet awaited)
     
+<strong>task</strong>.exception()
+    - returns the exception message of the <u>already awaited</u> <strong>task</strong>, return <mark>None</mark> if the <strong>task</strong> did not raise any exception
+    
+<strong>task</strong>.add_done_callback(<strong>fn</strong>)
+    - adds a callback which is called when the <strong>task</strong> finshes<br>
+    - the callback (<strong>fn</strong>) receives this <strong>task</strong> as its argument 
+    
+<strong>task</strong>.remove_done_callback(<strong>fn</strong>)
+    - removes a previously added callback (<strong>fn</strong>) reference
+    
+<strong>task</strong>.get_name()
+    - returns the name of the <strong>task</strong>
+    
+<strong>task</strong>.set_name()
+    - sets the name of the <strong>task</strong>
+    
+    
+<em>asyncio</em>.iscorutinefunction(<strong>fn</strong>)
+    - returns <mark>True</mark> if the passed <strong>fn</strong> is a corutine funciton (async function), <mark>False</mark> otherwise
+    
+<em>asyncio</em>.iscorutine(<strong>obj</strong>)
+    - returns <mark>True</mark> if the passed <strong>ob</strong> is a corutine object, <mark>False</mark> otherwise
+    
+<em>asyncio</em>.isfuture(<strong>obj</strong>)
+    - returns <mark>True</mark> if the passed <strong>ob</strong> is a <strong>task</strong> or <strong>future</strong>, <mark>False</mark> otherwise
+    
+    
+    
+<em>asyncio</em>.create_subprocess_shell(<strong>shellCmd</strong>, <small class="openable">stdin=<i>pipe</i><div>
+    <p> <mark>None</mark> - no stdin </p>
+    <p> <mark>asyncio.subprocess.PIPE</mark> - stdin open (we can pass data through the <mark>communicate()</mark> method to this process) </p>
+</div></small>, <small class="openable">stdout=<i>pipe</i><div>
+    <p> <mark>None</mark> - stdout linked to the parent process </p>
+    <p> <mark>asyncio.subprocess.PIPE</mark> - stdout open (can read data through the <mark>communicate()</mark> method from this process) </p>
+</div></small>, <small class="openable">stdout=<i>pipe</i><div>
+    <p> <mark>None</mark> - stderr linked to the parent process </p>
+    <p> <mark>asyncio.subprocess.PIPE</mark> - stdout open (can read data through the <mark>communicate()</mark> method from this process) </p>
+</div></small>, <small class="openable">limit)
+    - executes the <strong>shellCmd</strong> in 
+    
+    
+    
+    
+    
+    
     
     
     
     - concurrency !== parellelism 
+        - parallelism -> running threads at the same time
+        - concurrency -> one execution runs multiple threads by jumping between them 
+    
     
     - v3.6
-        - "for yield" keyword support in async def
+        - "from yield" keyword support in async def
             - cannot use "return" or "yield from" in this corutine
         - async of comprehension 
     
@@ -193,12 +251,6 @@ stage 3 :
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    * asyncio.gather()
-        - runs the passed corutines and futures concurently 
-    
-    - asyncio.shield(aw)
-        - WTF is this ???
-
     - hmmm... what to do with all those low level API :/
         - well we don't really need to create futures in API level 
         - event loop tools maybe good to document hm...
