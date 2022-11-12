@@ -58,7 +58,7 @@
 <hr>
 <h2 class="header"> The <mark>useState()</mark> / <mark>useReducer()</mark> hooks</h2>
     <p> - <mark>useState()</mark> creates an individual state hook </p>
-    <p> - <mark>useReducer()</mark> creates an individual state hook, changes its predefined state based on a dispatched action </p>
+    <p> - <mark>useReducer()</mark> creates an individual state hook, changes its predefined state based on a dispatched action (sophisticated version of <mark>useState()</mark> hook) </p>
     <pre class="syntax">
     import React from 'react'
     
@@ -217,22 +217,20 @@
 <!----------------------------------------------------------------------------------------------->
 <hr>
 <h2 class="header"> The <mark>useMemo()</mark> / <mark>useCallback()</mark> hooks</h2>
-    <p> - <mark>useMemo</mark> - the returned result of its function is momoized, recreated only when the passed state|prop changes </p>
-    <p> - <mark>useCallback</mark> - the returned fucntion is momoized, recreated only when the passed state|prop changes </p>
+    <p> - memoized values or callbacks won't be recomputed when the component rerenders </p>
     <pre class="syntax">
     import React from 'react'
     
     function <strong>Component</strong> () {
-        const <strong>memo</strong> = React.useEffect(<strong>fn</strong>, <small class="openable">[state|prop, ...]<div>
+        const <strong>memo</strong> = React.useMemo(<strong>fn</strong>, <small class="openable">[state|prop, ...]<div>
             <p> - only runs its function when the passed state or prop changes <u>(always runs for the 1st time)</u> </p>
             <p> - if empty Array passed <mark>[]</mark> runs the function only when the component mounts for the first time </p>
-        </div></small>)                           // the result of <strong>fn</strong> is memoized (recreated only when the passed state|prop changes)
+        </div></small>)                             // the returned value of <strong>fn</strong> is memoized (<mark>React.useMemo(<strong>fn</strong>, [])</mark> = <strong>fn</strong> will be called only when the component renders for the fist time)    
         
-        const <strong>fn</strong> = React.useEffect(<strong>fn</strong>, <small class="openable">[state|prop, ...]<div>
+        const <strong>fn</strong> = React.useCallback(<strong>fn</strong>, <small class="openable">[state|prop, ...]<div>
             <p> - returns the passed function only when state or prop changes <u>(always runs for the 1st time)</u> </p>
             <p> - if empty Array passed <mark>[]</mark> runs the function only when the component mounts for the first time </p>
-        </div></small>)                             // memoized <strong>fn</strong> (recreated only when the passed state|prop changes)
-      
+        </div></small>)                           // returns <strong>fn</strong> (<mark>React.useCallback(<strong>cb</strong>, [])</mark> = <strong>cb</strong> memoized only when the component renders for the fist time)    
     } 
     </pre>
 <details class="example">
@@ -240,19 +238,25 @@
     <pre>
     import React, { useState, useMemo, useCallback } from 'react';
     
+    function doSomething(){
+        console.log( 'doSomething called!' )
+        return 2
+    }
+    
     function TestComponent () {
-        console.log('render')
-        const [count, updateCount] = useState(0)
+        let [counter, updateCounter] = useState(() => 1)
+        setTimeout(() => updateCounter( counter + 1), 1000)                            // component rerenders every 1 seconds
         
-        const memoCount = useMemo(() => 0, []);                                        // the returned value for the function is memoized (function runs only when the component mounts for the fist time)
-        const memoCallback = useCallback(() => count, [])                              // function memoized (when the component mounts for the first time)
+        const memo = useMemo(() => {
+            console.log( 'called only when the component is rendered for the first time' )
+            return 1
+        }, [])                                                                         // -! <mark>[]</mark> = run <mark>useMemo</mark> callback only when the component is rendered for the first time   
+      
+        const memoCb = useCallback(doSomething, [])
+        }, [])                                                                         // -! <mark>[]</mark> = run <mark>useCallback</mark> callback only when the component is rendered for the first time    
         
         return (
-            &lt;div&gt;
-                &lt;p&gt; { memoCount } &lt;/p&gt;
-                &lt;p&gt; { memoCallback() } &lt;/p&gt;
-                &lt;button onClick={() =&gt; updateCount(count + 1)}&gt; add &lt;/button&gt;
-            &lt;/div&gt;
+          &lt;div&gt; test component {memo} and {memoCb()}  &lt;/div&gt;
         )
     }
     
@@ -261,24 +265,36 @@
 </details>
 <!----------------------------------------------------------------------------------------------->
 <hr>
-<h2 class="headerExtra"> Referencing DOM Elements <mark>useRef()</mark> / <mark>useImperativeHandle()</mark> / <mark>forwardRef()</mark> </h2>
-    <p> - <mark>useRef()</mark> references a DOM element in React </p>
+<h2 class="headerExtra"> Referencing child components and calling function inside them <mark>useRef()</mark> / <mark>useImperativeHandle()</mark> / <mark>forwardRef()</mark> </h2>
+    <p> - <mark>useRef()</mark> references a child component (or DOM element) </p>
     <p> - with <mark>useImperativeHandle()</mark> and <mark>forwardRef()</mark> we can call functions in the child component from the parent </p>
     <pre class="syntax">
     import React from 'react'
+    import <strong>ChildComponent</strong> from './ChildComponent'
     
-<span style="color:darkgray;">// <mark>useRef()</mark> ---------------------------------------------------------------------------</span>
-    function <strong>Component</strong> () {
-        const <strong>el</strong> = React.useRef()
+    function <strong>Component</strong>() {
+        const <strong>chRef</strong> = React.useRef()                                                      // <strong>chRef</strong> will reference the child component    
         
-        el.current                                                                     // -> returns the DOM element itself
+        React.useEffect(() => {
+            <strong>chRef</strong>.current.<strong>childFn</strong>()                                                       // calling the child component's function from the parent component (after the this component is fully rendered)    
+        })
         
         return {
-            &lt;div&gt;
-                &lt;p ref={<strong>el</strong>}&gt; test &lt;/p&gt;                                                 // referencing DOM element 
-            &lt;/div&gt;
+            &lt;<strong>ChildComponent</strong> ref={<strong>chRef</strong>}/&gt;
         }
-    } 
+    }
+    
+    
+// <mark>ChildComponent.js</mark> ---------------------------------------------------------------------
+    import React from 'react'
+    
+    const <strong>ChildComponent</strong> = React.forwardRef((<strong>props, ref</strong>) => {                             // forward referencing the component    
+        React.useImperativeHandle(<strong>ref</strong>, () => {
+            <strong>childFn</strong>() {}                                                                  // function that can be called from the parent component    
+        })
+    })
+    
+    export default <strong>ChildComponent</strong>
     </pre>
 <details class="example">
 <summary> Example : </summary>
@@ -345,7 +361,36 @@
 <h2 class="headerExtra"> Context <mark>createContext()</mark> / <mark>useContext()</mark> </h2>
     <p> - in React 18.0 we can create contexts, all components (no matter how deep) have access to the context state </p>
     <p> - in a context have a centralized state (object) which can be accessed and modified by any of the component in the context <u>(context state object properties are merged in the context state (like state works in class components))</u>
-<details class="example">
+    <pre class="syntax">
+// <mark>Main.js</mark> -------------------------------------------------------------------------------
+    import React from 'react';
+    import <strong>ChildComponent</strong> from './ChildComponent'
+    
+    cosnt <strong>__ctx</strong> = React.createContext(<strong>ctxObj</strong>)                                             // initializing context object (centralized state object)    
+    
+    function <strong>Component</strong>(){
+        const <strong>ctx</strong> = React.useContext(<strong>__ctx</strong>)                                               // using the context inside the component    
+        
+        return (
+            <em>&lt;Ctx.Provider value={<strong>ctx</strong>}&gt;</em>                                                    // all child components inside this context have access to <strong>ctx</strong>    
+                &lt;<strong>ChildComponent </strong>/&gt;
+            <em>&lt;/Ctx.Provider&gt;</em>
+        )
+    }
+    
+    export { <strong>__ctx</strong> }                                                                      // exporting context (cerntalized state)    
+    
+    
+// <mark>ChildComponent.js</mark> ---------------------------------------------------------------------
+    import React from 'react'
+    import { <strong>__ctx</strong> } from './Main'                                                        // importing context (cerntalized state)    
+    
+    export default <strong>ChildComponent</strong>(){
+        const <strong>ctx</strong> = React.useContext(<strong>__ctx</strong>)                                               // <strong>ctx</strong> is the centralized state object (can be get or set)    
+        
+    }
+    </pre>
+<details class="example" open>
 <summary> Example : </summary>
     <pre>
 // Main.js ----------------------------------------------------------------------------
