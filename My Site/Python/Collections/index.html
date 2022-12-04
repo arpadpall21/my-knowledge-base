@@ -189,22 +189,6 @@
             - deletes the indexed list member (does not leave a 'hole' = shrinks the list)
         </td>
     </tr>
-    <tr class="16.01">
-        <td> 
-            [<strong class="openable">exp<div>
-                <p> - expression recevies the current <strong>item</strong> </p>
-                <p> - we can perform some operation on the returned item before returning it in the new list (ex: <mark><strong>item</strong>.lower()</mark>) </p>
-            </div></strong> for <strong class="openable">item<div>
-                <p> - the current item variable </p>
-            </div></strong> in <strong>iterable</strong> <small>[if <i class="openable">cond<div>
-                <p> - if the condition is <mark>True</mark> the item is stored in the new list </p>
-            </div></i>]</small>]
-        </td>
-        <td> 
-            - (list of comprehension) returns (and formats) items in a new list from the passed <strong>iterable</strong> (based on the <strong>cond</strong>) <br>
-            - does not modify the original <strong>iterable</strong> (syntax used to write short sort logics)
-        </td>
-    </tr>
     <tr class="25.01">
         <td colspan="2"> 
             Methods 
@@ -442,22 +426,6 @@
         </td>
         <td> 
             - returns <mark>True</mark> if <strong>val</strong> is (<small>not</small>) part of  <strong>tuple</strong>, otherwise returns <mark>False</mark>
-        </td>
-    </tr>
-    <tr class="20.01">
-        <td> 
-            {<strong class="openable">exp<div>
-                <p> - expression recevies the current <strong>item</strong> </p>
-                <p> - we can perform some operation on the returned item before returning it in the new set (ex: <mark><strong>item</strong>.lower()</mark>) </p>
-            </div></strong> for <strong class="openable">item<div>
-                <p> - the current item variable </p>
-            </div></strong> in <strong>iterable</strong> <small>[if <i class="openable">cond<div>
-                <p> - if the condition is <mark>True</mark> the item is stored in the new set </p>
-            </div></i>]</small>}
-        </td>
-        <td> 
-            - (set of comprehensiont) returns (and formats) items in a new set from the passed <strong>iterable</strong> (based on the <strong>cond</strong>) <br>
-            - does not modify the original <strong>iterable</strong> (syntax used to write short sort logics)
         </td>
     </tr>
     <tr class="25.01">
@@ -843,7 +811,8 @@
     
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - all Python Collection types are <u>iterable</u> </p>
-<h2 class="header"> Accessing Collection Members </h2>
+<h2 class="header"> Accessing and Slicing Collection (Iterable) Members </h2>
+    <p><u> - slicing creates a <u>shallow copy</u> </u></p>
     <pre class="syntax">
 <span style="color:darkgrey;">// dictionary -------------------------------------------------------------------------</span>    
     <strong>dict</strong>[<strong>key</strong>]                                                                          // returns the dictionary key value <u>(raises a KeyError if the key does not exist)</u>
@@ -852,12 +821,17 @@
 <span style="color:darkgrey;">// set --------------------------------------------------------------------------------</span>    
     <strong>set</strong>                                                                                // sets are iterable but not indexed so the only real option is to use <mark>for</mark> loop   
     
-<span style="color:darkgrey;">// list / tuple -----------------------------------------------------------------------</span>    
-    <strong>list|tuple</strong>[<strong>idx</strong>]                                                                    // returns the item at the specified index 
-    <strong>list|tuple</strong>[-<strong>idx</strong>]                                                                   // negative indexes are counted from the end (<mark>:-1</mark> = second letter / however <mark>:-0</mark> is not allowed)
+<span style="color:darkgrey;">// iterable (this syntax will work on every <strong>itarable</strong>) having single members -----------</span>    
+    <strong>iterable</strong>[<strong>idx</strong>]                                                                      // returns the item at the specified index 
+    <strong>iterable</strong>[-<strong>idx</strong>]                                                                     // negative indexes are counted from end to start (<mark>-1</mark> = last member)    
     
-    <strong>list|tuple</strong>[<i>stIdx(inc)</i>:<i>endIdx(exc)</i>]                                                 // returns the specified range in a new <strong>list|tuple</strong> (omitting <i>idx</i> = from the start|to the end)   
-    <strong>list|tuple</strong>[<i>-endIdx(exc)</i>:<i>-stIdx(inc)</i>]                                               // negative indexes are counted from the end (<mark>:-1</mark> = second last member / however <mark>:-0</mark> doesn't work)
+    <strong>iterable</strong>[<i>stIdx(inc)</i>:<i>endIdx(exc)</i><small>:</small><i class="openable">step:int<div>
+        <p> - takes every nth element from the sliced part </p>
+    </div></i>]                                         // returns the specified range in a new <strong>iterable</strong> (omitting <i>idx</i> = from the start|to the end)   
+    <strong>iterable</strong>[<i>-endIdx(exc)</i>:<i>-stIdx(inc)</i><small>:</small><i class="openable">-step:int<div>
+        <p> - takes every nth element from the sliced part </p>
+        <p> - using <mark>[::-1]</mark> reverses the list (awesome) </p>
+    </div></i>]                                      // negative indexes are counted from end to start (<mark>-1</mark> = last member)    
     </pre>
 <details class="example">
 <summary> DEMO </summary>
@@ -881,9 +855,14 @@
     mySet[0]                                                                           // -! raises a TypeError because sets are not indexed   
     
     
-// list / tuple -----------------------------------------------------------------------
+// iterables --------------------------------------------------------------------------
     myList = [1, 2, 3, 4, 5]
     myTuple = (1, 2, 3, 4, 5)
+    
+    newList = myList[:]                                                                 // slicing creates a new object    
+    newList[0] = 'replaced'
+    myList                                                                              // -> [1, 2, 3, 4, 5]       // original not modified    
+    newList                                                                             // -> ['replaced', 2, 3, 4, 5]
     
     myList[1]                                                                           // -> 2           // returns the indexed member    
     myTuple[1]                                                                          // -> 2
@@ -902,6 +881,17 @@
     
     myList[:-2]                                                                         // -> [1, 2, 3]   // from start to end index 2 (excluded)    
     myTuple[-2:]                                                                        // -> (4, 5)      // from end index 2 (indcluded) to the end   
+    
+  // step ------------------------------------------------------------
+    l = [1, 4, 2, 11, 0, 7]
+    l[::2]                                                                              // -> [1, 2, 0]   // takes every 2nd element 
+    l[:3:2]                                                                             // -> [1, 2]      // slices from <mark>0</mark> to <mark>3</mark> index and takes every 2nd element from the sliced part 
+    
+    l[::-1]                                                                             // -> [1, 4, 2, 11, 0, 7] // reverses the list   
+    l[::-2]                                                                             // -> [7, 11, 4]  // negative slice means slicing from end to start    
+    
+    l[-1:-4:-1]                                                                         // -> [7, 0, 11]  // -! if the step is negative all slicing must be indexed with negative indexes    
+    l[-1:-4:-2]                                                                         // -> [7, 0]
     </pre>
 </details>
 <hr>
@@ -987,38 +977,6 @@
 <!-------------------------------------------------------------------------------------------->
 <h2 class="headerExtra"> Lists </h2>
     <p> - a lists is an indexed collection data type which is ordered, changable and allow duplicate members </p>
-<hr>
-<!-------------------------------------------------------------------------------------------->
-<h2 class="header"> list of Comprehension <mark>[<strong>exp</strong> for <strong>item</strong> in <strong>iterable</strong> if <strong>cond</strong>]</mark> </h2>
-    <p> - the list of comprehension is a short syntax to create a new list from an iterable based on some kind of condition </p>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    myTuple = (1, 2, 3, 4, 5)
-    newList = [x for x in myTuple if x &lt;= 3]                                           // returns in a new list members that are smaller or equal than 3    
-    newList                                                                            // -> [1, 2, 3]
-    myTuple                                                                            // -> (1, 2, 3, 4, 5)  // does not modify the original iterable  
-    
-// ------------------------------------------------------------------------------------
-    strings = ['The', 'Dog', 'Was', 'Found', 'Back', 'In', 'The', 'House']
-    newList = [x.lower() for x in strings if len(x) == 3]                              // format members to lower case and returns them in a new list if their length is 3   
-    newList                                                                            // -> ['the', 'dog', 'was', 'the']
-    
-// ------------------------------------------------------------------------------------
-    def isObject(item):                                                                // custom function returns True for object types   
-        checkTypes = [list, dict, set, frozenset, tuple]
-        for cls in checkTypes:
-            if type(item) == cls:
-                return True
-    
-    myItems = [1-2j, 'someString', 1.3, [1, 2], {"dict":1}, 5, {1, 2}]
-    primitives = [data for data in myItems if not isObject(data)]
-    objects = [data for data in myItems if isObject(data)]
-    
-    primitives                                                                         // -> [1-2j, 'someString', 1.3, 5]     
-    objects                                                                            // -> [[1, 2], {'dict': 1}, {1, 2}]   
-    </pre>
-</details>
 <hr>
 <!-------------------------------------------------------------------------------------------->
 <h2 class="header"> The <mark>in</mark> / <mark>del</mark> keywords and <mark>+</mark> operator </h2>
@@ -1263,24 +1221,6 @@
         i                                                                              // -> 1 | 2 | 3 | 76   // we can loop through members but they are unordered   
     for i in frozenset1:
         i                                                                              // -> 3 | 1 | 55
-    </pre>
-</details>
-<hr>
-<!-------------------------------------------------------------------------------------------->
-<h2 class="header"> set of Comprehension <mark>{<strong>exp</strong> for <strong>item</strong> in <strong>iterable</strong> if <strong>cond</strong>}</mark> </h2>
-    <p> - the set of comprehension is a short syntax to create a new set from an iterable based on some kind of condition </p>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    myTuple = {1, 2, 3, 4, 5}
-    newSet = {x for x in mySet if x &lt;= 3}                                              // returns in a new list members that are smaller or equal than 3    
-    newList                                                                            // -> {1, 2, 3}   
-    myTuple                                                                            // -> {1, 2, 3, 4, 5}  // does not modify the original iterable  
-    
-// ------------------------------------------------------------------------------------
-    strings = ['The', 'Dog', 'Was', 'Found', 'Back', 'In', 'The', 'House']
-    newSet = {x.lower() for x in strings if len(x) == 3}                               // format members to lower case and returns them in a new set if their length is 3   
-    newList                                                                            // -> {'was', 'the', 'dog'}
     </pre>
 </details>
 <hr>

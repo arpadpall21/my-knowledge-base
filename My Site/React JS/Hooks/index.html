@@ -273,10 +273,10 @@
     import <strong>ChildComponent</strong> from './ChildComponent'
     
     function <strong>Component</strong>() {
-        const <strong>chRef</strong> = React.useRef()                                                      // <strong>chRef</strong> will reference the child component    
+        const <strong>chRef</strong> = React.useRef()                                                   // <strong>chRef</strong> will reference the child component    
         
         React.useEffect(() => {
-            <strong>chRef</strong>.current.<strong>childFn</strong>()                                                       // calling the child component's function from the parent component (after the this component is fully rendered)    
+            <strong>chRef</strong>.current.<strong>childFn</strong>()                                                    // calling the child component's function from the parent component (after the this component is fully rendered)    
         })
         
         return {
@@ -285,12 +285,12 @@
     }
     
     
-// <mark>ChildComponent.js</mark> ---------------------------------------------------------------------
+// <mark>ChildComponent.js</mark> ------------------------------------------------------------------
     import React from 'react'
     
-    const <strong>ChildComponent</strong> = React.forwardRef((<strong>props, ref</strong>) => {                             // forward referencing the component    
+    const <strong>ChildComponent</strong> = React.forwardRef((<strong>props, ref</strong>) => {                          // forward referencing the component    
         React.useImperativeHandle(<strong>ref</strong>, () => {
-            <strong>fn</strong>() {}                                                                       // function that can be called from the parent component    
+            <strong>fn</strong>() {}                                                                    // function that can be called from the parent component    
         })
     })
     
@@ -362,31 +362,31 @@
     <p> - in React 18.0 we can create contexts, all components (no matter how deep) have access to the context state </p>
     <p> - in a context have a centralized state (object) which can be accessed and modified by any of the component in the context <u>(context state object properties are merged in the context state (like state works in class components))</u>
     <pre class="syntax">
-// <mark>Main.js</mark> -------------------------------------------------------------------------------
+// <mark>Main.js</mark> ----------------------------------------------------------------------------
     import React from 'react';
     import <strong>ChildComponent</strong> from './ChildComponent'
     
-    cosnt <strong>__ctx</strong> = React.createContext(<strong>ctxObj</strong>)                                             // initializing context object (centralized state object)    
+    cosnt <strong>__ctx</strong> = React.createContext(<strong>ctxObj</strong>)                                          // initializing context object (centralized state object)    
     
     function <strong>Component</strong>(){
-        const <strong>ctx</strong> = React.useContext(<strong>__ctx</strong>)                                               // using the context inside the component    
+        const <strong>ctx</strong> = React.useContext(<strong>__ctx</strong>)                                            // using the context inside the component    
         
         return (
-            <em>&lt;Ctx.Provider value={<strong>ctx</strong>}&gt;</em>                                                    // all child components inside this context have access to <strong>ctx</strong>    
+            <em>&lt;Ctx.Provider value={<strong>ctx</strong>}&gt;</em>                                                 // all child components inside this context have access to <strong>ctx</strong>    
                 &lt;<strong>ChildComponent </strong>/&gt;
             <em>&lt;/Ctx.Provider&gt;</em>
         )
     }
     
-    export { <strong>__ctx</strong> }                                                                      // exporting context (cerntalized state)    
+    export { <strong>__ctx</strong> }                                                                   // exporting context (cerntalized state)    
     
     
-// <mark>ChildComponent.js</mark> ---------------------------------------------------------------------
+// <mark>ChildComponent.js</mark> ------------------------------------------------------------------
     import React from 'react'
-    import { <strong>__ctx</strong> } from './Main'                                                        // importing context (cerntalized state)    
+    import { <strong>__ctx</strong> } from './Main'                                                     // importing context (cerntalized state)    
     
     export default <strong>ChildComponent</strong>(){
-        const <strong>ctx</strong> = React.useContext(<strong>__ctx</strong>)                                               // <strong>ctx</strong> is the centralized state object (can be get or set)    
+        const <strong>ctx</strong> = React.useContext(<strong>__ctx</strong>)                                            // <strong>ctx</strong> is the centralized state object (can be get or set)    
         
     }
     </pre>
