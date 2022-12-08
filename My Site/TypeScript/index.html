@@ -143,18 +143,29 @@
     console.log( divide(10) );                          // -> 5 
     </pre>
 </details>
+<hr>
 <!------------------------------------------------------------------------------------->
 <h2 class="header"> TypeScript types </h2>
     <p> - TypeScript supports all JavaScript types but extends these types with a few new ones </p>
+    <p style="font-size:22px;"> <mark><strong>tsType</strong></mark> can be: </p>
+<h4 class="header"> JavaScript Types: </h4>
     <pre class="syntax">
-    <strong>tsType</strong> can be:
-    
-<span style="color:darkgrey;">// JavaScript types -------------------------------------------</span>
     <mark>string</mark> <mark>number</mark> <mark>bigint</mark> <mark>boolean</mark> <mark>undefined</mark> <mark>null</mark> <mark>symbol</mark> <mark>object</mark>  // JavaScript types   
     <strong>tsType</strong>[]                                                   // array of <strong>tsType</strong> (ex: <mark>number[]</mark> = array holding only numbers)    
-    
-    
-<span style="color:darkgrey;">// TypeScript types -------------------------------------------</span>
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - array </p>
+    <pre>
+    let myArray : number[] = [1, 2, 3];                     // array of types (array will have only number types)
+    let myArray2 : (number|string)[] = [1, 2, '3'];         // number or string types can be contained 
+    let myArray3 : any[] = [1, '2', false];                 // array can have any types
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h4 class="header"> TypeScript Types: </h4>
+    <pre class="syntax">
     <strong>val</strong>                                                        // type can be any value (ex: <mark>'test'</mark> or <mark>32</mark>)    
     
     <mark>any</mark>                                                        // can be any type, callable, assignable 
@@ -168,28 +179,8 @@
     enum <strong>enumName</strong> { <strong>varName</strong><small>=<i>val</i></small><i>, ...</i> }                         // enum (a set of <u>unchangable values</u>) (object-like data type where values cannot be changed once declared)    
                                                                // values (<i>val</i>) are defined as <mark>0, 1, 2, ...</mark> by default
                                                                // values can be accessed as <mark><strong>enumName.varName</strong></mark> or <mark><strong>enumName['varName']</strong></mark>    
-    
-<span style="color:darkgrey;">// type alias -------------------------------------------------</span>
-    type <strong>typeName</strong> = <strong>tsType</strong>                                     // the <mark>type</mark> keyword defines a type alias for <strong>tsType</strong>   
-    
-    type <strong>objType</strong> = {                                           // object type alias
-        <small>readonly</small> <strong>prop</strong><small>?</small> : <strong>tsType</strong>                                // property (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)
-        <strong>fn</strong><small>?</small>(<strong>arg<small>?</small> : tsType</strong>): <strong>tsType</strong>                             // function 
-    }
-    
-    
-<span style="color:darkgrey;">// <mark>|</mark> (union) / <mark>&</mark> (intersection) -------------------------------</span>
-    <strong>tsType</strong> | <strong>tsType</strong>                                            // implements one or any combination of the listed <strong>tsTypes</strong>    
-    <strong>tsType</strong> & <strong>tsType</strong>                                            // implements all of the listed types    
-    
-    
-<span style="color:darkgrey;">// Generics ---------------------------------------------------</span>// captures the type(s) at code entry then reuses the <strong>genTypeAlias</strong> in the code block (can <small>extends</small> the <strong>tsType</strong>)
-                                                               // <u>type narrowing is pretty limited on generics</u>   
-    
-    function <strong>fnName</strong><em>&lt;</em><strong>genTypeAlias</strong><i>, ...</i> <small>[extends <i>tsType</i>]</small></strong><em>&gt;</em>(<strong>arg: genTypeAlias</strong>): <strong>genTypeAlias</strong> {}
-
     </pre>
-<details class="example" open>
+<details class="example">
 <summary> DEMO </summary>
     <p> - <mark>any</mark> / <mark>unknown</mark> </p>
     <pre>
@@ -232,12 +223,6 @@
             console.log( '?' );
     }
     </pre>
-    <p> - array </p>
-    <pre>
-    let myArray : number[] = [1, 2, 3];                     // array of types (array will have only number types)
-    let myArray2 : (number|string)[] = [1, 2, '3'];         // number or string types can be contained 
-    let myArray3 : any[] = [1, '2', false];                 // array can have any types
-    </pre>
     <p> - tuple & enum </p>
     <pre>
 // tuple -----------------------------------------------------------
@@ -264,6 +249,20 @@
     console.log( Pepe.surname, Pepe.name );                 // -> 'Bozóki Péter'    
     console.log( concateName(Pepe.name, Pepe.surname) )     // -> 'Bozóki Péter'    
     </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h4 class="header"> Type Alias: </h4>
+    <pre class="syntax">
+    type <strong>typeName</strong> = <strong>tsType</strong>                                     // the <mark>type</mark> keyword defines a type alias for <strong>tsType</strong>   
+    
+    type <strong>objType</strong> = {                                           // object type alias
+        <small>readonly</small> <strong>propName</strong><small>?</small> : <strong>tsType</strong>                            // property (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)
+        <strong>methodName</strong><small>?</small>(<i>arg<small>?</small> : tsType</i>): <strong>tsType</strong>                     // function 
+    }
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
     <p> - <mark>type</mark> alias </p>
     <pre>
     type LoggedIn = 0 | 1                       // type alias for 2 possible values  
@@ -287,6 +286,16 @@
     
     console.log( monika )       // -> { name:'Mónika', surname:'Péter', sex:'female', getAge:fn }
     </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h4 class="header"> Union (<mark>|</mark>) & Intersection (<mark>&</mark>): </h4>
+    <pre class="syntax">
+    <strong>tsType</strong> | <strong>tsType</strong>                                            // implements one or any combination of the listed <strong>tsTypes</strong>    
+    <strong>tsType</strong> & <strong>tsType</strong>                                            // implements all of the listed types    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
     <p> - <mark>|</mark> (union) <mark>&</mark> (intersection) </p>
     <pre>
     type a = { propA: string }
@@ -309,8 +318,174 @@
     console.log( allOf )                                                    // -> { propA:'valA', propC:'valC' }
     </pre>
 </details>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h4 class="header"> Generics: </h4>
+<p> - captures the type(s) at code entry then reuses the <mark><strong>genTypeAlias</strong></mark> in the code block (can <mark><small>extends</small></mark> the <mark><strong>tsType</strong></mark>) </p>
+<p> <u>- type narrowing doesn't work on generics </u>
+    <pre class="syntax">
+    function <strong>fnName</strong><em>&lt;</em><strong>genTypeAlias</strong><i>, ...</i> <small>[extends <i>tsType, ...</i>]</small></strong><em>&gt;</em>(<strong>arg: genTypeAlias</strong>): <strong>genTypeAlias</strong> {}
+    
+    class <strong>ClassName</strong><em>&lt;</em><strong>genTypeAlias</strong><i>, ...</i> <small>[extends <i>tsType, ...</i>]</small></strong><em>&gt;</em> {
+        <strong>propName</strong> : <strong>genTypeAlias</strong>  
+        
+        constructor( <strong>propName: genTypeAlias</strong> <i>, ...</i>) {           // type captured here
+            <span style="color:darkgrey;">// ...</span>
+        }
+    }
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - Generics </p>
+    <pre>
+// on functions ---------------------------------------------------------------
+    function getBack<T1, T2>(a: T1, b:T2): (T1|T2)[] {      // captures the entry type 
+        return [a, b]
+    }
+    
+    console.log( getBack(1, false) );           // -> [1, false]
+    console.log( getBack('a', [2]) );           // -> ['a', [2]]
+    
+    
+    function getBac2<T>(a:T, b:T): T {
+        if (typeof a === 'number' && typeof b === 'number') {       // type narrowing does not work on Generics 
+            return a + b;                                           // -! throws an error (type not narrowed)
+        }
+    }
+    
+    
+// on classes -----------------------------------------------------------------
+    class Cart<Product> {
+        public cart: Product[] = [];
+    
+        addProductCart(p: Product): void {
+            this.cart.push(p)
+        }
+    
+        getAll(): Product[] {
+            return this.cart
+        }
+    }
+    
+    const cart = new Cart();
+    
+    cart.addProductCart('apple');
+    cart.addProductCart('mellon');
+    cart.addProductCart(2);
+    cart.addProductCart(true);
+    console.log( cart.getAll() );   // -> ['apple', 'mellon', 2, true]
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h2 class="header"> Type Narrowing </h2>
+    <p> - Type Narrowing is a technique which narrows down type possibilityes from a set of types (ex: we narrow down an <mark>any</mark> type to <mark>string</mark> so we can use string methods on the narrowed value) </p>
+    <p> - serveral type narrowing techniques can be used: <mark>typeof</mark> / checking type properties / protitype checking / using the TypeScript <mark>as</mark> operator </p>
+    <pre class="syntax">
+    <strong>val</strong> as <strong>tsType</strong>                                     // identifies the <strong>val</strong> as <strong>tsType</strong>     
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+// <mark>typeof</mark> operator --------------------------------------------
+    type myTypes = string | number | null;
+    
+    function getCorrectType(a: myTypes): myTypes {
+        if (a)                                      // narrowing (excluding) null type
+            if (typeof a === 'string') {
+                return a.toUpperCase();             // once the type is fully narrowed we can use the appropriate opperation on the type (<mark>string</mark> type)    
+            } else {
+                return a++;                         // <mark>number</mark> type 
+            }
+        
+        return null
+    }
+    
+    console.log( getCorrectType(null) )     // -> null
+    console.log( getCorrectType('x') )      // -> 'X'
+    console.log( getCorrectType(1) )        // -> 2
+    
+    
+// property check -----------------------------------------------------------
+    type Fish = {
+        swimSpeed: number
+        getSwimSpeed(): number
+    }
+    
+    type Bird = {
+        flySpeed: number
+        getFlySpeed(): number
+    }
+    
+    function getSpeed( animal : Fish | Bird ): number {
+        if ('swimSpeed' in animal) {            // type narrowed down to Fish type 
+            return animal.getSwimSpeed()        // we can call Fish type methods here 
+        } else {
+            return animal.getFlySpeed()         // we can call Bird type methods here
+        }
+    }
+    
+    
+// <mark>as</mark> operator--------------------------------------------------
+    type Fish = {
+        swimSpeed : number
+        getSwimSpeed(): number
+    }
+    type Bird = {
+        flySpeed : number
+        getFlySpeed(): number
+    }
+    
+    function getSpeed(animal: Fish | Bird): number {
+        return (animal as Fish).getSwimSpeed();     // argument identified as Fish type 
+    }
+    </pre>
+</details>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h2 class="header"> Interface </h2>
+    <p> - an interface describes properties/methods that the targed object must implemented </p>
+    <p> - interfaces can be extended (opened) by other interfaces, and can be implemented in classes (unlike <mark>type</mark>s) </p>
+    <pre class="syntax">
+    interface <strong>interfaceName</strong> <small>[extends <i>parentInerfaceName</i>]</small>{ 
+        <small>readonly</small> <strong>propName</strong><small>?</small> : <strong>tsType</strong>                            // property (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)
+        <strong>methodName</strong><small>?</small>(<i>arg<small>?</small> : tsType</i>): <strong>tsType</strong>                     // function 
+    }
+    
+    interface <strong>interfaceA</strong> { <strong>propNameA : tsType</strong> }
+    interface <strong>interfaceA</strong> { <strong>propNameB : tsType</strong> }                // extends <strong>interfaceA</strong> with new properties/mehods
+    
+    
+<span style="color:darkgrey;">// implementation ----------------------------------------------------</span>
+    let|const <strong>objName</strong> : <strong>interfaceName</strong> = {
+        <span style="color:darkgrey;">// interface porperties/methods must be implemented ... </span>
+    }
+    
+    
+    
+    </pre>
 
 
+<details class="example" open>
+<summary> DEMO </summary>
+    <p> <mark>type</mark> VS <mark>interface</mark> </p>
+    <pre>
+    interface PersonInterface { name:string }
+    interface PersonInterface { age:number }    // interfaces 'opened' (extended)
+    
+    type PersonType = { name:string }
+    type PersonType = { age:number }            // -! throws an error (type is not extendable)
+    
+    </pre>
+    <p> - extending interface </p>
+    <pre>
+    
+    
+    
+    
+    
+    </pre>
+</details>
 
 
 <!--
@@ -332,54 +507,6 @@ stage 3 :
 
 
 
-- mention about type narrowing 
-
-
-let|const <strong>objName</strong>: {           // object  annotation
-    <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>,         // <mark>?</mark> optional parameter / <mark>readonly</mark> read only property 
-    <i>...</i>,
-} = { <strong>propName</strong>:<strong>val</strong><i>, ...</i>}
-
-
-
-
-
-// Type
-the type keyword creates a type alias (type aliases are written with PascalCase)
-
-type <strong>tsTypeName</strong> = {
-    <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>,                     
-    <i>, ...</i> 
-}
-type <strong>TsTypeName</strong> = <strong>tsTypeSyntax</strong>
-
-
-
-
-
-
-
-// Generic Type
-- reusable type 
-- captures the type of the data then reuses that type 
-
-
-
-as operator document!
-
-is operator document!
-    - used when we want a boolean value 
-    - used by type narrowing function
-
-
-
-
-// Interface
-- the interface is much like type object definition, but it's an interface :D -> already existing interface can be extended ('opening' interface)
-- an interface describes what an 'interface' (object) should implement
-- we can use the extends keyword to inherit from parent interface
-- interfaces can be implemented in ther interfaces (where we implement them they must have the same fields)
-- interfaces (multiple) can be implemented in classes 
 
 
 
@@ -408,19 +535,75 @@ abstract class
 
 
 
+// Optional access operator 
+    <strong>tsType</strong>?.<strong>something</strong>
+        - if <strong>tsType</strong> is truty executed <strong>something</strong> <br>
+        - otherwise shortcircuits the statement (<strong>something</strong> never called) <br>
+        - this can be called on any types (object, array, primitives, function)
+
+
+
+**** Type Narrowing ****
+**** Interface ****
+**** Classes ****
+
+
+
+
+
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+
+
+as operator document!
+
+is operator document!
+    - used when we want a boolean value 
+    - used by type narrowing function
+
+
+
+
+let|const <strong>objName</strong>: {           // object  annotation
+    <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>,         // <mark>?</mark> optional parameter / <mark>readonly</mark> read only property 
+    <i>...</i>,
+} = { <strong>propName</strong>:<strong>val</strong><i>, ...</i>}
+
+
+
+
+
+
+
+- mention about type narrowing 
+
 
 <strong>tsType</strong> | <strong>tsType</strong> <small>|<small> <i>tsType, ...</i>        // union type (any of the listed type)
 
 
 type <strong>tsTypeC<strong> : <strong>tsTypeA</strong> & <strong>tsTypeB</strong>          // <strong>tsTypeC</strong> must have both types 
-
-
-
-
-
-
-
-
 
 
 
@@ -449,16 +632,14 @@ type <strong>tsTypeC<strong> : <strong>tsTypeA</strong> & <strong>tsTypeB</stron
 
 
 
+// Type
+the type keyword creates a type alias (type aliases are written with PascalCase)
 
-
-
-
-// Optional access operator 
-    <strong>tsType</strong>?.<strong>something</strong>
-        - if <strong>tsType</strong> is truty executed <strong>something</strong> <br>
-        - otherwise shortcircuits the statement (<strong>something</strong> never called) <br>
-        - this can be called on any types (object, array, primitives, function)
-
+type <strong>tsTypeName</strong> = {
+    <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>,                     
+    <i>, ...</i> 
+}
+type <strong>TsTypeName</strong> = <strong>tsTypeSyntax</strong>
 
 
 
@@ -466,28 +647,15 @@ type <strong>tsTypeC<strong> : <strong>tsTypeA</strong> & <strong>tsTypeB</stron
 
 
 
-
-
-- 
-
-
-**** TypeScript types and type annotations ****
-**** Type Narrowing ****
-**** Interface ****
-**** Classes ****
+// Generic Type
+- reusable type 
+- captures the type of the data then reuses that type 
 
 
 
 
 
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
 
--->
-
-
-<!--
 
 let myNumber : number = 100_000_001
     - typescript numbers can be separated with <mark>_</mark> at hundrests for readability
@@ -522,6 +690,8 @@ function <strong>fnName</strong>(<i>val<small>?<small> : tsType</i>): <strong>ts
 
 
 **** Config File ****
+**** TypeScript types and type annotations ****
+
 
 
 

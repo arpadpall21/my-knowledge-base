@@ -1,31 +1,4 @@
 "use strict";
-function getBack(a, b) {
-    return [a, b];
-}
-console.log(getBack(1, false)); // -> [1, false]
-console.log(getBack('a', [2])); // -> ['a', [2]]
-function getBac2(a, b) {
-    if (typeof a === 'number' && typeof b === 'number') { // type narrowing is very limited on Generics 
-        return a + b; // -
-    }
-}
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// type Person = {
-//     name: string | null | undefined
-// }
-// const peter: Person = { name: 'Péter' }
-// const adam: Person = { name: null }
-// console.log( peter.name?.toUpperCase() )        // -> 'PÉTER'
-// console.log( adam.name?.toUpperCase() )         // -> undefined (statement shortcircuited because <mark>adam.name</mark> is a falsy type)
-// const myArray : any = [1];
-// console.log( myArray?.[0] );            // -> 1
-// console.log( myArray?.[1] );            // -> undefined 
-// let myFunction :any;
-// console.log( myFunction?.('w') )        // -> undefined 
-// myFunction = (a:any):any => a;
-// console.log( myFunction('x') );         // -> 'x'
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
@@ -143,100 +116,10 @@ function getBac2(a, b) {
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
-// function returnAnyType<Type>(arg:Type): Type {
-//     return arg;
-// }
-// const returnAnyTypeArrowFunction = <T>(arg: T) => arg       // generic used in arrow function 
-// console.log( returnAnyType(23) );               // -> 23
-// console.log( returnAnyType('someString') );     // -> 'someString'
-// console.log( returnAnyTypeArrowFunction('x') )  // -> 'x
-// function returnArrayOfTypes<T>(arr: T[]): T {   // takse an array of generic types
-//     return arr[0]
-// }
-// console.log( returnArrayOfTypes([1, 2]) )            // -> 1
-// console.log( returnArrayOfTypes(['a', 'b']) )        // -> 'a'
-// function getGen<AnyName>(a: AnyName): AnyName {     // can have any name
-//     return a
-// }
-// console.log( getGen(false) )            // -> false
-// function multipleGens<T1, T2> (a: T1, b: T2): T2 {      // multiple generics
-//     return b
-// }
-// console.log( multipleGens(2, 'x') )     // -> 'x'
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// class Cart<Product> {
-//     public cart: Product[] = [];
-//     addProductCart(p: Product): void {
-//         this.cart.push(p)
-//     }
-//     getAll(): Product[] {
-//         return this.cart
-//     }
-// }
-// const cart = new Cart();
-// cart.addProductCart('apple');
-// cart.addProductCart('mellon');
-// cart.addProductCart(2);
-// cart.addProductCart(true);
-// console.log( cart.getAll() );   // -> ['apple', 'mellon', 2, true]
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// type myTypes = string | number | null
-// function getCorrectType(a: myTypes): myTypes {
-//     if (a)                  // narrowing null type
-//         if (typeof a === 'string') {
-//             return a.toUpperCase();
-//         } else {
-//             return a++;
-//         }
-//     return null
-// }
-// console.log( getCorrectType(null) )     // -> null
-// console.log( getCorrectType('x') )      // -> 'X'
-// console.log( getCorrectType(1) )        // -> 2
-// type Person = {
-//     name: string
-//     surname?: string
-// }
-// function getName(p: Person): Person | null {
-//     if ('surname' in p) {
-//         return p
-//     }
-//     return null
-// }
-// console.log( getName({name:'Smith', surname:'John'}) )      // -> {name:'Smith', surname:'John'}   
-// console.log( getName({name:'Frederick'}) )              // -> null
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// const a : any = 'some string'
-// const b = a as string;      // identifies variable a as string type
-// console.log( typeof b )     // -> 'string'
-// type Fish = {
-//     swimSpeed : number
-// }
-// type Bird = {
-//     flySpeed : number
-// }
-// function getSpeed(animal: Fish | Bird): number {
-//     if ('swimSpeed' in animal) {
-//         return (animal as Fish).swimSpeed;
-//     } else {
-//         return (animal as Bird).flySpeed;
-//     }
-// }
-// console.log( getSpeed({ swimSpeed:15 }) )       // -> 15
-// console.log( getSpeed({ flySpeed:21 }) )        // -> 21
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// type narrowing with instanceof
-// function isString(val: string | number): val is string {    // type narrowing function
-//     return typeof val === "string";
-// }
+function isString(val) {
+    return true;
+}
+console.log(isString(3));
 // function isNumber(val: string | number): val is number {    // type narrowing function
 //     return typeof val === "number";
 // }
