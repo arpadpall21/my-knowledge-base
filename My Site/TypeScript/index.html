@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title> TypeScript </title> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../Assets/stylesPages.css"> 
+    <script src="../Assets/scriptPages.js"></script>
+</head>
+<body>
+<h1> TypeScript </h1>
+    <p> Updated ( 2022-12-04 )</p>
+    <p class="sitenav"> <a href="../index.html">MySite></a> TypeScript </p>
+    
+    
+    <p class="subSite"><a href=""> SubSite > </a></p>
+    
+    
+<table class="table">
+<caption>
+    <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+</caption>
+    <tr>
+        <th style="width:30%;"> Method / Property / statement ect... </th>
+        <th> Description </th>
+    </tr>
+    <tr class="05.01">
+        <td> 
+            npm install <small>-g</small> typescript 
+        </td>
+        <td>
+            - installs TypeScript
+        </td>
+    </tr>
+    <tr class="10.01">
+        <td> 
+            tsc <i>tscFile.ts</i>
+        </td>
+        <td>
+            - transpiles the <i>tscFile.ts</i> (TypeScript) files into JavaScript file (in the current directory) <br>
+            - in <mark>tsconfig.json</mark> we can set the transpilation source (<mark>rootDir</mark>) and target (<mark>outDir</mark>) directories 
+        </td>
+    </tr>
+    <tr class="10.02">
+        <td>
+            tsc -w
+        </td>
+        <td>
+            - watch mode, when there's a change in the <mark>rootDir</mark> -> runs the compiler
+        </td>
+    </tr>
+    <tr class="15.01">
+        <td>
+            tsc --init
+        </td>
+        <td>
+            - creates the <mark>tsconfig.json</mark> file in the current directory
+        </td>
+    </tr>
+</table>
+    <br>
+    <details class="example" id="notes">
+    <summary> Notes :</summary>
+        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+<h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.typescriptlang.org/" target="_blank">www.typescriptlang.org</a></p>
+<h2 style="color:green;"><u> Remember This : </u></h2>
+    
+<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - TypeScript is basically a strongly typed JavaScript, it's an extension of JavaScript with typing approach (Static-like programming language) </p>
+    <p> - TypeScript is a transpiler which transpiles TypeScript code into JavaScript code </p> 
+    <p> - TypeScript benefits: </p>
+    <p style="text-indent: 30px;"> - statically typed (type errors are raised on transpile time) </p>
+    <p style="text-indent: 30px;"> - we can use brand new features because the transpiler compiles compatilbe JavaScript code </p>
+    <p style="text-indent: 30px;"> - code completition (while developing we can see precise method/property suggestions becasue the type is known already) </p>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h2 class="header"> The <mark>tsconfig.json</mark> file (configuration) </h2>
+    <p> - the <mark>tsconfig.json</mark> file (can be created with <mark>tsc --init</mark>) configures the tsc transpiler, among others the most used settings are <mark>rootDir</mark> (source) and <mark>outDir</mark> (target) directories </p>
+<hr>
+<!------------------------------------------------------------------------------------->
+<h2 class="header"> Type annotation syntax </h2>
+    <pre class="syntax">
+    let|const <strong>varName</strong> : <strong>tsType</strong> <small>= <i>val</i></small>                    // variable type annotation     
+    let|const <strong>varName</strong> <small>= <i>val</i></small>                             // TypeScript will figure out the type if <strong>tsType</strong> is omitted    
+    let <strong>varName</strong>                                         // variable has <mark>any</mark> type (no value assigned)    
+    
+    
+    function <strong>fnName</strong>(<strong>arg<small>? :</small> tsType</strong>): <strong>tsType</strong> { }          // type annotation of function argument(s) and return value (<mark><small>?</small></mark> after function argument = optional argument)    
+    function <strong>fnName</strong>(<strong>arg : tsType</strong>) { }                   // TypeScript will figure out the return type if <strong>tsType</strong> is omitted (arguments must be type annotated)    
+    </pre>
+<details class="example">
+<summary> DEMO </summary>
+    <p> - variables </p>
+    <pre>
+    let s : string = 'some string';
+    let n : number = 21;
+    let Parent : 'father' | 'mother';       // any of the listed values (types)
+    
+    
+    let s2 = 'some string 2';               // typescript automatically annotates the type (string)
+    let nope                                // <mark>any</mark> type 
+    
+    
+// -------------------------------------------------------------------------
+    const nestArr: string[][] = [           // nested string arrays 
+        ['a', 'b', 'c'],
+        ['d', 'e', 'f']
+    ]
+    
+// -------------------------------------------------------------------------
+    const animal: {                         // object annotation 
+        name: string,
+        readonly age: number,               // readonly property
+        color?: string                      // optional property
+    } = {name:'Morgo', age:12}
+    
+    console.log( animal );                  // -> { name: 'Morgo', age: 12 }
+    console.log( animal.color );            // undefined
+    
+    animal.name = 'New Morgo';
+    animal.age = 13;                        // this would trow an error (readonly property)
+    </pre>
+    <p> - functions </p>
+    <pre>
+    function add(a : number, b : string): number {
+        return a + parseInt(b);                         // returns a number type
+    }
+    
+    function add2(a : number, b : string) {
+        return a + parseInt(b);                         // returned type is figured out by TypeScrip (number)
+    }
+    
+    function divide( a:number, b?:number ): number {    // optional parameter
+        return a / (b ? b : 2);
+    }
+    
+    console.log( add(1, '3') );                         // -> 4
+    console.log( add2(1, '3') );                        // -> 4
+    console.log( divide(10, 5) );                       // -> 2
+    console.log( divide(10) );                          // -> 5 
+    </pre>
+</details>
+<!------------------------------------------------------------------------------------->
+<h2 class="header"> TypeScript types </h2>
+    <p> - TypeScript supports all JavaScript types but extends these types with a few new ones </p>
+    <pre class="syntax">
+    <strong>tsType</strong> can be:
+    
+<span style="color:darkgrey;">// JavaScript types -------------------------------------------</span>
+    <mark>string</mark> <mark>number</mark> <mark>bigint</mark> <mark>boolean</mark> <mark>undefined</mark> <mark>null</mark> <mark>symbol</mark> <mark>object</mark>  // JavaScript types   
+    <strong>tsType</strong>[]                                                   // array of <strong>tsType</strong> (ex: <mark>number[]</mark> = array holding only numbers)    
+    
+    
+<span style="color:darkgrey;">// TypeScript types -------------------------------------------</span>
+    <strong>val</strong>                                                        // type can be any value (ex: <mark>'test'</mark> or <mark>32</mark>)    
+    
+    <mark>any</mark>                                                        // can be any type, callable, assignable 
+    <mark>unknown</mark>                                                    // can be any type, not callable, not assignable  <span id="browserSupport" style="color:yellow;"><span>v.3</span></span>    
+    
+    <mark>void</mark>                                                       // function return type where function has no return     
+    <mark>never</mark>                                                      // function return type where function throws an error or has inifinite loop (should never happen)    
+    
+    [<strong>tsType</strong><i>, ...</i>]                                              // tuple (fixed length array with annotated types) (values can be changes -> not a Python style tupe)    
+    
+    enum <strong>enumName</strong> { <strong>varName</strong><small>=<i>val</i></small><i>, ...</i> }                         // enum (a set of <u>unchangable values</u>) (object-like data type where values cannot be changed once declared)    
+                                                               // values (<i>val</i>) are defined as <mark>0, 1, 2, ...</mark> by default
+                                                               // values can be accessed as <mark><strong>enumName.varName</strong></mark> or <mark><strong>enumName['varName']</strong></mark>    
+    
+<span style="color:darkgrey;">// type alias -------------------------------------------------</span>
+    type <strong>typeName</strong> = <strong>tsType</strong>                                     // the <mark>type</mark> keyword defines a type alias for <strong>tsType</strong>   
+    
+    type <strong>objType</strong> = {                                           // object type alias
+        <small>readonly</small> <strong>prop</strong><small>?</small> : <strong>tsType</strong>                                // property (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)
+        <strong>fn</strong><small>?</small>(<strong>arg<small>?</small> : tsType</strong>): <strong>tsType</strong>                             // function 
+    }
+    
+    
+<span style="color:darkgrey;">// <mark>|</mark> (union) / <mark>&</mark> (intersection) -------------------------------</span>
+    <strong>tsType</strong> | <strong>tsType</strong>                                            // implements one or any combination of the listed <strong>tsTypes</strong>    
+    <strong>tsType</strong> & <strong>tsType</strong>                                            // implements all of the listed types    
+    
+    
+<span style="color:darkgrey;">// Generics ---------------------------------------------------</span>// captures the type(s) at code entry then reuses the <strong>genTypeAlias</strong> in the code block (can <small>extends</small> the <strong>tsType</strong>)
+                                                               // <u>type narrowing is pretty limited on generics</u>   
+    
+    function <strong>fnName</strong><em>&lt;</em><strong>genTypeAlias</strong><i>, ...</i> <small>[extends <i>tsType</i>]</small></strong><em>&gt;</em>(<strong>arg: genTypeAlias</strong>): <strong>genTypeAlias</strong> {}
+
+    </pre>
+<details class="example" open>
+<summary> DEMO </summary>
+    <p> - <mark>any</mark> / <mark>unknown</mark> </p>
+    <pre>
+// any -------------------------------------------------------------------
+    let a1: any = 10;
+    let a2: any = (a:any) => a;
+    
+    console.log( a1 );          // -> 10        // can be any value
+    const new1: string = a1;    // can be assigned to other values (this is the problem that <mark>unknown</mark> fixes)   
+    console.log( new1 );        // -> 10        // -! the new variable has wrong value this way    
+    
+    console.log( a2(10));       // -> 'x'       // can be called 
+    
+    
+// unknown ---------------------------------------------------------------
+    let b1: unknown = 10;
+    let b2: unknown = (a:any) => a;
+    
+    console.log( b1 );          // -> 10        // can be any value
+    const new2:string = b1;     // -! not assignable (this throws an error)
+    
+    b2(10);                     // -! not callable (this throws an error)
+    </pre>
+    <p> - <mark>void</mark> / <mark>never</mark> </p>
+    <pre>
+// void ------------------------------------------------------------------
+    function toPower2 (a: number): void {           // no return value 
+        console.log( a**2 )
+    }
+    
+    console.log( toPower2(4) )                      // 16 (side effect)
+    
+// never -----------------------------------------------------------------
+    function throwSomeError(): never {              // throws an error (should be 'never' called)    
+        throw Error('Some Error');
+    }
+    
+    function hasIniniteLoop(): never {              // has infinite loop (should be 'never' called)    
+        while (true)
+            console.log( '?' );
+    }
+    </pre>
+    <p> - array </p>
+    <pre>
+    let myArray : number[] = [1, 2, 3];                     // array of types (array will have only number types)
+    let myArray2 : (number|string)[] = [1, 2, '3'];         // number or string types can be contained 
+    let myArray3 : any[] = [1, '2', false];                 // array can have any types
+    </pre>
+    <p> - tuple & enum </p>
+    <pre>
+// tuple -----------------------------------------------------------
+    const t : [string, number] = ['1', 1];
+    
+    t[0] = '2'                  // not a Python style tuple (values can be changed)
+    console.log( t[0] )         // -> '2'
+    
+    
+// enum ------------------------------------------------------------
+    enum MyEnum { zero, one, tow};
+    
+    console.log( MyEnum.zero )      // -> 0
+    console.log( MyEnum.one )       // -> 1
+    MyEnum.zero = 3;                // -! this throws an error
+    
+    
+    enum Pepe { name="Péter", surname="Bozóki" }
+    
+    function concateName(name : string, surname: string ): string {
+        return surname + ' ' + name;
+    }
+    
+    console.log( Pepe.surname, Pepe.name );                 // -> 'Bozóki Péter'    
+    console.log( concateName(Pepe.name, Pepe.surname) )     // -> 'Bozóki Péter'    
+    </pre>
+    <p> - <mark>type</mark> alias </p>
+    <pre>
+    type LoggedIn = 0 | 1                       // type alias for 2 possible values  
+    
+    function connect(id : number, logged: LoggedIn ) { ... }
+    
+// -------------------------------------------------------------------------
+    type Person = {
+        name : string,
+        surname? : string,
+        readonly sex: 'male' | 'female' | 'other',
+        getAge(): number
+    }
+    
+    const monika : Person = {
+        name: 'Mónika',
+        surname: 'Péter',
+        sex: 'female',
+        getAge: () => 34
+    }
+    
+    console.log( monika )       // -> { name:'Mónika', surname:'Péter', sex:'female', getAge:fn }
+    </pre>
+    <p> - <mark>|</mark> (union) <mark>&</mark> (intersection) </p>
+    <pre>
+    type a = { propA: string }
+    type b = { propB: string }
+    type c = { propC: string }
+    
+// union -------------------------------------------------------------------
+    const one : a | b = { propA:'valA' }                                    // any of the listed types
+    const many : a | b | c = { propA:'valA', propC:'valC' }                 // any combination of the listed types
+    
+    console.log( one )                                                      // -> { propA:'valA' }    
+    console.log( many )                                                     // -> { propA:'valA', propC:'valC' }    
+    
+    
+// intersection ------------------------------------------------------------
+    const all : a & b & c = { propA:'valA', propB:'valB', propC:'valC'}     // must implement all unified types 
+    const allOf : a & c = { propA:'valA', propC:'valC'}
+    
+    console.log( all )                                                      // -> { propA:'valA', propB:'valB', propC:'valC' }
+    console.log( allOf )                                                    // -> { propA:'valA', propC:'valC' }
+    </pre>
+</details>
+
+
+
+
+<!--
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+stage 1: high level overview 
+    - read through 
+    - create notes 
+    - deciede what exactly will you document down 
+    
+stage 2:  low level overview
+    - deeper understanding of all what you've taken down in stage 1
+    
+stage 3 : 
+    - organize and document down everything 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+
+
+
+- mention about type narrowing 
+
+
+let|const <strong>objName</strong>: {           // object  annotation
+    <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>,         // <mark>?</mark> optional parameter / <mark>readonly</mark> read only property 
+    <i>...</i>,
+} = { <strong>propName</strong>:<strong>val</strong><i>, ...</i>}
+
+
+
+
+
+// Type
+the type keyword creates a type alias (type aliases are written with PascalCase)
+
+type <strong>tsTypeName</strong> = {
+    <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>,                     
+    <i>, ...</i> 
+}
+type <strong>TsTypeName</strong> = <strong>tsTypeSyntax</strong>
+
+
+
+
+
+
+
+// Generic Type
+- reusable type 
+- captures the type of the data then reuses that type 
+
+
+
+as operator document!
+
+is operator document!
+    - used when we want a boolean value 
+    - used by type narrowing function
+
+
+
+
+// Interface
+- the interface is much like type object definition, but it's an interface :D -> already existing interface can be extended ('opening' interface)
+- an interface describes what an 'interface' (object) should implement
+- we can use the extends keyword to inherit from parent interface
+- interfaces can be implemented in ther interfaces (where we implement them they must have the same fields)
+- interfaces (multiple) can be implemented in classes 
+
+
+
+
+
+
+
+// class
+- by default everything is public a class
+- private fields work just like in vanilla JS
+- protected field accessible within its class an all classes that inherits from this class
+
+class <strong>className</strong> {
+    <strong>propName</strong>: <strong>tsType</strong> <small>= <i>val</i>             // constructor property types are annotated here (= default value -> no need to declare in constructor -> this is JS syntax by the way)
+    <i>...</i>
+    
+    constructor(<strong>propName</strong>:<strong>tsType</strong><i>, ...</i>) {
+        this.<strong>propName</strong> = <strong>propName</strong>
+        <i>...</i>
+    }
+}
+
+abstract class  
+    -> cannot be instantained 
+
+
+
+
+
+<strong>tsType</strong> | <strong>tsType</strong> <small>|<small> <i>tsType, ...</i>        // union type (any of the listed type)
+
+
+type <strong>tsTypeC<strong> : <strong>tsTypeA</strong> & <strong>tsTypeB</strong>          // <strong>tsTypeC</strong> must have both types 
+
+
+
+
+
+
+
+
+
+
+
+- TypeScript types and type annotation 
+    - string | number | bigint | boolean | undefined | null | symbol    // builtin js types
+    
+    - any                           // can be any type, callable, assignable
+    - unknown                       // can be any type, not callable, not assignable  (v.3)
+    - never                         // return type of a function that throws an error or has inifinite loop 
+    - void                          // return type of a function that doesn't return
+    - object                        // object 
+    
+    
+    - enum                          // a list of values that we can chose one 
+        - enum <strong>EnumName</strong> { <strong>EnumVar</strong>=<strong>val</strong><i>, ...</i> }
+        - <strong>EnumName.EnumVar</strong>     // to access value 
+    
+    
+    - tuple                         // fixed length array
+        - let|const <strong>valName</strong> : [<strong>tsType</strong><i>...</i>] = [<strong>val</strong><i>, ...</i>]
+    
+
+    - <strong>tsType</strong>[]     // array of types
+    - 
+
+
+
+
+
+
+
+
+// Optional access operator 
+    <strong>tsType</strong>?.<strong>something</strong>
+        - if <strong>tsType</strong> is truty executed <strong>something</strong> <br>
+        - otherwise shortcircuits the statement (<strong>something</strong> never called) <br>
+        - this can be called on any types (object, array, primitives, function)
+
+
+
+
+
+
+
+
+
+
+- 
+
+
+**** TypeScript types and type annotations ****
+**** Type Narrowing ****
+**** Interface ****
+**** Classes ****
+
+
+
+
+
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+
+-->
+
+
+<!--
+
+let myNumber : number = 100_000_001
+    - typescript numbers can be separated with <mark>_</mark> at hundrests for readability
+
+let <strong>varName</strong> <small>: <i>type</i> = <i>val</i></small>
+    - the typ is inferenced if no type is declared
+
+let <strong>varName</strong>
+    - this will be <mark>any</mark> type 
+
+const <strong>varName</strong> <small>: <i>type</i></small> = <strong>val</strong>
+    - <mark>const</mark> must be value assigned 
+
+
+function <strong>fnName</strong>(<i>val<small>?<small> : tsType</i>): <strong>tsType</strong>|void {       // return value annotation or <mark>void</mark> if no return value expected  
+    return <strong>val</strong>                                 // automatically annotaed if no return values annotation 
+}       // <small>?</small>         // optional argument 
+
+
+
+- TypeScript is a strongly typed programming language built on top of JavaScript
+- it uses a (tsc) compiler which transpiled TypeScript code into JavaScript
+- advantages:
+    - statically typed 
+    - we can use new feautres right away because the TS code is compiled to JS after
+    - code completition (types are known so the code editor can offer code completition (ex: once a string type is declared the code editor can offer string methods hints on that type )
+
+
+
+
+
+
+
+**** Config File ****
+
+
+
+-->
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <hr><hr><hr><hr><hr>
+    
+    
+<h2 class="headerExtra"><u> Title 1 </u></h2>
+<h2 class="header"> Title 1.1 </h2>
+<h3 class="header"> Title 1.1.1 </h3>
+<h4 class="header"> Title 1.1.1.1 </h4>
+    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
+    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
+    <p style="text-decoration:underline;"> - important information is underlined </p>
+    <p style="color:yellow;"> - very important information is written with yellow colors </p>
+    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
+    <div style="background-color:red;">
+        <p> - red background block means not learned or not tested information! </p>
+        <p> - </p>
+    </div>
+    
+    <pre class="syntax">
+SYNTAX :    main syntax
+            <em>literally used </em>
+            <small>literally used optional </small>
+            <prot style="color:#049500;">prototype chain</prot>
+            <strong>required value </strong>
+            <i>optional value </i>
+                - some descriptions will come here (like arguments)
+                - ??? (3 question marks) in syntax means not tested or not learned yet
+                
+            <span class="openable"> this is an openable element<div>
+                <p> - openable elements listed here in paragraphs </p>
+                <p> - </p>
+            </div></span>
+    </pre>
+    
+<details class="example">
+<summary> DEMO </summary>
+    <pre>
+    examples of the current lessons 
+    
+// -----------------------------------------
+
+// -----------------------------------------
+    </pre>
+</details>
+    
+    <pre class="cmd">
+    command line demo 
+    </pre>
+    <pre class="formula">
+    formula code (like conversion meter...)
+    </pre>
+<details class="example">
+<summary> Example : </summary>
+<h4 style="color:darkblue;"><u> example title </u></h4>
+    <p> - live tests will come here </p>
+        <details>
+        <summary> CODE : </summary>
+        <pre>
+    copy of the exaple code 
+        </pre>
+        </details>
+</details>
+<!---------------------------------------------------------------------------------------------------------------------------------->    
+<hr>
+    
+<h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
+    
+    
+    <br><br>
+</body>
+</html>
