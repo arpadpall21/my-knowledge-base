@@ -31,6 +31,14 @@
         - installs TypeScript
       </td>
     </tr>
+    <tr class="06.01">
+      <td>
+        tsc --help
+      </td>
+      <td>
+        - tsc help
+      </td>
+    </tr>
     <tr class="10.01">
       <td>
         tsc <i>tscFile.ts</i>
@@ -41,7 +49,16 @@
         (<mark>outDir</mark>) directories
       </td>
     </tr>
-    <tr class="10.02">
+    <tr class='10.02'>
+      <td>
+        tsc --out|--outFile <strong>outFile.js</strong> <strong>inFile.ts</strong> <i>...</i>
+      </td>
+      <td>
+        - transpiles <strong>inFile.ts</strong> <i>...</i> (TypeScript) file(s) in one single
+        <strong>outFile.js</strong> (JavaScirpt) file
+      </td>
+    </tr>
+    <tr class="12.01">
       <td>
         tsc -w
       </td>
@@ -672,7 +689,64 @@
     const cat = new Cat('cat', 'europe');
     </pre>
   </details>
-
+  <hr>
+  <!------------------------------------------------------------------------------------->
+  <h2 class="headerExtra"> Namespace </h2>
+  <p> - namespaces are sort of modules in TypeScript </p>
+  <pre class='syntax'>
+    /// &lt;reference path'<strong>modulePath.ts</strong>' />              // importing namespaces from other modules (works only if we transpile with <mark>--outFile</mark> options (transpiling into a single file))    
+    
+    
+    namespace <strong>NamespaceName</strong> {
+        <span style='color:gray;'>// isolated environment ...</span>
+        
+        export const <strong>someVar: tsType = someVal</strong>         // varialbes, functions, classes, interfaces, etc... must be exported if we want to use them outside this namespace (just like with modules)
+        
+        export namespace <strong>NestedNamespaceName</strong> {         // nested namespaces must be exported if we want to use them outside
+            const <strong>someNestedVar = someNestedVal</strong>
+        }
+    }
+    
+    
+    <strong>NamesapceName.someVar</strong>                              // accessing exported variables, functions, etc...
+    <strong>NamesapceName.NestedNamespaceName.someNestedVar</strong>    // accessing exported variables, functions, etc...
+  </pre>
+  <details class="example">
+    <summary> DEMO </summary>
+    <pre>
+    namespace SomeNamespace {
+      const hello: string = 'Hello from namespace!';          // isolated 
+      console.log(hello);                                     // -> 'Hello from namespace!'    
+      
+      export function helloFn(): string {                     // exported function 
+        return hello;
+      }
+      
+      export namespace NestedNamespace {                      // namespace available outsde 
+        export function helloFn(): string {
+          return hello;
+        }
+      }
+    }
+    
+    console.log( SomeNamespace.helloFn() );                   // -> 'Hello from namespace!'    
+    console.log( SomeNamespace.NestedNamespace.helloFn() );   // -> 'Hello from namespace!'    
+    </pre>
+    <p> - importing namespaces from another file </p>
+    <p> - transpiled with <mark>tsc --outFile main.js main.ts</mark> command </p>
+    <pre>
+// <mark>main.ts</mark> (file) ------------------------------------------
+    /// &lt;reference path='./module1.ts' />            // this only works if we transplie in one target file <mark>tsc --outFile ... </mark>
+    
+    console.log( Namespace1.test )                      // -> 'test'    
+    
+    
+// <mark>module1.ts</mark> (file) ---------------------------------------
+    namespace Namespace1 {
+      export const test: string = 'test';
+    }
+    </pre>
+  </details>
 
   <br><br>
 </body>

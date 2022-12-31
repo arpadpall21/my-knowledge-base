@@ -36,28 +36,202 @@
   <p> - <b>Spiral Model</b> (same as the Interactive Model but at each release we repeat the planning, testing and build
     again and again) </p>
   <p> - <b>Big Bang Model</b> (Minimal Design and using most of resources on Coding -> effective on small projects) </p>
-<hr>
-<!-------------------------------------------------------------------------->
+  <hr>
+  <!-------------------------------------------------------------------------->
   <h2 class='headerExtra'> Programming Principles </h2>
   <h2 class='header'> The SOLID principle </h2>
   <p> Ojbect Oriented Programming principle : </p>
-  <p style='text-indent:30px;'> - <b>S</b>ingle Responsibility Principle (a Class hould have only one respoinsibility) </p>
-  <p style='text-indent:30px;'> - <b>O</b>pen for extension but closed for modification (a Class should be open for extension but closed for modification) </p>
-  <p style='text-indent:30px;'> - <b>L</b>iskov Substitution (a Class should be able to replace any of its superclasses without breaking the program, we should never modify inherited stuff) </p>
-  <p style='text-indent:30px;'> - <b>I</b>nterface Segregation (interfaces should be split so implemented clients don't implement functions that they don't need) </p>
-  <p style='text-indent:30px;'> - <b>D</b>ependency Inversion (high level modules should not depend directly on low level dependencies, instead an abstraction should be implemented between them, this way parts are swappable) </p>
-<hr>
-<!-------------------------------------------------------------------------->
+  <p style='text-indent:30px;'> - <b>S</b>ingle Responsibility Principle (a Class hould have only one respoinsibility)
+  </p>
+  <p style='text-indent:30px;'> - <b>O</b>pen for extension but closed for modification (a Class should be open for
+    extension but closed for modification) </p>
+  <p style='text-indent:30px;'> - <b>L</b>iskov Substitution (a Class should be able to replace any of its superclasses
+    without breaking the program, we should never modify inherited stuff) </p>
+  <p style='text-indent:30px;'> - <b>I</b>nterface Segregation (interfaces should be split so implemented clients don't
+    implement functions that they don't need) </p>
+  <p style='text-indent:30px;'> - <b>D</b>ependency Inversion (high level modules should not depend directly on low
+    level dependencies, instead an abstraction should be implemented between them, this way parts are swappable) </p>
+  <hr>
+  <!-------------------------------------------------------------------------->
   <h2 class='header'> The KISS principle </h2>
-  <p> - <b>K</b>eep <b>I</b>tt <b>S</b>imple and <b>S</b>tupid (keep the code base as simple as possible, no need for any fancy unnecessary stuff!) </p>
-<hr>
-<!-------------------------------------------------------------------------->
+  <p> - <b>K</b>eep <b>I</b>tt <b>S</b>imple and <b>S</b>tupid (keep the code base as simple as possible, no need for
+    any fancy unnecessary stuff!) </p>
+  <hr>
+  <!-------------------------------------------------------------------------->
   <h2 class='header'> The DRY principle </h2>
   <p> - <b>D</b>on't <b>R</b>epeat <b>Y</b>ourself (avoid code repetition as much as possible) </p>
+  <hr>
+  <!-------------------------------------------------------------------------->
+  <h2 class='header'> Composition over Inheritance </h2>
+  <p> - with inheritance we create objects bases on what <b>they are</b> </p>
+  <p> - with composition we create objects based on what <b>they do</b> (we are composing objects based on what the need
+    to do)</p>
+  <p> - with the composition principle we only imlement functionalities that the object needs </p>
+  <details class="example">
+    <summary> DEMO </summary>
+    <p> - JavaScript </p>
+    <pre>
+// the inheritance problem that composition can solve -----------------------------
+    class Animal {
+      constructor(name) {
+        this.name = name;
+      }
+      eat() {
+        return `${name} can eat`;
+      }
+    }
+    
+    class FlyingAnimal extends Animal {
+      fly() {
+        return `${this.name} can fly`;
+      }
+    }
 
-
-
-
+    class SwimmingAnimal extends Animal {
+      swim() {
+        return `${this.name} can swim`;
+      }
+    }
+    
+    const stork = new FlyingAnimal('Jerry');
+    console.log(stork.eat());       // -> 'Jerry can eat'
+    console.log(stork.fly());       // -> 'Jerry can fly'
+    
+    const dolphin = new SwimmingAnimal('Maggie');
+    console.log(dolphin.eat());     // -> 'Maggie can eat'
+    console.log(dolphin.swim());    // -> 'Maggie can swim'
+    
+    // const duck = ???             // duck needs to swim and fly but we cannot do this without` code duplication here 
+    
+    
+// composition --------------------------------------------------------------------
+    function eater({ name }) {
+      return {
+        eat: () => `${name} can eat`
+      }
+    }
+    
+    function flyer({ name }) {
+      return {
+        fly: () => `${name} can fly`
+      }
+    }
+    
+    function swimmer({ name }) {
+      return {
+        swim: () => `${name} can swim`
+      }
+    }
+    
+    function FlyingAnimal(name) {
+      const animal = { name };
+      return {
+        ...eater(animal),
+        ...flyer(animal)
+      }
+    }
+    
+    function SwimmingAnimal(name) {
+      const animal = { name };
+      return {
+        ...eater(animal),
+        ...swimmer(animal)
+      }
+    }
+    
+    function FlyingSwimmingAnimal(name) {
+      const animal = { name }
+      return {
+        ...eater(animal),
+        ...flyer(animal),           // we are composing animals based on what they do
+        ...swimmer(animal)
+      }
+    }
+    
+    const stork = FlyingAnimal('Jerry')
+    console.log( stork.eat() );     // -> 'Jerry can eat'
+    console.log( stork.fly() );     // -> 'Jerry can fly'
+    
+    const dolphin = SwimmingAnimal('Maggie');
+    console.log( dolphin.eat() );   // -> 'Maggie can eat'
+    console.log( dolphin.swim() );  // -> 'Maggie can swim'
+    
+    const duck = FlyingSwimmingAnimal('Stewie');
+    console.log( duck.eat() );      // -> 'Jerry can eat'
+    console.log( duck.fly() );      // -> 'Stewie can fly'
+    console.log( duck.swim() );     // -> 'Stewie can swim'
+    </pre>
+    <p> - Python </p>
+    <pre>
+    class Animal:
+        def __init__(self, name):
+            self.name = name
+    
+        def eat(self):
+            return f'{self.name} can eat'
+    
+    class FlyingAnimal(Animal):
+        def fly(self):
+            return f'{self.name} can fly'
+    
+    class SwimmingAnimal(Animal):
+        def swim(self):
+            return f'{self.name} can swim'
+    
+    class FlyingSwimmingAnimal(Animal):         // -! this is the way Python composition explained in the interned but I find this ugly!
+        def __init__(self, name):
+            super().__init__(name)
+            self.s = FlyingAnimal(name)         # the duck instance will have the flyingAnimal and swimmingAnimal objects as its properties (what the hell?)   
+            self.d = SwimmingAnimal(name)
+    
+        def fly(self):
+          return self.s.fly()
+    
+        def swim(self):
+          return self.d.swim()
+    
+    class FlyingSwimmingAnimal2(FlyingAnimal, SwimmingAnimal):    # voida (this is much cleaner)
+        pass
+    
+    
+    duck1 = FlyingSwimmingAnimal('Stewie');
+    print( duck1.eat() )         # // -> 'Stewie can eat'
+    print( duck1.fly() )         # // -> 'Stewie can fly'
+    print( duck1.swim() )        # // -> 'Stewie can swim'
+    
+    duck2 = FlyingSwimmingAnimal('Bart');
+    print( duck2.eat() )         # // -> 'Stewie can eat'
+    print( duck2.fly() )         # // -> 'Stewie can fly'
+    print( duck2.swim() )        # // -> 'Stewie can swim'
+    </pre>
+    <p> - my way to do composition in Python </p>
+    <pre>
+    class Animal:
+        def __init__(self, name):
+            self.name = name
+    
+        def eat(self):
+            return f'{self.name} can eat'
+    
+    class FlyingAnimal(Animal):
+        def fly(self):
+            return f'{self.name} can fly'
+    
+    class SwimmingAnimal(Animal):
+        def swim(self):
+            return f'{self.name} can swim'
+    
+    
+    class Stork(FlyingAnimal):
+        pass
+    
+    class Dolphin(SwimmingAnimal):
+        pass
+    
+    class Duck(FlyingAnimal, SwimmingAnimal):
+        pass
+    </pre>
+  </details>
 
 
   <br><br>
