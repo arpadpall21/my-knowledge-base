@@ -75,7 +75,9 @@ stage 3 :
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 
-- project is broken to applications
+
+
+- project is broken to applications (a Django project is a collection of apps)
 - MVT (model, view, template)
     - model -> data handling and modeling
     - view -> business logic
@@ -88,12 +90,25 @@ coreAppDirectory/settings.py                                    -> django settin
 
 appDirectory/views.py                                           -> where all the view for this app is handled
 appDirectory/models.py                                          -> where the DB is handled
+appDirectory/urls.py                                            -> where the routing is handled
+
+
+<strong>projectDir</strong>
+    |-manage.py                       // used by django-admin commands (ex: <mark>python manage.py runserver</mark>)
+    |-<strong>coreApp</strong>        // has the same name as the <strong>projectDir</strong>
+    |   |-wsgi.py                     // server file
+    |   |-urls.py                     // core urls
+    |   |-settings.py                 // core settings
+    |-<strong>app</strong>
+    |   |-urls.py                     // app urls
+        |-views.py                    // app views
 
 
 
--------------------------------------------------------
--------------------------------------------------------
-  django-admin                                                  -> to print Django commands
+-----------------------------------------------------------------------------
+commands (from the project root directory)
+-----------------------------------------------------------------------------
+  django-admin                                                  -> prints available Django commands
   
   django-admin startproject <strong>projectName</strong>        -> creates the Django project 
   
@@ -108,28 +123,59 @@ appDirectory/models.py                                          -> where the DB 
 
 
 
+-----------------------------------------------------------------------------
+settings.py (file)
+-----------------------------------------------------------------------------
+      - INSTALLED_APP
+          - app config classes are listed here
+      - TEMPLATES
+          - DIRS -> list to template directories (in the project we can pass just the template name, templates will be looked up on these paths)
+  
+  
+-----------------------------------------------------------------------------
+urls.py 
+-----------------------------------------------------------------------------
+    from django.urls import path, include
+    from <strong>viewModule</strong> import <strong>viewFn</strong>
+    
+    urlpatterns = [
+        path(<strong>route:str</strong>, <strong>viewFn</strong> name=<strong>routeName</strong>),
+        path(<strong>route:str</strong>, indclude(<strong>pathTo<mark>urls.py</mark></strong>)),       // the <mark>urlpatterns</mark> variable from the targeted <mark>urls.py</mark> file will be automatically looked up  
+    ]
+  
+  
+  
+  
+  
+  
+-----------------------------------------------------------------------------
+views.py 
+-----------------------------------------------------------------------------
+    from django.shortcuts import render
+    from django.http import HttpResponse
+
+
+
 
 -----------------------------------------------------------------------------
-  - the settings.py
-      - INSTALLED_APP
-          - routes to the app config class
-      - TEMPLATES
-          - template directories
-  
-  
-  - urls.py 
-      - urlpatterns (list containing) path(<strong>urlPath</strong>, functionReturningHttpResponse)
-        
-  
-  
-  - db modles
-  - views (HTML templating)
+templates
+-----------------------------------------------------------------------------
+    {% include <strong>templatePath</strong> %}
 
 
 
 
 
 
+-----------------------------------------------------------------------------
+structure plan
+-----------------------------------------------------------------------------
+    - Basics
+        - overview of app structure and the base structure
+    - Views and Templates
+        - views.py file
+        - templating syntax
+    - Model (DB stuff)
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
