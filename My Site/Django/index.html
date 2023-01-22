@@ -78,6 +78,7 @@ stage 3 :
 
 
 - project is broken to applications (a Django project is a collection of apps)
+    - Django applications are designed to be reused
 - MVT (model, view, template)
     - model -> data handling and modeling
     - view -> business logic
@@ -101,8 +102,13 @@ appDirectory/urls.py                                            -> where the rou
     |   |-settings.py                 // core settings
     |-<strong>app</strong>
     |   |-urls.py                     // app urls
-        |-views.py                    // app views
+    |   |-views.py                    // app views
+    |-static                          // directory where static files are placed
 
+
+- describe admin features 
+    - Django handles password hashing for us 
+    - user management by default 
 
 
 -----------------------------------------------------------------------------
@@ -112,24 +118,33 @@ commands (from the project root directory)
   
   django-admin startproject <strong>projectName</strong>        -> creates the Django project 
   
-  python manage.py surnserver                                   -> in the Django project folder (starts the dev server)
+  python manage.py runserver                                    -> in the Django project folder (starts the dev server)
   
   python manage.py startapp <strong>appName</strong>            -> creates a new app (skeleton and boilerplate code)
   
+  python manage.py makemigrations                               -> creates the migration script (in the <strong>appDir</strong>/migrations/__init__.py file)
   
+  python manage.py migrate                                      -> runs databse migrations (creates / modifies the db structure) based on <strong>appDir</strong>/migrations/__init__.py file
 
+  python manage.py createsuperuser                              -> creating admin
 
+  python manage.py sqlmigrate <strong>appName</strong> <strong>migrationsNr<strong> -> prints the SQL query for the specified migration
 
-
-
+  python manage.py shell                                        -> entering python shell
 
 -----------------------------------------------------------------------------
 settings.py (file)
 -----------------------------------------------------------------------------
       - INSTALLED_APP
-          - app config classes are listed here
+          - app config classes are listed here (new application confibs must be listed here (conrfig class in the <mark>apps.py</mark> file))
       - TEMPLATES
           - DIRS -> list to template directories (in the project we can pass just the template name, templates will be looked up on these paths)
+  
+      - STATIC_URL = <strong>path:str</strong>  
+          - URL prefix for static resources (ex: <strong>prefix/resource</strong> request will be made for static files)
+      - STATICFILES_DIRS = [<strong>absolutePath:str</strong>]
+          - list of directory where static files live
+  
   
   
 -----------------------------------------------------------------------------
@@ -137,10 +152,13 @@ urls.py
 -----------------------------------------------------------------------------
     from django.urls import path, include
     from <strong>viewModule</strong> import <strong>viewFn</strong>
+    from django.views.generic.base import RedirectView
+    
     
     urlpatterns = [
-        path(<strong>route:str</strong>, <strong>viewFn</strong> name=<strong>routeName</strong>),
-        path(<strong>route:str</strong>, indclude(<strong>pathTo<mark>urls.py</mark></strong>)),       // the <mark>urlpatterns</mark> variable from the targeted <mark>urls.py</mark> file will be automatically looked up  
+        path(<strong>route:str|regExp</strong>, <strong>viewFn</strong> name=<strong>routeName</strong>),   // the <strong>route:str</strong> works hierarchycally (ex if the root url file has <mark>test</mark> the the app will be reacable on <mark>test/<strong>appRoute</strong></mark>)
+        path(<strong>route:str</strong>, indclude(<strong>pathTo<mark>urls.py</mark></strong>)),            // the <mark>urlpatterns</mark> variable from the targeted <mark>urls.py</mark> file will be automatically looked up for available paths
+        path(<strong>route:str</strong>, RedirectView.as_view(url=<strong>route:str</strong>)               // to redirect view
     ]
   
   
@@ -154,17 +172,100 @@ views.py
     from django.shortcuts import render
     from django.http import HttpResponse
 
+    def <strong>viewName</strong>(<strong>req</strong>):
+        return render(<strong>req</strong>, <strong>pathToView</strong>, ctx:dict, content_type=None status=None)        // the template path is resolved when setting the app config in the INSTALLED_APPS in the config file (lookup from the <appDir>/templates dir), we also can specify the templates lookup path in the settings.py TEMPLATES[{DIR}]
+    
+    ctx:dict      -> dictionary containing values that we pass to the template
+    content_type  -> MIME content type (Default: 'text/html')
+    status        -> status code (Default: 200)
+    
+    
+    
+    def <strong>viewName</strong>(<strong>req</strong>):
+        return HttpResponse(<strong>html:str</strong>)           // string containing html markup
 
 
 
 -----------------------------------------------------------------------------
-templates
+templates (Django templates are very similar to Jinja2)
 -----------------------------------------------------------------------------
     {% include <strong>templatePath</strong> %}
 
 
+--------------------------
+    {{ <strong>var</strong> }}          // to access code variables within the template
 
 
+
+--------------------------
+    {% <strong>var</strong> in <strong>contextKey</strong> %}         // looping (the contextKey is one of the keys on this templates context passed in render(context=<strong>dict</strong>)
+        <strong>var</strong>
+
+    {% endfor %}
+
+
+
+--------------------------
+    {% if <strong>cond</strong> %}          // only the if is required
+        // html here...
+    {% elif <strong>cond</strong> %}
+        // html here...
+    {% else %}
+        // html here...
+    {% endif %}
+
+
+--------------------------
+a block is a section that child templates can override
+  - interestingly we exted from child to parent 
+  - so the view is the child wich blocks are extended in the pulled parent blocks ??? WTF <- complicated as F
+  
+    child template
+    -----------------------
+    {% extends <strong>parentTemplatePath</strong> %}           // extending a 'base' view (1 allowed in 1 template)
+
+    {% block <strong>blockName</strong %}                       // the <strong>blockName</strong> is a references in the base template
+      // HTML content that we want to insert in the base content
+    {% endblock %}
+
+    parent template
+    -----------------------
+    {% block <strong>blockName</strong> %} {% endblock %}       // references the <strong>blockName</strong> in the child template
+                                                                // HTML content in the <strong>blockName</strong> in the child template will be inserted here 
+
+
+
+--------------------------
+{% load static %}         // loading static resources 
+                          // the <mark>static</mark> represents the base paths in the <mark>STATICFILES_DIRS</mark> in the <strong>settings.py</strong> file  
+
+
+
+static request resource {% static <strong>path:str</strong> %}   // <mark>static</mark> is the base path to static resources
+  ex:
+
+  <link rel='stylesheet' type='text/css' href="{% static 'one/two/three/x.css' %}">
+  <img src="{% static 'some_image.jpg' %}"
+
+
+
+--------------------------
+  <a href="{% url <strong>urlPatternNmame</strong> %}"          // will reference the url name in the <mark>urlpattern</strong> path(name=<strong>pathName</strong>)
+
+
+
+-----------------------------------------------------------------------------
+models.py 
+-----------------------------------------------------------------------------
+  - each class is a table in the DB
+  - primary key is automatically added to the table if we don't specify one
+
+from django.contrib.auth.models import User     -> import the User model (the user table)
+
+
+
+class <strong>TableName</strong>(models.Model):
+    <strong>filedName</strong> = model<strong>filedType()</strong>
 
 
 -----------------------------------------------------------------------------
