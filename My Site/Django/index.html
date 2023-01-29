@@ -20,6 +20,7 @@
   <p class="subSite"><a href=""> SubSite > </a></p>
 
 
+
   <table class="table">
     <caption>
       <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
@@ -50,7 +51,7 @@
     <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
   </details>
   <h2 style="color:green;"><u> Useful Links : </u></h2>
-
+  <p><a href='https://docs.djangoproject.com/en/4.1/' target='_blank'>Django docs (docs.djangoproject.com)</a></p>
   <h2 style="color:green;"><u> Remember This : </u></h2>
 
   <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
@@ -103,7 +104,7 @@ appDirectory/urls.py                                            -> where the rou
     |-<strong>app</strong>
     |   |-urls.py                     // app urls
     |   |-views.py                    // app views
-    |-static                          // directory where static files are placed
+    |-static                          // directory where static files are placed (we can place this in apps as well)
 
 
 - describe admin features 
@@ -130,7 +131,11 @@ commands (from the project root directory)
 
   python manage.py sqlmigrate <strong>appName</strong> <strong>migrationsNr<strong> -> prints the SQL query for the specified migration
 
-  python manage.py shell                                        -> entering python shell
+  python manage.py shell                                        -> entering django shell (djang settings are already imported here, ex: we can query db etc...)
+
+  
+
+
 
 -----------------------------------------------------------------------------
 settings.py (file)
@@ -257,7 +262,7 @@ static request resource {% static <strong>path:str</strong> %}   // <mark>static
 -----------------------------------------------------------------------------
 models.py 
 -----------------------------------------------------------------------------
-  - each class is a table in the DB
+  - each class is a table in the DB (the table in the database is prefixed with the app name)
   - primary key is automatically added to the table if we don't specify one
 
 from django.contrib.auth.models import User     -> import the User model (the user table)
@@ -266,6 +271,66 @@ from django.contrib.auth.models import User     -> import the User model (the us
 
 class <strong>TableName</strong>(models.Model):
     <strong>filedName</strong> = model<strong>filedType()</strong>
+
+    def __str__(self):                    # specify how to print records 
+        return self.<strong>fieldName</strong>  # by example 
+
+
+<strong>Model</strong>(<strong>colName</strong>=<strong>val</strong><i>, ...</i>)
+    - returns the <strong>Model</strong> object with the added record (must be saved to write to the db)
+<strong>Model</strong>.(<small>force_insert=False</small>, <small>force_update=False</small>, <small>using=DEFAULT_DB_ALIAS</small>, <small>update_fields=None</small>)
+    - saves (commits) previous model changes in the data base
+
+<strong>Model</strong>objects.create(<strong>colName</strong>=<strong>val</strong><i>, ...</i>)
+    - inserts a new record in DB (no need to save this way)
+
+
+
+<strong>querySet</strong>.delete()
+<strong>record</strong>delete()
+    - to delete record(s)
+
+
+
+<strong>Model</strong>.objects.all()
+    - get all records (in a querySet <- iterable object containing records)
+<strong>Model</strong>.objects.first()
+    - returns the first <strong>record</strong> in the table
+<strong>Model</strong>.objects.last()
+    - returns the last <strong>record</strong> in the table
+
+<strong>Model</strong>.objects.get(<strong>colName</strong>=<strong>val</strong>)   -> we can use pk=<strong>int</strong>
+    - filters ONE record (if more than one record found throws an error)
+<strong>Model</strong>.objects.filter(<strong>colName</strong>=<strong>val</strong><i>, ...</i>)
+    - return all records in a querySet wher the <strong>colName</strong> filter matches
+
+<strong>record</strong>.<strong>colName</strong>
+    - returns the record value of the specified column
+
+updating record
+<storng>record</strong> = <strong>record</strong>.<strong>colName</strong> = <storng>newVal</strong>
+<strong>record</strong>.save()            - save the returned value 
+
+
+
+<strong>Model</strong>.objects.last(<strong>fieldName</strong>=<strong>filter:str</strong>)
+ex_user = <strong>Model</strong>.objects.last(<strong>fieldName</strong>=<strong>filter:str</strong>).first()
+    - returns the user record
+ex_user.id
+    - get the field
+<strong>Model</strong>.objects.get(<strong>fieldName<strong>=<strong>val</strong>)
+    - get the record by <strong>fieldName</strong>
+
+
+
+
+
+
+
+
+
+- all fields (document these down)
+https://docs.djangoproject.com/en/4.1/ref/models/fields/
 
 
 -----------------------------------------------------------------------------
