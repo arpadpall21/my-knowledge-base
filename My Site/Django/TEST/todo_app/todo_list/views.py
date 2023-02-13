@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 
 dummy_todo_list = [
@@ -11,7 +13,20 @@ dummy_todo_list = [
 
 
 def list(req):
-    return render(req, 'list/index.html', context={
+    return render(req, 'todo_list/index.html', context={
         'list': dummy_todo_list,
         'nr': 1,
     })
+
+
+def register(req):
+    if req.method == 'POST':
+        form = UserCreationForm(req.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            messages.success(req, f'Account created form {username}')
+    else:
+        form = UserCreationForm()
+    
+    return render(req, 'todo_list/register_user.html', {'form': form, 'test': 'test'})
+

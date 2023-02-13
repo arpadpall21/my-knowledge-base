@@ -141,7 +141,7 @@ commands (from the project root directory)
 settings.py (file)
 -----------------------------------------------------------------------------
       - INSTALLED_APP
-          - app config classes are listed here (new application confibs must be listed here (conrfig class in the <mark>apps.py</mark> file))
+          - app config classes are listed here (new application configs must be listed here (conrfig class in the <mark>apps.py</mark> file))
       - TEMPLATES
           - DIRS -> list to template directories (in the project we can pass just the template name, templates will be looked up on these paths)
   
@@ -165,16 +165,19 @@ urls.py
         path(<strong>route:str</strong>, indclude(<strong>pathTo<mark>urls.py</mark></strong>)),            // the <mark>urlpatterns</mark> variable from the targeted <mark>urls.py</mark> file will be automatically looked up for available paths
         path(<strong>route:str</strong>, RedirectView.as_view(url=<strong>route:str</strong>)               // to redirect view
     ]
-  
-  
-  
-  
-  
-  
+    
+    
+    
+    
+    
+    
+    
+    
+    
 -----------------------------------------------------------------------------
 views.py 
 -----------------------------------------------------------------------------
-    from django.shortcuts import render
+    from django.shortcuts import render, redirect
     from django.http import HttpResponse
 
     def <strong>viewName</strong>(<strong>req</strong>):
@@ -190,15 +193,24 @@ views.py
         return HttpResponse(<strong>html:str</strong>)           // string containing html markup
 
 
+    <strong>req</strong>.method                               // request method
+    redirect(<strong>pathName</strong>)                       // redirects to path (urls.py.urlpatters.path(name=here))
+
 
 -----------------------------------------------------------------------------
 templates (Django templates are very similar to Jinja2)
 -----------------------------------------------------------------------------
+- appName
+    - templates
+        - appName                 -> convention to store templates on app level
+
+
     {% include <strong>templatePath</strong> %}
 
 
 --------------------------
-    {{ <strong>var</strong> }}          // to access code variables within the template
+    {{ <strong>var</strong> }}                                  // to access code variables within the template
+    {{ <strong>var</strong>|<strong>filter</strong> }}          // filtering the displayed data     https://realpython.com/django-templates-tags-filters/ (link to explore)
 
 
 
@@ -241,7 +253,7 @@ a block is a section that child templates can override
 
 
 --------------------------
-{% load static %}         // loading static resources 
+{% load static|pluginName %}         // loading static resources (used to load libraries or templates, these templates are default or provided in the <mark>settings.py</mark>)
                           // the <mark>static</mark> represents the base paths in the <mark>STATICFILES_DIRS</mark> in the <strong>settings.py</strong> file  
 
 
@@ -263,7 +275,8 @@ static request resource {% static <strong>path:str</strong> %}   // <mark>static
 models.py 
 -----------------------------------------------------------------------------
   - each class is a table in the DB (the table in the database is prefixed with the app name)
-  - primary key is automatically added to the table if we don't specify one
+  - primary key is automatically added to the table if we don't specify one (with the field name of 'id' incrementing integers)
+
 
 from django.contrib.auth.models import User     -> import the User model (the user table)
 
@@ -285,6 +298,9 @@ class <strong>TableName</strong>(models.Model):
     - inserts a new record in DB (no need to save this way)
 
 
+<strong>Model</strong>.objects
+    - returns a django manager object
+
 
 <strong>querySet</strong>.delete()
 <strong>record</strong>delete()
@@ -301,7 +317,7 @@ class <strong>TableName</strong>(models.Model):
 
 <strong>Model</strong>.objects.get(<strong>colName</strong>=<strong>val</strong>)   -> we can use pk=<strong>int</strong>
     - filters ONE record (if more than one record found throws an error)
-<strong>Model</strong>.objects.filter(<strong>colName</strong>=<strong>val</strong><i>, ...</i>)
+<strong>Model</strong>.objects.filter(<strong>colName</strong>=<strong>val</strong><i>, ...</i>)[.first()|last()]
     - return all records in a querySet wher the <strong>colName</strong> filter matches
 
 <strong>record</strong>.<strong>colName</strong>
@@ -312,25 +328,41 @@ updating record
 <strong>record</strong>.save()            - save the returned value 
 
 
+<strong>recordA</strong>.<strong>recordB</strong>_set
+    - return a querySet containing all <strong>recordB</strong> where foreigh keys are related to <strong>recordA</strong>
+
 
 <strong>Model</strong>.objects.last(<strong>fieldName</strong>=<strong>filter:str</strong>)
 ex_user = <strong>Model</strong>.objects.last(<strong>fieldName</strong>=<strong>filter:str</strong>).first()
     - returns the user record
 ex_user.id
     - get the field
-<strong>Model</strong>.objects.get(<strong>fieldName<strong>=<strong>val</strong>)
+<strong>Model</strong>.objects.get(<strong>fieldName<strong>=<strong>val</strong>)[.all()|create()]
     - get the record by <strong>fieldName</strong>
 
 
+-- foreign key 
+class <strong>Model</strong>(models.Model):
+    <strong>key</strong> = models.ForeignKey(<strong>upperModel</strong>, on_delte=models.CASCADE)          on_delete -> models.CASCADE = deleting the pk of this foreign key will delete this foreign key as well / on_delete - model.PROTECT -> won't allow to delete the pk linking thie foregin key / on_delete - model.SET_NULL -> set this foreig key to NULL / https://docs.djangoproject.com/en/4.1/ref/models/fields/#arguments
 
-
-
+    <strong>Model</strong>.objects.create(... <strong>foreignKeyField</strong>=<strong>pkRecord</strong>)   - the <strong>pkRecord</strong> is the primary key record from the parent (referenced) table 
 
 
 
 
 - all fields (document these down)
 https://docs.djangoproject.com/en/4.1/ref/models/fields/
+
+
+-----------------------------------------------------------------------------
+forms
+-----------------------------------------------------------------------------
+from django.contrib.auth.forms import UserCreationForm        -> builtin form (has validation and all that is needed to provide a basic form), 
+{% csrf_token %}    -> include this in all form POST request for crf check (Cross Site Request Foreign)
+                                                              -> this also does frontend 
+                    -> server can check if the user is the one it should be 
+                    -> generated by the server then the server check if the right token is received
+
 
 
 -----------------------------------------------------------------------------
@@ -343,6 +375,19 @@ structure plan
         - templating syntax
     - Model (DB stuff)
 
+
+- do do
+    - a user registration form with feedback (from django.contrib import messages -> this guy stores its value in a cookie)
+    
+    - to retrieve the message in the frontend
+    ---------------
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE

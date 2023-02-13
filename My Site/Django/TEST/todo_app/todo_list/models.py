@@ -1,6 +1,11 @@
 from django.db import models
 
-class TestModel(models.Model):
+
+class User(models.Model):
+    user = models.TextField(primary_key=True)
+
+
+class Post(models.Model):
     date = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    awesome = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
