@@ -28,7 +28,12 @@
     </tr>
     <tr class="0">
       <td>
-        python -m unittest <strong>path</strong><i>.TestClass.test_method</i> <small>[-v]</small>
+        python -m unittest <strong class='openable'>path<i>.TestClass.test_method</i> <small>[-v]</small><div>
+          <p> ex: </p>
+          <p> <mark>python -m unittest</mark> (runs all test in the current and nested directories) </p>
+          <p> <mark>python -m unittest tests/test_something.py tests2</mark> (runs test files on the specified paths) </p>
+          <p> <mark>pytest -m unittest test_something.py.TestClass.test_one</mark> (runs the <mark>test_one</mark> test case within the <mark>TestClass</mark> in <mark>test_something.py</mark> file) </p>
+        </div></strong> <i>...</i>
       </td>
       <td>
         - start unning test (on the passed directory will lookup all <mark>test</mark> prefixed files) <br>
@@ -55,7 +60,32 @@
   <p style='text-indent:15px;'> - <mark class='mark'>test suite</mark> (a collection of tests) </p>
   <p> - <a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.debug" target="_blank">here you can
       find [link]</a> a number of test assertion methods to check test casses </p>
-  <pre>
+  <pre class='syntax'>
+    from unittest import TestCase
+    
+    
+    class <strong>TestSuiteName</strong>(TestCase):     # test suite = class extended with <mark>TestCase</mark> 
+        def setUp(self):               # run before each test case
+            <span style='color:darkgrey;'>// some setup logic...</span>
+      
+        def tearDown(self):            # run after each test case
+            <span style='color:darkgrey;'>// some teardown logic...</span>
+    
+        @classmethod  
+        def setUpClass(cls):           # runs before all test cases
+            <span style='color:darkgrey;'>// some setup logic...</span>
+    
+        @classmethod
+        def tearDownClass(cls):        # runs after all test cases
+            <span style='color:darkgrey;'>// some teardown logic...</span>
+    
+        def test_<strong>testCaseName</strong>(self):   # test cases within test class (function prefixed with <mark>test_</mark>)
+            <span style='color:darkgrey;'>// some test case...</span>
+  </pre>
+  <details class="example">
+    <summary> DEMO </summary>
+    <p> - setup / teardown methods </p>
+    <pre>
     from unittest import TestCase
     
     class Person:
@@ -89,7 +119,40 @@
     
         def test_wrong_name(self):
             self.assertNotEqual(self.adam.name, 'Adam_')
+    </pre>
+    <p> - making assertions about logs </p>
+    <pre>
+    from unittest import TestCase
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    logger2 = logging.getLogger('some.other.logger')
+    
+    def my_fun():
+        logger.debug('some debug message')
+        logger.info('some info message')
+        logger.warning('some warning message')
+        logger.error('some error message')
+    
+    
+    class MyTestOne(TestCase):
+        def test_one(self):
+            with self.assertLogs(logger, level='WARNING') as logRecord:   # the logger and the assertion level we want to capture assertions   
+                my_fun()
+
+                print( logRecord.output)       // -> ['WARNING:test_demo:WARNING log', 'ERROR:test_demo:ERROR log']      // the list of the captured logs (level logLevel:loggerName:logMessage)
+                print( logRecord.records )     // -> [&lt;LogRecord&gt;, ...]     a list of capture log reccords 
+            
+            self.assertEqual(logRecord.records[1].msg, 'some error message')        # assert log 
+            self.assertEqual(logRecord.records[1].levelname, 'ERROR')
+    
+            assert logRecord.records[0].msg == 'some warning message'
+            assert logRecord.records[0].levelname == 'WARNING'
+    
+            assert logRecord.output[0] == 'WARNING:test_demo:some warning message'
+            assert logRecord.output[1] == 'ERROR:test_demo:some error message'  
   </pre>
+  </details>
   <!--------------------------------------------------------------------------------------------->
   <hr>
   <h2 class="headerExtra"> Mocking </h2>
@@ -201,7 +264,8 @@
     as a MagicMock instance) </p>
   <p style='text-indent: 30px'> - in contenxt manager (in this case the context receives mocked system part as a
     MagicMock instance) </p>
-  <p style='text-indent: 30px'> - return a patcher (the <mark>patch()</mark> method returns a patcher object that can be
+  <p style='text-indent: 30px'> - return a patcher (the <mark>patch()</mark> method returns a patcher object that can
+    be
     started/stopped to get the intended MagicMock instance (usually used in fixtures)) </p>
   <pre class='syntax'>
     patch(<strong>path:str</strong>, <strong>**kwargs</strong>, <a href="https://docs.python.org/3/library/unittest.mock.html#patch" target="
@@ -212,7 +276,51 @@
     
     patch.dict(<strong>path:str</strong>, <strong>dict</strong>, <strong>**kwargs</strong>, <a href="https://docs.python.org/3/library/unittest.mock.html#unittest.mock.patch.object" target="_blank">moreArgs...</a>)       // patches the <strong>dict</strong> at <strong>path</strong> (the 2nd arg <strong>dict</strong> members override the original onces)  
                                                             // does not create a <strong>magicMock</strong> like <mark>patch()</mark> and <mark>patch.object()</mark> do, instead value modification is specified in the patch directly    
+    
+    
+<span style='color:darkgrey;'>// patching as decorator -----------------------------------------------</span>
+    class <strong>TestSuiteName</strong>(TestCase):
+        @patch(<strong>path_1</strong>)
+        @patch(<strong>path_2</strong>)
+        def <strong>testCaseName</strong>(self, mock_1, mock_2):
+            mock_1                                          // -> <strong>magicMock</strong> of the mocked object on <strong>path_1</strong>   
+            mock_2                                          // -> <strong>magicMock</strong> of the mocked object on <strong>path_2</strong>   
+    
+    
+<span style='color:darkgrey;'>// patching test class -------------------------------------------------</span>
+    @patch(<strong>path_1</strong>)                                          // all test cases will be patched in this class 
+    @patch(<strong>path_2</strong>)
+    class <strong>TestSuiteName2</strong>(TestCase): 
+        def <strong>testCaseName</strong>(self, mock_1, mock_2):             // each test case receives the patched object as <strong>magicMock</strong>
+            mock_1 
+            mock_2 
+
+        def <strong>testCaseName2</strong>(self, mock_1, mock_2):
+            mock_1 
+            mock_2 
+    
+    
+<span style='color:darkgrey;'>// patching in context manager -----------------------------------------</span>
+    class <strong>TestSuiteName2</strong>(TestCase): 
+        def <strong>testCaseName</strong>(self):
+            with patch(<strong>path</strong>) as mock:
+                <span style='color:darkgrey'>// context receives the patched object as <strong>magicMock</strong></span>  
+    
+    
+<span style='color:darkgrey;'>// patching in fixture -------------------------------------------------</span>
+    class <strong>TestSuiteName2</strong>(TestCase): 
+        def setUp(self):
+            self.patcher = patch(<strong>path</strong>)
+            self.patcher.start()                            // patcher must be started for the mock to take effect 
+    
+        def tearDwon(self):
+            self.patcher.stop()                             // after stopping the patcher <mark>path</mark> is not mocked anymore    
+            
+        def <strong>testCaseName</strong>(self):
+            <span style='color:darkgrey;'>// some test case...</span>
     </pre>
+  <details class="example">
+    <summary> DEMO </summary>
   <p> - patching as decorator </p>
   <pre>
     from unittest import TestCase
@@ -285,8 +393,6 @@
         def test_one(self):
             print( fn_1() )         # // -> MagicMock (mocked)
   </pre>
-  <details class="example">
-    <summary> DEMO </summary>
     <p> - patching <u>where the object is used</u> </p>
     <pre>
 // test_demo.py --------------------------------------------------------
@@ -394,7 +500,7 @@
     not allowed) </p>
   <details class="example">
     <summary> DEMO </summary>
-  <pre>
+    <pre>
     from unittest.mock import create_autospec
     
     
@@ -406,7 +512,6 @@
             return x
     
     # creates a spec (mimics an original object structure)
-    # speck = MagicMock(spec=TestClass)
     speck = create_autospec(TestClass)
     
     print( speck )                  // -> MagicMock 
@@ -427,8 +532,8 @@
     
     speck.new_attr = 'new val'    # but this version does not allow to create new attributes 
   </pre>
-  <p> - speck used in <mark>patch()</mark> </p>
-  <pre>
+    <p> - speck used in <mark>patch()</mark> </p>
+    <pre>
     from unittest import TestCase
     from unittest.mock import patch
     
@@ -464,8 +569,8 @@
             Original.new_attr = 'new val'             # raises an error (on a strict spec we cannot create new attirbute)
   </pre>
   </details>
-  
-  
+
+
   <br><br>
 </body>
 
