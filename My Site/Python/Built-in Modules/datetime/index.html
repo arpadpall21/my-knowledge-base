@@ -33,7 +33,7 @@
             - immutable, hashable and supports efficient picking (can be converted to bytestream)
         </td>
     </tr>
-    <tr class="10.01">
+    <tr class="09.01">
         <td> 
             <em>datetime.datetime</em>.today()
         </td>
@@ -41,20 +41,12 @@
             - returns a <strong>datetime</strong> object of the current local datetime 
         </td>
     </tr>
-    <tr class="10.02">
+    <tr class="09.02">
         <td> 
             <em>datetime.datetime</em>.now(<small>tz=<i>tzinfo</i></small>)
         </td>
         <td> 
             - returns a <strong>datetime</strong> object of the current local datetime (we can provide our tzinfo implementation)
-        </td>
-    </tr>
-    <tr class="10.03">
-        <td> 
-            <em>datetime.datetime</em>.utcnow()
-        </td>
-        <td> 
-            - returns a <strong>datetime</strong> object of the current utc datetime 
         </td>
     </tr>
     <tr class="10.04">
@@ -778,9 +770,9 @@
 <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - arithmetic and comparison operations are supported betwen datetime objects </p>
     <p> - datetime object can be 'naive' or 'awaire' </p>
-    <p style="text-indent:20px;"> <b><u>'naive'</u></b> datetime objects don't contain timezone informations </p>
-    <p style="text-indent:20px;"> <b><u>'awaire'</u></b> datetime objects contain timezone informations </p>
-    <p style="text-indent:40px;"> - the <mark>time</mark> and <mark>datetime</mark> objects can be awaire, we basically pass timezone informations (as <mark>tzinfo</mark> implementation) on creation into them (as <mark>tz</mark> or <mark>timezone</mark> argument) </p>
+    <p style="text-indent:20px;"> <b><u>'naive'</u></b> has no timezone informations, <u>assumes to contain the local time</u> </p>
+    <p style="text-indent:20px;"> <b><u>'awaire'</u></b> has timezone informations </p>
+    <p> - to check if the datetime object is awaire or naive call <mark><strong>datetime</strong>.tzinfo</mark>, if the returned value is <mark>None</mark> the datetime object is naive, awaire otherwise </p>
 <h2 class="header"> Creating awaire datetime objects </h2>
     <p> - we can implement our own tzinfo by creating a subclass of the <mark>tzinfo</mark> class and implement the <mark>utcoffset()</mark> / <mark>dst()</mark> / <mark>tzname()</mark> methods on it </p>
     <p> - we can also create tzinfo implementation by using the <mark>timezone</mark> class (that's the cheapest way) </p>
@@ -788,6 +780,28 @@
     <p> - or use the 'easy way' <mark><a href="../zoneinfo/index.html" target="_blank">zoneinfo</a></mark> module (this handles timezone and DST alike) </p>
 <details class="example">
 <summary> Example : </summary>
+    <p> - get local VS get utc </p>
+    <pre>
+    from datetime import datetime, timezone
+    
+    
+    local = datetime.now()
+    utc = datetime.now(tz=timezone.utc)
+    
+    print( local.hour )                   // -> 8
+    print( utc.hour )                     // -> 6
+    </pre>
+    <p> - checking if datetime is 'awaire' or 'naive' </p>
+    <pre>
+    from datetime import datetime, timezone
+    
+    
+    naive = datetime.now()
+    awaire = datetime.now(tz=timezone.utc)
+    
+    print( naive.tzinfo )         # // -> None 
+    print( awaire.tzinfo )        # // -> UTC    (&lt;datetime.timezone&gt; obj)
+    </pre>
     <p> - <mark>datetime.timedelta()</mark> </p>
     <pre>
     import datetime
