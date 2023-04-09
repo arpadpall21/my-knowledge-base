@@ -1,0 +1,591 @@
+<html lang="en">
+
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title> Style Guide</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../Assets/stylesPages.css">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> Style Guide </h1>
+  <p> Updated ( 2023-04-05 )</p>
+  <p class="sitenav"> <a href="../../index.html">MySite></a>
+    <a href="../index.html">JavaScript></a> Style Guide
+  </p>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+  <p><a href="https://github.com/airbnb/javascript" target="_blank">airbnb style guide (GitHub)</a></p>
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+  <p> - Consistent style guide is important -> Consisentcy within a project is more important -> Consistency within a
+    module is the most important </p>
+  <h2 class='header'> General Roules </h2>
+  <p> - always use spaces instead of tabs </p>
+  <p> - lines should be limite up to 100 characters (not recommended but I prefer 120 characters) </p>
+  <p> - use single quotes <mark>'</mark> for strings (use dobule quotes to avoid escaping (bad -> <mark>'It\'s'</mark> good -> <mark>"It's"</mark>))</p>
+  <p> - long strings should not be broken, even if it exedes the allowed line length</p>
+  <p> - files should be terminated with a single new line character </p>
+  <pre class='right'>
+// naming conventions --------------------------------------
+  const someConstant = 'constant;                           // constants are not written with capital letters (thant's a Python thing)
+  
+  
+  const varName = 'some value';                             // variables and function names are written with camelCase (only use <mark>const</mark> or <mark>let</mark> for variables)   
+  function someFunc() {
+    // function body...
+  }
+    
+    
+  class ClassName {};                                       // Class and Constructor names should be written with CamelCase   
+  </pre>
+  <pre class='wrong'>
+  const __invalidInJavascrip__ = 'some value';              // never pre or post fix variable names with <mark>_</mark> undersocres (that's a Python thing)   
+  </pre>
+  <br>
+  <pre class='right'>
+  const arr = [1, 2, 3];                                    // always use literals 
+  /^a/.test('abc');
+  </pre>
+  <pre class='wrong'>
+  const arr = new Array(1, 2, 3);
+  RegExp('^a').test('abc');
+  </pre>
+  <br>
+  <pre class='right'>
+  const myVar = 21;                                         // use <mark>;</mark> (semicolons) to end of expressions, but not for blocks 
+  
+  function test() {
+    // functon body...
+  }
+  </pre>
+  <pre class='wrong'>
+  const myVar = 21
+  
+  function test() {
+    // functon body...
+  };
+  </pre>
+  <br>
+  <pre class='right'>
+  ['get', 'post', 'put', 'delete'].map(httpMethod => (
+    Object.prototype.call(                                  // long expressions should be wrapped in <mark>()</mark>  
+      httpMagicObjectWithAVeryLongName,
+      httpMethod,
+    )
+  ))
+  </pre>
+  <pre class='wrong'>
+  ['get', 'post', 'put', 'delete'].map(httpMethod => Object.prototype.call(httpMagicObjectWithAVeryLongName, httpMethod))
+  </pre>
+  <br>
+  <pre class='right'>
+  function someFunction() {
+    if (a) {                                                // avoid using <mark>else if</mark> / <mark>else</mark> 
+      return 'something';
+    }
+    
+    if (b) {
+      return 'something else';
+    } 
+    
+    return 'default return';
+  }
+  </pre>
+  <pre class='wrong'>
+  function someFunction() {
+    if (a) {
+      return 'something';
+    } else if (b) {
+      return 'something else';
+    } else {
+      return 'default return';
+    }
+  }
+  </pre>
+  <br>
+  <pre class='right'>
+  switch(someCondition) {
+    case 1: {                                               // wrap switch cases in <mark>{}</mark>
+      // do something...
+      break;
+    }
+    case 2: {
+      // do something else...
+      break;
+    }
+      // do some default behaviour 
+    default: {
+      let x = 21;
+    }
+  }
+  </pre>
+  <pre class='wrong'>
+  switch(someCondition) {
+    case 1:
+      // do something...
+      break;
+    case 2:
+      // do something else...
+      break;
+    default:
+      // do some default behaviour 
+      let x = 21;
+  }
+  </pre>
+  <br>
+  <pre class='right'>
+  Object.hasOwnProperty.call(someObj, 'prop');              // object property checkers <mark>hasOwnProperty()</mark> <mark>propertyIsEnumerable()</mark> etc, should be used on constructor (not directly on the object)   
+  </pre>
+  <pre class='wrong'>
+  someObj.hasOwnProperty('prop');
+  </pre>
+  <br>
+  <pre class='right'>
+  parseInt('123.444');                                      // to parse a value into integer
+  parseInt(123.444);
+  </pre>
+  <hr>
+  <!---------------------------------------------------------------------------->
+  <h2 class='header'> Operators </h2>
+  <pre class="right">
+  const hasAge = !!age;                                     // use <mark>!!</mark> to convert any value into a boolean (it's really cool)
+  </pre>
+  <pre class="wrong">
+  const hasAge = Boolean(age);
+  </pre>
+  <br>
+  <pre class="right">
+  1 === '1';                                                // always use strict comparison
+  </pre>
+  <pre class="wrong">
+  1 == '1';
+  </pre>
+  <pre class="right">
+  i += 1;                                                   // dont use unary <mark>++</mark> or <mark>--</mark> (only in loop)    
+  </pre>
+  <pre class="wrong">
+  i++;
+  </pre>
+  <br>
+  <pre class="right">
+  const myVar = 'some val';                                 // suround operators with a white space
+  const result = 2 + 2 - 1;
+  </pre>
+  <pre class="wrong">
+  const myVar='some val';
+  const result = 2+2-1;
+  </pre>
+  <pre class="right">
+  const y = someFunction();                                 // avoid line breaks around the <mark>=</mark> operator   
+  
+  const i = (
+    someFunction();
+  )
+  </pre>
+  <pre class="wrong">
+  const i =
+    someFunction();
+  </pre>
+  <br>
+  <pre class="right">
+  const isDay2 = day ? day : 'no ok';                       // ternary operators should not be nested
+  </pre>
+  <pre class="wrong">
+  const isDay = day ? day : false ? 'ok': 'no ok'
+  </pre>
+  <br>
+  <pre class="right">
+  const orgObj = { a: 21, b: 22 };
+  const orgArr = [1, 2, 3];
+  
+  const newObj2 = {...orgObj, c: 23 };                      // use spread operator to copy objects or arrays   
+  const newArr2 = [...orgArr];
+  </pre>
+  <br>
+  <pre class="right">
+  const arr = [...someIterableObj];                         // use the spread operator to create Array from any iterable object
+  </pre>
+  <pre class="wrong">
+  const arr = Array.from(someIterableObj);
+  </pre>
+  <br>
+  <pre class="right">
+  const arr = [11, 22, 33];
+  const obj = { a: 111, b: 222, c: 333 };
+  
+  const [x, y] = arr;                                       // use object|array deconstructing they're really cool!
+  const { a, b: B } = obj;
+  </pre>
+  <hr>
+  <!---------------------------------------------------------------------------->
+  <h2 class='header'> White Spaces and Indentations </h2>
+  <pre class="right">
+  function myFunction() {                                   // use 2 white space indentations (never use tabs)   
+    return 'some value';
+  }
+  </pre>
+  <pre class="wrong">
+    function myFunction() {
+        return 'some value';
+    }
+  </pre>
+  <br>
+  <pre class="right">
+  const myObj = { a: 21, b: 22 };                           // object keys should be separated by their values with a white space   
+  </pre>
+  <pre class="wrong">
+  const myObj = { a:21, b:22 };
+  </pre>
+  <pre class="right">
+  const myObj = { a: 21, b: 22, c: 23 };                    // commas should be followed by a white space but not be preceded   
+  function myFunction(arg1, arg2, arg3) {
+    // function body...
+  }
+  </pre>
+  <pre class="wrong">
+  const myObj = { a: 21 ,b: 22 ,c: 23 };
+  function myFunction(arg1 ,arg2 ,arg3) {
+    // function body...
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  const arr = [1, 2, 3];                                    // don't add white spaces inside brackets
+  const obj = { a: 21, b: 22 };                             // add white spaces inside curly brackets 
+  
+  if (someCondition) {                                      // don't add white spaces inside parentheses
+  }
+  </pre>
+  <pre class="wrong">
+  const arr = [ 1, 2, 3 ];
+  const obj = {a: 21, b: 22};
+  
+  if ( someCondition ) {
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  if (someCondition) {                                      // blocks should be followed by an empty line
+    // block...
+  }
+  
+  if (someCondition) {
+    // block...
+  }
+  
+  const someVar = 'some val';
+  </pre>
+  <pre class="wrong">
+  if (someCondition) {
+    // block...
+  }
+  if (someCondition) {
+    // block...
+  }
+  const someVar = 'some val';
+  </pre>
+  <br>
+  <pre class="right">
+  function someFunc() {                                     // don't pad code blocks (that's a Python thing)  
+    console.log('Hello World!');
+  }
+  </pre>
+  <pre class="wrong">
+  function someFunc() {
+  
+    console.log('Hello World!');
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  function someFunc() {                                     // preced starting <mark>{</mark> (curly braces) with a white space   
+    // function body...
+  }
+  </pre>
+  <pre class="wrong">
+  function someFunc(){ 
+    // function body...
+  }
+  </pre>
+  <pre class="right">
+  if (someCondition) {                                      // in <mark>if</mark>, <mark>while</mark>, etc... statements the starting <mark>(</mark> should be preceded by a white space   
+    // some code...
+  }
+  </pre>
+  <pre class="wrong">
+  if(someCondition) {
+    // some code...
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  $('#items')                                               // use leading dots when chaining methods through multiple lines   
+    .find('.selected')
+      .highlight()
+      .end()
+    .find('.open')
+      .updateCount();
+  </pre>
+  <pre class="wrong">
+  $('#items').
+  find('.selected').
+    highlight().
+    end().
+  find('.open').
+    updateCount();
+  </pre>
+  <br>
+  <pre class="right">
+  if (                                                      // logical operators should start the line if the operation is broken up through multiple lines   
+    (foo === 123 && bar === 321)
+    && longLongLongLongMethod() 
+    && anotherLongLongMethod()
+  ) {
+    // body...
+  }
+  </pre>
+  <pre class="wrong">
+  if (foo === 123 && bar === 321 &&
+    longLongLongLongMethod() &&
+    anotherLongLongMethod()) {
+    // body...
+  }
+  </pre>
+  <hr>
+  <!---------------------------------------------------------------------------->
+  <h2 class='header'> Imports/Exports </h2>
+  <pre class="right">
+  import AirbnbStyleGuide from './AirbnbStyleGuide';        // don't use while card imports  
+  </pre>
+  <pre class="wrong">
+  import * as AirbnbStyleGuide from './AirbnbStyleGuide';
+  </pre>
+  <br>
+  <pre class="right">
+  export default const defaultValue = 21;                   // if a module has a single export it should be default
+  </pre>
+  <pre class="wrong">
+  export const defaultValue = 21;
+  </pre>
+  <br>
+  <pre class="right">
+  import someVar from 'someModule';                         // ignore file extension on inports (when possible)   
+  import SomeComponent from 'SomeComponent';
+  </pre>
+  <pre class="wrong">
+  import someVar from 'someModule.js';
+  import SomeComponent from 'SomeComponent.jsx';
+  </pre>
+  <br>
+  <pre class="right">
+  // SideBar.js (file name)
+  
+  export default function SideBar() {                       // file name should match the default export 
+  
+  }
+  </pre>
+  <hr>
+  <!---------------------------------------------------------------------------->
+  <h2 class='header'> Objects </h2>
+  <pre class="right">
+  const myObj = {
+    someMethod() {                                          // use shorthand object method 
+      // function body...
+    }
+  }
+  </pre>
+  <pre class="wrong">
+  const myObj = {
+    someMethod: function() {
+      // function body...
+    }
+  }
+  </pre>
+  <pre class="right">
+  const someProperty = 'some value';
+  
+  const myObj = {
+    someProperty;                                           // use shorthan object properties    
+  }
+  </pre>
+  <pre class="wrong">
+  const someProperty = 'some value';
+  
+  const myObj = {
+    someProperty: someProperty;
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  const myObj = {
+    someProperty: 'some value',
+    'some-property': 'some value',                          // only quote invalid object properties    
+  }
+  </pre>
+  <pre class="wrong">
+  const myObj = {
+    'someProperty': 'some value',
+    'some-property': 'some value',
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  class Person {                                            // never use getters|setters (they're really bad)   
+    constructor(name) {
+      this.name = name;
+    }
+  
+     getName() {                                            // use methods that modify the intended property instead 
+      return this.name
+    }
+  
+    setName(newName) {
+      this.name = newName;
+    }
+  }
+  </pre>
+  <pre class="wrong">
+  class Person {
+    name;
+  
+  get name() {
+    return this.name
+  }
+  
+    set name(arg) {
+      this.name = arg;
+    }
+  }
+  
+  const myObj = {
+    __hiddenProperty: undefined,
+    get a() { 
+      return this.__hiddenProperty
+    },
+    set a(newVal) {
+      this.__hiddenProperty = newVal
+    }
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  class MyClass {
+    constructor(a) {
+      this.a = a
+    }
+    
+    toPower() {                                             // manipulating <mark><strong>Class</strong>.prototype</mark> directly is not recommended
+      return this.a ** 2
+    }
+  }
+  </pre>
+  <pre class="wrong">
+  function MyClass(a){
+    this.a = a
+  }
+  
+  MyClass.prototype.toPower = function() {
+    return this.a ** 2
+  }
+  </pre>
+  <hr>
+  <!---------------------------------------------------------------------------->
+  <h2 class='header'> Functions </h2>
+  <pre class="right">
+  if (true) {
+    const x = () => {                                       // don't use function definition in a non function block 
+      return null;
+    }
+  }
+  </pre>
+  <pre class="wrong">
+  if (true) {
+    function x() {
+      return null;
+    }
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  function test(a, b = false) {                             // default function arguments come last
+    // function body...
+  }
+  </pre>
+  <pre class="wrong">
+  function test(b = false, a) {
+    // function body...
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  function test(a) {                                        // function arguments should not be reasigned
+    const b = a || 1;
+  }
+  </pre>
+  <pre class="wrong">
+  function test(a) {
+    a = 'new value';
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  function test(                                            // function with a lot of arguments should be indented just like objects  
+    someArgument,
+    anotherArgument,
+    andAnotherArgument
+  ) {
+    // function body...
+  }
+  </pre>
+  <pre class="wrong">
+  function test(someArgument,
+                anotherArgument,
+                andAnotherArgument) {
+    // function body...
+  }
+  </pre>
+  <br>
+  <pre class="right">
+  [1, 2, 3].map((val, i, arr) => {                          // use arrow function where where anonymous functions can be used    
+    // function body...
+  })
+  </pre>
+  <pre class="wrong">
+  [1, 2, 3].map(function (val, i, arr) {
+    // function body...
+  })
+  </pre>
+  <br>
+  <pre class="right">
+  [1, 2, 3].map((val) => val += 1 )                         // always wrap arrow function arguments 
+  </pre>
+  <pre class="wrong">
+  [1, 2, 3].map(val => val += 1)
+  </pre>
+  <hr>
+  <!---------------------------------------------------------------------------->
+  <h2 class='header'> Comments </h2>
+  <pre class="right">
+  /**
+   * multiline comment                                      // multiline comment 
+   * comment line
+   * comment line
+  */
+  
+  // constant variable declared 21                          // single line comments come on top of the commented line 
+  const twentyOne = 21
+  
+  // TODO: something to do                                  // action comments indicating required actions
+  // FIXME: something to fix 
+  </pre>
+  <br>
+  
+  
+  <br><br>
+</body>
+
+</html>

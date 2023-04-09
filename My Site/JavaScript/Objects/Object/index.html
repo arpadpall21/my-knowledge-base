@@ -266,14 +266,15 @@
             <em>Object</em>.is(<strong>val1</strong>, <strong>val2</strong>) 
 </td>
 <td> 
-            - compares 2 values together and returns a boolean <br>
-            - does the same as the <mark>===</mark> (strict equal comparison) <u class="openable">with some exception<div>
+            - compares 2 values or references <br>
+            - does the same as the <mark>===</mark> <u>when comparing primitives</u> <u class="openable">with some exception<div>
                 <p> <mark>Object.is(-0, +0);</mark> is false </p>
                 <p> <mark>-0 === +0;</mark> is true </p>
                 <hr>
                 <p> <mark>Object.is(Number.NaN, NaN);</mark> is true </p>
                 <p> <mark>Number.NaN === NaN;</mark> is false </p>
-            </div></u> 
+            </div></u> <br>
+            - can compare objects <u>check if variable reference <strong>val1</strong> and <strong>val2</strong> points to the same memory </u>
             <span id="browserSupport" title="updated: 2021-02-14">
                 <span><i class="fab fa-chrome"></i> 30 </span>
                 <span><i class="fab fa-firefox"></i> 22 </span>
@@ -2140,19 +2141,18 @@ SYNTAX :    <strong>object</strong>.<strong>property</strong> = <strong>value</s
 <hr>
 <h2 style="color:darkblue;"><u> <mark>is()</mark> / <mark>getOwnPropertyNames</mark> / <mark>hasOwnProperty()</mark> / <mark>keys()</mark> / <mark>values()</mark> / <mark>entries()</mark> methods </u></h2> 
 <details class="example">
-<summary> DEMO </summary>     
+<summary> DEMO </summary>
     <pre>
 // is() -------------------------------------------------------------------------------
     Object.is(2, '2');                                                                 // -> false 
     Object.is(2, 2)                                                                    // -> true
     
-    Object.is({}, {})                                                                  // -> false              // cannot compare 2 objects (always false)  
+    Object.is({ a: 'someVal' }, { a: 'someVal' })                                      // -> false              // different objects 
     
-    Object.is(-0, +0);                                                                 // -> false
-    -0 === +0;                                                                         // -> true
+    const obj1 = { a: 'someVal' }
+    const obj2 = obj1
+    Object.is(obj1, obj2)                                                              // -> true               // same objects (variables point to the same memory location)
     
-    Object.is(Number.NaN, NaN);                                                        // -> true
-    Number.NaN === NaN;                                                                // -> false
     
 // getOwnPropertyNames() / hasOwnProperty() -------------------------------------------
     var objA = {prop1:21};
@@ -2163,6 +2163,7 @@ SYNTAX :    <strong>object</strong>.<strong>property</strong> = <strong>value</s
     
     objB.hasOwnProperty('prop1');                                                      // -> false              // not native property 
     objB.hasOwnProperty('prop2');                                                      // -> true               // native property 
+    
     
 // keys() / values() / entries() ------------------------------------------------------
     var objA = {prop1:21};
@@ -2179,9 +2180,9 @@ SYNTAX :    <strong>object</strong>.<strong>property</strong> = <strong>value</s
     Object.values(objB);                                                               // -> [23, 24]
     Object.entries(objB);                                                              // -> [['prop3', 23], ['prop4', 23]]
     </pre>
-</details>    
+</details>
 <details class="example">
-<summary> Example : </summary>     
+<summary> Example : </summary>
     <p id="propertyCheck"></p> 
 <script>
     var nativeMyObj = {natProp_1:"value_A", natProp_2:"value_B", natProp_3:"value_C"};
