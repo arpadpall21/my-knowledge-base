@@ -9,366 +9,839 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="../Assets/stylesPages.css">
   <script src="../Assets/scriptPages.js"></script>
-
   <link rel="stylesheet" href="TEST/styles.css">
 </head>
 
 <body>
-  <h1> Main Title (ver 3.2) </h1>
-  <p> Updated ( 2019-05-31 )</p>
+  <h1> SASS </h1>
+  <p> Updated: ( 2019-05-31 / 2023-04-23 )</p>
   <p class="sitenav"> <a href="../index.html" title="home">My Site></a> SASS </p>
-
-
-
-  <p class="subSite"><a href=""> SubSite > </a></p>
-
-
   <table class="table">
+    <caption> Response Object
+      <span class="changeListOrder">[Ordered: <span>Grouped</span>]</span>
+    </caption>
     <tr>
-      <th> Method / Property / statement ect... </th>
-      <th> Value </th>
+      <th style="width:30%;"> CLI </th>
+      <th> Description </th>
     </tr>
-    <tr>
-      <td> Demo Prop </td>
-      <td> demo description </td>
-    </tr>
-    <tr>
-      <td> </td>
+    <tr class="05.01">
       <td>
-        <span id="browserSupport" title="updated : yyyy-mm-dd">
-          <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-          <span><i class="fab fa-firefox"></i> </span>
-          <span><i class="fab fa-opera"></i> </span>
-          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> </span>
-          <span><i class="fab fa-safari"></i> </span>
-          <span><i class="fab fa-node-js"></i> </span>
-        </span>
+        sass <small>[--watch]</small> <strong>sassFile cssFile</strong><i>, ...</i>
+      </td>
+      <td>
+        - transpiles sass into css <br>
+        - (<small>--watch</small>) watches for changes in <strong>sassFile</strong> and triggers transpilcaiton on
+        change </td>
       </td>
     </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-    </tr>
   </table>
+
   <h2 style="color:green;"><u> Notes : </u></h2>
   <details class="example" id="notes">
     <summary> Notes :</summary>
   </details>
-
   <h2 style="color:green;"><u> Useful Links : </u></h2>
   <p><a href="https://sass-lang.com/" target="_blank"> sass-lang.com </a></p>
-
+  <p><a href="https://sass-lang.com/documentation/modules" target="_blank"> sass built-in modules (sass-lang.com) </a> </p>
   <h2 style="color:green;"><u> Remember This : </u></h2>
-  <p> - </p>
+  <p> - SASS considers hyphens (<mark>-</mark>) the same as underscores (<mark>_</mark>) for backward compatibility
+    reasons (ex: <mark>$some_var</mark> same as <mark>$some-var</mark>) </p>
+  <p> - SASS values are immutable (ex when appending a new member to a list the original list never changes)</p>
+  <p> - iterable start at index <mark>1</mark> (not <mark>0</mark> like in JavaScript/Python) </p>
   <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-
-
-  <!--
-- CLI
-  - sass - CLI to compile *.sass or *.scss into *.css (npm i sass)
-  - sass <small>-watch</small> <strong>srcFile</strong> <strong>trgFile</strong>
-  
-  
-- Preprocessor
-  - sass is a css preprocessor 
-  - we have access to powerfull css tools then the preprocessor translate our syntax into regular css
-  
-  
-- SASS is compatible with regular CSS syntax (SASS syntax is an enhancement on top of CSS)
-  
-  
-- SASS vs SCSS (simple syntax differences)
-  - sass is the original syntax but scss is more common 
-
-
-- Variables
-  $<strong>var</strong>: <strong>val</strong> <small>!global</small>
-    - variables are separated in scopes (available in the current or any nested scopes)
-    - SASS variables treat hyphens and underscores the same (some_var same as some-var)
-    - <small>!global</small> <- to override an existing global variable
-
-
-- Nesting
-  - SASS css roules are nested (that's pretty neat!)
-  - shallow nesting is recommended by SASS (deep nesting can result a large compiled css)
-  - property name with the same prefix can be nexted as well
-
-
-- sass modules
-  - sass files can be modularized
-  - we can use partials (bacially sass modules prefixed with _), partials won't be parsed to CSS!!!
-  - import them with @use (in the targeted scope)
-
-
-- mixin
-  - a set of css roules which can be reused
-  - it's basically a function with side effect 
-
-
-- extend
-  - extends are almost identical with mixins but the final css result will be shorter
-  - different syntax
-
-
-- operators
-  - on top of regular css functions sass offers a lot of operators 
-
-
-- sass expression
-$var: <strong>sassExp</strong>        // variable value is an expression
-cssProperty: cssValue;                // the property and its value is an expression
-cssSelector                           // selector is an expression
-
-
-- sass considers every value true exept false and null
-- on top of css comments sass supports the single line // comment 
-
-- the & <- parent selector points to its parent
-  - these guys are mostly usefue for exending the parent with a pseudo class selector
-
-
-- #{someValue}
-  - interpolation can be used in expressions
-  - don't use interpolation with numbers (they compromise arithmetic operations)
-
-
-
-
-
-
---------------------------------------------------------------------------------------------
-@use <strong>url</strong> <small>[as <i>moduleName</i>]</small>
-  - import css in the current module 
-  - import a sass module (import sass mixin, functions and variables)
-  - sass modules should be prefixed with _
-  - <strong>url</strong> should not contain the prefixed _ and the file extension (scss, sass or css)
-  - sass modules are not compliled to css!
-  - importing varialbes, functions and mixins this will NOT become global variables (this means imported stuff is available only here!)
-  - loads the module once only!
-
-@use <strong>url</strong> with (<strong>$var: val</strong>)
-  - assing values to !default variables in <strong>url</strong> module
-
-
--------------------------------------------------
-@import 
-  - discouraged to use (use @use instead)
-
-
--------------------------------------------------
-@forward <strong>url</strong> 
-  - imports and exports (forwards) the specified module
-
-@forward <strong>url</strong> with (<strong>$var: val</strong>)
-  - we can modify default varialbes in the forwarded module (just like with @use)
-
-@forward hide|show <strong>var|mixin|function</strong>
-  - hide or show forwarded <strong>var|mixin|function</strong>
-
-
-
-
-
-@debug <strong>exp</strong>
-  - prints the result on the command line 
-
-
-
--->
-
-  <div class='test'>
-    <p>some paragraph</p>
-    <p>some paragraph <span>test</span></p>
-  </div>
-  <div class='test2'>
-    <p> some paragraph </p>
-    <p> some paragraph </p>
-  </div>
-  <div>
-    <p> some paragraph </p>
-    <p> some paragraph </p>
-  </div>
-
-
-  <!--
-    
-    - CSS preprocessor (CSS on steroids) -> write a definition about CSS preprocessors
-    
-    - syntax differences (with file extension)
-    - demo how you can run sass through command line but is its not automated!
-        
-        
-    - two type of comments /* */ and // (not compiled to css)
-        - syntax comment differences 
-        - /// = document comments     
-    
-    
-    - url() function parsing 
-    - calc() is not interpreted as sass syntax (except interpolation)
-    - min() / max() = if it contains a valid CSS value it is compiled to normal css (if not min() / max() is sass functions)
-    - selector combinators are supported in nesting as well  ( > , + )
-    - interpolation is resolved before selector parsing
-    - property nesting  prefixedProperty: {prop ....} (same namespace used)  
-    - if no property value is declared or null it won't be compiled to CSS
-    - custom propety (css variable) values are passed to CSS as they are (except interpolation)
-    - meta.inspect() preserves quotes 
-    
-    - & = parent selector (allowed at the beginning of the compound) 
-        - returns the whole coumpounded parent selector 
-    - placeholder selector (not included in CSS output) - @extend can include plaecholder 
-    
-    - interpolation #{} 
-        - returns an unquoted string  ( use string.unquote() instead)
-        - not a good idea of passing numbers 
-        
-    
-    - sass cli demo
-        - install sass = available on the cmdl = Syntax DEMO
-            - --watch = watch files 
-            - directory watch SYNTAX = Demo it
-            
-            
-            
-    -  variable (can be declared anywhere) (- and _ are the same in sass as var id)      $varName: cssValue
-         - sass variable = imperative
-         - css variable = declarative 
-         - !default (flag) (can be over overriden when loading module)
-         - variables are scoped (the !global flag makes them global)
-         - variables in control flow ???????????? TEST
-         - variable functions meta.variable-exist() / meta.global-variable-exist()
-    - operators 
-    - nesting 
-        
-    
-    
-    - partials 
-        _partials.scss      used @use
-    - modules
-        @use
-        
-        
-        
-    - mixin = makes css group declarations 
-        - @mixin
-        - @include
-    - inherit / extend 
-        - %inheritName
-        - @extend 
-    
-    
-    - @ (at roules)
-        
-        
-??????????????????????????????????????????????????????????????????????????????????????????
-    - dart-sass VS LibSass VS Ruby Sass ??? difference??? TEST
-    - what is going on with the sass VS scss Syntax difference 
-    
--->
-
-
-
-
-  <details class="example" open>
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> variables TEST</u></h4>
-    <p class="sassVar"> test sass var </p>
-    <details>
-      <summary> CODE : </summary>
-      <pre>
--- CODE (HTML) --
-    &lt;p class="sassVar"&gt; test sass var &lt;/p&gt;
-    
--- CODE (SCSS) --
-    $fontColor: rgb(125, 32, 220);
-    $textDeco: underline;
-    $bgColor: white;
-    $customBorder: solid 2px black;
-    
-    .sassVar {
-        color: $fontColor;
-        text-decoration: $textDeco;
-        background-color: $bgColor;
-        font-size: 2em;
-        border: $customBorder;
-    }
-        </pre>
-    </details>
-
-
-  </details>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!--
-    - notes while testing is written in comments like this!
-
-
--->
-
-
-
-
-
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  <hr>
-  <hr>
-  <hr>
-  <hr>
-  <hr>
-
-
-
+  <p> - SASS is a CSS preprocessor supporting 2 syntaxes, css-like syntax <mark>*.scss</mark> and indented syntax
+    <mark>*.sass</mark> (scss is the most common)
+  </p>
+  <p> - the SASS language is built on top of regular CSS which means it's fully compatible with the CSS syntax </p>
   <pre class="syntax">
-SYNTAX :    main syntax
-            <em>literally used print syntax</em>
-            <prot style="color:#049500;">prototype chain</prot>
-            <strong>required value </strong>
-            <i>optional value </i>
-                - some descriptions will come here (like arguments)
-                - ??? (3 question marks) in syntax means not tested or not learned yet
-    </pre>
-  <pre>
-    examples of the current lessons 
+    <span style="color:darkgray;">// SCSS (file extension <mark>*.scss</mark>)                   // SASS (file extension <mark>*.sass</mark>)</span>
+    $someVar: 'test';                                 $someVar: 'test'
     
-// -----------------------------------------
-
-// -----------------------------------------
-
-    </pre>
-  <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-
-
+    .testSelector {                                   .testSelector
+        color: white;                                     color: white
+    }                             
+  </pre>
+  <pre class="syntax">
+    $someVal: <strong>exp</strong>;                   // the variable value is a sass expression 
+    
+    <strong>selectorExp</strong> {                    // the css selector is a sass expression
+        <strong>cssProperty</strong>: <strong>cssValueExp</strong>;    // the css value is a sass expression 
+        
+        // some comment              // on top of regular css comment sass supports JavaScript style comments
+    }
+  </pre>
   <details class="example">
     <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> example title </u></h4>
-    <p> - live tests will come here </p>
-    <details>
-      <summary> CODE : </summary>
-      <pre>
-    copy of the exaple code 
-        </pre>
-    </details>
+    <pre>
+// SCSS (file extension <mark>*.scss</mark>) ---------------------
+    $my-border: solid black 2px;
+    $yellow: yellow;
+    
+    #someElement {
+        $nestedColor: white;      // variable available in this or any nested scopes
+        
+        border: $my-border;
+        
+        .anotherElement { }       // -! because of nesting rules this selector can only target child elements of <mark>#someElement</mark>   
+        
+        p {                       // when transpiled this becomse <mark>#someElement p</mark>
+            color: $yellow;
+        
+            span {                // when transpiled this becomse <mark>#someElement p span</mark>
+                color: $nestedColor;
+            }
+        }
+    }
+    
+    
+// SASS (file extension <mark>*.sass</mark>) ---------------------
+    $my-border: solid black 2px
+    $yellow: yellow
+    
+    #someElement
+        $nestedColor: white
+        border: $my-border
+    
+        p
+            color: $yellow
+    
+        span
+            color: $nestedColor
+    </pre>
+    <h4 class="header"> comments </h4>
+    <pre>
+  h1 {
+      color: red;
+      /* border-color: white; */        // regular css comment
+      // border-color: white;           // sass comment 
+  }
+    </pre>
+    <h4 class="header"> expressions </h4>
+    <pre>
+    $gray: gray;
+    $myColor: dark#{$gray};         // variable values are expressions
+    $myProperty: color;
+    $mySelector: test;
+    
+    div.#{$mySelector} {            // selectors are expressions
+      #{$myProperty}: $myColor;     // property values are expressions
+    }
+    </pre>
   </details>
-  <!---------------------------------------------------------------------------------------------------------------------------------->
   <hr>
-
-  <h2 class="test" style=""><a href="TEST/index.html"> TEST (empty) > </a></h2>
+  <h2 class="header"> Variable, Nesting (scopes) and Selection </h2>
+  <p> - SASS supports nesting which means only child elements can be selected within a selected scope </p>
+  <p> - variables are available in the current or any nested scopes </p>
+  <pre class="syntax">
+    $<strong>varName</strong>: <strong>val</strong>;                   // global variable 
+    
+    <strong>parentSelector</strong> {
+        $<strong>varName</strong>: <strong>val</strong> <small>!global</small>;       // local variable (available within this or any nested scopes) (<small>!global</small> handles this variable as global variable)    
+        
+      <span style="color:darkgray;">// selecting element within a scope ----------------</span>
+        <strong>selector</strong> {}                  // selects any child elements of <strong>parentSelector</strong> 
+        & {}                         // parent selector, selects the parent within its scope (ex: <mark><strong>parentSelector</strong>:hover</mark>)   
+        @at-root <strong>selector</strong>            // selects any element in the document (root selector)
+    }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <h4 class="header"> variables </h4>
+    <pre>
+    $my-border: solid black 2px;
+    $yellow: yellow;
+    $yellow: orange;                  // reassigning variable 
+    
+    .test {
+      $nestedColor: white;            // available in this or any nested scopes
+      $yellow: lightyellow;
+    
+      border: $my-border;
+    
+      p {
+        $yellow: white !global;       // -! this will reassign the global variable
+    
+        span {
+          color: $yellow;
+        }
+      }
+    }
+    
+    #test2 {
+      p {
+        color: $nestedColor;          // not available here (because variable defined in another scope not in the global scope)
+      }
+    }
+    </pre>
+    <h4 class="header"> nesting </h4>
+    <pre>
+    $my-border: solid black 2px;
+    $yellow: yellow;
+    
+    #someElement {
+        $nestedColor: white;      // variable available in this or any nested scopes
+        
+        border: $my-border;
+        
+        .anotherElement { }       // -! because of nesting rules this selector can only target child elements of <mark>#someElement</mark>   
+        
+        p {                       // when transpiled this becomse <mark>#someElement p</mark>
+            color: $yellow;
+        
+            span {                // when transpiled this becomse <mark>#someElement p span</mark>
+                color: $nestedColor;
+            }
+        }
+    }
+    </pre>
+    <h4 class="header"> combinators in nesting </h4>
+    <pre>
+    .test {
+      > p {                   // becomes <mark>.test > div</mark>
+        border: solid 2px red;
+      }
+    }
+    
+    .test {
+      + div {                 // becomes <mark>.test + div</mark>
+        color: red;
+      }
+    }
+    </pre>
+    <h4 class="header"> property postfix nesting </h4>
+    <pre>
+    .test {
+      border: {
+        color: red;           // <mark>border-color</mark>
+        width: 5px;           // <mark>border-width</mark>
+        style: dotted;        // <mark>border-style</mark>
+      }
+      margin: {
+        left: 100px;          // <mark>margin-left</mark> 
+        right: 100px;         // <mark>margin-right</mark> 
+      }
+    }
+    </pre>
+    <h4 class="header"> parent selector <mark>&</mark> </h4>
+    <pre>
+    .test {
+      &:hover {                 // becomes <mark>.test:hover</mark>
+        color: white;
+      }
+    }
+    </pre>
+    <h4 class="header"> <mark>@at-root</mark> </h4>
+    <pre>
+    .test {
+      p {
+        
+        span {
+          color: yellow;
+          
+          @at-root .test2 {          // selects <mark>.test2</mark> on the root element
+            color: green;
+          }
+        }
+      }
+    }
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="headerExtra"> Data Types </h2>
+  <p> - in SASS any value other than <mark>false</mark> and <mark>null</mark> evaluates false (ex: an empty string,
+    <mark>0</mark>
+    evalues false)
+  </p>
+  <p> - is SASS values are <u>immutable</u> (ex: adding a new member to a list won't modifiy the original list) </p>
+  <p> - SASS provides a handful of builtin functions to operate with sass values (like <mark>map.get()</mark>, etc...)
+    <a href="https://sass-lang.com/documentation/modules" target="_blank">[link]</a>
+  </p>
+  <pre class="syntax">
+<span style="color:darkgray;">// string ---------------------------------------</span>
+    <strong>"string"</strong> <strong>'string'</strong> <strong>string</strong>         // strings can be written in double or single quotes or without qoutes (unquoted string should be used for css values only (ex: <mark>white</mark>))
+    <strong>'abc<mark>\<strong>escapedChar</strong></mark>'</strong>                // character that follows the <mark>\</mark> is escaped <u>a unicode hex value can be used as well (ex: <mark>'test \1F494'</mark> -> <mark>test 💔</mark>)</u>
+    <strong>'abc<mark>#{<strong>exp</strong>}</mark>'</strong>                      // interpolation -> expression evaluated in <mark>#{}</mark> and converted to string   
+    
+    
+<span style="color:darkgray;">// number ---------------------------------------</span>
+    <strong>numberUnit</strong>                       // numbers are composed of a number and its unit, the only case recommended to omit unit is <mark>0</mark>
+                                     // numbers are stored as 64bit double precision (sass represents as 10 digits)
+                                     // scientific notation is supported (ex: <mark>4.4e</mark>)
+    
+    
+<span style="color:darkgray;">// boolean & <mark>null</mark> -------------------------------</span>
+    <mark>true</mark>
+    <mark>false</mark>
+    <mark>null</mark>
+    
+    
+<span style="color:darkgray;">// map ------------------------------------------</span>
+    (<strong>key:any</strong>:<strong>val</strong><i>, ...</i>)               // a map holds key value pairs (maps are iterable)    
+    
+    
+<span style="color:darkgray;">// list -----------------------------------------</span>
+    (<strong>val</strong><i>, ...</i>)                       // a list holds a value sequence (in sass iterables start with index <mark>1</mark>)
+    <strong>val</strong><i>, ...</i>                         // lists can be written without parentheses
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <h4 class="header"> string </h4>
+    <pre>
+    @use 'sass:string';
+    
+    'someString';
+    "someString";
+    someString;                                   // unquoted strings can be used but not recommended (because they are used for css values (ex: <mark>white</mark>))   
+    
+    
+    @debug 'It\'s my life';                       // -> It's my life      // <mark>\</mark> escapes the next characer
+    @debug test\1F494;                            // -> test 💔           // unicode hex value interpreted after <mark>\</mark>
+    
+    
+    $place: 'World';
+    @debug 'Hello #{$place}!';                    // -> Hello World!      // interpolation
+    
+    
+    @debug string.slice('This is my test', 1, 4); // -> This              // sass indexes start with 1
+    </pre>
+    <h4 class="header"> number </h4>
+    <pre>
+    $someSize: 4px;
+    $someSize2: 0;            // only the 0 should be written without unit
+    $someSize3: 4.4e;         // scientific notation supported
+    
+    
+    @debug 1px + 1px;         // -> 2px       // operation should be performed between same uints
+    @debug #{1}px + #{1}px;   // -> 1px1px    // because interpolation converts values into string
+    </pre>
+    <h4 class="header"> map </h4>
+    <pre>
+    @use 'sass:map';
+    
+    $myMap: ('key': 21, 1: 22, true: 23, null: 24);     // key can be any value
+    
+    @debug map.get($myMap, 'key');                      // -> 21
+    @debug map.get($myMap, 1);                          // -> 22
+    @debug map.get($myMap, true);                       // -> 23
+    @debug map.get($myMap, null);                       // -> 23
+    @debug map.get($myMap, 'noKey');                    // -> null      // no such key
+    
+    
+    @each $key, $val in $myMap {
+      @debug $key;                                      // -> 'key1'  /  'key2'
+      @debug $val;                                      // -> 21      /   22
+    }
+    
+    
+    @debug map.set($myMap, 'key3', 100);                // -> ('key': 21, 1: 22, true: 23, null: 24, 'key3': 100)
+    @debug $myMap;                                      // -> ('key': 21, 1: 22, true: 23, null: 24)     // sass values are immutable (original never changes)   
+    
+    
+    @debug map.merge($myMap, ('key3': 100));            // -> ('key': 21, 1: 22, true: 23, null: 24, 'key3': 100)
+    
+    
+    @debug map.has-key($myMap, 'key1');                 // -> true
+    @debug map.has-key($myMap, 'noKey');                // -> false
+    </pre>
+    <h4 class="header"> list </h4>
+    <pre>
+    @use 'sass:list';
+    
+    $list: ('a', 'b', 'c');
+    $list2: 'a', 'b', 'c';                  // parentheses can be omitted
+    $list3: 'a' 'b', 'c' 'd', 'e' 'f';      // we can use grouped members
+    
+    
+    @each $i in $list2 {
+      @debug $i;                            // -> 'a'  /  'b'  /  'c'
+    }
+    @each $i in $list3 {
+      @debug $i;                            // -> 'a' 'b'  /  'c' 'd'  /  'e' 'f'
+    }
+    
+    
+    @debug list.nth($list, 1);   -> 'a'     // iterables in SASS start with <mark>1</mark>
+    @debug list.nth($list, 3);   -> 'c'
+    @debug list.nth($list, 4);   -> 'c'     // index error
+    
+    
+    @debug list.append($list, 'e');         // -> 'a', 'b', 'c', 'e'
+    @debug $list;                           // -> 'a', 'b', 'c'      // immutable
+    
+    
+    @debug list.index($list, 'b');          // -> 2
+    @debug list.index($list, 'x');          // -> null
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="headerExtra"> Operators </h2>
+  <pre class="syntax">
+<span style="color:darkgray;">// arithmetic operators -------------------------</span>
+    <mark>+</mark> <mark>-</mark> <mark>*</mark> <mark>math.div(<strong>divident</strong>, <strong>divisor</strong>)</mark> <mark>%</mark>  // because of syntactical reasons the <mark>/</mark> cannot be used for division   
+                                         // perform arithmetic operations between same unit types (ex: <mark>10px + 10px</mark>)
+    
+    calc(<strong>cssCalculations</strong>)            // use the css <mark>calc()</mark> when result needed on render (ex: <mark>calc(100vw - 100px)</mark>)   
+    
+    
+<span style="color:darkgray;">// comparison operators -------------------------</span>
+    <mark>==</mark> <mark>!=</mark>                            // equal, unequal
+    <mark><</mark> <mark><=</mark> <mark>></mark> <mark>>=</mark>                        // smaller, smaller or equal, larger, larger or equal
+  
+  
+<span style="color:darkgray;">// logical operators ----------------------------</span>
+    <mark>and</mark> <mark>or</mark> <mark>not</mark>                       // logical and, or, not
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <h4 class="header"> arithmetic operators </h4>
+    <pre>
+    @use 'sass:math';
+    
+    @debug 1 + 1;             // -> 2
+    @debug 3 - 1;             // -> 2
+    @debug 1 * 2;             // -> 2
+    @debug math.div(4, 2);    // -> 2
+    @debug 10 % 4;            // -> 2
+    </pre>
+    <h4 class="header"> comparison operators </h4>
+    <pre>
+    @debug 1 == 1;            // -> true
+    @debug 2 != 1;            // -> true
+    
+    @debug 1 < 2;             // -> true
+    @debug 2 <= 2;            // -> true
+    @debug 3 > 2;             // -> true
+    @debug 3 >= 2;            // -> true
+    </pre>
+    <h4 class="header"> logical operators </h4>
+    <pre>
+    @debug 'one' and 'two';   // -> 'two'
+    @debug 'one' or 'two';    // -> 'one'
+    
+    @debug not 'one';         // -> false
+    @debug not null;          // -> true    
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="headerExtra"> Statements </h2>
+  <h2 class="header"> <mark>@debug</mark> / <mark>@warn</mark> / <mark>@error</mark> statements </h2>
+  <pre class="syntax">
+  @debug <strong>exp</strong>;                        // prints the result of <strong>exp</strong> on the console
+  @warn <strong>exp</strong>;                         // prints the result of <strong>exp</strong> on the console as warning   
+  @error <strong>exp</strong>;                        // prinst the result of <strong>exp</strong> on the console as an error <u>and stops further execution</u> (throws an error)
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    @function sizeChecker($val) {
+        @debug 'checking #{$val} parameter';
+        
+        @if $val >100px {
+            @error 'parameter is bigger than 100px: #{$val}';
+        }
+      
+        @if $val > 50px {
+            @warn 'parameter is bigger than 10px: #{$val}';
+        }
+        
+        @return $val;
+    }
+    
+    @debug sizeChecker(40px);     // debug 
+    @debug sizeChecker(51px);     // debug  ->  warn
+    @debug sizeChecker(101px);    // debug  ->  error
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> <mark>@mixin</mark> / <mark>@extend</mark> / <mark>@function</mark> statements </h2>
+  <pre class="syntax">
+<span style="color:darkgray;">// mixin -----------------------------------------------------------------------------</span> 
+<span style="color:darkgray;">// (a mixin is basically a function having side effects (side effect -> css rules)) --</span>
+<span style="color:darkgray;">// -----------------------------------------------------------------------------------</span>
+    @mixin <strong>mixinName</strong><small>(<i>$arg, ..., <i class="openable">$key: val,<div>
+      <p> - keyword argument (default value used if no argument is passed) </p>
+    </div></i> <i class="openable">$arg...<div>
+      <p> - collect additional arguments and passes into the body in a list </p>
+    </div></i></i>)</small> {
+        <span style="color:darkgray;">// cssRules...</span>
+        <small>@content</small>                     // if at mixin <mark>@include</mark> we pass a block this is where it will included
+    }
+    
+    
+    <strong>selector</strong> {
+        @include <strong>mixinName</strong><small>(<i>val, ...</i>) {</small>  // using mixin 
+            <span style="color:darkgray;">// optional css rules</span>       // optionally we can include a body that extends the original mixin at <mark>@content</mark>
+        <small>}</small>
+    }
+    
+    
+<span style="color:darkgray;">// extend ----------------------------------------------------------------------------</span>
+<span style="color:darkgray;">// (extends the the styles of an element) --------------------------------------------</span>
+<span style="color:darkgray;">// -----------------------------------------------------------------------------------</span>
+    <strong>selector-1</strong> {
+        <span style="color:darkgray;">// css rules...</span>
+    }
+    
+    
+    <strong>selector-2</strong> {
+        @extend: <strong>selector-1</strong>;         // all <strong>selector-1</strong> element's styles are included here 
+    }
+    
+    
+<span style="color:darkgray;">// function --------------------------------------------------------------------------</span>
+<span style="color:darkgray;">// used to process some operation and return a value ---------------------------------</span>
+<span style="color:darkgray;">// -----------------------------------------------------------------------------------</span>
+    @function <strong>functionName</strong>(<i>$arg, ..., <i class="openable">$key: val,<div>
+      <p> - keyword argument (default value used if no argument is passed) </p>
+    </div></i> <i class="openable">$arg...<div>
+      <p> - collect additional arguments and passes into the body in a list </p>
+    </div></i></i>) {
+        <span style="color:darkgray;">// do some processing ...</span>
+        @return <strong>val</strong>;
+    }
+    
+    <strong>functionName</strong>(<i>val, ...</i>)           // calls the function and returns the value here 
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <h4 class="header"> mixin </h4>
+    <pre>
+    @mixin myTheme {
+        color: $color;
+        border: solid $color2 2px;
+    }
+    
+    #test {
+        @include myTheme;              // using mixint
+    }
+    
+    
+// mixing with arguments ------------------------------------------
+    @mixin someMixin ($color, $borderWidht: 10px) {
+        color: $color;
+        border: solid white $borderWidht;
+    }
+    
+    .test {
+        @include someMixin(red, 2px)
+    }
+    
+    .test2 {
+        @include someMixin(orange)       // default argument used here
+    }
+    
+    
+// mixing argument list -------------------------------------------
+    @mixin someMixing ($selectors...) {   // arguments are collected in a list
+        @each $selector in $selectors {
+            $selector;                    // -> '.test' / '.test2' / 'p'
+        }
+    }
+    
+    .test {
+        @include someMixing('.test', '.test2', 'p')
+    }
+    
+    
+// extending mixin ------------------------------------------------
+    @mixin someMixing {
+        color: red;
+        text-decoration: underline;
+        background-color: null;           // property omitted (value null)
+        @content;                         // will receive the mixin body at @include
+    }
+    
+    .test {
+        @include someMixing {             // this block is icluded at the mixin's <mark>@content</mark>
+            border: solid 2px black;
+        
+            &:hover {
+                background-color: white;
+            }
+        }
+    }
+    </pre>
+    <h4 class="header"> extend </h4>
+    <pre>
+    .test {
+        color: red;
+        border: solid 2px black;
+        background-color: white;
+        
+        &:hover {
+            background-color: cyan;
+        }
+    }
+    
+    .test2 {
+        @extend .test;                    // all <mark>.test</mark> css rules are used here
+    }
+    </pre>
+    <h4 class="header"> function </h4>
+    <pre>
+    @function addPixels($a, $b: 10px) {
+      @return $a + $b;
+    }
+    
+    @debug addPixels(5px);                  // -> 15px;
+    @debug addPixels(5px, 15px);            // -> 20px;
+    
+    
+    @function addAllPixels($pixels...) {
+      $result: 0;
+      @each $px in $pixels {
+        $result: $result + $px;
+      }
+    
+      @return $result;
+    }
+    
+    @debug addAllPixels(3px, 5px, 19px, 2px);  // -> 29px
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> <mark>@if...@else if...@else</mark> statement </h2>
+  <pre class="syntax">
+  @if <strong>exp</strong> {                          // if <strong>exp</strong> is truthy runs the code block 
+      <span style="color:darkgray;">//someCode...</span>
+  } <small>@else if <strong>exp</strong> {</small>                   // if <strong>exp</strong> is truthy runs the code block (we can have as my <mark>@else if</mark> blocks as we like)
+      <span style="color:darkgray;">//someCode...</span>
+  <small>} @else {</small>                          // if all the above fails runs this code block 
+      <span style="color:darkgray;">//someCode...</span>
+  <small>}</small>
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    @function getColorShade($level) {
+        @if $level <= 2 {
+            @return lightgray;
+        } @else if $level <= 4 {
+            @return gray;
+        } @else if $level <= 6 {
+            @return darkgray;
+        } @else {
+            @error 'invalid shade';
+        }
+    }
+    
+    @debug getColorShade(1);    // -> lightgray
+    @debug getColorShade(3);    // -> gray
+    @debug getColorShade(5);    // -> darkgray
+    @debug getColorShade(8);    // -> error 
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> <mark>@each</mark> / <mark>@for</mark> / <mark>@while</mark> statement </h2>
+  <pre class="syntax">
+<span style="color:darkgray;">// <mark>@each</mark> ----------------------------------------</span>
+    @each <strong>$member</strong> in <strong>iterable</strong> {      // iterate for each element in sequence 
+        <strong>$member</strong>;                     // current member 
+    }
+    
+    
+<span style="color:darkgray;">// <mark>@for</mark> -----------------------------------------</span>
+    @for <strong>$member</strong> from <strong>numberA</strong> to <strong>numberB</strong> {   // iterate from <strong>numberA</strong> to <strong>numberB</strong> <u>(excludes <strong>numberB</strong>)</u>
+        <strong>$member</strong>;                             // current number (ex: <mark>1</mark> / <mark>2</mark> / ...)
+    }
+    
+    @for <strong>$member</strong> from <strong>numberA</strong> through <strong>numberB</strong> {  // iterate from <strong>numberA</strong> to <strong>numberB</strong> <u>(includes <strong>numberB</strong>)</u>
+        <strong>$member</strong>;                                 // current number (ex: <mark>1</mark> / <mark>2</mark> / ...)
+    }
+    
+    
+<span style="color:darkgray;">// <mark>@while</mark> ---------------------------------------</span>
+    @while <strong>exp</strong> {                     // runs a pass if <strong>exp</strong> is truthy 
+      <span style="color:darkgray;">//someCode...</span>
+    }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <h4 class="header"> <mark>@each</mark> </h4>
+    <pre>
+    $elements: '.test', '.test2', '.test3';
+    
+    @each $element in $elements {
+      #{$element} {
+        color: red;             // each element colored red
+      }
+    }
+    
+    
+    $colorMap: ('.test': red, '.test2': white, '.test3': forestgreen);
+    
+    @each $element, $color in $colorMap {
+      #{$element} {
+        color: $color;          // each element color mapped
+      }
+    }
+    
+    
+    $styleMap: 
+      '.test' red white,
+      '.test2' white green,
+      '.test3' yellow blue;
+    
+    @each $element, $elementColor, $backgroundColor in $styleMap {
+      #{$element} {
+        color: $elementColor;
+        background-color: $backgroundColor;
+      }
+    }
+    </pre>
+    <h4 class="header"> <mark>@for</mark> </h4>
+    <pre>
+    @for $member from 1 + 1 to 10 {
+      @debug $member;         // 1  /  2 ... 9          // excludes the last member
+    }
+    
+    @for $member from 1 + 1 through 10 {
+      @debug $member;         // 1  /  2 ... 10         // includes the last member
+    }
+    </pre>
+    <h4 class="header"> <mark>@while</mark> </h4>
+    <pre>
+    @function count($from, $to) {
+      @while $from <= $to {
+        @debug $from;         // 1  /  2  /  3  /  4  / 5
+        $from: $from + 1;
+      }
+      @return ''
+    }
+    
+    @debug count(1, 5);
+    </pre>
+  </details>
+  <!----------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="headerExtra"> Modules </h2>
+  <p> - SASS modules are called <u>partials</u>, these are files prefixed with an underscore (ex:
+    <mark>_module1.scss</mark>) that <u>won't be transpiled into css</u></p>
+  <p> - SASS supports <mark>*.sass</mark> <mark>*.scss</mark> and <mark>*.css</mark> modules </p>
+  <p> - SASS supports several builtin modules, these are useful for working with maps, list, strings etc... <a href="https://sass-lang.com/documentation/modules" target="_blank">[link]</a> </p>
+  <pre class="syntax">
+    @use <strong>url</strong> <small>[as <i>moduleName</i>]</small> <small class="openable">[with (<i>$var</i>: <i>val, ...</i>)]<div>
+      <p> overrides <i>$var</i> in the imported module, <i>var</i> value in the module must be declared as default value (ex: <mark>$someVar: 'val' !default</mark>)</p>
+    </div></small>   // imports <strong>url</strong> (loads the module only once)
+    
+    @forward <strong>url</strong> <small class="openable">[show|hide <i>$var</i>]<div>
+      <p> <small>show</small> - only the listed variables are forwarded (whitelist) </p>
+      <p> <small>hide</small> - other thane the listed variables are forwarded (blacklist)</p>
+    </div></small> <small class="openable">[with (<i>$var</i>: <i>val, ...</i>)]<div>
+      <p> overrides <i>$var</i> in the imported module, <i>var</i> value in the module must be declared as default value (ex: <mark>$someVar: 'val' !default</mark>)</p>
+    </div></small>   // forwards <strong>url</strong> (import and export in one statement)
+    
+<span style="color:orange;">// deprecated -----------------------------------</span>
+    @import <strong>url</strong>                                         // imports <strong>url</strong> (has <span class="openable">several disadvantages<div>
+      <p> - imported properties directly polute the global scope </p>
+      <p> - cannot have private members </p>
+    </div></span> over <mark>@use</mark>)
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    @use '../base';           // imports styles in here 
+    
+    
+// <mark>_base.scss</mark> (file) --------------------------------------
+    body {
+      background-color: white;
+      padding: 10px;
+    }
+    </pre>
+    <h4 class="header"> private members </h4>
+    <pre>
+    @use './module1' as m1;
+    
+    .test {
+      @include m1.box;                // imported mixin
+      padding: m1.add(10px, 6px);     // imported function
+    
+      span {
+        color: m1.$module_color;      // imported color
+      }
+    }
+    
+// <mark>_module1.scss</mark> (file) ------------------------------------
+    @mixin box {
+      border: solid 2px red;
+      background-color: lightblue;
+    }
+    
+    $module_color: lightgreen;
+    $_private: gray;                    // private variable (not exported)
+    
+    @function add($a, $b) {
+      @return $a + $b;
+    }
+    @function _private_add($a, $b) {    // private (not exported)
+      @return $a + $b;
+    }
+    </pre>
+    <h4 class="header"> default module variables </h4>
+    <pre>
+    @use './module1' with ($fontColor: yellow);   // overriding default variable
+    
+    @debug module1.$fontColor;                    // -> yellow
+    @debug module1.$fontColor2;                   // -> red
+    
+    
+// <mark>_module1.scss</mark> (file) ------------------------------------
+    $fontColor: white !default;                   // default values can be overriden on import 
+    $fontColor2: red !default;
+    </pre>
+    <h4 class="header"> <mark>@forward</mark> </h4>
+    <pre>
+    @use './module1';
+    
+    @debug module1.$mod2Var;        // -> module 2 variable value
+    @debug module1.$mod2Var2;       // -> module 2 variable value 2
+    
+// <mark>_module1.scss</mark> (file) ------------------------------------
+    @forward './module2';
+    
+// <mark>_module2.scss</mark> (file) ------------------------------------
+    $mod2Var: 'module 2 variable value';
+    $mod2Var2: 'module 2 variable value 2';
+    </pre>
+    <h4 class="header"> <mark>@forward</mark> (whitelist) </h4>
+    <pre>
+    @use './module1';
+    
+    h1 {
+      @include module1.fancyMixin;
+      color: module1.$fancyColor2;
+    }
+    
+// <mark>_module1.scss</mark> (file) ------------------------------------
+    @forward 'module2' show fancyMixin, $fancyColor2;        // whitelisted forwarding
+    
+// <mark>_module2.scss</mark> (file) ------------------------------------
+    $fancyColor: skyblue;
+    $fancyColor2: forestgreen;
+    
+    @mixin fancyMixin {
+      border: solid 2px white;
+    }
+    </pre>
+    <h4 class="header"> <mark>@import</mark> [DEPRECATED] </h4>
+    <pre>
+    @import './module1';
+    
+    @debug $fontColor;          // -> red     // imported property directly polute the global scope
+    
+// <mark>_module1.scss</mark> (file) ------------------------------------
+    $fontColor: red !default;
+    </pre>
+  </details>
+  <br><br>
+  
 </body>
 
 </html>
