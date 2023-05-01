@@ -12,7 +12,7 @@
 <h1> Components and JSX (ver 3.4.1) </h1>
     <p> Updated ( 2020-10-20 )</p>
     <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
-        <a href="../index.html" title="Learn WebDesign">React JS></a> Components and JSX 
+        <a href="../index.html" title="Learn WebDesign">React></a> Components and JSX 
     </p>
 <table class="table">
 <caption>
@@ -164,14 +164,14 @@
 <h2 class="headerExtra"><u> JSX and rendering <mark>ReactDOM.render()</mark> </u></h2>
     <p> - JSX (JavaScript XML) is a HTML-like script, React interprets and renders JSX as HTML </p>
     <pre class="syntax">
-JSX         &lt;<strong>rootnode</strong>&gt;                                                                         &lt;-- JSX must have ONE root node (Component Container)     
-                &lt;<strong>element</strong> /&gt;                                                                    &lt;-- JSX elements follow strict XML rules, every element must be properly closed   
-                &lt;<strong>element</strong>&gt;<i>content...</i>{<strong>exp</strong>}<i>content...</i>&lt;/<strong>element</strong>&gt;                                   &lt;-- <span class="openable">expressions<div>
+    &lt;<strong>rootnode</strong>&gt; or <small>&lt;React.Fragment&gt;|&lt;&gt;</small>                 // JSX must have wrapped in a root node <small>(from v.16.2 react fragment can be used (root that is not on DOM))</small>
+        &lt;<strong>element</strong> /&gt;                                   // JSX elements follow strict XML rules, every element must be properly closed   
+        &lt;<strong>element</strong>&gt;<i>content...</i>{<strong>exp</strong>}<i>content...</i>&lt;/<strong>element</strong>&gt;  // interpolation where an <span class="openable">expression<div>
                     <p> - can contain React variable, property or any JavaScript expression </p>
-                </div></span> can be written into curly brackets (<mark>{}</mark>)    
-                &lt;<strong>Component</strong> /&gt;                                                                  &lt;-- other components can be nested 
-                {/*<strong>comment</strong>*/}                                                                  &lt;-- comment (NO other HTML or JS comment syntax allowed)
-            &lt;/<strong>rootnode</strong>&gt;
+        </div></span> is interpreted 
+        &lt;<strong>Component</strong> /&gt;                                 // other components can be nested 
+        {/*<strong>comment</strong>*/}                                 // comment (NO other HTML or JS comment syntax allowed)
+    &lt;/<strong>rootnode</strong>&gt; or <small>&lt;/React.Fragment&gt;|&lt;/&gt;</small>
     </pre>
 <details class="example">
 <summary> DEMO </summary>
@@ -251,18 +251,22 @@ JSX         &lt;<strong>rootnode</strong>&gt;                                   
     <p> - there are 2 types of components in React <u>Function Components</u> and <u>Class Components</u>, <u style="color:yellow;">Component names must start with upper casse letter </u></p>
     <p> - Components can be stored in files (modules) we just need to export... import them where we want to render them </p>
     <pre class="syntax">
-SYNTAX:     
-  <span style="color:darkgray;">// Class Component ------------------------------------------------------------------</span>
-            class <strong>Component</strong> extends React.Component{                                   // Class Component extends the <mark>React.Component</mark> class, so the created component has access to all React.Component functions    
-                <small>constructor(){ super() }</small>                                               // if the constructor is present the <mark>super()</mark> is required which calls the parent class constructor   
-                render(){ return <small>(</small><strong>JSX</strong><small>)</small> }                                               // render method is required, it must returns a JSX which composes the actual Component   
-            }
-            
-            
-  <span style="color:darkgray;">// Function Component ---------------------------------------------------------------</span>
-            function <strong>Component</strong>(){                                                      // Function Component is a simple JavaScript function which returns JSX    
-                return <small>(</small><strong>JSX</strong><small>)</small>                                                              does not implement <mark>state</mark> and lifecycle methods
-            }
+<span style="color:darkgray;">// Class Component ------------------------------------------------------------------</span>
+    class <strong>Component</strong> extends React.Component{          // Class Component extends the <mark>React.Component</mark> class, so the created component has access to all React.Component functions    
+      constructor(<strong>props</strong>){ 
+        super(<strong>props</strong>)
+      }
+        
+      render(){                                       // render method is required, it must returns a JSX which composes the actual Component   
+        return <strong>JSX</strong>
+      }
+    }
+    
+    
+<span style="color:darkgray;">// Function Component ---------------------------------------------------------------</span>
+    function <strong>Component</strong>(<strong>props</strong>){                        // Function Component is a simple JavaScript function which returns JSX    
+      return <strong>JSX</strong>                                      // does not implement any lifecycle methods (this is managed through hooks)
+    }
     </pre>
 <details class="example">
 <summary> DEMO </summary>
