@@ -26,10 +26,14 @@
       </tr>
       <tr>
         <td>
-          mongosh
+          mongosh <opt>[options]</opt>
         </td>
         <td>
-          - enter Mongo Shell
+          - enter Mongo Shell <br>
+          - if authentication enabled, we still can enter the mongo shell but our acctions are restricted <br>
+          <opt>[options]</opt> <br>
+          - (<opt>-u <optval>user</optval></opt>) user for authentication <br>
+          - (<opt>-p <optval>password</optval></opt>) password for authentication
         </td>
       </tr>
       <tr>
@@ -257,248 +261,58 @@
       </details>
       <hr>
       <!------------------------------------------------------------------------------------------------------>
-      <h2 class="header"> Authentication </h2>
-
-
-
-
-
-
-<!--
-  - by default authentication is disabled (for easier hands on start experiment), but it's heavily reocmmended to enable for prod environments 
-
--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <!--
-    // mongoexport mongoimport utilities
-    $ mongoexport --collection <collection> --db <database> --out <connectionString>
-    
-    
-    $ mongoimport [options] <connectionString> <filePath>
-        [options]
-          --collections <collection>
-          --db <db>
-    
-    
-    $ mongodump -d <dbName> -o <dirPath>
-
-///////////////////////////////////////////////////////////////////////////
-// gridFS
-///////////////////////////////////////////////////////////////////////////
-    - to store files that are larger than 16MB use gridFS, does it by storing the file in 255 KB chunks
-    - gridFS stores files in 2 collections (this is for efficiency reasons (ex: if you want some metadata we don't have to fetch the whole file))
-        - chunks -> the actual data stored in chunks
-        - files  -> metadata of the files 
-        
-        - the file can be accessed on arbitrary session like in the middle of an audio or video 
-        
-        - we don't have to load the entire file in memory (great!) -> yeah thats really great!
-        https://www.mongodb.com/docs/manual/core/gridfs/
-
-
-    // MongoDB provides the mongofiles CLI
-        // Each Programing language has its own driver to imlement GridFS
-
-
-
-    // why use girdFS over File system storage
-        Advantage:
-            - your files are stored along with your data, this provides a more seamless integration
-            - all MongoDB goodies are applicable, backup, replication, access control, etc...
-        Disatvangage:
-            - for lots of file is better to use FS
-
-
-
-    // CMD
-        mongofiles [options] [connectionString] <CMD> <fileName>        <fileName> how we store the file in the DB 
-            [options]
-                --username
-                --password
-                --local=<pathToFile>
-                -- https://www.mongodb.com/docs/database-tools/mongofiles/#options
-        
-
-      mongofiles put
-      mongofiles list
-      mongofiles search <name>      // any portion
-      mongofiles get                // copies the file in the current directory     --local="relative path including the desired file name"
-      
-
-
-      // apparently we can hierarchy structure files in mongofiles (nope!)
-
-
-
-
-
-
-    
-// view
-    // TODO...
-    
-
-
-// schema??
-    // TODO...
-    
-    
-    
-
-
-    var = <val>           // variable 
-
-
-
-///////////////////////////////////////////////////////////////////////////
-// general description
-///////////////////////////////////////////////////////////////////////////
-    - MongoDB 7.0.11
-    - MongoDB shell
-
-
-
-    - MongoDB is an open-source NoSQL document oriented database that provides high scalability
-    - mongodb runs as a service (daemon)
-    - has mango shell 
-    - mongoDB Compas is a GUI client
-
-
-    - Database -> Collection -> Document
-    - Documents are stored BSON (Binary JSON)
-        - this is JSON basically with the extension that we also can store binary data 
-        - every document has an _id that identifies the document which is unique in the database (automatically created whith the document)
-            - the value of _id can be set by the user
-        - document size max 16 Mega Bytes
-
-
-    - mongoDB is schmealess (but we can enforce schema link it!)
-
-
-
-
-
-cmd:
-    mongosh                                       - enter mongo shell
-    
-    help                                          - help doc
-    cls                                           - clear screen
-    
-    exit                                          - exit mongoshell
-    
-
-
-
-
-
--->
-
-      <!--
-[ DO THIS AT THE END ]
-// authentication: https://www.geeksforgeeks.org/how-to-enable-authentication-on-mongodb/?ref=lbp
-    - disabled by default
-    
-    - we have to create 
-    
-    
-    -- admin roles
-        userAdminAnyDatabase: full access
-        read: allows the user to read data from a database.
-        readWrite: allows the user to read and write data to a database.
-        dbAdmin: allows the user to perform administrative tasks for a single database, such as creating indexes and viewing statistics.
-        userAdmin: allows the user to manage users and roles for a single database.
-        clusterAdmin: allows the user to perform administrative tasks for a cluster, such as adding and removing shards and viewing diagnostic information.
-        backup: allows the user to perform backups of a cluster.
-        restore: allows the user to restore backups of a cluster.
-    
-
-
-
--->
-
-      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-      <hr>
-      <hr>
-      <hr>
-      <hr>
-      <hr>
-
-      <h2 class="headerExtra"><u> Title 1 </u></h2>
-      <h2 class="header"> Title 1.1 </h2>
-      <h3 class="header"> Title 1.1.1 </h3>
-      <h4 class="header"> Title 1.1.1.1 </h4>
-      <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-      <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-      <p style="text-decoration:underline;"> - important information is underlined </p>
-      <p style="color:yellow;"> - very important information is written with yellow colors </p>
-      <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-      <div style="background-color:red;">
-        <p> - red background block means not learned or not tested information! </p>
-        <p> - </p>
-      </div>
-
+      <h2 class="header"> Authentication <a href="https://www.mongodb.com/docs/manual/core/authentication/" target="_blank">[link]</a></h2>
+      <p> - MongoDB provide lots of authentication mechanisms, the most common authentication method is SCRAM (Salted Challenge Response Authentication Mechanism) (user + password authentication) </p>
+      <p> - by default authentication is disabled (for easy hands on experience), but it's highly recommended to enable it for real data storage </p>
+      <p> - authentication can be enable through the mongo config file <a href="https://www.mongodb.com/docs/manual/reference/configuration-options/#configuration-file" target="_blank">[link]</a> (restart the server once authentication is enabled) </p>
+      <p> - after the authentication is enabled we are allowed to <u>create <b>one</b> user if we connect through <mark>mongosh</mark> from localhost</u> </p>
+      <p> - the authentication is valid for all MongoDB tools (ex: <mark>mongodump</mark>) </p>
+      <p> - MongoDB authentication is role based (users have assigned roles to do limited actions), <a href="https://www.mongodb.com/docs/manual/reference/built-in-roles/" target="_blank">[MongoDB user roles]</a> </p>
       <pre class="syntax">
-    <reqval>required value </reqval>
-    <optval>optional value </optval>
-    <lit>literally used </lit>
-    <opt>optionally used </opt>
-  
-    <prot style="color:#049500;">prototype chain</prot>
-        
-    <span class="openable"> this is an openable element<div>
-        <p> - openable elements listed here in paragraphs </p>
-        <p> - </p>
-    </div></span>
-    </pre>
-
-      <details class="example">
-        <summary> DEMO (can be pseudocode) </summary>
-        <pre>
-    examples of the current lessons 
+// MongoDB config file -
+    security:
+        authorization: enabled|disabled                // enables|disables authentication
+      </pre>
+      <pre class="syntax">
+// get current user --------------
+    db.runCommand({ connectionStatus: 1 }).authInfo.authenticatedUsers
     
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
-      </details>
-
+    
+// list users -----------------
+    use <reqval>db</reqval>         // select db where the user is (<mark>admin</mark> for administrators)   
+    db.getUsers()
+    
+    
+// create new user -----------
+    use <reqval>db</reqval>         // select db where the user is (<mark>admin</mark> for administrators)   
+    db.createUser({
+      user: '<reqval>user</reqval>',
+      pwd: '<reqval>password</reqval>'|passwordPrompt(),      // the <mark>passwordPrompt()</mark> will prompt for the password after user creation (to hide the password from shell history)
+      db: '<reqval>db</reqval>'                   // db for which the user is created (<mark>admin</mark> for administrators)
+      roles: [
+        { role: '<a href="https:\/\/www.mongodb.com/docs/manual/reference/built-in-roles/" target="_blank">userRole</a>', db: '<reqval>db</reqval>' },    // list user roles for databases
+        <optval>...</optval>
+      ]
+    })
+    
+    
+// delete user ------------------
+    use <reqval>db</reqval>         // select db where the user is (<mark>admin</mark> for administrators)   
+    db.dropUser('<reqval>user</reqval>')
+      </pre>
       <pre class="cmd">
-    command line demo 
-    </pre>
-      <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-      <details class="example">
-        <summary> Example : </summary>
-        <h4 style="color:darkblue;"><u> example title </u></h4>
-        <p> - live tests will come here </p>
-        <details>
-          <summary> CODE : </summary>
-          <pre>
-    copy of the exaple code 
-        </pre>
-        </details>
-      </details>
-      <!---------------------------------------------------------------------------------------------------------------------------------->
-      <hr>
-
-      <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
+    use admin                                         // create admin user with full access
+    db.createUser(
+      {
+        user: "myUserAdmin",
+        pwd: passwordPrompt(),
+        roles: [
+          { role: "userAdminAnyDatabase", db: "admin" },
+          { role: "readWriteAnyDatabase", db: "admin" }
+        ]
+      }
+    )
+      </pre>
 
       <br><br>
     </body>
