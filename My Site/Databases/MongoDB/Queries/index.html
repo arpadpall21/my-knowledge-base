@@ -28,6 +28,31 @@
     </tr>
     <tr>
       <td>
+        db.<reqval>collection</reqval>.insertOne(<reqval>BSON</reqval>, <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.insertOne/#syntax" target="_blank">options</a>)
+      </td>
+      <td>
+        - insert one <reqval>BSON</reqval> document <br>
+        - creates the database and|or the collection if not yet exist <br>
+        - the <mark>_id</mark> unique field is required (but automatically created if we don't add one)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        db.<reqval>collection</reqval>.insertMany([<reqval>BSON</reqval>
+        <optval>, ...</optval>], <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.insertMany/#syntax" target="_blank">options</a>)
+      </td>
+      <td>
+        - insert multiple <reqval>BSON</reqval> documents <br>
+        - creates the database and|or the collection if not yet exist <br>
+        - the <mark>_id</mark> unique field is required for each (but automatically created if we don't add one)
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
         db.<reqval>collection</reqval>.find(<reqval>filterObj</reqval>, <optval class="openable">{ key: 1|0, ... }<div>
             <p> <mark>Projection</mark> </p>
             <p> - controlls what fields to include|exclude in the returned documents </p>
@@ -68,51 +93,32 @@
     </tr>
     <tr>
       <td>
-        db.<reqval>collection</reqval>.insertOne(<reqval>BSON</reqval>, <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.insertOne/#syntax" target="_blank">options</a>)
+        db.<reqval>collection</reqval>.updateOne(<reqval>filterObj</reqval>, <reqval>updateObj</reqval>, <opt>option:obj</opt>)
       </td>
       <td>
-        - insert one <reqval>BSON</reqval> document <br>
-        - creates the database and|or the collection if not yet exist <br>
-        - the <mark>_id</mark> unique field is required (but automatically created if we don't add one)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        db.<reqval>collection</reqval>.insertMany([<reqval>BSON</reqval>
-        <optval>, ...</optval>], <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.insertMany/#syntax" target="_blank">options</a>)
-      </td>
-      <td>
-        - insert multiple <reqval>BSON</reqval> documents <br>
-        - creates the database and|or the collection if not yet exist <br>
-        - the <mark>_id</mark> unique field is required for each (but automatically created if we don't add one)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        db.<reqval>collection</reqval>.updateOne(<reqval>filterObj</reqval>, <reqval>updateObj</reqval>, <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/#syntax" target="_blank">options</a>)
-      </td>
-      <td>
-        - updates the 1st document filtered by <reqval>filterObj</reqval>
+        - updates the 1st document filtered by <reqval>filterObj</reqval> <br>
+        <opt>[options]</opt> <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/#syntax" target="_blank">[link]</a> <br>
+        - (<opt>upsert: true</opt>) upserts match (create one if not exist)
       </td>
     </tr>
     <tr>
       <td>
-        db.<reqval>collection</reqval>.updateMany(<reqval>filterObj</reqval>, <reqval>updateObj</reqval>, <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateMany/#syntax" target="_blank">options</a>)
+        db.<reqval>collection</reqval>.updateMany(<reqval>filterObj</reqval>, <reqval>updateObj</reqval>, <reqval>updateObj</reqval>, <opt>option:obj</opt>)
       </td>
       <td>
-        - updates all documents filtered by <reqval>filterObj</reqval>
+        - updates all documents filtered by <reqval>filterObj</reqval> <br>
+        <opt>[options]</opt> <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/#syntax" target="_blank">[link]</a> <br>
+        - (<opt>upsert: true</opt>) upserts match (create one if not exist)
       </td>
     </tr>
     <tr>
       <td>
-        db.<reqval>collection</reqval>.replaceOne(<reqval>filterObj</reqval>, <reqval>BSON</reqval>, <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.replaceOne/#syntax" target="_blank">options</a>)
+        db.<reqval>collection</reqval>.replaceOne(<reqval>filterObj</reqval>, <reqval>BSON</reqval>, <opt>option:obj</opt>)
       </td>
       <td>
-        - completely replaces the 1st document filtered by <reqval>filterObj</reqval>
+        - completely replaces the 1st document filtered by <reqval>filterObj</reqval> <br>
+        <opt>[options]</opt> <a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/#syntax" target="_blank">[link]</a> <br>
+        - (<opt>upsert: true</opt>) upserts match (create one if not exist)
       </td>
     </tr>
     <tr>
@@ -173,13 +179,13 @@
       <td></td>
     </tr>
     <tr>
-      <td colspan="2"> <mark>
+      <td id="filterObj" colspan="2"> <mark>
           <reqval>filterObj</reqval>
         </mark> </td>
     </tr>
     <tr>
       <td>
-        { <reqval>key</reqval>: <reqval>val|operatorExp</reqval>
+        { <reqval>key</reqval>: <reqval>val|RegExp|operatorExp</reqval>
         <optval>, ...</optval>}
       </td>
       <td>
@@ -324,7 +330,7 @@
       <td></td>
     </tr>
     <tr>
-      <td colspan="2"> <mark>
+      <td id="updateObj" colspan="2"> <mark>
           <reqval>updateObj</reqval>
         </mark> </td>
     </tr>
@@ -356,7 +362,7 @@
     </tr>
     <tr>
       <td>
-        { $rename: { <reqval>key</reqval>: <reqval>newNaem</reqval>
+        { $rename: { <reqval>key</reqval>: <reqval>newName</reqval>
         <optval>, ...</optval> } }
       </td>
       <td>
@@ -658,7 +664,10 @@
   <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
   <h2 class="headerExtra"> Queries </h2>
   <pre class="syntax">
-    db.<reqval>collection.someQueryMethod({ 'key.key' })    // to target nested keys use JavaScript style object accessor wrapped in quotes
+    db.<reqval>collection.someQueryMethod</reqval>({ <reqval>key: operationExpression</reqval> })
+    
+// queries to nested keys (fields) --------------
+    db.<reqval>collection.someQueryMethod</reqval>({ <reqval>'key.key....': operationExpression</reqval> })    // to target nested keys use JavaScript style object accessor wrapped in quotes
   </pre>
   <details class="example">
     <summary> Example : </summary>
@@ -914,6 +923,7 @@
       <optval>...</optval>,
     ])
   </pre>
+  <img style="display:block; margin:auto;" src="Aggregation.png" height="300">
   <details class="example">
     <summary> Example : </summary>
     <pre class="cmd">
@@ -960,7 +970,6 @@
     
     db.<reqval>viewName</reqval>.find(<optval>...</optval>)           // the view can be queried as a normal collection 
   </pre>
-  <img style="display:block; margin:auto;" src="Aggregation.png" height="300">
   <details class="example">
     <summary> Example : </summary>
     <pre class="cmd">
@@ -969,6 +978,11 @@
     db.twenty_nine.find()                                     // view queried as normal collection 
     </pre>
   </details>
+  <hr>
+  <!-------------------------------------------------------------------------------------------------->
+  <h2 class="headerExtra"> Change Stream </h2>
+  <p> - with change streams we can subscribe and get notified about any activity happening in a collection <a href="https://www.mongodb.com/docs/manual/changeStreams/" target="_blanc">[link]</a> </p>
+
 
   <br><br>
 </body>
