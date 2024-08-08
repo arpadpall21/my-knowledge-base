@@ -311,7 +311,7 @@
           <p> <mark>alias</mark>: <strong>str|str[]</strong> - field alias </p>
           <p> <a href="https:\/\/mongoosejs.com/docs/schematypes.html#schematype-options" target="_blank"> all options </a> </p>
         </div></reqval>
-        <reqval>key</reqval>: <reqval>schema</reqval>             // schema can be used as child document 
+        <reqval>key</reqval>: <reqval>childSchema</reqval>             // schema can be used as child document (to make the nested schema required use <mark>{ type: <reqval>childSchema</reqval> required: true }</mark>)
         <optval>...</optval>
     }, <reqval class="openable">option:obj<div>
       <p> <mark>timestamp</mark>: <strong>bool</strong> - automatically adds and updates the <mark>createdAt</mark> and <mark>updatedAt</mark> fields </p>
@@ -829,7 +829,7 @@
       </pre>
       <details class="example">
         <summary> DEMO (can be pseudocode) </summary>
-        <h4 class="header"> Custom Document & Schema methods </h4>
+        <h4 class="header"> Custom Document & Model methods </h4>
         <pre>
     import mongoose from 'mongoose';
     
@@ -856,20 +856,28 @@
       }
     });
     
-    personSchema.methods.getName = function () {                        // instance method added after schema creation
+    personSchema.methods.getName = function () {                        // document (instance) method added after schema creation
       return this.name
     }
-    personSchema.static.getByCity = function(city) {                    // static method added after schema creation
+    personSchema.static.getByCity = function(city) {                    // Model (static) method added after schema creation
       return this.find({ 'address.city': new RegExp(city, 'i') })
     }
     
     const Person = mongoose.model('friends', personSchema); 
     
     const pall = Person({ name: 'Pall' });
+    pall.name = 'Pall';
+    pall.address = {
+      city: 'Budapest',
+      street: 'Toplosi',
+      number: 32,
+    }
+    pall.getAddress();                        // -> address... (document methods)
+    pall.getName();                           // -> 'Pall'
+    await pall.save();
     
-    
-    await pall.getAddress();                            // -> custom Document method
-    await Person.findByName('Pall');                    // -> custom Schema method
+    await Person.findByName('Pall');           // -> result... (Model methods)
+    await Person.findByCity('Budapest');       // -> result...
       </pre>
         <!-------------------------------------------------------------------------------->
         <hr>
@@ -1033,7 +1041,7 @@
     import mongoose from 'mongoose';
     
     <reqval>schema</reqval> = new mongoose.Schema({
-        <reqval>key</reqval> { type: <reqval>mongooseType<reqval>, index: 1|-1|'text' },    // indexing (default, full-text and multikey indexing)
+        <reqval>key</reqval> { type: <reqval>mongooseType</reqval>, index: 1|-1|'text' },    // indexing (default, full-text and multikey indexing)
         <optval>...</optval>
     });
     
@@ -1137,7 +1145,7 @@
       <hr>
       <h2 class="header"> Transactions <a href="https://mongoosejs.com/docs/transactions.html" target="_blank">[link]</a></h2>
       <p> - unfortunatly <u>transactions are only working with replica sets</u> and pretty badly documented :/ </p>
-      <p> - we can use the <mark>bulkWrite()</mark> for transactions, but because mongoose is schema based (one schema allowed per collection) this makes less sence to use </p>
+      <p> - we can use the <mark>bulkWrite()</mark> for transactions, but this approach only works on the same Model </p>
       <details class="example">
         <summary> DEMO (can be pseudocode) </summary>
         <pre>
@@ -1163,16 +1171,16 @@
     const session = await mongoose.startSession();
     
     try {
-      session.startTransaction();
+      session.startTransaction();                                     // start transaction
       
       await Person.updateOne({ _id: personId }, { $inc: { wallet: 10 }}, { session });
       await Wallet.updateOne({ _id: personId }, { $inc: { balance: 10 }}, { session });
       
-      await session.commitTransaction();
+      await session.commitTransaction();                              // commit transaction 
     } catch (error) {
-      await session.abortTransaction();
+      await session.abortTransaction();                               // abort
     } finally {
-      session.endSession();
+      session.endSession();                                           // end transcation 
     }
         </pre>
       </details>
