@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> User Account </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+  <body>
+    <h1> User Account </h1>
+    <p> Updated ( 2020-07-26 / 2023-05-22 )</p>
+    <nav class="sitenav"> <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../index.html" title="Learn WebDesign">MySQL > </a> User Account
+    </nav>
+    <h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+      <summary> Notes :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - when connecting to a database at least the user must be specified </p>
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - a created new user has no grant to anything <mark>'.'</mark> </p> 
+    <pre class="syntax">
+    CREATE USER <strong>'userName'</strong><small>[@<i>'host'</i>]</small> <small>[IDENTIFIED BY <i>'passwd'</i>]</small>                   // creates a <span class="openable">new user account<div>
+                <p><u> - the user is created with no system privileges </u></p>
+                <p> - creates a new row in <mark>mysql.user</mark> system table </p>
+    </div></span> (optionally sets a password to it) <u>(the new user created with no priviledges)</u>
+                                                                                  // (<small>@<i>host</i></small>) specifies the host from which this user can access this MySQL-server (Default: <mark>%</mark> = any host) 
+    
+    SELECT user, host FROM mysql.user                                                // lists all users 
+    SELECT user()|current_user()                                               // returns the current user 
+    
+    DROP USER <strong>'userName'</strong>@<strong>'host'</strong> <i>,...</i>                                           // deletes the specified user(s)    
+    RENAME USER <strong>'userName'</strong>@<strong>'host'</strong> TO <strong>'newUserName'</strong><small>[@<i>'host'</i>]</small>                    // renames the specified user account (account privileges are kept)
+    
+    ALTER USER <strong>'userName'</strong>@<strong>'host'</strong> IDENTIFIED BY <strong>'passwd'</strong>   // sets a new password to the account  
+    ALTER USER <strong>'userName'</strong>@<strong>'host'</strong> PASSWORD EXPIRE                               // expires the account's password (forces the user to set a new password the next time connects)
+    
+    
+// access control ---------
+    SHOW GRANTS FOR <strong>'userName'</strong><small>[@<i>'host'</i>]</small>                                        // displays the privileges (and roles) to the user account  
+    
+    GRANT <a href="https:/\/dev.mysql.com/doc/refman/8.4/en/grant.html" target="_blank">priviledge</a><optval> ...</optval> ON <strong class="openable">dbName.tableName<div>
+                <p> <mark>*.*</mark> - all databases and all tables (global privilege) </p>
+                <p> <mark>myDb.*</mark> - all tables in 'myDb' database (database privilege) </p>
+                <p> <mark>myDb.myTbl</mark> - table 'myTbl' in 'myDb' database (table privilege) </p>
+    </div></strong> TO <strong>'userName'</strong><small>[@<i>'host'</i>]</small>          // grant privileges to the specified user account on the specified database.table (new user accounts don't have any privileges)    
+    REVOKE <a href="https:/\/dev.mysql.com/doc/refman/8.4/en/grant.html" target="_blank">priviledge</a> ON <strong class="openable">dbName.tableName<div>
+                <p> <mark>*.*</mark> - all databases and all tables (global privilege) </p>
+                <p> <mark>myDb.*</mark> - all tables in 'myDb' database (database privilege) </p>
+                <p> <mark>myDb.myTbl</mark> - table 'myTbl' in 'myDb' database (table privilege) </p>
+    </div></strong> FROM <strong>'userName'</strong><small>[@<i>'host'</i>]</small>            // revokes the specified privilege from the user account 
+    </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
+// SLELECT user() / SELECT user, host FROM mysql.user ---------------------------------------
+    mysql> SELECT user();                                                              // returns the current user 
+    
+    mysql> SELECT user FROM mysql.user;                                                // prints all users 
+    mysql> SELECT user, host FROM mysql.user;                                          // prints all users with their host 
+    
+// CREATE USER / RENAME USER / DROP USER ----------------------------------------------
+    mysql> CREATE USER 'testUser'@'localhost' IDENTIFIED BY 'pass';                    // creates a new user account with password  
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> RENAME USER 'testUser'@'localhost' TO 'simpleUser'@'172.0.0.1';             // renames the user account (new host configured)   
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> DROP USER 'simpleUser'@'172.0.0.1';                                         // removes the user account 
+    Query OK, 0 rows affected (0.00 sec)
+    
+// GRANT / REVOKE / SHOW GRANTS FOR ---------------------------------------------------
+    mysql> GRANT ALL ON *.* TO 'testUser'@'localhost';                                 // the user account 'testUser' granted all priviledges on all databases 
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> REVOKE DROP ON *.* FROM 'testUser'@'localhost';                             // the user account 'testUser' cannot delete any database or table (DROP privilege revoked)   
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> SHOW GRANTS FOR 'testUser'@'localhost';                                     // displays the user account priviledges 
+    
+// ALTER USER -------------------------------------------------------------------------
+    mysql> ALTER USER 'testUser'@'localhost' IDENTIFIED BY 'newPass';                  // new password is set to the 'testUser' user account 
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> ALTER USER 'testUser2'@'localhost' PASSWORD EXPIRE;                         // expires the password of the 'testUser2' user account (the user must set a new password the next time connects)   
+    Query OK, 0 rows affected (0.00 sec)
+    </pre>
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>CREATE USER</mark> TEST </u></h4>
+      <pre class="cmd">
+// creating new users -----------------------------------------------------------------
+mysql> CREATE USER 'pall'@'localhost' IDENTIFIED BY 'pass';                            // user account created with password and host 
+Query OK, 0 rows affected (0.01 sec)
+    
+mysql> CREATE USER 'other';                                                            // user account created with no password and host (host defaults to % = any host)   
+Query OK, 0 rows affected (0.01 sec)
+    
+mysql> 
+    
+// log-in -----------------------------------------------------------------------------
+pall@Ryzen:~$ mysql -u pall -p                                                         // user has a password
+Enter password:                                                                        // password needed 
+    
+    // ----
+pall@Ryzen:~$ mysql -u other                                                           // user without password (logs-in without password)
+    </pre>
+      <hr>
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>DROP USER</mark> TEST </u></h4>
+      <pre class="cmd">
+mysql> DROP USER 'pall'@'localhost';                                                      
+Query OK, 0 rows affected (0.01 sec)
+    
+mysql> DROP USER 'other'@'%';                                                          // host not specified when created (default host name)
+Query OK, 0 rows affected (0.01 sec)
+    </pre>
+      <hr>
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>RENAME USER</mark> TEST </u></h4>
+      <pre class="cmd">
+mysql> RENAME USER pall@localhost TO Pall@172.0.0.1;    
+    </pre>
+      <hr>
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>GRANT</mark> / <mark>REVOKE</mark> TEST </u></h4>
+      <pre class="cmd">
+mysql> GRANT ALL ON test.* TO 'pall'@'localhost';                                      // the user is 'granted' all privileges in the 'test' database 
+Query OK, 0 rows affected (0.00 sec)
+    
+mysql> REVOKE DROP ON test.* FROM 'pall'@'localhost';                                  // the user cannot use any DROP statements (cannot remove any table from the 'test' database)   
+Query OK, 0 rows affected (0.01 sec)
+    </pre>
+    </details>
+
+    <br><br>
+  </body>
+</html>

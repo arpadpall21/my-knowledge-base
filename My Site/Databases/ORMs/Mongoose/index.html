@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Mongoose </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Mongoose </h1>
+    <p> Updated ( 2024-07-09 ) </p>
+    <nav class="sitenav">
+      <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../index.html" title="Learn WebDesign">ORMs > </a> Mongoose
+    </nav>
+    <p class="subSite"><a href="Data Types/index.html"> Data Types > </a></p>
+    <p class="subSite"><a href="Middlewares/index.html"> Middlewares > </a></p>
+    <p class="subSite"><a href="Plugins/index.html"> Plugins > </a></p>
+    <p class="subSite"><a href="Typescript Support/index.html"> Typescript Support > </a></p>
+    <table class="table">
+      <caption>
+        CLI
+      </caption>
+      <tr>
+        <th style="width:30%;"> CMD </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          mongosh
+        </td>
+        <td>
+          - open mongo shell
+        </td>
+      </tr>
+    </table>
+    <br>
+    <table class="table">
+      <caption>
+        Methods
+      </caption>
+      <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          mongoose.set(<a href="https://mongoosejs.com/docs/api/mongoose.html#Mongoose.prototype.set()" target="_blank">obj</a>)
+        </td>
+        <td>
+          - mongoose global configurations
+        </td>
+      </tr>
+      <tr>
+        <td>
+          mongoose.<a href="https://mongoosejs.com/docs/api/mongoose.html" target="_blank">method()</a>
+        </td>
+        <td>
+          - mongoose methods
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <reqval>Model</reqval>.<a href="https://mongoosejs.com/docs/api/model.html" target="_blank">modelMethod()</a>
+        </td>
+        <td>
+          - other model methods
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <reqval>document</reqval>.<a href="https://mongoosejs.com/docs/api/document.html" target="_blank">documentMethod()</a>
+        </td>
+        <td>
+          - document Methods (<mark><reqval>document</reqval></mark> is a <mark><reqval>Model</reqval></mark> instance)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <reqval>query</reqval>.<a href="https://mongoosejs.com/docs/api/query.html" target="_blank">queryMethod()</a>
+        </td>
+        <td>
+          - query methods (<mark><reqval>query</reqval></mark> returned by <mark>find|findOne()</mark> methods)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <reqval>schema</reqval>.<a href="https://mongoosejs.com/docs/api/schema.html" target="_blank">queryMethod()</a>
+        </td>
+        <td>
+          - schema methods
+        </td>
+      </tr>
+    </table>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <p> - At the time of making this documentation (2024-07-30 mongoose v8.5.0), <mark class="mark">mongoose</mark> is kind of crappy, here are my current thoughts: </p>
+      <p class="indent-lv1"> - the overall package dont' feel solid </p>
+      <p class="indent-lv1"> - week Typescript integration </p>
+      <p class="indent-lv1"> - the ide of field alias is great but currently half working :/ </p>
+      <p class="indent-lv1"> - transactions are no supported on a single mongoose instance (only on replica sets) </p>
+      <p class="indent-lv1"> - <a href="https://mongoosejs.com/docs/tutorials/getters-setters.html" target="_blank">[link]</a> field getters & setters only work on <mark><reqval>document</reqval></mark> which is kind of crapy, they should work on any CRUD operations (like in sequelize) </p>
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://mongoosejs.com/docs/index.html" target="_blank">mongoosejs.com </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+    
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - mongoose is a schema based ORM for mongoDB, we can define a single schema for one mongoDB colleciton </p>
+    <p> - we are declaring fields on Schemas, only the declared fields can be handled by mongoose (ex: if a Schema does not have the <mark>name</mark> field we cannot manipulate it <u>even if it's stored in the DB</u>) </p>
+    <p class="indent-lv1"> - <mark class="mark">aggregation</mark> <a href="https://mongoosejs.com/docs/queries.html#versus-aggregation" target="_blank">[link]</a> </p>
+    <p class="indent-lv1"> - <mark class="mark">change stream</mark> <a href="https://mongoosejs.com/docs/change-streams.html" target="_blank">[link]</a> </p>
+    <p class="indent-lv2"> - with change streams we can listen to any document updates <u>(feature only supported on replica sets)</u> </p>
+    <p class="indent-lv1"> - <mark class="mark">populate</mark> <a href="https://mongoosejs.com/docs/populate.html" target="_blank">[link]</a> </p>
+    <p class="indent-lv2"> - populate is a technique to reference a document from another collection </p>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Connection <a href="https://mongoosejs.com/docs/connections.html" target="_blank">[link]</a> </h2>
+    <pre class="syntax">
+      import mongoose from 'mongoose';
+      
+      await mongoose.connect(<reqval>mongoUrl:str</reqval>, <a href="https:\/\/mongoosejs.com/docs/connections.html#options" target="_blank">connOpt:obj</a>)         // connect (mongo url -> <mark>mongodb://<reqval>host</reqval>:<reqval>port</reqval>/<reqval>DB</reqval></mark>)  
+      
+      
+      mongoose.connection.on('<a href="https:\/\/mongoosejs.com/docs/connections.html#connection-events" target="_blank">ev</a>', <reqval>cb</reqval>)        // connection events can be listened (ex: <mark>error</mark>)
+      </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    
+// connection events ----------------
+    mongoose.connection.on('error', (err) => {                      // listening errors on an estabilished connection
+      console.error(err);
+    })
+        </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Shema & Model definition </h2>
+    <pre class="syntax">
+    import mongoose from 'mongoose';
+    
+    <reqval>schema</reqval> = new mongoose.Schema({           // shema definition 
+        <opt>_id: ObjectId(<optval>hex:str</optval>)</opt>                 // automatically generated (but we can handle it manually as well)
+        <reqval>key</reqval>: <reqval>mongooseType|</reqval><reqval class="openable">type:obj<div>
+          <p> <mark>type</mark>: <strong>mongooseType</strong> </p>
+          <p> <mark>required</mark>: <strong>bool</strong> </p>
+          <p> <mark>default</mark>: <strong>val</strong> - default value </p>
+          <p> <mark>index</mark>: <mark>1|-1</mark> - indexing this field </p>
+          <p> <mark>alias</mark>: <strong>str|str[]</strong> - field alias </p>
+          <p> <a href="https:\/\/mongoosejs.com/docs/schematypes.html#schematype-options" target="_blank"> all options </a> </p>
+        </div></reqval>
+        <reqval>key</reqval>: <reqval>childSchema</reqval>             // schema can be used as child document (to make the nested schema required use <mark>{ type: <reqval>childSchema</reqval> required: true }</mark>)
+        <optval>...</optval>
+    }, <optval class="openable">option:obj<div>
+      <p> <mark>timestamp</mark>: <strong>bool</strong> - automatically adds and updates the <mark>createdAt</mark> and <mark>updatedAt</mark> fields (Default: false) </p>
+      <p> <a href="https:\/\/mongoosejs.com/docs/guide.html#options" target="_blank">all options...</a> </p>
+    </div></optval>)                  // schema option object
+    
+    
+    <reqval>Model</reqval> = mongoose.model(<reqval>dbCollection:str</reqval>, <reqval>schema</reqval>)     // creating model (<reqval>dbCollection</reqval> -> mongoDB collection where this schema stores its documents)
+    
+    
+    
+// discriminators ----------------
+// (discriminators are basically Object Oriented style inherited Models) --
+    
+    <reqval>baseSchema</reqval> = new mongoose.Schema({ <optval>...</optval> }<opt>, { discriminatorKey: <optval>val</optval> }</opt>)    // base schema (a discriminator key is stored in each child document (default key: <mark>__t</mark>) this is how mongoose keeps track of child models)
+    <reqval>childSchema</reqval> = new mongoose.Schema({ <optval>...</optval> })
+    
+    <reqval>BaseModel</reqval> = mongoose.model(<reqval>dbCollection:str</reqval>, <reqval>baseSchema</reqval>)           // base schema (just like a normal schema)
+    <reqval>ChildModel</reqval> = <reqval>BaseModel</reqval>.discriminator(<reqval>disciriminatorKeyVal:str</reqval>, <reqval>childSchema</reqval>)     // child model inherits all properties from <reqval>BaseModel</reqval>
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/persons')
+      console.log('DB connection estabilished')
+    
+    const personSchema = new mongoose.Schema({                       // schema
+      name: { type: String, required: true },
+      surname: String,
+      male: { type: Boolean, default: true },
+    }, { timestamps: true });                                       // createAd & updateAt fields automatically added and handled
+    
+    const Person = mongoose.model('Col1', personSchema);             // model stores document in collection 'Col1' (created with lowercase letters -> 'col1)
+    
+    const pall = new Person({ name: 'Pall' })                      // creating documents
+    const july = new Person({ name: 'July', surname: 'Feragy', male: false })
+    
+    await pall.save();                                          // persisting the document to the DB
+    await july.save();
+    
+    
+    await Person.find();                               // -> get all records (the find method follows mongo shell's syntax)
+        </pre>
+      <!------------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Nested Schemas </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    
+    const addressSchema = new mongoose.Schema({
+      _id: false,                                         // won't add _id (nested shouldn't have ids)
+      city: String,
+      street: String,
+      number: Number,
+    })
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      address: addressSchema,                            // embeded schema
+    });
+    
+    
+    const Person = mongoose.model('col1', personSchema);
+    
+    const pall = new Person({
+      name: 'Pall',
+      address: {
+        city: 'Budapest',
+        street: 'Some Street',
+        number: 123,
+      }
+    })
+    
+    await pall.save();
+        </pre>
+      <!------------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Discriminator </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/animals');
+      console.log('DB connection estabilished');
+    
+    const animalSchema = new mongoose.Schema({
+      name: String,
+      isHouseAnimal: Boolean,
+    }, { discriminatorKey: 'anymalType' });         // custom discriminatorKey (default would be '__t')
+    const dogSchema = new mongoose.Schema({ numberOfLegs: Number });
+    const fishSchema = new mongoose.Schema({ numberOfFlippers: Number });
+    
+    const Animal = mongoose.model('animal', animalSchema);
+    const Dog = Animal.discriminator('Dog', dogSchema);         // 'Dog' -> discriminator key value 
+    const Fish = Animal.discriminator('Fish', fishSchema);      // 'Fish' -> discriminator key value
+    
+    
+    await Animal.create({
+      name: 'Generic animal',
+      isHouseAnimal: true,
+    });
+    
+    await Dog.create({
+      name: 'Scooby',
+      isHouseAnimal: true,
+      numberOfLegs: 4,
+    });
+    
+    await Fish.create({
+      name: 'Goldy',
+      isHouseAnimal: false,
+      numberOfFlippers: 2,
+    });
+        </pre>
+      <!------------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Validation </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: { 
+        type: String,
+        validate: {
+          validator(v) {                                                      // validator function
+            return /^[A-Z]/.test(v)
+          },
+          message: (props) => `${props.value} is not a valid name!`           // custom message
+        },
+        required: true,
+      },
+      age: { 
+        type: Number,
+        min: [18, 'value must be bigger or equal 18, got {VALUE}'],           // custom error message
+        max: [67, 'value must be smaller or equal 67, got {VALUE}'],
+      },
+      sex: {
+        type: String,
+        enum: {                                                               // enum style validation (this is awesome)
+          values: ['M', 'F'],
+          message: '{VALUE} is not supported (suppored values are M or F)',
+        }
+      },
+    })
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    const bob =  Person.create({                // all fails
+      name: 'bob',
+      age: 124,
+      sex: 'N'
+    });
+        </pre>
+      <!------------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> The <mark>path()</mark> method </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const addressSchema = new mongoose.Schema({
+      city: String,
+      street: String,
+      nr: Number,
+    })
+    
+    const personSchema = new mongoose.Schema({
+      name: { type: String, get(v){ return v.toUpperCase() }},
+      address: addressSchema,
+    })
+    
+    personSchema.path('name')                // getting info about the key (field)
+    personSchema.path('address.street')
+        </pre>
+      <!------------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Using the <mark>timestamps</mark> option to automatically timestamp mognoDB documents </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = mongoose.Schema({
+      name: String,
+    }, { timestamps: true });                 // automatically adds 'createdAt' and 'updatedAt' fields to the document
+    
+    const Person = mongoose.model('friends', personSchema);
+    
+    await Person.create({ name: 'Arpad' });
+        </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Validation </h2>
+    <p> - validation is performed on any save & update operations, mongoose validates values in 2 steps in this order: </p>
+    <p class="indent-lv1"> - <mark class="mark">casting</mark>: validates values against field constraints (like a number within a range) </p>
+    <p class="indent-lv1"> - <mark class="mark">custom validation</mark>: custom validator function (if any) </p>
+    <p><u> - important for update operations: </u></p>
+    <p class="indent-lv1"> - the <mark>{ runValidators: true }</mark> option is required in order to enable validation on update operations </p>
+    <p class="indent-lv1"> - validation is only performed for <mark>$set</mark> & <mark>$unset</mark> operations (ex: <mark>$inc</mark> (increment) operations ingore validation) </p>
+    <p class="indent-lv1"> - validation is NOT performed on the Array itself but only on individual array members (so no validation on <mark>$push</mark>, <mark>$addToSet</mark>, <mark>$pull</mark>, <mark>$pullAll</mark> operations ) </p>
+    <p> - the <mark>unique</mark> casting does not work on its own! field uniqueness can be enforced by unique indexing only (<mark><reqval>key</reqval>: { type: <reqval>mongooseType</reqval>, index: true, unique: true }</mark>) (see indexing) </p>
+    <pre class="syntax">
+    import mongoose from 'mongoose';
+    
+    <reqval>schema</reqval> = new mongoose.Schema({
+        <reqval>key</reqval>: {                                               // making child schema required
+          type: <reqval>childSchema</reqval>,
+          required: true,
+        }
+        <reqval>key</reqval>: {                                               // casting values
+            type: <reqval>mongooseType</reqval>,
+            <a href="https:\/\/mongoosejs.com/docs/schematypes.html#schematype-options" target="_blank">castingOptions</a>,
+            message: <reqval class="openable">errMsg<div>
+              <p> - we van interpolate the <mark>VALUE</mark> to prompt the input value (ex: <mark>"{VALUE} is smaller than 10"</mark>) </p>
+            </div></reqval>,                  // custom casting error message
+        },
+        <reqval>key</reqval>: {                                         // custom error message for number range casting 
+            type: Number,
+            min: [<reqval>nr</reqval>, <reqval class="openable">errMsg<div>
+              <p> - we van interpolate the <mark>VALUE</mark> to prompt the input value (ex: <mark>"{VALUE} is smaller than 10"</mark>) </p>
+            </div></reqval>],
+            max: [<reqval>nr</reqval>, <reqval class="openable">errMsg<div>
+              <p> - we van interpolate the <mark>VALUE</mark> to prompt the input value (ex: <mark>"{VALUE} is smaller than 10"</mark>) </p>
+            </div></reqval>],
+        },
+        <reqval>key</reqval>: {                                                       // custom validator 
+            type: <reqval>mongooseType</reqval>,
+            validate: {
+              validator: <reqval>fn(val)</reqval>,                                    // validator function, return <reqval>bool</reqval> for pass|fail validation
+              message: <reqval>fn(props)</reqval>,                                    // return a custom error message (<mark>props.value</mark> = error message)
+            },
+        },
+        <reqval>key</reqval>: {                                                       // custom promise validator <u>(requires <mark><reqval>document</reqval>.validate()</mark> promise if document validation used)</u>
+            type: <reqval>mongooseType</reqval>,
+            validate: {
+              validator: <reqval>fn(val):promise|promise</reqval>,                    // the rejected promise value is the validation error message
+            },
+        },
+        <optval>...</optval>
+    });
+    
+    
+    <reqval>Model</reqval> = mongoose.Model(<reqval>dbCollection:str</reqval>, <reqval>schema</reqval>)
+    
+    <reqval>document</reqval> = new <reqval>Model</reqval>({<optval>...</optval>});
+    <reqval>document</reqval><optval>....</optval>
+    
+    <reqval>document</reqval>.validateSync()                        // synchronous validations (returns <mark>undefined</mark> on success / <reqval>err</reqval> on fail)
+    await <reqval>document</reqval>.validate()                      // sync validation with promise
+    
+    
+    
+// enable validation on update operations -------------
+// ---------------------------------------------
+    await <reqval>Model</reqval>.update|updateOne(<reqval>filterObj, updateObj</reqval>, { runValidators: true })   // validation enabled 
+    
+    
+    
+// global schema type validation -------------
+// ---------------------------------------------
+    mongoose.Schema.Types.<reqval>mongooseType</reqval>.set('validate', <reqval>fn(val)</reqval>)         // <reqval>mongooseType</reqval> validated on all schemas (<reqval>fn(v)</reqval> retuns <reqval>bool</reqval> for pass|fail validation)
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/persons')
+      console.log('DB connection estabilished')
+    
+    const personSchema = new mongoose.Schema({
+      name: {
+        type: String,
+        required: true,                                     // required field (casting)
+        unique: true,
+        minLength: 3,
+        message: '{VALUE} is too short (must be at least 3 characters)',
+      },
+      age: {
+        type: Number,                                       // range casting
+        min: 3,
+        max: [100, '{VALUE} is invalid: age must be smaller or equal 100'],     // error message prompted on failed validation
+      },
+      sex: {
+        type: String,                                       // enum will be validated for allowed values
+        enum: ['M', 'F'],
+        message: '{VALUE} is not supported',                // error message prompted on failed validation
+      }
+    });
+    
+    const Person = mongoose.model('Col1', personSchema);
+    
+    const steven = Person();
+    steven.name = 'Steven';
+    steven.age = 39;
+    steven.sex = 'M';
+    steven.books = ['test']
+    
+    steven.validateSync();                   // -> undefined (on failed valdation returns ValidationError)
+        </pre>
+      <!------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Custom validators </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/persons')
+      console.log('DB connection estabilished')
+    
+    const personSchema = new mongoose.Schema({
+      name: {
+        type: String,
+        validate: {
+          validator: (v) => /^[A-Z].*/.test(v),                                   // custom validator 
+          message: (props) => `${props.value} must start with a capital letter`,
+        },
+      },
+      phone: {
+        type: String,
+        validate: {
+          validator: (v) => {
+            return new Promise((res, rej) => {
+              if (/\d{3}-\d{3}-\d{4}/.test(v)) {
+                res();
+              } else {
+                rej(`${v} is invalid phone number (accepted format: ddd-ddd-dddd)`);    // error message in the rejected promise (not in message field)
+              }
+            }
+          )},
+        },
+      }
+    });
+    
+    const Person = mongoose.model('Col1', personSchema);
+    
+    const steven = Person();
+    steven.name = 'Steven';
+    steven.phone = '123-123-1234';
+    
+    await steven.validate();        // -! async validation required because of the promise validator 
+      </pre>
+
+      <!------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Required nested schema </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const addressSchema = new mongoose.Schema({
+      city: String,
+      street: String,
+    });
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      address: {                        // nested schema required
+        type: addressSchema,
+        required: true
+      }
+    });
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    const bob = await Person.create({ name: 'Bob' });           // validation fails (address object required)
+        </pre>
+      <!------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Global schema type validator </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/persons')
+    console.log('DB connection estabilished')
+    
+    mongoose.Schema.Types.String.set('validate', (v) => /^[a-z0-9 ]+$/.test(v))
+    mongoose.Schema.Types.Number.set('validate', (v) => v >=0 )
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      age: Number,
+    });
+    
+    const Person = mongoose.model('Col1', personSchema);
+    
+    await Person.create({ name: 'steven', age: 39 });
+      </pre>
+      <!------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Validation on update operations </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/persons')
+      console.log('DB connection estabilished')
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      age: { type: Number, max: 100 },              // constraint 
+    });
+    
+    const Person = mongoose.model('Col1', personSchema);
+    
+    
+    await Person.updateOne({
+      _id: new mongoose.Types.ObjectId('66b9b2f209f6688ab0c70955')},
+      { $set: {age: 101},
+    },
+    { runValidators: true });     // validates the input (rejects the promise)
+    
+    await Person.updateOne({
+      _id: new mongoose.Types.ObjectId('66b9b2f209f6688ab0c70955')},
+      { $inc: {age: 1000}m
+    }, { runValidators: true });    // -! validation ignored (because the update operation is not <mark>$set</mark> or <mark>$unset</mark>)
+      </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> CRUD Operations </h2>
+    <pre class="syntax">
+// CREATE -------------
+  // creating a document with model method -------
+    await <reqval>Model</reqval>.create|insertMany(<opt>[</opt>{ <reqval>key:val</reqval><optval>, ...</optval>}<opt><optval>, ...</optval>]</opt>) 
+    
+    
+  // creating a document with document method ----
+    const <reqval>document</reqval> = new <reqval>Model</reqval>();
+    <reqval>document.key = val</reqval>               // setting individual fields 
+    <optval>...</optval>
+    await <reqval>document</reqval>.save();           // persisting document in DB
+    
+    
+    
+// READ --------------
+    await <reqval>Model</reqval>.find|findOne(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>);          // gets all matches
+    
+    await <reqval>Model</reqval>.find|findOne(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>)
+        .<reqval class="openable">queryMethod()<div>
+          <p> - <mark>.where(<strong>key|obj</strong>)</mark> - selects, which field (path) to query </p>
+          <p> - <mark>.skip(<strong>nr</strong>)</mark> - specifies how many documents to skip for the query </p>
+          <p> - <mark>.limit(<strong>nr</strong>)</mark> - specifies how many documents to return for the query </p>
+          <p> - <mark><strong>query</strong>.sort(<a href="https:\/\/mongoosejs.com/docs/api/query.html#Query.prototype.sort()" target="_blank">arg</a>)</mark> - sorts the query result </p>
+          <p> - <a href="https:\/\/mongoosejs.com/docs/api/query.html" target="_blank">otherQueryMethods()</a> </p>
+        </div></reqval>         // query method(s) fine grain the query    <u>query methods also can be used to update delete, etc... (basically works as a db cursor)</u>
+        .<optval>...</optval>                                               // chainable...
+        .exec()                                                             // executes the query (returns a <reqval>promise</reqval>)
+    
+    
+    // streaming query result ------------
+    for await (let <reqval>res</reqval> of <reqval>Model</reqval>.find(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>)<optval>.queryMethod()....</optval>) {    // streaming a query is more memory efficient and faster 
+        <reqval>res</reqval>                // -> one <reqva>document</reqva>
+    }
+  
+  
+    // lean ------------------------------
+    await <reqval>Model</reqval>.find|findOne(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>)
+        .lean()                                   // lean transforms mongo object into plain JS object (~3X smaller) which makes the query faster <u class="openable">but we loose these features<div>
+        <p> - Casting & Validation </p>
+        <p> - Change tracking </p>
+        <p> - Getters & Setters </p>
+        <p> - Virtuals </p>
+        <p> - <mark>save()</mark>
+        </div></u>
+        .<reqval class="openable">queryMethod()<div>
+          <p> - <mark>.where(<strong>key|obj</strong>)</mark> - selects, which field (path) to query </p>
+          <p> - <mark>.skip(<strong>nr</strong>)</mark> - specifies how many documents to skip for the query </p>
+          <p> - <mark>.limit(<strong>nr</strong>)</mark> - specifies how many documents to return for the query </p>
+          <p> - <mark><strong>query</strong>.sort(<a href="https:\/\/mongoosejs.com/docs/api/query.html#Query.prototype.sort()" target="_blank">arg</a>)</mark> - sorts the query result </p>
+          <p> - <a href="https:\/\/mongoosejs.com/docs/api/query.html" target="_blank">otherQueryMethods()</a> </p>
+        </div></reqval>
+  
+  
+    // projection (mongoDB concept) ------
+    await <reqval>Model</reqval>.find|findOne(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>)
+        .select(<reqval class="openable"><div>
+        <p> - <strong>str</strong> -> field to include </p>
+        <p> - <strong>str[]</strong> -> fields to include </p>
+        <p> - <mark>{ <strong>key</strong>: 1, <strong>key</strong>: 0, <optval>...</optval>}</mark> -> (include field <mark>1</mark>) (exclude field <mark>0</mark>) </p>
+        </div>obj|str|str[]</reqval>)                  // select what fields to include|exclude in the query result 
+        .<reqval class="openable">queryMethod()<div>
+          <p> - <mark>.where(<strong>key|obj</strong>)</mark> - selects, which field (path) to query </p>
+          <p> - <mark>.skip(<strong>nr</strong>)</mark> - specifies how many documents to skip for the query </p>
+          <p> - <mark>.limit(<strong>nr</strong>)</mark> - specifies how many documents to return for the query </p>
+          <p> - <mark><strong>query</strong>.sort(<a href="https:\/\/mongoosejs.com/docs/api/query.html#Query.prototype.sort()" target="_blank">arg</a>)</mark> - sorts the query result </p>
+          <p> - <a href="https:\/\/mongoosejs.com/docs/api/query.html" target="_blank">otherQueryMethods()</a> </p>
+        </div></reqval>
+    
+    
+    
+// UPDATE -------------
+    await <reqval>Model</reqval>.update|updateOne(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>, <a href="../../MongoDB/Queries/index.html#updateObj" target="_blank">updateObj</a><opt>, { runValidators: true }</opt>)   // -! by default there's no validation on update operations, set <mark>{ runValidators: true }</mark> in order to enable it
+    
+    
+    // upsert ----------------------------
+    await <reqval>Model</reqval>.findOneAndUpdate(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>, <a href="../../MongoDB/Queries/index.html#updateObj" target="_blank">updateObj</a>, { upsert: true })       // updates existing or create new record 
+    
+    
+    
+// DELETE -------------
+    await <reqval>Model</reqval>.delete|deleteOne(<a href="../../MongoDB/Queries/index.html#filterObj" target="_blank">filterObj</a>)
+      </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Create document </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      sex: { type: String, enum: ['M', 'F']},
+    })
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+// create document with model method -----
+    await Person.create({
+      name: 'Bob',
+      sex: 'M',
+    });
+    
+// create document with query method ---------
+    const sally = new Person()
+    
+    sally.name = 'sally';
+    sally.sex = 'F';
+    
+    await sally.save();
+        </pre>
+      <!-------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Query documents </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      age: Number,
+      sex: { type: String, default: null},
+    })
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    
+    await Person.find({ sex: 'F' });             // gets all matches
+    
+    await Person.find()
+      .where('sex')                             // chaining query methods for fine grained queryes
+      .eq('F')
+      .skip(1)
+      .limit(1)
+      .exec();
+      
+// same query with streaming technique -------------------------------
+    for await (let res of Person.find({ sex: 'F' })) {
+      res                                             // -> one document 
+    };
+    
+    for await (let res of Person.find().where({ 'sex': 'F' }).skip(1).limit(1)) {
+      res                                             // -> one document 
+    };
+    
+    
+// lean ----------------------------
+    await Person.find({ sex: 'F' }).lean()
+    
+    await Person.find()
+      .lean()                                           // lean
+      .where('sex')
+      .eq('F')
+      .skip(1)
+      .limit(1)
+    
+    
+// projections --------------------------
+    await Person.find()
+      .select('name')                     // include name field only
+  
+    await Person.find()
+      .select(['name', 'age'])              // include name and age fields only
+    
+    await Person.find()
+      .select({ name: 1, age: 1 })          // include name and age fields only
+    
+    await Person.find()
+      .select({ sex: 0 })                  // exclude sex field
+        </pre>
+      <!-------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Update, Replace, Upsert documents </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      age: Number,
+      sex: String,
+    });
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    
+    await Person.updateOne({ _id: '3692cd382ca8b61926342a51' }, { name: null });      // update single document 
+    await Person.updateMany({ sex: { $exists: 1 } }, { $set: { sex: 'N' } });         // update all matches
+    
+    await Person.replaceOne({ _id: '6692cd382c18b61926342a30' }, { name: 'Joshua'});  // replace document 
+    
+    await Person.findOneAndUpdate(                                          // replace document
+      { _id: '6692cd382c18b61926342a30' },
+      { _id: '6692cd382c18b61926342a30', name: 'Joshua'},
+      { upsert: true }
+    ); 
+        </pre>
+      <!-------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Validation on Update operations </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      age: { type: Number, min: 20, max: 40 }
+    });
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    
+    await Person.updateMany({ name: 'Sally' }, { age: 55 })                             // -! by default there's no input validation (this gets persisted in DB)
+    await Person.updateMany({ name: 'Sally' }, { age: 12 }, { runValidators: true } )   // validation enalbed -> thrown an error
+        </pre>
+      <!-------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Delete documents </h4>
+      <pre>
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      age: Number,
+    });
+      
+    const Person = new mongoose.model('friends', personSchema);
+    
+    await Person.deleteOne({ _id: '66abd650c5a84e8a5ab7cf84' });        // delete single document 
+    await Person.deleteMany({ age: { $gte: 20, $lte: 30 } });           // delete all matches
+    await Person.deleteMany()                                           // does the same as above but with query methods
+      .where('age')
+      .gte(20)
+      .lte(30)
+        </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Methods </h2>
+    <p> - mongoose allows us to define our own methods </p>
+    <pre class="syntax">
+      import mongoose from 'mongoose';
+      
+      <reqval>schema</reqval> = new mongoose.Schema({ <optval>...</optval> }, {
+          methods : {                             // defines document (instance) methods 
+              <reqval>fn</reqval>() { this },     // <mark>this</mark> -> refers to the <reqval>document</reqval>
+              <optval>...</optval>
+          },
+          static : {                              // defines Model (static) methods 
+              <reqval>fn</reqval>() { this },     // <mark>this</mark> -> refers to the <reqval>Model</reqval>
+              <optval>...</optval>
+          }
+          query : {                               // defines <reqval>query</reqval> methods 
+              <reqval>fn</reqval>() { this },     // <mark>this</mark> -> refers to the <reqval>query</reqval>
+              <optval>...</optval>
+          }
+      });
+      
+      <reqval>schema</reqval>.methods.<reqval>fn</reqval> = function() { <optval>...</optval> }     // alternative way to defined document (instance method)    
+      <reqval>schema</reqval>.static.<reqval>fn</reqval> = function() { <optval>...</optval> }      // alternative way to defined Model (static) method     
+      <reqval>schema</reqval>.query.<reqval>fn</reqval> = function() { <optval>...</optval> }       // alternative way to defined query method
+      </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Custom Document & Model methods </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      address: {
+        city: String,
+        street: String,
+        number: Number,
+      }
+    }, {
+      methods: {
+        getAddress() {
+          return `City: ${this.address.city} / Street: ${this.address.street} / Number ${this.address.number}`;
+        }
+      },
+      statics: {
+        findByName(name) {
+          return this.find({ name: new RegExp(name, 'i') });
+        }
+      }
+    });
+    
+    personSchema.methods.getName = function () {                        // document (instance) method added after schema creation
+      return this.name
+    }
+    personSchema.static.getByCity = function(city) {                    // Model (static) method added after schema creation
+      return this.find({ 'address.city': new RegExp(city, 'i') })
+    }
+    
+    const Person = mongoose.model('friends', personSchema); 
+    
+    const pall = Person({ name: 'Pall' });
+    pall.name = 'Pall';
+    pall.address = {
+      city: 'Budapest',
+      street: 'Toplosi',
+      number: 32,
+    }
+    pall.getAddress();                        // -> address... (document methods)
+    pall.getName();                           // -> 'Pall'
+    await pall.save();
+    
+    await Person.findByName('Pall');           // -> result... (Model methods)
+    await Person.findByCity('Budapest');       // -> result...
+      </pre>
+      <!-------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Query methods </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      address: {
+        city: String,
+        street: String,
+        number: Number,
+      }
+    }, {
+      query: {
+        findByCity(city) {
+          return this.where({ 'address.city': new RegExp(city, 'i') });     // we can create custom queries with query methods 
+        }
+      },
+    });
+    
+    personSchema.query.findByStreet = function(street) {                    // query method added after schema creation
+      return this.where({ 'address.street': new RegExp(street, 'i') })
+    }
+    
+    const Person = mongoose.model('friends', personSchema); 
+    
+    await Person.find().findByCity('Budapest').exec()                    // -> our query methods are chainalbe (just like other mongoose query methods -> awesome!)
+    await Person.find().findByStreet('Swan').exec()                             
+      </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Virtuals & Field Aliases </h2>
+    <p> - A Virtual is a field that is not stored in the DB (it's an abstraction over normal fields) </p>
+    <p> - A Field Alias is an alternative name for the same field <u>[2024-08-05 mognoose v8.5.0] can be used only when creating Model, but not for query (get) operations which makes them pretty much useless :/</u> </p>
+    <pre class="syntax">
+// Virtuals ---------------------------------------------------
+    import mongoose from 'mongoose';
+    
+    <reqval>schema</reqval> = new mongoose.Schema({ <optval>...</optval> }, {
+        virtuals : {                             // defines virtuals
+            <reqval>virtualName</reqval>: {
+                get() { <mark>this</mark> },                      // define virtual getter logic (<mark>this</mark> -> refers to the <reqval>document</reqval>)
+                set(<optval>arg</optval>) { <mark>this</mark> },  // define virtual setter logic 
+            },
+            <optval>...</optval>
+        },
+    });
+    
+    <reqval>schema</reqval>.virtual(<reqval>virtualName:str</reqval>)       // alternative way to define a virtual
+        .get(function() { <mark>this</mark> })
+        .set(function(<optval>arg</optval>) { <mark>this</mark> })
+    
+    
+// Aliases ---------------------------------------------------
+    <reqval>schema</reqval> = new mongoose.Schema({
+        <reqval>key</reqval>: { type: <reqval>mongooseType</reqval>, alias: <reqval>alias:str|alias:str[]</reqval> },     // setting field aliases
+        <optval>...</optval>
+    });
+    
+    <reqval>Model</reqval> = mongoose.model(<reqval>dbCollection:str</reqval>, <reqval>schema</reqval>);
+    
+    <reqval>document</reqval> = new <reqval>Model</reqval>({ <optval>...</optval> })
+    <reqval>document.alias = val</reqval>                   // setting field value through alias 
+    
+    
+    await <reqval>Model</reqval>.find|findOne({ <reqval>alias</reqval>: <reqval>val</reqval> })       // -! does not work, finds nothing (alias cannot be used to query data :/)
+      </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Virtuals </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      surname: String,
+    },{
+      virtuals: {
+        fullName: {
+          get() {
+            return this.name + ' ' + this.surname;
+          },
+          set(fullName) {
+            const [name, surname] = fullName.split(' ');
+            this.name = name;                                       // modifying underlying data through virtual setter
+            this.surname = surname;
+          }
+        }
+      }
+    });
+    
+    personSchema.virtual('fullName2')                       // defining virtual after schema definition (does the same as above)
+      .get(function() {
+        return this.name + ' ' + this.surname;
+      })
+      .set(function(fullName) {
+        const [name, surname] = fullName.split(' ');
+        this.name = name;
+        this.surname = surname;
+      })
+    
+    
+    const Person = mongoose.model('friends', personSchema);
+    
+    const noemi = new Person();
+    noemi.fullName = 'Noemi Sanders';                     // set virtual 
+    
+    noemi.fullName;                          // -> 'Noemi Sanders'
+    noemi.name;                              // -> 'Noemi'       // fields are set through the virtual setter
+    noemi.surname;                           // -> 'Sanders'
+    
+    await noemi.save();
+      </pre>
+      <!----------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Aliases </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const addressSchema = new mongoose.Schema({
+      city: { type: String, alias: ['town', 'place'] },       // multiple aliases
+      street: { type: String, alias: 'venue' },
+    });
+    
+    const Address = mongoose.model('friends', addressSchema);
+    
+    const address1 = new Address();
+    address1.town = 'Budapest';                   // using field aliases
+    address1.venue = 'Taposi';
+    
+    address1.city;                                // -> 'Budapest'
+    address1.street;                              // -> 'Taposi'
+    
+    await address1.save();
+    
+// -! we cannot use field aliases for queries (which makes them pretty useless :/)
+    await Address.find({ town: 'Budapest' });       // -> []            // alias query does not work 
+    await Address.find({ venue: 'Taposi' });        // -> []
+    
+    await Address.find({ city: 'Budapest' })        // -> [{ ... }, ...]    // this works we need to query the original field :/
+    await Address.find({ street: 'Taposi' })        // -> [{ ... }, ...]
+        </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Indexing </h2>
+    <p><u> - by default mongoose reindexes the database on each connection, but this behaviour can be disabled (recommeded for prod env) </u></p>
+    <pre class="syntax">
+    import mongoose from 'mongoose';
+    
+    <reqval>schema</reqval> = new mongoose.Schema({
+        <reqval>key</reqval>: { type: <reqval>mongooseType</reqval>, index: 1|-1|'text' },    // indexing (default, full-text and multikey indexing)
+        <reqval>key</reqval>: { type: <reqval>mongooseType</reqval>, index: true, unique: true },   // unique indexing
+        <optval>...</optval>
+    });
+    
+    <reqval>schema</reqval>.index({ <reqval>key</reqval>: 1|-1|'text', <reqval>key</reqval>: 1|-1|'text'<optval>, ...</optval> });   // create compound index
+    
+    
+// ------------------------
+// disable auto indexing --------------
+    mongoose.set('autoIndex': false);               // globally disable auto indexing 
+    
+    <reqval>schema</reqval> = new mongoose.Schema({ <optval>...</optval> });
+    <reqval>schema</reqval>.set({ autoIndex: false });    // disable auto indexing for this schema 
+      </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+// default index ----------------------------------------------
+    const personSchema = new mongoose.Schema({
+      name: { type: String, index: 1 },
+    });
+    
+// unique index ----------------------------------------------
+    const personSchema = new mongoose.Schema({
+      name: { type: String, index: true, unique: true },
+    });
+    
+// full-text index -----------------------------------------
+    const personSchema = new mongoose.Schema({
+      name: { type: String, index: 'text' },
+    });
+    
+// compound index (full-text) -----------------------------------------
+    const personSchema = new mongoose.Schema({
+      name: String,
+    });
+    
+    personSchema.index({ name: 'text', surname: 'text' });
+    
+// multikey index -----------------------------------------
+    const personSchema = new mongoose.Schema({
+      names: { type: [String], index: 1 },
+    });
+    
+    
+    const Person = mongoose.model('friends', personSchema); 
+    
+    Person.on('index', (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log('Indexing success!')
+    });
+        </pre>
+      <!---------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Disable Auto Indexing </h4>
+      <pre>
+    import mongoose from 'mongoose';
+    mongoose.set({ autoIndex: false });               // disable auto indexing globally 
+    
+    
+    const personSchema = mongoose.Schema({
+      name: String,
+    });
+    personSchema.set({ autoIndex: false });           // disable auto indexing for this schema 
+        </pre>
+    </details>
+    <!----------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Transactions <a href="https://mongoosejs.com/docs/transactions.html" target="_blank">[link]</a></h2>
+    <p> - unfortunatly <u>transactions are only working with replica sets</u> and pretty badly documented :/ </p>
+    <p> - we can use the <mark>bulkWrite()</mark> for transactions, but this approach only works on the same Model </p>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+// NOT TESTED CODE ------------------------------
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people')
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+      wallet: Number,
+    });
+    
+    const walletSchema = new mongoose.Schema({
+      balance: Number,
+    });
+    
+    const Person = mongoose.model('person', personSchema);
+    const Wallet = mongoose.model('wallet', walletSchema);
+    
+    const personId = '123456789012345678901234';
+    const session = await mongoose.startSession();
+    
+    try {
+      session.startTransaction();                                     // start transaction
+      
+      await Person.updateOne({ _id: personId }, { $inc: { wallet: 10 }}, { session });
+      await Wallet.updateOne({ _id: personId }, { $inc: { balance: 10 }}, { session });
+      
+      await session.commitTransaction();                              // commit transaction 
+    } catch (error) {
+      await session.abortTransaction();                               // abort
+    } finally {
+      session.endSession();                                           // end transcation 
+    }
+        </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>

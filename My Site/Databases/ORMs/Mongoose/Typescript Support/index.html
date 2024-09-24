@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Typescript Support </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+    <script src="../../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Typescript Support </h1>
+    <p> Updated ( 2024-08-06 ) </p>
+    <nav class="sitenav">
+      <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+      <a href="../index.html" title="Learn WebDesign">Mongoose > </a> Typescript Support
+    </nav>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p> <a href="https://mongoosejs.com/docs/typescript.html" target="_blank">mongoosejs.com (typescript) </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - to start install <mark>@types/mongoose</mark> </p>
+    <p> - Typescript is supported from mongoose v5.11.0, but typescript support is pretty crapy, we could use interfaces to annotate schemas but it's not necessary (schmas are automatically inferenced <a href="https://mongoosejs.com/docs/typescript/schemas.html">[link]</a>) </p>
+    <p> - curently what I see Typescirpt works 'OK' with mongoose (2024-08-08 mongoose v.8.5.2), the only minor limitation we cannot declare methods after schema definition without annotation (<a href="https://mongoosejs.com/docs/typescript/statics-and-methods.html" target="_blank">schema method annotation [link]</a>) 
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/persons')
+        console.log('DB connection estabilished')
+    
+    const addressSchema = new mongoose.Schema({
+      city: String,
+      street: String,
+    });
+    
+    const personSchema = new mongoose.Schema({                  // schema types are automatically inferenced
+      name: { type: String, required: true },
+      surname: String,
+      age: Number,
+      address: addressSchema,
+    }, {
+      virtuals: {                                               // methods can be used as normal
+        fullName: {
+          get(): string {
+            return this.name + this.surname;
+          },
+          set(fullName: string): void {
+            const [name, surname] = fullName.split(' ');
+            this.name = name;
+            this.surname = surname;
+          }
+        }
+      },
+      methods: {
+        getAddress(): string {
+          if (this.address) {
+            return `${this.address.city} ${this.address.city}`;
+          }
+          return '';
+        },
+        setAddress(city: string, street: string): void {
+          this.address = { city, street };
+        }
+      },
+    });
+    
+    personSchema.static.getByName = function(name: string) { }         // -! these are not working because they should be anotated <a href="https://mongoosejs.com/docs/typescript/statics-and-methods.html" target="_blank">[link]</a>
+    personSchema.query.getByName = function(name: string) { }
+    
+    
+    const Person = mongoose.model('friends', personSchema);
+    
+    const angie = new Person();
+    angie.fullName = 'Peter Solomon';
+    angie.setAddress('Budapest', 'Kelemen');
+    
+    console.log(angie.fullName)
+    console.log(angie.getAddress())
+    
+    await angie.save();
+    </pre>
+
+      <br><br>
+    </body>
+
+  </html>

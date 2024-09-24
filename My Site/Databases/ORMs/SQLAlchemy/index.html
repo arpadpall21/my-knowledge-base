@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> SQLAlchemy </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> SQLAlchemy (v2.0.13) </h1>
+    <p> Updated ( 2023-05-17 / 2024-08-27 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../index.html" title="Learn WebDesign">ORMs > </a> SQLAlchemy
+    </p>
+    <p class="subSite"><a href="./Data Types/index.html"> Data Types > </a></p>
+    <p class="subSite"><a href="./Relations/index.html"> Relations > </a></p>
+    <p class="subSite"><a href="./Migration With Alembic/index.html"> DB Migration with Alembic> </a></p>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <p> - async support is pretty ducktapey at the time of writing this (2023-06-09) </p>
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://www.sqlalchemy.org/" target="_blank"> sqlalchemy.org </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - SQL create, update, delete operations must be committed, but query operations don't need to be committed </p>
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - SQLAlchemy is a Python ORM providing tools for working with <a href="https://docs.sqlalchemy.org/en/20/core/engines.html#creating-urls-programmatically" target="_blank">different relational databases</a> <u>(database drivers needs to be installed)</u></p>
+    <p> - SQLAlchemy supports the data mapper pattern (there's an abstraction layer between the ORM and the DB) </p>
+    <pre class="syntax">
+    <reqval>result</reqval> = <reqval>session</reqval>.execute(text(<reqval>sqlStatement:str</reqval>))   // executes a raw SQL query
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    from sqlalchemy import URL, create_engine, text
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    
+    Base = declarative_base()
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    
+    with Session() as session:
+// create table --------
+        session.execute(text('CREATE TABLE Person(id INTEGER PRIMARY KEY, name VARCHAR(30))'))
+    
+// insert values ------------
+    with Session() as session:
+        session.execute(text('INSERT INTO Person VALUES(1, "Anne")'))
+        session.execute(text('INSERT INTO Person VALUES(2, "Jolly")'))
+        session.execute(text('INSERT INTO Person VALUES(3, "Jenny")'))
+        session.commit()
+    
+// get -----------
+    with Session() as session:
+        records = session.execute(text('SELECT * FROM Person'))
+        for record in records:
+            print(record)            // -> (1, 'Anne') | (2, 'Jolly') | (3, 'Jenny')
+    </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> Connection, Session & Model Definition </h2>
+    <pre class="syntax">
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    
+  // Mode definition ---------------------------
+    Base = declarative_base()
+    
+    class <strong>Model</strong>(Base):                              // models a table in the db
+        __tablename__ = <strong>tableName:str</strong>
+        <strong>colName</strong> = Column(<strong>Type</strong>, <i class="openable">constraints<div>
+            <p> <mark>primary_key=<strong>bol</strong></mark> </p>
+            <p> <mark>autoincrement=<strong>bol</strong></mark> (in MySQL this is restricted to the primary key) </p>
+            <p> <mark>default=<strong>val|callable</strong></mark> </p>
+            <p> <mark>index=<strong>bol</strong></mark> </p>
+            <p> <mark>nullable=<strong>bol</strong></mark> (default <mark>True</mark>, when set to <mark>False</mark> the column does not accept <mark>NULL</mark> value) </p>
+            <p> <mark>unique=<strong>bol</strong></mark> </p>
+        </div></i>)                                   // describes a column in the table 
+        <i>...</i>
+    
+    
+  // Connection --------------------------------
+    <reqval>urlObj</reqval> = URL.create(<reqval class="openable">driver:str<div>
+      <p> ex: <mark>mysql+mysqlconnector</mark> for MySQL </p>
+    </div></reqval>, username=<reqval>user:str</reqval>, password=<reqval>pass:str</reqval>, 
+                        host=<reqval>host:str</reqval>, port=<reqval>port:int</reqval>, database=<reqval>db:str</reqval>)
+    <reqval>urlStr</reqval> = '<reqval class="openable">driver<div>
+      <p> ex: <mark>mysql+mysqlconnector</mark> for MySQL </p>
+    </div></reqval>://<reqval>user</reqval>:<reqval>pass</reqval>@<reqval>host</reqval>:<reqval>port</reqval>/<reqval>db</reqval>'
+    
+    engine = create_engine(<reqval>urlObj|urlStr</reqval>, echo=True|False)           // echo=True|False -> print generated SQL statement on console (Default: False)
+    connection = engine.connect()                             // connect
+    
+    Base.metadata.create_all(bind=engine)                     // -! creates the table if not exist, <u>does not modify already existing tables</u> (don't use it if you're using a migraion tool)
+    
+    Session = sessionmaker(bind=engine)
+    
+    
+  // Session -----------------------------------
+    with Session() as <reqval>session</reqval>:                                // acquire session
+        <optval>CRUD operatoins with the open session...</optval>
+        
+        <reqval>session</reqval>.commit()                               // commit (persist) changes to the db
+        <reqval>session</reqval>.rollback()                             // rolls back changes up to the lastest commit
+        
+        <reqval>session</reqval>.close()                                // manually closes the session (performing operations after this call the session will automatically reopen)
+        
+                                                            // session closes when exiting the context 
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Connection </h4>
+      <pre>
+    import datetime
+    
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        date_of_birth = Column(Date)
+    
+    
+// different ways to connect ------
+  // url object -----------------------------------------------
+    url_obj = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                         host='localhost', port=3306, database='sqlalchemy_test')
+  
+  // url string (describes the same connection as url_obj) ----
+    url_str = 'mysql+mysqlconnector://test_user:test_password@localhost:3306/sqlalchemy_test'
+  
+  // sqlite connection ----------------------------------------
+    url_str_sqlite = 'sqlite:///light.db'
+    
+    
+    engine = create_engine(url_obj, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        steven = Person(name='Steven', date_of_birth=datetime.datetime(1998, 6, 25))    // record 
+        session.add(steven)
+        session.commit()
+    </pre>
+      <!------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Commit & Rollback <mark>commit()</mark> / <mark>rollback()</mark> </h4>
+      <pre>
+    import datetime
+    
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        age = Column(Integer)
+        updated = Column(Date, default=datetime.datetime.now())
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    
+    with Session() as session:
+        session.add(Person(name='Frank', age=40))
+        session.rollback()                          // rollback the changes (undoes changes up to the latest commit)
+    
+        session.add(Person(name='John', age=50))
+        session.commit()                            //  commit the changes to the database
+    </pre>
+      <!------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Closing session <mark>close()</mark> </h4>
+      <pre>
+    import datetime
+    
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        age = Column(Integer)
+        updated = Column(Date, default=datetime.datetime.now())
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    
+    with Session() as session:
+        session.close()                             // closes the session (the connection is returned to the connection pool)
+        
+        john = session.query(Person).filter(Person.name == 'John').first()      // session reopened automatically
+    </pre>
+      <!------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Model </h4>
+      <pre>
+    import datetime
+    
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+        
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        date_of_birth = Column(Date)
+    
+    
+    url = 'mysql+mysqlconnector://test_user:test_password@localhost:3306/sqlalchemy_test'
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        steven = Person(name='Steven', date_of_birth=datetime.datetime(1998, 6, 25)) 
+        session.add(steven)
+        
+        session.commit()
+    </pre>
+      <!------------------------------------------------------------------>
+      <hr>
+      <h4 class="header"> Constraints </h4>
+      <pre>
+    import datetime
+    
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)                              // primary key
+        name = Column(String(30), nullable=False, unique=True, index=True)  // unique, indexed, non nullable
+        updated = Column(Date, default=datetime.datetime.now())             // default value 
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.add_all([
+            Person(name='Steven'),
+            Person(name='Joe'),
+        ])
+        session.commit()
+    </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> Validation </h2>
+    <p> - SQLAlchemy does't have any built-in validators like sequelize, but provides a validator function where we can implement our custom validation </p> 
+    <p> - validation only work for INSERT operations <u>but ignored on UPDATE operations</u> </p>
+    <pre class="syntax">
+    from sqlalchemy.orm import declarative_base, validates
+    
+    Base = declarative_base()
+    
+    class <reqval>Model</reqval>(Base):
+            __tablename__ = <reqval>tableName:str</reqval>
+            <reqval>colName</reqval> = Column(<reqval>Type</reqval>)
+            <optval>...</optval>
+            
+            @validates(<reqval>colName:str</reqval><optval>, ...</optval>)    // runs validator for each listed columns
+            def capitalize_name_surname(self, key, val):
+                <optval>do some validation|data modification...</optval>      // if error raised aborts the operation
+                
+                <opt>return <optval>val</optval></opt>              // we can modify and return a new value (optional)
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer
+    from sqlalchemy.orm import sessionmaker, declarative_base, validates
+    
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        age = Column(Integer)
+    
+        @validates('name', 'surname')                       // modifies input data for 2 fiels 
+        def capitalize_name_surname(self, key, val):
+            return val.capitalize()
+    
+        @validates('age')                                   // validates age range
+        def validate_age(self, key, val):
+            if val > 100 or val < 1:
+                raise ValueError(f'age out of range: {val}')
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                     host='localhost', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.add(Person(name='doe', surname='john', age=1))
+        session.commit()
+      </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> CRUD Operations </h2>
+    <pre class="syntax">
+// CREATE ----------------------
+    <reqval>record</reqval> = <reqval>Model</reqval>(<optval>...</optval>)    // creates a record
+    <reqval>record.attr</reqval> = <reqval>val</reqval>                       // set record attirbute
+    
+    <reqval>session</reqval>.add(<reqval>record</reqval>)                   // adds one record
+    <reqval>session</reqval>.add_all([<reqval>record</reqval><optval>, ...</optval>])   // adds multiple records
+    
+    
+    
+// READ ----------------------
+    <reqval>query</reqval> = <reqval>session</reqval>.query(<reqval>Model|Model.column</reqval><optval>, ...</optval>)    // creates a query where all columns (<reqval>Model</reqval>) or selected columns (<reqval>Model.column</reqval><optval>, ...</optval>) will be queried (returns a new <reqval>query</reqval>)
+    
+  // fine-grain (filter) query (optional, methods are chainable) ---
+    <reqval>query</reqval>.add_columns(<reqval>Model.column</reqval><optval>, ...</optval>)           // add columns to the query (returns a new <reqval>query</reqval>)
+    
+    <reqval>query</reqval>.filter(<strong class="openable">cond<div>
+      <p> - <mark><reqval>Model.column</reqval> <reqval>pythonComparisonOperator val</reqval></mark> - python style comparison (ex: <mark>Person.id >= 100</mark>) </p>
+      <p> - </p>
+      <p> - <mark><reqval>Model.column</reqval>.in_([<reqval>val</reqval><optval>, ...</optval>])</mark> - passing several possible values (ex: <mark>Person.id.in_([34, 56])</mark>) </p>
+      <p> - </p>
+      <p> - <mark><reqval>Model.column</reqval>.and_(<reqval>cond</reqval><optval>, ...</optval>)</mark> - query records where all conditions are true (ex: <mark>and_(Person.id > 10, Person.id <= 20)</mark>) </p>
+      <p> - </p>
+      <p> - <mark><reqval>Model.column</reqval>.or_(<reqval>cond</reqval><optval>, ...</optval>)</mark> - query records where at least one condition is true (ex: <mark>or_(Person.id == 10, Person.id == 20)</mark>) </p>
+      <p> - </p>
+      <p> - <mark><reqval>Model.column</reqval>.like(<reqval>sqlStr:str</reqval>)</mark> - SQL LIKE filtering, supports sql wildcards (ex: <mark>Person.name.like('L%')</mark>) </p>
+    </div></strong><optval>, ...</optval>)          // filters the query (returns a new <reqval>query</reqval>)
+    
+    <reqval>query</reqval>.limit(<reqval>int</reqval>)            // returns the first <reqval>int</reqval> records (returns a new <reqval>query</reqval>)
+    <reqval>query</reqval>.slice(<reqval>startIdx(inc):int</reqval>, <reqval>EndIdx(exc):int</reqval>)    // returns the specified query range (returns a new <reqval>query</reqval>)
+    
+    <reqval>query</reqval>.order_by(<reqval>Model.column</reqval><optval>, ...</optval>)        // groups by column (returns a new <reqval>query</reqval>)
+    
+  // execute query -------------------------------------------------
+    <reqval>query</reqval>.all()                        // get all records
+    <reqval>query</reqval>.first()                      // get the 1st record (<mark>None</mark> if no record found)
+    
+    <reqval>query</reqval>.one()                        // get 1 record (raises an Exception if no or multiple records found)
+    <reqval>query</reqval>.one_none()                   // get 1 record (<mark>None</mark> if no record found) (raises an Exception if multiple records found)
+    
+    <reqval>query</reqval>.get(<reqval>pk:int</reqval>)     // get record with primary key (<mark>None</mark> if no record found)
+    <reqval>query</reqval>.count()                        // count records
+    
+    
+    
+// UPDATE ----------------------
+    <reqval>query</reqval>.update({<reqval>column:str</reqval>: <reqval>newVal</reqval><optval>, ...</optval>})   // updates all records selected in <reqval>query</reqval>
+    
+    
+    
+// DELETE ----------------------
+    <reqval>query</reqval>.delete()                     // deletes all records selected in <reqval>query</reqval>
+    
+    <reqval>session</reqval>.delete(<reqval>record</reqval>)  // deletes <reqval>record</reqval>
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Create </h4>
+      <pre>
+    import datetime
+    
+    from sqlalchemy import URL, create_engine, Column, Integer, String, Date
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        age = Column(Integer, index=True)
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    
+    with Session() as session:
+        frank_record = Person(name='Frank', age=40)
+        frank_record.age = 41
+        
+        session.add(frank_record)                      // adds single record
+        session.add_all([                              // adds multiple records
+            frank_record,
+            Person(name='Jane', age=60),
+        ])
+        
+        session.commit()                            // commit
+    </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Read </h4>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        age = Column(Integer, index=True)
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                    host='127.0.0.1', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+      // select columns -------------------
+        session.query(Person).all()                        // get all Model columns
+        session.query(Person.name, Person.surname).all()   // get only name and surname columns
+        
+      // filter query --------------------
+        session.query(Person) \
+            .filter(Person.age > 30) \                    // filter records where the age is bigger than 30
+            .slice(10, 10) \                              // get sencond 10 records
+            .order_by(Person.age) \                       // group result by name
+            .all()
+      
+      // execute query --------------------
+        session.query(Person).all()                       // query all records
+        session.query(Person).first()                     // query the 1st record
+        session.query(Person).get(4)                      // query record with primary key 4 
+    </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Update </h4>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        age = Column(Integer, index=True)
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                    host='127.0.0.1', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.query(Person) \
+            .filter(Person.age < 20) \
+            .update({'age': 20})                          // update filtered records 
+        
+        session.commit()
+    </pre>
+      <h4 class="header"> Delete </h4>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        age = Column(Integer, index=True)
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                    host='127.0.0.1', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.query(Person) \
+            .filter(Person.age < 20) \
+            .delete({'age': 20})                          // delete filtered records 
+        
+        maria = session.query(Person) \
+          .filter(Person.name == 'Maria') \
+          .one()
+        session.delete(maria)                             // delete record
+        
+        session.commit()
+    </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> Indexing </h2>
+    <pre class="syntax">
+// default index ----------------------------------------------------
+    class <reqval>Model</reqval>(Base):
+        __tablename__ = <strong>tableName:str</strong>
+        <strong>colName</strong> = Column(<strong>Type</strong>, index=True)      // creates default index on the column
+    
+    
+// fulltext index ----------------------------------------------------
+    <reqval>session</reqval>.execute(
+        text('CREATE FULLTEXT INDEX <reqval>idxName</reqval> on <reqvao>table</reqval>(<reqval>column</reqval><optval>, ...</optval>)')   // -! SQLAlchemy doesn't support full-text index directly, so we have to run raw query 
+    )
+    <reqval>session</reqval>.commit()
+    
+    
+    result = session.execute(
+        text('SELECT * FROM employee WHERE MATCH(name, surname) AGAINST("Vasilu")')             // raw query to use full-text index search
+    ).all()
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Default Index </h4>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'employee'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        address = Column(String(120))
+        age = Column(Integer, index=True)                             // default indexes this column
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                     host='127.0.0.1', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.query(Person).filter(Person.age > 30).all()               // uses indexes for quick search
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------->
+      <h4 class="header"> Full-text Index </h4>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer, text, Index
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Person(Base):
+        __tablename__ = 'employee'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+        age = Column(Integer)
+        address = Column(String(120))
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                    host='127.0.0.1', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.execute(text('CREATE FULLTEXT INDEX idx_user_surname on employee(name, surname)'))      // create full-text index
+        session.commit()
+        
+        session.add_all([
+            Person(name="Doe", surname="John", age=33, address="Budapest"),
+            Person(name="Julian", surname="Marek", age=42, address="Las Vegas"),
+            Person(name="Vasilu", surname="Petru", age=32, address="Bucarest"),
+            Person(name="Silviu Orasanu", surname="Vasilu Kuka", age=32, address="Bucarest"),
+        ])
+        session.commit()
+        
+        result = session.execute(text('SELECT * FROM employee WHERE MATCH(name, surname) AGAINST("Vasilu")')).all()   // uses full-text index for quick word search
+      </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> Transactions </h2>
+    <pre class="syntax">
+    with Session() as <reqval>session</reqval>:
+        try:
+            <reqval>session</reqval>.begin()
+            
+            <optval>CRUD operations...</optval>           // listed CRUD operations will be executed in one transaction 
+            
+            <reqval>session</reqval>.commit()
+        except Exception as e:
+            <reqval>session</reqval>.rollback()           // roll back in case of error
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, String, Integer
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    Base = declarative_base()
+    
+    
+    class Employee(Base):
+        __tablename__ = 'employee'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+        surname = Column(String(30))
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='pall', password='pass',
+                     host='127.0.0.1', port=3306, database='test_db')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    
+// successful transaction ------------------------------
+    with Session() as session:
+        try:
+            session.begin()
+            
+            session.add(Employee(name="Doe", surname="John"))
+            session.add(Employee(name="Bob", surname="Jimny"))
+            session.add(Employee(name="Bob", surname="Sally"))
+            
+            session.commit()
+        except Exception as e:
+            session.rollback()
+    
+// transaction rolled back ------------------------------
+    with Session() as session:
+        try:
+            session.begin()
+        
+            session.add(Employee(name="Doe", surname="John"))
+            session.add(Employee(name="Bob", surname="Jimny"))
+            
+            raise ValueError('some error...')               // error raised
+            
+            session.add(Employee(name="Bob", surname="Sally"))
+        
+            session.commit()
+        except Exception as e:
+            print(e)
+            session.rollback()
+    </pre>
+
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> Joins </h2>
+    <pre class="syntax">
+<span style="color:darkgrey;">// inner join ----------------------------------------------------</span>
+    session.query(<strong>ModelLeft, ModelRight</strong>).join(<strong>ModelLeft</strong>, <strong>ModelLeft.col</strong> == <strong>ModelRight.col</strong>).all()
+    
+    session.query(<strong>ModelLeft, ModelRight</strong>).filter(<strong>ModelLeft.col</strong> == <strong>ModelRigth.col</strong>).all()       // inner join with filter method (does the same as above)
+    
+  
+<span style="color:darkgrey;">// left join -----------------------------------------------------</span>
+    session.query(<strong>ModelLeft, ModelRight</strong>).join(<strong>ModelRight</strong>, <strong>ModelLeft.col</strong> == <strong>ModelRight.col</strong>, isouter=True)
+    
+    
+<span style="color:darkgrey;">// right join ----------------------------------------------------</span>
+    session.query(<strong>ModelLeft, ModelRight</strong>).join(<strong>ModelLeft</strong>, <strong>ModelLeft.col</strong> == <strong>ModelRight.col</strong>, isouter=True)
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, Integer, String
+    from sqlalchemy.orm import sessionmaker, declarative_base
+    
+    
+    Base = declarative_base()
+    
+    class Person(Base):
+        __tablename__ = 'Person'
+    
+        name = Column(String(30), primary_key=True)
+        bank_account_number = Column(Integer)
+    
+    
+    class BankAccount(Base):
+        __tablename__ = 'BankAccount'
+    
+        account_number = Column(Integer, primary_key=True)
+        balance = Column(Integer)
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user',  password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    
+    with Session() as session:
+// inner join ---------------------------------------------------------
+        session.query(Person, BankAccount) \
+            .join(Person, Person.bank_account_number == BankAccount.account_number) \
+            .all()
+    
+        session.query(Person, BankAccount) \                             // with .filter() method 
+            .filter(Person.bank_account_number == BankAccount.account_number) \
+            .all()
+    
+// left join ----------------------------------------------------------
+        session.query(Person, BankAccount) \
+            .join(BankAccount, Person.bank_account_number == BankAccount.account_number, isouter=True) \
+            .all()
+    
+// right join ---------------------------------------------------------
+        session.query(Person, BankAccount) \
+            .join(Person, Person.bank_account_number == BankAccount.account_number, isouter=True) \
+            .all()
+    </pre>
+      <!------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Chaining Join </h4>
+      <pre>
+    from sqlalchemy import URL, create_engine, Column, ForeignKey, Integer, String
+    from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+    
+    
+    Base = declarative_base()
+    
+    
+    class Student(Base):
+        __tablename__ = 'student'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+    
+    
+    class Class(Base):
+        __tablename__ = 'class'
+    
+        id = Column(Integer, primary_key=True)
+        class_name = Column(String(30))
+    
+    
+    class Address(Base):
+        __tablename__ = 'address'
+        id = Column(Integer, primary_key=True)
+        address = Column(String(30))
+    
+    
+    class Origin(Base):
+        __tablename__ = 'origin'
+        id = Column(Integer, primary_key=True)
+        origin = Column(String(30))
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+        session.query(Student) \                        // only Student records are returned
+            .join(Class, Student.id == Class.id) \
+            .join(Address, Student.id == Address.id) \
+            .join(Origin, Student.id == Origin.id) \
+            .all()
+    </pre>
+    </details>
+
+    <!--
+  // -----------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------
+      - mention validation libs
+      
+      
+      
+      - how table creation works (compared to sequelize)
+          - the Base.metadata.create_all(bind=engine) method only creates new tables but cannot modify already existing onces
+      
+      
+      
+      - indexing
+  -->
+
+    <br><br>
+  </body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Typescript Support </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+  <script src="../../../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> Typescript Support </h1>
+  <p> Updated: ( 2024-08-25 ) </p>
+    <nav class="sitenav"> <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+      <a href="../index.html" title="Learn WebDesign">Sequelize > </a> Typescript Support
+    </nav>
+  <br>
+  <details class="example" id="notes">
+    <summary> Notes & Tips :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - to start install <mark>@types/sequelize</mark> </p>
+  <p> - currenently (2024-08-25) sequelize has poor Typescirtp support, but the lib works mostly fine without type definition as well </p>
+  <pre>
+// typescirpt example -----------
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model { };
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        age: { type: DataTypes.INTEGER, validate: { min: 0 } },
+      }, { sequelize }
+    );
+    
+    const Address = sequelize.define(
+      'Address',
+      {
+        city: DataTypes.STRING,
+      }
+    );
+    
+    Person.hasMany(Address);
+    Address.belongsTo(Person);
+    
+    await sequelize.sync({ force: true });
+    
+    const doe = await Person.create({ name: 'Doe', age: 123 });
+    await (doe as any).createAddress({ city: 'Budapest' });           // -! here we have to use some ducktape syntax :/
+  </pre>
+
+
+  <br><br>
+</body>
+
+</html>

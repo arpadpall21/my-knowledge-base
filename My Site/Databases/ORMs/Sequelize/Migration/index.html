@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Migration (with Sequelize CLI) </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+  <script src="../../../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> Migration (with Sequelize CLI) </h1>
+  <p> Updated ( 2024-08-19 ) </p>
+    <nav class="sitenav"> <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+      <a href="../index.html" title="Learn WebDesign">Sequelize > </a> Migration (with Sequelize CLI)
+    </nav>
+  <table class="table">
+    <tr>
+      <th style="width:30%;"> CMD </th>
+      <th> Description </th>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> init <opt>[options]</opt>
+      </td>
+      <td>
+        - scaffolds the sequelize-cli project (default scaffold) <br>
+        <opt>[options]</opt><br>
+        - (<opt>--config <optval>filePath</optval></opt>) creates and defines the sequelize-cli config file (created specified directories and the config file) <br>
+        - (<opt>--migrations-path <optval>dirPath</optval></opt>) creates the directory for migration scripts (created specified directories) <br>
+        - (<opt>--models-path <optval>dirPath</optval></opt>) creates the directory for sequelize models (created specified directories) <br>
+        - (<opt>--seeders-path <optval>dirPath</optval></opt>) creates the directory for seeders (created specified directories) <br>
+        - ex: <mark>npx sequelize-cli init --config config/sequelize.js --migrations-path database/migrations --models-path database/models --seeders-path database/seeders</mark> (will create the necessary directories and files)
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+      <lit>npx sequelize-cli</lit> model:generate --name <reqval>ModelName</reqval> --attirubtes <reqval>attr:sequelizeDataType</reqval><optval>,...</optval> <opt>[options]</opt>
+      </td>
+      <td>
+        - creates a sequelize Model and the migration script for it <u>(I don't recommend using it, because IMO we should decouple sequelize-cli from the project)</u> <br>
+        <opt>[options]</opt><br>
+        - (<opt>--migrations-path <optval>dirPath</optval></opt>) specifies the migration directory (required if the project is not default scaffoled) <br>
+        - (<opt>--models-path <optval>dirPath</optval></opt>) specifies the models directory (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2"> Migration </td>
+    </tr>
+    <tr>
+      <td>
+      <lit>npx sequelize-cli</lit> migration:generate --name <reqval>scriptName</reqval> <opt>[options]</opt>
+      </td>
+      <td>
+        - creates a sequelize-cli migration script <u>template</u> <br>
+        <opt>[options]</opt><br>
+        - (<opt>--migrations-path <optval>dirPath</optval></opt>) specifies the migration directory (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:migrate:status <opt>[options]</opt>
+      </td>
+      <td>
+        - mrint migration status (stack) <br>
+        <opt>[options]</opt><br>
+        - (<opt>--migrations-path <optval>dirPath</optval></opt>) specifies the migration directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:migrate <opt>[options]</opt>
+      </td>
+      <td>
+        - up plays all migration scripts <br>
+        <opt>[options]</opt><br>
+        - (<opt>--to <optval>migrationScript.js</optval></opt>) up plays migration scrips to the specfied one (included) <br>
+        - (<opt>--migrations-path <optval>dirPath</optval></opt>) specifies the migration directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:migrate:undo<opt>[options]</opt>
+      </td>
+      <td>
+        - down plays one migration scrip <br>
+        <opt>[options]</opt><br>
+        - (<opt>:all</opt>) down play all migration scripts <br>
+        - (<opt>--to <optval>migrationScript.js</optval></opt>) down plays migration scrips to the specfied one (included) <br>
+        - (<opt>--migrations-path <optval>dirPath</optval></opt>) specifies the migration directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"> Seeding </td>
+    </tr>
+    <tr>
+      <td>
+      <lit>npx sequelize-cli</lit> seed:generate --name <reqval>scriptName</reqval> <opt>[options]</opt>
+      </td>
+      <td>
+        - creates a sequelize-cli migration script <u>template</u> <br>
+        <opt>[options]</opt><br>
+        - (<opt>--seeders-path <optval>dirPath</optval></opt>) specifies the seeders directory (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:seed:all <opt>[options]</opt>
+      </td>
+      <td>
+        - up plays all seed scripts <br>
+        <opt>[options]</opt><br>
+        - (<opt>--sedds-path <optval>dirPath</optval></opt>) specifies the seeds directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:undo<opt>[:all]</opt> <opt>[options]</opt>
+      </td>
+      <td>
+        - executes the <mark>down</mark> function in the latest <reqval>seedScript.js</reqval> ((<mark><opt>:all</opt></mark>) or down plays all seed scripts)<br>
+        <opt>[options]</opt><br>
+        - (<opt>--sedds-path <optval>dirPath</optval></opt>) specifies the seeds directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:seed --seed <reqval>seedScript.js</reqval> <opt>[options]</opt>
+      </td>
+      <td>
+        - executes the <mark>up</mark> function in <reqval>seedScript.js</reqval> <u>(this individual script executed only not the whole stack)</u> <br>
+        <opt>[options]</opt><br>
+        - (<opt>--sedds-path <optval>dirPath</optval></opt>) specifies the seeds directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <lit>npx sequelize-cli</lit> db:seed:undo --seed <reqval>seedScript.js</reqval> <opt>[options]</opt>
+      </td>
+      <td>
+        - executes the <mark>down</mark> function in <reqval>seedScript.js</reqval> <u>(this individual script executed only not the whole stack)</u> <br>
+        <opt>[options]</opt><br>
+        - (<opt>--sedds-path <optval>dirPath</optval></opt>) specifies the seeds directory (required if the project is not default scaffoled) <br>
+        - (<opt>--config <optval>filePath</optval></opt>) specifies the sequelize config file (required if the project is not default scaffoled) <br>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <details class="example" id="notes">
+    <summary> Notes & Tips :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+  <p> - I tested sequelize-cli with <mark>package.json</mark> <mark>"type": "module"</mark> settings in order to run *.js files as ES modules, however seqluelice-cli recognie *.js files an Common.js modules (to fix the problem I simply renamed *.js files to *.cjs so they are loaded as CommonJS modules) </p>
+  <p> - sequelize internally plurifies table names, so when migration we have to make sure to refer the correct table name </p>
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <p> - sequelize-cli is migration tool that also offers seeding (filling the db with data), however it does NOT support automatic migration script generation (wich is kind of bad) </p>
+  <p> - by default manages your sequelize models, <u style="background-color: yellow;">but based on my testings it's best not to used this feature because this way we decouple this tool from our project and sequelize-cli becomes a standalone migration tool</u> </p>
+  <p> Composed of 4 main components (can be scaffolded with <mark>init</mark> but also can be created manually): </p>
+  <p class="indent-lv1"> - config file (<mark>sequelize.json</mark>): environment contains connection parameters (connects to environment set by <mark>NODE_ENV</mark> environment variable) </p>
+  <p class="indent-lv1"> - migration script folder: contains migration scripts </p>
+  <p class="indent-lv1"> - seeds script folder: contains seed scripts </p>
+  <p class="indent-lv1"> - models folder: contains sequeliz models (IMO should not be used) </p>
+  <p> Migration </p>
+  <p class="indent-lv1"> - migration scripts can be applied in stack order (we can sequencially create a new migration scirpt on the top of the stack, move up or down the stack) </p>
+  <p class="indent-lv1"> - the migration metadata is stored in a <mark>SequelizeMeta</mark> table in the database </p>
+  <p> Seeding </p>
+  <p class="indent-lv1"> - sees script are just like migration scripts but with the purpose of adding removing data to|from the database </p>
+  <p class="indent-lv1"> - sees scripts are not tracked (like migrations), so we can only play the whole stack up or down <u>or play an individual seed scirpt's <mark>up|down</mark> function</u> </p>
+  <pre class="syntax">
+// sequelize.json (config file) --------------------------
+    {
+        "<reqval>env</reqval>": {                 // connects this database if <mark>NODE_ENV</mark> is set to <reqval>env</reqval>
+            "username": "<reqval>user</reqval>",
+            "password": "<reqval>password</reqval>",
+            "database": "<reqval>db</reqval>",
+            "host": "<reqval>host</reqval>",
+            "dialect": "<reqval>dialect</reqval>",      // driver type (ex: mysql)
+            <opt>"port": <reqval>port</reqval></opt>                                // optional (if db runs on default port)
+        },
+        <optval>...</optval>                      // multiple connections...
+    }
+  </pre>
+  <pre class="syntax">
+// migration script --------------------------
+// it's best to ask ChangGPT to generate the migration scirpts for us 😉 -
+    module.exports = {
+        up: async (queryInterface, Sequelize) => {                    // migrate up (forwrad)
+            await queryInterface.<a href="https:\/\/sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface" target="_blank">method</a>
+            <optval>...</optval>
+        },
+    
+        down: async (queryInterface, Sequelize) => {                    // migrate down (backward)
+            await queryInterface.<a href="https:\/\/sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface" target="_blank">method</a>
+            <optval>...</optval>
+        },
+    };
+  </pre>
+  <pre class="syntax">
+// seed script --------------------------
+    module.exports = {
+        async up (queryInterface, Sequelize) {
+            <opt>await queryInterface.bulkInsert(<reqval>tableName:str</reqval>, [{ <optval>...</optval> }])</opt>    // for multiple insert operations
+            return queryInterface.bulkInsert(<reqval>tableName:str</reqval>, [<reqval>recordObj</reqval><optval>, ...</optval> ])   // records to insert
+        }
+        
+        async up (queryInterface, Sequelize) {                              // deleting inserted records
+            <opt>await queryInterface.bulkDelete(<reqval>tableName:str</reqval>, [{ <optval>...</optval> }])</opt>
+            return queryInterface.bulkDelete(<reqval>tableName:str</reqval>, [<reqval>recordObj</reqval><optval>, ...</optval> ])
+        }
+    };
+  </pre>
+  <details class="example">
+    <summary> DEMO (can be pseudocode) </summary>
+    <h4 class="header"> Migrations </h4>
+    <p> - the below 3 step migration migrates the database for this model architecture </p>
+    <pre>
+    class Person extends Model {};
+    Person.init({
+      name: DataTypes.STRING,
+      age: { type: DataTypes.INTEGER, validate: { min: 0, max: 100 }},
+    }, {
+      sequelize,
+      modelName: 'Person',
+    });
+    
+    class Address extends Model {};
+    Address.init({
+      city: DataTypes.STRING,
+      street: DataTypes.STRING,
+      nr: DataTypes.INTEGER,
+    }, {
+      sequelize,
+      modelName: 'Address',
+    });
+    
+    Person.hasMany(Address);
+    Address.belongsTo(Person);
+    </pre>
+    <pre class="cmd">
+    npx sequelize-cli init \                                          // scaffods the sequelize-cli project (custom structure)
+      --config migration/config/sequelize.json \
+      --migrations-path migration/migrations \
+      --seeders-path migration/seeders
+    
+    
+// created folder structure ------------
+    |- models                                       // -! I deleted this <u>(I manage models myself)</u>
+        |- index.js
+    |- migration
+        |- migrations                               // migration scripts will be stored here
+        |- seeders                                  // seeder scripts will be stored here
+        |- config
+            |- sequelize.json                       // sequelize-cli config file
+    </pre>
+    <pre>
+// sequelize.json (file) --------
+    {
+      "dev": {                                    // dev db connection description
+        "username": "pall",
+        "password": "pass",
+        "database": "test_db",
+        "host": "127.0.0.1",
+        "dialect": "mysql",
+        "port": 3306
+      }
+      "prod": {
+        "username": "",
+        "password": "",
+        "database": "",
+        "host": "",
+        "dialect": "",
+        "port": 0
+      }
+    }
+    </pre>
+    <p> - 1st migration (creates the 1st table) </p>
+    <pre class="cmd">
+    npx sequelize-cli migration:generate \                    // generates a migration script template
+      --name create-person \
+      --migrations-path migration/migrations
+    </pre>
+    <pre>
+// 20240821174512-create-person.cjs (Migration script) ----------------------------
+    'use strict';
+    /** @type {import('sequelize-cli').Migration} */
+    module.exports = {
+      async up(queryInterface, Sequelize) {
+        await queryInterface.createTable('People', {
+          id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER
+          },
+          name: {
+            type: Sequelize.STRING
+          },
+          age: {
+            type: Sequelize.INTEGER
+          },
+          createdAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+          },
+          updatedAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+          }
+        });
+      },
+      async down(queryInterface, Sequelize) {       // revert migrations
+        await queryInterface.dropTable('People');
+      }
+    };
+    </pre>
+    <pre class="cmd">
+    export NODE_ENV=dev                           // -! from this env var sequelize-cli knows whic db to migrate
+    
+    npx sequelize-cli db:migrate \                // migrate database
+      --migrations-path migration/migrations \
+      --config migration/config/sequelize.json
+    </pre>
+    <p> - 2nd migration (creates 2nd table) </p>
+    <pre class="cmd">
+    npx sequelize-cli migration:generate \                    // generates a migration script template (2nd migration)
+      --name create-address \
+      --migrations-path migration/migrations
+    </pre>
+    <pre>
+// 20240821182143-create-address.cjs (migration script) -----------------
+    'use strict';
+    /** @type {import('sequelize-cli').Migration} */
+    module.exports = {
+      async up(queryInterface, Sequelize) {
+        await queryInterface.createTable('Addresses', {
+          id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER
+          },
+          city: {
+            type: Sequelize.STRING
+          },
+          street: {
+            type: Sequelize.STRING
+          },
+          nr: {
+            type: Sequelize.INTEGER
+          },
+          createdAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+          },
+          updatedAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+          }
+        });
+      },
+      async down(queryInterface, Sequelize) {
+        await queryInterface.dropTable('Addresses');
+      }
+    };  
+    </pre>
+    <pre class="cmd">
+    npx sequelize-cli db:migrate \                // migrate database
+      --migrations-path migration/migrations \
+      --config migration/config/sequelize.json
+    </pre>
+    <p> - 3rd migration (creates relattion between tables) </p>
+    <pre class="cmd">
+    npx sequelize-cli migration:generate \                    // generates a migration script template (2nd migration)
+      --name person-address-relation \
+      --migrations-path migration/migrations
+    </pre>
+    <pre>
+// 20240822055735-person-address-relation.cjs (migration script) -----------------
+    'use strict';
+    /** @type {import('sequelize-cli').Migration} */
+    module.exports = {
+      async up (queryInterface, Sequelize) {
+        await queryInterface.addColumn('Addresses', 'PersonId', {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'People',
+            key: 'id',
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        });
+      },
+      async down (queryInterface, Sequelize) {
+        await queryInterface.removeColumn('Addresses', 'PersonId');
+      }
+    };
+    </pre>
+    <pre class="cmd">
+    npx sequelize-cli db:migrate \                // migrate database
+      --migrations-path migration/migrations \
+      --config migration/config/sequelize.json
+    </pre>
+    <!------------------------------------------------------------------------------------------->
+    <hr>
+    <h4 class="header"> Seeding </h4>
+    <p> - here are 3 seeder file examples </p>
+    <pre>
+// 20240824114156-persons.cjs (file) -------------------------------------------
+    'use strict';
+    
+    module.exports = {
+      async up (queryInterface, Sequelize) {
+        return queryInterface.bulkInsert('People', [
+          {
+            id: 11,
+            name: 'Bob',
+            age: 32,
+          },
+        ]);
+      },
+    
+      async down (queryInterface, Sequelize) {
+        return queryInterface.bulkDelete('People', [
+          {
+            id: 11,
+            name: 'Bob',
+            age: 32,
+          },
+        ]);
+      },
+    };
+    </pre>
+    <pre>
+// 20240824114726-bob-addresses.cjs (file) -------------------------------------------
+    'use strict';
+    
+    module.exports = {
+      async up (queryInterface, Sequelize) {
+        return queryInterface.bulkInsert('Addresses', [
+          {
+            PersonId: 11, 
+            city: 'Budapest',
+            street: 'duck',
+            nr: 123,
+          },
+          {
+            PersonId: 11,
+            city: 'Prague',
+            street: 'swadlingtol',
+            nr: 345,
+          },
+          {
+            PersonId: 11,
+            city: 'Mars',
+            street: 'star',
+            nr: 999,
+          },
+        ]);
+      },
+    
+      async down (queryInterface, Sequelize) {
+        return queryInterface.bulkDelete('Addresses', [
+          {
+            PersonId: 11, 
+            city: 'Budapest',
+            street: 'duck',
+            nr: 123,
+          },
+          {
+            PersonId: 11,
+            city: 'Prague',
+            street: 'swadlingtol',
+            nr: 345,
+          },
+          {
+            PersonId: 11,
+            city: 'Mars',
+            street: 'star',
+            nr: 999,
+          },
+        ]);
+      },
+    };
+    </pre>
+    <pre>
+// 20240824123127-sally_and_addresses.cjs (file) -------------------------------------------
+    'use strict';
+    
+    module.exports = {
+      async up (queryInterface, Sequelize) {
+        await queryInterface.bulkInsert('People', [
+          {
+            id: 12,
+            name: 'Sally',
+            age: 16,
+          },
+        ]);
+        return queryInterface.bulkInsert('Addresses', [
+          {
+            PersonId: 12, 
+            city: 'Italy',
+            street: 'ipalo',
+            nr: 642,
+          },
+          {
+            PersonId: 12,
+            city: 'Spain',
+            street: 'labara',
+            nr: 999,
+          },
+        ]);
+      },
+    
+      async down (queryInterface, Sequelize) {
+        await queryInterface.bulkDelete('People', [
+          {
+            id: 12,
+            name: 'Sally',
+            age: 16,
+          },
+        ]);
+        return queryInterface.bulkDelete('Addresses', [
+          {
+            PersonId: 12,
+            city: 'Italy',
+            street: 'ipalo',
+            nr: 642,
+          },
+          {
+            PersonId: 12,
+            city: 'Spain',
+            street: 'labara',
+            nr: 999,
+          },
+        ]);
+      }
+    };
+    </pre>
+  </details>
+
+  <br><br>
+</body>
+
+</html>

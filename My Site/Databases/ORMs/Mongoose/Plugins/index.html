@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Plugins </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+    <script src="../../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Plugins </h1>
+    <p> Updated ( 2024-08-05 ) </p>
+    <nav class="sitenav">
+      <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+      <a href="../index.html" title="Learn WebDesign">Mongoose > </a> Plugins
+    </nav>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - plugins are used to extend schema functionalities </p>
+    <pre class="syntax">
+    import mongoose from 'mongoose';
+    
+    <reqval>schema</reqval> = new mongoose.Schema({ <optval>...</optval> })
+    
+    <reqval>plugin</reqval> = function(<reqval>schema</reqval><optval>, option:obj</optval>) {      // custom plugin
+      // some plugin logic...
+    }
+    
+// schema plugin --------------------------
+    <reqval>schema</reqval>.plugin(<reqval>plugin</reqval><optval>, option:obj</optval>)
+    
+    
+// global plugin --------------------------
+    monoose.plugin(<reqval>plugin</reqval><optval>, option:obj</optval>)
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+    <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = mongoose.Schema({
+      name: String,
+    });
+    
+    const logPlugin = function(schema, options) {             // plugin
+      schema.pre(['save', 'updateOne'], function(next) {
+        if (options?.millisecond) {
+          console.log(new Date().getTime());
+        } else {
+          console.log(new Date().toString());
+        }
+        next();
+      });
+    }
+    
+    personSchema.plugin(logPlugin, { millisecond: true });        // passing options
+    const Person = mongoose.model('friends', personSchema);
+    
+    await Person.create({ name: 'Arpad' });
+    </pre>
+    <!---------------------------------------------------------------------------------------------->
+    <hr>
+    <h4 class="header"> Global Plugins </h4>
+    <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const logPlugin = function(schema, options) {             // plugin
+      schema.pre(['save', 'updateOne'], function(next) {
+        if (options?.millisecond) {
+          console.log(new Date().getTime());
+        } else {
+          console.log(new Date().toString());
+        }
+        next();
+      });
+    }
+    
+    mongoose.plugin(logPlugin, { millisecond: true });                  // adding plugin globally 
+    
+    const personSchema = mongoose.Schema({
+      name: String,
+    });
+    
+    const Person = mongoose.model('friends', personSchema);
+    
+    await Person.create({ name: 'Arpad' });
+    </pre>
+    </details>
+
+
+      <br><br>
+    </body>
+
+  </html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Relations </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+  <script src="../../../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> Relations </h1>
+  <p> Updated ( 2024-08-26 ) </p>
+  <nav class="sitenav"> <a href="../../../../index.html">MySite > </a>
+    <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+    <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+    <a href="../index.html" title="Learn WebDesign">SQLAlchemy > </a> Relations
+  </nav>
+  <br>
+  <details class="example" id="notes">
+    <summary> Notes & Tips :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <p> - relations are described on record level, records have their relation attribute where we can coltrol their relations </p>
+  <p> - relations are automatically updated when we change one side </p>
+  <pre class="syntax">
+    from sqlalchemy import create_engine, Column, ForeignKey, <strong>Type</strong>
+    from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+    
+    Base = declarative_base()
+    
+    
+<span style="color:darkgray;">// one-to-one (<mark>uselist=False</mark>) & one-to-many (<mark>uselist=True</mark>) relation -----------------------------</span>
+    class <strong>ParentModel</strong>(Base):
+        __tablename__ = <strong>parentName:str</strong>
+        <strong>primaryKey</strong> = Column(<strong>Type</strong>, primary_key=True)
+        <i>...</i>
+        <strong>parentRelationAttr</strong> = relationship(<strong>ChildModel:str</strong>, back_populates=<strong>childRelationAttr:str</strong>, uselist=True|False)    // <mark>useList=False</mark> -> one-to-one relation
+                                                                                                  // <mark>useList=True</mark> -> one-to-many relation
+    
+    class <strong>ChildModel</strong>(Base):
+        __tablename__ = <strong>childName:str</strong>
+        <strong>foreignKey</strong> = Column(<strong>Type</strong>, ForeignKey(<strong>parentName.p_key:str</strong>, <small>ondelete=<i class="openable">constraint<div>
+          <h4> Operation when deleting the parent primary key </h4>
+          <p> - <mark>'no action'</mark> - no action will be taken (default) </p>
+          <p> - <mark>'restrict'</mark> - parent primary key cannot be deleted </p>
+          <p> - <mark>'cascade'</mark> - deleting the parent primary key record will delete the foreign key record </p>
+          <p> - <mark>'set null'</mark> - deleting the parent primary key will set the foreign key to <mark>NULL</mark> </p>
+        </div></i>, onupdate=<optval class="openable">constraint<div>
+          <h4> Operation when modifying the parent primary key </h4>
+          <p> - <mark>'no action'</mark> - no action will be taken (default) </p>
+          <p> - <mark>'restrict'</mark> - parent primary key cannot be modified </p>
+          <p> - <mark>'cascade'</mark> - modifying the parent primary key will modify the foreign key as well </p>
+          <p> - <mark>'set null'</mark> - modifying the parent primary key will set the foreign key to <mark>NULL</mark> </p>
+        </div></optval></small>))    // foreign key settings 
+        <i>...</i>
+        <strong>childRelationAttr</strong> = relationship(<strong>ParentModel:str</strong>, back_populates=<strong>parentRelationAttr:str</strong>)
+    
+    
+<span style="color:darkgray;">// many-to-many relation ------------------------------------------------------------------------</span>
+    class <strong>Model_A</strong>(Base):
+        __tablename__ = <strong>aName:str</strong>
+        <strong>primaryKey</strong> = Column(<strong>Type</strong>, primary_key=True)
+        <i>...</i>
+        <strong>relationAttr_A</strong> relationship(<strong>Model_B:str</strong>, secondary=<strong>junctionModelName:str</strong>)       // attribute contains related records    
+        
+        
+    class <strong>Model_B</strong>(Base):
+        __tablename__ = <strong>bName:str</strong>
+        <strong>primaryKey</strong> = Column(<strong>Type</strong>, primary_key=True)
+        <i>...</i>
+        <strong>relationAttr_B</strong> relationship(<strong>Model_A:str</strong>, secondary=<strong>junctionModelName:str</strong>)
+        
+        
+    class <strong>LinkModel</strong>(Base):                                 // junktion table
+        __tablename__ = <strong>junctionModelName:str</strong>
+        <strong>colNameA</strong> = Column(<strong>Type</strong>, ForeignKey(<strong>aName.primaryKey:str</strong>), primary_key=True)
+        <strong>colNameB</strong> = Column(<strong>Type</strong>, ForeignKey(<strong>bName.primaryKey:str</strong>), primary_key=True)
+  </pre>
+  <details class="example">
+    <summary> DEMO (can be pseudocode) </summary>
+    <h4 class="header"> One-to-One Relation with CRUD operations </h4>
+    <pre>
+    from sqlalchemy import URL, create_engine, Column, ForeignKey, Integer, String
+    from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+    
+    
+    Base = declarative_base()
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+    
+        address = relationship('Address', back_populates='person', uselist=False)       // describes a one-to-one relation
+    
+    
+    class Address(Base):
+        __tablename__ = 'address'
+    
+        id = Column(Integer, primary_key=True)
+        person_id = Column(Integer, ForeignKey('person.id', ondelete='cascade', onupdate='cascade'))
+        address = Column(String(30))
+    
+        person = relationship('Person', back_populates='address')
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    sessionmaker = sessionmaker(bind=engine)
+    
+    
+// create ---------------------------------------------------------
+    with sessionmaker() as session:
+        session.add(
+            Person(
+                name='Frank',
+                address=Address(address='some address 1')         // add new relation
+            )
+        )
+        
+        session.commit()
+    
+    
+// read -----------------------------------------------------------
+    with sessionmaker() as session:
+        frank = session.query(Person).filter(Person.name == 'Frank').one()
+        frank.address                                         // -> addressRecord
+    
+    
+// update ---------------------------------------------------------
+    with sessionmaker() as session:
+        frank = session.query(Person).filter(Person.name == 'Frank').one()
+        
+        frank.address.address = 'new address'                 // update relation
+        
+        session.commit()
+    
+    
+// delete  --------------------------------------------------------
+    with sessionmaker() as session:
+        frank = session.query(Person).filter(Person.name == 'Frank').one()
+        
+        session.delete(frank.address)
+        session.commit()
+        
+        frank.address               // -> None
+    </pre>
+    <!--------------------------------------------------------------------------------------------->
+    <hr>
+    <h4 class="header"> One-to-Many Relation with CRUD operations </h4>
+    <pre>
+    from sqlalchemy import URL, create_engine, Column, ForeignKey, Integer, String
+    from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+    
+    
+    Base = declarative_base()
+    
+    class Person(Base):
+        __tablename__ = 'person'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+    
+        bank_accounts = relationship('BankAccount', back_populates='persons')           // describes a one-to-many relation
+    
+    
+    class BankAccount(Base):
+        __tablename__ = 'bank_account'
+    
+        id = Column(Integer, primary_key=True)
+        person_id = Column(Integer, ForeignKey('person.id', ondelete='cascade', onupdate='cascade'))
+        balance = Column(Integer)
+    
+        persons = relationship('Person', back_populates='bank_accounts')
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    sessionmaker = sessionmaker(bind=engine)
+    
+    
+// create ---------------------------------------------------------
+    with sessionmaker() as session:
+        session.add(
+            Person(
+                name='Frank',
+                bank_accounts=[                          // creating relations
+                    BankAccount(balance=2300),
+                    BankAccount(balance=1700),
+                ],
+            )
+        )
+        session.commit()
+    
+    
+// read -----------------------------------------------------------
+    with sessionmaker() as session:
+        frank = session.query(Person).filter(Person.name == 'Frank').one()
+    
+        frank.bank_accounts         // -> [accountRecord, accountRecord]      // the parent record has all the relations (linked by relations attributes)
+    
+    
+// update ---------------------------------------------------------
+    with sessionmaker() as session:
+        frank = session.query(Person).filter(Person.name == 'Frank').one()
+        
+        for account in frank.bank_accounts:                     // update relations
+            account.balance = 0
+        
+        frank.bank_accounts.append(BankAccount(balance=100))    // add new relation
+        
+        session.commit()
+    
+    
+// delete  --------------------------------------------------------
+    with sessionmaker() as session:
+        frank = session.query(Person).filter(Person.name == 'Frank').one()
+        
+        for account in frank.bank_accounts:
+            session.delete(account)
+        
+        session.commit()
+        
+        frank.bank_accounts         // -> []
+    </pre>
+    <!--------------------------------------------------------------------------------------------->
+    <hr>
+    <h4 class="header"> Many-to-Many Relation with CRUD operations </h4>
+    <pre>
+    from sqlalchemy import URL, create_engine, Column, ForeignKey, Integer, String
+    from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+    
+    
+    Base = declarative_base()
+    
+    class Employee(Base):
+        __tablename__ = 'employee'
+    
+        id = Column(Integer, primary_key=True)
+        name = Column(String(30))
+    
+        desks = relationship('Desk', secondary='link')
+    
+    
+    class Desk(Base):
+        __tablename__ = 'desk'
+    
+        id = Column(Integer, primary_key=True)
+    
+        employees = relationship('Employee', secondary='link')
+    
+    
+    class Link(Base):                             // junction table
+        __tablename__ = 'link'
+    
+        employee_id = Column(Integer, ForeignKey('employee.id'), primary_key=True)
+        desk_id = Column(Integer, ForeignKey('desk.id'), primary_key=True)
+    
+    
+    url = URL.create('mysql+mysqlconnector', username='test_user', password='test_password',
+                     host='localhost', port=3306, database='sqlalchemy_test')
+    engine = create_engine(url, echo=True)
+    connection = engine.connect()
+    Base.metadata.create_all(bind=engine)
+    sessionmaker = sessionmaker(bind=engine)
+    
+    
+    with sessionmaker() as session:
+// creating employes and desks records --
+        employee_1 = Employee(id=1, name='Joyce')
+        employee_2 = Employee(id=2, name='Sally')
+        employee_3 = Employee(id=3, name='Eva')
+        
+        desk_1 = Desk(id=1)
+        desk_2 = Desk(id=2)
+    
+// describing relation between employees and desks ---
+        employee_1.desks.append(desk_1)
+        employee_1.desks.append(desk_2)
+        
+        desk_2.employees.append(employee_1)             // -! this would raise an exception (desk_2 has already employee_1) 
+        desk_2.employees.append(employee_2)
+        desk_2.employees.append(employee_3)
+        
+        session.add_all([employee_1, employee_2, employee_3, desk_1, desk_2])
+        session.commit()
+    
+    
+// records has their relation automatically updated (adding relation of 1 member will appear on the other as well) --
+        employee_1 = session.query(Employee).get(1)
+        desk_2 = session.query(Desk).get(2)
+        
+        employee_1.desks                            // -> [desk_1Record, desk_2Record] 
+        desk_2.employees                            // -> [employee_1Record, employee_2Record, employee_3Record]  
+    </pre>
+  </details>
+
+
+  <br><br>
+</body>
+
+</html>

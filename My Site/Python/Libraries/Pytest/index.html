@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Pytest </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+  <script src="../../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> Pytest </h1>
+  <p> Updated ( 2023-03-18 )</p>
+  <nav class="sitenav"> <a href="../../../index.html">MySite > </a>
+    <a href="../../index.html">Python > </a> Pytest
+  </nav>
+  <table class="table">
+    <caption>
+      <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
+    </caption>
+    <tr>
+      <th style="width:30%;"> CMD </th>
+      <th> Description </th>
+    </tr>
+    <tr>
+      <td>
+        pytest <small>[options]</small> <strong class="openable">path<i>::test::test::...</i>
+          <div>
+            <p> ex:</p>
+            <p> <mark>pytest</mark> (runs all test in the current and nested directories) </p>
+            <p> <mark>pytest tests/test_something.py tests2</mark> (runs test files on the specified paths) </p>
+            <p> <mark>pytest test_something.py::test_one</mark> (runs the <mark>test_one</mark> test case within
+              <mark>test_something.py</mark> file)
+            </p>
+            <p> <mark>pytest test_something.py::TestClass::test_one</mark> (runs the <mark>test_one</mark> test case
+              within the <mark>TestClass</mark> in <mark>test_something.py</mark> file) </p>
+          </div>
+        </strong>
+        </span> <i>...</i>
+      </td>
+      <td>
+        - start running tests (recognized <mark>test_<strong>fileName</strong>.py</mark> files) <br>
+        <small>[options]</small> <br>
+        - (<small>-s</small>) output prints (from the test and also from the project) <br>
+        - (<small>-v</small>) verbose mode (more detailed output on the terminal)
+      </td>
+    </tr>
+  </table>
+  <br>
+  <details class="example" id="notes">
+    <summary> Notes :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+  <p><a href="https://docs.pytest.org/en/7.2.x/" target="_blank">docs.pytest.org</a></p>
+  <p><a href="https://docs.pytest.org/en/7.2.x/reference/fixtures.html" target="_blank">Pytest built-in Fixture Reference </a></p>
+
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+  <p> - path resolution errors can be solved by placing a <mark>__init__.py</mark> file in the test directory </p>
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <p> - Pytest is a testing framework (requires at least Python v3.7) providing the following testing features over the built-in <mark>unittest</mark> module: </p>
+  <p style='text-indent:30px'> - fully compatible with <mark>unittest</mark> (we can use unittest features with Pytest) </p>
+  <p style='text-indent:30px'> - does not required test classes (we can write test cases right on the global scope) </p>
+  <p style='text-indent:30px'> - has far better test result output </p>
+  <p style='text-indent:30px'> - has a large plugin support </p>
+  <p style='text-indent:30px'> - fixtures and parametrize </p>
+  <p> - just like with unittest, test files must be prefixed with <mark>test_</mark> (ex: <mark>test_request.py</mark>)</p>
+  <pre class='syntax'>
+    def setup_module(module):                // runs before all tests in this module (the <mark>module</mark> argument references this module)   
+        // some setup logic...
+    
+    def teardown_module(module):              // runs after all tests in this module 
+        // some teardown logic...
+    
+    
+    
+    def test_<strong>testCaseName</strong>():                  // test cases (function prefixed with <mark>test_</mark>) can be declared in module level (no need to embed them in a class)
+        // some test case...
+    
+    
+    
+    class Test<strong>TestSuiteName</strong>:                  // test class must be prefixed with <mark>Test</mark>    
+        def setup_method(self, method):       // runs before each test case in this class (the <mark>method</mark> argument is the current test case function)   
+            // some setup logic...
+        
+        def teardown_method(self, method):    // runs after each test case in this class 
+            // some teardown logic...
+        
+        @classmethod
+        def setup_class(cls):                 // runs before all test cases in this class 
+            // some setup logic...
+        
+        @classmethod
+        def teardown_class(cls):              // runs after all test cases in this class 
+            // some teardown logic...
+        
+        def test_<strong>testCaseName</strong>(self):          // test cases within test class (function prefixed with <mark>test_</mark>)
+            // some test case...
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <p> - compatible with <mark>unittest</mark> </p>
+    <pre>
+    from unittest.mock import patch
+    
+    def some_func():
+        return 'OK'
+    
+    
+    @patch('test_demo.some_func')
+    def test_first(mock_some_func):     # no test classes are needed like in <mark>unittest</mark>
+        mock_some_func.return_value = 'mocked value!'
+    
+        assert some_func() == 'mocked value!'
+    
+    
+    @patch('test_demo.some_func')       # patching works the same was as in unittest (the class or individual test cases can be patched)
+    class TestClass:                    # test class must start with 'Test'
+        def test_one(self, mock_some_func):
+            mock_some_func.return_value = 'mocked value!'
+    
+            assert some_func() == 'mocked value!'
+    
+        def test_two(self, mock_some_func):
+            assert True
+  </pre>
+    <p> - setup / teardown </p>
+    <pre>
+    def setup_module(module):     # the module is the current module (global)
+        print( 'runs before all tests in this module')
+    
+    def teardown_module(module):
+        print( 'runs after all tests in this module')
+    
+    
+    class TestClass:
+        def setup_method(self, method):       # the method is the current test case function
+            print( 'runs before each test case in this class' )
+        
+        def teardown_method(self, method):
+            print( 'runs after each test case in this class' )
+        
+        @classmethod
+        def setup_class(cls):
+            print( 'runs before all tests in this class' )
+        
+        @classmethod
+        def teardown_class(cls):
+            print( 'runs after all tests in this class' )
+        
+        def test_one(self):
+            assert True
+    
+        def test_two(self):
+            assert True
+        
+        
+    def test_outer():
+        assert True  
+  </pre>
+    <p> - assert errors with Pytest </p>
+    <pre>
+    import pytest
+    
+    
+    def my_fun():
+        raise ValueError('some error')
+    
+    
+    def test_one():
+        with pytest.raises(ValueError, match='^some'):     # assert in this context the ValueError with the mached error message (regex) is raised
+            my_fun()
+  </pre>
+  </details>
+  <!--------------------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> Fixtures <mark>@pytest.fixture</mark> </h2>
+  <p> - pytes fixtures are functions that are recognized in test cases as arguments, we can write our own custom fixtures
+    but there are a lot of cool built-in fixtures (like: <mark class='mark'>monkeypatch</mark>, <mark class='mark'>caplog</mark>, etc...) </p>
+  <p> - <a href="https://docs.pytest.org/en/7.2.x/reference/fixtures.html" target="_blank">Pytest built-in Fixture
+      Reference </a></p>
+  <pre class='syntax'>
+    import pytest
+    
+    @pytest.fixture
+    def <strong>fixture_1</strong>():         // we can simply return some value but it's more common to use some kind of setup/teardown logic in fixtures like this   
+        // setup logic...                   
+        yield <strong>fixtureResult</strong>
+        // teardown logic...
+    
+    
+    def test_<strong>testName</strong>(<strong>fixture_1</strong>):     // the fixture is automatically recognized in test cases (as argument)
+        <strong>fixture_1</strong>   // using the fixture in test case...
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <p> - fixture </p>
+    <pre>
+    import pytest
+    
+    
+    @pytest.fixture
+    def fixture_1():                // usually we use a setup/teardown approach like this
+        // setup logic
+        yield 1
+        // teardown logic
+    
+    @pytest.fixture
+    def fixture_2():
+        yield 2
+    
+    
+    def test_one(fixture_2):          // the fixture is automatically recognized by the right argument name
+        assert fixture_2 == 2
+    
+    def test_two(fixture_1):
+        assert fixture_1 == 1
+    
+    def test_three(fixture_2, fixture_1):
+        assert fixture_2 == 2
+        assert fixture_1 == 1
+    
+    class TestSuite:
+        def test_one(self, fixture_1):
+            assert fixture_1 == 1
+  </pre>
+    <p> -fixture using other fixtures </p>
+    <pre>
+    import pytest
+    
+    
+    @pytest.fixture
+    def fix_1():
+        return 1
+    
+    @pytest.fixture
+    def fix_2():
+        return 2
+    
+    @pytest.fixture
+    def fix_result(fix_1, fix_2):
+        return fix_1 + fix_2
+    
+    
+    def test_x(fix_result):
+        assert fix_result == 3
+  </pre>
+    <p> - <mark class='mark'>monkeypatch</mark> built-in fixture </p>
+    <pre>
+// test_demo.py ----------------------------------------------------------------
+    import pytest
+    
+    from person import Person
+    from name_concatenator import NameConcatenator        // must be imported for object monkeypatch
+    
+    
+    adam = Person('Adam', 'Szelid')
+    
+    
+    def test_get_name(monkeypatch):
+        monkeypatch.setattr('person.NameConcatenator.concat_names', lambda name, surname : 'mocked value!')   // mocking where the function is used
+        assert adam.get_full_name() == 'mocked value!'
+    
+    
+    def test_get_name2(monkeypatch):
+        monkeypatch.setattr(NameConcatenator, 'concat_names', lambda name, surname : 'mocked value!')         // like this we have to import the object 
+        assert adam.get_full_name() == 'mocked value!'
+    
+    
+// person.py -------------------------------------------------------------------
+    from name_concatenator import NameConcatenator
+    
+    
+    class Person:
+        def __init__(self, name, surname):
+            self.name = name
+            self.surname = surname
+        
+        def get_full_name(self):
+            return NameConcatenator.concat_names(self.name, self.surname)
+    
+    
+// name_concatenator.py --------------------------------------------------------
+    class NameConcatenator:
+        @classmethod
+        def concat_names(cls, name, surname):
+            return f'{surname} {name}'
+  </pre>
+    <p> - <mark class='mark'>caplog</mark> built-in fixture </p>
+    <pre>
+    import pytest
+    import logging
+    
+    
+    logger1 = logging.getLogger('someLogger1')
+    logger1.setLevel(logging.DEBUG)
+    logger2 = logging.getLogger('someLogger2')
+    logger2.setLevel(logging.DEBUG)
+    
+    
+    def some_func():
+        logger1.debug('some debug message')
+        logger1.info('some info message')
+        logger2.warn('some warn message')
+        logger2.error('some error message')
+    
+    
+    def test_one(caplog):
+        some_func()
+        assert caplog.records[0].msg == 'some debug message'
+        assert caplog.records[1].msg == 'some info message'
+        assert caplog.records[2].msg == 'some warn message'
+        assert caplog.records[3].msg == 'some error message'
+  </pre>
+  </details>
+  <!--------------------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> Parametrize <mark>@pytest.mark.parametrize()</mark> </h2>
+  <p> - with parametrize we can control how many times the test case should run with different values (passed as parameters) </p>
+  <pre class='syntax'>
+  @pytest.mark.parametrize(<strong>arg<i>,...</i>:str</strong>, [<strong class='openable'>tuple<div>
+      <p> ex: <mark>@pytest.mark.parametrize('arg1,arg2', [(1, 2), (11, 22)])</mark> </p>
+      <p> - the decorated test will run twice, arg1 and arg2 arguments will get <mark>1</mark> and <mark>2</mark> on the first pass and <mark>11</mark> and <mark>22</mark> on the second </p>
+  </div></strong><i>, ...</i>])
+  def test_<strong>testName</strong>(<strong>arg</strong><i>, ...</i>):
+      // test case...
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <p> - parametrize </p>
+    <pre>
+    import pytest
+    
+    
+    @pytest.mark.parametrize('input,expected', [(2, 4), (4, 16), (100, 10_000)])    # test will run 3 times
+    def test_one(input, expected):
+        assert input * input == expected
+  </pre>
+  </details>
+  <!--------------------------------------------------------------------------------------------->
+  <hr>
+  <h2 class="headerExtra"> Async Testing </h2>
+  <p> - to test asynchronous code we can use the <mark>pytest-asyncio</mark> plugin (must be installed) </p>
+  <p> - Python 3.8 natively supports the AsynMock to create awaitable mock object <a href="../../Built-in Libraries/unittest/index.html#mock" target="_blank">[link]</a></p>
+  <pre class='syntax'>
+    import pytest
+    
+    
+    @pytest.mark.asyncio                    // allows async logic testing
+    async def test_<strong>testSuite</strong>():
+        await <strong>awaitable()</strong>                // awaitables can be tested 
+    
+    
+    @pytest.mark.asyncio                 // can be used in class level (all class methods can async test now)
+    class Test<strong>TestSuiteName</strong>:
+        async def test_<strong>testSuite</strong>():
+            await <strong>awaitable()</strong>
+        
+        <i>...</i>
+  </pre>
+
+
+  <br><br>
+</body>
+
+</html>

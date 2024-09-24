@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Sequelize </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Sequelize </h1>
+    <p> Updated ( 2024-08-08 ) </p>
+    <nav class="sitenav">
+      <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../index.html" title="Learn WebDesign">ORMs > </a> Sequelize
+    </nav>
+    <p class="subSite"><a href="./Data Types/index.html"> Data Types > </a></p>
+    <p class="subSite"><a href="./Associations/index.html"> Associations (Relations) > </a></p>
+    <p class="subSite"><a href="./Hooks/index.html"> Hooks > </a></p>
+    <p class="subSite"><a href="./Migration/index.html"> Migration (with Sequelize CLI) > </a></p>
+    <p class="subSite"><a href="./Typescript Support/index.html"> Typescript Support > </a></p>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p> <a href="https://sequelize.org/docs/v6/getting-started/" target="_blank">sequelize.org (docs) </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - by default internally passed table names are plurified (with the inflection lib), to specify the exact db table name use the <mark>tableName</mark> Model option </p>
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - sequelize is an SQL database ORM for JavaScript </p>
+    <p> - custom logging can be configured <a href="https://sequelize.org/docs/v6/getting-started/#logging" target="_blank">here...</a> </p>
+    <p> - sequelize has paranoid tables which is basically a sequelize soft delete implementation <a href="https://sequelize.org/docs/v6/core-concepts/paranoid/" target="_blank">[link]</a> </p>
+    <pre class="syntax">
+    [<reqval>result</reqval>, <reqval>meta</reqval>] = await sequelize.query(<reqval>sqlStatement:str</reqval>)   // to execute SQL statement directly
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> Raw SQL query </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    const [result, meta] = await sequelize.query('SELECT * FROM People');
+    </pre>
+      <!----------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Paranoid table (soft delete) </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    const Person = sequelize.define(
+      'Person',
+      {
+        name: DataTypes.STRING,
+      },
+      { paranoid: true });                 // enable paranoid table
+    
+    await sequelize.sync({ force: true });
+    
+    await Person.bulkCreate([
+      { name: 'Bob' },
+      { name: 'Doe' },
+      { name: 'Sally' },
+    ]);
+    
+    await Person.destroy({ where: {} });     // any normal delete = soft delete
+    
+    await Person.destroy({ where: {}, force: true });     // hard delete
+      </pre>
+    </details>
+
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Connection </h2>
+    <p> - sequelize supports several SQL databases, the necessary DB driver needs to be installed <a href="https://sequelize.org/docs/v6/getting-started/#installing" target="_blank">[link]</a> </p>
+    <pre class="syntax">
+    import { Sequelize } from 'sequelize';
+    
+    const sequelize = new Sequelize(
+      '<reqval>driver</reqval>//<reqval>user</reqval>:<reqval>password</reqval>@<reqval>host:port</reqval>/<reqval>db</reqval>',
+      { <a href="https:\/\/sequelize.org/docs/v6/other-topics/connection-pool/" target="_blank">connectionPoolOptions</a>, <optval>...</optval> }
+    )
+    await sequelize.authenticate()                    // start connection (promise)
+                                                    // -! a single <mark>sequelize</mark> instance is one connection, if disconnected cannot be reconnedted again (a new instance is needed for each connection)
+        
+    await sequelize.close()                           // closes the connection (promise)
+  </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+    import { Sequelize } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db');
+    
+    await sequelize.authenticate();             // connect 
+    console.log('connected!')
+    
+    // ...
+    
+    await sequelize.close();                    // close connection
+    </pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Model Definition </h2>
+    <p> - a sequelize Model is an SQL table abstraction, a Model instance is an SQL record representation (DAO), the Model name is automatically pluralized in the DB (sequelize automatically do naming pluralization for consistency (like other ORMs)) </p>
+    <p> - sequelize provides 2 ways to define Models </p>
+    <pre class="syntax">
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    sequelize = new Sequelize(<reqval>connectionString</reqva>)
+    
+// 2 ways of Model defintion ---------------------
+  // using sequelize.define() --------------------------------
+    <reqval>Model</reqval> = sequelize.define(
+        <reqval>modelName:str</reqval>,
+        {
+            <reqval>column</reqval>: <reqval>sequelizeType</reqval>|{ type: <reqval>sequelizeType</reqval><optval>, ...</optval> },
+            <optval>...</optval>
+        },
+        { <reqval class="openable">options<div>
+          <p> <mark>timestamps: <strong>bool</strong></mark> - automatically adds the <mark>createdAt</mark> and <mark>updatedAt</mark> columns to the model (Default: <mark>true</mark>) </p>
+          <p> <mark>tableName: <strong>tableName</strong></mark> - table name (by default the passed name is plurified) </p>
+        </div></reqval> },          // options object
+    );
+    
+    
+  // extending Model class -----------------------------------
+    class <reqval>Model</reqval> extends Model {            // on class Models we can declare methods 
+        static <reqval>fn</reqval>() { <mark>this</mark> }        // <mark>this</mark> -> refers to the <reqval>Model</reqval>
+        <reqval>fn</reqval>() { <mark>this</mark> }               // <mark>this</mark> -> refers to the <reqval>record</reqval> (DAO) (<reqval>Model</reqval> instance)    
+    }
+    
+    <reqval>Model</reqval>.init(
+        {
+            <reqval>column</reqval>: <reqval>sequelizeType</reqval>|{ type: <reqval>sequelizeType</reqval><optval>, ...</optval> },
+            <optval>...</optval>
+        },
+        { sequelize, <reqval class="openable">options<div>
+          <p> <mark>timestamps: <strong>bool</strong></mark> - automatically adds the <mark>createdAt</mark> and <mark>updatedAt</mark> columns to the model (Default: <mark>true</mark>) </p>
+          <p> <mark>tableName: <strong>tableName</strong></mark> - table name (by default the passed name is plurified) </p>
+        </div></reqval> },          // options object
+    )
+    
+    
+// synchronizing Models with database tables ---------------------
+// (synchronization should not be used if we use migration tools like Sequelize CLI) --
+    await sequelize|<reqval>Model</reqval>.sync()                       // creates tabless in the DB if not exist (does nothing if tables exist)
+    await sequelize|<reqval>Model</reqval>.sync({ alter: true })        // only changes are synchronizes with the DB tables
+    await sequelize|<reqval>Model</reqval>.sync({ force: true })        // completely destroys the current and creates new tables in the DB
+    
+    await <reqval>Model</reqval>.drop()                         // deletes the DB table mapped to <reqval>Model</reqval>
+  </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> 2 ways of Defining sequelize Models </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    
+    // using sequelize.define() -----------------------------
+    const Person = sequelize.define(
+      'Person',
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+      },
+      { timestamps: false }
+    )
+    
+    
+    // using Model class ------------------------------------
+    class Person extends Model {};
+    
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+      },
+      { sequelize, tableName: 'Person', timestamps: false }
+    );
+    
+    
+// synchronizing / droping tables ----------
+    await Person.sync()                   // synchronizes the model with the DB table (if DB table not exist)
+    await sequelize.sync()                // synchronizes ALL model with the DB tables (if DB tables not exist)
+    
+    await Person.drop()                   // deletes DB table mapped to the Person model
+    </pre>
+      <!--------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Using methods on class Models </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {
+      static getInfo() {                                  // static method 
+        return 'Person class info...';
+      }
+    
+      getFullname() {                                     // instance method (available on the created DAO)
+        return this.name + ' ' + this.surname;
+      }
+    };
+    
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+    const person = Person.build({
+      name: 'Steven',
+      surname: 'McAnister',
+    });
+    
+    person.getFullname();                    // -> 'Steven McAnister'
+    Person.getInfo();                        // -> 'Person class info...'  (static method)
+    </pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> SQL Constraints & Validation </h2>
+    <p> - SQL constraints are enforced in database level, but we also can enforce validation on sequelize level </p>
+    <pre class="syntax">
+    <reqval>Model</reqval> = sequelize.define(
+        <reqval>tableName:str</reqval>,
+        {
+            <reqval>column</reqval>: {
+                type: <reqval>sequelizeType</reqval>
+                <strong class="openable">constraints<div>
+                  <p> <mark>primaryKey: <reqval>bool</reqval></mark> - primary key (Default: <mark>false</mark>) </p>
+                  <p> <mark>defaultValue: <reqval>val</reqval></mark> - default value (Default: <mark>null</mark>) (<mark>DataTypes.NOW</mark> supported for date columns) </p>
+                  <p> <mark>allowNull: <reqval>bool</reqval></mark> - allow NULL (Default: <mark>true</mark>) </p>
+                  <p> <mark>unique: <reqval>bool</reqval></mark> - unique column (Default: <mark>false</mark>) </p>
+                  <p> <mark>autoIncrement: <reqval>bool</reqval></mark> - auto increment (Default: <mark>false</mark>) </p>
+                  <p> <mark>comment: <reqval>val</reqval></mark> - column comment </p>
+                  <p> <mark>field: <reqval>val</reqval></mark> - custom column name </p>
+                </div></strong>,              // SQL constraints 
+                validate: {
+                    <a href="https:\/\/sequelize.org/docs/v6/core-concepts/validations-and-constraints/#per-attribute-validations" target="_blank">builtInValidator</a>,                        // built-in validators
+                    <reqval>fn</reqval>() { this },               // custom validator (raise an error on failed validation otherwise do nothing)
+                    <reqval>builtInValidator</reqval> : {
+                        arg: <reqval>arg</reqval>,
+                        msg: <reqval>errMsg</reqval>,             // custom error message for built-in validator 
+                    }
+                }
+            },
+            <optval>...</optval>
+        },
+        {
+            validator: {
+                <reqval>fn</reqval>() { this }        // model-wide custom validator (raise an error on failed validation otherwise do nothing)
+            }
+            <optval>options...</optval>
+        }
+    );
+    
+// manual validation -----------------
+    <reqval>record</reqval>.validate()                // validates the record (throws an error on failed validation)
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> SQL Constraints </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: { type: DataTypes.STRING, allowNull: false, defaultValue: '[no name]' },
+        passportId: { type: DataTypes.INTEGER, unique: true, comment: 'personal passport Id' },
+        createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+      </pre>
+      <!------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Built-in & Custom Validators </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: {
+          type: DataTypes.STRING,
+          validate: {
+            startsWithCapitalLetter(v) {                                  // custom validator 
+              if (!/^[A-Z].*/.test(v)) {
+                throw new Error('name does not start with capital letter')    // throws an error on failed validation
+              }
+            }
+          }
+        },
+        age: {
+          type: DataTypes.INTEGER,
+          validate: {
+            max: 100,                                               // built-in validator
+            min: {                                                  // built-in validator with custom error message
+              arg: 0,
+              msg: 'Age must be bigger than 0',
+            },
+          }
+        }
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+      </pre>
+      <!------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Model Wide Custom Validator </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        age: DataTypes.INTEGER, 
+      },
+      { 
+        sequelize,
+        modelName: 'Person',
+        timestamps: false,
+        validate: {
+          PeggyAgeLimit() {                                     // model-wide validator 
+            if (this.name === 'Peggy' && this.age > 25) {
+              throw Error('Peggy cannot be older than 25 years');
+            }
+          }
+        }
+      }
+    );
+      </pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> CRUD Operations </h2>
+    <pre class="syntax">
+    // sequelize also supports the variation of CRUD methods (ex: <mark>findAndCountAll()</mark> etc...) <a href="https://sequelize.org/api/v6/class/src/model.js~model" target="_blank">[link]</a>
+    
+// CREATE ------------------------------
+  // creatting single record with build() & save() -------------
+    <reqval>record</reqval> = <reqval>Model</reqval>.build(<opt>{ <optval>column: val, ...</optval> }</opt>)
+    
+    <reqval>record.column = val</reqval>             // setting column value
+    <optval>...</optval>
+    
+    <reqval>record</reqval>.set({ <reqval>column: val</reqval><optval>, ...</optval> })      // setting multiple columns
+    await <reqval>record</reqval>.save();                     // persisting record in DB
+    
+    
+  // creatting single record with create() ---------------------
+    await <reqval>Model</reqval>.create({ <reqval>column: val</reqval><optval>, ...</optval> })     // creates and persist the record in DB 
+    
+    
+  // creating multiple records----------------------------------
+    await <reqval>Model</reqval>.bulkCreate([<reqval class="openable">recordObj<div>
+      <p> - JS plain object that follows the Model schema (ex: <mark>{ name: 'Bob', age: 32 }</mark>) </p>
+    </div></reqval><optval>, ...</optval>]<opt>, { validation: true }</opt>)                      // create and persist multiple records in DB (validation explicitly has to be enabled)
+    
+    
+    
+// READ ------------------------------
+    await <reqval>Model</reqval>.findByPk(<reqval>val</reqval>)                          // get record by primary key
+    await <reqval>Model</reqval>.findOne|findAll(<optval class="openable">options:obj<div>
+      <p> - <mark>attribute</mark> (selecting specific columns & using SQL functions on columns) </p>
+      <p> - <mark>[<reqval>column:str</reqval><small>, ... ,[column:str, columnAlias:str]</small>]</mark> - get the specified columns only (columns can be aliased) </p>
+      <p> - <mark>{ exclude: [<reqval>column:str</reqval><small>, ...</small>] }</mark> - get all columns except the specified onces </p>
+      <p> - <mark>[ <small>...</small> [sequelize.fn(<reqval>sqlFn:str</reqval>, sequelize.col(<reqval>column:str</reqval>)), <reqval>columnAlias:str</reqval>] <small>...</small>]</mark> - execute SQL functions on columns </p>
+      <p> - </p>
+      <p> - <mark>where</mark> (enhanced filtering) </p>
+      <p> - <mark>{ <reqval>column</reqval>: <reqval>val|val[]</reqval><small>, ...</small> }</mark> - filter for specific value(s) </p>
+      <p> - <mark>{ <reqval>column</reqval>: { [Op.<a href="https:\/\/sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators" target="_blank">operator</a>]: <small>...</small> } }</mark> - enhanced filtering with the <mark>Op</mark> symbol (ex: equal, larger, smaller, and, or, etc...) </p>
+      <p> - </p>
+      <p> - <mark>order</mark> (ordering) </p>
+      <p> - <mark>[[<reqval>column:str</reqval>, 'ASC|DESC']<small>, ...</small>]</mark> - orders the result (also does grouped ordering) </p>
+      <p> - </p>
+      <p> - <mark>group</mark> (grouping) </p>
+      <p> - <mark><reqval>column:str</reqval></mark> - groups the result by the specified column </p>
+      <p> - </p>
+      <p> - <mark>offset</mark> (skip for pagination) </p>
+      <p> - <mark><reqval>nr</reqval></mark> - skips <reqval>nr</reqval> records </p>
+      <p> - </p>
+      <p> - <mark>limit</mark> (limit for pagination) </p>
+      <p> - <mark><reqval>nr</reqval></mark> - returns <reqval>nr</reqval> records </p>
+    </div></optval>)                          // get the 1st matching or all records 
+    
+    await <reqval>Model</reqval>.count(<optval class="openable">options:obj<div>
+      <p> - <mark>where</mark> (enhanced filtering) </p>
+      <p> - <mark>{ <reqval>column</reqval>: <reqval>val|val[]</reqval><small>, ...</small> }</mark> - filter for specific value(s) </p>
+      <p> - <mark>{ <reqval>column</reqval>: { [Op.<a href="https:\/\/sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators" target="_blank">operator</a>]: <small>...</small> } }</mark> - enhanced filtering with the <mark>Op</mark> symbol (ex: equal, larger, smaller, and, or, etc...) </p>
+    </div></optval>)                          // count all (or the filtered) records
+    await <reqval>Model</reqval>.min|max|sum(<reqval>column:str</reqval>, <optval class="openable">options:obj<div>
+      <p> - <mark>where</mark> (enhanced filtering) </p>
+      <p> - <mark>{ <reqval>column</reqval>: <reqval>val|val[]</reqval><small>, ...</small> }</mark> - filter for specific value(s) </p>
+      <p> - <mark>{ <reqval>column</reqval>: { [Op.<a href="https:\/\/sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators" target="_blank">operator</a>]: <small>...</small> } }</mark> - enhanced filtering with the <mark>Op</mark> symbol (ex: equal, larger, smaller, and, or, etc...) </p>
+    </div></optval>)                          // get the smallest, largest value or sum up column values for all (or filtered) columns
+    
+    
+    
+// UPDATE ------------------------------
+    await <reqval>Model</reqval>.update({ <reqval>column</reqval>: <reqval>newVal</reqval><optval>, ...</optval> }, <strong class="openable">filter:obj<div>
+      <p> - <mark>where</mark> (enhanced filtering) </p>
+      <p> - <mark>{ <reqval>column</reqval>: <reqval>val|val[]</reqval><small>, ...</small> }</mark> - filter for specific value(s) </p>
+      <p> - <mark>{ <reqval>column</reqval>: { [Op.<a href="https:\/\/sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators" target="_blank">operator</a>]: <small>...</small> } }</mark> - enhanced filtering with the <mark>Op</mark> symbol (ex: equal, larger, smaller, and, or, etc...) </p>
+    </div></strong>)            // updates all (or filtered) records
+    
+    await <reqval>Model</reqval>.increment|decrement({ <reqval>column</reqval>: <reqval>by:nr</reqval><optval>, ...</optval> }, <strong class="openable">filter:obj<div>
+      <p> - <mark>where</mark> (enhanced filtering) </p>
+      <p> - <mark>{ <reqval>column</reqval>: <reqval>val|val[]</reqval><small>, ...</small> }</mark> - filter for specific value(s) </p>
+      <p> - <mark>{ <reqval>column</reqval>: { [Op.<a href="https:\/\/sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators" target="_blank">operator</a>]: <small>...</small> } }</mark> - enhanced filtering with the <mark>Op</mark> symbol (ex: equal, larger, smaller, and, or, etc...) </p>
+    </div></strong>)          // increments|decrements the targeted column value of all (or filtered) columns by <reqval>by</reqval>
+    
+    
+  // upsert ----------------------------------------------------
+    await <reqval>Model</reqval>.upsert({ <reqval>column: val</reqval><optval>, ...</optval> })           // modify existing or creates a new record 
+    
+    
+    
+// DELETE ------------------------------
+    await <reqval>Model</reqval>.destory(<strong class="openable">filter:obj<div>
+      <p> - <mark>where</mark> (enhanced filtering) </p>
+      <p> - <mark>{ <reqval>column</reqval>: <reqval>val|val[]</reqval><small>, ...</small> }</mark> - filter for specific value(s) </p>
+      <p> - <mark>{ <reqval>column</reqval>: { [Op.<a href="https:\/\/sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators" target="_blank">operator</a>]: <small>...</small> } }</mark> - enhanced filtering with the <mark>Op</mark> symbol (ex: equal, larger, smaller, and, or, etc...) </p>
+      <p> - </p>
+      <p> - <mark>force: <reqval>bool</reqval></mark>: force delete (on paranoid tables enables real data removal (Default: <mark>false</mark>)) </p>
+    </div></strong>)            // deletes all (or filtered) records
+  </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> Create records </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model, Op } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+        sex: { type: DataTypes.ENUM, values: ['M', 'F'] },
+        job: DataTypes.STRING,
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+    
+// create single record using build() & save() methods --------------------------
+    const person = Person.build({ name: 'Steven' });                // building record
+    
+    person.surname = 'McAnister';                           // update individual fields
+    person.set({                                            // bulk field update
+      age: 32,
+      sex: 'M',
+      job: 'Scrum Master'
+    });
+    
+    person.toJSON();                                  // -> use this syntax to clearly log DAO on console 
+    await person.save();                              // pesisting record in DB
+    
+    
+// create single record using create() method --------------------------
+    await Person.create({                             // create & persist record in DB
+      name: 'Julie',
+      surname: 'Lenan',
+      age: 39,
+      sex: 'F',
+      job: 'Software Developer',
+    });
+    
+    
+// create multiple records -------------------------------------
+    await Person.bulkCreate([
+      { name: 'Josh', surname: 'McAnister', age: 32, sex: 'M', job: 'Carpenter' },    // JS plain object that follows the Person Model schema
+      { name: 'Anya', surname: 'Cepelin', age: 27, sex: 'F', job: 'Hairdresser' },
+      { name: 'Evelyn', age: 23, sex: 'F' },
+      { name: 'Sonka', surname: 'Sanduly', age: 36, sex: 'M', job: 'Tractorist' },
+    ], { validation: true });                                                         // enable validation 
+    </pre>
+      <!-------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Read (get) records </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model, Op } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+        sex: { type: DataTypes.ENUM, values: ['M', 'F'] },
+        job: DataTypes.STRING,
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+// column selection ------------
+    await Person.findByPk(3);                                 // get record by primary key
+    
+    await Person.findAll();                                   // get all records 
+    
+    await Person.findAll({ attributes: ['name', 'surname', ['sex', 'gender']] });     // get only specific columns (projection) (column name aliased ['sex', 'gender'])
+    
+    await Person.findAll({ attributes: { exclude: ['age', 'job'] }});                 // get all columnst except the listed onces
+    
+    await Person.findAll({ attributes: [                                  // executing SQL function on columns
+      [sequelize.fn('COUNT', sequelize.col('name')), 'n_names']
+    ]});                                  
+    await Person.findAll({ attributes: [
+      [sequelize.fn('LOWER', sequelize.col('name')), 'name'],
+      'surname',
+      'sex'
+    ]});
+    
+    
+// filtering (where) query ----------------------------------------
+    await Person.findAll({ where: { job: 'software developer' }});                  // simple where filtering
+    await Person.findAll({ where: { job: ['software developer', 'Tractorist'] }});      // several matches (or logical)
+    
+    await Person.findAll({ where: { job: { [Op.eq]: 'software developer' }}});      // where filtering with Op.eq (queries do the same as above)
+    await Person.findAll({ where: { job: { 
+      [Op.or]: ['software developer', 'Tractorist'],
+    }}});
+    
+    await Person.findAll({ where: {                                   // complex Op filtering
+      [Op.and]: [
+        { job: { [Op.in]: ['software developer', 'Tractorist', 'Hairdresser'] }},
+        { age: { [Op.gte]: 30 }},
+      ]
+    }});
+    
+    
+// ordering -----------------------------------------------
+    await Person.findAll({ order: [['name', 'ASC']] });
+    await Person.findAll({ order: [['sex', 'DESC'], ['name', 'ASC']] });          // grouped filtering 
+    
+    
+// grouping ---------------------------------------
+    await Person.findAll({ attributes: [                                // group and count by sex
+      [sequelize.fn('COUNT', sequelize.col('id')), 'count'], 'sex'],
+      group: 'sex',
+    });
+    
+    
+// offset & limit (pagination) --------------------
+    await Person.findAll({ offset: 10, limit: 20 });                  // get 20 records but skip the first 10 
+    
+    
+// utility methods ----------------------------------
+    await Person.count();                                            // -> 32434   // count all records
+    await Person.count({ where: { sex: 'F' } });                     // count specific records
+    
+    await Person.min('age');                                    // -> 27     // smallest value in 'age' column
+    await Person.max('age', { where: { sex: 'F' }});              // -> 54     // oldest feemale 
+    await Person.sum('age');                                    // -> 134    // sum of all values in the 'age' column
+    
+    
+    
+// readable record(s) -----------------------------
+    const result = await Person.findAll();
+    JSON.stringify(result, null, 2);                            // outputs record(s) in a nice readable JSON format 
+    </pre>
+      <!-------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Update records </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model, Op } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+        sex: { type: DataTypes.ENUM, values: ['M', 'F'] },
+        job: DataTypes.STRING,
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+    await Person.update({ job: 'Software Developer'}, { where: { job: 'Dev' }});        // update job column
+    
+    await Person.decrement({ age: 1 }, { where: {} });                                // increment / decrement 
+    await Person.increment({ age: 5 }, { where: { age: { [Op.lte]: 25 } } });
+    
+    await Person.upsert({ id: 11, job: 'Software Developer'});                        // upsert record
+    </pre>
+      <!-------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Delete records </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model, Op } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+        sex: { type: DataTypes.ENUM, values: ['M', 'F'] },
+        job: DataTypes.STRING,
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+    await Person.destroy({ where: { job: 'Software Developer' } });         // delete filtered records
+    </pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Getters, Setters and Virtuals </h2>
+    <p> - getters & setters are basically functions that process user input and output <u>(getters & setters are working on all CRUD operations)</u> </p>
+    <p> - virtuals are columns that are not stored in the database (it's an abstraction over normal fields) </p>
+    <pre class="syntax">
+    import { DataTypes } from 'sequelize';
+    
+// Getters & Setters -----------------------------------------
+    <reqval>Model</reqval> = sequelize.define(
+        <reqval>tableName:str</reqval>,
+        {
+            <reqval>column</reqval>: {
+                type: <reqval>sequelizeType</reqval>,
+                get() { <mark>this</mark> },                                    // processes output value before output on <reqval>record</reqval> (<mark>this</mark> -> current <reqval>record</reqval> <u>(use <mark>this.getDataValue(<reqval>column:str</reqval></mark>) to refer to the current column)</u>)  
+                set(<reqval>v</reqval>) { <mark>this</mark> },                 // processes input value before persisting to the DB (<mark>this</mark> -> current <reqval>record</reqval> <u>(use <mark>this.setDataValue(<reqval>column:str</reqval></mark>) to refer to the current column)</u>)
+            },
+            <optval>...</optval>
+        },
+        <reqval>option:obj</reqval>
+    );
+    
+    
+// Virtuals -----------------------------------------
+    <reqval>Model</reqval> = sequelize.define(
+        <reqval>tableName:str</reqval>,
+        {
+            <reqval>virtual</reqval>: {
+                type: DataTypes.Virtual,
+                get() { <mark>this</mark> },                                    // processes output for this virutal  
+                set(<reqval>v</reqval>) { <mark>this</mark> },                 // processes input for this virtual 
+            },
+            <optval>...</optval>
+        },
+        <reqval>option:obj</reqval>
+    );
+  </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> Getters & Setters </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model} from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: {
+          type: DataTypes.STRING,
+          get() { 
+            return this.getDataValue('name') ? this.getDataValue('name').toUpperCase() : null;        // -! <mark>this.name</mark> cannot be used (would end up in an infinite recursion)
+          },
+          set(v) {
+            const formatedName = v.charAt(0).toUpperCase() + v.slice(1).toLowerCase();                // -! <mark>this.name</mark> cannot be used (would end up in an infinite recursion)
+            this.setDataValue('name', formatedName);
+          },
+        },
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+    
+// getters & setters are working with any CRUD operations -----------------------------------------
+    const john = Person.build({ name: 'john' })
+    john.name                             // -> 'JOHN'
+    
+    john.name = 'jony'
+    john.name                             // -> 'JONY'
+    await john.save();                    // 'Jony' persisted in DB
+    
+    
+    await Person.create({ name: 'JoSH' })                 // 'Josh' peristed in db
+    
+    const result = await Person.findAll({ where: { name: 'Josh'} });
+    console.log( JSON.stringify(result, null, 2));        // -> [{ "name":"JOSH" }]     we see 'JOSH' because of the getter but 'Josh' is stored in DB
+    
+    await Person.update({ name: 'jennifer' }, { where: { name: 'josh' }})     // update all 'Josh' to -> 'Jenifer'    (where statement is case insensitive: could be 'JOSH', 'JOsh', etc...)
+    </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Virtuals </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model} from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Person extends Model {};
+    Person.init(
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        fullName: {
+          type: DataTypes.VIRTUAL,
+          get() { return this.name + ' ' + this.surname },
+          set(v) {
+            const [name, surname] = v.split(' ')
+            this.name = name;
+            this.surname = surname;
+          }
+        }
+      },
+      { sequelize, modelName: 'Person', timestamps: false }
+    );
+    
+    
+    await Person.create({ fullName: 'Arpad Pall' })                 // get vitual   // persisted in db: (name -> 'Arpad') (surname -> 'Pall')
+    
+    const result = await Person.findOne({ where: { name: 'Arpad' }});   // setting fields throug virtual 
+    result.fullName;                   // -> 'Pall Arpad'          
+    
+    Person.findAll({ where: { fullName: 'Arpad Pall' }});           // -! does not work (we cannot query virtuals because they don't exist in DB)
+      </pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Indexing </h2>
+    <pre class="syntax">
+    <reqval>Model</reqval> = sequelize.define(
+        <reqval>tableName:str</reqval>,
+        { <optval>...</optval> },
+        {
+            indexes: [
+                { 
+                    fields: [<reqval>column:str</reqval><optval>, ...</optval>],    // field(s) to index
+                    <opt>name: <optval>idxName:str</optval>,</opt>                  // custom index name
+                    <opt>type: 'FULLTEXT',</opt>                                    // to create full-text index
+                },
+                <optval>...</optval>
+            ],
+            <optval>options...</optval>
+        },
+    );
+    
+// searching words in full-text indexed columns ----
+    await sequelize.query('SELECT *|<optval>col, ...</optval> FROM <reqval>table</reqval> WHERE MATCH(<reqval>col, ...</reqval>) AGAINST(<reqval>str</reqval>)')    // -! sequelize does not support word search for full-text indexed columns so raw query should be used for that
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    
+    const People = sequelize.define(
+      'People',
+      {
+        name: DataTypes.STRING,
+        surname: DataTypes.STRING,
+        age: DataTypes.INTEGER,
+      },
+      {
+        timestamps: false,
+        indexes: [
+          { fields: ['name'] },
+          { fields: ['surname', 'name'], name: 'compoundIndex' },                     // compound index
+          { fields: ['surname', 'name'], name: 'fullTextIndex', type: 'FULLTEXT' },   // full-text (compound) index
+        ]
+      },
+    );
+    
+    await sequelize.sync({ force: true });
+    
+    await People.bulkCreate([
+      { name: 'Doe', surname: 'John', age: 32 },
+      { name: 'Dani', surname: 'Janos', age: 42 },
+      { name: 'Denes', surname: 'Johan', age: 22 },
+    ]);
+    
+    
+    const [res, meta] = await sequelize.query(                              // we have to use raw query to take advantage of full-text indexed search  
+      'SELECT * FROM People WHERE MATCH(surname, name) AGAINST("Dani + Doe")'
+    ) 
+      </pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Transactions </h2>
+    <p> - sequelize supports 2 types of transactions: </p>
+    <p class="indent-lv1"> Unmanaged transaction: we manually call commit and rollback </p>
+    <p class="indent-lv1"> Managed transaction: committing and rollingback handled automatically </p>
+    <p> - rows participating in the transaction can be write locked during the transaction </p>
+    <pre class="syntax">
+// unmanaged transaction -----------------------------
+    <reqval>transaction</reqval> = await sequelize.transaction()        // transaction object
+    
+    await <reqval>Model.modelMethod</reqval>( <optval>...</optval>, {
+        transaction: <reqval>transaction</reqval>,                        // transaction object must be passed to any CRUD method participating the transaction
+        lock: <reqval>bool</reqval>,                                    // rows participating in the transaction are write locked (untile the end of transaction (Default: <mark>false</mark>))
+    })
+    <optval>otherCRUDoperations...</optval>
+    
+    <reqval>transaction</reqval>.commit()           // commits the transaction
+    <reqval>transaction</reqval>.rollback()         // rollback back the transaction
+    
+    
+    
+// managed transaction -----------------------------
+    await sequelize.transaction((<reqval>transaction</reqval>) => {           // if callback ends successfully the transaction is commited, if throws an error the transaction is rolled back
+        await <reqval>Model.modelMethod</reqval>( <optval>...</optval>, {
+            transaction: <reqval>transaction</reqval>,                        // transaction object must be passed
+            lock: <reqval>bool</reqval>,                                    // rows participating in the transaction are write locked (untile the end of transaction (Default: <mark>false</mark>))
+        })
+        <optval>otherCRUDoperations...</optval>
+    })
+    
+    
+    
+// transaction hook ------------
+    <reqval>transaction</reqval>.afterCommit(() => {})                    // callback called when the transaction is successfully commited
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> Unmanaged transaction </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    export const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    const Person = sequelize.define(
+      'Person',
+      {
+        name: DataTypes.STRING,
+    });
+    
+    await sequelize.sync({ force: true });
+    
+    const transaction = await sequelize.transaction();        // transaction
+    
+    
+// transaction pass ------------------------------
+    try {
+      await Person.create({ name: 'Bob'}, { transaction });    // the transaction object must be passed to operation participating the transcation
+      await Person.create({ name: 'Steven'}, { transaction });
+    
+      await transaction.commit();                             // commiting transaction
+    } catch(e) {
+      await transaction.rollback();                           // rollback in case of error
+    }
+    
+// transaction rolled back -----------------------
+    try {
+      await Person.create({ name: 'Bob' }, { transaction});                     // none of the INSERT method persisted because the transaction fails and rolled back
+    
+      throw Error('some error');
+    
+      await Person.create({ name: 'Steven' }, { transaction });
+      await transaction.commit();
+    } catch(e) {
+      console.log(e);
+      await transaction.rollback();
+    }
+      </pre>
+      <!------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Managed transaction </h4>
+      <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    export const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    const Person = sequelize.define(
+      'Person',
+      {
+        name: DataTypes.STRING,
+    });
+    
+    await sequelize.sync({ force: true });
+    
+    
+// transaction pass ------------------------------
+    try {
+      await sequelize.transaction(async (transaction) => {      // automatically rolls back operations if error occures in the callback
+        await Person.create({ name: 'Bob'}, { transaction });
+        await Person.create({ name: 'Steven'}, { transaction });
+        
+        transaction.afterCommit(() => console.log('Transaction completed'));    // after commit hook cb called after transaction commit
+      });                                                       // no manual commit or rollback needed
+    } catch(e) {
+      console.log(e);
+    }
+    
+// transaction rolled back -----------------------
+    try {
+      await sequelize.transaction(async (transaction) => {      // automatically rolls back operations if error occures in the callback
+        await Person.create({ name: 'Bob'}, { transaction });
+        
+        throw Error('some error');                              // error raised = transaction rolled back automatically
+        
+        await Person.create({ name: 'Steven'}, { transaction });
+    
+        transaction.afterCommit(() => console.log('Transaction completed'));    // after commit hook cb never called
+      });                                                       // no manual commit or rollback needed
+    } catch(e) {
+      console.log(e);
+    }
+      </pre>
+    </details>
+    
+    
+    <br><br>
+  </body>
+
+</html>

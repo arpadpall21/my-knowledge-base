@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Associations (Relations) </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+    <script src="../../../../Assets/scriptPages.js"></script>
+  </head>
+
+<body>
+  <h1> Associations (Relations) </h1>
+  <p> Updated ( 2024-08-16 ) </p>
+    <nav class="sitenav"> <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+      <a href="../index.html" title="Learn WebDesign">Sequelize > </a> Associations (Relations)
+    </nav>
+  <details class="example" id="notes">
+    <summary> Notes & Tips :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+  <p> <a href="https://sequelize.org/docs/v6/core-concepts/assocs/" target="_blank">sequelize.org (associations) </a></p>
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <h2 class="header"> One-To-One Relation </h2>
+  <pre class="syntax">
+    <reqval>ParentModel</reqval>.hasOne(<reqval>ChildModel</reqval>, <opt class="openable">option:obj<div>
+      <p> <mark>foreignKey: <reqval>foreignKey:str</reqval></mark> - setting custom foreign key (Default: <mark><reqval>ParentModel</reqval>Id</mark>) <u>(also required in <mark>belongTo()</mark> method!)</u> </p>
+      <p> <mark>onDelete: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON DELETE foreign key constraint (Default: <mark>SET NULL</mark>) </p>
+      <p> <mark>onUpdate: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON UPDATE foreign key constraint (Default: <mark>CASCADE</mark>) </p>
+    </div></opt>)          // relation definition
+    <reqval>ChildModel</reqval>.belongsTo(<reqval>ParentModel</reqval>, <opt class="openable">option:obj<div>
+      <p> <mark>foreignKey: <reqval>foreignKey:str</reqval></mark> - setting custom foreign key (Default: <mark><reqval>ParentModel</reqval>Id</mark>) <u>(also required in <mark>belongTo()</mark> method!)</u> </p>
+    </div></opt>)
+    
+    
+// parent methods -------------
+    await <reqval>parentRecord</reqval>.set<reqval>ChildModel</reqval>(<reqval>childRecord</reqval>|null)          // sets the <reqval>childRecord</reqval> - <reqval>parentRecord</reqval> relation (null -> removes relation <u>does not delete the child record</u>)
+    await <reqval>parentRecord</reqval>.create<reqval>ChildModel</reqval>(<reqval class="openable">childRecord:obj<div>
+      <p> - an object that follows the <mark><strong>ChildModel</strong></mark> schema (ex: <mark>{ name: 'Doe' }</mark>) </p>
+    </div></reqval>)      // creates the <reqval>childRecord</reqval> and sets the relation at the same time  
+    
+    await <reqval>parentRecord</reqval>.get<reqval>ChildModel</reqval>()                                // return the related child record
+    
+    
+// child methods -------------
+    await <reqval>childRecord</reqval>.set<reqval>ParentModel</reqval>(<reqval>parentRecord</reqval>|null)          // sets the <reqval>childRecord</reqval> - <reqval>parentRecord</reqval> relation (null -> removes relation <u>does not delete the child record</u>)
+    await <reqval>childRecord</reqval>.create<reqval>ParentModel</reqval>(<reqval class="openable">parentRecord:obj<div>
+      <p> - an object that follows the <mark><strong>ParentModel</strong></mark> schema (ex: <mark>{ name: 'Doe' }</mark>) </p>
+    </div></reqval>)      // creates the <reqval>parentRecord</reqval> and sets the relation at the same time  
+    
+    await <reqval>childRecord</reqval>.get<reqval>ParentModel</reqval>()                                // return the related parent record
+    
+    
+// create parent child records in a single query ---------
+    await <reqval>ParentModel</reqval>.create({
+        <reqval>column</reqval>: <reqval>sequelizeType</reqval>|{ type: <reqval>sequelizeType</reqval><optval>, ...</optval> },
+        <optval>...</optval>
+        <reqval>ChildModel</reqval>: <reqval>childRecord:obj</reqval>,                                // child record     
+    }, { include: <reqval>ChildModel</reqval> })
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Driver extends Model {};
+    Driver.init(
+      {
+        name: DataTypes.STRING
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    class Car extends Model {};
+    Car.init(
+      {
+        number: DataTypes.INTEGER,
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    Driver.hasOne(Car, { foreignKey: 'myCars' });               // relation definition
+    Car.belongsTo(Driver, { foreignKey: 'myCars' });
+    
+    
+// parent methods ----------------------------------
+    const driver1 = await Driver.create({ name: 'Dirver1' });      // creating records individually
+    const car1 = await Car.create({ number: 1 });
+    
+    await driver1.getCar();                                        // -> null        // no relation 
+    
+    await driver1.setCar(car1);                                   // create relation 
+    await driver1.getCar();                                       // -> car1 record
+    
+    
+    await car.setDriver(null);                                    // removes the relation <u>(does not delete the child record)</u>
+    await driver1.createCar({ number: 2 });                       // creates the child record and sets the relation 
+    
+    
+// child methods ----------------------------------------------------------------------------------
+    const driver1 = await Driver.create({ name: 'Dirver1' });      // creating records individually
+    const car1 = await Car.create({ number: 1 });
+    
+    await car.getDriver();                                        // -> null        // no relation 
+    
+    await car.setDriver(driver1);                                 // create relation 
+    await car.getCar();                                           // -> driver1 record
+    
+    
+    await car.setDriver(null);                                    // removes the relation <u>(does not delete the parent record)</u>
+    await car.createDriver({ name: 'driver2' });                  // creates the parent record and sets the relation 
+    
+    
+// to creacte the parent with its child in single query ------------------------------
+    await Driver.create({
+       name: 'driver1',
+       Car: { number: 1 },
+    }, { include: Car });
+    </pre>
+  </details>
+  <!--------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> One-To-Many Relation </h2>
+  <pre class="syntax">
+    <reqval>ParentModel</reqval>.hasMany(<reqval>ChildModel</reqval>, <opt class="openable">option:obj<div>
+      <p> <mark>foreignKey: <reqval>foreignKey:str</reqval></mark> - setting custom foreign key (Default: <mark><reqval>ParentModel</reqval>Id</mark>) <u>(also required in <mark>belongTo()</mark> method!)</u> </p>
+      <p> <mark>onDelete: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON DELETE foreign key constraint (Default: <mark>SET NULL</mark>) </p>
+      <p> <mark>onUpdate: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON UPDATE foreign key constraint (Default: <mark>CASCADE</mark>) </p>
+    </div></opt>)          // relation description
+    <reqval>ChildModel</reqval>.belongsTo(<reqval>ParentModel</reqval>, <opt class="openable">option:obj<div>
+      <p> <mark>foreignKey: <reqval>foreignKey:str</reqval></mark> - setting custom foreign key (Default: <mark><reqval>ParentModel</reqval>Id</mark>) <u>(also required in <mark>belongTo()</mark> method!)</u> </p>
+    </div></opt>)
+    
+    
+// parent methods -------------
+    await <reqval>parentRecord</reqval>.add<reqval>ChildModel</reqval>(<reqval>childRecord</reqval>)          // adds the <reqval>childRecord</reqval> to the relation with the <reqval>parentRecord</reqval> 
+    await <reqval>parentRecord</reqval>.add<reqval>ChildModel</reqval>s([<reqval>childRecord</reqval><optval>, ...</optval>])          // adds the listed <reqval>childRecord</reqval>s to the relation with the <reqval>parentRecord</reqval> 
+    await <reqval>parentRecord</reqval>.set<reqval>ChildModel</reqval>s([<reqval>childRecord</reqval><optval>, ...</optval>])          // unassociate all previous relations then adds the listed <reqval>childRecord</reqval>s to the relation with the <reqval>parentRecord</reqval> 
+    await <reqval>parentRecord</reqval>.create<reqval>ChildModel</reqval>(<reqval class="openable">childRecord:obj<div>
+      <p> - an object that follows the <mark><strong>ChildModel</strong></mark> schema (ex: <mark>{ name: 'Doe' }</mark>) </p>
+    </div></reqval>)          // creates the <reqval>childRecord</reqval> and adds it to the relation at the same time 
+    
+    await <reqval>parentRecord</reqval>.get<reqval>ChildModel</reqval>s()                                // returns all related child records
+    
+    await <reqval>parentRecord</reqval>.count<reqval>ChildModel</reqval>s()                             // returns the number of related children records
+    
+    await <reqval>parentRecord</reqval>.has<reqval>ChildModel</reqval>(<reqval>childRecord</reqval>)          // returns <mark>true</mark> if the <reqval>childRecord</reqval> is in relation with <reqval>parentRecord</reqval>, otherwise returns <mark>false</mark>   
+    await <reqval>parentRecord</reqval>.has<reqval>ChildModel</reqval>s([<reqval>childRecord</reqval><optval>, ...</optval>])          // returns <mark>true</mark> if all the listed <reqval>childRecord</reqval> are in relation with <reqval>parentRecord</reqval>, otherwise returns <mark>false</mark>   
+    
+    await <reqval>parentRecord</reqval>.remove<reqval>ChildModel</reqval>(<reqval>childRecord</reqval>)          // removes the <reqval>childRecord</reqval> from the relation with <reqval>parentRecord</reqval> 
+    await <reqval>parentRecord</reqval>.remove<reqval>ChildModel</reqval>s([<reqval>childRecord</reqval><optval>, ...</optval>])          // removes the listed <reqval>childRecord</reqval>s from the relation with <reqval>parentRecord</reqval> 
+    
+    
+// child methods -------------
+    await <reqval>childRecord</reqval>.set<reqval>ParentModel</reqval>(<reqval>parentRecord</reqval>|null)          // sets the <reqval>childRecord</reqval> - <reqval>parentRecord</reqval> relation (null -> removes relation <u>does not delete the child record</u>)
+    await <reqval>childRecord</reqval>.create<reqval>ParentModel</reqval>(<reqval class="openable">parentRecord:obj<div>
+      <p> - an object that follows the <mark><strong>ParentModel</strong></mark> schema (ex: <mark>{ name: 'Doe' }</mark>) </p>
+    </div></reqval>)      // creates the <reqval>parentRecord</reqval> and sets the relation at the same time  
+    
+    await <reqval>childRecord</reqval>.get<reqval>ParentModel</reqval>()                                // return the related parent record
+    
+    
+// create parent children records in a single query ---------
+    await <reqval>ParentModel</reqval>.create({
+        <reqval>column</reqval>: <reqval>sequelizeType</reqval>|{ type: <reqval>sequelizeType</reqval><optval>, ...</optval> },
+        <optval>...</optval>
+        <reqval>ChildModel</reqval>s: [                                             // related child records
+          <reqval>childRecord:obj</reqval>,
+          <optval>...</optval>
+        ],
+    }, { include: <reqval>ChildModel</reqval> })
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Driver extends Model {};
+    Driver.init(
+      {
+        name: DataTypes.STRING
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    class Car extends Model {};
+    Car.init(
+      {
+        number: DataTypes.INTEGER,
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    Driver.hasMany(Car);
+    Car.belongsTo(Driver);
+    
+    
+// parent methods ----------------------------------------------------------------------------------
+    const driver1 = await Driver.create({ name: 'Dirver1' });      // creating records individually
+    const car1 = await Car.create({ number: 1 });
+    const car2 = await Car.create({ number: 2 });
+    const car3 = await Car.create({ number: 2 });
+    
+    await driver1.addCar(car1);                                  // adds the car1 record to the relation 
+    await driver1.addCars([car2, car3]);                         // adds the listed records to the relation
+    
+    await driver1.setCars([car1, car3]);                         // unassociate previous relations then adds the listed records to the relation with the parent 
+    
+    await driver1.createCar({ number: 4 });                      // creates a new child record and adds it to the relation with the parent  
+    
+    await driver1.getCars();                                     // -> [records, ...]     // gets all related child records 
+    
+    await driver1.countCars();                                   // -> 3       // number of child records
+    await driver1.hasCar(car1);                                  // -> true     // car1 record is child of driver1
+    await driver1.hasCars([car1, car3]);                         // -> true     // driver1 record has both record as child relation
+    
+    await driver1.removeCar(car3);                               // removes the car3 record from the relation (does not delete the child record)
+    await driver1.removeCars(car1, car3);                        // removes the listed records from the relation (does not delete the child records)
+    
+    
+// child methos ----------------------------------------------------------------------------------
+    const driver1 = await Driver.create({ name: 'dirver1' });      // creating records individually
+    const car1 = await Car.create({ number: 1 });
+    
+    await car1.setDriver(driver1)                                  // add car1 to the relation with the driver1 parent 
+    await car1.setDriver(null)                                     // removes the relation 
+    await car1.createDrirver({ name: 'driver2'})                   // creates the parent record then adds car1 as child relation
+    
+    await car1.getDriver()                                        // -> gets the parent record
+    
+    
+// create parent children in a single query --------------------------------
+    await Driver.create({
+      name: 'driver1',
+      Cars: [
+        { number: 1 },
+        { number: 2 },
+        { number: 3 },
+      ]
+    }, { include: Car });
+    </pre>
+  </details>
+  <!--------------------------------------------------------------------------->
+  <hr>
+  <h2 class="header"> Many-To-Many Relation </h2>
+  <pre class="syntax">
+    <reqval>ModelA</reqval>.belongsToMany(<reqval>ModelB</reqval>, { through: <reqval class="openable">junctionTable:Model|str<div>
+      <p> <mark><strong>Model</strong></mark> - custom junction model </p>
+      <p> <mark><strong>str</strong></mark> - sequelize automatically creates and handles the junction table with the passed name </p>
+    </div></reqval>, <opt class="openable">options<div>
+      <p> <mark>foreignKey: <reqval>foreignKey:str</reqval></mark> - setting custom foreign key (Default: <mark><reqval>ModelA</reqval>Id</mark>) <u>(also required in the other relation descriptor <mark>belongsToMany()</mark> method!)</u>
+      <p> <mark>onDelete: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON DELETE foreign key constraint (Default: <mark>CASCADE</mark>) </p>
+      <p> <mark>onUpdate: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON UPDATE foreign key constraint (Default: <mark>CASCADE</mark>) </p>
+    </div></opt> })          // relation description (the junction table is handled automatically)
+    <reqval>ModelB</reqval>.belongsToMany(<reqval>ModelA</reqval>, { through: <reqval class="openable">junctionTable:Model|str<div>
+      <p> <mark><strong>Model</strong></mark> - custom junction model </p>
+      <p> <mark><strong>str</strong></mark> - sequelize automatically creates and handles the junction table with the passed name </p>
+    </div></reqval>, <opt class="openable">options<div>
+      <p> <mark>foreignKey: <reqval>foreignKey:str</reqval></mark> - setting custom foreign key (Default: <mark><reqval>ModelB</reqval>Id</mark>) <u>(also required in the other relation descriptor <mark>belongsToMany()</mark> method!)</u>
+      <p> <mark>onDelete: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON DELETE foreign key constraint (Default: <mark>CASCADE</mark>) </p>
+      <p> <mark>onUpdate: 'NO ACTION|RESTRICT|CASCADE|SET DEFAULT|SET NULL'</mark> - SQL ON UPDATE foreign key constraint (Default: <mark>CASCADE</mark>) </p>
+    </div></opt> })
+    
+    
+// methods (are the same for both Models) -------------
+    await <reqval>recordA|recordB</reqval>.add<reqval>ModelA|ModelB</reqval>(<reqval>recordA|recordB</reqval>)          // adds <reqval>recordA|recordB</reqval> to the relation with <reqval>recordA|recordB</reqval>    
+    await <reqval>recordA|recordB</reqval>.add<reqval>ModelA|ModelB</reqval>s([<reqval>recordA|recordB</reqval><optval>, ...</optval>])          // adds the listed records to the relation with <reqval>recordA|recordB</reqval>    
+    await <reqval>recordA|recordB</reqval>.set<reqval>ModelA|ModelB</reqval>s([<reqval>recordA|recordB</reqval><optval>, ...</optval>])          // unassociate previous relations <u>for both <reqval>recordA</reqval> and <reqval>recordB</reqval></u> then creates the specified onces 
+    await <reqval>recordA|recordB</reqval>.create<reqval>ModelA|ModelB</reqval>(<reqval class="openable">record:obj<div>
+      <p> - an object that follows the <mark><strong>ChildModel</strong></mark> schema (ex: <mark>{ name: 'Doe' }</mark>) </p>
+    </div></reqval>)          // creates the <reqval>record</reqval> and adds it to the relation at the same time 
+    
+    await <reqval>recordA|recordB</reqval>.get<reqval>ModelA|ModelB</reqval>s()          // returns all related records 
+    
+    await <reqval>recordA|recordB</reqval>.count<reqval>ModelA|ModelB</reqval>s()          // returns the number of related records
+    
+    await <reqval>recordA|recordB</reqval>.has<reqval>ModelA|ModelB</reqval>(<reqval>recordA|recordB</reqval>)          // returns <mark>true</mark> if records are in relation, otherwise returns <mark>false</mark>   
+    await <reqval>recordA|recordB</reqval>.has<reqval>ModelA|ModelB</reqval>s([<reqval>recordA|recordB</reqval><optval>, ...</optval>])          // returns <mark>true</mark> if all the listed records are in relation, otherwise returns <mark>false</mark>   
+    
+    await <reqval>recordA|recordB</reqval>.remove<reqval>ModelA|ModelB</reqval>(<reqval>recordA|recordB</reqval>)          // removes the specified record from the relation    
+    await <reqval>recordA|recordB</reqval>.remove<reqval>ModelA|ModelB</reqval>s([<reqval>recordA|recordB</reqval><optval>, ...</optval>])          // removes the specified records from the relation    
+    
+    
+// create a record with its relations in a single query ---------
+    await <reqval>ModelA|ModelB</reqval>.create({
+        <reqval>column</reqval>: <reqval>sequelizeType</reqval>|{ type: <reqval>sequelizeType</reqval><optval>, ...</optval> },
+        <optval>...</optval>
+        <reqval>ModelA|ModelB</reqval>s: [                                             // related records
+          <reqval>recordA|recordB:obj</reqval>,
+          <optval>...</optval>
+        ],
+    }, { include: <reqval>ChildModel</reqval> })
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Driver extends Model {};
+    Driver.init(
+      {
+        name: DataTypes.STRING
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    class Car extends Model {};
+    Car.init(
+      {
+        number: DataTypes.INTEGER,
+      },
+      { sequelize, timestamps: false },
+    );
+    class JoinTable extends Model {};
+    JoinTable.init({}, { sequelize, timestamps: false });
+    
+    Driver.belongsToMany(Car, { through: JoinTable });        // Many-To-Many relation description (custom junction table used)
+    Car.belongsToMany(Driver, { through: JoinTable });
+    
+    
+// methos --------------
+    const driver1 = await Driver.create({ name: 'dirver1' });
+    const driver2 = await Driver.create({ name: 'dirver2' });
+    const car1 = await Car.create({ number: 1 });
+    const car2 = await Car.create({ number: 2 });
+    
+    await driver1.addCar(car1);                                                // adds one record to the relation
+    await driver1.addCar(car2);
+    await car1.addDrivers([driver1, driver2]);                                      // add multiple records to the relation
+    
+    await car1.setDrivers([driver2]);                                 // unassociate previous relations for both car1 and dirver2 then creates the new relation     (this could be confusing becasue removes relation for both records)   
+    
+    await driver1.createCar({ number: 3 });                     // creates a new record as new relation  
+    
+    await driver1.getCars();                                      // -> [records, ...]     // gets all related records 
+    
+    await driver1.countCars();                                  // -> 2         // number of related records
+    await driver1.hasCar(car2);                                 // -> true       // driver1 is related to car2
+    await driver1.hasCars([car1, car2]);                        // -> true       // driver1 is related to both records 
+    
+    await car1.removeCar(driver1);                              // removes the car2 record from the relation (does not delete the child record)
+    await car1.removeCars(driver1, driver2);                     // removes the listed records from the relation (does not delete the child records)
+    
+    
+// create record with ist relation is a single query ---------------------
+    await Driver.create({
+      name: 'driver1',
+      Cars: [
+        { number: 1 },
+        { number: 2 },
+        { number: 3 },
+      ]
+    }, { include: Car });
+
+    await Car.create({
+      number: 10,
+      Drivers: [
+        { name: 'driver10'}
+      ]
+    }, { include: Driver });
+    </pre>
+  </details>
+  <!--------------------------------------------------------------------------->
+  <hr>
+  <h2 class="headerExtra"> Lazy Loading VS Eager Loading </h2>
+  <p> - with lazy loading the record is loaded without its relations (related records) </p>
+  <p> - with eager loading the record is loaded with its relations (related records) </p>
+  <pre class="syntax">
+    await <reqval>Model</reqval>.findOne|findAll({ <optval>...,</optval> <opt>include: <optval>RelatedModel</optval></opt> })     // lazy loading (without <mark><opt>include: <optval>RelatedModel</optval></opt></mark>)
+                                                                                  // eager loading (with <mark><opt>include: <optval>RelatedModel</optval></opt></mark>) 
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    import { Sequelize, DataTypes, Model } from 'sequelize';
+    
+    const sequelize = new Sequelize('mysql://pall:pass@localhost:3306/test_db')
+      await sequelize.authenticate();
+      console.log('connected!')
+    
+    class Driver extends Model {};
+    Driver.init(
+      {
+        name: DataTypes.STRING
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    class Car extends Model {};
+    Car.init(
+      {
+        number: DataTypes.INTEGER,
+      },
+      { sequelize, timestamps: false },
+    );
+    
+    Driver.hasMany(Car);
+    Car.belongsTo(Driver);
+    
+    
+    const driver1 = await Driver.create({ name: 'driver1' })
+    const car1 = await Car.create({ number: 1 });
+    const car2 = await Car.create({ number: 2 });
+    
+    driver1.addCars([car1, car2]);                          // One-To-Many relation
+    
+    
+// lazy loading -----------------
+    await Driver.findAll({ name: 'driver1' });                // only the record itself is queried 
+    
+// eager loading -----------------
+    await Driver.findAll({ name: 'driver1', include: Car });    // record with all its relation is queried 
+    </pre>
+  </details>
+  
+  
+  <br><br>
+</body>
+
+</html>

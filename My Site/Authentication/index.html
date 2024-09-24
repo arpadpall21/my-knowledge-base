@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Authentication </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../Assets/stylesPages.css">
+    <script src="../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Authentication </h1>
+    <p> Updated ( 2023-02-13 / 2024-03-22 )</p>
+    <nav class="sitenav">
+      <a href="../index.html" title="home">MySite > </a> Authentication
+    </nav>
+    <p class="subSite"><a href="./OAuth2/index.html"> OAuth 2.0 > </a></p>
+    <p class="subSite"><a href="./Token Based Authentication/index.html"> Token Based Authentication > </a></p>
+    <p class="subSite"><a href="./JWT Token/index.html"> JWT Token > </a></p>
+    <p class="subSite"><a href="./LDAP/index.html"> LDAP > </a></p>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <h2 class="headerExtra"> Session VS Token Authentication </h2>
+    <h3 class="header"> Session Based Authentication </h3>
+    <p> - after successful client login the server generates a session token then sends it to the client as cookie </p>
+    <p> - the session token is included in every request as cookie (so the server can verify if the client is logged in) </p>
+    <!------------------------------------------------------------------------------------------------>
+    <hr>
+    <h3 class="header"> Token Based Authentication </h3>
+    <p> - tokens are protected by some cryptographic protocols, we use shared secred or private/public keys </p>
+    <p class="indent-lv1"> ex: </p>
+    <p class="indent-lv1"> - after successful client login the authentication server creates and <u>signs</u> the token with the private key, then sends it to the client in a request body </p>
+    <p class="indent-lv2"> - the token itself contains the user data (username, expiration, signature, etc...) so these informations are stored on client side </p>
+    <p class="indent-lv1"> - the token is included in every request's <mark>Authorization: Bearer <strong>token</strong></mark> header </p>
+    <p class="indent-lv1"> - the resource server verifies the received token with the public key and extracts user informations from it (on successful verification) </p>
+    <table class="table">
+      <caption>
+        Session VS Token Based Authentication
+      </caption>
+      <tr>
+        <th style="width:30%;">
+          Criteria
+        </th>
+        <th style="width:30%;">
+          Session Authentication
+        </th>
+        <th style="width:30%;">
+          Token Authentication
+        </th>
+      </tr>
+      <tr>
+        <td>
+          Use Case
+        </td>
+        <td>
+          - We want to manage authentication
+        </td>
+        <td>
+          - Authentication is delegated to an IdP (Identity Provider)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Stored information in token
+        </td>
+        <td>
+          - contains no information
+        </td>
+        <td>
+          - contains all session informations (user, expiration, signagure, etc...)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Authentication stored on side
+        </td>
+        <td>
+          - server
+        </td>
+        <td>
+          - client
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Client sends for authorization
+        </td>
+        <td>
+          - token in cookie
+        </td>
+        <td>
+          - token in <mark>Authorization: Bearer <strong>token</strong></mark> header
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Server process to authorize the client request
+        </td>
+        <td>
+          - database lookup + token validation process
+        </td>
+        <td>
+          - decrypts the token and verifies its signature
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Server can control login operations
+        </td>
+        <td>
+          - yes because the token is stored on server side
+        </td>
+        <td>
+          - no (limited) because the token is stored on client side
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Prefered implementation
+        </td>
+        <td>
+          - user-to-server connection
+        </td>
+        <td>
+          - server-to-server connection
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Cyber attack weakness
+        </td>
+        <td>
+          - man-in-the middle <br>
+          - cross-site request forgery (CSRF)
+        </td>
+        <td>
+          - man-in-the middle <br>
+          - token steal <br>
+          - breaches of secret key
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Pros
+        </td>
+        <td>
+          - more secure because the data is kept on server side <br>
+          - server has more control over the session <br>
+          - easy to implement
+        </td>
+        <td>
+          - scalable because the server does not store the token <br>
+          - stateless, the server does not required to keep track the user's session <br>
+          - required less server resources and infrastructure
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Cons
+        </td>
+        <td>
+          - hard to scale because the session information is kept on server side, this becomes a problem with a large number of users <br>
+          - requires more server resources (storage, processing power) <br>
+        </td>
+        <td>
+          - less secure because session informations are stored on client side <br>
+          - server has less control because the token is not stored on its side <br>
+          - harder to implement (needs secret key, validation, etc...)
+        </td>
+      </tr>
+    </table>
+    <!------------------------------------------------------------------------------------------------>
+    <hr>
+    <h2 class="headerExtra"> SSO (Single Sign On) </h2>
+    <p> - SSO is a mechanism to delegate the authentication to a trusted Identity Provider (IdP), like Google, Facebook, ect... </p>
+    <p> - the biggest advantage that the user authenticates once that can be valid for several systems (ex: Google athenticated use can access multiple platforms, hence the name Single Sign On) </p>
+    <p> - This is achieved by token based authentication: </p>
+    <p class="indent-lv1"> - the IdP issues a tokent to the App (on successful authentication) </p>
+    <p class="indent-lv1"> - the App verifies the token issued by the IdP </p>
+    <p> - SSO protocols: </p>
+    <p class="indent-lv1"> - <mark class="mark">OpenId</mark> & <mark class="mark">OpenId Connect</mark> (OIDC) </p>
+    <p class="indent-lv2"> - mostly used for web app authentications (OpenId is an Authorization protocol) (OpenId Connect is an Authentication protocol) </p>
+    <p class="indent-lv1"> - <mark class="mark">SAML</mark> (Security Assertion Markup Language) </p>
+    <p class="indent-lv2"> - mostly for used for enterprize authentications (uses XML payloads) </p>
+
+
+    <br><br>
+  </body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> enum </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+  <script src="../../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> enum </h1>
+  <p> Updated ( 2023-11-25 ) </p>
+    <p class="sitenav"> <a href="../../../index.html">MySite></a>
+        <a href="../../index.html">Python></a>
+        <a href="../index.html">Built-in Libraries></a> enum
+    </p>
+  <br>
+  <details class="example" id="notes">
+    <summary> Notes & Tips :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <p> - Python Enum is supported from <b>v3.4</b>, it's an enumeration datype containing set of symbolic names bound to unique values </p>
+  <p> - We use enums with their symbolic members (member type = Enum type), but each member has its name and value </p>
+  <p> - Enums can be iterated over (members are stored in definition order) </p>
+  <pre class="syntax">
+    from enum import Enum
+    
+    
+    class <strong>MyEnum</strong>(Enum):               // creating enum 
+        <strong>MEMBER</strong> = <strong>val</strong>
+        <i>...</i>
+    
+    
+    <strong>MyEnum</strong>.<strong>MEMBER</strong>                     // using enum
+    <strong>MyEnum</strong>['<strong>MEMBER</strong>']
+    
+    <strong>MyEnum</strong>.<strong>MEMBER</strong>.name                // accessing member name (returns '<strong>MEMBER</strong>')
+    <strong>MyEnum</strong>.<strong>MEMBER</strong>.value               // accessing member value 
+    
+    type(<strong>MyEnum</strong>.<strong>MEMBER</strong>) == <strong>MyEnum</strong>     // <mark>True</mark> (the member type = enum itself)
+    
+    
+    
+<span style="color:darkgray;">// functional enum creation --------------------------------------------</span>
+    <strong>MyEnum</strong> = Enum(<strong>className:str</strong>, [<strong>MEMBER:str</strong><i>, ...</i>])     // does the same as <mark>class <strong>MyEnum</strong>(Enum):</mark> (enum member values will be <mark>1</mark> <mark>2</mark> <mark>...</mark>)
+  </pre>
+  <pre class="syntax">
+    from enum import IntEnum, StrEnum
+    
+    
+    class <strong>MyEnum</strong>(IntEnum):            // same as <mark>Enum</mark>, but member values can only be <strong>int</strong>  
+        <strong>MEMBER</strong> = <strong>int</strong>
+        <i>...</i>
+    
+    
+    class <strong>MyEnum</strong>(StrEnum):            // same as <mark>Enum</mark>, but member values can only be <strong>str</strong> <span id="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.11 </span></span>
+        <strong>MEMBER</strong> = <strong>str</strong>
+        <i>...</i>
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    from enum import Enum
+    
+    
+    class Color(Enum):
+        RED = 1                 # internal values must be uniqe
+        GREEN = 2
+        BLUE = 3
+    
+    
+    Color.RED                   # we use enums as values (one of the enumerated member) 
+    Color['RED']
+    
+    
+# accessing member name & value ---------------
+    Color.RED.name              // -> 'RED'
+    Color.RED.value             // -> 1
+    
+    
+# iterating over enum members -----------------
+    for val in Color:
+        val                     // -> [&lt;Color.RED: 1&gt;, &lt;Color.GREEN: 2&gt;, &lt;Color.BLUE: 3&gt;]
+    
+    
+# member type is the enum ---------------------
+    type(Color.BLUE)            // -> &lt;enum 'Color'&gt;
+    type(Color.BLUE) == Color   // -> True
+    </pre>
+    <h4 class="header"> Functional enum creation </h4>
+    <pre>
+    from enum import Enum
+    
+    
+    Color = Enum('Color', ['RED', 'GREEN', 'BLUE'])
+    
+    for member in Color:
+        member                  // -> 1  |   2   |  3       // member values are mapped to integers
+    </pre>
+    <h4 class="header"> The <mark>IntEnum</mark> / <mark>StrEnum</mark> enums </h4>
+    <pre>
+    from enum import IntEnum, StrEnum
+    
+    
+    class Number(IntEnum):
+        ONE = 1
+        TWO = 2
+        THREE = 3
+    
+    
+    class NumberStr(StrEnum):
+        ONE = 'one'
+        TWO = 'two'
+        THREE = 'three'
+    
+    
+    type(Number.TWO.value)          // -> &lt;class 'int'&gt;   
+    type(NumberStr.TWO.value)       // -> &lt;class 'str'&gt;   
+    </pre>
+  </details>
+  
+  
+  <br><br>
+</body>
+
+</html>

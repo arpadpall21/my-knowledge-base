@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Middlewares </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+    <script src="../../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Middlewares </h1>
+    <p> Updated ( 2024-07-31 ) </p>
+    <nav class="sitenav">
+      <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../../index.html" title="Learn WebDesign">ORMs > </a>
+      <a href="../index.html" title="Learn WebDesign">Mongoose > </a> Middlewares
+    </nav>
+    <table class="table">
+      <caption>
+        Middleware Actions (<mark>pre()</mark> or <mark>post()</mark>)
+      </caption>
+      <tr>
+        <th style="width:25%;"> Model </th>
+        <th style="width:25%;"> Document (Model Instance) </th>
+        <th style="width:25%;"> Query </th>
+        <th style="width:25%;"> Aggregate </th>
+      </tr>
+      <tr>
+        <td> bulkWrite </td>
+        <td> validate </td>
+        <td> validate </td>
+        <td> aggregate </td>
+      </tr>
+      <tr>
+        <td> createCollecttion </td>
+        <td> updateOne </td>
+        <td> updateOne </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> insertMany </td>
+        <td> deleteOne </td>
+        <td> deleteOne </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> remove </td>
+        <td> remove </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> save </td>
+        <td> deleteMany </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> init (synchrnous) </td>
+        <td> find </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> findOne </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> findOneAndDelete </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> findOneAndReplace </td>
+        <td> </td>
+      </tr>
+      <td> </td>
+      <td> </td>
+      <td> findOneAndUpdate </td>
+      <td> </td>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> replaceOne </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> estimatedDocumentCount </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> updateMany </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> count </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td> </td>
+        <td> countDocuments </td>
+        <td> </td>
+      </tr>
+    </table>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - middlewares are function that are execute before or after certain operations (they are sort of event listeners) </p>
+    <p> - there are 4 types of middlewares: <mark>document</mark> / <mark>model</mark> / <mark>query</mark> / <mark>aggregate</mark> </p>
+    <p> - middleware function called before|after certain action executes </p>
+    <pre class="syntax">
+    <reqval>schema</reqval> = <reqval>schemaDefinition...</reqval>
+                                                        // middleware definitions must be between the schema definition and model definition   
+    
+// pre middelware ------------------
+    <reqval>schema</reqval>.pre('<strong>action|action[]</strong>', <optval class="openable">nameConflict:obj<div>
+      <p> - some middleware action can be used for several middlewares (ex: <mark>deleteOne</mark> is available for document and query middleware as well) </p>
+      <p> - object <mark>{ &lt;middlewareType&gt;: &lt;bool&gt;, ... } defines to which middleware type to use </mark> </p>
+      <p> ex: <mark>{ document: true, query: false }</mark> </p>
+    </div></optval>, function(next) {
+        this                                    // -> refers to the current object (ex: for document middelware refers to the document)
+      
+    // stepping further ----------
+        next()                                  // calls the next step (block further execution if not called)
+                                        // calling the <mark>next()</mark> won't stop further code exectuion (use return for that)
+        return <reqval>promise</reqval>         // in mongoose v5.x we can return a promise (resolve -> further execution / reject -> stop further exectuion)
+    
+    // raising error (blocking further exectuion) ----------------------
+        next(<reqval>val</reqval>)              // passing anything in <mark>next()</mark>
+        <reqval>promiseRejected</reqval>        // rejected promise 
+        throw <reqval>val</reqval>              // throw
+    })
+    
+    
+// post middelware ------------------
+    <reqval>schema</reqval>.post('<reqval>action|action[]</reqval>', <optval class="openable">nameConflict:obj<div>
+      <p> - some middleware action can be used for several middlewares (ex: <mark>deleteOne</mark> is available for document and query middleware as well) </p>
+      <p> - object <mark>{ &lt;middlewareType&gt;: &lt;bool&gt;, ... } defines to which middleware type to use </mark> </p>
+      <p> ex: <mark>{ document: true, query: false }</mark> </p>
+    </div></optval>, function(<reqval>res</reqval>, <opt>next</opt>){
+        <reqval>res</reqval>                                  // operation result (ex: query response)
+        this                                    // -> refers to the current object (ex: for document middelware refers to the document)
+        
+        <opt>next()</opt>                 // next must be called (if passed) (used to end async operations)
+    })
+    
+    
+// error handling middelware ------------------
+    <reqval>schema</reqval>.post|pre('<reqval>action</reqval>', function(<reqval>err, res, next</reqval>){ })       // middelware catches and handles errors thrown for <reqval>action</reqval> (3 arguments are required)
+    
+    
+    <reqval>Model</reqval> = <reqval>ModelDefinition...</reqval>
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+    });
+    
+// pre document middleware ----------
+    personSchema.pre('validate', function(next){
+      this.name = this.name.toUpperCase();                   // <mark>this</mark> -> the document itself
+    
+      next();                                               // calls the next step (required -> otherwise would block futher execution)
+      console.log('-- executed --');                        // -! calling next does not block futher middleware function execution! (use return for that)
+    })
+    personSchema.pre('save', function(){
+      console.log(`document ${this} saved`);
+      return Promise.resolve();                             // from mongoose 5.x we can return a promise instead of calling next
+    })
+    
+// post document middleware -----
+    personSchema.post('validate', function(doc){ 
+      console.log('validation successful!');
+      doc;                                              // -> document
+    })
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    const bob = Person();
+    bob.name = 'Elon'
+    await bob.save()
+      </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h3 class="header"> using <mark>next</mark> callback in pre middleware </h3>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+    });
+    
+    personSchema.post('find', function(res, next) {
+      
+      setTimeout(() => {                          // we simulate some async task here
+        console.log(res)                          // -> query result
+        next();                                   // calling next indicates the end of async task
+      }, 2000)
+    })
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    await Person.find({ _id: '6691096f2eccef75448e2d92' })
+    </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h3 class="header"> raising error </h3>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+    });
+    
+    personSchema.pre('find', function(next) {
+      return Promise.reject('some reason to reject')          // error simulation
+    })
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    await Person.find({ _id: '6691096f2eccef75448e2d92' })
+    </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h3 class="header"> handling middeleware conflict </h3>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+    });
+    
+    personSchema.post('deleteOne', { query: true, document: false }, function(doc) {        // middleware triggers for query 'deleteOne' action 
+      console.log('document deleted:')
+      console.log(doc)
+    });
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    await Person.deleteOne({ _id: '6694b68b5e48c6b443f6fa5a' });
+    </pre>
+      <!-------------------------------------------------------------------------->
+      <hr>
+      <h3 class="header"> error handling middelware </h3>
+      <pre>
+    import mongoose from 'mongoose';
+    
+    await mongoose.connect('mongodb://127.0.0.1:27017/people');
+      console.log('DB connection estabilished');
+    
+    const personSchema = new mongoose.Schema({
+      name: String,
+    });
+    
+    personSchema.post('validate', function() {
+      throw Error('some error');                                  // error simulation
+    });
+    
+  // error handling middleware ----
+    personSchema.post('validate', function(err, doc, next) {      // -! 3 arguments required
+      if (err) {
+        console.log(`error occured: ${err.message}`)                // handling error
+      } else {
+        next();
+      }
+    });
+    
+    const Person = new mongoose.model('friends', personSchema);
+    
+    await Person.create({ name: 'Noris' })
+    </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>

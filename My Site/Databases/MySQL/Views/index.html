@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Views </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Views </h1>
+    <p> Updated ( 2020-08-20 / 2023-06-05 )</p>
+    <p class="sitenav"> <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html" title="Learn WebDesign">Databases > </a>
+      <a href="../index.html" title="Learn WebDesign">MySQL > </a> Views
+    </p>
+    <h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+      <summary> Notes :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+    
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - views are basically virtual tables showing the underlying data (abstraction over tables), views belong to a database </p>
+    <p> - views also can be used to create read update delete operations (just like sql tables), <u>however if the view shows more than one table create update delete operations are not permited</u>  </p>
+    <pre class="syntax">
+    CREATE <small>[OR REPLACE]</small> VIEW <strong>view</strong> AS <strong>selectStatement</strong>                           // creates a <span class="openable">view<div>
+        <p> - presotred SQL query which shows up and acts as a table in the database (with some restrictions to the underlying data) </p>
+    </div></span> from what is returned by the select statement, <u class="openable">view limitations<div>
+        <p> - cannot contain any variables (user-defined, local or system variables) </p>
+        <p> - cannot reference TEMPORARY tables </p>
+        <p> - triggers cannot be attached to a view </p>
+    </div></u>    
+                                                                                  // <span class="openable">a view is updatable (can modify the underlying data) if<div>
+        <p><u> A view is not updatable if:</u></p>
+        <p> - contains any joins </p>
+        <p> - contains any aggregations (<mark>COUNT()</mark>, <mark>AVG()</mark>, etc...) </p>
+        <p> - contains <mark>DISTINCT</mark> </p>
+        <p> - contains <mark>GROUP BY</mark> </p>
+        <p> - contains <mark>HAVING</mark> </p>
+        <p> - contains <mark>UNION</mark> or <mark>UNION ALL</mark> </p>
+    </div></span> its rows have one-to-one relation to the underlying table(s)    
+                                                                                  // (<small>OR REPLACE</small>) creates a new or replaces an existing view   
+    
+    
+    SHOW CREATE VIEW <strong>view</strong>                                                      // prints detailed informations about the view structure     
+    
+    
+    SHOW FULL TABLES IN <strong>db</strong>                                                     // returns all tables in the specified database including views   
+    
+    
+    DROP VIEW <small>[IF EXISTS]</small> <strong>view</strong>                                                 // deletes the specified view from the database  
+                                                                                  // (<small>IF EXISTS</small>) does not throw an error if the view does not exist   
+    </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
+    mysql> CREATE OR REPLACE VIEW myView AS                                            // creates new or replaces an existing view
+        -> SELECT * FROM myTable;                                                        // this is an updatable view because the view references the underlying 'myTable' table's row one-by-one    
+    
+    mysql> CREATE OR REPLACE VIEW myView2 AS   
+        ->   SELECT col1, col3, col1 + col3 AS sum FROM myTable;                       // this view shows only certain columns and does some operations from the underlying table  
+        
+    mysql> INSERT INTO myView(col1, col2) VALUES(200, 400);                            // because the 'view2' is updatable we can update the underlying data through the view       
+                                                                                         // I think a view should be used only to see the underlying data and not modify it (modifying data through views can mess things up)  
+    
+// SHOW FULL TABLES IN / SHOW CREATE VIEW / DROP VIEW ---------------------------------
+    mysql> SHOW FULL TABLES IN myDB;                                                   // displays all tables in 'myDB' database, describes the table type so we can see views   
+    mysql> SHOW FULL TABLES IN testDB WHERE Table_type = 'VIEW';                       // displays all view in 'myDB' database   
+    
+    mysql> SHOW CREATE VIEW myView;                                                    // returns a detailed structure abot the 'myView' view  
+    
+    mysql> SHOW CREATE VIEW myView;                                                    // deletes the 'myView' view  
+    mysql> SHOW CREATE VIEW myView2;    
+    </pre>
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>CREATE VIEW</mark> / <mark>CREATE OR REPLACE VIEW</mark> / <mark>SHOW CREATE
+            VIEW</mark> / <mark>DROP VIEW</mark> / <mark>SHOW FULL TABLES IN db WHERE TABLE_TYPE LIKE 'VIEW'</mark> TEST
+        </u></h4>
+      <pre class="cmd">
+// CREATE VIEW ------------------------------------------------------------------------
+    mysql> SHOW TABLES;
+    +------------------+
+    | Tables_in_testDB |
+    +------------------+
+    | Class            |
+    | Person           |
+    | Students         |
+    +------------------+
+    3 rows in set (0.00 sec)
+    
+    mysql> CREATE VIEW myView AS                                                       // creates a view over the Students table  
+        ->   SELECT * FROM Students;
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> SHOW TABLES;
+    +------------------+
+    | Tables_in_testDB |
+    +------------------+
+    | Class            |
+    | Person           |
+    | Students         |
+    | myView           |                                                               // the view shows up as a table in the database  
+    +------------------+
+    4 rows in set (0.00 sec)
+    
+    mysql> TABLE myView;                                                               // we can SELECT query views just like any other tables   
+    +------------+------------+-----------+
+    | student_id | first_name | last_name |
+    +------------+------------+-----------+
+    |          1 | Pall       | Arpad     |
+    |          2 | Bircsy     | Biro      |
+    |          3 | Gyula      | Szollosi  |
+    |          4 | Feri       | Gaspar    |
+    |          5 | Karsai     | Levente   |
+    |          6 | Lukacs     | Levente   |
+    |          7 | Szabo      | Emese     |
+    |          8 | Karsai     | Andrea    |
+    |          9 | Sandor     | Lorant    |
+    |         12 | Hegy       | Edith     |
+    |         13 | Marton     | Aron      |
+    |         14 | Karsai     | Melinda   |
+    |         15 | Cari       | Kinga     |
+    +------------+------------+-----------+
+    13 rows in set (0.00 sec)
+    
+// CREATE OR REPLACE ------------------------------------------------------------------
+    mysql> CREATE OR REPLACE VIEW myView AS                                            // creates a new or replaces an existing view   
+    ->   TABLE Class;
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> TABLE myView;
+    +------------+------------+
+    | student_id | class_name |
+    +------------+------------+
+    |          2 | Biology    |
+    |          5 | Math       |
+    |          7 | Algebra    |
+    +------------+------------+
+    3 rows in set (0.00 sec)
+    
+// SHOW CREATE VIEW -------------------------------------------------------------------
+    mysql> SHOW CREATE VIEW myView;
+    +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+
+    | View   | Create View                                                                                                                                                                               | character_set_client | collation_connection |
+    +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+
+    | myView | CREATE ALGORITHM=UNDEFINED DEFINER=`pall`@`localhost` SQL SECURITY DEFINER VIEW `myView` AS select `Class`.`student_id` AS `student_id`,`Class`.`class_name` AS `class_name` from `Class` | utf8mb4              | utf8mb4_0900_ai_ci   |
+    +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+
+    1 row in set (0.00 sec)
+    
+// SHOW FULL TABLES IN db WHERE TABLE_TYPE LIKE 'VIEW' --------------------------------
+    mysql> SHOW FULL TABLES IN testDB WHERE TABLE_TYPE LIKE 'VIEW';                    // shows views in the specified database 
+    +------------------+------------+
+    | Tables_in_testDB | Table_type |
+    +------------------+------------+
+    | myView           | VIEW       |
+    +------------------+------------+
+    1 row in set (0.01 sec)    
+    
+// DROP VIEW --------------------------------------------------------------------------
+    mysql> DROP VIEW myView;                                                           // deletes (drops) the specified view 
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> SHOW FULL TABLES IN testDB WHERE TABLE_TYPE LIKE 'VIEW';                    // no view in database   
+    Empty set (0.00 sec)    
+    </pre>
+      <hr>
+      <!---------------------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> modifying the underlyind data of a view TEST </u></h4>
+      <pre class="cmd">
+// TEST-1 -----------------------------------------------------------------------------
+    mysql> TABLE Students;
+    +------------+------------+-----------+
+    | student_id | first_name | last_name |
+    +------------+------------+-----------+
+    |          1 | Pall       | Arpad     |
+    |          2 | Bircsy     | Biro      |
+    |          3 | Gyula      | Szollosi  |
+    |          4 | Feri       | Gaspar    |
+    |          5 | Karsai     | Levente   |
+    |          6 | Lukacs     | Levente   |
+    |          7 | Szabo      | Emese     |
+    |          8 | Karsai     | Andrea    |
+    |          9 | Sandor     | Lorant    |
+    |         12 | Hegy       | Edith     |
+    |         13 | Marton     | Aron      |
+    |         14 | Karsai     | Melinda   |
+    |         15 | Cari       | Kinga     |
+    +------------+------------+-----------+
+    13 rows in set (0.00 sec)
+    
+    mysql> CREATE VIEW St_W AS 
+        ->   SELECT * FROM Students;
+    Query OK, 0 rows affected (0.02 sec)
+    
+    mysql> TABLE St_W;
+    +------------+------------+-----------+
+    | student_id | first_name | last_name |
+    +------------+------------+-----------+
+    |          1 | Pall       | Arpad     |
+    |          2 | Bircsy     | Biro      |
+    |          3 | Gyula      | Szollosi  |
+    |          4 | Feri       | Gaspar    |
+    |          5 | Karsai     | Levente   |
+    |          6 | Lukacs     | Levente   |
+    |          7 | Szabo      | Emese     |
+    |          8 | Karsai     | Andrea    |
+    |          9 | Sandor     | Lorant    |
+    |         12 | Hegy       | Edith     |
+    |         13 | Marton     | Aron      |
+    |         14 | Karsai     | Melinda   |
+    |         15 | Cari       | Kinga     |
+    +------------+------------+-----------+
+    13 rows in set (0.00 sec)
+    
+    mysql> DELETE FROM Students WHERE student_id > 10;                                 // deleting records from the original table  
+    Query OK, 4 rows affected (0.01 sec)
+    
+    mysql> TABLE Students;
+    +------------+------------+-----------+
+    | student_id | first_name | last_name |
+    +------------+------------+-----------+
+    |          1 | Pall       | Arpad     |
+    |          2 | Bircsy     | Biro      |
+    |          3 | Gyula      | Szollosi  |
+    |          4 | Feri       | Gaspar    |
+    |          5 | Karsai     | Levente   |
+    |          6 | Lukacs     | Levente   |
+    |          7 | Szabo      | Emese     |
+    |          8 | Karsai     | Andrea    |
+    |          9 | Sandor     | Lorant    |
+    +------------+------------+-----------+
+    9 rows in set (0.00 sec)
+    
+    mysql> TABLE St_W;                                                                 // the 'St_W' view shows the actual underlying data  
+    +------------+------------+-----------+
+    | student_id | first_name | last_name |
+    +------------+------------+-----------+
+    |          1 | Pall       | Arpad     |
+    |          2 | Bircsy     | Biro      |
+    |          3 | Gyula      | Szollosi  |
+    |          4 | Feri       | Gaspar    |
+    |          5 | Karsai     | Levente   |
+    |          6 | Lukacs     | Levente   |
+    |          7 | Szabo      | Emese     |
+    |          8 | Karsai     | Andrea    |
+    |          9 | Sandor     | Lorant    |
+    +------------+------------+-----------+
+    9 rows in set (0.00 sec)
+    
+// TEST-2 -----------------------------------------------------------------------------
+    mysql> TABLE Students;
+    +------------+------------+-----------+
+    | student_id | first_name | last_name |
+    +------------+------------+-----------+
+    |          1 | Pall       | Arpad     |
+    |          2 | Bircsy     | Biro      |
+    |          3 | Gyula      | Szollosi  |
+    |          4 | Feri       | Gaspar    |
+    |          5 | Karsai     | Levente   |
+    |          6 | Lukacs     | Levente   |
+    |          7 | Szabo      | Emese     |
+    |          8 | Karsai     | Andrea    |
+    |          9 | Sandor     | Lorant    |
+    |         12 | Hegy       | Edith     |
+    |         13 | Marton     | Aron      |
+    |         14 | Karsai     | Melinda   |
+    +------------+------------+-----------+
+    12 rows in set (0.00 sec)
+    
+    mysql> CREATE VIEW St_W AS 
+        ->   SELECT CONCAT_WS(' ', first_name, last_name) AS student_name
+        ->   FROM Students;
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> TABLE St_W;
+    +----------------+
+    | student_name   |
+    +----------------+
+    | Pall Arpad     |
+    | Bircsy Biro    |
+    | Gyula Szollosi |
+    | Feri Gaspar    |
+    | Karsai Levente |
+    | Lukacs Levente |
+    | Szabo Emese    |
+    | Karsai Andrea  |
+    | Sandor Lorant  |
+    | Hegy Edith     |
+    | Marton Aron    |
+    | Karsai Melinda |
+    +----------------+
+    12 rows in set (0.00 sec)
+    </pre>
+      <hr>
+      <!---------------------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> View restrictions TEST </u></h4>
+      <pre class="cmd">
+// cannot contain any variables (user-defined, local or system) -----------------------
+    mysql> SET @myVar = 21;
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> CREATE VIEW myView AS 
+        ->   SELECT @myVar;
+    ERROR 1351 (HY000): View's SELECT contains a variable or parameter    
+    
+// cannot refer to any TEMPORARY TABLE ------------------------------------------------
+    mysql> TABLE tempTable;                                                            // temporary table    
+    +------+------+
+    | nr   | str  |
+    +------+------+
+    |    1 | A    |
+    |    1 | B    |
+    |    1 | C    |
+    +------+------+
+    3 rows in set (0.00 sec)
+    
+    mysql> CREATE VIEW myView AS 
+        ->   TABLE tempTable;
+    ERROR 1352 (HY000): View's SELECT refers to a temporary table 'tempTable'
+    
+// triggers cannot be attached on it --------------------------------------------------
+    mysql> CREATE TRIGGER myTrigger AFTER INSERT ON Students FOR EACH ROW
+        ->   SELECT 1 + 1;
+    ERROR 1415 (0A000): Not allowed to return a result set from a trigger
+    </pre>
+      <hr>
+      <!---------------------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> JOIN View TEST </u></h4>
+      <pre class='cmd'>
+    mysql> CREATE VIEW myView AS                                                       // tables inner joined in a view  
+        ->   SELECT S.first_name, S.last_name, C.class_name
+        ->   FROM Class AS C JOIN Students AS S 
+        ->   ON C.student_id = S.student_id;
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> TABLE myView;
+    +------------+-----------+------------+
+    | first_name | last_name | class_name |
+    +------------+-----------+------------+
+    | Bircsy     | Biro      | Biology    |
+    | Karsai     | Levente   | Math       |
+    | Szabo      | Emese     | Algebra    |
+    +------------+-----------+------------+
+    3 rows in set (0.00 sec)
+    
+    mysql> DELETE FROM Students WHERE first_name = 'Bircsy';                           // deleting the underlying data 
+    Query OK, 1 row affected (0.01 sec)
+    
+    mysql> TABLE myView;
+    +------------+-----------+------------+
+    | first_name | last_name | class_name |
+    +------------+-----------+------------+
+    | Karsai     | Levente   | Math       |                                            // view show the current underlying data 
+    | Szabo      | Emese     | Algebra    |
+    +------------+-----------+------------+
+    2 rows in set (0.00 sec)
+        
+    mysql> DELETE FROM myView WHERE first_name = 'Karsai';                             // a join view is not updatable 
+    ERROR 1395 (HY000): Can not delete from join view 'testDB.myView'
+    mysql> DELETE FROM myView WHERE class_name LIKE 'Math';
+    ERROR 1395 (HY000): Can not delete from join view 'testDB.myView'
+    </pre>
+    </details>
+    
+    
+    <br><br>
+  </body>
+
+</html>
