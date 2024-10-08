@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <title> TLS (SSL) </title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../../Assets/stylesPages.css">
     <script src="../../Assets/scriptPages.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <h1> TLS (SSL) (ver 3.4.1) </h1>
     <p> Updated ( 2020-06-15 )</p>
-    <p class="sitenav"> <a href="../../index.html">MySite></a>
-        <a href="../index.html">Node.js></a> TLS (SSL)
-    </p>
+    <nav class="sitenav">
+      <a href="../../index.html">MySite > </a>
+      <a href="../index.html">Node.js > </a> TLS (SSL)
+    </nav>
     <pre class="syntax">
     <span style="color:deepskyblue;">------- incomming traffic -------> </span>
     
@@ -23,360 +24,360 @@
     </pre>
     <p class="subSite"><a href="Sni/index.html"> SNI (Server Name Indication) > </a></p>
     <p class="subSite"><a href="Session Resumption/index.html"> TLS Session Resumption > </a></p>
-<table class="table">
-        <tr>
-            <th style="width:30%;"> CLI / Method / Property </th>
-            <th> Description </th>
-        </tr>
-        <tr>
-            <td> <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>:</small><i>...</i>"
-                <strong>nodeFile.js</strong> </td>
-            <td> CLI specifies an alternative default TLS cipher suite list (overrides the default node cipher suite
-                list)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> 4.0.0 </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>tls</strong>.checkServerIdentity(<strong>hostName|ip:str</strong>, <strong
-                    class="openable">cert:obj<div>
-                        <p> a <strong>cert</strong> object which is returned by the
-                            <mark><strong>tlsSocket</strong>.getCertificate()</mark> /
-                            <mark><strong>tlsSocket</strong>.getPeerCertificate()</mark> methods </p>
-                    </div></strong>)
-            </td>
-            <td> returns <mark>undefined</mark> if the certificate (<strong>cert:obj</strong>) is issued to the hostname
-                (<strong>hostName|ip</strong>), if check fails returns an Error object with <mark>reason</mark> /
-                <mark>host</mark> / <mark>cert</mark> properties
-                <span class="browserSupport" title="updated : 2020-06-21">
-                    <span><i class="fab fa-node-js"></i> 0.8.4 </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.CLIENT_RENEG_LIMIT </td>
-            <td> gets or sets the allowed number of TLS renegotiation limit for Clients (Default: <mark>3</mark>)
-                (TLSv1.3 does not allow renegotiation)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> ? </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.CLIENT_RENEG_WINDOW </td>
-            <td> gets or set the restart timer (in seconds) for TLS renegotiation (after renegotiation failure how much
-                time the Client can retry) (Default: <mark>600</mark>) (TLSv1.3 does not allow renegotiation)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> ? </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>tls</strong>.createSecureContext(<i class="openable">option:obj<div>
-                        <p> ca: <strong>str|buf|[srt|buf, ...]</strong> - Certificate Authority certificates,
-                            certificate list which is used against the received certificate in order to verify the
-                            authenticity of the received certificate (Default: <mark>tls.rootCertificates</mark>) </p>
-                        <p> cert: <strong>str|buf|[srt|buf, ...]</strong> - certificate chain (in <mark>.pem</mark>
-                            format) </p>
-                        <p> sigalgs: <strong>str</strong> - signautre algorighms (colon separated list ex:
-                            <mark>RSA-PSS:ECDSA</mark>) </p>
-                        <p> ciphers: <strong>str</strong> - overrides the default cipher list for this context (colon
-                            separated list ex: <mark>ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256</mark>)
-                        </p>
-                        <p> clientCertEngine: <strong>str</strong> - name of an OpenSSL engine which can provide the
-                            client certificate </p>
-                        <p> crl: <strong>str|buf|[srt|buf, ...]</strong> - revocated certificates = listed certificates
-                            should not be trusted (Certificate Revocation List)</p>
-                        <p> dhparam: <strong>str|buf</strong> - Diffie Hellman parameters required for Perferc Forward
-                            Secrecy (use <mark>openssl dhparam</mark> to create it) </p>
-                        <p> ecdhCurve: <strong>str</strong> - describes the name of the Diffie Hellman Elliptic Curve
-                            (to list available curves <mark>crypto.getCurves()</mark>) (Default:
-                            <mark>tls.DEFAULT_ECDH_CURVE</mark>) </p>
-                        <p> honorCipherOrder: <strong>bol</strong> - attempts to use the server cipher suite order
-                            instead of the client's </p>
-                        <p> key: <strong>str|buf|obj|[srt|buf, ...]</strong> - private key chain (<mark>.pem</mark>)
-                        </p>
-                        <p> privateKeyEngine: <strong>str</strong> - OpenSSL engine which can provide private keys (used
-                            together with <mark>privateKeyIdentifier</mark>) </p>
-                        <p> privateKeyIdentifier: <strong>str</strong> - private key identifier managed by an OpenSSL
-                            engine (used togehter with <mark>privateKeyEngine</mark>, <u>should not be used when
-                                <mark>key</mark> provided</u>) </p>
-                        <p> maxVersion: <strong>str</strong> - specifies the maximal TLS version used by this context
-                            (cannot be specified if the <mark>secureProtocol</mark> is specified) (Default:
-                            <mark>tls.DEFAULT_MAX_VERSION</mark>) </p>
-                        <p> mixVersion: <strong>str</strong> - specifies the minimal TLS version used by this context
-                            (cannot be specified if the <mark>secureProtocol</mark> is specified) (Default:
-                            <mark>tls.DEFAULT_MIN_VERSION</mark>) </p>
-                        <p> passphrase: <strong>str</strong> - password used when using <makr>pfx</makr> or encrypted
-                            private-keys </p>
-                        <p> pfx: <strong>str|buf|obj|[srt|buf, ...]</strong> - <mark>.pfx</mark> or <mark>.p12</mark>
-                            file (which contains both the certificate and the private-key pair) </p>
-                        <p> secureOptions: <strong>nr</strong> options for OpenSSL (<mark>16384</mark> = id session
-                            resumption only! (disables ticket based session resumption)) </p>
-                        <p> secureProtocol: <strong>srt</strong> - a mechanism which selects the TLS protocol (see
-                            OpenSSL for this) (Default: <mark>none</mark> = disabled) </p>
-                        <p> sessionIdContext: <strong>str</strong> - opaque Identifier used by the server to ensure
-                            session state is not shared between applications (not used by the client) </p>
-                    </div></i>)
-            </td>
-            <td> creates and returns a <strong>secureContext</strong> object which is used to set a secure context in
-                <mark>new tls.TLSSocket()</mark> / <mark>connect()</mark> / <mark>createServer()</mark> /
-                <mark><strong>tlsServer</strong>.setSecureContext()</mark> /
-                <mark><strong>tlsServer</strong>.addContext()</mark>
-                <span class="browserSupport" title="updated : 2020-06-20">
-                    <span><i class="fab fa-node-js"></i> 0.11.13 </span>
-                    <span class="openable"><i class="fab fa-node-js"></i> more... <div>
-                            <p> - 5.2.0 - <mark>ca</mark> option </p>
-                            <p> - 9.3.0 - <mark>clientCertEngine </mark>
-                            <p> - 10.16.0 - <mark>minVersion</mark> and <mark>maxVersion</mark> </p>
-                            <p> - 12.0.0 - TLSv1.3 support </p>
-                            <p> - 12.11.0 - <mark>sigalgs</mark> </p>
-                            <p> - 12.12.0 - <mark>privateKeyIdentifier</mark> and <mark>privateKeyEngine</mark> to get
-                                private key from OpenSSL engine </p>
-                        </div></span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.DEFAULT_ECDH_CURVE </td>
-            <td> gets or sets the default elliptic curve when using Perferc Forward Secrecy with <mark>ECDHE</mark>
-                (Default: <mark>auto</mark>)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> 0.11.13 </span>
-                    <span><i class="fab fa-node-js"></i> 10.0.0 Default: <mark>auto</mark> </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.DEFAULT_MAX_VERSION </td>
-            <td> gets or sets the default maximum TLS version (both for Client and Server) (Default:
-                <mark>TLSv1.3</mark>)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> 11.4.0 </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.DEFAULT_MIN_VERSION </td>
-            <td> gets or sets the default minimum TLS version (both for Client and Server) (Default:
-                <mark>TLSv1.2</mark>)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> 11.4.0 </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.getCiphers() </td>
-            <td>
-                returns an Array with the supported (not necessarily enabled) <span class="openable">TLS ciphers<div>
-                        <p> - the returned list contains lowercased ciphers, (ex: <mark>tls_aes_128_ccm_8_sha256</mark>)
-                        </p>
-                        <p> - if we want to use a cipher from this list we must uppercase it (ex :
-                            <mark>TLS_AES_128_CCM_8_SHA256</mark>) </p>
-                        <p> - ciphers that start with <mark>tls_</mark> are for TLSv1.3, all others are TLSv1.2 or below
-                        </p>
-                    </div></span>
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> 0.10.2 </span>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td> <strong>tls</strong>.rootCertificates </td>
-            <td> returns an immurable Array which contains trusted root certificates curated by Mozilla (used to verify
-                peer certificates)
-                <span class="browserSupport" title="updated : 2020-06-19">
-                    <span><i class="fab fa-node-js"></i> 12.3.0 </span>
-                </span>
-            </td>
-        </tr>
-</table>
-<br>
-<table class="table" id="TLS_Client">
-    <caption> TLS Client </caption>
-        <tr>
-            <th style="width:30%;"> Method / Property </th>
-            <th> Description </th>
-        </tr>
-        <tr>
-            <td>
-                <strong>tls</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">option:obj
-                    <div>
-                        <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on
-                            the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default:
-                            <mark>false</mark>)</p>
-                        <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed
-                            socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any
-                            duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> /
-                            <mark>path</mark> ignored) </p>
-                        <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was
-                            closed (if the client ends the stream with the <mark>end()</mark> method only the readable
-                            side is closed of the socket (duplex stream)) (if the server ends the stream with the
-                            <mark>end()</mark> method only th writable side is closed of the socket (duplex stream))
-                            (Default: <mark>false</mark>)</p>
-                        <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects server connections
-                            with unauthorized certificates (Default: <mark>true</mark>) </p>
-                        <p> pskCallback: <strong>fn</strong> - used for Pre-Shared-Key encryptions [I did not TESTED PSK
-                            algorighms because they are unsecure and not commont: 2020-06-20] </p>
-                        <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols
-                            (ordered by their priority) </p>
-                        <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication)
-                            request (hostname not IP), this is how the client indicates which certificate and content
-                            requests from an SNI server (server having multiple domains routed) (usually is the same as
-                            the requested domain name) </p>
-                        <p> checkServerIdentity: <strong>fn</strong> - does the same as the
-                            <mark><strong>tls</strong>.checkServerIdentity()</mark> function while the client connects
-                            to the server </p>
-                        <p> session: <strong>buf</strong> - TLS session (client tries to resume to the passed session)
-                        </p>
-                        <p> minDHSize: <strong>nr:bit</strong> - minimum size (bits) of the DH (Diffie Hellman)
-                            parameter that the clietn accept (when the server offers one) (Default: <mark>1024</mark>)
-                        </p>
-                        <p> highWaterMark: <strong>nr:byte</strong> - readable stream <mark>highWaterMark</mark>
-                            internal buffer size (bytes) (Default: <mark>16384</mark>) </p>
-                        <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided)
-                        </p>
-                        <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or
-                            <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
-                        <p> - any <mark>socket.connect()</mark> options can be passed </p>
-                    </div></i>, <i class="openable">fn<div>
-                        <p> - <mark>secureConnect</mark> event's listener callback </p>
-                    </div></i>) <br>
-                <strong>tls</strong>.connect(<strong class="openable">ipcSocket:path<div>
-                        <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a
-                            domain socket in the current directory) <u>(not removed from the file system if the server
-                                is not explicitly closed!)</u> </p>
-                        <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must
-                            start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex:
-                            <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when
-                                the server process closes)</u> </p>
-                    </div></strong>, <i class="openable">option:obj<div>
-                        <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on
-                            the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default:
-                            <mark>false</mark>)</p>
-                        <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed
-                            socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any
-                            duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> /
-                            <mark>path</mark> ignored) </p>
-                        <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was
-                            closed (if the client ends the stream with the <mark>end()</mark> method only the readable
-                            side is closed of the socket (duplex stream)) (if the server ends the stream with the
-                            <mark>end()</mark> method only th writable side is closed of the socket (duplex stream))
-                            (Default: <mark>false</mark>)</p>
-                        <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects server connections
-                            with unauthorized certificates (Default: <mark>true</mark>) </p>
-                        <p> pskCallback: <strong>fn</strong> - used for Pre-Shared-Key encryptions [I did not TESTED PSK
-                            algorighms because they are unsecure and not commont: 2020-06-20] </p>
-                        <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols
-                            (ordered by their priority) </p>
-                        <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication)
-                            request (hostname not IP), this is how the client indicates which certificate and content
-                            requests from an SNI server (server having multiple domains routed) (usually is the same as
-                            the requested domain name) </p>
-                        <p> checkServerIdentity: <strong>fn</strong> - does the same as the
-                            <mark><strong>tls</strong>.checkServerIdentity()</mark> function while the client connects
-                            to the server </p>
-                        <p> session: <strong>buf</strong> - TLS session (client tries to resume to the passed session)
-                        </p>
-                        <p> minDHSize: <strong>nr:bit</strong> - minimum size (bits) of the DH (Diffie Hellman)
-                            parameter that the clietn accept (when the server offers one) (Default: <mark>1024</mark>)
-                        </p>
-                        <p> highWaterMark: <strong>nr:byte</strong> - readable stream <mark>highWaterMark</mark>
-                            internal buffer size (bytes) (Default: <mark>16384</mark>) </p>
-                        <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided)
-                        </p>
-                        <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or
-                            <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
-                        <p> - any <mark>socket.connect()</mark> options can be passed </p>
-                    </div></i>, <i class="openable">fn<div>
-                        <p> - <mark>secureConnect</mark> event's listener callback </p>
-                    </div></i>)
-                <br>
-                <strong>tls</strong>.connect(<strong class="openable">option:obj<div>
-                        <p> port: <strong>nr</strong> </p>
-                        <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
-                        <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for
-                            IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
-                        <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on
-                            the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default:
-                            <mark>false</mark>)</p>
-                        <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed
-                            socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any
-                            duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> /
-                            <mark>path</mark> ignored) </p>
-                        <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was
-                            closed (if the client ends the stream with the <mark>end()</mark> method only the readable
-                            side is closed of the socket (duplex stream)) (if the server ends the stream with the
-                            <mark>end()</mark> method only th writable side is closed of the socket (duplex stream))
-                            (Default: <mark>false</mark>)</p>
-                        <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects server connections
-                            with unauthorized certificates (Default: <mark>true</mark>) </p>
-                        <p> pskCallback: <strong>fn</strong> - used for Pre-Shared-Key encryptions [I did not TESTED PSK
-                            algorighms because they are unsecure and not commont: 2020-06-20] </p>
-                        <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols
-                            (ordered by their priority) </p>
-                        <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication)
-                            request (hostname not IP), this is how the client indicates which certificate and content
-                            requests from an SNI server (server having multiple domains routed) (usually is the same as
-                            the requested domain name) </p>
-                        <p> checkServerIdentity: <strong>fn</strong> - does the same as the
-                            <mark><strong>tls</strong>.checkServerIdentity()</mark> function while the client connects
-                            to the server </p>
-                        <p> session: <strong>buf</strong> - TLS session (client tries to resume to the passed session)
-                        </p>
-                        <p> minDHSize: <strong>nr:bit</strong> - minimum size (bits) of the DH (Diffie Hellman)
-                            parameter that the clietn accept (when the server offers one) (Default: <mark>1024</mark>)
-                        </p>
-                        <p> highWaterMark: <strong>nr:byte</strong> - readable stream <mark>highWaterMark</mark>
-                            internal buffer size (bytes) (Default: <mark>16384</mark>) </p>
-                        <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided)
-                        </p>
-                        <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or
-                            <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
-                        <p> - any <mark>socket.connect()</mark> options can be passed </p>
-                    </div></strong>, <i class="openable">fn<div>
-                        <p> - <mark>secureConnect</mark> event's listener callback </p>
-                    </div></i>)
-            </td>
-            <td>
-                - synchronously returns a <strong>tlsSocket</strong> object, then asynchronously initiates the
-                connection <br>
-                - on successful connection returns a <strong>tlsSocket</strong> object again which is a net Client over
-                TLS basically
-                <span class="browserSupport" title="updated : 2020-06-21">
-                    <span><i class="fab fa-node-js"></i> 0.11.3 </span>
-                    <span class="openable"><i class="fab fa-node-js"></i> more <div>
-                            <p> - 5.0.0 - <mark>ALPN</mark> option </p>
-                            <p> - 5.3.0 - <mark>secureContext</mark> option </p>
-                            <p> - 8.0.0 - <mark>lookup</mark> option </p>
-                            <p> - 10.16.0 - <mark>timeout</mark> option </p>
-                            <p> - 12.2.0 - <mark>enableTrace</mark> option </p>
-                            <p> - 12.9.0 - <mark>allowHalfOpen</mark> option </p>
-                            <p> - 14.1.0 - <mark>highWaterMark</mark> option </p>
-                        </div></span>
-                </span>
-            </td>
-        </tr>
-</table>
-<br>
-<table class="table">
-<caption> TLS Server </caption>
-    <tr>
-        <th style="width:30%;"> Method / Property </th>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> CLI / Method / Property </th>
         <th> Description </th>
-    </tr>
-    <tr>
-        <td>  
+      </tr>
+      <tr>
+        <td> <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>:</small><i>...</i>"
+          <strong>nodeFile.js</strong> </td>
+        <td> CLI specifies an alternative default TLS cipher suite list (overrides the default node cipher suite
+          list)
+          <span class="browserSupport" title="updated : 2020-06-19">
+            <span><i class="fab fa-node-js"></i> 4.0.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>tls</strong>.checkServerIdentity(<strong>hostName|ip:str</strong>, <strong
+            class="openable">cert:obj<div>
+              <p> a <strong>cert</strong> object which is returned by the
+                <mark><strong>tlsSocket</strong>.getCertificate()</mark> /
+                <mark><strong>tlsSocket</strong>.getPeerCertificate()</mark> methods </p>
+            </div></strong>)
+        </td>
+        <td> returns <mark>undefined</mark> if the certificate (<strong>cert:obj</strong>) is issued to the hostname
+          (<strong>hostName|ip</strong>), if check fails returns an Error object with <mark>reason</mark> /
+          <mark>host</mark> / <mark>cert</mark> properties
+          <span class="browserSupport" title="updated : 2020-06-21">
+            <span><i class="fab fa-node-js"></i> 0.8.4 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td> <strong>tls</strong>.CLIENT_RENEG_LIMIT </td>
+        <td> gets or sets the allowed number of TLS renegotiation limit for Clients (Default: <mark>3</mark>)
+          (TLSv1.3 does not allow renegotiation)
+          <span class="browserSupport" title="updated : 2020-06-19">
+            <span><i class="fab fa-node-js"></i> ? </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td> <strong>tls</strong>.CLIENT_RENEG_WINDOW </td>
+        <td> gets or set the restart timer (in seconds) for TLS renegotiation (after renegotiation failure how much
+          time the Client can retry) (Default: <mark>600</mark>) (TLSv1.3 does not allow renegotiation)
+          <span class="browserSupport" title="updated : 2020-06-19">
+            <span><i class="fab fa-node-js"></i> ? </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>tls</strong>.createSecureContext(<i class="openable">option:obj<div>
+              <p> ca: <strong>str|buf|[srt|buf, ...]</strong> - Certificate Authority certificates,
+                certificate list which is used against the received certificate in order to verify the
+                authenticity of the received certificate (Default: <mark>tls.rootCertificates</mark>) </p>
+              <p> cert: <strong>str|buf|[srt|buf, ...]</strong> - certificate chain (in <mark>.pem</mark>
+                format) </p>
+              <p> sigalgs: <strong>str</strong> - signautre algorighms (colon separated list ex:
+                <mark>RSA-PSS:ECDSA</mark>) </p>
+              <p> ciphers: <strong>str</strong> - overrides the default cipher list for this context (colon
+                separated list ex: <mark>ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256</mark>)
+              </p>
+              <p> clientCertEngine: <strong>str</strong> - name of an OpenSSL engine which can provide the
+                client certificate </p>
+              <p> crl: <strong>str|buf|[srt|buf, ...]</strong> - revocated certificates = listed certificates
+                should not be trusted (Certificate Revocation List)</p>
+              <p> dhparam: <strong>str|buf</strong> - Diffie Hellman parameters required for Perferc Forward
+                Secrecy (use <mark>openssl dhparam</mark> to create it) </p>
+              <p> ecdhCurve: <strong>str</strong> - describes the name of the Diffie Hellman Elliptic Curve
+                (to list available curves <mark>crypto.getCurves()</mark>) (Default:
+                <mark>tls.DEFAULT_ECDH_CURVE</mark>) </p>
+              <p> honorCipherOrder: <strong>bol</strong> - attempts to use the server cipher suite order
+                instead of the client's </p>
+              <p> key: <strong>str|buf|obj|[srt|buf, ...]</strong> - private key chain (<mark>.pem</mark>)
+              </p>
+              <p> privateKeyEngine: <strong>str</strong> - OpenSSL engine which can provide private keys (used
+                together with <mark>privateKeyIdentifier</mark>) </p>
+              <p> privateKeyIdentifier: <strong>str</strong> - private key identifier managed by an OpenSSL
+                engine (used togehter with <mark>privateKeyEngine</mark>, <u>should not be used when
+                  <mark>key</mark> provided</u>) </p>
+              <p> maxVersion: <strong>str</strong> - specifies the maximal TLS version used by this context
+                (cannot be specified if the <mark>secureProtocol</mark> is specified) (Default:
+                <mark>tls.DEFAULT_MAX_VERSION</mark>) </p>
+              <p> mixVersion: <strong>str</strong> - specifies the minimal TLS version used by this context
+                (cannot be specified if the <mark>secureProtocol</mark> is specified) (Default:
+                <mark>tls.DEFAULT_MIN_VERSION</mark>) </p>
+              <p> passphrase: <strong>str</strong> - password used when using <makr>pfx</makr> or encrypted
+                private-keys </p>
+              <p> pfx: <strong>str|buf|obj|[srt|buf, ...]</strong> - <mark>.pfx</mark> or <mark>.p12</mark>
+                file (which contains both the certificate and the private-key pair) </p>
+              <p> secureOptions: <strong>nr</strong> options for OpenSSL (<mark>16384</mark> = id session
+                resumption only! (disables ticket based session resumption)) </p>
+              <p> secureProtocol: <strong>srt</strong> - a mechanism which selects the TLS protocol (see
+                OpenSSL for this) (Default: <mark>none</mark> = disabled) </p>
+              <p> sessionIdContext: <strong>str</strong> - opaque Identifier used by the server to ensure
+                session state is not shared between applications (not used by the client) </p>
+            </div></i>)
+        </td>
+        <td> creates and returns a <strong>secureContext</strong> object which is used to set a secure context in
+          <mark>new tls.TLSSocket()</mark> / <mark>connect()</mark> / <mark>createServer()</mark> /
+          <mark><strong>tlsServer</strong>.setSecureContext()</mark> /
+          <mark><strong>tlsServer</strong>.addContext()</mark>
+          <span class="browserSupport" title="updated : 2020-06-20">
+            <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+            <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                <p> - 5.2.0 - <mark>ca</mark> option </p>
+                <p> - 9.3.0 - <mark>clientCertEngine </mark>
+                  <p> - 10.16.0 - <mark>minVersion</mark> and <mark>maxVersion</mark> </p>
+                  <p> - 12.0.0 - TLSv1.3 support </p>
+                  <p> - 12.11.0 - <mark>sigalgs</mark> </p>
+                  <p> - 12.12.0 - <mark>privateKeyIdentifier</mark> and <mark>privateKeyEngine</mark> to get
+                    private key from OpenSSL engine </p>
+                </div></span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tls</strong>.DEFAULT_ECDH_CURVE </td>
+          <td> gets or sets the default elliptic curve when using Perferc Forward Secrecy with <mark>ECDHE</mark>
+            (Default: <mark>auto</mark>)
+            <span class="browserSupport" title="updated : 2020-06-19">
+              <span><i class="fab fa-node-js"></i> 0.11.13 </span>
+              <span><i class="fab fa-node-js"></i> 10.0.0 Default: <mark>auto</mark> </span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tls</strong>.DEFAULT_MAX_VERSION </td>
+          <td> gets or sets the default maximum TLS version (both for Client and Server) (Default:
+            <mark>TLSv1.3</mark>)
+            <span class="browserSupport" title="updated : 2020-06-19">
+              <span><i class="fab fa-node-js"></i> 11.4.0 </span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tls</strong>.DEFAULT_MIN_VERSION </td>
+          <td> gets or sets the default minimum TLS version (both for Client and Server) (Default:
+            <mark>TLSv1.2</mark>)
+            <span class="browserSupport" title="updated : 2020-06-19">
+              <span><i class="fab fa-node-js"></i> 11.4.0 </span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tls</strong>.getCiphers() </td>
+          <td>
+            returns an Array with the supported (not necessarily enabled) <span class="openable">TLS ciphers<div>
+                <p> - the returned list contains lowercased ciphers, (ex: <mark>tls_aes_128_ccm_8_sha256</mark>)
+                </p>
+                <p> - if we want to use a cipher from this list we must uppercase it (ex :
+                  <mark>TLS_AES_128_CCM_8_SHA256</mark>) </p>
+                <p> - ciphers that start with <mark>tls_</mark> are for TLSv1.3, all others are TLSv1.2 or below
+                </p>
+              </div></span>
+            <span class="browserSupport" title="updated : 2020-06-19">
+              <span><i class="fab fa-node-js"></i> 0.10.2 </span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tls</strong>.rootCertificates </td>
+          <td> returns an immurable Array which contains trusted root certificates curated by Mozilla (used to verify
+            peer certificates)
+            <span class="browserSupport" title="updated : 2020-06-19">
+              <span><i class="fab fa-node-js"></i> 12.3.0 </span>
+            </span>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <table class="table" id="TLS_Client">
+        <caption> TLS Client </caption>
+        <tr>
+          <th style="width:30%;"> Method / Property </th>
+          <th> Description </th>
+        </tr>
+        <tr>
+          <td>
+            <strong>tls</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">option:obj
+              <div>
+                <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on
+                  the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default:
+                  <mark>false</mark>)</p>
+                <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed
+                  socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any
+                  duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> /
+                  <mark>path</mark> ignored) </p>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was
+                  closed (if the client ends the stream with the <mark>end()</mark> method only the readable
+                  side is closed of the socket (duplex stream)) (if the server ends the stream with the
+                  <mark>end()</mark> method only th writable side is closed of the socket (duplex stream))
+                  (Default: <mark>false</mark>)</p>
+                <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects server connections
+                  with unauthorized certificates (Default: <mark>true</mark>) </p>
+                <p> pskCallback: <strong>fn</strong> - used for Pre-Shared-Key encryptions [I did not TESTED PSK
+                  algorighms because they are unsecure and not commont: 2020-06-20] </p>
+                <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols
+                  (ordered by their priority) </p>
+                <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication)
+                  request (hostname not IP), this is how the client indicates which certificate and content
+                  requests from an SNI server (server having multiple domains routed) (usually is the same as
+                  the requested domain name) </p>
+                <p> checkServerIdentity: <strong>fn</strong> - does the same as the
+                  <mark><strong>tls</strong>.checkServerIdentity()</mark> function while the client connects
+                  to the server </p>
+                <p> session: <strong>buf</strong> - TLS session (client tries to resume to the passed session)
+                </p>
+                <p> minDHSize: <strong>nr:bit</strong> - minimum size (bits) of the DH (Diffie Hellman)
+                  parameter that the clietn accept (when the server offers one) (Default: <mark>1024</mark>)
+                </p>
+                <p> highWaterMark: <strong>nr:byte</strong> - readable stream <mark>highWaterMark</mark>
+                  internal buffer size (bytes) (Default: <mark>16384</mark>) </p>
+                <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided)
+                </p>
+                <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or
+                  <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
+                <p> - any <mark>socket.connect()</mark> options can be passed </p>
+              </div></i>, <i class="openable">fn<div>
+                <p> - <mark>secureConnect</mark> event's listener callback </p>
+              </div></i>) <br>
+            <strong>tls</strong>.connect(<strong class="openable">ipcSocket:path<div>
+                <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a
+                  domain socket in the current directory) <u>(not removed from the file system if the server
+                    is not explicitly closed!)</u> </p>
+                <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must
+                  start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex:
+                  <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when
+                    the server process closes)</u> </p>
+              </div></strong>, <i class="openable">option:obj<div>
+                <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on
+                  the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default:
+                  <mark>false</mark>)</p>
+                <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed
+                  socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any
+                  duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> /
+                  <mark>path</mark> ignored) </p>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was
+                  closed (if the client ends the stream with the <mark>end()</mark> method only the readable
+                  side is closed of the socket (duplex stream)) (if the server ends the stream with the
+                  <mark>end()</mark> method only th writable side is closed of the socket (duplex stream))
+                  (Default: <mark>false</mark>)</p>
+                <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects server connections
+                  with unauthorized certificates (Default: <mark>true</mark>) </p>
+                <p> pskCallback: <strong>fn</strong> - used for Pre-Shared-Key encryptions [I did not TESTED PSK
+                  algorighms because they are unsecure and not commont: 2020-06-20] </p>
+                <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols
+                  (ordered by their priority) </p>
+                <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication)
+                  request (hostname not IP), this is how the client indicates which certificate and content
+                  requests from an SNI server (server having multiple domains routed) (usually is the same as
+                  the requested domain name) </p>
+                <p> checkServerIdentity: <strong>fn</strong> - does the same as the
+                  <mark><strong>tls</strong>.checkServerIdentity()</mark> function while the client connects
+                  to the server </p>
+                <p> session: <strong>buf</strong> - TLS session (client tries to resume to the passed session)
+                </p>
+                <p> minDHSize: <strong>nr:bit</strong> - minimum size (bits) of the DH (Diffie Hellman)
+                  parameter that the clietn accept (when the server offers one) (Default: <mark>1024</mark>)
+                </p>
+                <p> highWaterMark: <strong>nr:byte</strong> - readable stream <mark>highWaterMark</mark>
+                  internal buffer size (bytes) (Default: <mark>16384</mark>) </p>
+                <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided)
+                </p>
+                <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or
+                  <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
+                <p> - any <mark>socket.connect()</mark> options can be passed </p>
+              </div></i>, <i class="openable">fn<div>
+                <p> - <mark>secureConnect</mark> event's listener callback </p>
+              </div></i>)
+            <br>
+            <strong>tls</strong>.connect(<strong class="openable">option:obj<div>
+                <p> port: <strong>nr</strong> </p>
+                <p> host: <strong>srt</strong> - (Default: <mark>localhost</mark>) </p>
+                <p> path: <strong>srt</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for
+                  IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on
+                  the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default:
+                  <mark>false</mark>)</p>
+                <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed
+                  socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any
+                  duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> /
+                  <mark>path</mark> ignored) </p>
+                <p> allowHalfOpen: <strong>bol</strong> - allows a half open socket after the other side was
+                  closed (if the client ends the stream with the <mark>end()</mark> method only the readable
+                  side is closed of the socket (duplex stream)) (if the server ends the stream with the
+                  <mark>end()</mark> method only th writable side is closed of the socket (duplex stream))
+                  (Default: <mark>false</mark>)</p>
+                <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects server connections
+                  with unauthorized certificates (Default: <mark>true</mark>) </p>
+                <p> pskCallback: <strong>fn</strong> - used for Pre-Shared-Key encryptions [I did not TESTED PSK
+                  algorighms because they are unsecure and not commont: 2020-06-20] </p>
+                <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols
+                  (ordered by their priority) </p>
+                <p> servername: <strong>hostname:str</strong> - server name for SNI (Server Name Indication)
+                  request (hostname not IP), this is how the client indicates which certificate and content
+                  requests from an SNI server (server having multiple domains routed) (usually is the same as
+                  the requested domain name) </p>
+                <p> checkServerIdentity: <strong>fn</strong> - does the same as the
+                  <mark><strong>tls</strong>.checkServerIdentity()</mark> function while the client connects
+                  to the server </p>
+                <p> session: <strong>buf</strong> - TLS session (client tries to resume to the passed session)
+                </p>
+                <p> minDHSize: <strong>nr:bit</strong> - minimum size (bits) of the DH (Diffie Hellman)
+                  parameter that the clietn accept (when the server offers one) (Default: <mark>1024</mark>)
+                </p>
+                <p> highWaterMark: <strong>nr:byte</strong> - readable stream <mark>highWaterMark</mark>
+                  internal buffer size (bytes) (Default: <mark>16384</mark>) </p>
+                <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided)
+                </p>
+                <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or
+                  <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
+                <p> - any <mark>socket.connect()</mark> options can be passed </p>
+              </div></strong>, <i class="openable">fn<div>
+                <p> - <mark>secureConnect</mark> event's listener callback </p>
+              </div></i>)
+          </td>
+          <td>
+            - synchronously returns a <strong>tlsSocket</strong> object, then asynchronously initiates the
+            connection <br>
+            - on successful connection returns a <strong>tlsSocket</strong> object again which is a net Client over
+            TLS basically
+            <span class="browserSupport" title="updated : 2020-06-21">
+              <span><i class="fab fa-node-js"></i> 0.11.3 </span>
+              <span class="openable"><i class="fab fa-node-js"></i> more <div>
+                  <p> - 5.0.0 - <mark>ALPN</mark> option </p>
+                  <p> - 5.3.0 - <mark>secureContext</mark> option </p>
+                  <p> - 8.0.0 - <mark>lookup</mark> option </p>
+                  <p> - 10.16.0 - <mark>timeout</mark> option </p>
+                  <p> - 12.2.0 - <mark>enableTrace</mark> option </p>
+                  <p> - 12.9.0 - <mark>allowHalfOpen</mark> option </p>
+                  <p> - 14.1.0 - <mark>highWaterMark</mark> option </p>
+                </div></span>
+            </span>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <table class="table">
+        <caption> TLS Server </caption>
+        <tr>
+          <th style="width:30%;"> Method / Property </th>
+          <th> Description </th>
+        </tr>
+        <tr>
+          <td>
             <strong>tls</strong>.createServer(<i class="openable">option:obj<div>
                 <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols (ordered by their priority) </p>
                 <p> clientCertEngine: <strong>str</strong> - name of an OpenSSL engine which can provide the client certificate </p>
                 <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on the underlying socket on every connection (prints TLS packet informations on <mark>stderr</mark>) (Default: <mark>false</mark>)</p>
-                <p> handshakeTimeout: <strong>nr:ms</strong> - time (milliseconds) the server waits untill the TLS handshake finishes, if this timer times out the the server aborts the connection and emits the <mark>tlsClientError</mark> event (Default: <mark>120000</mark>) </p> 
+                <p> handshakeTimeout: <strong>nr:ms</strong> - time (milliseconds) the server waits untill the TLS handshake finishes, if this timer times out the the server aborts the connection and emits the <mark>tlsClientError</mark> event (Default: <mark>120000</mark>) </p>
                 <p> rejectUnauthorized: <strong>bol</strong> - <u>(only if <mark>requestCert:true</mark>)</u> if <mark>true</mark> rejects the client's certificate if the certificate is not authorized by the suplied certificate list (<mark>ca</mark> property of the suplied <strong>secureContext</strong> object) (Default: <mark>true</mark>) </p>
-                <p> requestCert: <strong>bol</strong> - if <mark>true</mark> the server will request a certificate from clients and attempts to verify that certificate (Default: <mark>false</mark>) </p> 
+                <p> requestCert: <strong>bol</strong> - if <mark>true</mark> the server will request a certificate from clients and attempts to verify that certificate (Default: <mark>false</mark>) </p>
                 <p> sessionTimeout: <strong>nr:s</strong> - time (seconds) after the TLS session cannot be resumed (Defaut: <mark>300</mark>) </p>
                 <p> SNICallback: <strong>fn(servername, cb)</strong> - function called when the client supporst SNI (Server Name Indication), the <mark>servername</mark> argument is the requested servername by the client, the <mark>cb</mark> is the callback what should be called with the specified <strong>secureContext</strong> (context with specified certificates) when responding (ex: <mark>cb(null, ctx1)</mark>) </p>
                 <p> ticketKeys: <strong>buf</strong> - session ticket (48 bytes (3 piece of 16 byte key composed in one single 48 byte data)) used when restarting server or to pass to a load balancer server, so the new server can resume the passed session (this property is useless for silgle process servers) </p>
@@ -384,16 +385,16 @@
                 <p> pskIdentityHint: <strong>str</strong> - hint send to the client in order to help select the identity [I did not TESTED PSK algorighms because they are unsecure and not commont: 2020-06-20] </p>
                 <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
                 <p> - any <mark>new.createServer()</mark> options can be passed </p>
-            </div></i>, <i class="openable">fn(tlsSocket)<div>
+              </div></i>, <i class="openable">fn(tlsSocket)<div>
                 <p> - <mark>secureConnection</mark> event's listener callback</p>
-            </div></i>) <br>
+              </div></i>) <br>
             new <strong>tls</strong>.Server(<i class="openable">option:obj<div>
                 <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols (ordered by their priority) </p>
                 <p> clientCertEngine: <strong>str</strong> - name of an OpenSSL engine which can provide the client certificate </p>
                 <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on the underlying socket on every connection (prints TLS packet informations on <mark>stderr</mark>) (Default: <mark>false</mark>)</p>
-                <p> handshakeTimeout: <strong>nr:ms</strong> - time (milliseconds) the server waits untill the TLS handshake finishes, if this timer times out the the server aborts the connection and emits the <mark>tlsClientError</mark> event (Default: <mark>120000</mark>) </p> 
+                <p> handshakeTimeout: <strong>nr:ms</strong> - time (milliseconds) the server waits untill the TLS handshake finishes, if this timer times out the the server aborts the connection and emits the <mark>tlsClientError</mark> event (Default: <mark>120000</mark>) </p>
                 <p> rejectUnauthorized: <strong>bol</strong> - <u>(only if <mark>requestCert:true</mark>)</u> if <mark>true</mark> rejects the client's certificate if the certificate is not authorized by the suplied certificate list (<mark>ca</mark> property of the suplied <strong>secureContext</strong> object) (Default: <mark>true</mark>) </p>
-                <p> requestCert: <strong>bol</strong> - if <mark>true</mark> the server will request a certificate from clients and attempts to verify that certificate (Default: <mark>false</mark>) </p> 
+                <p> requestCert: <strong>bol</strong> - if <mark>true</mark> the server will request a certificate from clients and attempts to verify that certificate (Default: <mark>false</mark>) </p>
                 <p> sessionTimeout: <strong>nr:s</strong> - time (seconds) after the TLS session cannot be resumed (Defaut: <mark>300</mark>) </p>
                 <p> SNICallback: <strong>fn(servername, cb)</strong> - function called when the client supporst SNI (Server Name Indication), the <mark>servername</mark> argument is the requested servername by the client, the <mark>cb</mark> is the callback what should be called with the specified <strong>secureContext</strong> (context with specified certificates) when responding (ex: <mark>cb(null, ctx1)</mark>) </p>
                 <p> ticketKeys: <strong>buf</strong> - session ticket (48 bytes (3 piece of 16 byte key composed in one single 48 byte data)) used when restarting server or to pass to a load balancer server, so the new server can resume the passed session (this property is useless for silgle process servers) </p>
@@ -401,525 +402,525 @@
                 <p> pskIdentityHint: <strong>str</strong> - hint send to the client in order to help select the identity [I did not TESTED PSK algorighms because they are unsecure and not commont: 2020-06-20] </p>
                 <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
                 <p> - any <mark>new.createServer()</mark> options can be passed </p>
-            </div></i>, <i class="openable">fn(tlsSocket)<div>
+              </div></i>, <i class="openable">fn(tlsSocket)<div>
                 <p> - <mark>secureConnection</mark> event's listener callback</p>
-            </div></i>)
-        </td>
-        <td> 
+              </div></i>)
+          </td>
+          <td>
             - creates a returns a <strong>tlsServer</strong> (any kind of TLS server, <mark>net.Server</mark> on TLS) (extends <mark>net.Server</mark> class) <br>
-            - the returned server type is defined by what kind of socket the <mark>listen()</mark> method is listening to 
+            - the returned server type is defined by what kind of socket the <mark>listen()</mark> method is listening to
             <span class="browserSupport" title="updated : 2020-06-27">
-                <span><i class="fab fa-node-js"></i> 0.3.2 </span>
-                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
-                    <p> - 5.0.0 - <mark>ALPNProtocols</mark> options </p>
-                    <p> - 8.0.0 - <mark>ALPNProtocols</mark> can be <mark>TypedArray</mark> or <mark>DataView</mark> </p>
-                    <p> - 12.3.0 - <mark>net.createServer()</mark> options can be used </p>
+              <span><i class="fab fa-node-js"></i> 0.3.2 </span>
+              <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                  <p> - 5.0.0 - <mark>ALPNProtocols</mark> options </p>
+                  <p> - 8.0.0 - <mark>ALPNProtocols</mark> can be <mark>TypedArray</mark> or <mark>DataView</mark> </p>
+                  <p> - 12.3.0 - <mark>net.createServer()</mark> options can be used </p>
                 </div></span>
             </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer</strong>.addContext(<strong>hostName</strong>, <strong>secureContext:obj</strong>) </td>
-        <td> <u>[Internally called apparently TESTED: 2020-06-25]</u> called when SNI request received (see <mark>SNICallback</mark> option)
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tlsServer</strong>.addContext(<strong>hostName</strong>, <strong>secureContext:obj</strong>) </td>
+          <td> <u>[Internally called apparently TESTED: 2020-06-25]</u> called when SNI request received (see <mark>SNICallback</mark> option)
             <span class="browserSupport" title="updated : 2020-06-27">
-                <span><i class="fab fa-node-js"></i> 0.5.3 </span>
+              <span><i class="fab fa-node-js"></i> 0.5.3 </span>
             </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer</strong>.address() </td>
-        <td> returns the listened address (reported by the OS), (<strong class="openable">object<div>
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tlsServer</strong>.address() </td>
+          <td> returns the listened address (reported by the OS), (<strong class="openable">object<div>
                 <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
-            </div></strong> for TLS servers) (<strong class="openable">string<div>
+              </div></strong> for TLS servers) (<strong class="openable">string<div>
                 <p> - the socket argument as it was passed in the <mark>listen()</mark> method (ex: <mark>./domainSocket</mark>) </p>
-            </div></strong> for IPC servers)
+              </div></strong> for IPC servers)
             <span class="browserSupport" title="updated : 2020-06-27">
-                <span><i class="fab fa-node-js"></i> 0.11.4 </span>
+              <span><i class="fab fa-node-js"></i> 0.11.4 </span>
             </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer</strong>.close(<i>fn(err)</i>) </td>
-        <td> 
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tlsServer</strong>.close(<i>fn(err)</i>) </td>
+          <td>
             - asynchronously stops the server listening for new connections (keeps pending connections) <br>
             - the server is finally closed when all its connections are closed <br>
             - when the server if finally closed it emits the <mark>close</mark> event and the callback is called (the <mark>err</mark> callback arguments trown if this method is called on a closed server) <br>
             - on Unix systems removes the Domain Socket (from the file system) creted by the server <br>
             - returns this <strong>tlsServer</strong> object
             <span class="browserSupport" title="updated : 2020-06-27">
-                <span><i class="fab fa-node-js"></i> 0.3.2 </span>
+              <span><i class="fab fa-node-js"></i> 0.3.2 </span>
             </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer</strong>.getTicketKeys() </td>
-        <td> returns the session ticket keys of the server (keys to access session resumption tickets) (3 16byte keys returned as a 48byte buffer)
+          </td>
+        </tr>
+        <tr>
+          <td> <strong>tlsServer</strong>.getTicketKeys() </td>
+          <td> returns the session ticket keys of the server (keys to access session resumption tickets) (3 16byte keys returned as a 48byte buffer)
             <span class="browserSupport" title="updated : 2020-06-27">
-                <span><i class="fab fa-node-js"></i> 3.0.0 </span>
+              <span><i class="fab fa-node-js"></i> 3.0.0 </span>
             </span>
-        </td>
-    </tr>
-    <tr>
-        <td>  
+          </td>
+        </tr>
+        <tr>
+          <td>
             <strong>tlsServer</strong>.listen(<i>port:nr, host:str, </i><i class="openable">backlog:nr<div>
                 <p> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
-            </div></i>, <i class="openable">fn<div>
+              </div></i>, <i class="openable">fn<div>
                 <p> - <mark>listening</mark> event listener's callback </p>
-            </div></i>) <br>
+              </div></i>) <br>
             <strong>tlsServer</strong>.listen(<strong class="openable">ipcSocket:path<div>
                 <p> - <u>on UNIX</u> creates a Unix Domain Socket (ex: <mark>'./domSocket'</mark> = creates a domain socket in the current directory) <u>(not removed from the file system if the server is not explicitly closed!)</u> </p>
                 <p> - <u>on Windows</u> creates a Named Pipe (not visible in the file system), named pipe must start with <mark>\\?\pipe\</mark> or <mark>\\.\pipe\</mark> (ex: <mark>'\\\\?\\pipe\\C:\\namedPipe'</mark>) <u>(named pipes are automatically removed when the server process closes)</u> </p>
-            </div></strong>, <i class="openable">backlog:nr<div>
+              </div></strong>, <i class="openable">backlog:nr<div>
                 <p> - maximum allowed pending connections (defined by the OS) (Default <mark>511) </mark>
-            </div></i>, <i class="openable">fn<div>
-                <p> - <mark>listening</mark> event listener's callback </p>
-            </div></i>) <br>
-            <strong>tlsServer</strong>.listen(<strong class="openable">option:obj<div>
-                <p> port: <strong>nr</strong> - if this value is specified the <strong>netServer</strong> will be a TCP server </p>
-                <p> host: <strong>str</strong> </p>
-                <p> path: <strong>str</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
-                <p> backlog: <strong>nr</strong> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
-            </div></strong>, <i class="openable">fn<div>
-                <p> - <mark>listening</mark> event listener's callback </p>
-            </div></i>)
-        </td>
-        <td> 
-            - asynchronously starts the server listening for TLS connections <br>
-            - can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method  
-            <span class="browserSupport" title="updated : 2020-06-27">
+                </div></i>, <i class="openable">fn<div>
+                  <p> - <mark>listening</mark> event listener's callback </p>
+                </div></i>) <br>
+              <strong>tlsServer</strong>.listen(<strong class="openable">option:obj<div>
+                  <p> port: <strong>nr</strong> - if this value is specified the <strong>netServer</strong> will be a TCP server </p>
+                  <p> host: <strong>str</strong> </p>
+                  <p> path: <strong>str</strong> - specifies a Domain Socket (UNIX) or Named Pipe (Windows) for IPC connections (if the <mark>port</mark> property is set this is omitted) </p>
+                  <p> backlog: <strong>nr</strong> - maximum allowed pending connections (defined by the OS) (Default <mark>511</mark>) </p>
+                </div></strong>, <i class="openable">fn<div>
+                  <p> - <mark>listening</mark> event listener's callback </p>
+                </div></i>)
+            </td>
+            <td>
+              - asynchronously starts the server listening for TLS connections <br>
+              - can be called again if the previous listening attempt is failed or after the <mark>close()</mark> method
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.3.2 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer</strong>.setSecureContext(<strong>secureContext:obj</strong>) </td>
-        <td> sets the secure context of the server (replaces existing)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsServer</strong>.setSecureContext(<strong>secureContext:obj</strong>) </td>
+            <td> sets the secure context of the server (replaces existing)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 11.0.0 </span>
-            </span>
-        </td>
-    </tr>
+              </span>
+            </td>
+          </tr>
 
-    <tr>
-        <td> <strong>tlsServer</strong>.setTicketKeys(<strong>buf</strong>) </td>
-        <td> sets the session ticket keys for the server (keys to access session resumption tickets) (48byte buffer)
-            <span class="browserSupport" title="updated : 2020-06-27">
+          <tr>
+            <td> <strong>tlsServer</strong>.setTicketKeys(<strong>buf</strong>) </td>
+            <td> sets the session ticket keys for the server (keys to access session resumption tickets) (48byte buffer)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 3.0.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"> events </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer.listener</strong>('secureConnection', <strong>fn(tlsSocket)</strong>) </td>
-        <td> emitted when the TLS handshake is successfully estabilished between the server and the connecting client
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"> events </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsServer.listener</strong>('secureConnection', <strong>fn(tlsSocket)</strong>) </td>
+            <td> emitted when the TLS handshake is successfully estabilished between the server and the connecting client
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.3.2 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer.listener</strong>('keylog', <strong>fn(<strong class="openable">keyMat<div>
-                <p> - <strong>buf</strong> - ASCII text in NSS SSL KEYLOGFILE format </p> 
-            </div></strong></strong>, <strong>tlsSocket)</strong>) </td>
-        <td> emitted when key matterial is generated or received by a connection to this server
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsServer.listener</strong>('keylog', <strong>fn(<strong class="openable">keyMat<div>
+                    <p> - <strong>buf</strong> - ASCII text in NSS SSL KEYLOGFILE format </p>
+                  </div></strong></strong>, <strong>tlsSocket)</strong>) </td>
+            <td> emitted when key matterial is generated or received by a connection to this server
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 10.20.0 </span>
                 <span><i class="fab fa-node-js"></i> 12.3.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> 
-            <strong>tlsServer.listener</strong>('newSession', <strong class="openable">fn(sessId, sessSt, cb)<div>
-                <p> - <strong>sessId</strong> - session identifier returned in a <strong>buf</strong> (buffer) </p>
-                <p> - <strong>sessSt</strong> - session state which can be stored and reused when the client request an ID session resumption (used in <mark>resumeSession</mark> event) </p>
-                <p> - <strong>cb</strong> - <u>callback must be called</u> in order to resume the communication </p>
-            </div></strong>) 
-        </td>
-        <td> emitted when a new TLS session is created and returns the session state <u>(used for ID-based session resumption only! which is not supported by TLSv1.3)</u>
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsServer.listener</strong>('newSession', <strong class="openable">fn(sessId, sessSt, cb)<div>
+                  <p> - <strong>sessId</strong> - session identifier returned in a <strong>buf</strong> (buffer) </p>
+                  <p> - <strong>sessSt</strong> - session state which can be stored and reused when the client request an ID session resumption (used in <mark>resumeSession</mark> event) </p>
+                  <p> - <strong>cb</strong> - <u>callback must be called</u> in order to resume the communication </p>
+                </div></strong>)
+            </td>
+            <td> emitted when a new TLS session is created and returns the session state <u>(used for ID-based session resumption only! which is not supported by TLSv1.3)</u>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.9.2 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> 
-            <strong>tlsServer.listener</strong>('OCSPRequest', <strong class="openable">fn(cert, issuer, cb)<div>
-                <p> - <strong>cert</strong> - certificate DER representation buffer </p>
-                <p> - <strong>issuer</strong> - issuer DER representation buffer </p>
-                <p> - <strong>cb</strong> - callback must be called (<mark>cb(null, null)</mark> = null OCSP response) (<mark>cb(<strong>err</strong>)</mark> = destroys the socket) (<mark>cb(null, <strong>OCSPResp</strong>)</mark> = the server should perform an OCSP request ot the CA and respond to the client with the CA received data) </p>
-            </div></strong>) 
-        </td>
-        <td> emitted when the server receives an OCSP request (Online Certificate Status Protocol) 
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsServer.listener</strong>('OCSPRequest', <strong class="openable">fn(cert, issuer, cb)<div>
+                  <p> - <strong>cert</strong> - certificate DER representation buffer </p>
+                  <p> - <strong>issuer</strong> - issuer DER representation buffer </p>
+                  <p> - <strong>cb</strong> - callback must be called (<mark>cb(null, null)</mark> = null OCSP response) (<mark>cb(<strong>err</strong>)</mark> = destroys the socket) (<mark>cb(null, <strong>OCSPResp</strong>)</mark> = the server should perform an OCSP request ot the CA and respond to the client with the CA received data) </p>
+                </div></strong>)
+            </td>
+            <td> emitted when the server receives an OCSP request (Online Certificate Status Protocol)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.13 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> 
-            <strong>tlsServer.listener</strong>('resumeSession', <strong class="openable">fn(sessId, cd)<div>
-                <p> - <strong>sessId</strong> - session identifier returned in a <strong>buf</strong> (buffer) </p>
-                <p> - <strong>cb</strong> - callback <u>must be called <strong>cb(<i>err, sessSt</i>)</strong></u> with 2 arguments (when sending session state to the client for session resumption) or empty (when we don't have any session state saved yet) </p>
-                <p> - - <i>err</i> - error </p>
-                <p> - - <i>sessSt</i> - session state which is sent to the client for session resumption, this data can be returned by the <mark>newSession</mark> event </p>
-            </div></strong>) 
-        </td>
-        <td> emitted when the client requests a TLS session resumption <u>(used for ID-based session resumption only! which is not supported by TLSv1.3)</u>
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsServer.listener</strong>('resumeSession', <strong class="openable">fn(sessId, cd)<div>
+                  <p> - <strong>sessId</strong> - session identifier returned in a <strong>buf</strong> (buffer) </p>
+                  <p> - <strong>cb</strong> - callback <u>must be called <strong>cb(<i>err, sessSt</i>)</strong></u> with 2 arguments (when sending session state to the client for session resumption) or empty (when we don't have any session state saved yet) </p>
+                  <p> - - <i>err</i> - error </p>
+                  <p> - - <i>sessSt</i> - session state which is sent to the client for session resumption, this data can be returned by the <mark>newSession</mark> event </p>
+                </div></strong>)
+            </td>
+            <td> emitted when the client requests a TLS session resumption <u>(used for ID-based session resumption only! which is not supported by TLSv1.3)</u>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.9.2 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsServer.listener</strong>('tlsClientError', <strong>fn(err, tlsSocket)</strong>) </td>
-        <td> emitted when an error occurs <u>before</u> a secure connection is estabilished (feedback when the client rejects a secure connection)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsServer.listener</strong>('tlsClientError', <strong>fn(err, tlsSocket)</strong>) </td>
+            <td> emitted when an error occurs <u>before</u> a secure connection is estabilished (feedback when the client rejects a secure connection)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 6.0.0 </span>
-            </span>
-        </td>
-    </tr>
-</table>
-<br>
-<table class="table">
-<caption> TLS Socket </caption>
-    <tr>
-        <th style="width:30%;"> Method / Property </th>
-        <th> Description </th>
-    </tr>
-    <tr>
-        <td>  
-            new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<div>
-                <p> - <mark>net.Socket</mark> or any duplex stream </p> 
-            </div></strong>, <i class="openable">option:obj<div>
-                <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> prints TLS packet informations on <mark>stderr</mark> (Default: <mark>false</mark>) </p>
-                <p> isServer: <strong>bol</strong> - if <mark>true</mark> the socket is instantiated as a server, if <mark>false</mark> instantiated as a client (Default: <mark>false</mark>) </p>
-                <p> server: <mark>net.Server</mark> instance </p>
-                <p> requestCert: <strong>bol</strong> - if <mark>true</mark> requests the peer's certificate (in case it is used as server, clients always request the peer certificate) </p>
-                <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects the peer's certificate if the certificate is not authorized by the suplied certificate list (<mark>ca</mark> property of the suplied <strong>secureContext</strong> object) (Default: <mark>true</mark>) </p>
-                <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols (ordered by their priority) </p>
-                <p> SNICallback: <strong>fn(servername, cb)</strong> - function called when the client supporst SNI (Server Name Indication), the <mark>servername</mark> argument is the requested servername by the client, the <mark>cb</mark> is the callback what should be called with the specified <strong>secureContext</strong> (context with specified certificates) when responding (ex: <mark>cb(null, ctx1)</mark>) </p>
-                <p> session: <strong>buf</strong> - TLS session (to resume TLS sessions) </p>
-                <p> requestOCSP: <strong>bol</strong> - if <mark>true</mark> the OCSP request extension will be added to the client 'hello' message and the <mark>OCSPResponse</mark> event will be emitted on the socket before estabilishing the secure connection </p>
-                <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided) </p>
-                <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
-            </div></i>) 
-        </td>
-        <td> creates a TLS Socket from a <mark>net.Socket</mark>
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+        </table>
+        <br>
+        <table class="table">
+          <caption> TLS Socket </caption>
+          <tr>
+            <th style="width:30%;"> Method / Property </th>
+            <th> Description </th>
+          </tr>
+          <tr>
+            <td>
+              new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<div>
+                  <p> - <mark>net.Socket</mark> or any duplex stream </p>
+                </div></strong>, <i class="openable">option:obj<div>
+                  <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> prints TLS packet informations on <mark>stderr</mark> (Default: <mark>false</mark>) </p>
+                  <p> isServer: <strong>bol</strong> - if <mark>true</mark> the socket is instantiated as a server, if <mark>false</mark> instantiated as a client (Default: <mark>false</mark>) </p>
+                  <p> server: <mark>net.Server</mark> instance </p>
+                  <p> requestCert: <strong>bol</strong> - if <mark>true</mark> requests the peer's certificate (in case it is used as server, clients always request the peer certificate) </p>
+                  <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects the peer's certificate if the certificate is not authorized by the suplied certificate list (<mark>ca</mark> property of the suplied <strong>secureContext</strong> object) (Default: <mark>true</mark>) </p>
+                  <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols (ordered by their priority) </p>
+                  <p> SNICallback: <strong>fn(servername, cb)</strong> - function called when the client supporst SNI (Server Name Indication), the <mark>servername</mark> argument is the requested servername by the client, the <mark>cb</mark> is the callback what should be called with the specified <strong>secureContext</strong> (context with specified certificates) when responding (ex: <mark>cb(null, ctx1)</mark>) </p>
+                  <p> session: <strong>buf</strong> - TLS session (to resume TLS sessions) </p>
+                  <p> requestOCSP: <strong>bol</strong> - if <mark>true</mark> the OCSP request extension will be added to the client 'hello' message and the <mark>OCSPResponse</mark> event will be emitted on the socket before estabilishing the secure connection </p>
+                  <p> secureContext: <strong>secureContext</strong> object (automatically created if not provided) </p>
+                  <p> - any <mark>tls.createSecureContext()</mark> options can be passed (<mark>pfx</mark> or <mark>cert</mark> / <mark>key</mark> are required for secure connections) </p>
+                </div></i>)
+            </td>
+            <td> creates a TLS Socket from a <mark>net.Socket</mark>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
                 <span><i class="fab fa-node-js"></i> 5.0.0 ALPN support </span>
                 <span><i class="fab fa-node-js"></i> 12.2.0 <mark>enableTrace</mark> option </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.address() </td>
-        <td> 
-            returns an <strong class="openable">object<div>
-                <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
-            </div></strong> with the connected local address
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.address() </td>
+            <td>
+              returns an <strong class="openable">object<div>
+                  <p> - (ex: <mark>{address:'127.0.0.1', family:'IPv4', port:1000}</mark> </p>
+                </div></strong> with the connected local address
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.authorizationError </td>
-        <td> returns the reason why the peer's certificate was not authorized (when <mark>authorized</mark> is <mark>false</mark>)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.authorizationError </td>
+            <td> returns the reason why the peer's certificate was not authorized (when <mark>authorized</mark> is <mark>false</mark>)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.authorized </td>
-        <td> returns <mark>true</mark> if the peer's certificate was signed by one of the listed CA (Certificate Authority) <mark>ca</mark> option
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.authorized </td>
+            <td> returns <mark>true</mark> if the peer's certificate was signed by one of the listed CA (Certificate Authority) <mark>ca</mark> option
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.encrypted </td>
-        <td> always <mark>true</mark> (distinguishes TLS socket from net.Socket)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.encrypted </td>
+            <td> always <mark>true</mark> (distinguishes TLS socket from net.Socket)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getCertificate() </td>
-        <td> returns the local certificate in an object
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getCertificate() </td>
+            <td> returns the local certificate in an object
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 11.2.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.disableRenegotiation() </td>
-        <td> disables TLS session renegotiation for the socket (tlsSocket trows an error if TLS renegotiation is disabled)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.disableRenegotiation() </td>
+            <td> disables TLS session renegotiation for the socket (tlsSocket trows an error if TLS renegotiation is disabled)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 8.4.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.enableTrace() </td>
-        <td> prints TLS packet trace informations on <strong>stderr</strong> (certificate info etc..)   
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.enableTrace() </td>
+            <td> prints TLS packet trace informations on <strong>stderr</strong> (certificate info etc..)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 12.2.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>  
-            <strong>tlsSocket</strong>.exportKeyingMaterial(<strong class="openable">nr:byte, label:str, ctx:buf<div>
-                <p> <strong>nr:byte</strong> - number of bytes to export </p>
-                <p> <strong>lable:str</strong> - specific label to export (ex: <mark>client finished</mark> <mark>server finished</mark> <mark>master secret</mark> <mark>key expansion</mark> etc.. ) </p>
-                <p> <strong>ctx:buf</strong> - context </p>
-            </div></strong>)
-        </td>
-        <td> exports the specified key matterial for some custom usage
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsSocket</strong>.exportKeyingMaterial(<strong class="openable">nr:byte, label:str, ctx:buf<div>
+                  <p> <strong>nr:byte</strong> - number of bytes to export </p>
+                  <p> <strong>lable:str</strong> - specific label to export (ex: <mark>client finished</mark> <mark>server finished</mark> <mark>master secret</mark> <mark>key expansion</mark> etc.. ) </p>
+                  <p> <strong>ctx:buf</strong> - context </p>
+                </div></strong>)
+            </td>
+            <td> exports the specified key matterial for some custom usage
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 13.11.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getCipher() </td>
-        <td> returns the negotiated cipher suite details in an object
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getCipher() </td>
+            <td> returns the negotiated cipher suite details in an object
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
                 <span><i class="fab fa-node-js"></i> 12.16.0 / 13.4.0 IETF cipher name </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getEphemeralKeyInfo() </td>
-        <td> 
-            - returns an object containing the ephemeral key exchange details on client connections (Perfect Forward Secrecy) <br>
-            - empty object if no Perfect Forward Secrecy used, for servers always <mark>null</mark> 
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getEphemeralKeyInfo() </td>
+            <td>
+              - returns an object containing the ephemeral key exchange details on client connections (Perfect Forward Secrecy) <br>
+              - empty object if no Perfect Forward Secrecy used, for servers always <mark>null</mark>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 5.0.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getFinished() </td>
-        <td> returns a buffer with the lates sent <mark>Finished</mark> message that has been sent to the socket as part of TLS/SSL handshake 
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getFinished() </td>
+            <td> returns a buffer with the lates sent <mark>Finished</mark> message that has been sent to the socket as part of TLS/SSL handshake
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 9.9.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>  
-            <strong>tlsSocket</strong>.getPeerCertificate(<i class="openable">detailed:bol<div>
-                <p> - <i>detailed:bol</i> - a more detailed certificate is returned </p>
-            </div></i>)
-        </td>
-        <td> returns the peer's certificate in an object
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsSocket</strong>.getPeerCertificate(<i class="openable">detailed:bol<div>
+                  <p> - <i>detailed:bol</i> - a more detailed certificate is returned </p>
+                </div></i>)
+            </td>
+            <td> returns the peer's certificate in an object
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getPeerFinished() </td>
-        <td> returns a buffer with the lates received <mark>Finished</mark> message that has been received on the socket as part of TLS/SSL handshake   
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getPeerFinished() </td>
+            <td> returns a buffer with the lates received <mark>Finished</mark> message that has been received on the socket as part of TLS/SSL handshake
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 9.9.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getProtocol() </td>
-        <td> returns the negotiated TLS/SSL protocol version (ex: <mark>TLSv1.3</mark>)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getProtocol() </td>
+            <td> returns the negotiated TLS/SSL protocol version (ex: <mark>TLSv1.3</mark>)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 5.7.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getSession() </td>
-        <td> 
-            returns the TLS session state in a buffer <u class="openable">(for session resumption)<div>
-                <p> - Node.js docs recommends for TLSv1.2 and below (use <mark>session</mark> event instead because it works for all TLS versions and more reliable) </p>
-                <p> - [TESTED: 2020-06-27] this works fine for ticket-based session resumption for TLSv1.3 as well, it returns the same session state data as the <mark>session</mark> event just we have to be careful when calling it </p>
-            </div></u>
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getSession() </td>
+            <td>
+              returns the TLS session state in a buffer <u class="openable">(for session resumption)<div>
+                  <p> - Node.js docs recommends for TLSv1.2 and below (use <mark>session</mark> event instead because it works for all TLS versions and more reliable) </p>
+                  <p> - [TESTED: 2020-06-27] this works fine for ticket-based session resumption for TLSv1.3 as well, it returns the same session state data as the <mark>session</mark> event just we have to be careful when calling it </p>
+                </div></u>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getSharedSigalgs() </td>
-        <td> returns an Array which contains a list of signature algorithms shared between the server and the client (decreasing preference)  
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getSharedSigalgs() </td>
+            <td> returns an Array which contains a list of signature algorithms shared between the server and the client (decreasing preference)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 12.11.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.getTLSTicket() </td>
-        <td> returns a buffer containg the TLS session ticket for the client (for servers always <mark>undefined</mark>) 
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.getTLSTicket() </td>
+            <td> returns a buffer containg the TLS session ticket for the client (for servers always <mark>undefined</mark>)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.isSessionReused() </td>
-        <td> returns <mark>true</mark> if TLS session was reused, otherwise <mark>false</mark>
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.isSessionReused() </td>
+            <td> returns <mark>true</mark> if TLS session was reused, otherwise <mark>false</mark>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.5.6 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.localAddress </td>
-        <td> returns the connected local IP address (in a string)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.localAddress </td>
+            <td> returns the connected local IP address (in a string)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.localPort </td>
-        <td> returns the connected local port (number)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.localPort </td>
+            <td> returns the connected local port (number)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.remoteAddress </td>
-        <td> returns the connected remote IP address (in a string)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.remoteAddress </td>
+            <td> returns the connected remote IP address (in a string)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.remoteFamily </td>
-        <td> returns the connected remote IP address faimily (<mark>'IPv4'</mark>|<mark>'IPv6'</mark>)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.remoteFamily </td>
+            <td> returns the connected remote IP address faimily (<mark>'IPv4'</mark>|<mark>'IPv6'</mark>)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.remotePort </td>
-        <td> returns the connected remote port (number)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.remotePort </td>
+            <td> returns the connected remote port (number)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>  
-            <strong>tlsSocket</strong>.renegotiate(<strong class="openable">option:obj<div>
-                <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects the peer's certificates if they are not unauthorized by the listet CA (<mark>ca</mark> option) (Default: <mark>true</mark>) </p>
-                <p> requestCert: <strong>bol</strong> - requests the peer's certificate </p>
-            </div></strong>, <strong class="openable">fn(err)<div>
-                <p> - if this method returns <mark>true</mark> this callback attached <u>once</u> to the <mark>secure</mark> event </p>
-                <p> - if this method returns <mark>false</mark> this callback is called in the next tick with an error (unless the sockert is destroyed) </p>
-            </div></strong>)
-        </td>
-        <td> 
-            - <u>client or server</u> initiates a new TLS session renegotiation (renegotiation works only on an already connected TLS connection) <br> 
-            - returns <mark>true</mark> if the renegotiation is initiated <u>(TLSv1.3 does not support TLS renegotiations)</u>    
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsSocket</strong>.renegotiate(<strong class="openable">option:obj<div>
+                  <p> rejectUnauthorized: <strong>bol</strong> - if <mark>true</mark> rejects the peer's certificates if they are not unauthorized by the listet CA (<mark>ca</mark> option) (Default: <mark>true</mark>) </p>
+                  <p> requestCert: <strong>bol</strong> - requests the peer's certificate </p>
+                </div></strong>, <strong class="openable">fn(err)<div>
+                  <p> - if this method returns <mark>true</mark> this callback attached <u>once</u> to the <mark>secure</mark> event </p>
+                  <p> - if this method returns <mark>false</mark> this callback is called in the next tick with an error (unless the sockert is destroyed) </p>
+                </div></strong>)
+            </td>
+            <td>
+              - <u>client or server</u> initiates a new TLS session renegotiation (renegotiation works only on an already connected TLS connection) <br>
+              - returns <mark>true</mark> if the renegotiation is initiated <u>(TLSv1.3 does not support TLS renegotiations)</u>
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.8 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.serverName </td>
-        <td> returns the requested <u>SNI</u> server name (<mark>undefined</mark> if not SNI requested)  
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.serverName </td>
+            <td> returns the requested <u>SNI</u> server name (<mark>undefined</mark> if not SNI requested)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> ? </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket</strong>.setMaxSendFragment(<strong>nr:byte</strong>) </td>
-        <td> sets the maximum TLS fragment size (in bytes), returns <mark>true</mark> if settings succeeded, <mark>false</mark> otherwise (Default: <mark>16384</mark>)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket</strong>.setMaxSendFragment(<strong>nr:byte</strong>) </td>
+            <td> sets the maximum TLS fragment size (in bytes), returns <mark>true</mark> if settings succeeded, <mark>false</mark> otherwise (Default: <mark>16384</mark>)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.1 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"> events </td>
-    </tr>
-    <tr>
-        <td>  
-            <strong>tlsSocket.listener</strong>('keylog', <strong>fn(<strong class="openable">keyMat<div>
-                <p> - <strong>buf</strong> - ASCII text in NSS SSL KEYLOGFILE format </p> 
-            </div></strong>)</strong>)
-        </td>
-        <td> emitted when key matterial is generated or received by the connected server 
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"> events </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsSocket.listener</strong>('keylog', <strong>fn(<strong class="openable">keyMat<div>
+                    <p> - <strong>buf</strong> - ASCII text in NSS SSL KEYLOGFILE format </p>
+                  </div></strong>)</strong>)
+            </td>
+            <td> emitted when key matterial is generated or received by the connected server
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 10.20.0 / 12.3.0 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>  
-            <strong>tlsSocket.listener</strong>('OCSPResponse', <strong class="openable">fn(OCSPResp)<div>
-                <p> - <strong>OCSPResp</strong> - OCSP response in a buffer (digitally signed object from the server's CA that contains information about the server's certificate revocation status) </p>
-            </div></strong>)
-        </td>
-        <td> emitted when an OCSP response is received (set <mark>requestOCSP</mark> on the socket to request an OCSP from the server)
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsSocket.listener</strong>('OCSPResponse', <strong class="openable">fn(OCSPResp)<div>
+                  <p> - <strong>OCSPResp</strong> - OCSP response in a buffer (digitally signed object from the server's CA that contains information about the server's certificate revocation status) </p>
+                </div></strong>)
+            </td>
+            <td> emitted when an OCSP response is received (set <mark>requestOCSP</mark> on the socket to request an OCSP from the server)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.13 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>tlsSocket.listener</strong>('secureConnect', <strong>fn</strong>) </td>
-        <td> emitted after the TLS handshake is successfully estabilished
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td> <strong>tlsSocket.listener</strong>('secureConnect', <strong>fn</strong>) </td>
+            <td> emitted after the TLS handshake is successfully estabilished
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 0.11.4 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td>  
-            <strong>tlsSocket.listener</strong>('session', <strong class="openable">fn(sessSt)<div>
-                <p> <strong>sessSt</strong> - session state data is returned </p>
-                <p> - the client can use this data in <mark>tls.connect()</mark> <mark>session</mark> option in order to request a session resumption </p>
-                <p> - this mechanism implements both ID and Ticket based session resumption (depending how the server handles the session resumption) </p>
-            </div></strong>)
-        </td>
-        <td> 
-            - emited when a new session or TLS ticket is available and returns the session state (the returned session state can be used for both ID and Ticket based session resumption request) <br>
-            - not emitted on server or if no new session was created (client reuses a session) 
-            <span class="browserSupport" title="updated : 2020-06-27">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>tlsSocket.listener</strong>('session', <strong class="openable">fn(sessSt)<div>
+                  <p> <strong>sessSt</strong> - session state data is returned </p>
+                  <p> - the client can use this data in <mark>tls.connect()</mark> <mark>session</mark> option in order to request a session resumption </p>
+                  <p> - this mechanism implements both ID and Ticket based session resumption (depending how the server handles the session resumption) </p>
+                </div></strong>)
+            </td>
+            <td>
+              - emited when a new session or TLS ticket is available and returns the session state (the returned session state can be used for both ID and Ticket based session resumption request) <br>
+              - not emitted on server or if no new session was created (client reuses a session)
+              <span class="browserSupport" title="updated : 2020-06-27">
                 <span><i class="fab fa-node-js"></i> 11.10.0 </span>
-            </span>
-        </td>
-    </tr>
-</table>
-<h2 style="color:green;"><u> Notes : </u></h2>
-<details class="example" id="notes">
-        <summary> Notes :</summary>
-        <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
-</details>
-    <h2 style="color:green;"><u> Useful Links : </u></h2>
+              </span>
+            </td>
+          </tr>
+        </table>
+        <h2 style="color:green;"><u> Notes : </u></h2>
+        <details class="example" id="notes">
+          <summary> Notes :</summary>
+          <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+        </details>
+        <h2 style="color:green;"><u> Useful Links : </u></h2>
         <p><a href="https://nodejs.org/dist/latest-v14.x/docs/api/tls.html" target="_blank">TLS (nodejs.org)</a></p>
-    <h2 style="color:green;"><u> Remember This : </u></h2>
+        <h2 style="color:green;"><u> Remember This : </u></h2>
         <p> - the certificate's <mark>CN</mark> Common Name must match to the server's FQDN (Fully Qualified Domain Name) otherwiser the requesting client does not accept the certificate </p>
         <p> - TLSv1.3 does not support ID-based session resumption </p>
-    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-    <p> - the <mark>tls</mark> module provides an implementation of the <mark>TLS/SSL</mark> layer <u>which is built on
+        <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+        <p> - the <mark>tls</mark> module provides an implementation of the <mark>TLS/SSL</mark> layer <u>which is built on
             top of OpenSSL</u> </p>
-<h2 style="color:darkblue;"><u> The <mark>--tls-cipher-list</mark> / <mark>getCiphers()</mark> / <mark>rootCertificates</mark> / <mark>DEFAULT_ECDH_CURVE</mark> / <mark>DEFAULT_MIN_VERSION</mark> / <mark>DEFAULT_MAX_VERSION</mark> / <mark>CLIENT_RENEG_LIMIT</mark> / <mark>CLIENT_RENEG_WINDOW</mark> / <mark>checkServerIdentity()</mark> CLI Properties and Methods </u></h2>
-    <pre class="syntax">
+        <h2 style="color:darkblue;"><u> The <mark>--tls-cipher-list</mark> / <mark>getCiphers()</mark> / <mark>rootCertificates</mark> / <mark>DEFAULT_ECDH_CURVE</mark> / <mark>DEFAULT_MIN_VERSION</mark> / <mark>DEFAULT_MAX_VERSION</mark> / <mark>CLIENT_RENEG_LIMIT</mark> / <mark>CLIENT_RENEG_WINDOW</mark> / <mark>checkServerIdentity()</mark> CLI Properties and Methods </u></h2>
+        <pre class="syntax">
 SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>:</small><i>...</i>" <strong>nodeFile.js</strong>                       // CLI specifies an alternative default TLS cipher suite list (overrides the default node cipher suite list)    
             
             <strong>tls</strong>.getCiphers()                                                           // returns an Array with the supported (not necessarily enabled) <span class="openable">TLS ciphers<div>
@@ -940,12 +941,12 @@ SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>
                 <p> a <strong>cert</strong> object which is returned by the <mark><strong>tlsSocket</strong>.getCertificate()</mark> / <mark><strong>tlsSocket</strong>.getPeerCertificate()</mark> methods </p>
             </div></strong>)                        // returns <mark>undefined</mark> if the certificate (<strong>cert:obj</strong>) is issued to the hostname (<strong>hostName|ip</strong>), if check fails returns an Error object with <mark>reason</mark> / <mark>host</mark> / <mark>cert</mark> properties    
     </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre class="cmd">
+        <details class="example">
+          <summary> DEMO </summary>
+          <pre class="cmd">
     $ node --tls-cipher-list="TLS_AES_128_GCM_SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256" srv.js      // tls server uses only these 3 ciphers   
     </pre>
-    <pre>
+          <pre>
     var tls = require('tls');
     
 // getCiphers() / rootCertificates ----------------------------------------------------
@@ -965,28 +966,28 @@ SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>
     tls.checkServerIdentity('myServer2', mySrvCert);                                   // -> error                      // the 'mySrvCert' is not issued to 'myServer2' domain 
                                                                                        // -! the 'mySrvCert' is an demo certificate object here (we can got one with 'getCertificate()')
     </pre>
-</details>
-<details class="example">
-        <summary> Example : </summary>
-        <h4 style="color:darkblue;"><u> <mark>--tls-cipher-list</mark> CLI TEST </u></h4>
-        <pre class="cmd">
+        </details>
+        <details class="example">
+          <summary> Example : </summary>
+          <h4 style="color:darkblue;"><u> <mark>--tls-cipher-list</mark> CLI TEST </u></h4>
+          <pre class="cmd">
     sudo node --tls-cipher-list="ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256" srv    // the passed cipher suits list overrides the default node cipher suit list   
     </pre>
-        <hr>
-        <!-------------------------------------------------------------------------------------------------------------->
-        <h4 style="color:darkblue;"><u> <mark>getCiphers()</mark> / <mark>rootCertificates</mark> TEST </u></h4>
-        <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>getCiphers()</mark> / <mark>rootCertificates</mark> TEST </u></h4>
+          <pre>
     var tls = require('tls');
     
     console.log( tls.getCiphers() );                                                   // returns node.js supported ciphers   // -! this is not a list of enabled ciphers 
     console.log( tls.rootCertificates );                                               // returns the root certificates of CAs curated by Mozilla
     </pre>
-        <hr>
-        <!-------------------------------------------------------------------------------------------------------------->
-        <h4 style="color:darkblue;"><u> <mark>DEFAULT_MIN_VERSION</mark> / <mark>DEFAULT_MAX_VERSION</mark> TEST </u>
-        </h4>
-        <p> - both examples are tested with the <mark>opnessl s_client -connect</mark> CLI = works </p>
-        <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>DEFAULT_MIN_VERSION</mark> / <mark>DEFAULT_MAX_VERSION</mark> TEST </u>
+          </h4>
+          <p> - both examples are tested with the <mark>opnessl s_client -connect</mark> CLI = works </p>
+          <pre>
     var tls = require('tls');
     var http2 = require('http2');
     var fs = require('fs');
@@ -1002,7 +1003,7 @@ SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>
         stream.write('server response')
     });
     </pre>
-        <pre>
+          <pre>
     var tls = require('tls');
     var http2 = require('http2');
     var fs = require('fs');
@@ -1018,11 +1019,11 @@ SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>
         stream.write('server response')
     });
     </pre>
-        <!-------------------------------------------------------------------------------------------------------------->
-        <h4 style="color:darkblue;"><u> <mark>CLIENT_RENEG_LIMIT</mark> / <mark>CLIENT_RENEG_WINDOW</mark> TEST </u>
-        </h4>
-        <p> - new TLS renegotiation limit set </p>
-        <pre>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>CLIENT_RENEG_LIMIT</mark> / <mark>CLIENT_RENEG_WINDOW</mark> TEST </u>
+          </h4>
+          <p> - new TLS renegotiation limit set </p>
+          <pre>
     var tls = require('tls');
     var http2 = require('http2');
     var fs = require('fs');
@@ -1045,10 +1046,10 @@ SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>
         stream.write('server response')
     });
     </pre>
-        <hr>
-        <!-------------------------------------------------------------------------------------------------------------->
-        <h4 style="color:darkblue;"><u> <mark>checkServerIdentity()</mark> TEST </u></h4>
-        <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>checkServerIdentity()</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1068,11 +1069,11 @@ SYNTAX:     <em>node</em> --tls-cipher-list="<strong>cipherSuite</strong><small>
         console.log( tls.checkServerIdentity('somesite.com', cert) );                  // -> error         // the certificate is not issued to 'somesite.com'
     },2000);
     </pre>
-</details>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h2 style="color:darkblue;"><u> The secureContext object <mark>createSecureContext()</mark> </u></h2>
-    <pre class="syntax">
+        </details>
+        <hr>
+        <!-------------------------------------------------------------------------------------------------------------->
+        <h2 style="color:darkblue;"><u> The secureContext object <mark>createSecureContext()</mark> </u></h2>
+        <pre class="syntax">
 SYNTAX:     <strong>tls</strong>.createSecureContext(<i class="openable">option:obj<div>
                 <p> ca: <strong>str|buf|[srt|buf, ...]</strong> - Certificate Authority certificates, certificate list which is used against the received certificate in order to verify the authenticity of the received certificate (Default: <mark>tls.rootCertificates</mark>) </p>
                 <p> cert: <strong>str|buf|[srt|buf, ...]</strong> - certificate chain (in <mark>.pem</mark> format) </p>
@@ -1095,9 +1096,9 @@ SYNTAX:     <strong>tls</strong>.createSecureContext(<i class="openable">option:
                 <p> sessionIdContext: <strong>str</strong> - opaque Identifier used by the server to ensure session state is not shared between applications (not used by the client) </p>  
             </div></i>)                                       // creates and returns a <strong>secureContext</strong> object which is used to set a secure context in <mark>new tls.TLSSocket()</mark> / <mark>connect()</mark> / <mark>createServer()</mark> / <mark><strong>tlsServer</strong>.setSecureContext()</mark> / <mark><strong>tlsServer</strong>.addContext()</mark>    
     </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+        <details class="example">
+          <summary> DEMO </summary>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
     
@@ -1110,11 +1111,11 @@ SYNTAX:     <strong>tls</strong>.createSecureContext(<i class="openable">option:
         tlsSocket.write('server response!');
     });    
     </pre>
-</details>
-<details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> override default ciphers suite TEST </u></h4>
-    <pre>
+        </details>
+        <details class="example">
+          <summary> Example : </summary>
+          <h4 style="color:darkblue;"><u> override default ciphers suite TEST </u></h4>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
 
@@ -1130,11 +1131,11 @@ SYNTAX:     <strong>tls</strong>.createSecureContext(<i class="openable">option:
         tlsSocket.write('server response!');
     });
 </pre>
-</details>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h2 style="color:darkblue;"><u> TLS Client <mark>connect()</mark> </u></h2>
-    <pre class="syntax">
+        </details>
+        <hr>
+        <!-------------------------------------------------------------------------------------------------------------->
+        <h2 style="color:darkblue;"><u> TLS Client <mark>connect()</mark> </u></h2>
+        <pre class="syntax">
 SYNTAX:     <strong>tls</strong>.connect(<strong>port:nr</strong>, <i>host:str</i>, <i class="openable">option:obj<div>
                 <p> enableTrace: <strong>bol</strong> - if <mark>true</mark> calls <mark>enableTrace()</mark> on the underlying socket (prints TLS packet informations on <mark>stderr</mark>) (Default: <mark>false</mark>)</p>  
                 <p> socket: <strong>stream.Duplex</strong> - estabilishes the secure connection on the passed socket rather than creating a new socket (usually a <mark>net.Scoket</mark> but can by any duplex stream) (if this option is specified the <mark>port</mark> / <mark>host</mark> / <mark>path</mark> ignored) </p>
@@ -1196,9 +1197,9 @@ SYNTAX:     <strong>tls</strong>.connect(<strong>port:nr</strong>, <i>host:str</
                 <p> - <mark>secureConnect</mark> event's listener callback </p>
             </div></i>)
     </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+        <details class="example">
+          <summary> DEMO </summary>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1209,11 +1210,11 @@ SYNTAX:     <strong>tls</strong>.connect(<strong>port:nr</strong>, <i>host:str</
         client.on('data', (chunk)=>{ console.log(chunk.toString()) });
     });
     </pre>
-</details>
-<details class="example">
-        <summary> Example : </summary>
-        <h4 style="color:darkblue;"><u> <mark>connect()</mark> with <mark>rejectUnauthorized:false</mark> TEST </u></h4>
-        <pre>
+        </details>
+        <details class="example">
+          <summary> Example : </summary>
+          <h4 style="color:darkblue;"><u> <mark>connect()</mark> with <mark>rejectUnauthorized:false</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1225,12 +1226,12 @@ SYNTAX:     <strong>tls</strong>.connect(<strong>port:nr</strong>, <i>host:str</
         this.on('data', (chunk)=>{console.log(chunk.toString())})
     });
     </pre>
-</details>
-    <hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h2 style="color:darkblue;"><u> TLS Server <mark>createServer()</mark> / <mark>listen()</mark> / <mark>close()</mark> / <mark>address()</mark> / <mark>getTicketKeys()</mark> / <mark>setTicketKeys()</mark> / <mark>setSecureContext</mark> / <mark>addSecureContext()</mark> </u></h2>
-<h3 style="color:darkblue;"><u> Events: <mark>secureConnection</mark> / <mark>keylog</mark> / <mark>resumeSession</mark> / <mark>newSession</mark> / <mark>OCSPRequest</mark> / <mark>tlsClientError</mark> </u></h3>
-    <pre class="syntax">
+        </details>
+        <hr>
+        <!-------------------------------------------------------------------------------------------------------------->
+        <h2 style="color:darkblue;"><u> TLS Server <mark>createServer()</mark> / <mark>listen()</mark> / <mark>close()</mark> / <mark>address()</mark> / <mark>getTicketKeys()</mark> / <mark>setTicketKeys()</mark> / <mark>setSecureContext</mark> / <mark>addSecureContext()</mark> </u></h2>
+        <h3 style="color:darkblue;"><u> Events: <mark>secureConnection</mark> / <mark>keylog</mark> / <mark>resumeSession</mark> / <mark>newSession</mark> / <mark>OCSPRequest</mark> / <mark>tlsClientError</mark> </u></h3>
+        <pre class="syntax">
 SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div>
                 <p> ALPNProtocols: <strong>[str|buf|typedArr|dataView, ...]</strong> - supported ALPN protocols (ordered by their priority) </p>
                 <p> clientCertEngine: <strong>str</strong> - name of an OpenSSL engine which can provide the client certificate </p>
@@ -1333,9 +1334,9 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
             
             <strong>tlsServer.listener</strong>('tlsClientError', <strong>fn(err, tlsSocket)</strong>)                   // emitted when an error occurs <u>before</u> a secure connection is estabilished (feedback when the client rejects a secure connection)   
     </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+        <details class="example">
+          <summary> DEMO </summary>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
     
@@ -1377,11 +1378,11 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
 // resumeSession / newSession (events) ------------------------------------------------
     // see ID-based session resumption ...
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h4 style="color:darkblue;"><u> <mark>createServer()</mark> / <mark>listen()</mark> / <mark>close()</mark> / <mark>address()</mark> / <mark>secureConnection</mark> (event) TEST </u></h4>
-    <pre>
+        </details>
+        <details class="example">
+          <summary> Example : </summary>
+          <h4 style="color:darkblue;"><u> <mark>createServer()</mark> / <mark>listen()</mark> / <mark>close()</mark> / <mark>address()</mark> / <mark>secureConnection</mark> (event) TEST </u></h4>
+          <pre>
         var fs = require('fs');
         const { Server } = require('http');
         
@@ -1397,12 +1398,12 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
             tlsServer.close(function(){ console.log('server closed!') });                  // closing the server after 15 seconds (closed when all connecttions are closed)
         }, 15000);
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> using TLS through Domain Socket TEST </u></h4>
-    <p> - Yes it does! we can use TLS connection through Domain Sockets </p>
-    <p> Client </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> using TLS through Domain Socket TEST </u></h4>
+          <p> - Yes it does! we can use TLS connection through Domain Sockets </p>
+          <p> Client </p>
+          <pre>
         var fs = require('fs');
         var tls = require('tls');
         
@@ -1412,8 +1413,8 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
             this.on('data', (chunk)=>{console.log(chunk.toString())})
     });    
     </pre>
-    <p> Server </p>
-    <pre>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
     
@@ -1424,11 +1425,11 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         socket.write('server response!');
     });
     </pre>
-    <hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> server requests certificates from clients TEST </u></h4>
-    <p> Client </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> server requests certificates from clients TEST </u></h4>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1441,8 +1442,8 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         this.on('data', (chunk)=>{console.log(chunk.toString())})
     });    
     </pre>
-    <p> Server </p>
-    <pre>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
     
@@ -1459,16 +1460,16 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         tlsSocket.write('server response!');
     });
     </pre>
-    <hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> SNI TEST </u></h4>
-    <p> - the issued certificate is issued to a domain name, so when the client request a domain the received
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> SNI TEST </u></h4>
+          <p> - the issued certificate is issued to a domain name, so when the client request a domain the received
             certificate from the server must match with the requested domain name (ex: <mark>example.com</mark> must
-        have a certificate with CN (Common Name) 'example.com') </p>
-    <p style="color:yellow"> - all 3 domains <mark>testSite1.com</mark> / <mark>testSite2.com</mark> /
-        <mark>testSite3.com</mark> are pointing to the same <mark>127.0.0.1</mark> IP address </p>
-    <p><u> Server </u></p>
-    <pre>
+            have a certificate with CN (Common Name) 'example.com') </p>
+          <p style="color:yellow"> - all 3 domains <mark>testSite1.com</mark> / <mark>testSite2.com</mark> /
+            <mark>testSite3.com</mark> are pointing to the same <mark>127.0.0.1</mark> IP address </p>
+          <p><u> Server </u></p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
                                                                                        // the server has 3 different certificate 
@@ -1497,8 +1498,8 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         };
     });
     </pre>
-    <p><u> Client-1 </u></p>
-    <pre>
+          <p><u> Client-1 </u></p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1511,8 +1512,8 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         this.on('data', (chunk)=>{console.log(chunk.toString())});
     });    
     </pre>
-    <p><u> Client-2 </u></p>
-    <pre>
+          <p><u> Client-2 </u></p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1525,8 +1526,8 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         this.on('data', (chunk)=>{console.log(chunk.toString())});
     });    
     </pre>
-    <p><u> Client-3 </u></p>
-    <pre>
+          <p><u> Client-3 </u></p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1539,11 +1540,11 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         this.on('data', (chunk)=>{console.log(chunk.toString())});
     });    
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>keylog</mark> (event) TEST </u></h4>
-    <p> Client </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>keylog</mark> (event) TEST </u></h4>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1558,7 +1559,7 @@ SYNTAX:     <strong>tls</strong>.createServer(<i class="openable">option:obj<div
         console.log( keyMat.toString('ascii') );
     });
     </pre>
-    <pre class="cmd">
+          <pre class="cmd">
 pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/TLS/TEST$ node client
     SERVER_HANDSHAKE_TRAFFIC_SECRET a961bfb85962564cc1da26e0a66c9adb134ffa35e6e091722efc8e1fd8b785ca 070801bf6c82257ac130943b39f7b68ba85ce1a625e6cf7d89372e8759ad0c8bdefc6d61e95b1afedba8b293d79ac822
     
@@ -1572,8 +1573,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
     
     server response
     </pre>
-    <p> Server </p>
-    <pre>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -1590,7 +1591,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( keyMat.toString('ascii') );
     });
     </pre>
-    <pre class="cmd">
+          <pre class="cmd">
     all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/TLS/TEST$ sudo node srv
     server listening!
     SERVER_HANDSHAKE_TRAFFIC_SECRET a961bfb85962564cc1da26e0a66c9adb134ffa35e6e091722efc8e1fd8b785ca 070801bf6c82257ac130943b39f7b68ba85ce1a625e6cf7d89372e8759ad0c8bdefc6d61e95b1afedba8b293d79ac822
@@ -1603,13 +1604,13 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
     
     CLIENT_TRAFFIC_SECRET_0 a961bfb85962564cc1da26e0a66c9adb134ffa35e6e091722efc8e1fd8b785ca 3527f88f390c4b5e769e8bf5bab82bd81d61ad35ae9eb18b84ac70a9fdbcdcde97d4dd5e0755aac5ac2202c1fbfa34ff
     </pre>
-    <hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> Ticket-based session resumption TEST </u></h4>
-    <p style="color:yellow"> - TLSv1.3 allows only ticket based session resumption because the client is the one who
-    stores the session state instead of the server </p>
-    <p> Client </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> Ticket-based session resumption TEST </u></h4>
+          <p style="color:yellow"> - TLSv1.3 allows only ticket based session resumption because the client is the one who
+            stores the session state instead of the server </p>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1626,8 +1627,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         fs.writeFileSync('session', session);                                          // the returned session ticket is stored for the next session resumption 
     });
     </pre>
-    <p> Server </p>
-    <pre>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');                                                          // -! single process servers handle the session resumption mechanism (no extra code needed)   
     var fs = require('fs');
     
@@ -1640,11 +1641,11 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         tlsSocket.write('server response');
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> ID-based session resumption TEST </u></h4>
-    <p> Client </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> ID-based session resumption TEST </u></h4>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -1661,8 +1662,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         fs.writeFileSync('session', session);                                          // the returned session Id is stored for the next session ressumption 
     });
     </pre>
-    <p> Server </p>
-    <pre>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -1689,10 +1690,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         cb();                                                                          // -! callback must be called 
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>getTicketKeys()</mark> / <mark>setTicketKeys()</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>getTicketKeys()</mark> / <mark>setTicketKeys()</mark> TEST </u></h4>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -1714,10 +1715,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
                                                                                        // -! in production this is a bad idea 
     console.log( tlsServer.getTicketKeys() );                                          // -> &lt;Buffer e6 3a 80 42 f5 37 8a 6c 53 bb 28 39 d8 ce 88 79 64 7e 72 f9 8f 80 86 44 c3 a3 6b 7e 6a 05 e1 f3 c8 b8 28 58 1a e4 90 ae 11 58 8d 6a ed d8 e7 b9&gt;
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>setSecureContext()</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>setSecureContext()</mark> TEST </u></h4>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -1730,11 +1731,11 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         tlsSocket.end('server response');
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> Server: <mark>OCSPRequest</mark> | Client: <mark>OCSPResponse</mark> (events) TEST </u></h4>
-    <p> Server </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> Server: <mark>OCSPRequest</mark> | Client: <mark>OCSPResponse</mark> (events) TEST </u></h4>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -1758,8 +1759,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
             // the received response should be sent to the client ( cb(null, OCSPresp) )
     });
     </pre>
-    <p> Client </p>
-    <pre>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -1776,11 +1777,11 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( resp );                                                           // -> null      // on OCSP performed 
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>tlsClientError</mark> (event) TEST </u></h4>
-    <p> - self-signed certificate used which is why the client rejects the connection in this example </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>tlsClientError</mark> (event) TEST </u></h4>
+          <p> - self-signed certificate used which is why the client rejects the connection in this example </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -1795,10 +1796,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( err.message );                                                    // -> 'socket hang up' 
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> get and compare server side session state TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> get and compare server side session state TEST </u></h4>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
     var utl = require('util');
@@ -1822,12 +1823,12 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         
     });    
     </pre>
-</details>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h2 style="color:darkblue;"><u> TLS Socket <mark>address()</mark> / <mark>localAddress</mark> / <mark>localPort</mark> / <mark>remoteAddress</mark> / <mark>remotePort</mark> / <mark>remoteFamily</mark> / <mark>authorized</mark> / <mark>authorizationError</mark> / <mark>getCertificate()</mark> / <mark>getPeerCertificate()</mark> / <mark>getCipher()</mark> / <mark>getProtocol()</mark> / <mark>getEphemeralKeyInfo()</mark> / <mark>getSharedSigalgs()</mark> / <mark>getFinished()</mark> / <mark>getPeerFinished()</mark> / <mark>renegotiate()</mark> / <mark>disableRenegotiation()</mark> / <mark>getSession()</mark> / <mark>getTLSTicket()</mark> / <mark>isSessionReused()</mark> / <mark>encrypted</mark> / <mark>enableTrace()</mark> / <mark>setMaxSendFragment()</mark> / <mark>exportKeyingMaterial()</mark> / <mark>serverName</mark> </u></h2>
-<h3 style="color:darkblue;"><u> Events: <mark>secureConnect</mark> / <mark>keylog</mark> / <mark>session</mark> / <mark>OCSPResponse</mark> </u></h3>
-    <pre class="syntax">
+        </details>
+        <hr>
+        <!-------------------------------------------------------------------------------------------------------------->
+        <h2 style="color:darkblue;"><u> TLS Socket <mark>address()</mark> / <mark>localAddress</mark> / <mark>localPort</mark> / <mark>remoteAddress</mark> / <mark>remotePort</mark> / <mark>remoteFamily</mark> / <mark>authorized</mark> / <mark>authorizationError</mark> / <mark>getCertificate()</mark> / <mark>getPeerCertificate()</mark> / <mark>getCipher()</mark> / <mark>getProtocol()</mark> / <mark>getEphemeralKeyInfo()</mark> / <mark>getSharedSigalgs()</mark> / <mark>getFinished()</mark> / <mark>getPeerFinished()</mark> / <mark>renegotiate()</mark> / <mark>disableRenegotiation()</mark> / <mark>getSession()</mark> / <mark>getTLSTicket()</mark> / <mark>isSessionReused()</mark> / <mark>encrypted</mark> / <mark>enableTrace()</mark> / <mark>setMaxSendFragment()</mark> / <mark>exportKeyingMaterial()</mark> / <mark>serverName</mark> </u></h2>
+        <h3 style="color:darkblue;"><u> Events: <mark>secureConnect</mark> / <mark>keylog</mark> / <mark>session</mark> / <mark>OCSPResponse</mark> </u></h3>
+        <pre class="syntax">
 SYNTAX:     new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<div>
                 <p> - <mark>net.Socket</mark> or any duplex stream </p> 
             </div></strong>, <i class="openable">option:obj<div>
@@ -1917,9 +1918,9 @@ SYNTAX:     new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<d
                 <p> - <strong>OCSPResp</strong> - OCSP response in a buffer (digitally signed object from the server's CA that contains information about the server's certificate revocation status) </p>
             </div></strong>)                          // emitted when an OCSP response is received (set <mark>requestOCSP</mark> on the socket to request an OCSP from the server)    
     </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+        <details class="example">
+          <summary> DEMO </summary>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -1990,11 +1991,11 @@ SYNTAX:     new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<d
         sessSt;                                                                          // -> &lt;Buffer ...&gt;         // the session state (this can be used to resume this TLS session)  
     });
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> create TLSSocket TEST </u></h4>
-    <pre>
+        </details>
+        <details class="example">
+          <summary> Example : </summary>
+          <h4 style="color:darkblue;"><u> create TLSSocket TEST </u></h4>
+          <pre>
     var tls = require('tls');
     var net = require('net');
     
@@ -2004,11 +2005,11 @@ SYNTAX:     new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<d
     
     console.log( tlsSocket );                                                          // -> TLSSocket 
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>keylog</mark> (event) TEST </u></h4>
-    <p> Client </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>keylog</mark> (event) TEST </u></h4>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     
@@ -2023,7 +2024,7 @@ SYNTAX:     new <strong>tls</strong>.TLSSocket(<strong class="openable">socket<d
         console.log( keyMat.toString('ascii') );
     });
     </pre>
-    <pre class="cmd">
+          <pre class="cmd">
 pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/TLS/TEST$ node client
     SERVER_HANDSHAKE_TRAFFIC_SECRET a961bfb85962564cc1da26e0a66c9adb134ffa35e6e091722efc8e1fd8b785ca 070801bf6c82257ac130943b39f7b68ba85ce1a625e6cf7d89372e8759ad0c8bdefc6d61e95b1afedba8b293d79ac822
     
@@ -2037,8 +2038,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
     
     server response
     </pre>
-    <p> Server </p>
-    <pre>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -2055,7 +2056,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( keyMat.toString('ascii') );
     });
     </pre>
-    <pre class="cmd">
+          <pre class="cmd">
     all@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/TLS/TEST$ sudo node srv
     server listening!
     SERVER_HANDSHAKE_TRAFFIC_SECRET a961bfb85962564cc1da26e0a66c9adb134ffa35e6e091722efc8e1fd8b785ca 070801bf6c82257ac130943b39f7b68ba85ce1a625e6cf7d89372e8759ad0c8bdefc6d61e95b1afedba8b293d79ac822
@@ -2068,11 +2069,11 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
     
     CLIENT_TRAFFIC_SECRET_0 a961bfb85962564cc1da26e0a66c9adb134ffa35e6e091722efc8e1fd8b785ca 3527f88f390c4b5e769e8bf5bab82bd81d61ad35ae9eb18b84ac70a9fdbcdcde97d4dd5e0755aac5ac2202c1fbfa34ff
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> Server: <mark>OCSPRequest</mark> | Client: <mark>OCSPResponse</mark> (events) TEST </u></h4>
-    <p> Server </p>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> Server: <mark>OCSPRequest</mark> | Client: <mark>OCSPResponse</mark> (events) TEST </u></h4>
+          <p> Server </p>
+          <pre>
     var tls = require('tls');
     var fs = require('fs');
         
@@ -2096,8 +2097,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
             // the received response should be sent to the client ( cb(null, OCSPresp) )
     });
     </pre>
-    <p> Client </p>
-    <pre>
+          <p> Client </p>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -2114,10 +2115,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( resp );                                                           // -> null      // on OCSP performed 
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>address()</mark> / <mark>localAddress</mark> / <mark>localPort</mark> / <mark>remoteAddress</mark> / <mark>remotePort</mark> / <mark>remoteFamily</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>address()</mark> / <mark>localAddress</mark> / <mark>localPort</mark> / <mark>remoteAddress</mark> / <mark>remotePort</mark> / <mark>remoteFamily</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -2135,10 +2136,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( client.remoteFamily );                                            // -> 'IPv4'
     });  
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>authorized</mark> / <mark>authorizationError</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>authorized</mark> / <mark>authorizationError</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -2153,10 +2154,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( client.authorizationError );                                      // -> 'DEPTH_ZERO_SELF_SIGNED_CERT'     // unauthorized reason
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>getCertificate()</mark> / <mark>getPeerCertificate()</mark> / <mark>getCipher()</mark> / <mark>getEphemeralKeyInfo()</mark> / <mark>getProtocol</mark> / <mark>getSharedSigalgs()</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>getCertificate()</mark> / <mark>getPeerCertificate()</mark> / <mark>getCipher()</mark> / <mark>getEphemeralKeyInfo()</mark> / <mark>getProtocol</mark> / <mark>getSharedSigalgs()</mark> TEST </u></h4>
+          <pre>
 // -----------------------------------------------------------------------------------
 // Server ----------------------------------------------------------------------------
     var tls = require('tls');
@@ -2192,7 +2193,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( client.getEphemeralKeyInfo() );                                   // -> {type:'ECDH', name:'X25519', size:253}
     });  
     </pre>
-    <pre class="cmd">
+          <pre class="cmd">
 // -----------------------------------------------------------------------------------
 // Server ----------------------------------------------------------------------------
 pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/TLS/TEST$ sudo node srv
@@ -2237,10 +2238,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
     server response
 pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/TLS/TEST$ 
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>renegotiate()</mark> / <mark>disableRenegotiation()</mark> TEST (Client Request the Server) </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>renegotiate()</mark> / <mark>disableRenegotiation()</mark> TEST (Client Request the Server) </u></h4>
+          <pre>
 // ------------------------------------------------------------------------------------
 // SERVER -----------------------------------------------------------------------------
     var tls = require('tls');
@@ -2276,10 +2277,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         );
     }, 2000);
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>renegotiate()</mark> / <mark>disableRenegotiation()</mark> TEST (Server Request the Client) </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>renegotiate()</mark> / <mark>disableRenegotiation()</mark> TEST (Server Request the Client) </u></h4>
+          <pre>
 // ------------------------------------------------------------------------------------
 // SERVER -----------------------------------------------------------------------------
     var tls = require('tls');
@@ -2315,10 +2316,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         // client.disableRenegotiation();                                              // -! for some reason the client cannot disable TLS renegotiation (this method)
     }); 
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>getSession()</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>getSession()</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
     var utl = require('util');
@@ -2339,10 +2340,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         fs.writeFileSync('session', client.getSession() );                             // -> true          // returns the same session state so it can be used for ticket  based renegotiation as well!     
     });                                                                                // -! Node.js docs says that it should be used only for TLSv1.2 or below but it works fine for TLSv1.3 ticket based session resumption as well just we have to be careful when calling it!    
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>getTLSTicket()</mark> / <mark>isSessionReused()</mark> / <mark>encrypted</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>getTLSTicket()</mark> / <mark>isSessionReused()</mark> / <mark>encrypted</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -2362,10 +2363,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         fs.writeFileSync('session', sessSt)
     });
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>enableTrace()</mark> / <mark>setMaxSendFragment()</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>enableTrace()</mark> / <mark>setMaxSendFragment()</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -2381,10 +2382,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
     client.enableTrace();
     console.log( client.setMaxSendFragment(8000) );                                    // -> true          // maximum TLS fragment size is set to 8KB  
     </pre>
-<hr>
-<!-------------------------------------------------------------------------------------------------------------->
-<h4 style="color:darkblue;"><u> <mark>exportKeyingMaterial()</mark> TEST </u></h4>
-    <pre>
+          <hr>
+          <!-------------------------------------------------------------------------------------------------------------->
+          <h4 style="color:darkblue;"><u> <mark>exportKeyingMaterial()</mark> TEST </u></h4>
+          <pre>
     var fs = require('fs');
     var tls = require('tls');
         
@@ -2400,8 +2401,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/T
         console.log( client.exportKeyingMaterial(1000, 'master secret') );             // -> &lt;Buffer ... &gt;           // not string interpretable 
     }); 
     </pre>
-</details>
+        </details>
 
-<br><br>
-</body>
-</html>
+        <br><br>
+      </body>
+    </html>
