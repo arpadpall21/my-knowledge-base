@@ -14,9 +14,10 @@
 <body>
   <h1> GraphQL </h1>
   <p> Updated ( 2023-06-14 )</p>
-  <p class="sitenav"> <a href="../../index.html" title="home">MySite></a>
-    <a href="../index.html">Network APIs></a> GraphQL
-  </p>
+  <nav class="sitenav">
+    <a href="../../index.html" title="home">MySite > </a>
+    <a href="../index.html">Network APIs > </a> GraphQL
+  </nav>
   <details class="example" id="notes" open>
     <summary> Notes & Tips :</summary>
     <h4 class="header"> GraphQL implementation </h4>
@@ -46,7 +47,7 @@
   <p style='text-indent:30px;'> - <mark>Query</mark> -> getting data from the server (like GET) </p>
   <p style='text-indent:30px;'> - <mark>Mutation</mark> -> modifying data on the server (like POST / PUT / DELETE) <u>mutation queries are executed sequentially on the server in order to avoid race conditions</u></p>
   <p style='text-indent:30px;'> - <mark>Subscription</mark> -> client subscribes to an event and gets notified by the server (pub-sub) <u>works through web socket connection</u></p>
-<pre class='syntax'>
+  <pre class='syntax'>
 <span style='color:darkgray;'>// GraphQL server SDL </span>
     
     type <strong>queryType</strong> {                           // describes the <strong>queryType</strong> (<mark>Query</mark> -> get data) (<mark>Mutation</mark> -> modify data on the server) (<mark>Subscription</mark> -> client subscribes to a server event (pub-sub))    
@@ -59,7 +60,7 @@
         <span style='color:darkgray;'>...</span>
     }
 </pre>
-<pre class='syntax'>
+  <pre class='syntax'>
 <span style='color:darkgray;'>// GraphQL query SDL </span>
     
     <i>queryType</i> <i>Name</i> {                           // the query type and name are optional (falls back to default -> <mark>query</mark>)
@@ -135,8 +136,8 @@
     <summary> DEMO (can be pseudocode) </summary>
     <br>
     <details class="example">
-    <summary> Basics </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Basics </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       name
@@ -145,7 +146,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -156,13 +157,13 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       address         // -! cannot request entire objects (only object fields) (this would be an error response)
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import QueryType, make_executable_schema, gql
@@ -214,8 +215,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Query / Mutation / Subscription </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Query / Mutation / Subscription </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
   # request 1 -------------------
     query getAllProducts{
@@ -258,7 +259,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
   # response 1 ------------------
     {
@@ -307,14 +308,14 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lighgray;' class='cmd'>
+      <pre style='margin:0; background-color:lighgray;' class='cmd'>
 # web socket client responses -------------
     python client.py
     websocket client connected!
     recently added products: [{'name': 'Melon', 'price': 2.99, 'origin': {'country': 'Kongo', 'continent': 'Africa'}}]
     recently added products: [{'name': 'Plum', 'price': 1.39, 'origin': {'country': 'Hungary', 'continent': 'Europe'}}]
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # server implementation -------------------
     
     import asyncio
@@ -451,8 +452,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Arguments </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Arguments </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       employee(id: 2, convertNameToUppercase: true) {
@@ -465,7 +466,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -486,7 +487,7 @@
       }
     }    
   </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -551,8 +552,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Aliases </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Aliases </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       alias1: products {
@@ -566,7 +567,7 @@
     }
     
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -601,7 +602,7 @@
       }
     }
   </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -650,8 +651,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Variables </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Variables </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query getProducts($price: Float) {        # variables must be passed at query level (if value is required in the SDL the variable type here must be required as well -> <mark>!</mark> (not the case here))
       products(priceHigherThan: $price) {
@@ -665,7 +666,7 @@
       "price": 3.7
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -682,7 +683,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query getProduct($price: Float) {
       allProducts: products {
@@ -708,7 +709,7 @@
       "price": 3.7
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -767,7 +768,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -852,8 +853,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Directives </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Directives </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($includePrice: Boolean!) {
       products {
@@ -867,7 +868,7 @@
       "includePrice": true
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -892,7 +893,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($includeOrigin: Boolean!) {
       products {
@@ -910,7 +911,7 @@
       "includeOrigin": false
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -935,7 +936,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($includeOrigin: Boolean!) {
       products {
@@ -953,7 +954,7 @@
       "includeOrigin": true
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -994,7 +995,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($excludeOrigin: Boolean!) {
       products {
@@ -1012,7 +1013,7 @@
       "excludeOrigin": true
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1037,7 +1038,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -1118,8 +1119,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Fragments </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Fragments </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       allProducts: products {
@@ -1139,7 +1140,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1198,7 +1199,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -1281,8 +1282,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Inline Fragments </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Inline Fragments </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "digital") {
@@ -1299,7 +1300,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1311,7 +1312,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "mechanical") {
@@ -1328,7 +1329,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1340,7 +1341,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "hybrid") {      # no type found for that argument
@@ -1357,7 +1358,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1365,7 +1366,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType, ObjectType, UnionType
@@ -1442,9 +1443,9 @@
     </pre>
     </details>
   </details>
-<hr>
-<!---------------------------------------------------------------->
-<h2 class="header"> Types </h2>
+  <hr>
+  <!---------------------------------------------------------------->
+  <h2 class="header"> Types </h2>
   <p> - GraplQL is language agnostinc so it uses its own types not the types of the underlying programming language </p>
   <pre class='syntax'>
 <span style='color:darkgray;'>// GraphQL types </span>
@@ -1505,8 +1506,8 @@
     <summary> DEMO (can be pseudocode) </summary>
     <br>
     <details class="example">
-    <summary> Types </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Types </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Person {
       person(id: 1) {
@@ -1522,7 +1523,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1548,7 +1549,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Person {
       person(id: 10) {                  # nullable -> may return null
@@ -1561,7 +1562,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1569,7 +1570,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     from ariadne import gql, make_executable_schema, QueryType
     from ariadne.asgi import GraphQL
@@ -1632,8 +1633,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Input Type </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Input Type </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
   # request 1
     mutation AddProduct ($product: InputProduct!) {
@@ -1652,7 +1653,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
   # response 1
     {
@@ -1677,7 +1678,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType, MutationType
@@ -1748,8 +1749,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Union Type </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Union Type </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "digital") {
@@ -1766,7 +1767,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1778,7 +1779,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "mechanical") {
@@ -1795,7 +1796,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1807,7 +1808,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color:lightblue;'>
+      <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "hybrid") {      # no type found for that argument
@@ -1824,7 +1825,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1832,7 +1833,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType, ObjectType, UnionType
@@ -1910,8 +1911,8 @@
     </details>
     <br>
     <details class="example">
-    <summary> Interface </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> Interface </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       mechanicalCamera {
@@ -1926,7 +1927,7 @@
       }
     }
     </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
+      <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1943,7 +1944,7 @@
       }
     }
     </pre>
-    <pre style='margin:0;'>
+      <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -2008,9 +2009,9 @@
     </pre>
     </details>
   </details>
-<hr>
-<!---------------------------------------------------------------->
-<h2 class="header"> Introspection </h2>
+  <hr>
+  <!---------------------------------------------------------------->
+  <h2 class="header"> Introspection </h2>
   <p> - introspection is used to query information about the schema from the client side (unfortunately there's no way to request for the full server SDL schema) </p>
   <pre class='syntax'>
 <span style="color:darkgray;">// GraphQL query SDL</span>
@@ -2275,9 +2276,9 @@
         server.run()
     </pre>
   </details>
-<hr>
-<!---------------------------------------------------------------->
-<h2 class="header"> REST Api VS GraphQL </h2>
+  <hr>
+  <!---------------------------------------------------------------->
+  <h2 class="header"> REST Api VS GraphQL </h2>
   <p> - GraphQL is NOT a replacement for REST Api, it does some things better and some things worse </p>
   <p> - GraphQL is more suited for large applications with complex data requirements, REST Api is more suited for simple applications with simple data requirements </p>
   <p> - Pros GrapQL over REST Api : </p>

@@ -12,17 +12,17 @@
 
 <body>
   <h1> JSON </h1>
-  <p> Updated ( 2018-07-24 / 2019-05-24 / 2021-02-16 / 2024-06-13 )</p>
+  <p> Updated ( 2018-07-24 / 2019-05-24 / 2021-02-16 / 2024-06-13 / 2024-10-13 )</p>
   <nav class="sitenav">
-    <a href="../../index.html">MySite></a>
-    <a href="../index.html">Serialization Languages></a> JSON
+    <a href="../../index.html">MySite > </a>
+    <a href="../index.html">Serialization Languages > </a> JSON
   </nav>
   <table class="table">
     <caption>
       Browser Built-in Parsers
     </caption>
     <tr>
-      <th> Methods </th>
+      <th style="width: 30%;"> Methods </th>
       <th> Value </th>
     </tr>
     <tr>
@@ -33,7 +33,7 @@
           </div></i>)
       </td>
       <td>
-        - converts JSON data into JavaScript data
+        - parses JSON into JavaScript
         <span id="browserSupport" title="updated : 2019-05-24">
           <span><i class="fab fa-chrome"></i> yes </span>
           <span><i class="fab fa-firefox"></i> 3.5 </span>
@@ -46,24 +46,25 @@
     </tr>
     <tr>
       <td>
-        <em>JSON</em>.stringify(<strong>jsData</strong>, <i class="openable">fn(key, val)|[key:str, ...]<div>
+        <em>JSON</em>.stringify(<strong>jsData</strong>, <i class="openable">fn(key, val)|[key:str, ...]|null<div>
             <p> <i>fn(key, val) </i> </p>
-            <p> - callback executed for every key-value pair (callback used to filter values while stringifying) </p>
-            <p> - must return the current value <u>(for the first pass the <mark>val</mark> is the received full <strong>jsData</strong></u> </p>
+            <p> - callback executed for each key/value pairs (returns the current val) </p>
             <hr>
-            <p> <i>[key:str, ...]</i> - array with the source object keys as string </p>
-            <p> - only these specified keys well be parsed to JSON </p>
-            <p> - EX: source object <mark>{p1:21, p2:22, p3:23}</mark> parsed with <mark>JSON.stringify({p1:21, p2:22, p3:23}, ['p1', 'p2'])</mark> results in <mark>'{"p1":21, "p2":22}'</mark> </p>
-          </div></i>, <i class="openable">space:str|nr<div>
-            <p> - <i>str</i> - string inserted between each of the parsed key/value pairs </p>
-            <p> - <i>nr</i> - number of white spaces inserted between each of the parsed key/value pairs </p>
-            <p> - (Default: <mark>null</mark>) </p>
-            <p> - EX: source object <mark>{p1:21, p2:22, p3:23}</mark> parsed with <mark>JSON.stringify({p1:21, p2:22, p3:23}, null, '**')</mark> results in <mark>{**"p1": 21,**"p2": 22,**"p3": 23}</mark> </p>
+            <p> <i>[key:str, ...]</i> </p>
+            <p> - only the listed keys are paresd </p>
+            <hr>
+            <p> null </p>
+            <p> - no action </p>
+          </div></i>, <i class="openable">fill:str|nr<div>
+            <p> <i>str</i> </p>
+            <p> - value inserted between each key/value pairs </p>
+            <hr>
+            <p> <i>nr</i> </p>
+            <p> - indentation spaces </p>
           </div></i>)
       </td>
       <td>
-        - converts JavaScript data into a JSON data
-
+        - parses JavaScript into JSON
         <span id="browserSupport" title="updated : 2019-05-24">
           <span><i class="fab fa-chrome"></i> yes </span>
           <span><i class="fab fa-firefox"></i> 3.5 </span>
@@ -113,7 +114,7 @@
     Infinity | NaN                          // converted as <mark>null</mark> 
     <reqval>dataObject</reqval>             // converted as date string (can be reconverted into a <reqval>dateObj</reqval> with the <mark>Date()</mark> constructor)
   </pre>
-  
+
   <details class="example">
     <summary> DEMO </summary>
     <pre>
@@ -203,24 +204,33 @@
   </details>
   <!---------------------------------------------------------------------------------------------------------------------------->
   <hr>
-  <h2 style="color:darkblue;"><u> JSON Methods <mark>.stringify()</mark> / <mark>parse()</mark> </u></h2>
+  <h2 style="color:darkblue;"><u> JSON Methods <mark>.stringify()</mark> / <mark>.parse()</mark> </u></h2>
   <details class="example">
     <summary> DEMO </summary>
     <pre>
-    var myObj = {p1:'myString', p2:21, p3:true, p4:null, p5:undefined};
+    var myObj = {
+      p1: 'myString',
+      p2: 21,
+      p3: true,
+      p4: null,
+      p5: undefined                                            // will be lost in conversion (undefined is not supported by JSON)
+    };
     
 // stringify() -----------------------------------------------------------------
-    JSON.stringify(myObj);                                                      // -> {"p1":"myString", "p2":21, "p3":true, "p4":null}     // -! undefined in not supported 
+    JSON.stringify(myObj);                                                      // -> {"p1":"myString", "p2":21, "p3":true, "p4":null}     // -! undefined lost
     
-   // filtering with select Array ----------------------------------------------
-    JSON.stringify(myObj, ['p2', 'p3']);                                        // -> {"p2":21, "p3":true}      // only the specified key/value pairs are stringified  
-                                                
-   // filtering with callback function -----------------------------------------
-    var jsonData = JSON.stringify(myObj, function(key, value){                  // -> {   "p1":"first",   "p2":21,   "p3":true,   "p4":null}
-        if(key == 'p1') value = 'first';                                        // values can be modified 
-        if(key == 'p2') key = "az";                                             // -! keys cannot be modified (this has no effect)
-        return value;                                                           // !! the value MUST be returned at every pass!  
-    }, 3);                                                                      // 3 white spaces are inserted between key/value paris      // -! this is for readability purposes only does not have any effect on the transformed data   
+  // filtering with select Array ----------------------------------------------
+    JSON.stringify(myObj, ['p2', 'p3']);                                        // -> {"p2":21, "p3":true}      // only the specified properties are pares
+  
+  // filtering with callback function -----------------------------------------
+    var jsonData = JSON.stringify(myObj, function(key, val) {                   // -> {"p1":"***", "p2":21, "p3":"***", "p4":null}
+        if (['p1', 'p3'].includes(key)) {                                       // filter p1 and p3 properties
+            return '***'
+        }
+        
+        return val;
+    });
+    
     
 // parse() ---------------------------------------------------------------------
     JSON.parse(jsonData);                                                       // -> {p1:"blah", p2:21, p3:true, p4:null}
