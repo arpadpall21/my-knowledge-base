@@ -371,7 +371,7 @@ $(document).ready(function () {
       if (tableRowSeparatorElements.includes($(tr).children(":eq(0)").text())) {
         tr.style.backgroundColor = tableGroupingSeparatorBackgroundColor;
         tr.style.color = 'transparent';
-        tr.style.fontSize = '2em';
+        tr.style.fontSize = '1.2em';
         return
       }
 
