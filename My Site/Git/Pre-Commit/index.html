@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Pre-Commit </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets//scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Pre-Commit </h1>
+    <p> Updated ( 2024-10-24 ) </p>
+    <nav class="sitenav">
+      <a href="../../index.html">MySite > </a>
+      <a href="../index.html">Git > </a> Pre-Commit
+    </nav>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p> <a href="https://pre-commit.com/" target="_blank">pre-commit.com</a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - pre-commit is a popular open-source tool that allows us to run pre-commit hooks in our Git repo </p>
+    <p> - pre-commit hooks are scripts or commands that are executed automatically before a commit is created, if any of the scripts or commands fail the user is prompted the error <u>and prevents creating the commit</u> (untill all issues are resolved) </p>
+    <p> - we can also configure to run these scripts or commands on different git actions (<mark>pre-receive</mark>, <mark>post-receive</mark>, <a href="https://pre-commit.com/#supported-git-hooks" target="_blanc">etc...</a>) </p>
+    <hr>
+    <!--------------------------------------------------------------------------------->
+    <h2 class="headerExtra"> JavaScript </h2>
+    <p> - install the <a href="https://www.npmjs.com/package/pre-commit" target="_blank">pre-commit</a> lib then configure which node script should be executed on pre commit (that easy) </p>
+    <p> - the <a href="https://typicode.github.io/husky/" target="_blank">husky</a> lib is also a very popular tool for this purpose </p>
+    <pre>
+// package.json (file) (for <mark>pre-commit</mark>) -------------------------
+    {
+      // ...
+      "scripts": {
+        "lint": "eslint src/ --ext .tsx,.ts --max-warnings 0",
+        // ...
+      },
+      "pre-commit": ["lint"]                       // scripts to execute on commit
+    }
+  </pre>
+    <hr>
+    <!--------------------------------------------------------------------------------->
+    <h2 class="headerExtra"> Python </h2>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> CMD </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>pre-commit</lit> sample-config
+        </td>
+        <td>
+          - prints a basic init content for <mark>.pre-commit-config.yaml</mark> file <u>(does not create the config file)</u>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pre-commit</lit> install
+        </td>
+        <td>
+          - installs plugins configured in <mark>.pre-commit-config.yaml</mark> (activates hooks on git commands)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pre-commit</lit> uninstall
+        </td>
+        <td>
+          - uninstalls plugins (deactivates hooks on git commands)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pre-commit</lit> run <opt>[options]</opt>
+        </td>
+        <td>
+          - manually triggers hooks <u>on changed files since the last commit</u> <br>
+          <opt>[options]</opt><br>
+          - (<opt>--all-files</opt>) on all project files
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pre-commit</lit> autoupdate
+        </td>
+        <td>
+          - automatically updates all hook to their latest version
+        </td>
+      </tr>
+    </table>
+    <br>
+    <p> - in python we use a <mark>.pre-commit-config.yaml</mark> file to configure pre commit hooks (the idea is to share commit rules across projects) </p>
+    <p> - pre-commit generates it's own virtual environment based on the config file and runs configured commands within this environment </p>
+    <p class="indent-lv1"> - we could use the project's virtual environment as well but in this case we should run <mark>git</mark> commant within the virtual environment (which is not convenient) </p>
+    <p> - to enable configured pre-commits run <mark>pre-commit install</mark> (to disable run <mark>pre-commit uninstall</mark>) </p>
+    <p> - <a href="https://pre-commit.com/#adding-pre-commit-plugins-to-your-project" target="_blank">[config docs link]</a> </p>
+    <pre>
+// .pre-commit-config.yaml (file) -------------------------
+    repos:
+      - repo: https:\/\/github.com/pre-commit/pre-commit-hooks      // coommit hook repo
+        rev: v4.5.0
+        hooks:                                                    // hooks
+          - id: trailing-whitespace                               // hook
+            args: [--markdown-linebreak-ext=md]                   // arguments
+          - id: end-of-file-fixer
+            exclude: tests/fixtures/
+          - id: check-yaml
+            args: ["--unsafe"]
+          - id: check-json
+          - id: check-added-large-files
+          - id: detect-private-key
+      - repo: https:\/\/github.com/astral-sh/ruff-pre-commit            // ruff hook
+        rev: v4.0.1
+        hooks:
+        - id: ruff
+          args: [check]
+        - id: ruff-format
+          args: [--diff]
+  </pre>
+  <pre class="cmd">
+// in virtual environment where pre-commit is installed ----
+  $ pre-commit install                                // install pre commit plugins 
+  
+  $ git commit ...                                    // hook will run on commit
+  </pre>
+  
+  
+    <br><br>
+  </body>
+
+</html>
