@@ -14,7 +14,7 @@ const fastingConfig = {
     yellowPeriodBetweenHours: [[11, 13], [17, 19]],
   }
 }
-const displayedMessage = "[Communication]"
+const displayedMessage = "[Focus!]"
 
 function getPeriodColor() {
   const currentHour = new Date().getHours();
