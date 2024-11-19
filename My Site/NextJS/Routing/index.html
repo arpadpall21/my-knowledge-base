@@ -65,17 +65,72 @@
   │   │
   │   ├─ <reqval>folder</reqval>                     // folder structure describes the URL path (each folder represents a route segment)
   │   │   ├─ layout.js                         // layout (frame) in which the current page.js (and all deeper pages are rendered)
-  │   │   ├─ template.js                       // <span style="background-color: red;"> sort of layout TEST this and document here </span>
+  │   │   ├─ template.js                       // same as <mark>layout.js</mark> but the layout component unmounts & mounts at each route segment navigation 
   │   │   ├─ page.js                           // component to render on route segment
-  │   │   ├─ loading.js                        // component to render while <mark>page.js</mark> is loading
-  │   │   ├─ error.js                          // component to render if <mark>page.js</mark> fails to render
+  │   │   ├─ loading.js                        // <span class="openable">component to render<div>
+  <p> - by Next.js implemted as: </p>
+  <pre>
+    &lt;Suspense fallback={<reqval>loading.jsComponent</reqval>}&gt;<reqval>page.jsComponent</reqval>&lt;/Suspense&gt;
+  </pre>
+  </div></span> while <mark>page.js</mark> is loading (because of SSR this loading mechanic is useful) (component does not accept any props)
+  │   │   ├─ error.js                          // <span class="openable">component to render<div>
+    <p> - by Next.js implemted as: </p>
+  <pre>
+    &lt;ErrorBoundary fallback={<reqval>error.jsComponent</reqval>}&gt;<reqval>page.jsComponent</reqval>&lt;/ErrorBoundary&gt;
+  </pre>
+  </div></span> if <mark>page.js</mark> fails to render
   │   │   ├─ global-error.js                   // full page component to render if <mark>page.js</mark> fails to render (component must return an HTML document)
-  │   │   ├─ not-found.js                      // component to render on <mark>404</mark> error (fallback page)
+  │   │   ├─ not-found.js                      // component to render on <mark>404</mark> error (fallback page) <u>(works only as global fallback (placed on root path <mark>/</mark>))</u>
   │   │
   │   └─ <reqval>folderStructure...</reqval>
   │
   └─ public                    // public assets
   </pre>
+  <h3 class="header"> Syntax <mark>layout.js</mark> / <mark>template.js</mark> </h3>
+  <pre class="syntax">
+  function <reqval>Component</reqval>({ children }) {
+    return(
+      &lt;&gt;
+        <reqval>JSX</reqval>
+        {children}
+        <reqval>JSX</reqval>
+      &lt;/&gt;
+    )
+  }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+// layout.js or template.js (file) ---
+    'use client';
+    
+    import { useEffect } from 'react';
+    
+    function SomeLayout({ children }) {
+      useEffect(() => {
+        // some logic...
+      }, []);                       // <mark>layout.js</mark> mounts once across nested route navigations
+                                    // <mark>template.js</mark> unmounts & mounts at each route navigation
+
+      return (
+        &lt;&gt;
+          &lt;div&gt; Layout Header &lt;/div&gt;
+          {children}
+          &lt;div&gt; Layout Footer &lt;/div&gt;
+        &lt;/&gt;
+      )
+    }
+    
+    export default SomeLayout;
+    </pre>
+  </details>
+  
+  
+  
+  
+  
+  
+  
   <!--
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
