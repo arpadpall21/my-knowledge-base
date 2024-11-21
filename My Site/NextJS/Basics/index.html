@@ -98,7 +98,8 @@ stage 3 :
     
     - File based routing system
     - Full stack app
-    - Automatic Code spliting (this looks good)
+    - Automatic Code spliting and cashing on the frontend (this looks good)
+        - Next.js does cool cashing (only fetches parts that need to be rerendered) (partial rerendering)
 
 
     - server components should be the default (use client component when necessary only)
@@ -128,6 +129,7 @@ stage 3 :
       - it's a convertion to prefix routes with api this is great to structure apis on server side in next.js
     
     - we can export a metadata object or generateMetadata function in layout.js or page.js to improve SEO
+      https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-fields
     
     - next.js supports absolute imports https://nextjs.org/docs/app/getting-started/installation#set-up-absolute-imports-and-module-path-aliases
     
@@ -138,35 +140,58 @@ stage 3 :
     - client component needs to be declared explicitly, so child components in a client component parent are not automatically client component!
 
 
--- next hooks 
+---------------------------------------------------
+-- next hooks
+---------------------------------------------------
+-
 import { usePathname } from 'next/navigation'
- 
+
 export default function ExampleClientComponent() {
   const pathname = usePathname()
   return <p>Current pathname: {pathname}</p>
 }
+
+-
+import Link from 'next/link'
+
+<Link href="URL"> link </Link>
+
+
+---------------------------------------------------
+-- handling errors
+---------------------------------------------------
+- we should not use try/catch for catching unexpected errors, instead we should let the error to be cought by the nearest error.js (or global-error.js)
+- demo it!
+
+
+
+---------------------------------------------------
+-- streaming: https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming#what-is-streaming
+---------------------------------------------------
+- next.js uspports streaming, so basically we can use several suspences and the component is rendered as soon as the server is ready
+- demo it!
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
     - since in most cases server component is recommended, how loading state is handeled when render data on one part of the JSX? (should I use regular fetch for that?)
-
--- OK --
-    - the layout.js works neste (I'm pretty sure about this but let's test it)
-      -> yes it does!
-
-
-    - is it ok to mix components, I mean it seems that quite a few components needs to be client components?
-
--- OK --
-    - next is a server, I suppose it uses node.js server?
-      -> yes it uses node.js's http or https modules
-
-
+    
     - import { userRouter() } from next/navigation';    <- next hook
     
--- OK --
+    - is it ok to mix components, I mean it seems that quite a few components needs to be client components?
+    
+    - how the heck caching works?? (update route api too!)
+
+    - route segment config: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+
+-----   OK   -----
+    - the layout.js works neste (I'm pretty sure about this but let's test it)
+      -> yes it does!
+    
+    - next is a server, I suppose it uses node.js server?
+      -> yes it uses node.js's http or https modules
+    
     - does Next.js support SASS (like react?)
       -> work the same as in react
     

@@ -64,28 +64,70 @@
   │   │   └─ route.js                 // contains api logic (to serve resources)
   │   │
   │   ├─ <reqval>folder</reqval>                     // folder structure describes the URL path (each folder represents a route segment)
-  │   │   ├─ layout.js                         // layout (frame) in which the current page.js (and all deeper pages are rendered)
-  │   │   ├─ template.js                       // same as <mark>layout.js</mark> but the layout component unmounts & mounts at each route segment navigation 
-  │   │   ├─ page.js                           // component to render on route segment
+  │   │   ├─ layout.js                         // layout (frame) in which the current page.js and all deeper pages are rendered (does not rerender on navigation)
+  │   │   │                                    // required in the root <mark>/</mark>, can be nested
+  │   │   ├─ template.js                       // same as <mark>layout.js</mark> but the layout component unmounts & mounts (rerenders) on navigation 
+  │   │   │
+  │   │   ├─ page.js                           // component to render at route segment
   │   │   ├─ loading.js                        // <span class="openable">component to render<div>
   <p> - by Next.js implemted as: </p>
   <pre>
     &lt;Suspense fallback={<reqval>loading.jsComponent</reqval>}&gt;<reqval>page.jsComponent</reqval>&lt;/Suspense&gt;
   </pre>
   </div></span> while <mark>page.js</mark> is loading (because of SSR this loading mechanic is useful) (component does not accept any props)
+  │   │   │
   │   │   ├─ error.js                          // <span class="openable">component to render<div>
     <p> - by Next.js implemted as: </p>
   <pre>
     &lt;ErrorBoundary fallback={<reqval>error.jsComponent</reqval>}&gt;<reqval>page.jsComponent</reqval>&lt;/ErrorBoundary&gt;
   </pre>
   </div></span> if <mark>page.js</mark> fails to render
-  │   │   ├─ global-error.js                   // full page component to render if <mark>page.js</mark> fails to render (component must return an HTML document)
+  │   │   ├─ global-error.js                   // full page component to render if <mark>page.js</mark> fails to render (component must return an HTML document) <u>(works only as global and only in prod, but not in dev mode!)</u>
   │   │   ├─ not-found.js                      // component to render on <mark>404</mark> error (fallback page) <u>(works only as global fallback (placed on root path <mark>/</mark>))</u>
   │   │
-  │   └─ <reqval>folderStructure...</reqval>
+  │   └─ [<reqval>folder</reqval>]              // dynamic route segment that can be captured (route param)
+  │   └─ (<reqval>folder</reqval>)              // <span class="openable">route group<div>
+  <pre>
+    └
+    └
+    └
+    └
+  </pre>
+  </div></span>, folder is not part of URL but it's content, (groups routes <a href="https://nextjs.org/docs/app/building-your-application/routing/route-groups" target="_blank">[link]</a>)
   │
   └─ public                    // public assets
   </pre>
+  <h3 class="header"> Syntax <mark>route.js</mark> </h3>
+  <pre class="syntax">
+  import { NextResponse } from 'next/server';
+  import { redirect } from 'next/navigation'
+  
+  <span style="background-color:red;">export const dynamic = 'force-static';                        // caches <mark>GET</mark> requests (only GET requests!)</span>  
+  
+  
+  export async function <reqval class="openable">httpMethod<div>
+    <p> - <mark>GET</mark> / <mark>POST</mark> / <mark>PUT</mark> / <mark>PATCH</mark> / <mark>DELETE</mark> / <mark>HEAD</mark> / <mark>OPTIONS</mark> </p>
+    <p> - if an unsupported method is called, Next.js will return a <mark>405 Method Not Allowed</mark> response </p>
+  </div></reqval>(<a href="https:\/\/nextjs.org/docs/app/api-reference/functions/next-request" target=_blank>req:NextRequest</a>, { params }) {           // <mark>NextRequest</mark> extends the official <a href="https://developer.mozilla.org/en-US/docs/Web/API/Request" target="_blank">Request</a> object 
+    
+    await params                                                    // -> { <reqval>slugA</reqval>: <reqval>param</reqval><optval>, ...</optval>}       // captures slugs 
+    redirect(<reqval>url:str</reqval>)                                                          // respond with redirect (<mark>307 Temporary Redirect)</mark>)
+    
+    return <a href="https:\/\/nextjs.org/docs/app/api-reference/functions/next-response" target="_blank">NextResponse</a>          // <mark>NextResponse</mark> extends the official <a href="https://developer.mozilla.org/en-US/docs/Web/API/Response" target="_blank">Response</a> object 
+  }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+  import { NextResponse } from 'next/server'
+  
+  export async function GET(req) {
+    await params;                                         // -> { slugA: 'param', slugB: 'param' }    // caputres slugs 
+    
+    return NextResponse.json({ message:'OK' });
+  }
+    </pre>
+  </details>
   <h3 class="header"> Syntax <mark>layout.js</mark> / <mark>template.js</mark> </h3>
   <pre class="syntax">
   function <reqval>Component</reqval>({ children }) {
@@ -124,10 +166,32 @@
     export default SomeLayout;
     </pre>
   </details>
+  <h3 class="header"> Syntax <mark>error.js</mark> / <mark>global-error.js</mark> </h3>
+  <pre class="syntax">
+  'use client';                                                   // client component (because of &lt;ErrorBoundary /&gt;)
   
+  function <reqval>Component</reqval>({ error, reset }) {
+    error;                                                          // -> intercepted error
+    reset();                                                        // tries to reload the current <mark>page.js</mark> component
+    
+  // <mark>global-error.js</mark> --------------------------
+    return <reqval>HTMLDocument:JSX</reqval>                        // <mark>global-error.js</mark> must return an HTML document
+  }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+  'use client';
   
+  function ErrorComponent({ error, reset }) {
+    console.log(error)
+    return &lt;button onClick={() =&gt; reset()}&gt; Reset &lt;/button&gt;    // on click tries to reload the current <mark>page.js</mark>
+  }
   
-  
+  export default ErrorComponent;
+  </pre>
+  </details>
+
   
   
   
@@ -148,50 +212,26 @@ stage 3 :
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 -----------------------------------
-    - Files structure
-      - layout.js -> route layout
-      - page.js -> code for the actual route (react component that is rendered at route)
-      - loading.js -> displayed while the page laods, works the following way (this is cool: https://github.com/vercel/next.js/discussions/57379)
-          <Suspense fallback={<Loading />}>
-            <Home>
-                <Test />
-            </Home>
-          </Suspense>
-      - not-found.js -> page rendered when the requested route is not found (404 error boundary)
-      - error.js -> page rendered when the original page hits a display error (works the following way)
-          <ErrorBoundary fallback={<p>Something went wrong</p>}>
-            <Profile />
-          </ErrorBoundary>
-      
-          - the error component receives 2 props:
-              - error -> the forwarded error
-              - reset -> function that can be called to recover fromt the error
-      - global-error.js -> this guy will completely replace the whole web page is the component must return an html document
-      
-      
-      - route.js -> api handler (this one is cool)
-          export async function GET(request: Request) {}
-          
-          
-      - not-found.js -> page for 404 responses
-      - folders prefixed with _ means private
+    - in directories (url segments) we can store relevant files (because only the page.js and route.js are exposed publicly)
 
-    app     <- directory for routing pages
-    api     <- directory where api routes are structure (recommended)
-    static  <- static assets
-
-
-
-
-
-    - routes are described on file system under the app folder
-      - directories in square brackeds are caputred route parameters (ex: [post])
+    - for navigation we can use
+        - <Link> component :https://nextjs.org/docs/app/api-reference/components/link
+        - useRoouter hook: https://nextjs.org/docs/app/api-reference/functions/use-router
+            - works from client component 
+        - redirect() call: 
+            - in page.js redirects to URL
+            - in route.js responds with 307 Temporary Redirect
+            - permanentRedicect() in route.js responds with 308 Temporary Redirect
+        - native browser history apy: https://developer.mozilla.org/en-US/docs/Web/API/History_API
+        - redirect in middleware :https://nextjs.org/docs/app/building-your-application/routing/redirecting#nextresponseredirect-in-middleware
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    - 
+    - parallel routes
+      -  simultaneously show two or more pages in the same view that can be navigated independently. You can use them for split views that have their own sub-navigation.
+        - default.js
     
 -->
 
