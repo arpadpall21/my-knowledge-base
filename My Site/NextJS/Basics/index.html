@@ -17,35 +17,53 @@
     <a href="../../index.html" title="home">MySite > </a>
     <a href="../index.html">Next.js > </a> Basics
   </nav>
-
-  <p class="subSite"><a href=""> SubSite > </a></p>
-
-
   <table class="table">
     <tr>
-      <th style="width:30%;"> Method / Property / statement ect... </th>
+      <th style="width:30%;"> CMD </th>
       <th> Description </th>
     </tr>
     <tr>
       <td>
-        demo prop
+        npx create-next-app@latest
       </td>
       <td>
-        - demo description
-        <span class="browserSupport">
-          <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-          <span><i class="fab fa-firefox"></i> </span>
-          <span><i class="fab fa-opera"></i> </span>
-          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> </span>
-          <span><i class="fab fa-safari"></i> </span>
-          <span><i class="fab fa-node-js"></i> </span>
-        </span>
+        - cli wizzard scaffolds a Next.js project (very comprehensive solution)
       </td>
     </tr>
-
-
-
-
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        npm run dev
+      </td>
+      <td>
+        - starts the next.js project in dev mode (double component render, hot reloading, etc...)
+      </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        npm run build
+      </td>
+      <td>
+        - builds the application for production <br>
+        - prints info how much data is downloaded by the browser for each route segemnts <br>
+        - prints info about each pages static or dynamic
+      </td>
+    </tr>
+    <tr>
+      <td>
+        npm start
+      </td>
+      <td>
+        - start the app in prod mode (requires build step first <mark>npm run build</mark>)
+      </td>
+    </tr>
   </table>
   <br>
   <details class="example" id="notes">
@@ -55,10 +73,206 @@
   <h2 style="color:green;"><u> Useful Links : </u></h2>
 
   <h2 style="color:green;"><u> Remember This : </u></h2>
+  <p> - Personal Node: Next.js is awesome for creating full stack apps, however if we want max speed plain React is still the best option IMO </p>
 
   <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-
-
+  <p> - Next.js allow us to create full stack appilcation powered by React (requires Node.js v18.18) (uses node.js <mark>http</mark>, <mark>https</mark> modules) </p>
+  <p> - able to render react components on server or client side </p>
+  <p> - routing is file system hierarchy based <a href="../Routing/index.html" target="_blank">[link]</a> </p>
+  <p> - supports automatic clode splitting and caching (fetches only UI parts that need to be rerendered (partial rerendering)) </p>
+  <p> <span style="background-color:red;"> - data fetching TODO... </span> </p>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h2 class="header"> Client VS Server Components </h2>
+  <p> - server|client component Declaration is not inherited hierarchicaly, each component is rendered according to its side declaration </p>
+  <p> - Server Component: </p>
+  <p class="indent-lv1"> - default, undeclared Components are automatically server components </p>
+  <p class="indent-lv1"> - server components should be prioritised (unless client component required) because of of better SEO (Search Engine Optimization) <a href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#when-to-use-server-and-client-components" target="_blank">[link]</a> </p>
+  <p> - Client Component: </p>
+  <p class="indent-lv1"> - required to use browser features (like: click, etc...) </p>
+  <p class="indent-lv1"> - required for hooks (because React can only handle hooks on client side) </p>
+  <p class="indent-lv1"> - requred when rendering any dynamic content (ex: <mark>Math.random()</mark>) </p>
+  <pre class="syntax">
+    'use server'|'use client';                                            // declares server or client Component (default 'use server')
+    
+    <opt>async</opt> function <reqval>Component</reqval>() {              // async available for server Component only
+      // some logic...
+    }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <h4 class="header"> Server Component </h4>
+    <pre>
+    async function Posts() {
+      const data = await fetch('https:\/\/api.vercel.app/blog');            // server components are great for direct data fetching
+      const posts = await data.json();
+      
+      return (
+        &lt;ul&gt;
+          {posts.map((post) =&gt; (
+            &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      )
+    }
+    
+    export default Posts;
+    </pre>
+    <!------------------------------------------------------------------------------->
+    <hr>
+    <h4 class="header"> Client Component </h4>
+    <pre>
+    'use client';                                                 // client component declared 
+    
+    import { useState } from 'react';
+    
+    function Posts() {                                            // because of the hook and the onMouseUp (browser feature) client component required
+      const [count, setCount] = useState(0);
+      
+      return (
+        &lt;&gt;
+          &lt;p&gt; count: {count} &lt;/p&gt;
+          &lt;button onMouseUp={() =&gt; setCount(count + 1)}&gt; add &lt;/button&gt;
+        &lt;/&gt;
+      )
+    }
+    
+    export default Posts;
+    </pre>
+  </details>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h2 class="header"> Streaming </h2>
+  <p> - Next.js supports component streaming, which is basically rendering components as soon as they are available, for this we use the <mark>&lt;Suspence /&gt;</mark> Component </p>
+  <pre class="syntax">
+    import { Suspense } from 'react'
+    
+    function <reqval>Component</reqval>() {
+      return (
+        &lt;&gt;
+          &lt;Suspense fallback={<reqval>LoadingComponent</reqval>}&gt;     // displays loading component while <reqval>Component</reqval> is loading
+            <reqval>Component</reqval>
+          &lt;/Suspense&gt;
+          <optval>...</optval>                                        // other parts of the UI rendered 
+        &lt;/&gt;
+      )
+    }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+  <pre>
+    import { Suspense } from 'react'
+    import PostFeed from '@/app/post/postFeed';
+    import WeatherFeed from '@/app/post/weatherFeed';
+    
+    function Posts() {
+      return (
+        &lt;section&gt;
+          &lt;Suspense fallbalck={&lt;p&gt;Post Loading...&lt;/p&gt;}&gt;
+            &lt;PostFeed /&gt;
+          &lt;/Suspense&gt;
+          &lt;Suspense fallbalck={&lt;p&gt;Weather Loading...&lt;/p&gt;}&gt;
+            &lt;WeatherFeed /&gt;
+          &lt;/Suspense&gt;
+        &lt;/section&gt;
+      )
+    }
+    
+    export default Posts;
+  </pre>
+  </details>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h2 class="header"> Error Handling </h2>
+  <p> - Expected errors should be handled according to the expected behaviour (ex: <mark>400</mark> response) </p>
+  <p> - Unexpected errors should not be caught by any <mark>try/catch</mark> statement, instead the closest <mark>error.js</mark> should be used </p>
+  <pre class="syntax">
+    └─ src
+        └─ app
+            └─ post
+                ├─ page.js                // throws error
+                └─ error.js               // error cought here 
+  </pre>
+  <details class="example" open>
+    <summary> Example : </summary>
+  <pre>
+    async function Posts() {
+      const response = await fetch('https://api.vercel.app/blog');
+      const posts = await data.response();
+      
+      if (response.status === 400) {                                // expected error handled here
+        // expected error 
+      }
+    }                                                         // unexpected errors are handled by the closest <mark>error.js</mark>
+    
+    export default Posts;
+  </pre>
+  </details>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h2 class="header"> Other </h2>
+  <h4 class="header"> HTML metadata </h4>
+  <p> - Next.js configures HTML document metadata by exporing a <mark>metadata</mark> object or a <mark>generateMetadata()</mark> function in the root <mark>layout.js</mark> </p>
+  <pre class="syntax">
+// (root) layout.js --------
+    export const metadata = { <a href="https:\/\/nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-fields" target="_blank">fields...</a> }
+    
+    export function generateMetadata() { return <a href="https:\/\/nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-fields" target="_blank">metadata:obj</a> }
+    
+    function <reqval>Component</reqval>({ children }) {
+      return <reqval>JSX</reqval> {children} <reqval>JSX</reqval>
+    }
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+// (root) layout.js -------------------------------------------------
+    export const metadata = {
+      title: 'My Awesome App',
+      description: "Generated by create next app",
+    };
+    
+    export default function RootLayout({ children }) {
+      return (
+        &lt;html lang="en"&gt;
+          &lt;body&gt;
+            {children}
+          &lt;/body&gt;
+        &lt;/html&gt;
+      );
+    }
+    </pre>
+  </details>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h4 class="header"> Absolute Imports </h4>
+  <p> - Next.js supports absolute import (absolute imports are resolved from the <mark>src</mark> directory), can be enabled on app scaffolding </p>
+  <pre class="syntax">
+// any Next.js file 
+    import <reqval>something</reqval> from '@/<reqval>path</reqval>';       // absolute import
+    
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    'use client';
+    
+    import Title from '@/app/post/title';                 // absolute import (file located <mark>projectRoot/src/app/post/title</mark>)
+    import Body from '@/app/post/body';
+    
+    function Posts() {
+      return (
+        &lt;&gt;
+          &lt;Title /&gt;
+          &lt;Body /&gt;
+        &lt;/&gt;
+      )
+    }
+    
+    export default Posts;
+    </pre>
+  </details>
 
 
   <!--
@@ -77,73 +291,11 @@ stage 3 :
     - organize and document down everything 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
-    - nextjs version 15.0.3
-    - requires min node.js 18.18
-
-    - CMD 
-      - npx create-next-app@latest - walks you through very nice setup stuff (typescipt, tailwind, lint, etc...)
-
-      - npm run dev
-          -> starts the application in development mode with hot-code reloading, error reporting, and more.
-      - npm start
-          -> start the app in production mode
-          -> requires build step (npm run build) -> displayed sizes give you information how much data needs to be downloaded by the browser
-
-
-
-
-    - Server side rendering (but this is optional, we can still choose to render on client side)
-    
-    - Server side rendering is much better for SEO (Serach Engine Optimalization)
-    
-    - File based routing system
-    - Full stack app
-    - Automatic Code spliting and cashing on the frontend (this looks good)
-        - Next.js does cool cashing (only fetches parts that need to be rerendered) (partial rerendering)
-
-
-    - server components should be the default (use client component when necessary only)
-    - link: https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#when-to-use-server-and-client-components
-      - Server Component
-        - component rendered on server side
-      - Client Component
-        - component rendered on client side
-        - hooks are usable only on client side (component stat is handled on client side)
-        - 'use client' on top of file to declare a component as client side component
-      
-
-    - in general server components are prefered
-        - server components are good for direct data access from the DB
-        - if we want user input then we need to use client components
-
-
-    - data fetching (CLARIFY this more!)
-      - SSR (server side rendering) (fetched data is not cache)
-      - SSG (static site generation) (fetched data is cached)
-      - ISR (incremental Stati Generation) (fetch data in a set interval)
-
-
-    - API Routes -> this is basically an api handler (instead of serving page, servers some content)
-      - route.js file handles this stuff (this is cool!)
-          ex: async function GET(req) { ... }
-      - it's a convertion to prefix routes with api this is great to structure apis on server side in next.js
-    
-    - we can export a metadata object or generateMetadata function in layout.js or page.js to improve SEO
-      https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-fields
-    
-    - next.js supports absolute imports https://nextjs.org/docs/app/getting-started/installation#set-up-absolute-imports-and-module-path-aliases
-    
-    - Personal notes plain react is still a good option if the app is not big and we don't nee SEO
-
-    - the Link component is the link for next.js (like in react router)
-
-    - client component needs to be declared explicitly, so child components in a client component parent are not automatically client component!
-
 
 ---------------------------------------------------
 -- next hooks
 ---------------------------------------------------
--
+----
 import { usePathname } from 'next/navigation'
 
 export default function ExampleClientComponent() {
@@ -151,11 +303,93 @@ export default function ExampleClientComponent() {
   return <p>Current pathname: {pathname}</p>
 }
 
--
+----
 import Link from 'next/link'
 
 <Link href="URL"> link </Link>
 
+----
+import { cookies } from 'next/headers'
+
+----
+import { headers } from 'next/headers'
+
+----
+import { usePathname, useSearchParams } from 'next/navigation'
+
+
+
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    - since in most cases server component is recommended, how loading state is handeled when render data on one part of the JSX? (should I use regular fetch for that?)
+      - I suppose thi is data fetching
+
+    - how the heck caching works?? (update route api maybe?!)
+
+    - what the heck is a server action
+
+    - we can do fetch from middleware :https://nextjs.org/docs/app/building-your-application/routing/middleware#waituntil-and-nextfetchevent
+      - document it once you get to data fetching
+
+
+------------------
+-----   OK   -----
+------------------
+    - the layout.js works neste (I'm pretty sure about this but let's test it)
+      -> yes it does!
+
+    - next is a server, I suppose it uses node.js server?
+      -> yes it uses node.js's http or https modules
+
+    - does Next.js support SASS (like react?)
+      -> work the same as in react
+
+    - redirect()
+      -> documented!
+
+    - import { userRouter() } from next/navigation';
+      -> documented!
+
+    - is it ok to mix components, I mean it seems that quite a few components needs to be client components?
+      -> yeah next.js does it's ting here, so the basic ide is to use server component unless you need something on the client side
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- DONE 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------
 -- handling errors
@@ -172,30 +406,97 @@ import Link from 'next/link'
 - demo it!
 
 
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - since in most cases server component is recommended, how loading state is handeled when render data on one part of the JSX? (should I use regular fetch for that?)
-    
-    - import { userRouter() } from next/navigation';    <- next hook
-    
-    - is it ok to mix components, I mean it seems that quite a few components needs to be client components?
-    
-    - how the heck caching works?? (update route api too!)
 
-    - route segment config: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
-
------   OK   -----
-    - the layout.js works neste (I'm pretty sure about this but let's test it)
-      -> yes it does!
+    - we can export a metadata object or generateMetadata function in layout.js or page.js to improve SEO
+      https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-fields
     
+    - next.js supports absolute imports https://nextjs.org/docs/app/getting-started/installation#set-up-absolute-imports-and-module-path-aliases
+    
+
+
+    - client component needs to be declared explicitly, so child components in a client component parent are not automatically client component!
+
+    - in generay any dynamically generated content must be a client component (like Math.random())
+
+
+    - Server side rendering is much better for SEO (Serach Engine Optimalization)
+
+    - Server side rendering (but this is optional, we can still choose to render on client side)
+
+    - server components should be the default (use client component when necessary only)
+    - link: https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#when-to-use-server-and-client-components
+      - Server Component
+        - component rendered on server side
+      - Client Component
+        - component rendered on client side
+        - hooks are usable only on client side (component stat is handled on client side)
+        - 'use client' on top of file to declare a component as client side component
+      
+
+    - in general server components are prefered
+        - server components are good for direct data access from the DB
+        - if we want user input then we need to use client components
+
+
+    - the Link component is the link for next.js (like in react router)
+
+    - Personal notes plain react is still a good option if the app is not big and we don't nee SEO
+
+
+
+    - nextjs version 15.0.3
+    - requires min node.js 18.18
+
+    - File based routing system
+    - Full stack app
+
+    - Automatic Code spliting and cashing on the frontend (this looks good)
+        - Next.js does cool cashing (only fetches parts that need to be rerendered) (partial rerendering)
+
     - next is a server, I suppose it uses node.js server?
       -> yes it uses node.js's http or https modules
-    
-    - does Next.js support SASS (like react?)
-      -> work the same as in react
-    
+
+
+
+    - API Routes -> this is basically an api handler (instead of serving page, servers some content)
+      - route.js file handles this stuff (this is cool!)
+          ex: async function GET(req) { ... }
+      - it's a convertion to prefix routes with api this is great to structure apis on server side in next.js
+
+
+    - Automatic Code spliting and cashing on the frontend (this looks good)
+        - Next.js does cool cashing (only fetches parts that need to be rerendered) (partial rerendering)
+
+    - CMD 
+      - npx create-next-app@latest - walks you through very nice setup stuff (typescipt, tailwind, lint, etc...)
+
+      - npm run dev
+          -> starts the application in development mode with hot-code reloading, error reporting, and more.
+      - npm start
+          -> start the app in production mode
+          -> requires build step (npm run build) -> displayed sizes give you information how much data needs to be downloaded by the browser
+
+
+
+
+
+
+
+
+
+
+
+
+
 -->
+
+
+
+
+
+
+
+
 
 
   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

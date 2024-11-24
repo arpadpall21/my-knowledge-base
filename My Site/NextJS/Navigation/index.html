@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Navigation </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Navigation </h1>
+    <p> Updated ( 2024-11-22 ) </p>
+    <nav class="sitenav">
+      <a href="../../index.html" title="home">MySite > </a>
+      <a href="../index.html">Next.js > </a> Navigation
+    </nav>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Next.js supports the following 4 navigations </p>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> The <mark>&lt;Link&gt;</mark> Component <a href="https://nextjs.org/docs/app/api-reference/components/link" target="_blank">[link]</a> </h2>
+    <p> - this approach is the most recommended </p>
+    <pre class="syntax">
+    import Link from 'next/link';
+    
+    function <reqval>Component</reqval>() {
+      return (
+        <reqval>JSX...</reqval>
+          &lt;Link href="<reqval>url</reqval>" /&gt;            // basically a Next.js wrapper on <mark>&lt;a&gt;</mark>
+        <reqval>JSX...</reqval>
+      )
+    }
+  </pre>
+    <details class="example">
+      <summary> Example </summary>
+      <pre>
+    import Link from 'next/link';
+    
+    function PostPage() {
+      return (
+        &lt;&gt;
+          &lt;Link href="/post/123"&gt;Navigate to Id&lt;/Link&gt;
+        &lt;/&gt;
+      )
+    }
+    
+    export default PostPage;
+    </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> The <mark>useRouter</mark> hook <a href="https://nextjs.org/docs/app/api-reference/functions/use-router" target="_blank">[link]</a> </h2>
+    <p> - allows to a programatical navigation </p>
+    <pre class="syntax">
+    'use client';                                             // must be a client component
+    
+    import { useRouter } from 'next/navigation';
+    
+    function <reqval>Component</reqval>() {
+      const router = useRouter()
+      router.push(<reqval>url</reqval>)                       // navigates to <reqval>url</reqval> (<mark>router</mark> supports several <a href="https://nextjs.org/docs/app/api-reference/functions/use-router#userouter" target="_blank">methods</a>)
+      
+      return <reqval>JSX</reqval>
+    }
+    </pre>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> The browsers's <mark>history</mark> object <a href="../../Web Browser APIs/History API/index.html" target="_blank">[link]</a> </h2>
+    <p> - we can directly use the browser's <mark>window.history</mark> object to navigate around </p>
+    <pre class="syntax">
+    'use client'                            // must be a client component
+    
+    function <reqval>Component</reqval>() {
+      window.history.<a href="../../Web Browser APIs/History API/index.html" target="">method()</a>
+    }
+    </pre>
+    <details class="example">
+      <summary> Example </summary>
+      <pre>
+    import { redirect } from 'next/navigation'
+    
+    function IdPage({ params }) {
+      return (
+      &lt;&gt;
+        &lt;button onClick={() =&gt; window.history.back()}&gt; Go Back&lt;/button&gt;
+      &lt;/&gt;
+      )
+    }
+    
+    export default IdPage;
+      </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="headerExtra"> Redirect </h2>
+    <h2 class="header"> The <mark>redirect()</mark> / <mark>permanentRedirect()</mark> methods </h2>
+    <pre class="syntax">
+    import { redirect, permanentRedirect } from 'next/navigation'
+    
+// page.js -------------
+    function <reqval>Component</reqval>() {
+      redirect(<reqval>url</reqval>)                        // both redirect to <reqval>url</reqval>
+      permanentRedirect(<reqval>url</reqval>)
+    }
+    
+    
+// route.js ----------------
+    export async function <reqval>httpMethod</reqval>() {
+      redirect(<reqval>url:str</reqval>)                      // respond with <mark>307 Temporary Redirect</mark>
+      permanentRedirect(<reqval>url:str</reqval>)             // respond with <mark>308 Permanent Redirect</mark>
+    }
+    
+// server action -----------
+    <span style="background-color:red;"> TODO... </span>
+    </pre>
+    <details class="example">
+      <summary> Example </summary>
+      <h4 class="header"> Redirect in <mark>page.js</mark> </h4>
+      <pre>
+    import { redirect, permanentRedirect } from 'next/navigation';
+    
+    
+    function <reqval>Component</reqval>() {
+      redirect('/post/123');                          // both redirects to <mark>/post/123</mark>
+      permanentRedirect('/post/123');
+      
+      return &lt;h1&gt; Some Page Title &lt;/h1&gt;
+    }
+    
+    export default PostPage;
+      </pre>
+      <hr>
+      <!----------------------------------------------->
+      <h4 class="header"> Redirect in <mark>route.js</mark> </h4>
+      <pre>
+    import { redirect, permanentRedirect } from 'next/navigation';
+    
+    
+    export async function GET(req, { params }) {
+      redirect('http://someUrlToGo.com')                      // respond with <mark>307 Temporary Redirect</mark>
+      permanentRedirect('http://someUrlToGo.com')             // respond with <mark>308 Permanent Redirect</mark>
+    }
+      </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------->
+    <h2 class="header"> Redirect in middleware <mark>NextResponse.redirect</mark> </h2>
+    <pre class="syntax">
+    import { NextResponse } from 'next/server';
+    
+    
+    export const config = { matcher: <reqval>urlToMatch</reqval> }
+    
+    export function middleware(request) {
+      return NextResponse.redirect(<reqval>url</reqval>)            // Responds with <mark>307 Temporary Redirect</mark> to <reqval>url</reqval>  
+    }
+    </pre>
+    <details class="example">
+      <summary> Example </summary>
+      <pre>
+    import { NextResponse } from 'next/server';
+    
+    
+    export const config = { matcher: '/:any*' }
+    
+    export function middleware(request) {
+      if (request.method === 'OPTIONS') {
+        return NextResponse.redirect('http://localhost:3000/login')
+      }
+    }
+      </pre>
+    </details>
+
+
+    <br><br>
+  </body>
+
+</html>
