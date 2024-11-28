@@ -206,61 +206,6 @@
             └─ account                // -> URL <mark>/account</mark>
                 └─ page.js
   </pre>
-  <hr>
-  <!------------------------------------------------------------------------------------------>
-  <h3 class="header"> The <mark>middleware.js</mark> </h3>
-  <pre class="syntax">
-    <opt>import { NextResponse } from 'next/server';</opt>
-    
-    export const config = {                                 // configures which request to intercept
-      matcher: [
-        '/<reqval>url</reqval>'                             // direct url (ex: <mark>/books/32</mark>)
-        '/<reqval>url</reqval>:<reqval>param</reqval>'      // parameter (dynamic route segment) (ex matches: <mark>/books/32</mark>, <mark>/books/33</mark>)
-        '/<reqval>url</reqval>:<reqval>param</reqval>*|?|+'  // parameter segments (<mark>*</mark> zero or more) (<mark>?</mark> zero or one) (<mark>+</mark> one or more)
-        '/(<reqval>regExp</reqval>)'                         //  regular expression matching (ex: <mark>/(.*)</mark> matches all routes)
-        {                                                   // request having header (and value)
-          source: <reqval>url</reqval>,
-          has: [{ type: 'header', key: <reqval>httpHeader</reqval>, <opt>value: <optval>httpHeaderValue</optval></opt> }],
-        },
-        {                                                   // request not having header (and value)
-          source: <reqval>url</reqval>,
-          missing: [{ type: 'header', key: <reqval>httpHeader</reqval>, <opt>value: <optval>httpHeaderValue</optval></opt> }],
-        },
-      ]
-    }
-    
-    export <opt>async</opt> function middleware(<a href="https:\/\/nextjs.org/docs/app/api-reference/functions/next-request" target=_blank>req:NextRequest</a>) {
-      // some middleware logic
-      <opt>return <a href="https:\/\/nextjs.org/docs/app/api-reference/functions/next-response" target="_blank">NextResponse</a></opt>
-    }
-  </pre>
-  <details class="example">
-    <summary> Example : </summary>
-    <pre>
-  import { NextResponse } from 'next/server';
-  
-  export const config = {
-    matcher: [
-      '/book/:param*',
-      '/book/(.*)',                 // same as above (but regExp)
-      {
-        source: '/(.*)',            // any request that has header X-Cusotm with 'custom header' value
-        has: [{ type: 'header', key: 'X-Custom', value: 'custom header' }]
-      },
-      {
-        source: '/id/:id',          // <mark>/id/<param></mark> requests that don't have any X-Custom header with 'custom header' value
-        missing: [{ type: 'header', key: 'X-Custom', value: 'custom header' }]
-      },
-    ],
-  }
-  
-  export function middleware(request) {
-    // some middleware logic
-    
-    return NextResponse.json({ message: "middleware response!" })   // middleware response for intercepted request
-  }
-  </pre>
-  </details>
 
 
   <br><br>
