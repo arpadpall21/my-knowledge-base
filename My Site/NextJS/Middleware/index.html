@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title> Data Fetching and Caching </title>
+  <title> Middleware </title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="../../Assets/stylesPages.css">
@@ -11,12 +11,12 @@
 </head>
 
 <body>
-  <h1> Data Fetching and Caching </h1>
-  <p> Updated ( 2024-11-23 ) </p>
-    <nav class="sitenav">
-      <a href="../../index.html" title="home">MySite > </a>
-      <a href="../index.html">Next.js > </a> Data Fetching and Caching
-    </nav>
+  <h1> Middleware </h1>
+  <p> Updated ( 2024-11-28 ) </p>
+  <nav class="sitenav">
+    <a href="../../index.html" title="home">MySite > </a>
+    <a href="../index.html">Next.js > </a> Middleware
+  </nav>
 
   <p class="subSite"><a href=""> SubSite > </a></p>
 
@@ -75,82 +75,13 @@ stage 3 :
     - organize and document down everything 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
-    - on server side fetch is used which is basically a wrapper on the browser fetch: https://nextjs.org/docs/app/api-reference/functions/fetch
-    - the fetch is react server API 
-      - no cache by default
-      - fetch(url, {
-        cache:                    // if revalidate is set this is not required
-          'no-store'              <- no cache used (default from v15)
-          'force-cache'           <- uses cache, returns the response from cache if it's fresh (default before v15)
-        next: {
-          revalidate: false | 0 | number      <- sets the cache life time (false = Infinite | 0 = disables cache | number = seconds to cache)
-          tags: [tag:str, ...]                <- tags that can be used to revalidate on-demand with revalidateTag hook
-        }
-      })
-
-      - we can also use this    export const revalidate = 60    to enable ISR for all fetches in the current file
-          -> this option does not override fetch revalidates 
-    
-    
-
-    - client side data fetching works as in normal react
-    
-    - mention unstable_cach spaghetti https://nextjs.org/docs/app/api-reference/functions/unstable_cache
-      -> mention here that the natively supported react 'cache' hook is for this purpose (but that shit is still in canary)
-
-    Incremental Static Regeneration 
-      - the focus is performance here
 
 
-- data fetching (CLARIFY this more!)
-      - SSR (server side rendering) (fetched data is not cache)
-      - SSG (static site generation) (fetched data is cached)
-      - ISR (incremental Static Regeneration) -> well document this! (I tested it works)
 
-- server component rendering strategies
-    - static rendering 
-      - page is rendered at build time after data revalidation
-      - the result is cachedn and can be used in CDNs
-    - dynamic rendering
-      - rendered at request time 
-    
-
-
-    - well apparently this ting should be figured out by Next.js
-      -> yes by default server components are static, Next.js figures out if it should be dynamic 
-      -> server component built as static excepth when these Dynamic APIs used https://nextjs.org/docs/app/building-your-application/rendering/server-components#dynamic-apis
-      -> document that we should handle any page static unless specified otherwise with      export const dynamic = 'force-dynamic'
-    
-    - with "export const dynamic = 'force-dynamic'" we can force a server component be to dynamic
-    
-    - all this server side rendering shit works in production mode only
-    
-    - revalidateTag tag: https://nextjs.org/docs/app/api-reference/functions/revalidateTag
-        -> usable in server action or route.js (api call)
-        -> tested works$
-    
-    - revalidatePath revalidate cached data on path : https://nextjs.org/docs/app/api-reference/functions/revalidatePath
-        -> TEST IT!
-        -> usable in server action or route.js (api call) TEST IT!
-    
-    
-    - anything imported in the client component (file) will be boundled
-    
-    
-    - in order to expose environment variables to the client we need to prefix environment variable with NEXT_PUBLIC (this is to prevent accidental leaks)
-        -> empty strings will be exposed otherwise
-    
-    
-    - we can pass props without worry from server to client component but porps must be serializable: https://react.dev/reference/rsc/use-server#serializable-parameters-and-return-values
-      -> mention here the server action too (must be post fixed with Action)
-    
-    
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    - test how data caching works on client component
-    
-    - update router.refresh() <- kind of important
+    - 
     
 -->
 

@@ -193,7 +193,7 @@
                 ├─ page.js                // throws error
                 └─ error.js               // error cought here 
   </pre>
-  <details class="example" open>
+  <details class="example">
     <summary> Example : </summary>
   <pre>
     async function Posts() {
@@ -208,6 +208,92 @@
     export default Posts;
   </pre>
   </details>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h2 class="header"> Interleaving Server & Client Components </h2>
+  <p> - Next.js recommends a project structuring where Server Components are the base building blocks and Client Components are the leaf Components of the project, here are the reasons: </p> 
+  <p class="indent-lv1"> - Server Components are cached, keep secrets on the BE, direct data fetching, caching, etc... </p>
+  <p class="indent-lv1"> - Server Components cannot be rendered in Child Components <u>(except when passed as <mark>children</mark> props)</u> </p>
+  <pre>
+// import Client Component into Server Component ----------------
+    'use client';                                                   // this is a client component
+    
+    import serverComponent from '@/app/test/serverComponent';       // importing server component alone does not throw error <u>however is discuraged because it's bundled with the Client Component</u>
+    
+    function Counter() {
+      return (
+        &lt;&gt;
+          &lt;p&gt; Hello World! &lt;/p&gt;
+          &lt;Page /&gt;                                          // !! not allowed (throws an error)
+        &lt;/&gt;
+      )
+    }
+  </pre>
+  <pre>
+// Server Component as Client Component child ------------
+    import ClientComponent from '@/app/some-route/cl';
+    import ServerComponent from '@/app/some-route/srv';
+    
+    function SomeComponent() {
+      return (
+        &lt;ClientComponent&gt;                               // this works but also discouraged!
+          &lt;ServerComponent /&gt;
+        &lt;/ClientComponent&gt;
+      )
+    }
+  </pre>
+  <details class="example">
+    <summary> DEMO (can be pseudocode) </summary>
+    <pre>
+// src/demo/page.js (file) ----------------------
+    import ClientComponent from '@/app/test/cl';
+    import ServerComponent from '@/app/test/srv';
+    
+    function Counter() {
+      return (
+        &lt;ClientComponent&gt;
+          &lt;ServerComponent /&gt;
+        &lt;/ClientComponent&gt;
+      )
+    }
+    
+    export default Counter;
+    </pre>
+    <pre>
+// src/demo/cl.js (file) ----------------------
+    'use client';
+    
+    function ClientComponent({ children }) {
+      return (
+        &lt;&gt;
+          &lt;p&gt; Hello from client component! &lt;/p&gt;
+          {children}                                // server component received as child component
+        &lt;/&gt;
+      )
+    }
+    
+    export default ClientComponent;
+    </pre>
+    <pre>
+// src/demo/srv.js (file) ----------------------
+    'use server';
+    
+    async function ServerComponent() {
+      const response = await fetch('http://localhost:3001');
+      const payload = await response.json();
+      
+      console.log(payload)
+      
+      return <p> paragraph from server component {payload.randomNumber} </p>
+    }
+    
+    export default ServerComponent;
+    </pre>
+  </details>
+  
+  
+  
+  
   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   <!------------------------------------------------------------------------------------------>
   <hr>
@@ -251,7 +337,6 @@
   <pre class="syntax">
 // any Next.js file 
     import <reqval>something</reqval> from '@/<reqval>path</reqval>';       // absolute import
-    
   </pre>
   <details class="example">
     <summary> Example : </summary>
@@ -316,6 +401,9 @@ import { headers } from 'next/headers'
 
 ----
 import { usePathname, useSearchParams } from 'next/navigation'
+
+----
+import { useParams } from 'next/navigation'
 
 
 
@@ -390,6 +478,16 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  ---------------------------------------
+Interleaving Server and Client Components
+---------------------------------------
+    - server components should be prioritized 
+    - the development approach is to only use client components as leaf components 
+    - the limitation is that we cannot use server compnent inside a client component 
+        -> only if the server componetn is passed through children props (this works but discuraged, because of limitations)
+
+
 
 ---------------------------------------------------
 -- handling errors

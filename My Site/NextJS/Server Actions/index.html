@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Server Actions </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../Assets/stylesPages.css">
+  <script src="../../Assets/scriptPages.js"></script>
+</head>
+
+<body>
+  <h1> Server Actions </h1>
+  <p> Updated ( 2024-11-27 ) </p>
+  <nav class="sitenav">
+    <a href="../../index.html" title="home">MySite > </a>
+    <a href="../index.html">Next.js > </a> Server Actions
+  </nav>
+  <br>
+  <details class="example" id="notes">
+    <summary> Notes & Tips :</summary>
+    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+  </details>
+  <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+  <h2 style="color:green;"><u> Remember This : </u></h2>
+
+  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+  <p> - a server action is basically an asynchronous function that is executed on the server, it can be called from Server or <u>Client</u> Components </p>
+  <p> - it's a light convention to name files where server actions are to <mark>actions.js</mark> and postfix server action function with <mark>Action</mark> (ex: <mark><reqval>name</reqval>Action</mark>), <u>Client Components accept server actions as props if postfixed with <mark>Action</mark></u> </p>
+  <p> - calling a server action from a Client Component creates a POST request, so basically a public endpoint is created, Next.js protect this endpoint by an internal id which is regenerated at some interval, <u>however we should consider manual protection is specific scenarios (like: authentication, etc...) </u> </p> 
+  <pre class="syntax">
+// server actions in dedicated file -------------
+                                                                              // no need to declare <mark>'use server'</mark> (default)
+    async function <reqval>serverAction</reqval>(<optval>arg, ...</optval>) {
+                                                                    // server action body is never exposed to the frontend
+      // do some processing...
+      return <reqval>result</reqval>
+    }
+    
+    <reqval>...</reqval>                                                // all async functions are server actions
+  </pre>
+  <p> - if we declare a server action individually (like in a server Component) we need to add the <mark>'use server'</mark> directive on top </p>
+  <pre class="syntax">
+// action.js (file) ---
+    async function <reqval>serverAction</reqval>(<optval>arg, ...</optval>) {
+      'use server';                                                     // function declared as server action
+      
+      // do some processing...
+      return <reqval>result</reqval>
+    }
+  </pre>
+  <details class="example">
+    <summary> DEMO (can be pseudocode) </summary>
+    <h4 class="header"> Server action declared directly in a Server Component </h4>
+    <pre>
+    async function SomePage() {
+      async function getBook(bookId) {
+        'use server';                                             // function declared as server action
+        
+        const response = await fetch(`http://localhost:3001/book/${bookId}`, { cache: 'no-store' });
+        const { book } = await response.json();
+        
+        return book;
+      }
+    
+      const book = await getBook(123);                            // call server action
+    
+      return &lt;p&gt; book: {book} &lt;/p&gt;
+    }
+    
+    export default SomePage;
+    </pre>
+    <hr>
+    <!-------------------------------------------------------------->
+    <h4 class="header"> Clinet Component uses server action </h4>
+    <pre>
+// some-page.js (file) -----------------------------
+    'use client';
+    
+    import { useState, useEffect } from 'react';
+    import { getRandom } from '@/app/some-page/srv';              // server action imported 
+    
+    function SomePage() {
+      const [book, setBook] = useState('');
+      
+      useEffect(() => {
+        getRandom(123)
+          .then((book) => setBook(book));
+      }, []);
+      
+      return &lt;&gt; book: {book} &lt;/&gt;                    // server action triggered on page render
+    }
+    
+    export default SomePage;
+    </pre>
+    <pre>
+// action.js (file) -------------------------------------------------
+    export async function getBook(bookId) {
+      const response = await fetch(`http:/\/localhost:3001/book/${bookId}`, { cache: 'no-store' });
+      const { book } = await response.json();
+      
+      return book;
+    }
+    </pre>
+  </details>
+  <hr>
+  <!-------------------------------------------------------------------------------------------->
+  <h2 class="header"> Server Action direct Form integration <a href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms" target="_blank">[link]</a> </h2>
+  <p> - Next.js supports server actions directly integrated into Forms which allows us to use Forms as server component </p>
+  <p> - as I tested this [2024-11-18] this solution has User Experiece limitations </p>
+  <details class="example">
+    <summary> DEMO (can be pseudocode) </summary>
+  <pre>
+    async function SomePage() {                                 // everithing handled on server side 
+      async function updatePerson(personForm) {
+        'use server';
+        
+        console.log( personForm.get('name') );
+        console.log( personForm.get('age') );
+      }
+      
+      return (
+        &lt;form action={updatePerson}&gt;
+          &lt;input name="name" /&gt;
+          &lt;input name="age" type="number" /&gt;
+          &lt;button type="submit"&gt; Submit &lt;/button&gt;
+        &lt;/form&gt;
+      )
+    }
+    
+    export default SomePage;
+  </pre>
+  </details>
+
+
+  <br><br>
+</body>
+
+</html>
