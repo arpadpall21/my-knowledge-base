@@ -25,18 +25,20 @@
 
     <h2 style="color:green;"><u> Remember This : </u></h2>
     <p> - rendering strategies are only working in prod (always dynamic in dev), at build time a report is printed where we can see each page's rendering stategy (Static VS Dynamic) </p>
-    <p> - if ISR (Incremental Static Revalidation) caching user the page is rendered dynamic </p>
+    <p> - ISR pages are Static (they are regenerated at 'revalidation') </p>
+    <p> - Next.js has some initiatives to support general data caching (like: for DB cache), but currently none of the proposals are stable [2024-11-30] </p>
+    <p class="indent-lv1"> - <a href="https://nextjs.org/docs/app/api-reference/functions/unstable_cache" target="_blank">unstable_cache</a> works but unstable (not production ready) </p>
+    <p class="indent-lv1"> - <a href="https://nextjs.org/docs/canary/app/api-reference/directives/use-cache" target="_blank">cache</a> hook natively supported by React, but it's still in canary version </p>
     <h2 style="color:green;"><u> Description and Demonstration: </u></h2>
     <p> - Next.js support the following server side rendering strategies: </p>
     <p class="indent-lv1"> <u>Static</u> </p>
-    <p class="indent-lv2"> - at build time creates a static page that is cached and served at each request </p>
-    <p class="indent-lv2"> - if page contains any fetch then 'revalidates' resources (meaning fetches data then creates as static content) </p>
+    <p class="indent-lv2"> - Static page that is created <u>at build time</u> and served at each request </p>
     <p class="indent-lv1"> <u>Dynamic</u> </p>
-    <p class="indent-lv2"> - page rerendered at each request </p>
+    <p class="indent-lv2"> - page dynamically rerendered at each request </p>
     <p class="indent-lv1"> <u>Incremental Static Regeneration (ISR)</u> </p>
-    <p class="indent-lv2"> - static page that is regenerated after requesting it with a set of time (with performance in mind) </p>
+    <p class="indent-lv2"> - Static page that is regenerated after a set time (or explicitly)</p>
     <p class="indent-lv2"> - example where the page regenerates after 1 hour: </p>
-    <p class="indent-lv3"> - request within 1 hour considered fresh, so the stored page is served </p>
+    <p class="indent-lv3"> - request within 1 hour considered fresh, so the cached page is served </p>
     <p class="indent-lv3"> - the 1st request after 1 hour (like: 1:30) considered stale, <u>still gets the old page</u>, but a new page is regenerated in the background (so subsequent requests get fresh content) </p>
     <hr>
     <!------------------------------------------------------------------------>
@@ -141,33 +143,38 @@
     </details>
     <hr>
     <!---------------------------------------------------------------------------------------------->
-    <h2 class="headerExtra"> Fetching </h2>
+    <h2 class="headerExtra"> Data Fetching & Caching </h2>
     <p> <u>Client Side fetching</u> </p>
     <p class="indent-lv1"> - on Client side data fetching works as normal CRA </p>
     <p> <u>Server Side fetching</u> </p>
-    <p class="indent-lv1"> - on server side Next.js uses the <mark>fetch()</mark> API which is basically an extension of the original <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank">fetch()</a> with extra configurations </p>
-    <p class="indent-lv1"> - the extra configurations basically control server side data caching </p>
+    <p class="indent-lv1"> - on server side Next.js uses the <mark>fetch()</mark> API which is basically an extension of the original <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank">fetch()</a> with additional configurations </p>
+    <p class="indent-lv1"> - additional configurations control the caching strategy (Static | Dynamic | ISR) </p>
     <pre class="syntax">
     function <reqval>ServerComponent</reqval>() {           // server side fetch
         // ...
         
         fetch(<reqval>url</reqval>, {
-            cache: 'no-store' | 'force-cache',           // (<mark>no-store</mark> -> no cache used (default from Next.js v15)) (<mark>force-cache</mark> -> caches data (default before Next.js v15))
+            // static cache strategy ----
+            cache: 'force-cache',                       // caches data (default before Next.js v15)
+            // dynamic cache strategy ---
+            cache: 'no-store',                          // no cache used (default from Next.js v15)
+            // ISR cache strategy -------
             next: {
-                revalidate: false | 0 | <reqval>nr</reqval>,   // (<mark>false</mark> -> same as <mark>cache: force-cache</mark>) (<mark>0</mark> -> same as <mark>cache: no-sotre</mark>) (<mark><reqval>nr</reqval></mark> -> <u>ISR</u> revalidates the cache after <reqval>nr</reqval> seconds)
-                tag: [<reqval>tag:str</reqval><optval>, ...</optval>]       // tag user by the <mark>revalidateTag(<reqval>tag:str</reqval>)</mark> hook to manually revalidate (refresh) the cache tagged by <reqval>tag</reqval>  
+                revalidate: false | 0 | <reqval>nr</reqval>,   // (<mark>false</mark> -> never revalidate) (<mark>0</mark> -> no cache) (<mark><reqval>nr</reqval></mark> -> <u>ISR</u> revalidates the cache after <reqval>nr</reqval> seconds)
+                tags: [<reqval>isrTag:str</reqval><optval>, ...</optval>]       // tags this fetch, (so we can revalidate with <mark>revalidateTag(<reqval>tag:str</reqval>)</mark> hook)  
             }
             <a href="https:\/\/developer.mozilla.org/en-US/docs/Web/API/RequestInit" target="_blank">otherOptions...</a>
         });
     }
     </pre>
-    <details class="example" open>
+    <details class="example">
       <summary> DEMO (can be pseudocode) </summary>
       <h2 class="header"> Static Fetch Cache </h2>
       <pre>
     async function SomePage() {
-      const response = await fetch(`http:/\/localhost:3001`, { cache: 'force-cache' });           // -! altough the default 
+      const response = await fetch(`http:/\/localhost:3001`, { cache: 'force-cache' });
       const { product } = await response.json();
+      
       return (
         &lt;&gt;
           &lt;h1&gt; Header &lt;/h1&gt;
@@ -182,7 +189,7 @@
     // export const dynamic = 'force-dynamic';                  // if the page explicitly declared dynamic the below fetch cache will be dynamic (as expected)
     
     async function SomePage() {
-      const response = await fetch(`http:/\/localhost:3001`);                 // -! if this page is static fetch() without cache config will be static as well (despite the fact that the default cache config is <mark>cache: no-store</mark>)    
+      const response = await fetch(`http:/\/localhost:3001`);                 // -! if this page is static, any fetch() without cache config will be static as well (despite the fact that the default cache config is <mark>cache: no-store</mark>)    
       const { product } = await response.json();
       return (
         &lt;&gt;
@@ -215,7 +222,7 @@
       <h2 class="header"> ISR Fetch Cache </h2>
       <pre>
     async function SomePage() {
-      const response = await fetch(`http:/\/localhost:3001`, { next: revalidate: 60 });           // ISR cache revalidated after 1 hour (60 seconds) 
+      const response = await fetch(`http:/\/localhost:3001`, { next: revalidate: 60 });           // ISR fetch cache revalidated after 60 seconds
       const { product } = await response.json();
       return (
         &lt;&gt;
@@ -228,167 +235,101 @@
     export default SomePage;
       </pre>
     </details>
-
-    <!--
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-stage 1: high level overview 
-    - read through 
-    - create notes 
-    - deciede what exactly will you document down 
-    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
-    
-stage 2:  low level overview
-    - deeper understanding of all what you've taken down in stage 1
-    
-stage 3 : 
-    - organize and document down everything 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-    - on server side fetch is used which is basically a wrapper on the browser fetch: https://nextjs.org/docs/app/api-reference/functions/fetch
-    - the fetch is react server API 
-      - no cache by default
-      - fetch(url, {
-        cache:                    // if revalidate is set this is not required
-          'no-store'              <- no cache used (default from v15)
-          'force-cache'           <- uses cache, returns the response from cache if it's fresh (default before v15)
-        next: {
-          revalidate: false | 0 | number      <- sets the cache life time (false = Infinite | 0 = disables cache | number = seconds to cache)
-          tags: [tag:str, ...]                <- tags that can be used to revalidate on-demand with revalidateTag hook
-        }
-      })
-
-      - we can also use this    export const revalidate = 60    to enable ISR for all fetches in the current file
-          -> this option does not override fetch revalidates 
-    
-    
-
-    - client side data fetching works as in normal react
-    
-    - mention unstable_cach spaghetti https://nextjs.org/docs/app/api-reference/functions/unstable_cache
-      -> mention here that the natively supported react 'cache' hook is for this purpose (but that shit is still in canary)
-
-    Incremental Static Regeneration 
-      - the focus is performance here
-
-
-- data fetching (CLARIFY this more!)
-      - SSR (server side rendering) (fetched data is not cache)
-      - SSG (static site generation) (fetched data is cached)
-      - ISR (incremental Static Regeneration) -> well document this! (I tested it works)
-
-- server component rendering strategies
-    - static rendering 
-      - page is rendered at build time after data revalidation
-      - the result is cachedn and can be used in CDNs
-    - dynamic rendering
-      - rendered at request time 
-    
-
-
-    - well apparently this ting should be figured out by Next.js
-      -> yes by default server components are static, Next.js figures out if it should be dynamic 
-      -> server component built as static excepth when these Dynamic APIs used https://nextjs.org/docs/app/building-your-application/rendering/server-components#dynamic-apis
-      -> document that we should handle any page static unless specified otherwise with      export const dynamic = 'force-dynamic'
-    
-    - with "export const dynamic = 'force-dynamic'" we can force a server component be to dynamic
-    
-    - all this server side rendering shit works in production mode only
-    
-    - revalidateTag tag: https://nextjs.org/docs/app/api-reference/functions/revalidateTag
-        -> usable in server action or route.js (api call)
-        -> tested works$
-    
-    - revalidatePath revalidate cached data on path : https://nextjs.org/docs/app/api-reference/functions/revalidatePath
-        -> TEST IT!
-        -> usable in server action or route.js (api call) TEST IT!
-    
-    
-    - anything imported in the client component (file) will be boundled
-    
-    
-    - in order to expose environment variables to the client we need to prefix environment variable with NEXT_PUBLIC (this is to prevent accidental leaks)
-        -> empty strings will be exposed otherwise
-    
-    
-    
-    
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - test how data caching works on client component
-    
-    - update router.refresh() <- kind of important
-    
--->
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-
-    <h2 class="headerExtra"><u> Title 1 </u></h2>
-    <h2 class="header"> Title 1.1 </h2>
-    <h3 class="header"> Title 1.1.1 </h3>
-    <h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-      <p> - red background block means not learned or not tested information! </p>
-      <p> - </p>
-    </div>
-
+    <!---------------------------------------------------------------------------------------------->
+    <h2 class="header"> Revalidate ISR data cache <mark>revalidatePath()</mark> / <mark>revalidateTag()</mark> </h2>
+    <p> - we can manually revalidate <u>ISR fetch cache</u> by using the <mark>revalidatePath()</mark> and <mark>revalidateTag()</mark> hooks </p>
+    <p> - these hooks can be used in server actions or route handlers (<mark>route.js</mark>) </p>
     <pre class="syntax">
-    <reqval>required value </reqval>
-    <optval>optional value </optval>
-    <lit>literally used </lit>
-    <opt>optionally used </opt>
-  
-    <prot style="color:#049500;">prototype chain</prot>
-        
-    <span class="openable"> this is an openable element<div>
-        <p> - openable elements listed here in paragraphs </p>
-        <p> - </p>
-    </div></span>
-    </pre>
-
-    <details class="example">
-      <summary> DEMO (can be pseudocode) </summary>
-      <pre>
-    examples of the current lessons 
+    import { revalidatePath, revalidateTag } from 'next/cache';
     
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
-    </details>
-
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
+    
+    revalidatePath(<reqval class="openable">path:str<div>
+      <p> - project route (ex: <mark>/product/[id]</mark>) </p>
+    </div></reqval>, <opt class="openable">'page|layout'<div>
+      <p> - invalidate ISR fetch cache in <mark>page.js</mark> (Default) or <mark>layout.js</mark> </p>
+    </div></opt>)              // revalidates all ISR fetch cache at route <reqval>path</reqval>
+    revalidateTag(<reqval>isrTag:str</reqval>)                    // revalidate ISR fetch cache tagged by <reqval>isrTag</reqval>
     </pre>
     <details class="example">
       <summary> Example : </summary>
-      <h4 style="color:darkblue;"><u> example title </u></h4>
-      <p> - live tests will come here </p>
-      <details>
-        <summary> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-      </details>
+      <h4 class="header"> Revalidate with server action </h4>
+      <pre>
+// src/app/product/page.js (file) --------------------------
+    async function SomePage() {
+      const response = await fetch(`http://localhost:3001`, { next: { 
+        revalidate: false,                              // ISR fetch cache never revalidates 
+        tags: ['product']
+      }});
+      const { product } = await response.json();
+      
+      return (
+        &lt;p&gt; Product: {product} &lt;/p&gt;
+      )
+    }
+    
+    export default SomePage;
+      </pre>
+      <pre>
+// src/app/revalidate/page.js (file) --------------------------
+    'use client';
+    
+    import { revalidateProduct } from './action';
+    
+    function RevalidatePage() {
+      function handleClick() {                          // server action called from client component 
+        revalidateProduct();
+      }
+      
+      return &lt;button onClick={handleClick}&gt; Revalidate Product &lt;/button&gt;
+    }
+    
+    export default RevalidatePage;
+      </pre>
+      <pre>
+// src/app/revalidate/action.js (file) --------------------------
+    'use server';
+    
+    import { revalidatePath, revalidateTag } from 'next/cache';
+    
+    export async function revalidateProduct() {
+      revalidatePath('/product');                         // revalidates all ISR fetch cache on route <mark>/product</mark>
+      // revalidateTag('product');                                // this would revalidate ISR fetch cache tagged by <mark>product</mark>
+    }
+      </pre>
+      <hr>
+      <!---------------------------------------------------------------------------------->
+      <h4 class="header"> Revalidate with api call </h4>
+      <pre>
+// src/app/product/page.js (file) --------------------------
+    async function SomePage() {
+      const response = await fetch(`http://localhost:3001`, { next: { 
+        revalidate: false,                              // ISR fetch cache never revalidates 
+        tags: ['product']
+      }});
+      const { product } = await response.json();
+      
+      return (
+        &lt;p&gt; Product: {product} &lt;/p&gt;
+      )
+    }
+    
+    export default SomePage;
+      </pre>
+      <pre>
+// src/api/revalidate/route.js (file) --------------------------
+    import { NextResponse } from 'next/server';
+    import { revalidateTag, revalidatePath } from 'next/cache';
+    
+    export async function GET(req, { params }) {
+      revalidatePath('/product');                         // revalidates all ISR fetch cache on route <mark>/product</mark>
+      // revalidateTag('product');                                // this would revalidate ISR fetch cache tagged by <mark>product</mark>
+        
+        return NextResponse.json({ message: 'OK' });
+    }
+      </pre>
     </details>
-    <!---------------------------------------------------------------------------------------------------------------------------------->
-    <hr>
 
-    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
 
     <br><br>
   </body>

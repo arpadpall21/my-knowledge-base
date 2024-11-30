@@ -91,10 +91,11 @@
   <p class="indent-lv1"> - required to use browser features (like: click, etc...) </p>
   <p class="indent-lv1"> - required for hooks (because React can only handle hooks on client side) </p>
   <p class="indent-lv1"> - requred when rendering any dynamic content (ex: <mark>Math.random()</mark>) </p>
+  <p class="indent-lv1"> - <u>all imports in a Client Component file is bundled as client side code (so minimize imports!)</u> </p>
   <pre class="syntax">
     'use server'|'use client';                                            // declares server or client Component (default 'use server')
     
-    <opt>async</opt> function <reqval>Component</reqval>() {              // async available for server Component only
+    <opt>async</opt> function <reqval>Component</reqval>(<opt>{ params }</opt>) {              // async and params available for Server Component only
       // some logic...
     }
   </pre>
@@ -137,6 +138,90 @@
     }
     
     export default Posts;
+    </pre>
+  </details>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h2 class="header"> Interleaving Server & Client Components </h2>
+  <p> - Next.js recommends a project structuring where Server Components are the base building blocks and Client Components are the leaf Components of the project, here are the reasons: </p> 
+  <p class="indent-lv1"> - Server Components are cached, keep secrets on the BE, direct data fetching, caching, etc... </p>
+  <p class="indent-lv1"> - Server Components cannot be rendered in Child Components <u>(except when passed as <mark>children</mark> props)</u> </p>
+  <p> - props that are passed from Server to Client components must be <a href="https://react.dev/reference/rsc/use-server#serializable-parameters-and-return-values" target="_blank">serializable</a> </p>
+  <pre>
+// import Client Component into Server Component ----------------
+    'use client';                                                   // this is a client component
+    
+    import ServerComponent from '@/app/test/serverComponent';       // importing server component alone does not throw error <u>however is discouraged because it's bundled with the Client Component</u>
+    
+    function Counter() {
+      return (
+        &lt;&gt;
+          &lt;p&gt; Hello World! &lt;/p&gt;
+          &lt;ServerComponent /&gt;                                          // !! not allowed (throws an error)
+        &lt;/&gt;
+      )
+    }
+  </pre>
+  <pre>
+// Server Component as Client Component child ------------
+    import ClientComponent from '@/app/some-route/cl';
+    import ServerComponent from '@/app/some-route/srv';
+    
+    function SomeComponent() {
+      return (
+        &lt;ClientComponent&gt;                               // this works but also discouraged!
+          &lt;ServerComponent /&gt;
+        &lt;/ClientComponent&gt;
+      )
+    }
+  </pre>
+  <details class="example">
+    <summary> DEMO (can be pseudocode) </summary>
+    <h4 class="header"> Rendering Server Component as Client Component children </h4>
+    <pre>
+// src/demo/page.js (file) ----------------------
+    import ClientComponent from '@/app/test/cl';
+    import ServerComponent from '@/app/test/srv';
+    
+    function Counter() {
+      return (
+        &lt;ClientComponent&gt;
+          &lt;ServerComponent /&gt;
+        &lt;/ClientComponent&gt;
+      )
+    }
+    
+    export default Counter;
+    </pre>
+    <pre>
+// src/demo/cl.js (file) ----------------------
+    'use client';
+    
+    function ClientComponent({ children }) {
+      return (
+        &lt;&gt;
+          &lt;p&gt; Hello from client component! &lt;/p&gt;
+          {children}                                // server component received as child component
+        &lt;/&gt;
+      )
+    }
+    
+    export default ClientComponent;
+    </pre>
+    <pre>
+// src/demo/srv.js (file) ----------------------
+    'use server';
+    
+    async function ServerComponent() {
+      const response = await fetch('http://localhost:3001');
+      const payload = await response.json();
+      
+      console.log(payload)
+      
+      return <p> paragraph from server component {payload.randomNumber} </p>
+    }
+    
+    export default ServerComponent;
     </pre>
   </details>
   <!------------------------------------------------------------------------------------------>
@@ -209,88 +294,8 @@
   </details>
   <!------------------------------------------------------------------------------------------>
   <hr>
-  <h2 class="header"> Interleaving Server & Client Components </h2>
-  <p> - Next.js recommends a project structuring where Server Components are the base building blocks and Client Components are the leaf Components of the project, here are the reasons: </p> 
-  <p class="indent-lv1"> - Server Components are cached, keep secrets on the BE, direct data fetching, caching, etc... </p>
-  <p class="indent-lv1"> - Server Components cannot be rendered in Child Components <u>(except when passed as <mark>children</mark> props)</u> </p>
-  <p> - props that are passed from Server to Client components must be <a href="https://react.dev/reference/rsc/use-server#serializable-parameters-and-return-values" target="_blank">serializable</a> </p>
-  <pre>
-// import Client Component into Server Component ----------------
-    'use client';                                                   // this is a client component
-    
-    import serverComponent from '@/app/test/serverComponent';       // importing server component alone does not throw error <u>however is discuraged because it's bundled with the Client Component</u>
-    
-    function Counter() {
-      return (
-        &lt;&gt;
-          &lt;p&gt; Hello World! &lt;/p&gt;
-          &lt;Page /&gt;                                          // !! not allowed (throws an error)
-        &lt;/&gt;
-      )
-    }
-  </pre>
-  <pre>
-// Server Component as Client Component child ------------
-    import ClientComponent from '@/app/some-route/cl';
-    import ServerComponent from '@/app/some-route/srv';
-    
-    function SomeComponent() {
-      return (
-        &lt;ClientComponent&gt;                               // this works but also discouraged!
-          &lt;ServerComponent /&gt;
-        &lt;/ClientComponent&gt;
-      )
-    }
-  </pre>
-  <details class="example">
-    <summary> DEMO (can be pseudocode) </summary>
-    <h4 class="header"> Rendering Server Component as Client Component children </h4>
-    <pre>
-// src/demo/page.js (file) ----------------------
-    import ClientComponent from '@/app/test/cl';
-    import ServerComponent from '@/app/test/srv';
-    
-    function Counter() {
-      return (
-        &lt;ClientComponent&gt;
-          &lt;ServerComponent /&gt;
-        &lt;/ClientComponent&gt;
-      )
-    }
-    
-    export default Counter;
-    </pre>
-    <pre>
-// src/demo/cl.js (file) ----------------------
-    'use client';
-    
-    function ClientComponent({ children }) {
-      return (
-        &lt;&gt;
-          &lt;p&gt; Hello from client component! &lt;/p&gt;
-          {children}                                // server component received as child component
-        &lt;/&gt;
-      )
-    }
-    
-    export default ClientComponent;
-    </pre>
-    <pre>
-// src/demo/srv.js (file) ----------------------
-    'use server';
-    
-    async function ServerComponent() {
-      const response = await fetch('http://localhost:3001');
-      const payload = await response.json();
-      
-      console.log(payload)
-      
-      return <p> paragraph from server component {payload.randomNumber} </p>
-    }
-    
-    export default ServerComponent;
-    </pre>
-  </details>
+  
+  
   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   <!------------------------------------------------------------------------------------------>
   <hr>
@@ -355,6 +360,42 @@
     export default Posts;
     </pre>
   </details>
+  <!------------------------------------------------------------------------------------------>
+  <hr>
+  <h4 class="header"> Environment Variables </h4>
+  <p> - Next.js natively supports the <mark>.env</mark> file for environment variables </p>
+  <p> - by Default Next.js prevent exposing environment variable values on client side (for security reasons), if you want to expose prefix the environment variable with <mark>NEXT_PUBLIC</mark> (ex: <mark>NEXT_PUBLIC_API_KEY</mark>) </p>
+  <pre class="syntax">
+    .env                                            // local .env file natively supported
+  </pre>
+  <details class="example">
+    <summary> Example : </summary>
+    <pre>
+    'use client';
+    
+    function Posts() {
+      const apiKey = process.env.API_KEY;                           // not exposed (error printed on browser console)
+      const apiKey2 = process.env.NEXT_PUBLIC_API_KEY;              // exposed because the env var prefixed with <mark>NEXT_PUBLIC</mark>
+    
+      return (
+        <>
+          <p> Api Key: { apiKey }</p>
+          <p> Api Key2: { apiKey2 }</p>
+        </>
+      )
+    }
+    
+    export default Posts;
+    </pre>
+  </details>
+
+
+
+
+
+
+
+
 
 
   <!--
@@ -373,6 +414,20 @@ stage 3 :
     - organize and document down everything 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
+
+- in server components we cannot intercept query strings (this is very surprising)
+    -> there's a way around this to intercept query params in middleware and append as header (this is serious :( wow!))
+
+
+
+
+
+
+
+
+
+
+
 
 ---------------------------------------------------
 -- next hooks
@@ -402,20 +457,20 @@ import { usePathname, useSearchParams } from 'next/navigation'
 ----
 import { useParams } from 'next/navigation'
 
+----
+https://nextjs.org/docs/app/building-your-application/rendering/server-components#dynamic-apis
+
+----
+
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    - since in most cases server component is recommended, how loading state is handeled when render data on one part of the JSX? (should I use regular fetch for that?)
-      - I suppose thi is data fetching
-
-    - how the heck caching works?? (update route api maybe?!)
-
-    - what the heck is a server action
-
     - we can do fetch from middleware :https://nextjs.org/docs/app/building-your-application/routing/middleware#waituntil-and-nextfetchevent
       - document it once you get to data fetching
+
+    - have a look what Levi's setup with poetry PAT stuff
 
 
 ------------------
@@ -438,6 +493,23 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 
     - is it ok to mix components, I mean it seems that quite a few components needs to be client components?
       -> yeah next.js does it's ting here, so the basic ide is to use server component unless you need something on the client side
+
+    - what the heck is a server action
+      -> async function executed on the server (even can be called from client side which is awesome!)
+
+    - how the heck caching works?? (update route api maybe?!)
+      - ISR (Incremental Static Regeneration) which is a Next.js thing workink like a charm!
+
+    - since in most cases server component is recommended, how loading state is handeled when render data on one part of the JSX? (should I use regular fetch for that?)
+      - Well any server side component while loading is replaced with loading.js (that simple)
+      - if we want loading partially on the UI as I see now we have 2 options:
+        - using Client Component with fetch (handling loading state in CRA way)
+        - using streaming (<Suspence> so while the data is loading we can display that loading state)
+
+    - pass server action in client compoennt (document this)
+      -> DONE
+
+
 
 -->
 
@@ -475,6 +547,11 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    - in order to expose environment variables to the client we need to prefix environment variable with NEXT_PUBLIC (this is to prevent accidental leaks)
+        -> empty strings will be exposed otherwise
+
+
+
 
   ---------------------------------------
 Interleaving Server and Client Components

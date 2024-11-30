@@ -28,27 +28,23 @@
 
   <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
   <p> - a server action is basically an asynchronous function that is executed on the server, it can be called from Server or <u>Client</u> Components </p>
-  <p> - calling a server action from a Client Component creates a POST request, so basically a public endpoint is created, Next.js protect this endpoint by an internal id which is regenerated at some interval, <u>however we should consider manual protection is specific scenarios (like: authentication, etc...) </u> </p> 
+  <p> - server actions also can be passed as props into Client Components </p>
+  <p> - calling a server action from a Client Component creates a POST request, so basically a public endpoint is created, Next.js protect this endpoint by an internal id which is regenerated at some interval, <u>however we should consider manual protection is specific scenarios (like: authentication, etc...) </u> </p>
   <pre class="syntax">
-// server actions in dedicated file -------------
-                                                                              // no need to declare <mark>'use server'</mark> (default)
     async function <reqval>serverAction</reqval>(<optval>arg, ...</optval>) {
-                                                                    // server action body is never exposed to the frontend
+      'use server';                                                     // function declared as server action (not required in some cases)
+                                                                        // server action body is never exposed to the frontend
       // do some processing...
       return <reqval>result</reqval>
     }
-    
-    <reqval>...</reqval>                                                // all async functions are server actions
   </pre>
-  <p> - if we declare a server action individually (like in a server Component) we need to add the <mark>'use server'</mark> directive on top </p>
   <pre class="syntax">
-// action.js (file) ---
-    async function <reqval>serverAction</reqval>(<optval>arg, ...</optval>) {
-      'use server';                                                     // function declared as server action
-      
-      // do some processing...
-      return <reqval>result</reqval>
-    }
+// action.js (file) --------------
+    'user server';                              // declares dedicated server actions file 
+    
+    <reqval>asyncFunction</reqval>
+    
+    <optval>...</optval>
   </pre>
   <details class="example">
     <summary> DEMO (can be pseudocode) </summary>
@@ -73,19 +69,19 @@
     </pre>
     <hr>
     <!-------------------------------------------------------------->
-    <h4 class="header"> Clinet Component uses server action </h4>
+    <h4 class="header"> Client Component uses server action </h4>
     <pre>
 // some-page.js (file) -----------------------------
     'use client';
     
     import { useState, useEffect } from 'react';
-    import { getRandom } from '@/app/some-page/srv';              // server action imported 
+    import { getBook } from './action';              // server action imported 
     
     function SomePage() {
       const [book, setBook] = useState('');
       
       useEffect(() => {
-        getRandom(123)
+        getBook(123)
           .then((book) => setBook(book));
       }, []);
       
@@ -103,12 +99,61 @@
       return book;
     }
     </pre>
+    <hr>
+    <!-------------------------------------------------------------->
+    <h4 class="header"> Passig server action into a Client Component as props </h4>
+    <pre>
+// page.js (file) ------------------------------
+    import ClientComponent from './client';
+    import { getProduct } from './action';                      // server action
+    
+    function SomePage() {
+      return (
+        &lt;&gt;
+          &lt;p&gt; Hello From Server Component &lt;/p&gt;
+          &lt;ClientComponent getProduct={getProduct} /&gt;       // server action passed as prop in Client Component 
+        &lt;/&gt;
+      )
+    }
+    
+    export default SomePage;
+    </pre>
+    <pre>
+// client.js (file) -------------------------------------------
+    'use client';
+    
+    import { useState, useEffect } from 'react';
+    
+    function ClientComponent({ getProduct }) {                  // server action received as props
+      const [product, setProduct] = useState('');
+      
+      useEffect(() => {
+        getProduct()
+          .then((product) => setProduct(product));
+      }, []);
+      
+      return &lt;p&gt; product: {product} &lt;/p&gt;
+    }
+    
+    export default ClientComponent;
+    </pre>
+    <pre>
+// action.js (file) ---------------------------------------
+    export async function getProduct() {                      // server action 
+      'use server';
+      
+      const response = await fetch('http:/\/localhost:3001');
+      const { product } = await response.json();
+      
+      return product;
+    }
+    </pre>
   </details>
   <hr>
   <!-------------------------------------------------------------------------------------------->
   <h2 class="header"> Server Action direct Form integration <a href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms" target="_blank">[link]</a> </h2>
   <p> - Next.js supports server actions directly integrated into Forms which allows us to use Forms as server component </p>
-  <p> - as I tested this [2024-11-18] this solution has User Experiece limitations </p>
+  <p> - as I tested this [2024-11-18] this solution has limitations (like user feedback, etc...) </p>
   <details class="example">
     <summary> DEMO (can be pseudocode) </summary>
   <pre>
