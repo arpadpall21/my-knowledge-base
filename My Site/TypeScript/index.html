@@ -13,7 +13,12 @@
   <body>
     <h1> TypeScript </h1>
     <p> Updated ( 2022-12-04 )</p>
-    <p class="sitenav"> <a href="../index.html">MySite > </a> TypeScript </p>
+    <nav class="sitenav">
+      <a href="../index.html">MySite > </a> TypeScript
+    </nav>
+    <p class="subSite"><a href="./Interface/index.html"> Interface > </a></p>
+    <p class="subSite"><a href="./Class/index.html"> Class & Abstract Class > </a></p>
+    <p class="subSite"><a href="./Namespace/index.html"> Namespace > </a></p>
     <table class="table">
       <caption>
         <span class="changeListOrder">[Ordered: <span>Alphabetically</span>]</span>
@@ -96,36 +101,36 @@
     <h2 style="color:green;"><u> Remember This : </u></h2>
 
     <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-    <p> - TypeScript is basically a strongly typed JavaScript, it's an extension of JavaScript with typing approach
-      (Static-like programming language) </p>
+    <p> - TypeScript is basically a strongly typed JavaScript, it's an extension of JavaScript with typing approach (Static-like programming language) </p>
     <p> - TypeScript is a transpiler which transpiles TypeScript code into JavaScript code </p>
     <p> - TypeScript benefits: </p>
     <p style="text-indent: 30px;"> - statically typed (type errors are raised on transpile time) </p>
-    <p style="text-indent: 30px;"> - we can use brand new features because the transpiler compiles compatilbe JavaScript
-      code </p>
-    <p style="text-indent: 30px;"> - code completition (while developing we can see precise method/property suggestions
-      becasue the type is known already) </p>
+    <p style="text-indent: 30px;"> - we can use brand new features because the transpiler compiles compatilbe JavaScript code </p>
+    <p style="text-indent: 30px;"> - code completition / intellisence (while developing we can see precise method/property suggestions becasue the type is known already) </p>
+    <p> - the <mark>tsconfig.json</mark> file configures the Typescript compilier (can be created with <mark>tsc --init</mark>) </p>
     <hr>
     <!------------------------------------------------------------------------------------->
-    <h2 class="headerExtra"> Configuration (<mark>tsconfig.json</mark> file)</h2>
-    <p> - the <mark>tsconfig.json</mark> file (can be created with <mark>tsc --init</mark>) configures the tsc transpiler,
-      among others the most used settings are <mark>rootDir</mark> (source) and <mark>outDir</mark> (target) directories
-    </p>
-    <hr>
-    <!------------------------------------------------------------------------------------->
-    <h2 class="headerExtra"> Type annotation syntax </h2>
+    <h2 class="header"> Type Annotation </h2>
     <pre class="syntax">
     let|const <strong>varName</strong>: <strong>tsType</strong> <small>[= <i>val</i>]</small>                   // variable type annotation     
     let|const <strong>varName</strong> <small>[= <i>val</i>]</small>                           // TypeScript will figure out the type if <strong>tsType</strong> is omitted    
     let <strong>varName</strong>                                         // variable has <mark>any</mark> type (no value assigned)    
     
     
+// function annotation -----
     function <strong>fnName</strong>(<strong>arg<small>?: </small>tsType</strong>): <strong>tsType</strong> { }           // type annotation of function argument(s) and return value (<mark><small>?</small></mark> after function argument = optional argument)    
-    function <strong>fnName</strong>(<strong>arg</strong>) { }                            // if types are omitted: argument types are set to <mark>any</mark>, the return type will be dynamically assigned     
+    function <strong>fnName</strong>(<strong>arg</strong>) { }                            // if types are omitted: argument types are set to <mark>any</mark>, the return type will be dynamically assigned 
+    
+    
+// object annotation -----------
+    { [key in <reqval>union</reqval>]: <reqval>tsType</reqval> }      // <reqval>union</reqval> describes required object keys
+    { [key: string]: <reqval>tsType</reqval> }                        // string object keys
+    
+    type <reqval>keyTypes</reqval> = keyof <reqval>objType</reqval>     // extracts <reqval>objType</reqval> keys into <reqval>keyTypes</reqval> which is a <reqval>union</reqval> type
     </pre>
     <details class="example">
       <summary> DEMO </summary>
-      <p> - variables </p>
+      <h4 class="header"> Variables </h4>
       <pre>
     let s : string = 'some string';
     let n : number = 21;
@@ -155,7 +160,9 @@
     animal.name = 'New Morgo';
     animal.age = 13;                        // this would trow an error (readonly property)
     </pre>
-      <p> - functions </p>
+      <hr>
+      <!------------------------------------------------------>
+      <h4 class="header"> Functions Annotation </h4>
       <pre>
     function add(a : number, b : string): number {
         return a + parseInt(b);                         // returns a number type
@@ -174,131 +181,8 @@
     console.log( divide(10, 5) );                       // -> 2
     console.log( divide(10) );                          // -> 5 
     </pre>
-    </details>
-    <hr>
-    <!------------------------------------------------------------------------------------->
-    <h2 class="headerExtra"> Data Types </h2>
-    <p> - TypeScript supports all JavaScript types but extends these types with a few new ones </p>
-    <p style="font-size:22px;"> <mark><strong>tsType</strong></mark> can be: </p>
-    <h2 class="header"> JavaScript Types: </h2>
-    <pre class="syntax">
-    <lit>string</lit>                                                     // JavaScript types 
-    <lit>number</lit>
-    <lit>bigint</lit>
-    <lit>boolean</lit>
-    <lit>undefined</lit>
-    <lit>null</lit>
-    <lit>symbol</lit>
-    
-    <lit>object</lit>
-    <lit>Date</lit> | <lit>Function</lit> | <reqval>JavaScriptClass</reqval>    // any javaScript class can be used as type
-    
-    <strong>tsType</strong>[]                                                   // array of <strong>tsType</strong> (ex: <mark>number[]</mark> = array holding only numbers) 
-    
-    <reqval>fn</reqval>(<optval>arg:tsType, ...</optval>): <reqval>return:tsType</reqval>   // function annotation
-    </pre>
-    <details class="example">
-      <summary> DEMO </summary>
-      <p> - array </p>
-      <pre>
-    let myArray : number[] = [1, 2, 3];                     // array of types (array will have only number types)
-    let myArray2 : (number|string)[] = [1, 2, '3'];         // number or string types can be contained 
-    let myArray3 : any[] = [1, '2', false];                 // array can have any types
-    </pre>
-    </details>
-    <hr>
-    <!------------------------------------------------------------------------------------->
-    <h2 class="header"> TypeScript Types: </h2>
-    <pre class="syntax">
-    <strong>val</strong>                                                        // type can be any value (ex: <mark>'test'</mark> or <mark>32</mark>)    
-    
-    <lit>any</lit>                                                        // can be any type, callable, assignable 
-    <lit>unknown</lit>                                                    // can be any type, not callable, not assignable  <span id="browserSupport" style="color:yellow;"><span>v.3</span></span>    
-    
-    <lit>void</lit>                                                       // function return type where function has no return     
-    <lit>never</lit>                                                      // function return type where function throws an error or has inifinite loop (should never happen)    
-    
-    [<strong>tsType</strong><i>, ...</i>]                                              // tuple (fixed length array with annotated types) (values can be changes -> not a Python style tupe)    
-    
-    <lit>enum</lit> <strong>Enum</strong> { <strong>MEMBER</strong><small>=<i>val</i></small><i>, ...</i> }                              // enum (a set of <u>unchangable values</u> where only one member can be used) 
-                                                               // values (<i>val</i>) are defined as <mark>0, 1, 2, ...</mark> by default
-                                                               // values can be accessed as <mark><strong>Enum.MEMBER</strong></mark> or <mark><strong>Enum['MEMBER']</strong></mark> 
-    
-// object annotation -----------
-    { [key in <reqval>union</reqval>]: <reqval>tsType</reqval> }      // <reqval>union</reqval> describes required object keys
-    { [key: string]: <reqval>tsType</reqval> }                        // string object keys
-    
-    type <reqval>keyTypes</reqval> = keyof <reqval>objType</reqval>     // extracts <reqval>objType</reqval> keys into <reqval>keyTypes</reqval> which is a <reqval>union</reqval> type
-    </pre>
-    <details class="example">
-      <summary> DEMO </summary>
-      <h4> <mark>any</mark> / <mark>unknown</mark> </h4>
-      <pre>
-// any -------------------------------------------------------------------
-    let a1: any = 10;
-    let a2: any = (a:any) => a;
-    
-    console.log( a1 );          // -> 10        // can be any value
-    const new1: string = a1;    // can be assigned to other values (this is the problem that <mark>unknown</mark> fixes)   
-    console.log( new1 );        // -> 10        // -! the new variable has wrong value this way    
-    
-    console.log( a2(10));       // -> 'x'       // can be called 
-    
-    
-// unknown ---------------------------------------------------------------
-    let b1: unknown = 10;
-    let b2: unknown = (a:any) => a;
-    
-    console.log( b1 );          // -> 10        // can be any value
-    const new2:string = b1;     // -! not assignable (this throws an error)
-    
-    b2(10);                     // -! not callable (this throws an error)
-    </pre>
-      <h4 class="header"> <mark>void</mark> / <mark>never</mark> </h4>
-      <pre>
-// void ------------------------------------------------------------------
-    function toPower2 (a: number): void {           // no return value 
-        console.log( a**2 )
-    }
-    
-    console.log( toPower2(4) )                      // 16 (side effect)
-    
-// never -----------------------------------------------------------------
-    function throwSomeError(): never {              // throws an error (should be 'never' called)    
-        throw Error('Some Error');
-    }
-    
-    function hasIniniteLoop(): never {              // has infinite loop (should be 'never' called)    
-        while (true)
-            console.log( '?' );
-    }
-    </pre>
-      <h4 class="header"> Tuple & Enum </h4>
-      <pre>
-// tuple -----------------------------------------------------------
-    const t : [string, number] = ['1', 1];
-    
-    t[0] = '2'                  // not a Python style tuple (values can be changed)
-    console.log( t[0] )         // -> '2'
-    
-    
-// enum ------------------------------------------------------------
-    enum MyEnum { ZERO, ONE, TOW };
-    
-    console.log( MyEnum.ZERO )      // -> 0
-    console.log( MyEnum.ONE )       // -> 1
-    MyEnum.ZERO = 3;                // -! this throws an error
-    
-    
-    enum Pepe { NAME="Péter", SURNAME="Bozóki" };
-    
-    function concateName(name : string, surname: string ): string {
-        return surname + ' ' + name;
-    }
-    
-    console.log( Pepe.SURNAME, Pepe.NAME );                 // -> 'Bozóki Péter'    
-    console.log( concateName(Pepe.NAME, Pepe.SURNAME) )     // -> 'Bozóki Péter'    
-    </pre>
+      <hr>
+      <!------------------------------------------------------>
       <h4 class="header"> Object annotation </h4>
       <pre>
     const person: { [key in 'name' | 'age' | 'email']: string | number } = {
@@ -325,7 +209,124 @@
     </details>
     <hr>
     <!------------------------------------------------------------------------------------->
-    <h2 class="header"> Type Alias: </h2>
+    <h2 class="header"> Data Types </h2>
+    <p> - TypeScript supports all JavaScript types but extends these types with a few new ones </p>
+    <pre class="syntax">
+// Native JavaScript types -----------------------------
+    <lit>string</lit>
+    <lit>number</lit>
+    <lit>bigint</lit>
+    <lit>boolean</lit>
+    <lit>undefined</lit>
+    <lit>null</lit>
+    <lit>symbol</lit>
+    
+    <lit>object</lit>
+    <lit>Date</lit> | <lit>Function</lit> | <reqval>JavaScriptClass</reqval>    // any javaScript class can be used as type
+    
+    <strong>tsType</strong>[]                                                   // array of <strong>tsType</strong> (ex: <mark>number[]</mark> = array holding only numbers) 
+    
+    
+// Typescript Types -------------------
+    <strong>val</strong>                                                        // type can be any value (ex: <mark>'test'</mark> or <mark>32</mark>)    
+    
+    <lit>any</lit>                                                        // can be any type, callable, assignable 
+    <lit>unknown</lit>                                                    // can be any type, not callable, not assignable  <span id="browserSupport" style="color:yellow;"><span>v.3</span></span>  
+    
+    <lit>void</lit>                                                       // function return type where function has no return     
+    <lit>never</lit>                                                      // function return type where function throws an error or has inifinite loop (should never happen)    
+    
+    [<strong>tsType</strong><i>, ...</i>]                                              // tuple (fixed length array with annotated types) (values can be changes -> not a Python style tupe)    
+    
+    <lit>enum</lit> <strong>Enum</strong> { <strong>MEMBER</strong><small>=<i>val</i></small><i>, ...</i> }                              // enum (a set of <u>unchangable values</u> where only one member can be used) 
+                                                               // values (<i>val</i>) are defined as <mark>0, 1, 2, ...</mark> by default
+                                                               // values can be accessed as <mark><strong>Enum.MEMBER</strong></mark> or <mark><strong>Enum['MEMBER']</strong></mark> 
+    </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <h4 class="header"> Array </h4>
+      <pre>
+    let myArray : number[] = [1, 2, 3];                     // array of types (array will have only number types)
+    let myArray2 : (number|string)[] = [1, 2, '3'];         // number or string types can be contained 
+    let myArray3 : any[] = [1, '2', false];                 // array can have any types
+    </pre>
+    <hr>
+    <!---------------------------------------------------------------->
+      <h4 class="header"> The <mark>any</mark> / <mark>unknown</mark> types </h4>
+      <pre>
+// any -------------------------------------------------------------------
+    let a1: any = 10;
+    let a2: any = (a:any) => a;
+    
+    console.log( a1 );          // -> 10        // can be any value
+    const new1: string = a1;    // can be assigned to other values (this is the problem that <mark>unknown</mark> fixes)   
+    console.log( new1 );        // -> 10        // -! the new variable has wrong value this way    
+    
+    console.log( a2(10));       // -> 'x'       // can be called 
+    
+    
+// unknown ---------------------------------------------------------------
+    let b1: unknown = 10;
+    let b2: unknown = (a:any) => a;
+    
+    console.log( b1 );          // -> 10        // can be any value
+    const new2:string = b1;     // -! not assignable (this throws an error)
+    
+    b2(10);                     // -! not callable (this throws an error)
+    </pre>
+    <hr>
+    <!---------------------------------------------------------------->
+      <h4 class="header"> The <mark>void</mark> / <mark>never</mark> types</h4>
+      <pre>
+// void ------------------------------------------------------------------
+    function toPower2 (a: number): void {           // no return value 
+        console.log( a**2 )
+    }
+    
+    console.log( toPower2(4) )                      // 16 (side effect)
+    
+// never -----------------------------------------------------------------
+    function throwSomeError(): never {              // throws an error (should be 'never' called)    
+        throw Error('Some Error');
+    }
+    
+    function hasIniniteLoop(): never {              // has infinite loop (should be 'never' called)    
+        while (true)
+            console.log( '?' );
+    }
+    </pre>
+    <hr>
+    <!---------------------------------------------------------------->
+      <h4 class="header"> Tuple & Enum types </h4>
+      <pre>
+// tuple -----------------------------------------------------------
+    const t : [string, number] = ['1', 1];
+    
+    t[0] = '2'                  // not a Python style tuple (values can be changed)
+    console.log( t[0] )         // -> '2'
+    
+    
+// enum ------------------------------------------------------------
+    enum MyEnum { ZERO, ONE, TOW };
+    
+    console.log( MyEnum.ZERO )      // -> 0
+    console.log( MyEnum.ONE )       // -> 1
+    MyEnum.ZERO = 3;                // -! this throws an error
+    
+    
+    enum Pepe { NAME="Péter", SURNAME="Bozóki" };
+    
+    function concateName(name : string, surname: string ): string {
+        return surname + ' ' + name;
+    }
+    
+    console.log( Pepe.SURNAME, Pepe.NAME );                 // -> 'Bozóki Péter'    
+    console.log( concateName(Pepe.NAME, Pepe.SURNAME) )     // -> 'Bozóki Péter'    
+    </pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------->
+    <h4 class="header"> Type Alias: </h4>
     <pre class="syntax">
     type <strong>TypeName</strong> = <strong>tsType</strong>                                     // the <mark>type</mark> keyword defines a type alias for <strong>tsType</strong>   
     
@@ -362,7 +363,7 @@
     </details>
     <hr>
     <!------------------------------------------------------------------------------------->
-    <h2 class="header"> Union (<mark>|</mark>) & Intersection (<mark>&</mark>): </h2>
+    <h4 class="header"> Union (<mark>|</mark>) & Intersection (<mark>&</mark>) types </h4>
     <pre class="syntax">
     <strong>tsType</strong> | <strong>tsType</strong>                                            // implements one or any combination of the listed <strong>tsTypes</strong>    
     <strong>tsType</strong> & <strong>tsType</strong>                                            // implements all of the listed types    
@@ -393,7 +394,7 @@
     </details>
     <hr>
     <!------------------------------------------------------------------------------------->
-    <h2 class="header"> Generics: </h2>
+    <h4 class="header"> Generics: </h4>
     <p> - captures the type(s) at code entry then reuses the <mark><strong>GenTypeAlias</strong></mark> in the code block
       (can <mark><small>extends</small></mark> the <mark><strong>tsType</strong></mark>) </p>
     <p> <u>- type narrowing doesn't work on generics </u>
@@ -543,289 +544,8 @@
     }
     </pre>
       </details>
-      <hr>
-      <!------------------------------------------------------------------------------------->
-      <h2 class="headerExtra"> Interface </h2>
-      <p> - an interface describes properties/methods that the targed object must implemented </p>
-      <p> - interfaces can be extended (opened) by other interfaces, and can be implemented in classes (unlike
-        <mark>type</mark>s)
-      </p>
-      <pre class="syntax">
-    interface <strong>InterfaceName</strong> <small>[extends <i>ParentInerfaceName</i>]</small>{ 
-        <small>readonly</small> <strong>propName</strong><small>?</small>: <strong>tsType</strong>                             // property (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)
-        <strong>methodName</strong><small>?</small>(<i>arg<small>?</small>: tsType</i>): <strong>tsType</strong>                      // function 
-    }
-    
-    interface <strong>InterfaceA</strong> { <strong>propNameA: tsType</strong> }
-    interface <strong>InterfaceA</strong> { <strong>propNameB: tsType</strong> }                 // extends <strong>interfaceA</strong> with new properties/methods    
-    
-    
-<span style="color:darkgrey;">// implementation ---------------------------------------------</span>
-    let|const <strong>objName</strong>: <strong>InterfaceA</strong> = {                          // object with <strong>InterfaceA</strong> type must implement all <strong>InterfaceA</strong> methods/properties    
-        <span style="color:darkgrey;">// InterfaceA properties/methods must be implemented ... </span>
-    }
-    
-    class <strong>ClassName</strong> implements <strong>InterfaceA</strong><i>, ...</i> {               // class must implement all <strong>interfaceA</strong><i>, ...</i> method/properties    
-        <span style="color:darkgrey;">// InterfaceA, ... porperties/methods must be implemented ... </span>
-    }
-    </pre>
-      <details class="example">
-        <summary> DEMO </summary>
-        <p> <mark>type</mark> VS <mark>interface</mark> </p>
-        <pre>
-    interface PersonInterface { name:string }
-    interface PersonInterface { age:number }    // interfaces 'opened' (extended)
-    
-    type PersonType = { name:string }
-    type PersonType = { age:number }            // -! throws an error (type is not extendable)
-    </pre>
-        <p> - extending interface </p>
-        <pre>
-    interface Animal {
-        race: string
-    }
-    
-    interface Cat extends Animal {          // extending on creation
-        getVoice(): string
-    }
-    
-    const cat : Cat = {
-        race: 'cat',
-        getVoice: () => 'meoww'
-    }
-    
-// --------------------------------------------------------
-    interface Cat {
-        race: string 
-    }
-    interface Cat {                         // 'reopens' (extends) the interface
-        getVoice(): string 
-    }
-    
-    const cat : Cat = {
-        race: 'cat',
-        getVoice: () => 'meoww'
-    }
-    </pre>
-        <p> - implementation </p>
-        <pre>
-    interface Person {
-        name: string
-        age: number
-        getRace(): string
-    }
-    
-    
-// ------------------------------------------------------------------
-    const stewen : Person = {               // object must implement all interface properties and methods
-        name: 'Steven',
-        age: 32,
-        getRace: () => 'Hungarian'
-    }
-    
-    
-// ------------------------------------------------------------------
-    class Stewen implements Person {
-        constructor(public name : string,
-                    public age: number){
-            this.name = name;
-            this.age = age;
-        }
-        
-        getRace() { return 'Hungarian' }
-    }
-    </pre>
-      </details>
-      <hr>
-      <!------------------------------------------------------------------------------------->
-      <h2 class="headerExtra"> Class & Abstract Class </h2>
-      <p> - abstract classes cannot be instantained directly, they describe properties and methods that sub classes must
-        implement (like an interface) </p>
-      <p> - unlike interfaces abstract classes can have default properties and methods </p>
-      <pre class="syntax">
-    <small>abstract</small> class <strong>ClassName</strong> {                                        // if <mark><small>abstract</small></mark> declared -> abstract class  
-        <small class="openable">public|private|protected<div>
-            <p> <mark>public</mark> - public property (Default) </p>
-            <p> <mark>private</mark> - private property </p>
-            <p> <mark>protected</mark> - property available only within this class and all subclasses </p>
-        </div></small> <small>readonly</small> <strong>propA</strong><small>?</small>: <strong>tsTypeA</strong> <small>[= <i>val</i>]</small>    // property types must be declared at the top (default: <mark>public</mark>) (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)    
-        
-        constructor( <strong>propA</strong>: <strong>tsTypeA</strong><i>, ...</i> ) {                          // implementing properties
-            <i>//...</i>
-        }
-        
-        <small class="openable">public|private|protected<div>
-            <p> <mark>public</mark> - public method (Default) </p>
-            <p> <mark>private</mark> - private method </p>
-            <p> <mark>protected</mark> - method available only within this class and all subclasses </p>
-        </div></small> <strong>function()</strong>                          // method implementation same as in JavaScirpt   
-        
-        <small class="openable">public|protected<div>
-            <p> <mark>public</mark> - public abstract method (Default) </p>
-            <p> <mark>protected</mark> - method available only within this class and all subclasses </p>
-        </div></small> abstract <strong>fnName(<i>arg: tstype, ...</i>)</strong>: <strong>tsType</strong>   // abstract method available only in abstract class   
-    }
-    
-    
-    <small>abstract</small> class <strong>ClassName</strong> {
-        constructor( public <strong>propA</strong>: <strong>tsTypeA</strong><i>,</i> public <i>...</i> ) {            // public type declaration can be omitted if we use the <mark>public</mark> keyword in the constructor directly    
-            <i>//...</i>
-        }
-    }
-    </pre>
-      <details class="example">
-        <summary> DEMO </summary>
-        <p> - class </p>
-        <pre>
-    class Person {
-        name : string
-        surename? : string                              // optional
-        readonly age : number                           // readonly property
-        nationality : string = 'Hungarian'              // default value
-        private secret : string = 'private Prop'        // private field
-        
-        constructor(name:string, age:number) {
-            this.name = name;
-            this.age = age;
-        }
-        
-        private privFn() { return 'private Method' }    // private function 
-        
-        getPrivates() {
-            return this.secret + ' ' + this.privFn();
-        }
-    }
-    
-    const ada = new Person('Ada', 21);
-    console.log( ada );                                 // -> { nationality:'Hungarian', name:'Ada', age:21 }
-    console.log( ada.getPrivates() );                   // -> 'private Prop private Method'
-    
-    
-// -----------------------------------------------------
-    class Person {
-        nationality : string = "Hungarian"              // reauired for default property   
-    
-        constructor(public name : string,               // public fields can be written like this 
-                    public readonly age : number,
-                    public surename? : string){
-            this.name = name;
-            this.age = age;
-        }
-    }
-    
-    const ada = new Person('Ada', 21, 'Jenkins');
-    console.log( ada );                                 // -> { name:'Ada', age: 21, surename:'Jenkins', nationality:'Hungarian'}
-    </pre>
-        <p> - protected property/method </p>
-        <pre>
-    class Parent {
-        protected protectedProperty = 'protectedPropertyValue'
-        protected protectedMethod() { return 'protectedMethodValue'}
-    }
-    
-    const inst = new Parent()
-    console.log( inst.protectedProperty );                          // -! error thrown protected is not accessible by instances   
-    console.log( inst.protectedMethod() );                          // -! error thrown protected is not accessible by instances   
-    
-    
-    class Child extends Parent {
-        getParentProtecteds() {
-            return this.protectedProperty + ' & ' + this.protectedMethod();     // parent class protected property/method are accessible within subclasses   
-        }
-    }
-    
-    const childInst = new Child()
-    console.log( childInst.getParentProtecteds() );                 // -> 'protectedPropertyValue & protectedMethodValue'
-    </pre>
-        <p> - abstract class </p>
-        <pre>
-    abstract class AbsAnimal {
-        t : string = 'animal';                              // default property (all instance will own it)
-        
-        constructor(public species : string,                // subclasses must implement all these properties    
-                    public origin : string){}
-        
-        abstract getName( name? : string): string;          // subclasses must implement this method 
-        
-        getT() { return this.t }                            // instances will inherit this method (normal method)    
-    }
-    
-    // const animal = new Animal('cat'. 'europe', 32)       // -! error thrown, abstract class cannot be initialized directly
-    
-    class Cat extends AbsAnimal {
-        constructor(public species : string,                // implementing abstract class properties
-                    public origin : string){
-            super(species, origin);
-            this.species = species;
-            this.origin = origin;
-        }
-        
-        getName() { return 'cili' }                         // implementing abstract class method  
-    }
-    
-    const cat = new Cat('cat', 'europe');
-    </pre>
-      </details>
-      <hr>
-      <!------------------------------------------------------------------------------------->
-      <h2 class="headerExtra"> Namespace </h2>
-      <p> - namespaces are sort of modules in TypeScript </p>
-      <pre class='syntax'>
-    /// &lt;reference path'<strong>modulePath.ts</strong>' />              // importing namespaces from other modules (works only if we transpile with <mark>--outFile</mark> options (transpiling into a single file))    
-    
-    
-    namespace <strong>NamespaceName</strong> {
-        <span style='color:gray;'>// isolated environment ...</span>
-        
-        export const <strong>someVar: tsType = someVal</strong>         // variables, functions, classes, interfaces, etc... must be exported if we want to use them outside this namespace (just like with modules)
-        
-        export namespace <strong>NestedNamespaceName</strong> {         // nested namespaces must be exported if we want to use them outside
-            const <strong>someNestedVar = someNestedVal</strong>
-        }
-    }
-    
-    
-    <strong>NamesapceName.someVar</strong>                              // accessing exported variables, functions, etc...
-    <strong>NamesapceName.NestedNamespaceName.someNestedVar</strong>    // accessing exported variables, functions, etc...
-  </pre>
-      <details class="example">
-        <summary> DEMO </summary>
-        <pre>
-    namespace SomeNamespace {
-      const hello: string = 'Hello from namespace!';          // isolated 
-      console.log(hello);                                     // -> 'Hello from namespace!'    
-      
-      export function helloFn(): string {                     // exported function 
-        return hello;
-      }
-      
-      export namespace NestedNamespace {                      // namespace available outsde 
-        export function helloFn(): string {
-          return hello;
-        }
-      }
-    }
-    
-    console.log( SomeNamespace.helloFn() );                   // -> 'Hello from namespace!'    
-    console.log( SomeNamespace.NestedNamespace.helloFn() );   // -> 'Hello from namespace!'    
-    </pre>
-        <p> - importing namespaces from another file </p>
-        <p> - transpiled with <mark>tsc --outFile main.js main.ts</mark> command </p>
-        <pre>
-// <mark>main.ts</mark> (file) ------------------------------------------
-    /// &lt;reference path='./module1.ts' />            // this only works if we transplie in one target file <mark>tsc --outFile ... </mark>
-    
-    console.log( Namespace1.test )                      // -> 'test'    
-    
-    
-// <mark>module1.ts</mark> (file) ---------------------------------------
-    namespace Namespace1 {
-      export const test: string = 'test';
-    }
-    </pre>
-      </details>
-
       <br><br>
+
     </body>
 
   </html>

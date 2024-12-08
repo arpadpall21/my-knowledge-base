@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Namespace </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
+  <body>
+    <h1> Namespace </h1>
+    <p> Updated ( 2022-12-04 ) </p>
+    <nav class="sitenav">
+      <a href="../../index.html">MySite > </a>
+      <a href="../index.html">Typescript > </a> Namespace
+    </nav>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+
+    <p> - namespaces are sort of modules in TypeScript </p>
+    <pre class='syntax'>
+    /// &lt;reference path'<strong>modulePath.ts</strong>' />              // importing namespaces from other modules (works only if we transpile with <mark>--outFile</mark> options (transpiling into a single file))    
+    
+    
+    namespace <strong>NamespaceName</strong> {
+        <span style='color:gray;'>// isolated environment ...</span>
+        
+        export const <strong>someVar: tsType = someVal</strong>         // variables, functions, classes, interfaces, etc... must be exported if we want to use them outside this namespace (just like with modules)
+        
+        export namespace <strong>NestedNamespaceName</strong> {         // nested namespaces must be exported if we want to use them outside
+            const <strong>someNestedVar = someNestedVal</strong>
+        }
+    }
+    
+    
+    <strong>NamesapceName.someVar</strong>                              // accessing exported variables, functions, etc...
+    <strong>NamesapceName.NestedNamespaceName.someNestedVar</strong>    // accessing exported variables, functions, etc...
+  </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+    namespace SomeNamespace {
+      const hello: string = 'Hello from namespace!';          // isolated 
+      console.log(hello);                                     // -> 'Hello from namespace!'    
+      
+      export function helloFn(): string {                     // exported function 
+        return hello;
+      }
+      
+      export namespace NestedNamespace {                      // namespace available outsde 
+        export function helloFn(): string {
+          return hello;
+        }
+      }
+    }
+    
+    console.log( SomeNamespace.helloFn() );                   // -> 'Hello from namespace!'    
+    console.log( SomeNamespace.NestedNamespace.helloFn() );   // -> 'Hello from namespace!'    
+    </pre>
+      <p> - importing namespaces from another file </p>
+      <p> - transpiled with <mark>tsc --outFile main.js main.ts</mark> command </p>
+      <pre>
+// <mark>main.ts</mark> (file) ------------------------------------------
+    /// &lt;reference path='./module1.ts' />            // this only works if we transplie in one target file <mark>tsc --outFile ... </mark>
+    
+    console.log( Namespace1.test )                      // -> 'test'    
+    
+    
+// <mark>module1.ts</mark> (file) ---------------------------------------
+    namespace Namespace1 {
+      export const test: string = 'test';
+    }
+    </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Class & Abstract Class </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
+  <body>
+    <h1> Class & Abstract Class </h1>
+    <p> Updated ( 2022-12-04 ) </p>
+    <nav class="sitenav">
+      <a href="../../index.html">MySite > </a>
+      <a href="../index.html">Typescript > </a> Class & Abstract Class
+    </nav>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - abstract classes cannot be instantained directly, they describe properties and methods that sub classes must
+      implement (like an interface) </p>
+    <p> - unlike interfaces abstract classes can have default properties and methods </p>
+    <pre class="syntax">
+    <small>abstract</small> class <strong>ClassName</strong> {                                        // if <mark><small>abstract</small></mark> declared -> abstract class  
+        <small class="openable">public|private|protected<div>
+            <p> <mark>public</mark> - public property (Default) </p>
+            <p> <mark>private</mark> - private property </p>
+            <p> <mark>protected</mark> - property available only within this class and all subclasses </p>
+        </div></small> <small>readonly</small> <strong>propA</strong><small>?</small>: <strong>tsTypeA</strong> <small>[= <i>val</i>]</small>    // property types must be declared at the top (default: <mark>public</mark>) (<mark><small>readonly</small></mark> = readonly property) (<mark><small>?</small></mark> = optional property)    
+        
+        constructor( <strong>propA</strong>: <strong>tsTypeA</strong><i>, ...</i> ) {                          // implementing properties
+            <i>//...</i>
+        }
+        
+        <small class="openable">public|private|protected<div>
+            <p> <mark>public</mark> - public method (Default) </p>
+            <p> <mark>private</mark> - private method </p>
+            <p> <mark>protected</mark> - method available only within this class and all subclasses </p>
+        </div></small> <strong>function()</strong>                          // method implementation same as in JavaScirpt   
+        
+        <small class="openable">public|protected<div>
+            <p> <mark>public</mark> - public abstract method (Default) </p>
+            <p> <mark>protected</mark> - method available only within this class and all subclasses </p>
+        </div></small> abstract <strong>fnName(<i>arg: tstype, ...</i>)</strong>: <strong>tsType</strong>   // abstract method available only in abstract class   
+    }
+    
+    
+    <small>abstract</small> class <strong>ClassName</strong> {
+        constructor( public <strong>propA</strong>: <strong>tsTypeA</strong><i>,</i> public <i>...</i> ) {            // public type declaration can be omitted if we use the <mark>public</mark> keyword in the constructor directly    
+            <i>//...</i>
+        }
+    }
+    </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <p> - class </p>
+      <pre>
+    class Person {
+        name : string
+        surename? : string                              // optional
+        readonly age : number                           // readonly property
+        nationality : string = 'Hungarian'              // default value
+        private secret : string = 'private Prop'        // private field
+        
+        constructor(name:string, age:number) {
+            this.name = name;
+            this.age = age;
+        }
+        
+        private privFn() { return 'private Method' }    // private function 
+        
+        getPrivates() {
+            return this.secret + ' ' + this.privFn();
+        }
+    }
+    
+    const ada = new Person('Ada', 21);
+    console.log( ada );                                 // -> { nationality:'Hungarian', name:'Ada', age:21 }
+    console.log( ada.getPrivates() );                   // -> 'private Prop private Method'
+    
+    
+// -----------------------------------------------------
+    class Person {
+        nationality : string = "Hungarian"              // reauired for default property   
+    
+        constructor(public name : string,               // public fields can be written like this 
+                    public readonly age : number,
+                    public surename? : string){
+            this.name = name;
+            this.age = age;
+        }
+    }
+    
+    const ada = new Person('Ada', 21, 'Jenkins');
+    console.log( ada );                                 // -> { name:'Ada', age: 21, surename:'Jenkins', nationality:'Hungarian'}
+    </pre>
+      <p> - protected property/method </p>
+      <pre>
+    class Parent {
+        protected protectedProperty = 'protectedPropertyValue'
+        protected protectedMethod() { return 'protectedMethodValue'}
+    }
+    
+    const inst = new Parent()
+    console.log( inst.protectedProperty );                          // -! error thrown protected is not accessible by instances   
+    console.log( inst.protectedMethod() );                          // -! error thrown protected is not accessible by instances   
+    
+    
+    class Child extends Parent {
+        getParentProtecteds() {
+            return this.protectedProperty + ' & ' + this.protectedMethod();     // parent class protected property/method are accessible within subclasses   
+        }
+    }
+    
+    const childInst = new Child()
+    console.log( childInst.getParentProtecteds() );                 // -> 'protectedPropertyValue & protectedMethodValue'
+    </pre>
+      <p> - abstract class </p>
+      <pre>
+    abstract class AbsAnimal {
+        t : string = 'animal';                              // default property (all instance will own it)
+        
+        constructor(public species : string,                // subclasses must implement all these properties    
+                    public origin : string){}
+        
+        abstract getName( name? : string): string;          // subclasses must implement this method 
+        
+        getT() { return this.t }                            // instances will inherit this method (normal method)    
+    }
+    
+    // const animal = new Animal('cat'. 'europe', 32)       // -! error thrown, abstract class cannot be initialized directly
+    
+    class Cat extends AbsAnimal {
+        constructor(public species : string,                // implementing abstract class properties
+                    public origin : string){
+            super(species, origin);
+            this.species = species;
+            this.origin = origin;
+        }
+        
+        getName() { return 'cili' }                         // implementing abstract class method  
+    }
+    
+    const cat = new Cat('cat', 'europe');
+    </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>
