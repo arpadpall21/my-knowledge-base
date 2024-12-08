@@ -222,11 +222,17 @@
     
     <lit>enum</lit> <strong>Enum</strong> { <strong>MEMBER</strong><small>=<i>val</i></small><i>, ...</i> }                              // enum (a set of <u>unchangable values</u> where only one member can be used) 
                                                                // values (<i>val</i>) are defined as <mark>0, 1, 2, ...</mark> by default
-                                                               // values can be accessed as <mark><strong>Enum.MEMBER</strong></mark> or <mark><strong>Enum['MEMBER']</strong></mark>    
+                                                               // values can be accessed as <mark><strong>Enum.MEMBER</strong></mark> or <mark><strong>Enum['MEMBER']</strong></mark> 
+    
+// object annotation -----------
+    { [key in <reqval>union</reqval>]: <reqval>tsType</reqval> }      // <reqval>union</reqval> describes required object keys
+    { [key: string]: <reqval>tsType</reqval> }                        // string object keys
+    
+    type <reqval>keyTypes</reqval> = keyof <reqval>objType</reqval>     // extracts <reqval>objType</reqval> keys into <reqval>keyTypes</reqval> which is a <reqval>union</reqval> type
     </pre>
     <details class="example">
       <summary> DEMO </summary>
-      <p> - <mark>any</mark> / <mark>unknown</mark> </p>
+      <h4> <mark>any</mark> / <mark>unknown</mark> </h4>
       <pre>
 // any -------------------------------------------------------------------
     let a1: any = 10;
@@ -248,7 +254,7 @@
     
     b2(10);                     // -! not callable (this throws an error)
     </pre>
-      <p> - <mark>void</mark> / <mark>never</mark> </p>
+      <h4 class="header"> <mark>void</mark> / <mark>never</mark> </h4>
       <pre>
 // void ------------------------------------------------------------------
     function toPower2 (a: number): void {           // no return value 
@@ -267,7 +273,7 @@
             console.log( '?' );
     }
     </pre>
-      <p> - tuple & enum </p>
+      <h4 class="header"> Tuple & Enum </h4>
       <pre>
 // tuple -----------------------------------------------------------
     const t : [string, number] = ['1', 1];
@@ -293,6 +299,29 @@
     console.log( Pepe.SURNAME, Pepe.NAME );                 // -> 'Bozóki Péter'    
     console.log( concateName(Pepe.NAME, Pepe.SURNAME) )     // -> 'Bozóki Péter'    
     </pre>
+      <h4 class="header"> Object annotation </h4>
+      <pre>
+    const person: { [key in 'name' | 'age' | 'email']: string | number } = {
+      name: 'Doe',                                                    // annotated keys are required
+      age: 40,
+      email: 'doe@john.com',
+    };
+    
+    
+// <mark>keyof</mark> ---------------------------
+    type Person = {
+      name: string;
+      age: number;
+      email: string;
+    };
+    
+    type PersonKeys = keyof Person;       // PersonKeys is a union type of "name" | "age" | "email"
+    
+    let personKey: PersonKeys;            // to loop through (kind of a duktape solution but Typescript is very annoying on this :/)
+    for (personKey in person) {
+      person[personKey]
+    }
+      </pre>
     </details>
     <hr>
     <!------------------------------------------------------------------------------------->
@@ -433,12 +462,11 @@
       <p> - <b>Type Guard</b> is essentially a function that verifies the type(s) of an argument and returns a boolean accordingly <u>(this technique is especially powerful in Typescript because the <mark>typeof</mark> operator can only check built-in types (but not custom types))</u> </p>
       <p> - <b>Type Assertion</b> is a technique to identify a value as certain type </p>
       <pre class="syntax">
-    <strong>val</strong> as <strong>tsType</strong>                                     // (type assertion) identifies the <strong>val</strong> type as <strong>tsType</strong>     
+    <strong>val</strong> as <strong>tsType</strong>                                     // (type assertion) identifies the <strong>val</strong> type as <strong>tsType</strong>
     
     typeof <strong>val</strong>                                        // returns the <strong>tsType</strong> of <strong>val</strong> <u>(cannot return custom types)</u>
     
-    type <reqval>KeyTypes</reqval> = keyof <reqval>ObjType</reqval>     // identifies the <reqval>ObjType</reqval> all key (<reqval>keyTypes</reqval> is a union type with all the object's keys)
-                                                                      // does not work on generic <mark>object</mark> type
+    <reqval>variable</reqval>!                                        // (non-null assertion operator) tells the compiler that the <reqval>variable</reqval> value is not <mark>null</mark> or <mark>undefined</mark>
     </pre>
       <details class="example">
         <summary> DEMO </summary>
@@ -512,27 +540,6 @@
     
     function getSpeed(animal: Fish | Bird): number {
         return (animal as Fish).getSwimSpeed();     // argument identified as Fish type 
-    }
-    </pre>
-        <h4 class="header"> The <mark>keyof</mark> operator </h4>
-    <pre>
-    type Person = {
-      name: string;
-      age: number;
-      email: string;
-    };
-    
-    type PersonKeys = keyof Person;       // PersonKeys is a union type of "name" | "age" | "email"
-    
-    const person = {
-      name: 'Doe',
-      age: 40,
-      email: 'doe@john.com',
-    };
-    
-    let personKey: PersonKeys;          // to loop through (kind of a duktape solution but Typescript is very annoying on this :/)
-    for (personKey in person) {
-      person[personKey]
     }
     </pre>
       </details>

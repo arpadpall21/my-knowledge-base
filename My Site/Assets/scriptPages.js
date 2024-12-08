@@ -403,11 +403,11 @@ const fastingConfig = {
     red: '#CD5C5C',
   },
   colorSwitch: {      // outside green or yellow periods the default period is red
-    greenPeriodBetweenHours: [[13, 17]],
-    yellowPeriodBetweenHours: [[11, 13], [17, 19]],
+    greenPeriodBetweenHours: [[14, 18]],
+    yellowPeriodBetweenHours: [[12, 14], [18, 20]],
   }
 }
-const displayedMessage = "[Discipline!]"
+const displayedMessage = "[Focus!]"
 
 function getPeriodColor() {
   const currentHour = new Date().getHours();
