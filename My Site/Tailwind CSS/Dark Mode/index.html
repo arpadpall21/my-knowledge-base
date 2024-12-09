@@ -3,64 +3,90 @@
 
 <head>
   <meta charset="utf-8">
-  <title> Tailwind CSS </title>
+  <title> Dark Mode </title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="../Assets/stylesPages.css">
-  <script src="../Assets/scriptPages.js"></script>
+  <link rel="stylesheet" href="../../Assets/stylesPages.css">
+  <script src="../../Assets/scriptPages.js"></script>
 </head>
 
 <body>
-  <h1> Tailwind CSS </h1>
-  <p> Updated ( 2024-12-06 ) </p>
+  <h1> Dark Mode </h1>
+  <p> Updated ( 2024-12-09 ) </p>
     <nav class="sitenav">
-      <a href="../index.html" title="home">MySite > </a> Tailwind CSS
+      <a href="../../index.html" title="home">MySite > </a>
+      <a href="../index.html" title="home">Tailwind CSS > </a> Dark Mode
     </nav>
-
-  <p class="subSite"><a href="./Responsie Design/index.html"> Responsie Design > </a></p>
-  <p class="subSite"><a href="./Dark Mode/index.html"> Dark Mode > </a></p>
-
-
-  <table class="table">
-    <tr>
-      <th style="width:30%;"> Method / Property / statement ect... </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td>
-        demo prop
-      </td>
-      <td>
-        - demo description
-        <span class="browserSupport">
-          <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-          <span><i class="fab fa-firefox"></i> </span>
-          <span><i class="fab fa-opera"></i> </span>
-          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> </span>
-          <span><i class="fab fa-safari"></i> </span>
-          <span><i class="fab fa-node-js"></i> </span>
-        </span>
-      </td>
-    </tr>
-
-
-
-
-  </table>
-  <br>
   <details class="example" id="notes">
     <summary> Notes & Tips :</summary>
     <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
   </details>
   <h2 style="color:green;"><u> Useful Links : </u></h2>
-  <p><a href="https://tailwindcss.com/" target="_blank">tailwindcss (tailwindcss.com) </a></p>
+
   <h2 style="color:green;"><u> Remember This : </u></h2>
 
   <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-
-
-
-
+  <p> - Tailwind uses the <mark>dark:</mark> modifier to automatically apply dark styles (automatically detect OS dark settings) </p>
+  <pre class="syntax">
+    &lt;<strong>htmlTag</strong> class="dark:<reqval>tailwStyle</reqval>" &gt;              // automatically applies <reqval>tailwStyle</reqval> if the browser detects dark mode
+  </pre>
+  <p> - we can also enable manual dark mode switch from <mark>tailwind.config.js</mark> file </p>
+  <pre class="syntax">
+// tailwind.config.js (file) -------------
+    
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      darkMode: 'selector',                 // enables manual light|dark mode switch (<a href="https://tailwindcss.com/docs/dark-mode#customizing-the-selector" target="_blank">further config</a>)   
+    }
+  </pre>
+  <pre class="syntax">
+// HTML -------------------------
+    &lt;html class="dark"&gt;     // adding a <mark>dark</mark> class in html tag enables dark mode (otherwiser ligth mode)
+                                  // we control this behaviour from JavaScript
+  </pre>
+  <p> - getting browser's current dark mode status </p>
+  <pre>
+    window.matchMedia('(prefers-color-scheme: dark)').matches       // renturns <mark>ture</mark> if the OS is in dark mode, ortherwiser <mark>false</mark>
+  </pre>
+  <details class="example" open>
+    <summary> Example : </summary>
+    <h4 class="header"> Auto Dark Mode </h4>
+    <pre>
+    &lt;div class="h-10 bg-blue-300 dark:bg-blue-700"&gt;&lt;/div&gt;
+    </pre>
+    <hr>
+    <!------------------------------------------------------------------->
+    <h4 class="header"> Manual Dark Mode </h4>
+    <pre>
+// tailwind.config.js (file) -------------
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: ['./src/**/*.{html,js}'],
+      theme: {
+        extend: {}
+      },
+      plugins: [],
+      darkMode: 'selector',
+    }
+    </pre>
+    <pre>
+// HTML -------------
+    &lt;div class="h-10 bg-blue-300 dark:bg-blue-700"&gt;&lt;/div&gt;
+    &lt;button type="button" onClick="enableDarkMode()"&gt; Dark Mode &lt;/button&gt;
+    
+    &lt;script&gt;
+    function enableDarkMode(e) {                        // add/remove <mark>dark</mark> class on html tag
+      const dakrModeEnalbed = document.documentElement.classList.contains('dark')
+      
+      if (dakrModeEnalbed) {
+        document.documentElement.classList.remove('dark')
+      } else {
+        document.documentElement.classList.add('dark')
+      }
+    }
+    &lt;/script&gt;
+    </pre>
+  </details>
   <!--
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
@@ -77,95 +103,13 @@ stage 3 :
     - organize and document down everything 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
-- Tailwind is a utility-first CSS framework
-
-- inline styling 
-- great because no css management needed
-- well integrated in React
-
-- reference to modifiers 
-
--------- CLI --------
----------------------
-npm install -D tailwindcss
-        // install
-npx tailwindcss init
-        // creates tailwind.config.js file 
-npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
-        // transpile & watch
-npx tailwindcss -o build.css --minify
-        // minify
-
-
-
-    - non recognized tailwind utilities are treated as class names on the element
-    - conde between [...] interpreted as normal css
-
-    - group
-    - nested-groups
-
-    - peer-<modifier>
-        - peer styling works on element that follow the stuff (because of how CSS works)
-
-    - *:<tailwindUtil>
-        - targets direct child eleemnts
-
-    - has-[state|element|class|etc..]
-        - styles the current element if any of the descended element has state
-
-    - group-has
-    - peer-has
-
-    - after / before
-
-
--------- Bulk utilities --------
---------------------------------
-- I maybe should document only tailwind utilities that are tailwind specific like (ring) (let's see)
-    - before / after
-    - placeholder
-    - marker (list marker)
-    - selection (text highligth)
-    - first-line / first-letter
-    - open (modifier for <details>)
-
-
-
-
--------- Tailwind Classes --------
-----------------------------------
-accent-*
-      // takes care of checkox and radio button coloring in all states
-
-ring-*
-      // ring arround element (box-shadow)
-
-
-
--------- Syntax --------
-------------------------
-<color>/<opacity>
-      // color oppacity
-
-<modified>:<taiwindRule>
-      // modifier (ex: hover)
-      // modifies can be pseudo-classes / pseudo-elements / media query features / attribute selectors
-      // modifies can be stacked 
-
-
-
 
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    - Browser support ?
-    
-    - Explore Tailwind UI
-    
-    - Auto prefixer
-    
+    - 
     
 -->
 
