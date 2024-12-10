@@ -79,11 +79,18 @@ stage 3 :
 ---------------------------------------------------------------------------------------------
 - Tailwind is a utility-first CSS framework
 
+Tailwind CSS promotes a utility-first approach, which means that instead of creating custom class names for groups of styles, you should use the predefined utility classes provided by Tailwind for each element. This approach has several benefits:
+
 - inline styling 
 - great because no css management needed
 - well integrated in React
 
-- reference to modifiers 
+
+
+- reference to modifiers: https://tailwindcss.com/docs/hover-focus-and-other-states#quick-reference
+- non recognized tailwind utilities are treated as class names on the element
+
+- config options: https://tailwindcss.com/docs/configuration#configuration-options
 
 -------- CLI --------
 ---------------------
@@ -98,9 +105,57 @@ npx tailwindcss -o build.css --minify
 
 
 
-    - non recognized tailwind utilities are treated as class names on the element
-    - conde between [...] interpreted as normal css
+-------- Custom Styles --------
+-------------------------------
+- tailwind syntax [<originalCSS>] to include css in your tailwind syntax (break out the tailwind paradigm)
+    - this is used for values (as I see)
+    - custom variables are well supported (document this!)
 
+- we can use [<originalCSS>] to write completely arbitrary css
+
+- use _ (underscore) in [] for white space (ex: [1fr_500px_2fr] -> interpreted as '1fr 500px 2fr')
+
+@apply (link: https://tailwindcss.com/docs/functions-and-directives#layer) (Dig around this a bit)
+      // tailwind is utility first but this guy allows us to declare custom component class
+      // tailwind docs really discurages this!
+      // we can also use this guy to apply base style for elements
+      // these styles still we overriden by additional tailwind inline styles
+
+- we can add custom styles without the layer approach but there's the css specificity problem (use @layer vaze...)
+
+- theme() function gets theme values from config
+
+
+-------- Config Customization --------
+--------------------------------------
+- we can extend default colors (same goes for spaces (TEST and document it!)):
+    - all possible configs: https://tailwindcss.com/docs/theme#configuration-reference
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{html,js}'],
+  theme: {
+    extend: {
+      colors: {
+        myColor: '#141E8C',
+        someColor: {
+          light: '#ccbc91',
+          DEFAULT: '#ad9961',
+          dark: '#635736',
+        }
+      }
+    }
+  },
+  plugins: [],
+}
+
+
+
+
+
+
+
+-------- The Group staff --------
+--------------------------------
     - group
     - nested-groups
 
@@ -116,7 +171,7 @@ npx tailwindcss -o build.css --minify
     - group-has
     - peer-has
 
-    - after / before
+
 
 
 -------- Bulk utilities --------
@@ -157,15 +212,16 @@ ring-*
 
 
 
+
+
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
     - Browser support ?
     
-    - Explore Tailwind UI
+    - Auto prefixer?
     
-    - Auto prefixer
-    
+    - update var() in your css docs
     
 -->
 
