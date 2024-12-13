@@ -69,6 +69,8 @@
     </details>
     <h2 style="color:green;"><u> Useful Links : </u></h2>
     <p><a href="https://tailwindcss.com/" target="_blank">tailwindcss (tailwindcss.com) </a></p>
+    <p><a href="https://tailwindcss.com/docs/customizing-colors" target="_blank">DEFAULT COLOR PALETTE (tailwindcss.com) </a></p>
+    <p><a href="https://tailwindcss.com/docs/customizing-spacing#default-spacing-scale/" target="_blank">DEFAULT SPACING (tailwindcss.com) </a></p>
     <h2 style="color:green;"><u> Remember This : </u></h2>
 
     <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
@@ -76,8 +78,10 @@
     <p class="indent-lv1"> - Inline styling means no css files to maintain, no style namespace mix risk </p>
     <p class="indent-lv1"> - Not using css components means we won't end up with a bunch of css component to remember and maintain </p>
     <p class="indent-lv1"> - Tailwind docs agrees that writing repetitive inline styles make our HTML ugly, but maintaining css files and css components is worse! </p>
-    <p> - Tailwind CSS is very well supported by frontend frameworks (natively supported by Next.js) <a href="https://tailwindcss.com/docs/installation" target="_blank">[setup link]</a></p>
-    <p> - In Tailwind we still can use the css component approach, but it's discouraged by Tailwind docs </p>
+    <p> Support: </p>
+    <p class="indent-lv1"> - Well supported by frontend frameworks (natively supported by Next.js) <a href="https://tailwindcss.com/docs/installation" target="_blank">[setup link]</a></p>
+    <p class="indent-lv1"> - for browser support the docs says "tested on latest browsers", also transpiles vendor prefixes (or we could use <a href="https://tailwindcss.com/docs/browser-support#vendor-prefixes" target="">autoprefixer</a> for this) 
+    
     <p> - Tailwind <a href="https://tailwindcss.com/docs/preflight" target="_blank">removes default styles</a> from cretain html elements, this is for consistency reasons (this feature is called preflight) </p>
     <details class="example">
       <summary> CSS Utility-Fist Demo </summary>
@@ -153,7 +157,7 @@
     
     &lt;<reqval>htmlTag</reqval> class="<reqval>tailwSyntax</reqval>[<reqval>cssSyntax</reqval>]<reqval>tailwSyntax</reqval> <optval>...</optval>" &gt;   // (css interpolation) code between <mark>[]</mark> interpreted as normal css (ex: <mark>&lt;div class="h-[17px]"&gt;</mark>)
     &lt;<reqval>htmlTag</reqval> class="[<reqval>cssSyntax</reqval>] <optval>...</optval>" &gt;   // full interpolation can be used to write full css properties (ex: <mark>&lt;div class="[height:17px]"&gt;</mark>)
-                                                                // white spaces must be replaced by <mark>_</mark> (ex: <mark>&lt; class="grid-cols-[1fr_500px_2fr]"&gt;</mark>)
+                                                                // white spaces must be replaced by <mark>_</mark> (ex: <mark>&lt;div class="grid-cols-[1fr_500px_2fr]"&gt;</mark>)
   </pre>
     <details class="example">
       <summary> DEMO (can be pseudocode) </summary>
@@ -186,17 +190,29 @@
     </details>
     <hr>
     <!----------------------------------------------------------------------------------------------------------------->
-    <h2 class="header"> Selectors </h2>
+    <h2 class="header"> Selectors & Styling Based on Other Element's State </h2>
     <pre class="syntax">
-    &lt;<reqval>htmlTag</reqval> class="<reqval>tailwStyle</reqval> <optval>...</optval>"           // styles applied on the element itself
-    
-    &lt;<reqval>htmlTag</reqval> class="*:<reqval>tailwStyle</reqval> <optval>...</optval>"         // styles applied on direct children elements
-    
-    
-    
-    
+    &lt;<reqval>htmlTag</reqval> class="<reqval>tailwStyle</reqval> <optval>...</optval>"&gt;           // styles applied on the element itself
+    &lt;<reqval>htmlTag</reqval> class="*:<reqval>tailwStyle</reqval> <optval>...</optval>"&gt;         // styles applied on direct child elements
     </pre>
-    <details class="example" open>
+    <pre class="syntax">
+// styling based on parent element state (hover, active, etc...) ----
+    &lt;<reqval>htmlTag</reqval> class="group<opt>/<optval>groupName</optval></opt> <optval>...</optval>"&gt;
+      &lt;<reqval>htmlTag</reqval> class="group-<reqval>status</reqval><opt>/<optval>groupName</optval></opt>:<reqval>tailwStyle</reqval>"&gt;    // <reqval>tailwStyle</reqval> applied on element if <mark>group<opt>/<optval>groupName</optval></opt></mark> parent element has <reqval>status</reqval>
+    &lt;/<reqval>htmlTag</reqval>&gt;
+    
+    
+// styling based on previous sibling element state (hover, active, etc...) ----
+    &lt;<reqval>htmlTag</reqval> class="peer<opt>/<optval>peerName</optval></opt> <optval>...</optval>"&gt;
+    &lt;<reqval>htmlTag</reqval> class="peer-<reqval>status</reqval><opt>/<optval>peerName</optval></opt>:<reqval>tailwStyle</reqval>"&gt;    // <reqval>tailwStyle</reqval> applied on element if <mark>peer<opt>/<optval>peerName</optval></opt></mark> previous sibling element has <reqval>status</reqval>
+    
+    
+// styling based on child element state (hover, active, etc...) / or presence ----
+    &lt;<reqval>htmlTag</reqval> class="has-[<reqval>pseudoSel|htmlTag</reqval>]:<reqval>tailwStyle</reqval> <optval>...</optval>"&gt;      // <reqval>pseudoSel</reqval>: <reqval>tailwStyle</reqval> applied if any child element has status (ex: <mark>:active</mark>)
+      &lt;<optval>...</optval>&gt;                                                        // <reqval>htmlTag</reqval>: <reqval>tailwStyle</reqval> applied if this element has any <reqval>htmlTag</reqval> child element
+    &lt;/<reqval>htmlTag</reqval>&gt;
+    </pre>
+    <details class="example">
       <summary> DEMO (can be pseudocode) </summary>
     <h4 class="header"> Child Selector </h4>
     <pre>
@@ -217,40 +233,337 @@
       &lt;p&gt; Element-1 &lt;/p&gt;
       &lt;p class="group-active:text-red-600 group-active:text-lg"&gt; Element-2 &lt;/p&gt;   // styles applied when parent element is active (clicked on)
     &lt;/div&gt;
+    
+    
+// named groups --------------------------
+    &lt;div class="group/main bg-green-200"&gt;
+      &lt;p&gt; Hello World! &lt;/p&gt;
+      &lt;div class="group/child-1"&gt;
+        &lt;p class="group-hover/main:text-red-500 group-hover/child-1:text-2xl"&gt; Element-1 &lt;/p&gt;   // text becomes red when user is hovering on <mark>group/main</mark>   
+      &lt;/div&gt;                            // text size increase when the user is hovering on <mark>group/child-1</mark>
+    &lt;/div&gt;
+    
+    
+// using arbitrary class names -------------------
+    &lt;div id="div-group" class="group is-published"&gt;
+      &lt;p class="hidden group-[.is-published]:block"&gt; Published! &lt;/p&gt;      // if parent has <mark>group is-published</mark> class displays this element
+    &lt;/div&gt;
+    &lt;button id="div-group-button"&gt; Hide / Show Group &lt;/button&gt;
+    
+    &lt;script&gt;
+      document.getElementById('div-group-button').addEventListener('click', (e) =&gt; {
+        const divGroupClassList = document.getElementById('div-group').classList;
+        
+        if (divGroupClassList.contains('is-published')) {
+          divGroupClassList.remove('is-published')
+        } else {
+          divGroupClassList.add('is-published')
+        }
+      })
+    &lt;/script&gt;
+    </pre>
+    <hr>
+    <!----------------------------------------------------------------------->
+    <h4 class="header"> Styling based on previous sibling status <mark>peer</mark> </h4>
+    <pre>
+    &lt;p class="peer"&gt; Red &lt;/p&gt;
+    &lt;p class="peer-active:text-red-500"&gt; Color Feedback &lt;/p&gt;    // text becomes red when the user click on the previous element
+    
+    
+// named peers --------------------------------------
+    &lt;p class="peer/red"&gt; Red &lt;/p&gt;
+    &lt;p class="peer/green"&gt; Green &lt;/p&gt;
+    &lt;p class="peer-active/red:text-red-500 peer-active/green:text-green-500"&gt; Color Feedback &lt;/p&gt;   // text becomes red when user clicks on <mark>peer/red</mark> element 
+                                                                              // text becomes green when user clicks on <mark>peer/green</mark> element 
+    
+// using arbitrary class names --------------------------------------
+    &lt;p id="p-peer" class="peer is-published"&gt; Publish &lt;/p&gt;
+    &lt;p class="hidden peer-[.is-published]:block"&gt; Published! &lt;/p&gt;                            // if previous sibling element has peer is-published class displays this element
+    &lt;button id="p-peer-button"&gt; Hide / Show Group &lt;/button&gt;
+    
+    &lt;script&gt;
+      document.getElementById('p-peer-button').addEventListener('click', (e) =&gt; {
+        const pPeerClassList = document.getElementById('p-peer').classList;
+        
+        if (pPeerClassList.contains('is-published')) {
+          pPeerClassList.remove('is-published')
+        } else {
+          pPeerClassList.add('is-published')
+        }
+      })
+    &lt;/script&gt;  
+    </pre>
+    <hr>
+    <!----------------------------------------------------------------------->
+    <h4 class="header"> Styling based on child status <mark>has</mark> </h4>
+    <pre>
+    &lt;div class="has-[:active]:text-red-600 has-[:active]:text-lg"&gt;      // styles applied if any child element is clicked on
+      &lt;p&gt; Element-1 &lt;/p&gt;
+      &lt;p&gt; Element-2 &lt;/p&gt;
+    &lt;/div&gt;
+    
+    
+    &lt;div class="has-[span]:text-red-600 has-[span]:text-lg"&gt;            // styles applied if there's any <mark>&lt;span&gt;</mark> child element   
+      &lt;p&gt; Element-1 &lt;/p&gt;
+      &lt;p&gt; Element-&lt;span&gt;2&lt;/span&gt; &lt;/p&gt;
+    &lt;/div&gt;
     </pre>
     
     
+    
+    
     </details>
-
-
-
-
-
-<!--
--------- The Group staff --------
---------------------------------
-    - group
-    - nested-groups
-
-    - peer-<modifier>
-        - peer styling works on element that follow the stuff (because of how CSS works)
-
-    - *:<tailwindUtil>
-        - targets direct child eleemnts
-
-    - has-[state|element|class|etc..]
-        - styles the current element if any of the descended element has state
-
-    - group-has
-    - peer-has
--->
-
-
-
-
-
-
-
+    <hr>
+    <!----------------------------------------------------------------------------------------------------------------->
+    <h2 class="header"> CSS Components / Element Base styles / Custom Tailwind styles (utilities) </h2>
+    <p> - Tailwind also supports css components, but it's discouraged in Tailwind docs (only for highliy reused components) </p>
+    <pre class="syntax">
+// input.css (file) --------------------------
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    
+    
+// css component ---
+    @layer components {
+      .<reqval>className</reqval> {
+        <optval>cssStyes</optval>
+      }
+    }
+    
+    .<reqval>className</reqval> {              // this is also valid but not recommeded to use because of css specificity (use <mark>@layer components</mark> instead)
+      <optval>cssStyes</optval>
+    }
+    
+    
+// element base style ----
+    @layer base {
+      <reqval>htmlTag</reqval> {              // apply base style on all <reqval>htmlTag</reqval> elements
+        @apply <reqval>tailwStyle</reqval>;
+      }
+    }
+    
+    
+// custom tailwind style (utility) ----
+    @lary utilities {
+      .<reqval>tailwUtil</reqval> {           // creates a custrom <reqval>tailwUtil</reqval> class utility
+        <optval>cssStyes</optval>
+      }
+    }
+    
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+    <h4 class="header"> CSS Component </h4>
+    <pre>
+// HTML -----------------
+    &lt;div class="profile-card"&gt;
+      &lt;img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic"&gt;
+      &lt;h2 class="name"&gt;John Doe&lt;/h2&gt;
+      &lt;p class="description"&gt;Web Developer based in San Francisco. Loves coding and coffee.&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="profile-card-2"&gt;
+      &lt;img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic"&gt;
+      &lt;h2 class="name"&gt;John Doe&lt;/h2&gt;
+      &lt;p class="description"&gt;Web Developer based in San Francisco. Loves coding and coffee.&lt;/p&gt;
+    &lt;/div&gt;
+    
+    
+// input.css ---------------
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    
+    @layer component {
+        .profile-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            transition: transform 0.2s;
+        }
+    }
+    
+    .profile-card-2 {                                     // this also works but affected by css specificity logic
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+        padding: 20px;
+        margin: 20px auto;
+        transition: transform 0.2s;
+    }
+    </pre>
+    <hr>
+    <!--------------------------------------------------------------------------->
+    <h4 class="header"> Base Style </h4>
+    <pre>
+// HTML -----------------
+    &lt;h1&gt; Header 1 &lt;/h1&gt;
+    &lt;h2&gt; Header 2 &lt;/h2&gt;
+    
+    
+// input.css ---------------
+    @layer base {
+      h1 {                                  // specifying base styles for h1 and h2 elements
+        @apply text-2xl text-blue-300;
+      }
+      h2 {
+        @apply text-xl text-green-300;
+      }
+    }
+    </pre>
+    <hr>
+    <!--------------------------------------------------------------------------->
+    <h4 class="header"> Custom Utility </h4>
+    <pre>
+// HTML -----------------
+    &lt;p class="pop"&gt; Hello World! &lt;/p&gt;     // pop stiles applied
+    
+    
+// input.css ---------------
+    @layer utilities {
+      .pop {                          // custom tailwind utility
+        background-color: orange;
+        color: red;
+      }
+    }
+    </pre>
+    </details>
+    <hr>
+    <!----------------------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Configuration </h2>
+    <p> - the <mark>tailwind.config.js</mark> configures the tailwind transpiler, but most importantly we can use it to change or extend existing taiwind utility classes </p>
+    <pre class="syntax">
+// tailwind.config.js (file) -----
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: [<reqval>globPath</reqval>],               // source files to transpile
+      theme: {
+        <a href="https:\/\/tailwindcss.com/docs/theme#configuration-reference" target="_blank">utilityClass</a>   // default class utilities (ex: <mark>colors</mark> default color palette / <mark>spacing</mark> default spacing)
+                                    // -! overriding one property like: <mark>color</mark> overrides all default colors 
+        extend: {                   // extends existing class utilities (ex)
+          <optval>...</optval>          // ex: adding <mark>color</mark> property with new colors extends the existing color palette
+        },
+      },
+      <a href="https:\/\/tailwindcss.com/docs/configuration#configuration-options" target="_blank">other configs...</a>
+    }
+    
+    
+// <mark>theme()</mark> function -------------------
+    theme(<reqval>configThemeKey</reqval>)            // reference any config <mark>theme</mark> key (ex: <mark>theme(colors.red.400)</mark>)
+                                                      // can be used in: class interpolation (ex: <mark>&lt;div class-"bg-[theme.colors.blue.400]"&gt</mark>)
+                                                      // can be used in: input.css file
+    </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Overriding class utilities </h4>
+      <pre>
+// HTML --------------
+    &lt;div class="h-[43px] bg-red-100"&gt;&lt;/div&gt;             // -! not working because the default color palett is overriden
+    &lt;div class="h-[43px] bg-primary"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-secondary"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-someColor"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-someColor-light"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-someColor-dark"&gt;&lt;/div&gt;
+    
+    
+// tailwind.config.js --------------
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: ['./src/**/*.{html,js}'],
+      theme: {
+        colors: {                                   // this overrides all default color utility classes
+          primary: '#829156',
+          secondary: '#5d634c',
+          someColor: {
+            light: '#ccbc91',
+            DEFAULT: '#ad9961',
+            dark: '#635736',
+          }
+        },
+        extend: {
+        },
+      },
+      plugins: [],
+    }
+      </pre>
+      <hr>
+      <!------------------------------------------------------------------------------->
+      <h4 class="header"> Extending class utilities </h4>
+      <pre>
+// HTML --------------
+    &lt;div class="h-[43px] bg-cyan-100"&gt;&lt;/div&gt;            // existing colors are not overriden
+    &lt;div class="h-[43px] bg-myColor"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-someColor"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-someColor-light"&gt;&lt;/div&gt;
+    &lt;div class="h-[43px] bg-someColor-dark"&gt;&lt;/div&gt;
+    
+    
+// tailwind.config.js --------------
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: ['./src/**/*.{html,js}'],
+      theme: {
+        extend: {
+          colors: {                     // extends existing color palette
+            myColor: '#141E8C',         // custom color
+            someColor: {                // custom color with different shades
+              light: '#ccbc91',
+              DEFAULT: '#ad9961',       // default shade
+              dark: '#635736',
+            }
+          }
+        },
+      },
+      plugins: [],
+    }
+      </pre>
+      <hr>
+      <!------------------------------------------------------------------------------->
+      <h4 class="header"> The <mark>theme()</mark> function </h4>
+      <pre>
+// HTML --------------
+    &lt;div class="h-10 bg-[theme(colors.red.100)]"&gt;&lt;/div&gt;     // references default theme value
+    &lt;div class="h-10 bg-[theme(colors.myColor)]"&gt;&lt;/div&gt;     // references a custom value
+    
+// input.css -------------
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    
+    @layer component {
+      .some-component {
+        color: theme(colors.red.400);                   // references theme values 
+        background-color: theme(colors.amber.400);
+        height: theme(spacing.10);
+      }
+    }
+    
+    
+// tailwind.config.js --------------
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: ['./src/**/*.{html,js}'],
+      theme: {
+        extend: {
+          colors: {
+            myColor: '#734845'
+          }
+        },
+      },
+      plugins: [],
+    }
+      </pre>
+    </details>
+    
+    
+    
     <!--
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
@@ -267,75 +580,6 @@ stage 3 :
     - organize and document down everything 
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
--------- Custom Styles --------
--------------------------------
-    
-    
-    
-    - custom variables are well supported (document this!)
-
-
-colors: https://tailwindcss.com/docs/customizing-colors
-@apply (link: https://tailwindcss.com/docs/functions-and-directives#layer) (Dig around this a bit)
-      // tailwind is utility first but this guy allows us to declare custom component class
-      // tailwind docs really discurages this!
-      // we can also use this guy to apply base style for elements
-      // these styles still we overriden by additional tailwind inline styles
-
-- we can add custom styles without the layer approach but there's the css specificity problem (use @layer vaze...)
-
-- theme() function gets theme values from config
-
-
-
-
-
-
-
-
--------- Config Customization --------
---------------------------------------
-- config options: https://tailwindcss.com/docs/configuration#configuration-options
-- we can extend default colors (same goes for spaces (TEST and document it!)):
-    - all possible configs: https://tailwindcss.com/docs/theme#configuration-reference
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./src/**/*.{html,js}'],
-  theme: {
-    extend: {
-      colors: {
-        myColor: '#141E8C',
-        someColor: {
-          light: '#ccbc91',
-          DEFAULT: '#ad9961',
-          dark: '#635736',
-        }
-      }
-    }
-  },
-  plugins: [],
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -------- Bulk utilities --------
 --------------------------------
@@ -371,33 +615,121 @@ ring-*
 
 
 
-
-
-
-
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
     - Browser support ?
+        -> DONE
     
     - Auto prefixer?
+        -> DONE
     
     
     
--->
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
 
-    <!--
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- theme() function gets theme values from config
+
+-------- Config Customization --------
+--------------------------------------
+- config options: https://tailwindcss.com/docs/configuration#configuration-options
+- we can extend default colors (same goes for spaces (TEST and document it!)):
+    - all possible configs: https://tailwindcss.com/docs/theme#configuration-reference
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{html,js}'],
+  theme: {
+    extend: {
+      colors: {
+        myColor: '#141E8C',
+        someColor: {
+          light: '#ccbc91',
+          DEFAULT: '#ad9961',
+          dark: '#635736',
+        }
+      }
+    }
+  },
+  plugins: [],
+}
+
+
+
+
+
+
+
+
+
+
+
+-------- Custom Styles --------
+-------------------------------
+    - custom variables are well supported (document this!)
+
+
+colors: https://tailwindcss.com/docs/customizing-colors
+@apply (link: https://tailwindcss.com/docs/functions-and-directives#layer) (Dig around this a bit)
+      // tailwind is utility first but this guy allows us to declare custom component class
+      // tailwind docs really discurages this!
+      // we can also use this guy to apply base style for elements
+      // these styles still we overriden by additional tailwind inline styles
+
+- we can add custom styles without the layer approach but there's the css specificity problem (use @layer vaze...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------- The Group staff --------
+--------------------------------
+    - group
+    - nested-groups
+
+    - peer-<modifier>
+        - peer styling works on element that follow the stuff (because of how CSS works)
+
+    - *:<tailwindUtil>
+        - targets direct child eleemnts
+
+    - has-[state|element|class|etc..]
+        - styles the current element if any of the descended element has state
+
+    - group-has
+    - peer-has
 
 
 
