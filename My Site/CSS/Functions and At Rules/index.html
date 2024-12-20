@@ -138,7 +138,55 @@
 
     <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <h2 class="headerExtra"><u> CSS Functions </u></h2>
-    <h2 style="color:darkblue;"><u> The <mark>calc()</mark> function </u></h2>
+    <h2 class="header"> The <mark>var()</mark> function CSS custom properties </h2>
+    <p> - CSS custom properties are basically variables in CSS, they are used to <u>insert property values</u> </p>
+    <p> - CSS variables are scoped (available only on the declared element and on all its nested child elements) </p>
+    <pre class="syntax">
+    <reqval>parentSelector</reqval> {
+        --<reqval>var</reqval>: <reqval>val</reqval>;     // variable
+    }
+    
+    <reqval>childSelector</reqval> {
+        <reqval>property</reqval>: var(--<reqval>var</reqval><optval>, fallbackVal</optval>);     // variable value can be used as property values
+    }                                     // declared variables available in any child elelements (but not elsewhere)
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <div class="var-parent">
+        <div class="var-child">Child element</div>
+      </div>
+      <div class="var-sibling">Sibling element</div>
+      <details>
+        <summary> CODE : </summary>
+        <pre>
+// HTML -------------------------------------------
+    &lt;div class="var-parent"&gt;
+      &lt;div class="var-child"&gt;Child element&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="var-sibling"&gt;Sibling element&lt;/div&gt;
+    
+    
+// CSS --------------------------------------------
+    .var-parent {
+        --customBorder: solid 2px cyan;
+        height: 25px;
+        margin: 10px;
+        border: var(--customBorder, solid 1px black);
+    }
+    .var-child {
+        margin: 10px;
+        border: var(--customBorder, solid 1px black);     // child element inherits the variable value
+    }
+    .var-sibling {
+        margin: 10px;
+        border: var(--customBorder, solid 1px black)      // sibling element does not inherit the variable value (fallback used)
+    }
+        </pre>
+      </details>
+    </details>
+    <!--------------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> The <mark>calc()</mark> function </h2>
     <details class="example">
       <summary> DEMO </summary>
       <pre>
@@ -199,7 +247,7 @@
     </details>
     <!--------------------------------------------------------------------------------------------------------->
     <hr>
-    <h2 style="color:darkblue;"><u> The <mark>mix()</mark> / <mark>max()</mark> functions </u></h2>
+    <h2 class="header"> The <mark>mix()</mark> / <mark>max()</mark> functions </h2>
     <details class="example">
       <summary> DEMO </summary>
       <pre>
@@ -214,102 +262,8 @@
     </details>
     <!--------------------------------------------------------------------------------------------------------->
     <hr>
-    <h2 style="color:darkblue;"><u> The <mark>var()</mark> function CSS custom properties </u></h2>
-    <p> - <i class="fab fa-css3-alt"></i> CSS custom properties are "sort-of" variables in CSS, they are used to <u>insert property values</u> </p>
-    <p> - CSS variables are scoped (available only on the declared element and on all its nested child elements) </p>
-    <details class="example">
-      <summary> DEMO </summary>
-    </details>
-    <details class="example">
-      <summary> Example : </summary>
-      <h4><u> <mark>var()</mark> TEST </u></h4>
-      <p> - inheritable properties are inherited normally </p>
-      <div class="greatParentCssVar">
-        <div class="parentCssVar">
-          <p class="childVar"> CSS variable test paragraph <span>(deep children inherit too)</span></p>
-        </div>
-        <p class="neighbourVar"> sibling element do not inherit </p>
-      </div>
-      <details>
-        <summary> CODE : </summary>
-        <pre>
--- CODE (HTML) --
-    &lt;div class="greatParentCssVar"&gt;
-        &lt;div class="parentCssVar"&gt;
-            &lt;p class="childVar"&gt; CSS variable test paragraph &lt;span&gt;(deep children inherit too)&lt;/span&gt;&lt;/p&gt;
-        &lt;/div&gt;    
-        &lt;p class="neighbourVar"&gt; sibling element do not inherit &lt;/p&gt;
-    &lt;/div&gt;
-    
--- CODE (CSS) --
-    .parentCssVar {                 
-        border: solid black 2px;    //  variables (custom properties) are declared in the parent element  
-        --myColor: white;
-        --myBorder: dashed black 1px;
-        --myFont: Franklin Gothic Medium, monospace;
-        border: var(--myBorder);
-    }
-    .childVar {                     // direct child element inherit and its children inherit inheritable variable values as normal  
-        color: var(--myColor);
-        border: var(--myBorder);
-        font-family: var(--myFont);
-    }
-    .greatParentCssVar {            // custom properties are not inherited by the ancestros (just linke normal scoping) 
-        border: var (--myBorder);   // &lt;-- this does not Work!
-    }
-    .neighbourVar {                 //  sibling element cannot use custom properties declared in the other siblings 
-        color: var(--myColor);
-        border: var(--myBorder);
-        font-family: var(--myFont);
-    }
-        </pre>
-      </details>
-      <!--------------------------------------------------------------------------------------------------------->
-      <hr>
-      <h4><u> <mark>var()</mark> fallback value TEST </u></h4>
-      <p class="varFallback_test"> myParagraph</p>
-      <details>
-        <summary> CODE : </summary>
-        <pre>
--- CODE (HTML) --
-    &lt;p class="varFallback_test"&gt; myParagraph&lt;/p&gt;
-
--- CODE (CSS) --
-    :root {
-        --myTextDecoration: underline;
-    }
-    .varFallback_test {
-        text-decoration: var(--myTextDecoration);
-        color: var(--myColor, red);                 // variable value does not exist, fallback value used
-        border: var(--myBorder, double 3px blue);   // variable value does not exist, fallback value used
-    }
-        </pre>
-      </details>
-      <!--------------------------------------------------------------------------------------------------------->
-      <hr>
-      <h4><u> <mark>var()</mark> multiple fallback values TEST </u></h4>
-      <p> - multiple values separated with commas after the variable identifier works as 1 single value </p>
-      <div class="multipleFallback_test"></div>
-      <details>
-        <summary> CODE : </summary>
-        <pre>
--- CODE (HTML) --
-    &lt;div class="multipleFallback_test"&gt;&lt;/div&gt;
-    
--- CODE (CSS) --
-    .multipleFallback_test {
-        width: 1000px;
-        height: 500px;
-        border: double lightcoral 5px;
-        background: var(--undefinedBcg, url(bush2.png) no-repeat, url(bush1.png) no-repeat);
-    }
-        </pre>
-      </details>
-    </details>
-    <!--------------------------------------------------------------------------------------------------------->
-    <hr>
     <h2 class="headerExtra"><u> @ Rules </u></h2>
-    <h2 style="color:darkblue;"><u> The <mark>@charset</mark> / <mark>@import</mark> rule </u></h2>
+    <h2 class="header"> The <mark>@charset</mark> / <mark>@import</mark> rule </h2>
     <details class="example">
       <summary> DEMO </summary>
       <pre>
@@ -348,7 +302,7 @@
     </details>
     <!--------------------------------------------------------------------------------------------------------->
     <hr>
-    <h2 style="color:darkblue;"><u> The <mark>@supports</mark> rule </u></h2>
+    <h2 class="header"> The <mark>@supports</mark> rule </h2>
     <details class="example">
       <summary> DEMO </summary>
       <pre>
