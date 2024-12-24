@@ -13,7 +13,7 @@
 
 <body>
   <h1> Pseudo Selectors </h1>
-  <p> Updated( 2016-07-04 / 2017-01-11 / 2019-02-02 / 2024-03-13 ) </p>
+  <p> Updated ( 2016-07-04 / 2017-01-11 / 2019-02-02 / 2024-03-13 ) </p>
   <nav class="sitenav"> <a href="../../index.html">MySite > </a>
     <a href="../index.html" title="CSS">CSS > </a> Pseudo Selectors
   </nav>
@@ -28,13 +28,53 @@
     <tr>
       <td> <i>selector</i>:not(<strong>selector</strong>) </td>
       <td>
-        - from <optval>selector</optval> selects all elements that do NOT match <strong>selector</strong>
+        - selects all element that are not selected with <optval>selector</optval>
         <span id="browserSupport">
           <span><i class="fab fa-chrome"></i> 4 </span>
           <span><i class="fab fa-firefox"></i> 3.5 </span>
           <span><i class="fab fa-opera"></i> 9.6 </span>
           <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 9 </span>
           <span><i class="fab fa-safari"></i> 3.2 </span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td> <i>selector</i>:is(<strong>selector</strong><optval>, ...</optval>) </td>
+      <td>
+        - selects all element that are selected with <optval>selector</optval>s
+        <span id="browserSupport">
+          <span><i class="fab fa-chrome"></i> 88 </span>
+          <span><i class="fab fa-firefox"></i> 78 </span>
+          <span><i class="fab fa-opera"></i> 74 </span>
+          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 88 </span>
+          <span><i class="fab fa-safari"></i> 14 </span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td> <i>selector</i>:where(<strong>selector</strong><optval>, ...</optval>) </td>
+      <td>
+        - selects all element that are selected with <optval>selector</optval>s <br>
+        - does the same as <mark>:is()</mark> but css specifisity is not counted on listed <reqval>selector</reqval>s 
+        <span id="browserSupport">
+          <span><i class="fab fa-chrome"></i> 88 </span>
+          <span><i class="fab fa-firefox"></i> 78 </span>
+          <span><i class="fab fa-opera"></i> 74 </span>
+          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 88 </span>
+          <span><i class="fab fa-safari"></i> 14 </span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td> <i>selector</i>:has(<strong>selector</strong><optval>, ...</optval>) </td>
+      <td>
+        - element selected if has child elements with <reqval>selector</reqval>s
+        <span id="browserSupport">
+          <span><i class="fab fa-chrome"></i> 105 </span>
+          <span><i class="fab fa-firefox"></i> 121 </span>
+          <span><i class="fab fa-opera"></i> 91 </span>
+          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 105 </span>
+          <span><i class="fab fa-safari"></i> 15.4 </span>
         </span>
       </td>
     </tr>
@@ -754,38 +794,107 @@
     <i>selector</i>:<strong>pseudo-class</strong> 
   </pre>
   <hr>
-  <h3 style="color:darkblue;"><u> The <mark>:not()</mark> / <mark>:empty</mark> / <mark>:only-child</mark> / <mark>:only-of-type</mark> pseudo selectors </u></h3>
+  <h3 class="header"> The <mark>:is()</mark> / <mark>:where()</mark> / <mark>:not()</mark> / <mark>:has()</mark> pseudo selectors </h3>
   <details class="example">
     <summary> Example : </summary>
-
-    <h3><u> <mark>:not()</mark> TEST </u></h3>
-    <div id="not">
-      <h1> This heading is selected </h1>
-      <p class="select"> This paragraph is not selected </p>
-      <h6 class="select"> This heading is not selected </h6>
-      <p> This paragraph is also selected </p>
-      <div class="select"> This DIV is not selected </div>
-      <p> This paragraph is also selected </p>
+    <h3 class="header"> The <mark>:is()</mark> / <mark>:where()</mark> pseudo classes </h3>
+    <p class="is-where-test-1"> Hello Wolrd! (1) </p>
+    <p class="is-where-test-2"> Hello Wolrd! (2) </p>
+    <p class="is-where-test-3"> Hello Wolrd! (3) </p>
+    <details>
+      <summary> CODE : </summary>
+      <pre>
+// HTML -----------------------------------
+    &lt;p class="is-where-test-1"&gt; Hello Wolrd! (1) &lt;/p&gt;
+    &lt;p class="is-where-test-2"&gt; Hello Wolrd! (2) &lt;/p&gt;
+    &lt;p class="is-where-test-3"&gt; Hello Wolrd! (3) &lt;/p&gt;
+    
+// CSS -----------------------------------
+    *:is(.is-where-test-1, .is-where-test-2, .is-where-test-3) {
+        color: green;
+    }
+    *:where(.is-where-test-1, .is-where-test-2, .is-where-test-3) {
+        background-color: lightgray;
+        color: red;                                   // -! this has no effect because the <mark>:where()</mark> pseudo class doesn't have any specificity 
+    }
+      </pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------>
+    <h3 class="header"> The <mark>:not()</mark> pseudo class </h3>
+    <div class="not-test">
+      <p class="not-test-odd"> Hello World! (1) </p>
+      <p class="not-test-even"> Hello World! (2) </p>
+      <p class="not-test-odd"> Hello World! (3) </p>
+      <p class="not-test-even"> Hello World! (4) </p>
     </div>
     <details>
       <summary> CODE : </summary>
       <pre>
--- CODE (HTML) --
-    &lt;div id="not"&gt;
-        &lt;h1&gt; This heading is selected &lt;/h1&gt;
-        &lt;p class="select"&gt; This paragraph is not selected &lt;/p&gt;
-        &lt;h6 class="select"&gt; This heading is not selected &lt;/h6&gt;
-        &lt;p&gt; This paragraph is also selected &lt;/p&gt;
-        &lt;div class="select"&gt; This DIV is not selected &lt;/div&gt;
-        &lt;p&gt; This paragraph is also selected &lt;/p&gt;
+// HTML -----------------------------------
+    &lt;div class="not-test"&gt;
+      &lt;p class="not-test-odd"&gt; Hello World! (1) &lt;/p&gt;
+      &lt;p class="not-test-even"&gt; Hello World! (2) &lt;/p&gt;
+      &lt;p class="not-test-odd"&gt; Hello World! (3) &lt;/p&gt;
+      &lt;p class="not-test-even"&gt; Hello World! (4) &lt;/p&gt;
     &lt;/div&gt;
-
--- CODE (CSS) --
-    #not *:not(.select){                        
-        color:green;            
-    }                          
+    
+// CSS -----------------------
+    .not-test :not(.not-test-even) {      // selects elements that are not <mark>.not-test-even</mark>
+        color: green;
+    }
+    .not-test :not(.not-test-odd) {       // selects elements that are not <mark>.not-test-odd</mark>
+        color: yellow;
+    }
         </pre>
     </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------>
+    <h3 class="header"> The <mark>:has()</mark> pseudo class </h3>
+    <div class="has-test">
+      <p>Hello <span>World!</span></p>
+    </div>
+    <div class="has-test">
+      <p class="has-child">Hello World!</p>
+    </div>
+    <div class="has-test">
+      Hello World!
+    </div>
+    <p class="has-sibling"></p>
+    <details>
+      <summary> CODE : </summary>
+      <pre>
+// HTML -----------------------------------
+    &lt;div class="has-test"&gt;
+      &lt;p&gt;Hello &lt;span&gt;World!&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="has-test"&gt;
+      &lt;p class="has-child"&gt;Hello World!&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="has-test"&gt;
+      Hello World!
+    &lt;/div&gt;
+    &lt;p class="has-sibling"&gt;&lt;/p&gt;
+    
+// CSS -----------------------
+    .has-test {
+        height: 50px;
+        border: solid black 1px;
+    }
+    .has-test:has(.has-child, span) {
+        background-color: orange;
+    }
+    .has-test:has(+ .has-sibling) {       // has sibling
+        background-color: forestgreen;
+    }
+        </pre>
+    </details>
+  </details>
+  <!-------------------------------------------------------------------------------------------------------------------------->
+  <hr>
+  <h3 class="header"> The <mark>:empty</mark> / <mark>:only-child</mark> / <mark>:only-of-type</mark> pseudo selectors </h3>
+  <details class="example">
+    <summary> Example : </summary>
     <h3><u> <mark>:empty</mark> TEST </u></h3>
     <p> the second element is NOT empty (white space = content), the the thick line is the 3rd element which has not content (therefore it is selected) </p>
     <p class="empty_test"> this element is NOT empty (therefore it is not selected) </p>
@@ -1810,6 +1919,7 @@
         </pre>
     </details>
   </details>
+
 
   <br><br>
 </body>
