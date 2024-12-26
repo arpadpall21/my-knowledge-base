@@ -1,65 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <title> Container Queries </title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="../../Assets/stylesPages.css">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="../../Assets/scriptPages.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title> Container Queries </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
 
-<body>
-  <h1> Container Queries </h1>
-  <p> Updated ( 2024-12-25 ) </p>
+  <body>
+    <h1> Container Queries </h1>
+    <p> Updated ( 2024-12-25 ) </p>
     <nav class="sitenav"> <a href="../../index.html">MySite > </a>
       <a href="../index.html" title="CSS">CSS > </a> Container Queries
     </nav>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
 
-  <p class="subSite"><a href=""> SubSite > </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
 
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
 
-  <table class="table">
-    <tr>
-      <th style="width:30%;"> Method / Property / statement ect... </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td>
-        demo prop
-      </td>
-      <td>
-        - demo description
-        <span class="browserSupport">
-          <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-          <span><i class="fab fa-firefox"></i> </span>
-          <span><i class="fab fa-opera"></i> </span>
-          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> </span>
-          <span><i class="fab fa-safari"></i> </span>
-          <span><i class="fab fa-node-js"></i> </span>
-        </span>
-      </td>
-    </tr>
-
-
-
-
-  </table>
-  <br>
-  <details class="example" id="notes">
-    <summary> Notes & Tips :</summary>
-    <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
-  </details>
-  <h2 style="color:green;"><u> Useful Links : </u></h2>
-
-  <h2 style="color:green;"><u> Remember This : </u></h2>
-
-  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-
-
-  <!--
+    <!--
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 stage 1: high level overview 
@@ -79,10 +47,16 @@ stage 3 :
 - more reusable that media queries
 - 1st we have to declare on the parent element the container!
 
+- with media queries we style based on the viewport VS with container queries we style based on the parent element
+
 properies:
     container-type: size | inline-size | normal
     container-name: <name>
     container: container-type / container-name;               // shorthand 
+
+
+- we cannot style the container itself
+
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
@@ -96,41 +70,166 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     
     
     
+    - we can use @container within a block? (so it applies for that element?)
+        - apparently we have nesting in css so that's the trick (we do it in another round this)
+    
 -->
 
+    <span class="browserSupport">
+      <span><i class="fab fa-chrome"></i> 105 </span>
+      <span><i class="fab fa-firefox"></i> 115 </span>
+      <span><i class="fab fa-opera"></i> 91 </span>
+      <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 101 </span>
+      <span><i class="fab fa-safari"></i> 16 </span>
+    </span>
+    <p> - elements declared as container query, apply styles on child elements based on the container's dimensions <u>(styles cannot be applied on the container itself!)</u> </p>
+    <pre class="syntax">
+    @container <optval>contName</optval> <opt class="openable">not<div>
+      <p> - logical NOT, negates the following condition </p>
+    </div></opt> (<reqval class="openable">dimensionCondition<div>
+      <p> - media-query-like condition (ex: <mark>min-width: 1000px</mark>) </p>
+      <p> - supports comparison operators <mark>&lt;</mark> <mark>&lt;=</mark> <mark>&gt;</mark> <mark>&gt;=</mark> <mark>=</mark> (ex: <mark>width >= 1000px</mark> <mark>height < 450px</mark>) </p>
+      <p> - <a href="https:\/\/developer.mozilla.org/en-US/docs/Web/CSS/@container#descriptors" target="_blank">descriptors</a> </p>
+    </div></reqval>) <opt class="openable">and|or<div>
+      <p> - logical and|or, to chain container query conditions </p>
+    </div></opt> <optval>...</optval> {
+      <optval>cssStyles...</optval>
+    }
+    
+    <reqval>cssSelector</reqval> {
+      container-type: <span class="openable">inline-size|size|normal<div>
+        <p> <mark>inline-size</mark> - applies styles on inline dimenstion (writing direction (width by default)) </p>
+        <p> <mark>size</mark> - applies styles on inline and block dimensions (whichever is larger) </p>
+        <p> <mark>normal</mark> - declared as container query but does not apply styles on any dimentions </p>
+      </div></span>;        // declares this element as a container (container query)
+      container-name: <reqval>contName</reqval>;        // (optional) only apply styles declared in <mark>@cotainer</mark> named by <reqval>contName</reqval>
+      
+      // -------
+      container: <reqval>container-name</reqval> / <reqval>container-type</reqval>;         // shorthand property 
+    }
+  
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Container Query Without Name </h4>
+      <div class="cont-test">
+        <p class="cont-child"> container child </p>
+      </div>
+      <details class="example">
+        <summary> Example: </summary>
+        <pre>
+// HTML ---------------------------------
+    &lt;div class="cont-test"&gt;
+      &lt;p class="cont-child"&gt; container child &lt;/p&gt;
+    &lt;/div&gt;
+    
+// CSS -------------------------------
+    @container (min-width: 768px) {       // container rule
+      .cont-content {
+        background-color: orange;
+      }
+    }
+    
+    .cont-test {                          // element declared as container query 
+      container-type: inline-size;        // styles applied on width
+    }
+    </pre>
+      </details>
+      <hr>
+      <!------------------------------------------------------------------------------------>
+      <h4 class="header"> Container With Name </h4>
+      <div class="cont-name-test-1">
+        <p class="cont-name-child"> container child </p>
+      </div>
+      <div class="cont-name-test-2">
+        <p class="cont-name-child"> container child </p>
+      </div>
+      <details class="example">
+        <summary> Example: </summary>
+        <pre>
+// HTML ---------------------------------
+    &lt;div class="cont-name-test-1"&gt;
+      &lt;p class="cont-name-child"&gt; container child &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="cont-name-test-2"&gt;
+      &lt;p class="cont-name-child"&gt; container child &lt;/p&gt;
+    &lt;/div&gt;
+    
+    
+// CSS -------------------------------
+    @container cn-1 (width > 768px) {
+      .cont-name-child {
+        background-color: orange;
+      }
+    }
+    @container cn-2 (width > 768px) {
+      .cont-name-child {
+        background-color: cyan;
+      }
+    }
+    
+    .cont-name-test-1 {
+      container: cn-1 / inline-size;      // applies container styles <mark>cn-1</mark>
+    }
+    .cont-name-test-2 {
+      container: cn-2 / inline-size;      // applies container styles <mark>cn-2</mark>
+    }    
+    </pre>
+      </details>
+      <hr>
+      <!------------------------------------------------------------------------------------>
+      <h4 class="header"> Logical Conditions </h4>
+      <div class="cont-cond-test">
+        <p class="cont-cond-child"> container child </p>
+      </div>
+      <details class="example">
+        <summary> Example: </summary>
+        <pre>
+// HTML ---------------------------------
+    &lt;div class="cont-cond-test"&gt;
+      &lt;p class="cont-cond-child"&gt; container child &lt;/p&gt;
+    &lt;/div&gt;
+    
+// CSS -------------------------------
+    @container logicalCont (width <= 500px) or (width >= 1000px) {        // logical or
+      .cont-cond-child {
+        background-color: orange;
+      }
+    }
+    
+    .cont-cond-test {
+      container: logicalCont / inline-size;
+    }
+    </pre>
+      </details>
+    </details>
 
-<div class="post">
-  <div class="card">
-    <h2>Card title</h2>
-    <p>Card content</p>
-  </div>
-</div>
 
 
 
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  <hr>
-  <hr>
-  <hr>
-  <hr>
-  <hr>
 
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
 
-  <h2 class="headerExtra"><u> Title 1 </u></h2>
-  <h2 class="header"> Title 1.1 </h2>
-  <h3 class="header"> Title 1.1.1 </h3>
-  <h4 class="header"> Title 1.1.1.1 </h4>
-  <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-  <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-  <p style="text-decoration:underline;"> - important information is underlined </p>
-  <p style="color:yellow;"> - very important information is written with yellow colors </p>
-  <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-  <div style="background-color:red;">
-    <p> - red background block means not learned or not tested information! </p>
-    <p> - </p>
-  </div>
+    <h2 class="headerExtra"><u> Title 1 </u></h2>
+    <h2 class="header"> Title 1.1 </h2>
+    <h3 class="header"> Title 1.1.1 </h3>
+    <h4 class="header"> Title 1.1.1.1 </h4>
+    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
+    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
+    <p style="text-decoration:underline;"> - important information is underlined </p>
+    <p style="color:yellow;"> - very important information is written with yellow colors </p>
+    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
+    <div style="background-color:red;">
+      <p> - red background block means not learned or not tested information! </p>
+      <p> - </p>
+    </div>
 
-  <pre class="syntax">
+    <pre class="syntax">
     <reqval>required value </reqval>
     <optval>optional value </optval>
     <lit>literally used </lit>
@@ -144,41 +243,40 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     </div></span>
     </pre>
 
-  <details class="example">
-    <summary> DEMO (can be pseudocode) </summary>
-    <pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
     examples of the current lessons 
     
 // -----------------------------------------
 
 // -----------------------------------------
     </pre>
-  </details>
+    </details>
 
-  <pre class="cmd">
+    <pre class="cmd">
     command line demo 
     </pre>
-  <pre class="formula">
+    <pre class="formula">
     formula code (like conversion meter...)
     </pre>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> example title </u></h4>
-    <p> - live tests will come here </p>
-    <details>
-      <summary> CODE : </summary>
-      <pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> example title </u></h4>
+      <p> - live tests will come here </p>
+      <details>
+        <summary> CODE : </summary>
+        <pre>
     copy of the exaple code 
         </pre>
+      </details>
     </details>
-  </details>
-  <!---------------------------------------------------------------------------------------------------------------------------------->
-  <hr>
+    <!---------------------------------------------------------------------------------------------------------------------------------->
+    <hr>
 
-  <h2 class="test" style=""><a href="TEST/index.html"> TEST > </a></h2>
+    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
 
-
-  <br><br>
-</body>
+    <br><br>
+  </body>
 
 </html>
