@@ -126,6 +126,24 @@
           </span>
         </td>
       </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> @layer </td>
+        <td>
+          - solves the css specificity complexity by basically namespacing a group of css declarations and setting the specificity by the namespace relation <br>
+          - so <mark>@layer</mark>s are basically namespaced css declarations, and the specificity is set by layer relation (not by selector specificity)<br>
+          <span id="browserSupport" title="updated : 2019-05-24">
+            <span><i class="fab fa-chrome"></i> 99 </span>
+            <span><i class="fab fa-firefox"></i> 97 </span>
+            <span><i class="fab fa-opera"></i> 85 </span>
+            <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 99 </span>
+            <span><i class="fab fa-safari"></i> 15.4 </span>
+          </span>
+        </td>
+      </tr>
     </table>
     <br>
     <details class="example" id="notes">
@@ -384,6 +402,97 @@
         </pre>
       </details>
     </details>
+    <!--------------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> The <mark>@layer</mark> rule </h2>
+    <p> - <mark>@layer</mark>s solve the css specificity complexity by basically namespacing a group of css declarations and setting the specificity by the namespace relation </p>
+    <p> - so <mark>@layer</mark>s are basically namespaced css declarations, and the specificity is set by layer relation (not by selector specificity) </p>
+    <pre class="syntax">
+    @layer <reqval>layerName</reqval><optval>, ...</optval>   // <span class="openable">it's common to declare the layer specificity<div>
+      <p> - the very 1st layername declaration sets the current layer's specificity </p>
+      <p> - by declaring the layer specificity order like this on top of the file any furhter layer redeclaration does not matter for specificity </p>
+      <p> - this is a neat technique to see layer specificity relations in one line </p>
+    </div></span> on the top of the file (rightmost has higher specificity)
+                                                        // -! when using <mark>!important</mark> the lefmost important declaration has the highest specificity
+    
+    @layer <reqval>layerName</reqval> {     // layer namespaces a set of css declarations
+        <optval>cssStyling...</optval>
+    }
+    <optval>...</optval>                    // the latest layer declaration overrides the previous onces' specificity
+    
+    <reqval>cssStyling</reqval>             // css code outside layers has higher specificity than layers
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> @layer specificity order </h4>
+      <div class="layer-parent">
+        <div class="layer-child">
+          <p> Hello <span>World!</span> </p>
+        </div>
+      </div>
+      <details class="example">
+        <summary> DEMO : </summary>
+        <pre>
+// HTML --------------------------------------------------
+    &lt;div class="layer-parent"&gt;
+      &lt;div class="layer-child"&gt;
+        &lt;p&gt; Hello &lt;span&gt;World!&lt;/span&gt; &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    
+// CSS --------------------------------------------------
+    @layer high-specific, low-specific;       // layer specificity declared here (the rightmost layer is the most specific)
+    
+    .layer-parent span {                      // vanilla css utility cannot be overriden by any layer (has the highest specificity)
+      color: white;
+    }
+    
+    // specificity score: <mark>11</mark>
+    @layer low-specific {                     // -! since on top we decalred the layer specificity order layer declaration order does not matter anymore
+      .layer-parent span {
+        background-color: green;
+        color: yellow;
+      }
+    }
+    
+    // specificity score: <mark>22</mark>
+    @layer high-specific {
+      .layer-parent > .layer-child > p > span {
+        background-color: red;
+        color: orange;
+      }
+    }
+    </pre>
+      </details>
+      <hr>
+      <!---------------------------------------------------------------------------------------------->
+      <h4 class="header"> Using <mark>!important</mark> with @layers </h4>
+      <p class="layer-important"> Hello World! </p>
+      <details class="example">
+        <summary> DEMO : </summary>
+        <pre>
+// HTML --------------------------------------------------
+    &lt;p class="layer-important"&gt; Hello World! &lt;/p&gt;
+    
+    
+// CSS --------------------------------------------------
+    @layer l1, l2;                      // the leftmost <mark>!important</mark> declaration have the highest specificity
+    
+    @layer l1 {
+      .layer-important {
+        background-color: red !important;
+      }
+    }
+    @layer l2 {
+      .layer-important {
+        background-color: green !important;
+      }
+    }
+    </pre>
+      </details>
+    </details>
+
 
     <br><br>
   </body>
