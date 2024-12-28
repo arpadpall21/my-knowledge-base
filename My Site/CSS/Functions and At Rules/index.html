@@ -409,18 +409,37 @@
     <p> - so <mark>@layer</mark>s are basically namespaced css declarations, and the specificity is set by layer relation (not by selector specificity) </p>
     <pre class="syntax">
     @layer <reqval>layerName</reqval><optval>, ...</optval>   // <span class="openable">it's common to declare the layer specificity<div>
-      <p> - the very 1st layername declaration sets the current layer's specificity </p>
-      <p> - by declaring the layer specificity order like this on top of the file any furhter layer redeclaration does not matter for specificity </p>
+      <p> - cascade layers stack in the order they first appear, meaning the very fist declaration sets the layer specificity </p>
       <p> - this is a neat technique to see layer specificity relations in one line </p>
     </div></span> on the top of the file (rightmost has higher specificity)
                                                         // -! when using <mark>!important</mark> the lefmost important declaration has the highest specificity
     
-    @layer <reqval>layerName</reqval> {     // layer namespaces a set of css declarations
+    @layer <optval>layerName</optval> {     // layer namespaces is a set of css declarations (we can declare anonymus layers too)
+        <reqval>cssSelector</reqval> {
+            <reqval>prop</reqval>: <reqval>val</reqval> revert-layer;       // reverts this property (so the previous specific takes precedence)  
+        }
+        <optval>cssStyling...</optval>
+        
+        <opt>@layer <reqval>childLayerName</reqval> {</opt>   // we can nest layers in order give more structure to our code
+            <optval>cssStyling...</optval>
+        <opt>}</opt>
+        <optval>...</optval>
+    }
+    <optval>...</optval>                    // the latest layer declaration overrides the previous onces' (more specific)
+    
+    @layer <reqval>layerName</reqval>.<reqval>childLayerName</reqval> {   // setting a nested layer 
         <optval>cssStyling...</optval>
     }
-    <optval>...</optval>                    // the latest layer declaration overrides the previous onces' specificity
     
-    <reqval>cssStyling</reqval>             // css code outside layers has higher specificity than layers
+    
+    <reqval>cssStyling</reqval>             // css code outside layers has higher specificity than any @layer
+    </pre>
+    <pre class="syntax">
+// importing layers -----------------------------------------
+    @layer <reqval>layerName</reqval><optval>, ...</optval>;              // -! layer specificity must be declared before import
+    
+    @import url(<reqval>filePath</reqval>);                     // @layers declared in <reqval>filePath</reqval> are imported  
+    @import url(<reqval>filePath</reqval>) layer(<reqval>layerName</reqval>);                     // file <reqval>filePath</reqval> imported and namespaced as <reqval>layerName</reqval> @layer
     </pre>
     <details class="example">
       <summary> Example : </summary>
@@ -490,6 +509,116 @@
       }
     }
     </pre>
+      </details>
+      <hr>
+      <!---------------------------------------------------------------------------------------------->
+      <h4 class="header"> Nested Layers </h4>
+      <ol class="layer-nest-parent">
+        <li class="layer-nest-1st-child"> one </li>
+        <li class="layer-nest-2nd-child"> two </li>
+      </ol>
+      <details class="example">
+        <summary> DEMO : </summary>
+        <pre>
+// HTML --------------------------------------------------
+    &lt;ol class="layer-nest-parent"&gt;
+      &lt;li class="layer-nest-1st-child"&gt; one &lt;/li&gt;
+      &lt;li class="layer-nest-2nd-child"&gt; two &lt;/li&gt;
+    &lt;/ol&gt;
+    
+// CSS --------------------------------------------------
+    @layer list {                           // this gives more structure 
+      @layer item-1, item-2;
+      
+      @layer item-1 {
+        .layer-nest-1st-child {
+          background-color: orange;
+        }
+      }
+      @layer item-2 {
+        .layer-nest-2nd-child {
+          background-color: green;
+        }
+      }
+      
+      .layer-nest-parent {
+        border: solid 1px black;
+      }
+    }
+    
+    @layer list.item2 {                   // overriding nested layer
+      .layer-nest-2nd-child {
+        background-color: cyan;
+      }
+    }
+        </pre>
+      </details>
+      <hr>
+      <!---------------------------------------------------------------------------------------------->
+      <h4 class="header"> Import @layers from another file </h4>
+      <pre>
+// styles.css (file) -----------------
+    @layer my-p2, my-p1;                          // -! layer specificity must be declared before import
+    @import url("css files/layerImport1.css");    // import layers
+    
+// module1.css (file) -----------------
+    @layer my-p1 {
+      .my-p {
+        color: blue;
+      }
+    }
+    
+    @layer my-p2 {
+      .my-p {
+        color: red;
+      }
+    }
+    </pre>
+      <hr>
+      <!---------------------------------------------------------------------------------------------->
+      <h4 class="header"> Import file as @layers </h4>
+      <pre>
+// styles.css (file) -------------------
+    @layer my-p2, my-p1;                                          // -! layer specificity must be declared before import
+    @import url("css files/module1.css") layer(my-p1);            // importing css files as individual layers
+    @import url("css files/module2.css") layer(my-p2);
+      
+// module1.css (file) -------------------
+    .my-p {
+      color: blue;
+      background-color: yellow;
+    }
+    
+// module2.css (file) -------------------
+    .my-p {
+      color: red;
+      background-color: gray;
+    }
+      </pre>
+      <hr>
+      <!---------------------------------------------------------------------------------------------->
+      <h4 class="header"> Revert css utility <mark>revert-layer</mark> </h4>
+      <p class="my-p"> Hello World! </p>
+      <details class="example">
+        <summary> DEMO : </summary>
+        <pre>
+// HTML --------------------------------------------------
+    &lt;p class="my-p"&gt; Hello World! &lt;/p&gt;
+    
+// CSS --------------------------------------------------
+    @layer my-p1 {
+      .my-p {
+        color: white;
+        background-color: black;
+      }
+    }
+    @layer my-p2 {
+      .my-p {
+        color: blue;
+        background-color: darkgreen revert-layer;       // property disabled (so the previous specific takes precedence)
+      }
+    }
+        </pre>
       </details>
     </details>
 
