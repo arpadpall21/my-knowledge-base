@@ -6,8 +6,8 @@
   <title> CSS Pseudos</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="styles.css">
   <link rel="stylesheet" href="../../Assets/stylesPages.css">
+  <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="../../Assets/scriptPages.js"></script>
 </head>
 
@@ -159,6 +159,20 @@
       <td> <i>selector</i>:focus </td>
       <td>
         - selects the element that has focus
+        <span id="browserSupport">
+          <span><i class="fab fa-chrome"></i> 4 </span>
+          <span><i class="fab fa-firefox"></i> 2 </span>
+          <span><i class="fab fa-opera"></i> 9.6 </span>
+          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 8 </span>
+          <span><i class="fab fa-safari"></i> 3.1 </span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td> <i>selector</i>:focus-visible </td>
+      <td>
+        - intended to be an improved version of <mark>:focus</mark>, should get only focus when tabbed, but not when clicked <br>
+        - <u> currently [2024-12-29] does exactnly the same as <mark>:focus</mark></u>
         <span id="browserSupport">
           <span><i class="fab fa-chrome"></i> 4 </span>
           <span><i class="fab fa-firefox"></i> 2 </span>
@@ -1024,48 +1038,7 @@
   <h3 style="color:darkblue;"><u> The <mark>:default</mark> / <mark>:indeterminate</mark> / <mark>:focus</mark> / <mark>:checked</mark> / <mark>:enabled</mark> / <mark>:disabled</mark> / <mark>:in-range</mark> / <mark>:out-of-range</mark> / <mark>:valid</mark> / <mark>:invalid</mark> / <mark>:optional</mark> / <mark>:required</mark> / <mark>read-write</mark> / <mark>:read-only</mark> pseudo selectors </u></h3>
   <details class="example">
     <summary> Example : </summary>
-    <pre>
-    &lt;form name="myForm" id="myForm"&gt;
-        &lt;input type="text" required&gt;&lt;br&gt;
-            &lt;input type="number" min="1" max="10" value="5"&gt;&lt;br&gt;
-            &lt;input type="number" min="1" max="10" value="11"&gt;&lt;br&gt;
-        &lt;input type="email" value="my@Email.com" readolny&gt;&lt;br&gt;
-        &lt;input type="email" value="my@Email.com" disabled&gt;&lt;br&gt;
-            &lt;input type="radio" form="myForm"&gt;
-            &lt;input type="radio" form="myForm" checked&gt;
-            &lt;input type="radio" form="myForm"&gt;
-        &lt;input type="image" src="myImage" alt="subbmit imgae button"&gt;
-    &lt;/form&gt;
-    
--- CSS --
-    *:default {color: yellow;}                                         // "&lt;input type="image" src="myImage" alt="subbmit imgae button"&gt;", "&lt;input type="radio" form="myForm" checked&gt;" selected
-// :focus / :checked -------------------------
-    :focus {color: yellow;}                                            // the element the user is cicked is selected
-    :checked {color: yellow;}                                          // "&lt;input type="radio" form="myForm" checked&gt;" selected
-    
-// :enabled / :disabled ---------------------- 
-    :enabled {color: green;}                                           // <u>all elements selected except</u> "&lt;input type="email" value="my@Email.com" disabled&gt;"
-    :disabled {color: red;}                                            // "&lt;input type="email" value="my@Email.com" disabled&gt;" selected
-    
-// :in-range / :out-of-range ----------------- 
-    :in-range {color: green;}                                          // "&lt;input type="number" min="1" max="10" value="5"&gt;" selected
-    :out-of-range {color: red;}                                        // "&lt;input type="number" min="1" max="10" value="11"&gt;" selected (number is not between the allowed range)
-    
-// :valid / :invalid -------------------------
-    :valid {color: green;}                                             // <u>all elements selected except</u> "&lt;input type="text" required&gt;", "&lt;input type="number" min="1" max="10" value="11"&gt;"
-    :invalid {color: red;}                                             // selects "&lt;input type="text" required&gt;" <u>(because no value specified)</u>, "&lt;input type="number" min="1" max="10" value="11"&gt;" <u>(because out of range)</u>   
-    
-// :optional / :required --------------------- 
-    :optional {color: green;}                                          // <u>all elements except</u> "&lt;input type="text" required&gt;"
-    :required {color: green;}                                          // "&lt;input type="text" required&gt;" selected
-    
-// :read-write / :read-only ------------------ 
-    :read-write {color: green;}                                        // <u>all elements selected except</u> "&lt;input type="email" value="my@Email.com" readolny&gt;"
-    :read-only {color: red;}                                           // "&lt;input type="email" value="my@Email.com" readolny&gt;" selected
-        :-moz-read-write {color: green;}                               <span style="color:orangered;">&lt;-- required in Mozilla </span>
-        :-moz-read-only {color: red;}
-    </pre>
-    <h3><u> <mark>:default</mark> TEST </u></h3>
+    <h4 class="header"> The <mark>:default</mark> pseudo-class </h3>
     <p> - <mark>&lt;button&gt; Submit &lt;/button&gt;</mark> targeted </p>
     <form class="form">
       <input type="text" value="myValue">
@@ -1146,28 +1119,37 @@
     }
         </pre>
     </details>
-    <h3><u> <mark>:focus</mark> TEST </u></h3>
-    <p> - While you click on the input area it will turn yellow </p>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:focus</mark> VS <mark>:focus-visible</mark> pseudo classes </h4>
+    <p> - both <mark>:focus</mark> and <mark>:focus-visible</mark> does the same </p>
     <form>
-      <input id="focus" type="text" name="name"><br><br>
+      <input id="focus" type="text" name="name" placeholder=":focus"><br>
+      <input id="focus-visible" type="text" name="name" placeholder=":focus-visible"><br>
       <input type="submit" name="submit" value="Submit">
     </form>
     <details>
       <summary> CODE : </summary>
       <pre>
--- CODE (HTML) --
+// HTML ----------------------------
     &lt;form&gt;
-        &lt;input id="focus" type="text" name="name">&lt;br&gt;&lt;br&gt;
-        &lt;input type="submit" name="submit" value="Submit"&gt;
+      &lt;input id="focus" type="text" name="name" placeholder=":focus"&gt;&lt;br&gt;
+      &lt;input id="focus-visible" type="text" name="name" placeholder=":focus-visible"&gt;&lt;br&gt;
+      &lt;input type="submit" name="submit" value="Submit"&gt;
     &lt;/form&gt;
   
--- CODE (CSS) --
-    input#focus:focus{
+// CSS -----------------------
+    input#focus:focus {
         background-color: darkorange;
+    }
+    input#focus-visible:focus-visible {
+        background-color: yellow;
     }
         </pre>
     </details>
-    <h3><u> <mark>:checked</mark> TEST </u></h3>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:checked</mark> pseudo class </h3>
     <p> - click on the checkboxes and radio button to see the result </p>
     <form id="box">
       <input type="radio" name="radio" value="1st button"> 1st Button <br>
@@ -1204,7 +1186,9 @@
                                                             }
 		</pre>
     </details>
-    <h3><u> <mark>:enabled</mark> / <mark>:disabled</mark> TEST </u></h3>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:enabled</mark> / <mark>:disabled</mark> pseudo classes </h4>
     <form id="txt">
       <input type="text"> First Name <br>
       <input type="text"> Last Name <br>
@@ -1227,7 +1211,9 @@
                                                         }
         </pre>
     </details>
-    <h3><u> <mark>:in-range</mark> / <mark>:out-of-range</mark> TEST </u></h3>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:in-range</mark> / <mark>:out-of-range</mark> pseudo classes </h4>
     <p> - the field below will highlight differently when you enter a valid or invalid number </p>
     <form id="number">
       <input type="number" min="10" max="20" value="15"> valid value is between 10 and 20
@@ -1247,7 +1233,9 @@
     }                                                       }
         </pre>
     </details>
-    <h3><u> <mark>:valid</mark> / <mark>:invalid</mark> TEST </u></h3>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:valid</mark> / <mark>:invalid</mark> pseudo classes </h4>
     <p> - these two pseudo classes targets valid and invalid entries </p>
     <p> - this feild below requires a valid email entry and reacts differently when entered wrong or right values</p>
     <form id="email">
@@ -1267,7 +1255,9 @@
     }                                               }
         </pre>
     </details>
-    <h3><u> <mark>:optional</mark> / <mark>:required</mark> </u></h3>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:optional</mark> / <mark>:required</mark> classes </h4>
     <p> - targets optional and required fileds </p>
     <p> <b style="text-decoration:underline;">- form elements which are not declared required are optional </b></p>
     <form id="opt">
@@ -1289,7 +1279,9 @@
     }                                                       }
         </pre>
     </details>
-    <h3><u> <mark>:read-write</mark> / <mark>:read-only</mark> </u></h3>
+    <hr>
+    <!---------------------------------------------------------------------------------->
+    <h4 class="header"> The <mark>:read-write</mark> / <mark>:read-only</mark> classes </h4>
     <p> - targets readonly and read and write fields </p>
     <form id="readonly">
       <input type="text"> This field can be read and written<br>
