@@ -403,8 +403,8 @@ const fastingConfig = {
     red: '#CD5C5C',
   },
   colorSwitch: {      // outside green or yellow periods the default period is red
-    greenPeriodBetweenHours: [[14, 18]],
-    yellowPeriodBetweenHours: [[12, 14], [18, 20]],
+    greenPeriodBetweenHours: [[0, 23]],
+    yellowPeriodBetweenHours: [],
   }
 }
 const displayedMessage = "[Focus!]"

@@ -6,8 +6,9 @@
     <title> Basics </title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="styles_sass.css">
     <script src="../../Assets/scriptPages.js"></script>
   </head>
 
@@ -160,8 +161,7 @@
     <p> - <mark class="mark">extrinsic</mark> sizing = sized based on the element's parent element </p>
     <!--------------------------------------------------------------------------------------------->
     <hr>
-    <h2 class="headerExtra"> Properties </h2>
-    <h2 class="header"> CSS custom properties (variables)
+    <h2 class="header"> Custom properties (variables)
       <span id="browserSupport">
         <span><i class="fab fa-chrome"></i> 49 </span>
         <span><i class="fab fa-firefox"></i> 31 </span>
@@ -242,68 +242,94 @@
     </details>
     <!--------------------------------------------------------------------------------------------------------->
     <hr>
-    <h2 class="header"> Nesting </h2>
+    <h2 class="header"> Nesting
+      <span id="browserSupport" title="2025-01-07">
+        <span><i class="fab fa-chrome"></i> 120 </span>
+        <span><i class="fab fa-firefox"></i> 117 </span>
+        <span><i class="fab fa-opera"></i> 106 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 120 </span>
+        <span><i class="fab fa-safari"></i> 17.2 </span>
+      </span>
+    </h2>
+    <p> - only child elements can be selected within a selected scope (just like in SASS) </p>
+    <pre class="syntax">
+    <reqval>parentSelector</reqval> {
+        <optval>cssDeclarations...</optval>
+        
+        & {}                                 // nesting selector references the <u>direct</u> <reqval>parentSelector</reqval> (ex: <mark>$:hover</mark>)
+        + <reqval>cssSelector</reqval>              // sibling selector targets the next sibling element targeted by <reqval>cssSelector</reqval>
+    }
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+    <h4 class="header"> Nesting &  </h4>
     <div class="nest-test">
       <p> Hello <span>World!</span></p>
     </div>
     <p> Direct sibling element! </p>
     <p> Another sibling element! </p>
-    
-    <!--
-      - the & selector works like in sass, it just contributes to specificity
-    
-    -->
-    
-    
-    
-    
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <details>
+        <summary> CODE : </summary>
+      <pre>
+// HTML ---------------------------------------------
+    &lt;div class="nest-test"&gt;
+      &lt;p&gt; Hello &lt;span&gt;World!&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;p&gt; Direct sibling element! &lt;/p&gt;
+    &lt;p&gt; Another sibling element! &lt;/p&gt;
     
     
+// CSS ---------------------------------------------
+    .nest-test {
+      border: solid 1px black;
+      
+      & {                                           // nesting selector references the parent element
+        background-color: lightcoral;
+      }
+      
+      p {
+        color: red;
+        
+        span {
+          text-decoration: underline;
+        }
+      }
+      
+      + p {                                         // select direct sibling element
+        background-color: lightgreen;
+        color: green;
+      }
+    }
+      </pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------->
+    <h4 class="header"> Nesting Media Queries </h4>
+    <div class="nest-media-q">
+      <p> Hello World </p>
+    </div>
+      <details>
+        <summary> CODE : </summary>
+      <pre>
+// HTML ---------------------------------------------
+    &lt;div class="nest-media-q"&gt;
+      &lt;p&gt; Hello World &lt;/p&gt;
+    &lt;/div&gt;
+    
+    
+// CSS ----------------------------------------------
+    .nest-media-q {
+      @media(max-width: 1000px) {             // media queries can be nested (so media rule applies to this element)
+        color: red;
+      }
+    }
+      </pre>
+    </details>
+    </details>
     <!--------------------------------------------------------------------------------------------------------->
     <hr>
     <h2 class="header"> Global property values <mark>initial</mark> / <mark>revert</mark> / <mark>inherit</mark> / <mark>unset</mark> </h2>
     <p> - these property values are available on all CSS properties </p>
-    <details class="example">
-      <summary> DEMO </summary>
-      <pre>
-// HTML -------------------------------------------------------------------------------
-    &lt;div class="d1"&gt; &lt;/div&gt;
-    &lt;div class="d2"&gt; 
-        &lt;div&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    
-    
-// CSS --------------------------------------------------------------------------------
-  // initial / revert / inherit -------------------------------------------------------
-    .d1{
-        border: solid 2px black;
-        height: 50px;
-        background-color: orange;
-        display: initial;                                                              // the display's property default (initial) value is 'inline' 
-    }
-    .d2{
-        border: solid 2px black;
-        height: 50px;
-        background-color: orange;
-        display: revert;                                                               // according to the browser's (User Agent) stylesheet the display's propertiy value for div elements is 'block'    
-    }                                                                                  // the 'revert' keyword resets the default value for the property according to the browser's stylesheet    
-    
-    .d2 div{
-        border: inherit;                                                               // child element inherits the border property value from its parent    
-        height: 20px;
-        background-color: green;
-    }
-    
-  // unset ----------------------------------------------------------------------------
-    .d2 div{
-        border: unset;                                                                 // 'unset' = 'initial' because the border property is non inheritabl    
-        height: 20px;
-        color: unset;                                                                  // 'unset' = 'inherit' because the color property value is inherited from the parent     
-    }    
-    </pre>
-    </details>
     <details class="example">
       <summary> Example : </summary>
       <h4 style="color:darkblue;"><u> <mark>initial</mark> / <mark>revert</mark> TEST </u></h4>
@@ -397,47 +423,6 @@
     <!--------------------------------------------------------------------------------------------------------->
     <hr>
     <h2 style="color:darkblue;"><u> The <mark>all</mark> property </u></h2>
-    <details class="example">
-      <summary> DEMO </summary>
-      <pre>
-// HTML -------------------------------------------------------------------------------
-    &lt;div class="demoParent"&gt; parentElement 
-        &lt;p class="demoChild"&gt; childElement &lt;/p&gt;
-    &lt;/div&gt;
-    
-// CSS --------------------------------------------------------------------------------
-    .demoParent {
-        color: red;
-        border: solid 3px black;
-        width: 70%;
-        height: 75px;
-    }
-    .demoChild {
-        color: white;
-        border: dashed 2px green;
-    }
-    
-  // initial --------------------------------------------------------------------------
-    .demoChild {                    
-        all: initial;                                                                  // all the properties are set to initial (default state)
-    }
-    
-  // inherit --------------------------------------------------------------------------
-    .demoChild {
-        all: inherit;                                                                  // all properties are inherited from the parent element (even the non-inheritable ones ("width" "height" and "border"))  
-    }
-    
-  // unset ----------------------------------------------------------------------------
-    .demoChild {
-        all: unset;                                                                    // inheritable properties are inherited from the parent element ("color")
-    }                                                                                  // non-inheritable properties are set to "initial" ("width" "height" and "border")
-    
-  // revert ---------------------------------------------------------------------------
-    .demoChild {
-        all: revert;                                                                   // reverts all property values according to the browser's default stylesheet     
-    }                                                                                  // inheritable properties are inherited from the parent ('color')     
-    </pre>
-    </details>
     <details class="example">
       <summary> Example : </summary>
       <h4><u> <mark>all</mark> property TEST </u></h4>
