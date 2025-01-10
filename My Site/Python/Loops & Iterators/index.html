@@ -33,10 +33,10 @@
     </tr>
     <tr>
         <td> 
-            <strong>iterator</strong>.__iter__
+            <strong>iterator|generator</strong>.__iter__
         </td>
         <td> 
-            - object is iterator if has the <mark>__iter__</mark> method (this is how we can check)
+            - object is <strong>iterator</strong> or <strong>generator</strong> if has the <mark>__iter__</mark> method (this is how we can check)
         </td>
     </tr>
     <tr>
@@ -62,9 +62,9 @@
         <td> 
             - yields the next member of <strong>iterator</strong> <br>
             - if overcalled yields <i>default</i> (if <i>def</i> is not specified raises a <mark>StopIteration</mark> error)
-                <span id="browserSupport" title="Updated: 2022-03-23">
-                    <span><i class="fab fa-python"></i> 2.6 </span>
-                </span>
+            <span id="browserSupport" title="Updated: 2022-03-23">
+                <span><i class="fab fa-python"></i> 2.6 </span>
+            </span>
         </td>
     </tr>
     <tr>
@@ -85,6 +85,54 @@
     </tr>
     <tr>
       <td colspan="2"> Async </td>
+    </tr>
+    <tr>
+        <td> 
+            aiter(<reqval>asyncIterable</reqval>)
+        </td>
+        <td> 
+            - from an <reqval>asyncIterable</reqval> returns an <reqval>asyncIterator</reqval> object
+            <span id="browserSupport" title="Updated: 2025-01-09">
+                <span><i class="fab fa-python"></i> 3.10 </span>
+            </span>
+        </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+        <td> 
+            <reqval>asyncIterator|asyncGenerator</reqval>.__aiter__
+        </td>
+        <td> 
+            - object is an <reqval>asyncIterator</reqval> or <reqval>asyncGenerator</reqval> if it has this property
+        </td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
+    <tr>
+        <td> 
+            <strong>asyncIterator|asyncGenerator</strong>.__anext__()
+        </td>
+        <td> 
+            - yields the next member of <strong>asyncIterator|asyncGenerator</strong> <br>
+            - if overcalled raises a <mark>StopAsyncIteration</mark> error
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            anext(<strong>iterator|generator</strong>)
+        </td>
+        <td> 
+            - yields the next member of <strong>asyncIterator|asyncGenerator</strong> <br>
+            - if overcalled raises a <mark>StopAsyncIteration</mark> error
+            <span id="browserSupport" title="Updated: 2025-01-09">
+                <span><i class="fab fa-python"></i> 3.10 </span>
+            </span>
+        </td>
     </tr>
 </table>
     <br>
@@ -353,9 +401,10 @@
 </details>
 <!---------------------------------------------------------------------------------------------->
 <hr>
-<h2 class="header"> The <mark>__iter__</mark> / <mark>iter()</mark> / <mark>__next__()</mark> / <mark>next()</mark> / <mark>range()</mark> attribute and methods </h2>
+<h2 class="header"> The <mark>__iter__</mark> / <mark>iter()</mark> / <mark>__next__()</mark> / <mark>next()</mark> / <mark>range()</mark> / <mark>__anext__()</mark> / <mark>anext()</mark> attribute and methods </h2>
 <details class="example">
 <summary> DEMO </summary>
+    <h4 class="header"> The <mark>__iter__</mark> / <mark>iter()</mark> / <mark>__next__()</mark> / <mark>next()</mark> / <mark>range()</mark> proeprty and methods </h4>
     <pre>
 // __iter__ ---------------------------------------------------------------------------
     str = 'someString'
@@ -392,6 +441,31 @@
     
     for i in range(0, 21, 7):
         i                                                                              // -> 0  |  7  |  14
+    </pre>
+    <!-------------------------------------------------------------------------->
+    <hr>
+    <h4 class="header"> The <mark>__aiter__</mark> / <mark>__anext__()</mark> / <mark>anext()</mark> property and methods </h4>
+    <pre>
+    import asyncio
+    
+    
+    async def my_asgen():
+        for i in range(10):
+            await asyncio.sleep(1)
+            yield i
+    
+    asyncGen = my_asgen()                   // creates async generator
+    asyncGen.__aiter__                      // has <mark>__aiter__</mark> property (means it's an async iterator or generator)
+    
+    async def main():
+    
+        await anext(asyncGen)
+        await asyncGen.__anext__()
+        await anext(asyncGen)
+        await asyncGen.__anext__()
+    
+    
+    asyncio.run(main())
     </pre>
 </details>
     

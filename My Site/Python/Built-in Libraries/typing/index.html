@@ -94,10 +94,11 @@
     tuple[<strong>pyType</strong><i>, pyType, ...</i>]
     
     
-    LiteralString                                                                       // literal string (ex: does not accept 'F' string <mark>f'{var}'</mark>)   
+    LiteralString                                                                       // <span class="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.11 </span></span> literal string (ex: does not accept 'F' string <mark>f'{var}'</mark>)   
     
     class <reqva>Type</reqva>(TypedDict):                                        // <span class="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.8 </span></span> type dictionary, describes an exact dictionary structure and types
         <reqval>attr</reqval>: <reqval>pyType</reqval>
+        <reqval>attr</reqval>: Required[<reqval>pyType</reqval>] NotRequired[<reqval>pyType</reqval>]   // <span class="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.11 </span></span> required or not required (required by default)
         <optval>...</optval>
     
     
@@ -108,7 +109,7 @@
     
     Callable[[<strong>argType</strong><i>, ...</i>], <strong>returnType</strong>]                                                // <span class="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.10 </span></span> callable like a callback function 
     
-    Self                                                                                // the current class 
+    Self                                                                                // <span class="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.11 </span></span> instance (used in class methods)
   </pre>
     <details class="example">
       <summary> DEMO </summary>
@@ -117,21 +118,21 @@
     from typing import Dict, List, Set, FrozenSet, Tuple
     
     
-# dictionary annotation ---------------------------------------------------
+// dictionary annotation ---------------------------------------------------
     my_dict: dict[str, int]
     my_dict2: Dict[str, int]
     
     my_dict = {'one': 1}
     my_dict2 = {'one': 1}
     
-# list annotation ---------------------------------------------------------
+// list annotation ---------------------------------------------------------
     my_list: list[str] = ['a', 'b']
     my_list2: List[str]
     
     my_list = ['a', 'b']
     my_list2 = ['a', 'b']
     
-# set & frozenset annotations ---------------------------------------------
+// set & frozenset annotations ---------------------------------------------
     my_set: set[int]
     my_set2: Set[int]
     my_frozenset: frozenset[int]
@@ -142,7 +143,7 @@
     my_frozenset = frozenset([1, 2, 3])
     my_frozenset2 = frozenset([1, 2, 3])
     
-# tuple -------------------------------------------------------------------
+// tuple -------------------------------------------------------------------
     my_tuple: tuple[str, int, float]
     my_tuple2: Tuple[str, int, float]
     
@@ -154,7 +155,7 @@
     from typing import Callable, TypeVar, Union
     
     
-    Error_callback = Callable[[str], None]      # callback accepting one string argument, returns None
+    Error_callback = Callable[[str], None]                          // callback accepting one string argument, returns None
     
     def check_something(something: str, cb: Error_callback) -> str:
         return 'something'
@@ -166,7 +167,7 @@
       <pre>
     from typing import Any
     
-    def fn_one(a: Any) -> Any:              # can have any value
+    def fn_one(a: Any) -> Any:                      // can have any value
         return None
   </pre>
       <p> - <mark>LiteralString</mark> </p>
@@ -175,8 +176,8 @@
     
     
     def fn_one(a: str) -> LiteralString:
-        return f'abc'             # literal string
-        return f'abc{a}'          # not allowed not a literal string 
+        return f'abc'                                         // literal string
+        return f'abc{a}'                                      // not allowed not a literal string 
   </pre>
       <p> - <mark>Never</mark> <mark>NoReturn</mark> </p>
       <pre>
@@ -195,21 +196,22 @@
     
     
     class TestClass:
-        def get_self(self) -> Self:         # the class itself
+        def get_self(self) -> Self:               // the class itself
             return self
   </pre>
       <p> - <mark>TypeDict</mark>
         <pre>
-    from typing import TypedDict
+    from typing import TypedDict, Required, NotRequired
     
     
     class Person(TypedDict):
         name: str
-        age: int
-        emails: list[str]
+        surname: Required[str]
+        age: NotRequired[str]
     
-    me: Person = {'name': 'Pall', 'age': 38, 'emails': ['some@email', 'some@email2']}
-  </pre>
+    anna = Person(name="Anna", surname="Kerekes", age=32)
+    peter = Person(name="Peter", surname="Pall")
+   </pre>
       </details>
       <!----------------------------------------------------------------------------------->
       <hr>
