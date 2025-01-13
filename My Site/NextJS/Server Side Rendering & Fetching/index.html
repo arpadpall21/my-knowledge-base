@@ -25,7 +25,7 @@
 
     <h2 style="color:green;"><u> Remember This : </u></h2>
     <p> - rendering strategies are only working in prod (always dynamic in dev), at build time a report is printed where we can see each page's rendering stategy (Static VS Dynamic) </p>
-    <p> - ISR pages are Static (they are regenerated at 'revalidation') </p>
+    <p> - ISR (Incremental Static Regeneration) pages are Static (they are regenerated at 'revalidation') </p>
     <p> - Next.js has some initiatives to support general data caching (like: for DB cache), but currently none of the proposals are stable [2024-11-30] </p>
     <p class="indent-lv1"> - <a href="https://nextjs.org/docs/app/api-reference/functions/unstable_cache" target="_blank">unstable_cache</a> works but unstable (not production ready) </p>
     <p class="indent-lv1"> - <a href="https://nextjs.org/docs/canary/app/api-reference/directives/use-cache" target="_blank">cache</a> hook natively supported by React, but it's still in canary version </p>
@@ -154,11 +154,11 @@
         // ...
         
         fetch(<reqval>url</reqval>, {
-            // static cache strategy ----
+          // static cache strategy ----
             cache: 'force-cache',                       // caches data (default before Next.js v15)
-            // dynamic cache strategy ---
+          // dynamic cache strategy ---
             cache: 'no-store',                          // no cache used (default from Next.js v15)
-            // ISR cache strategy -------
+          // ISR cache strategy -------
             next: {
                 revalidate: false | 0 | <reqval>nr</reqval>,   // (<mark>false</mark> -> never revalidate) (<mark>0</mark> -> no cache) (<mark><reqval>nr</reqval></mark> -> <u>ISR</u> revalidates the cache after <reqval>nr</reqval> seconds)
                 tags: [<reqval>isrTag:str</reqval><optval>, ...</optval>]       // tags this fetch, (so we can revalidate with <mark>revalidateTag(<reqval>tag:str</reqval>)</mark> hook)  
