@@ -123,8 +123,13 @@
     
     
 // object annotation -----------
-    { [key in <reqval>union</reqval>]: <reqval>tsType</reqval> }      // <reqval>union</reqval> describes required object keys
-    { [key: string]: <reqval>tsType</reqval> }                        // string object keys
+    { <reqval>propName</reqval>: <reqval>tsType</reqval> <optval>, ...</optval> }       // annotates each key/val pairs
+    { [<reqval class="openable">desc<div>
+    <p> - describes the key (ex: <mark>key</mark> (general), <mark>id</mark> etc...) </p>
+</div></reqval> in <reqval>union</reqval>]: <reqval>tsType</reqval> }      // <reqval>union</reqval> describes required object keys
+    { [<reqval class="openable">desc<div>
+    <p> - describes the key (ex: <mark>key</mark> (general), <mark>id</mark> etc...) </p>
+</div></reqval>: string]: <reqval>tsType</reqval> }                        // string object keys
     
     type <reqval>keyTypes</reqval> = keyof <reqval>objType</reqval>     // extracts <reqval>objType</reqval> keys into <reqval>keyTypes</reqval> which is a <reqval>union</reqval> type
     </pre>
@@ -146,19 +151,6 @@
         ['a', 'b', 'c'],
         ['d', 'e', 'f']
     ]
-    
-// -------------------------------------------------------------------------
-    const animal: {                         // object annotation 
-        name: string,
-        readonly age: number,               // readonly property
-        color?: string                      // optional property
-    } = {name:'Morgo', age:12}
-    
-    console.log( animal );                  // -> { name: 'Morgo', age: 12 }
-    console.log( animal.color );            // undefined
-    
-    animal.name = 'New Morgo';
-    animal.age = 13;                        // this would trow an error (readonly property)
     </pre>
       <hr>
       <!------------------------------------------------------>
@@ -185,25 +177,46 @@
       <!------------------------------------------------------>
       <h4 class="header"> Object annotation </h4>
       <pre>
+// exact description -----------------------------
+    const animal: {                         // object annotation 
+        name: string,
+        readonly age: number,               // readonly property
+        email?: string                      // optional property
+    } = {
+        name:'Morgo',
+        age:12,
+    }
+    
+    
+// restricted key names and value types ----------
     const person: { [key in 'name' | 'age' | 'email']: string | number } = {
-      name: 'Doe',                                                    // annotated keys are required
+      name: 'Doe',                                                    // all keys are required
       age: 40,
       email: 'doe@john.com',
     };
     
     
+// restricted value types -----------------------
+    const person: { [attr: string]: string | number } = {
+        name: 'Doe',
+        age: 40,
+        email: 'doe@john.com',
+        // ...
+    }
+    
+    
 // <mark>keyof</mark> ---------------------------
     type Person = {
-      name: string;
-      age: number;
-      email: string;
+        name: string;
+        age: number;
+        email: string;
     };
     
     type PersonKeys = keyof Person;       // PersonKeys is a union type of "name" | "age" | "email"
     
     let personKey: PersonKeys;            // to loop through (kind of a duktape solution but Typescript is very annoying on this :/)
     for (personKey in person) {
-      person[personKey]
+        person[personKey]
     }
       </pre>
     </details>
