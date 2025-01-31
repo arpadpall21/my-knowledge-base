@@ -9,6 +9,5 @@ import {
   IsDate,
   Min,
   Max,
-  IsBoo
 } from 'class-validator';
 
