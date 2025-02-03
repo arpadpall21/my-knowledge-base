@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Server Request Validation </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+    <script src="../../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Server Request Validation </h1>
+    <p> Updated ( 2025-02-02 ) </p>
+    <nav class="sitenav">
+      <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html">Node.js > </a>
+      <a href="../index.html">Zod > </a> Server Request Validation
+    </nav>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - we can use <a href="https://github.com/samchungy/zod-openapi" target="_blank">zod-openapi</a> lib to generate openAPI compliant json from zod schemas (it's not that easy like in FastAPI but at least we have a solution) </p>
+    <pre>
+    import express, { Request, Response } from 'express';
+    import { z, ZodIssue } from 'zod';
+    
+    const app = express();
+    const port = 3000;
+    
+    app.use(express.json());
+    
+    const userShema = z.object({                        // request validation schema
+      id: z.number().max(100000).optional(),
+      name: z.string().min(3).max(50),
+      email: z.string().email(),
+    });
+    
+    interface Res201 {
+      message: string;
+      user: Req;
+    }
+    
+    interface Res422 {
+      error: ZodIssue[];
+    }
+    
+    interface Res500 {
+      error: string;
+    }
+    
+    type Req = z.infer&lt;typeof userShema&gt;;
+    type Res = Res201 | Res422 | Res500;
+    
+    app.post('/', (req: Request&lt;object, object, Req&gt;, res: Response&lt;Res&gt;) => {
+        try {
+          const userValidation = userShema.safeParse(req.body);
+          if (userValidation.success) {
+            res.status(201).json({ message: "User created successfully", user: req.body });
+            return;
+          }
+          res.status(422).json({ error: userValidation.error.errors });             // returns zod issues
+        } catch (e) {
+          res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+    
+    app.listen(port, () => console.log(`Express is listening on http://localhost:${port}`));  
+  </pre>
+
+
+    <br><br>
+  </body>
+
+</html>
