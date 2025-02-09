@@ -68,11 +68,21 @@
     import winston from 'winston';
     
     <reqval>logger</reqval> = winston.createLogger({
-      level: <reqval>logLevel:str</reqval>                  // logs the sepecyfied and higher log messages
-      format: <reqval>formater</reqval>
-              combine(<reqval>formater</reqval><optval>, ...</optval>)
+      level: <reqval>logLevel:str</reqval>                  // logs the sepecyfied and higher log messages (Default: <mark>'info'</mark>)
+      levels: <reqval>levelDes:obj</reqval>                 // set log levels (Default <mark>winston.config.npm.levels</mark>)
+      format: <reqval>formater</reqval>|winston.format.combine(<reqval>formater</reqval><optval>, ...</optval>)  // formater or multiple formaters combined (Default: <mark>winston.format.json</mark>)
+      <opt>defaultMeta: { <optval>...</optval> }</opt>      // optional extra messasges
+      transports: {                                         // transport (target storage devices) (Default: <mark>[]</mark>)
+        <reqval>transport</reqval>,
+        <optval>...</optval>,
+      }
+      <span style="background-color:red;">exitOnError: <reqval>bool</reqval></span>
+      <span style="background-color:red;">silent: <reqval>bool</reqval></span>
     })
     
+    
+    <reqval>logger</reqval>.log({ level: <reqval>logLevel:str</reqval>, message: <reqval>logMsg:str</reqval> })     // to log messages
+    <reqval>logger</reqval>.<reqval>logLevel</reqval>(<reqval>logMsg:str</reqval>)
     </pre>
     <!--
 ---------------------------------------------------------------------------------------------
@@ -133,6 +143,38 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     - 
     
 -->
+
+
+
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <hr>
+    <!-------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Transport </h2>
+
+
+    <pre class="syntax">
+    import winston from 'winston';
+    
+    <reqval>logger</reqval> = winston.createLogger({
+      transports: {                                         // adding transports at logger creation
+        <reqval>transport</reqval>,
+        <optval>...</optval>,
+      }
+    })
+    
+    <reqval>logger</reqval>.add(<reqval>transport</reqval>)     // adds a transport to the logger
+    <reqval>logger</reqval>.remove(<reqval>transport</reqval>)     // remove the specified transport to the logger
+    <reqval>logger</reqval>.clear()                                // removes all loggers
+    
+    <reqval>logger</reqval>.transports                          // configured transports (Array)
+    </pre>
+
+
+
+
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr>
