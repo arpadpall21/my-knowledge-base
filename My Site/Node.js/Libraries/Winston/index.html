@@ -21,7 +21,7 @@
       <caption> Default Winston Log Levels (follow NPM log levels) </caption>
       <tr>
         <th style="width:30%;"> Level </th>
-        <th> Numeric VAlue </th>
+        <th> Numeric Value </th>
       </tr>
       <tr>
         <td> ERROR </td>
@@ -70,17 +70,27 @@
     <reqval>logger</reqval> = winston.createLogger({
       level: <reqval>logLevel:str</reqval>                  // logs the sepecyfied and higher log messages (Default: <mark>'info'</mark>)
       levels: <reqval>levelDes:obj</reqval>                 // set log levels (Default <mark>winston.config.npm.levels</mark>)
-      format: <reqval>formater</reqval>|winston.format.combine(<reqval>formater</reqval><optval>, ...</optval>)  // formater or multiple formaters combined (Default: <mark>winston.format.json</mark>)
-      <opt>defaultMeta: { <optval>...</optval> }</opt>      // optional extra messasges
-      transports: {                                         // transport (target storage devices) (Default: <mark>[]</mark>)
+      format: <reqval>format</reqval>|winston.format.combine(<reqval>format</reqval><optval>, ...</optval>)  // format or multiple formats combined (Default: <mark>winston.format.json</mark>)
+      defaultMeta: { <optval>...</optval> }                 // optional extra messasges
+      transports: [                                         // transport (target storage devices) (Default: <mark>[]</mark>)
         <reqval>transport</reqval>,
         <optval>...</optval>,
-      }
-      <span style="background-color:red;">exitOnError: <reqval>bool</reqval></span>
-      <span style="background-color:red;">silent: <reqval>bool</reqval></span>
+      ]
+      exceptionHandlers: [                                  // logs uncaught exceptions (Default: <mark>[]</mark>)
+        <reqval>transport</reqval>,
+        <optval>...</optval>,
+      ]
+      rejectionHandlers: [                                  // logs unhandled promise rejections (Default: <mark>[]</mark>)
+        <reqval>transport</reqval>,
+        <optval>...</optval>,
+      ]
+      silent: <reqval>bool</reqval>                         // all logs are suppressed (Default: <mark>false</mark>)
     })
     
+    <reqval>logger</reqval>.<reqval>property</reqval> = <reqval>newVal</reqval>         // logger properties can be reconfigured (ex: <mark>logger.level = 'warn'</mark>)
     
+    
+  // log ----
     <reqval>logger</reqval>.log({ level: <reqval>logLevel:str</reqval>, message: <reqval>logMsg:str</reqval> })     // to log messages
     <reqval>logger</reqval>.<reqval>logLevel</reqval>(<reqval>logMsg:str</reqval>)
     </pre>
@@ -107,13 +117,8 @@ stage 3 :
         - target storage devices, winston supports a bunch natively
         - one logger can have multiple transports (each can be configured on different logging level)
         - there's a great support for other storages as well (this is cool!): https://github.com/winstonjs/winston/blob/master/docs/transports.md#built-in-to-winston
-        
-      - Formats:
-        - this is basically log formating
-        - winston has a bunc of built-in formattings
-        - formats can be combined
-        - we can also write our custom formats (this is also cool!)
-        
+    
+  
 
     - winston recommend to create a custom logger, but there's also a base logger ready to go
         - the base logger has not transport attached so it can lead to hight memory usage!
@@ -121,6 +126,11 @@ stage 3 :
 
 
       
+
+-----------------------------------------------------
+--- Transport 
+-----------------------------------------------------
+
 
 
 -----------------------------------------------------
@@ -132,9 +142,14 @@ stage 3 :
 
 
 -----------------------------------------------------
---- formaters
+--- formats
 -----------------------------------------------------
-
+      - Formats:
+        - this is basically log formating
+        - winston has a bunc of built-in formattings
+        - formats can be combined
+        - we can also write our custom formats (this is also cool!)
+        - also can write our own transport: https://github.com/winstonjs/winston?tab=readme-ov-file#adding-custom-transports
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
@@ -143,6 +158,88 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     - 
     
 -->
+
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <hr>
+    <!-------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Log Level </h2>
+
+    <pre class="syntax">
+    import winston from 'winston';
+    
+    winston.addColors(<reqval class="openable">levelDes:obj<div>
+        <p> - color descriptor object: <mark>{ <strong>logLevel</strong>: <strong>color:str</strong><optval>, ...</optval> }</mark> </p>
+        <p> - available colors: <mark>black</mark> <mark>red</mark> <mark>green</mark> <mark>yellow</mark> <mark>blue</mark> <mark>magenta</mark> <mark>cyan</mark> <mark>white</mark> <mark>gray</mark> <mark>grey</mark> </p>
+        <p> - ex: <mark>{ disaster: 'red', problem: 'yellow', ok: 'blue' }</mark> (custom log levels mapped to custom colors) </p>
+      </div></reqval>)                        // maps log levels to colors
+    
+    <reqval>logger</reqval> = winston.createLogger({
+      level: <reqval>logLevel:str</reqval>                  // sets the logger log level (Default: <mark>'info'</mark>)
+      levels: <reqval class="openable">levelDes:obj<div>
+        <p> - log level descriptor object: <mark>{ <strong>logLevel</strong>: <strong>logVal:nr</strong><optval>, ...</optval> }</mark> </p>
+        <p> - ex: <mark>{ foo: 0, bar: 1, baz: 2, foobar: 3}</mark> </p>
+      </div></reqval>                 // set log levels (Default <mark>winston.config.npm.levels</mark>)
+      transports: {
+        <reqval>transport</reqval>,                         // the log level also can set on tansport level
+      }
+    })
+    
+    
+  // log ----
+    <reqval>logger</reqval>.log({ level: <reqval>logLevel:str</reqval>, message: <reqval>logMsg:str</reqval> })     // <reqval>logLevel</reqval> defined by <reqval>delveDes:obj</reqval>
+    <reqval>logger</reqval>.<reqval>logLevel</reqval>(<reqval>logMsg:str</reqval>)
+    </pre>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <hr>
+    <!-------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Format </h2>
+    <pre class="syntax">
+    const { createLogger, format, transports } = require('winston');
+    const { combine, timestamp, label, printf } = format;
+    
+    <reqval>format</reqval> = format.<a href="https:\/\/github.com/winstonjs/logform?tab=readme-ov-file#logform" target="_blank">format</a>         // available built-in formats
+    
+    <reqval>format</reqval> = printf(({ level, message, label, timestamp }) => {      // creates a fully custom log format
+      return <reqval>customFormat:str</reqval>
+    })
+    
+    <reqval>format</reqval> = format((info) => {                            // filters log messages (info = stream object <mark>{ message: <reqval>msg:str</reqval>, level: <reqval>msg:str</reqval><optval>, ...</optval> }</mark>)
+      // do some filtering logic
+      return info|false                                                   // if we return <mark>false</mark> that message is not logged
+    })
+    
+    <reqval>logger</reqval> = winston.createLogger({
+      format: <reqval>format</reqval>|winston.format.combine(<reqval>format</reqval><optval>, ...</optval>)  // format or multiple formats combined (Default: <mark>winston.format.json</mark>)
+    })
+    </pre>
+
 
 
 
@@ -158,12 +255,15 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     <pre class="syntax">
     import winston from 'winston';
     
+    <reqval>transport</reqval> = winston.transports.<a href="https:\/\/github.com/winstonjs/winston/blob/master/docs/transports.md#winston-transports" target="_blank">transport</a>        // built-in transports
+    
     <reqval>logger</reqval> = winston.createLogger({
       transports: {                                         // adding transports at logger creation
-        <reqval>transport</reqval>,
+        <reqval>transport</reqval>,                         // each transport is configured individually
         <optval>...</optval>,
       }
     })
+    
     
     <reqval>logger</reqval>.add(<reqval>transport</reqval>)     // adds a transport to the logger
     <reqval>logger</reqval>.remove(<reqval>transport</reqval>)     // remove the specified transport to the logger
