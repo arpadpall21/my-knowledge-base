@@ -62,16 +62,24 @@
     <h2 style="color:green;"><u> Remember This : </u></h2>
 
     <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-
-
+    <p> - winston is a universal logging library supporting multiple output storages </p>
+    <p> - winston is built on top of node.js streams in object mode (each stream object is a log) </p>
+    <p> - winston concepts: </p>
+    <p class="indent-lv1"> Transport <a href="https://github.com/winstonjs/winston/blob/master/docs/transports.md#winston-transports" target="_blank">[link]</a> </p>
+    <p class="indent-lv2"> - target storage devices (multiple can be attached to one logger) </p>
+    <p class="indent-lv2"> - winston have several natively suported (console, file, http, stream) </p>
+    <p class="indent-lv1"> Format <a href="https://github.com/winstonjs/logform?tab=readme-ov-file#logform" target="_blank">[link]</a> </p>
+    <p class="indent-lv2"> - formats log messages </p>
+    <p class="indent-lv2"> - winston have several natively suported that can be combined </p>
     <pre class="syntax">
     import winston from 'winston';
     
-    <reqval>logger</reqval> = winston.createLogger({
+    winston                                                 // <mark>winston</mark> is the base logger (doesn't have any transport attached)
+    
+    <reqval>logger</reqval> = winston.createLogger({        // creates and returns a logger
       level: <reqval>logLevel:str</reqval>                  // logs the sepecyfied and higher log messages (Default: <mark>'info'</mark>)
       levels: <reqval>levelDes:obj</reqval>                 // set log levels (Default <mark>winston.config.npm.levels</mark>)
       format: <reqval>format</reqval>|winston.format.combine(<reqval>format</reqval><optval>, ...</optval>)  // format or multiple formats combined (Default: <mark>winston.format.json</mark>)
-      defaultMeta: { <optval>...</optval> }                 // optional extra messasges
       transports: [                                         // transport (target storage devices) (Default: <mark>[]</mark>)
         <reqval>transport</reqval>,
         <optval>...</optval>,
@@ -84,89 +92,114 @@
         <reqval>transport</reqval>,
         <optval>...</optval>,
       ]
+      defaultMeta: { <optval>...</optval> }                 // optional extra messasges
       silent: <reqval>bool</reqval>                         // all logs are suppressed (Default: <mark>false</mark>)
     })
     
     <reqval>logger</reqval>.<reqval>property</reqval> = <reqval>newVal</reqval>         // logger properties can be reconfigured (ex: <mark>logger.level = 'warn'</mark>)
     
     
-  // log ----
+// log ----
     <reqval>logger</reqval>.log({ level: <reqval>logLevel:str</reqval>, message: <reqval>logMsg:str</reqval> })     // to log messages
     <reqval>logger</reqval>.<reqval>logLevel</reqval>(<reqval>logMsg:str</reqval>)
     </pre>
-    <!--
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-stage 1: high level overview 
-    - read through 
-    - create notes 
-    - deciede what exactly will you document down 
-    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    import winston from 'winston';
     
-stage 2:  low level overview
-    - deeper understanding of all what you've taken down in stage 1
+    const logger = winston.createLogger({
+      level: 'info',
+      format: winston.format.json(),
+      defaultMeta: { service: 'user-service' },
+      transports: [
+        new winston.transports.File({ filename: './logs/error.log', level: 'error' }),     // only errors are logged here
+        new winston.transports.File({ filename: './logs/combined.log' }),
+      ],
+    });
     
-stage 3 : 
-    - organize and document down everything 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-    - Winston is a universal logging library supporting multiple output storages
-
-    - Winston Concepts:
-      - Transports:
-        - target storage devices, winston supports a bunch natively
-        - one logger can have multiple transports (each can be configured on different logging level)
-        - there's a great support for other storages as well (this is cool!): https://github.com/winstonjs/winston/blob/master/docs/transports.md#built-in-to-winston
+    if (process.env.NODE_ENV !== 'production') {
+      logger.add(new winston.transports.Console())                       // add console transport ,
+      }));
+    }
     
-  
-
-    - winston recommend to create a custom logger, but there's also a base logger ready to go
-        - the base logger has not transport attached so it can lead to hight memory usage!
+  // log...
+    logger.info('logging some info')
+    logger.warn('logging some warning')
+    logger.error('logging some error')
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Base Logger </h4>
+      <pre>
+    import winston from 'winston';
     
-
-
-      
-
------------------------------------------------------
---- Transport 
------------------------------------------------------
-
-
-
------------------------------------------------------
---- log levels (includes customization)
------------------------------------------------------
-    - log levels follow the RFC5424 specification where 0 is the highest severity
-    - by default winston implements npm logging levles (but we can customize them )
-
-
-
------------------------------------------------------
---- formats
------------------------------------------------------
-      - Formats:
-        - this is basically log formating
-        - winston has a bunc of built-in formattings
-        - formats can be combined
-        - we can also write our custom formats (this is also cool!)
-        - also can write our own transport: https://github.com/winstonjs/winston?tab=readme-ov-file#adding-custom-transports
-
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - 
+    winston.add(new winston.transports.Console())          // add console transport to the base logger
     
--->
-
-
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
+    winston.info('logging some info')
+    winston.warn('logging some warning')
+    winston.error('logging some error')
+      </pre>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Reconfigure Logger </h4>
+      <pre>
+    import winston from 'winston';
+    
+    const logger = winston.createLogger({
+      level: 'http',
+      defaultMeta: { service: 'some-service' },
+      transports: [
+        new winston.transports.File({ filename: './logs/combined.log' }),
+        new winston.transports.Console(),
+      ],
+    });
+    
+    logger.level = 'silly';                               // reconfigure level and defaultMeta
+    logger.defaultMeta = null;
+    
+    
+    // log...
+    logger.silly('log silly message')
+      </pre>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Exception Handling </h4>
+      <pre>
+    import { createLogger, transports } from 'winston';
+    
+    const logger = createLogger({
+      transports: [
+        new transports.Console({ handleExceptions: true })              // logs unhandled exceptions
+      ],
+      exceptionHandlers: [
+        new transports.File({ filename: './logs/exection.log' })        // logs unhandled exceptions
+      ]
+    })
+    
+    
+    throw Error('another error')       // logged by the exceptionHandler
+      </pre>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Handling Rejected Promises </h4>
+      <pre>
+    import { createLogger, transports } from 'winston';
+    
+    const logger = createLogger({
+      transports: [
+        new transports.Console({ handleRejections: true })                 // logs uncaught promise rejections
+      ],
+      rejectionHandlers: [
+        new transports.File({ filename: './logs/rejections.log' })         // logs uncaught promise rejections
+      ]
+    })
+    
+    
+    Promise.reject('rejected promise...')
+      </pre>
+    </details>
     <hr>
     <!-------------------------------------------------------------------------------------------------->
     <h2 class="header"> Log Level </h2>
-
+    <p> - winston implements the RFC5424 specification where <mark>0</mark> is the highest severity, by default npm logging levles are implemented (but we can customize them) </p>
     <pre class="syntax">
     import winston from 'winston';
     
@@ -192,34 +225,66 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     <reqval>logger</reqval>.log({ level: <reqval>logLevel:str</reqval>, message: <reqval>logMsg:str</reqval> })     // <reqval>logLevel</reqval> defined by <reqval>delveDes:obj</reqval>
     <reqval>logger</reqval>.<reqval>logLevel</reqval>(<reqval>logMsg:str</reqval>)
     </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Setting Log Levels on Transporst Individually </h4>
+      <pre>
+    import { createLogger, transports } from 'winston';
+    
+    const logger = createLogger({
+      level: 'silly',
+      transports: [
+        new transports.Console(),                                                     // logs from 'silly' level
+        new transports.File({ filename: './logs/combined.log', level: 'info' }),      // logs from 'info' level
+        new transports.File({ filename: './logs/error.log', level: 'error' }),        // logs from 'error' level
+      ],
+    });
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    // log...
+    logger.silly('log silly message...')
+    logger.debug('log debug message...')
+    logger.info('log info message...')
+    logger.error('log error message...')
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Cusom Log Levels </h4>
+      <pre>
+    import winston, { createLogger, format, transports } from 'winston'
 
+    const myLogLevels = {                             // log level mapping
+      levels: {
+        disaster: 0,
+        problem: 1,
+        ok: 3,
+      },
+      colors: {
+        disaster: 'red',
+        problem: 'yellow',
+        ok: 'blue',
+      }
+    }
+    
+    winston.addColors(myLogLevels.colors)           // set custom colors
+    
+    const myLogger = createLogger({
+      level: 'ok',
+      levels: myLogLevels.levels,                   // set custom log level
+      format: format.cli(),
+      transports: [new transports.Console()]
+    })
+    
+    
+    // log...
+    myLogger.ok('ok log message...')
+    myLogger.problem('problem log message...')
+    myLogger.disaster('disaster log message...')
+      </pre>
+    </details>
     <hr>
     <!-------------------------------------------------------------------------------------------------->
-    <h2 class="header"> Format </h2>
+    <h2 class="header"> Format & Filter Logs </h2>
     <pre class="syntax">
     const { createLogger, format, transports } = require('winston');
     const { combine, timestamp, label, printf } = format;
@@ -239,19 +304,122 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
       format: <reqval>format</reqval>|winston.format.combine(<reqval>format</reqval><optval>, ...</optval>)  // format or multiple formats combined (Default: <mark>winston.format.json</mark>)
     })
     </pre>
-
-
-
-
-
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Custom Log Message Format </h4>
+      <pre>
+    import { createLogger, transports, format } from 'winston';
+    const { combine, timestamp, label, printf } = format;
+    
+    const myFormat = printf(({ level, message, label, timestamp }) => {     // custom log message formater
+      return `${timestamp} [${label}] ${level}: ${message}`;
+    });
+    
+    const logger = createLogger({
+      format: combine(
+        label({ label: 'test-label' }),
+        timestamp(),
+        myFormat,
+      ),
+      transports: [new transports.Console()],
+    });
+    
+    
+    // log...
+    logger.info('some info log')
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Some Log Formats </h4>
+      <pre>
+    import { createLogger, transports, format } from 'winston';
+    
+    const logger = createLogger({
+      format: format.cli({ colors: { info: 'blue', }}),             // cli log format
+      transports: [new transports.Console()],
+    });
+    
+    
+    // log...
+    logger.info('some info log')
+    logger.warn('some warn log')
+    logger.error('some error log')
+    
+    
+// -------------------------------
+    const logger2 = createLogger({
+      format: format.combine(
+        format.colorize(),                                          // simple colorized log format
+        format.simple(),
+      ),
+      transports: [new transports.Console()],
+    });
+    
+    // log...
+    logger2.info('some info log')
+    logger2.warn('some warn log')
+    logger2.error('some error log')
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Using <mark>splat()</mark> built-in formater for interpolation </h4>
+      <pre>
+    import { createLogger, transports, format } from 'winston';
+    
+    const logger = createLogger({
+      format: format.combine(
+        format.splat(),
+        format.simple(),
+      ),
+      transports: [new transports.Console()],
+    });
+    
+    
+    // log...
+    logger.info('some %s log', 'log')         // -> info: some log log
+    logger.warn('some %s log', 'warn')        // -> warn: some warn log
+    logger.error('some %s log', 'error')      // -> error: some error log
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Filtering Log Messages </h4>
+      <pre>
+    import { createLogger, transports, format } from 'winston';
+    
+    const ignorePrivate = format((info) => {          // the info argument is basicaly a node.js stream object having log properties
+      if (info.private) {
+        return false;
+      };
+      return info;
+    });
+    
+    const ignoreSecret = format((info) => {         // we can also filter messages like this 
+      if (/secret/.test(info.message)) {
+        return false;
+      }
+      return info;
+    })
+    
+    const logger = createLogger({
+      format: format.combine(
+        format.simple(),
+        ignorePrivate(),
+        ignoreSecret(),
+      ),
+      transports: [new transports.Console()],
+    });
+    
+    
+    // log...
+    logger.info('some info log')                                                                    // logged
+    
+    logger.info('This is super secret - hide it.');                                                 // not logged because it contains the 'secret' word
+    logger.log({ private: true, level: 'error', message: 'This is super secret - hide it.' });      // not logged because of the pirvate property
+      </pre>
+    </details>
     <hr>
     <!-------------------------------------------------------------------------------------------------->
     <h2 class="header"> Transport </h2>
-
-
     <pre class="syntax">
     import winston from 'winston';
     
@@ -264,86 +432,74 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
       }
     })
     
+    <reqval>logger</reqval>.transports                          // configured transports (Array)
     
     <reqval>logger</reqval>.add(<reqval>transport</reqval>)     // adds a transport to the logger
     <reqval>logger</reqval>.remove(<reqval>transport</reqval>)     // remove the specified transport to the logger
     <reqval>logger</reqval>.clear()                                // removes all loggers
-    
-    <reqval>logger</reqval>.transports                          // configured transports (Array)
     </pre>
-
-
-
-
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-
-    <h2 class="headerExtra"><u> Title 1 </u></h2>
-    <h2 class="header"> Title 1.1 </h2>
-    <h3 class="header"> Title 1.1.1 </h3>
-    <h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-      <p> - red background block means not learned or not tested information! </p>
-      <p> - </p>
-    </div>
-
-    <pre class="syntax">
-    <reqval>required value </reqval>
-    <optval>optional value </optval>
-    <lit>literally used </lit>
-    <opt>optionally used </opt>
-  
-    <prot style="color:#049500;">prototype chain</prot>
-        
-    <span class="openable"> this is an openable element<div>
-        <p> - openable elements listed here in paragraphs </p>
-        <p> - </p>
-    </div></span>
-    </pre>
-
     <details class="example">
       <summary> DEMO (can be pseudocode) </summary>
+      <h4 class="header"> Custom Log Message Format </h4>
       <pre>
-    examples of the current lessons 
+    import { createLogger, transports, format } from 'winston';
     
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
+    const logger = createLogger({
+      level: 'debug',
+      transports: [
+        new transports.Console({                              // multiple transports configured
+          level: 'info',
+          format: format.combine(
+            format.colorize(),
+            format.simple(),
+          )
+        }),
+        new transports.File({
+          level: 'error',
+          filename: './logs/error.log',
+          format: format.json(),
+        }),
+        new transports.File({
+          level: 'info',
+          filename: './logs/error.log',
+          format: format.json(),
+        }),
+      ],
+    });
+    
+    // log...
+    logger.info('log info message...')
+    logger.error('log error message...')
+      </pre>
+      <hr>
+      <!--------------------------------------------------------------------------------->
+      <h4 class="header"> Add Remove Transporst </h4>
+      <pre>
+    import winston from 'winston';
+    
+    const logger = winston.createLogger({
+      transports: [
+        new winston.transports.File({ filename: './logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: './logs/combined.log' }),
+      ],
+    });
+    
+    const consoleTransport = new winston.transports.Console();
+    
+    logger.add(consoleTransport)                                          // add console transport 
+    logger.remove(consoleTransport)                                       // remove console transport 
+    
+    const errorFileTransport = logger.transports.find((transport) => {    // find and remove transport
+      return transport.filename === 'error.log';
+    });
+    logger.remove(errorFileTransport)
+    
+    logger.clear()                                                        // removes all loggers
+    logger.transports                                                     // -> []
+      </pre>
     </details>
-
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-    <details class="example">
-      <summary> Example : </summary>
-      <h4 style="color:darkblue;"><u> example title </u></h4>
-      <p> - live tests will come here </p>
-      <details>
-        <summary> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-      </details>
-    </details>
-    <!---------------------------------------------------------------------------------------------------------------------------------->
-    <hr>
-
-    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
-
+    
+    
     <br><br>
   </body>
 
