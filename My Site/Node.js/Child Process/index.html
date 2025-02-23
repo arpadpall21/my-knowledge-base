@@ -1,916 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
-    <title> Child Process </title> 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> 
+    <title> Child Process </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../Assets/stylesPages.css"> 
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
     <script src="../../Assets/scriptPages.js"></script>
-</head>
-<body>
-<h1> Child Process (ver 3.4.1) </h1>
-    <p> Updated ( 2019-06-16 / 2020-02-04 / 2020-07-09 )</p>
-    <p class="sitenav"> <a href="../../index.html">MySite></a>
-        <a href="../index.html">Node.js></a> Child Process 
+  </head>
+  <body>
+    <h1> Child Process </h1>
+    <p> Updated: ( 2019-06-16 / 2020-02-04 / 2020-07-09 / 2025-02-23 )</p>
+    <p class="sitenav"> <a href="../../index.html">MySite > </a>
+      <a href="../index.html">Node.js > </a> Child Process
     </p>
-<table class="table">
-    <tr>
+    <table class="table">
+      <tr>
         <th style="width:30%;"> Method / Property </th>
         <th> Description </th>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <td colspan="2"> Child Processes </td>
-    </tr>
-    <tr>
-        <td> 
-            exec(<strong>cmd:str</strong>, <i class="openable">options:obj<div>
-                <p> cwd: <strong>str</strong> - current working directory of the child process (Default: <mark>null</mark>) </p>
-                <p> env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> encoding: <strong>str</strong> - returned data encoding (Default: <mark>'utf8'</mark>) </p>
-                <p> shell: <strong>str</strong> - shell to execute the command with (Default: <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) </p>
-                <p> timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>0</mark>) </p>
-                <p> maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) </p>
-            </div></i>, <i class="openable">fn(err, stdout, stderr)<div>
-                <p> - err - error thrown by the current process (parent process) </p>
-                <p> - stdout - standard out of the child process (this is where we get the returned data) </p>
-                <p> - stderr - standard error of the child process </p>
-            </div></i>) 
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.exec(<strong>cmd:str</strong>, <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processexeccommand-options-callback" target="_blank">option:obj</a>, <i>fn(err, stdout, stderr)</i>)
         </td>
-        <td> 
-            - asynchronously spawns a shell (command prompt on Windows / bash on UNIX by default) and runs the passed <strong>cmd</strong> in it <br>
-            - when the child process is finished it returns the result in <u>one string</u>, <span class="openable">with limited size<div>
-                    <p> - default max size 1024*1024 in bytes </p> 
-                    <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
-                </div></span> <br>
-            - returns a ChildProcess object 
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> 
-            execSync(<strong>cmd:str</strong>, <i class="openable">options:obj<div>
-                <p> cwd: <strong>str</strong> - current working directory of the child process (Default: null) </p>
-                <p> env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> encoding: <strong>str</strong> - returned data encoding (Default: <mark>'utf8'</mark>) </p>
-                <p> shell: <strong>str</strong> - shell to execute the command with (Default: <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) </p>
-                <p> timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>undefined</mark>) </p>
-                <p> maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) </p>
-                <p> input: <strong>str|Buffer|TypedArray|DataView</strong> - data passed to the spawned child process stdin (overrides <mark>stdio[0]</mark>) </p>
-                <p> stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-            </div></i>) 
-        </td>
-        <td> 
-            - synchronously spawns a shell (command prompt on Windows / bash on UNIX by default) and runs the passed <strong>cmd</strong> in it <br>
-            - returns a Buffer object with the child process result, <span class="openable">with limited size<div>
-                    <p> - default max size 1024*1024 in bytes </p> 
-                    <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
-                </div></span>
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.11.12 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> 
-            execFile(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process (Default: <mark>null</mark>) </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) <br>
-                <p> - encoding: <strong>str</strong> - returned data encoding (Default: <mark>'utf8'</mark>) <br>
-                <p> - timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>0</mark>) <br>
-                <p> - maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) <br>
-                <p> - killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) <br>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process <br>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process <br>
-                <p> - windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) <br>
-                <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) <br>
-                <p> - shell: <strong>str|bol</strong> - if <mark>true</mark> shell set to <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows (Default: <mark>false</mark>)
-            </div></i>, <i class="openable">fn(err, stdout, stderr)<div>
-                <p> - err - error thrown by the current process (parent process) </p>
-                <p> - stdout - standard out of the child process (this is where we get the returned data) </p>
-                <p> - stderr - standard error of the child process </p>
-            </div></i>) 
-        </td>
-        <td> 
-            - asynchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default) <br>
-            - <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad) <br>
-            - when the child process is finished it returns the result in one string, <span class="openable">with limited size<div>
-                <p> - default max size 1024*1024 in bytes </p> 
-                <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
+        <td>
+          - asynchronously spawns a shell (by default: <mark>/bin/sh'</mark> on Unix, <mark>process.env.ComSpec</mark> on Windows) and executes <strong>cmd</strong> in it <br>
+          - on child process finish returns a single result (in the callback), <span class="openable">with limited size<div>
+              <p> - default max size 1024*1024 (can be configured) </p>
+              <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
             </div></span> <br>
-            - returns a ChildProcess object
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.1.91 </span>
-            </span>
+          - returns a <reqval>childProcess</reqval>
         </td>
-    </tr>
-    <tr>
-        <td> 
-            execFileSync(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process (Default: <mark>null</mark>) </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> - encoding: <strong>str</strong> - returned data encoding (Default: <mark>'buffer'</mark>) </p>
-                <p> - shell: <strong>str</strong> - shell to execute the command with (Default: <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) </p>
-                <p> - timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>undefined</mark>) </p>
-                <p> - maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> - killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> - windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) </p>
-                <p> - input: <strong>str|Buffer|TypedArray|DataView</strong> - data passed to the spawned child process stdin (overrides <mark>stdio[0]</mark>) </p>
-                <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-            </div></i>) 
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.execSync(<strong>cmd:str</strong>, <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processexecsynccommand-options" target="_blank">option:obj</a>)
         </td>
-        <td> 
-            - synchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default) <br>
-            - <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad) <br>
-            - returns a Buffer object with the child process result, <span class="openable">with limited size<div>
-                <p> - default max size 1024*1024 in bytes </p> 
-                <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
+        <td>
+          - synchronous version of <mark>exec()</mark> <u>(blocks the parent process until finishes)</u> <br>
+          - returns the result in a <reqval>buf</reqval>, <span class="openable">with limited size<div>
+              <p> - default max size 1024*1024 in bytes (can be configured) </p>
+              <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
             </div></span>
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.11.12 </span>
-            </span>
         </td>
-    </tr>
-    <tr>
-        <td> spawn(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> - shell: <strong>str|bol</strong> - spawns a shell and runs the <strong>exePath</strong> as a command in it, (<mark>true</mark> = <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) (Default: <mark>false</mark>) </p>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> - windowsHide: <strong>bol</strong>-  hide the subprocess console window (Default: <mark>false</mark>) </p>
-                <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-                <p> - argv0: <strong>str</strong> - sets the value of argv[0] sent to the child process </p>
-                <p> - detached: <strong>bol</strong> - prepares the child process to run independently (Windows only) </p>
-                <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) </p>
-            </div></i>) 
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.execFile(<strong>exePath:str</strong>, <i class="openable">[cmdArg, ...]<div>
+              <p> - command argument(s) </p>
+            </div></i>, <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processexecfilefile-args-options-callback" target="_blank">options:obj</a>, <i>fn(err, stdout, stderr)</i>)
         </td>
-        <td> - asynchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default) <br>
-             - <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad) <br>
-             - returns a ChildProcess which streams the data (can be listened on stdout as a ReadableStream) 
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
+        <td>
+          - asynchronously executes an executable file (directly without shell by default) <br>
+          - on child process finish returns a single result (in the callback), <span class="openable">with limited size<div>
+              <p> - default max size 1024*1024 (can be configured) </p>
+              <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
+            </div></span> <br>
+          - returns a <reqval>childProcess</reqval>
         </td>
-    </tr>
-    <tr>
-        <td> spawnSync(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> - encoding: <strong>str</strong> - returned data encoding (Default: <mark>'buffer'</mark>) </p>
-                <p> - shell: <strong>str|bol</strong> - spawns a shell and runs the <strong>exePath</strong> as a command in it, (<mark>true</mark> = <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) (Default: <mark>false</mark>) </p>
-                <p> - timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>undefined</mark>) </p>
-                <p> - maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> - killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> - windowsHide: <strong>bol</strong>-  hide the subprocess console window (Default: <mark>false</mark>) </p>
-                <p> - input: <strong>str|Buffer|TypedArray|DataView</strong> - data passed to the spawned child process stdin (overrides <mark>stdio[0]</mark>) </p>
-                <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-                <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) </p>
-            </div></i>) 
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.execFileSync(<strong>exePath:str</strong>, <i class="openable">[cmdArg, ...]<div>
+              <p> - command argument(s) </p>
+            </div></i>, <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processexecfilesyncfile-args-options" target="_blank">options:obj</a>)
         </td>
-        <td> 
-            - synchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default) <br>
-            - <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad) <br>
-            - returns an <span class="openable">object<div> 
-                <p> - pid: <strong>nr</strong> - child process id </p> 
-                <p> - output: <strong>arr</strong> - stdio in an Array </p>
-                <p> - stdout: <strong>buff|str</strong> - standard out </p>
-                <p> - stderr: <strong>buff|str</strong> - standard error </p>
-                <p> - status: <strong>nr|null</strong> - exit code or null if the subprocess terminated due to a signal </p>
-                <p> - signal: <strong>str|null</strong> - signal used to kill ths subprocess, null = subprocess did not terminated due to a signal </p>
-                <p> - error: <strong>err</strong> - error </p>
+        <td>
+          - synchronous version of <mark>execFile()</mark> <u>(blocks the parent process until finishes)</u> <br>
+          - returns the result in a <reqval>buf</reqval>, <span class="openable">with limited size<div>
+              <p> - default max size 1024*1024 in bytes (can be configured) </p>
+              <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
+            </div></span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.spawn(<strong>cmd|exePath:str</strong>, <i class="openable">[cmdArg, ...]<div>
+              <p> - command argument(s) </p>
+            </div></i> <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processspawncommand-args-options" target="_blank">options:obj</a>)
+        </td>
+        <td>
+          - asynchronously executes an executable file or command (directly without shell by default) <br>
+          - returns a <reqval>childProcess</reqval> which streams the data between the parrent and child process <br>
+          - designed to keep the child process running and actively communicate with the parent process
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.spawnSync(<strong>cmd|exePath:str</strong>, <i class="openable">[cmdArg, ...]<div>
+              <p> - command argument(s) </p>
+            </div></i> <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processspawnsynccommand-args-options" target="_blank">options:obj</a>)
+        </td>
+        <td>
+          - synchronous version of <mark>spawn()</mark> <u>(blocks the parent process until finishes)</u><br>
+          - returns an <span class="openable">object<div>
+              <p> - pid: <strong>nr</strong> - child process id </p>
+              <p> - output: <strong>arr</strong> - stdio in an Array </p>
+              <p> - stdout: <strong>buff|str</strong> - standard out </p>
+              <p> - stderr: <strong>buff|str</strong> - standard error </p>
+              <p> - status: <strong>nr|null</strong> - exit code or null if the subprocess terminated due to a signal </p>
+              <p> - signal: <strong>str|null</strong> - signal used to kill ths subprocess, null = subprocess did not terminated due to a signal </p>
+              <p> - error: <strong>err</strong> - error </p>
             </div></span> with the child process result, <span class="openable">the returned data size is limited<div>
-                <p> - default max size 1024*1024 in bytes </p>
-                <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated!) </p>
+              <p> - default max size 1024*1024 in bytes (by default) </p>
+              <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
             </div></span>
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.11.12 </span>
-            </span>
         </td>
-    </tr>
-    <tr>
-        <td> 
-             fork(<strong>modulePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">options:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>['inherit', 'inherit', 'inherit', 'ipc']</mark> <u>(must have one 'ipc' channel)</u> <u>(overrides the 'silent' option is specified)</u> </p>
-                <p> - detached: <strong>bol</strong> - prepares the child process to run independently (Windows only) </p>
-                <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) </p>
-                <p> - silent: <strong>bol</strong> - <mark>false</mark> = stdio set to <mark>'inherit'</mark> | <mark>true</mark> = stdio set to <mark>'pipe'</mark> (Default: <mark>false</mark>) </p>
-                <p> - execPath: <strong>str</strong> - executable used to create the child process </p>
-                <p> - execArgv: <em>[<strong>str, ...</strong>]</em> - list of arguments passed to the executable (Default: <mark>process.execArgv</mark>) </p>
-            </div></i>)
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>child_process</lit>.fork(<strong>modulePath:str</strong>, <i class="openable">[cmdArg, ...]<div>
+              <p> - command argument(s) </p>
+            </div></i>, <a href="https://nodejs.org/docs/latest/api/child_process.html#child_processforkmodulepath-args-options" target="_blank">options:obj</a>)
         </td>
-        <td> 
-             - asynchronously launches a node.js process (<strong>modulePath</strong>) (directly without shell) <br>
-             - <i>[arg, ...]</i> = command line argument 3, 4, ... to pass to the child process <br>
-             - streams the data, communicates by an IPC channel with the parent process <u>(required)</u>, (Default: stdio set to <mark>'inherit'</mark> = uses its parent stdio) <br>
-             - returns a ChildProcess object 
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.5.0 </span>
-            </span>
+        <td>
+          - asynchronously launches a node.js process (directly without shell) <br>
+          - streams the data, communicates by an IPC channel with the parent process <u>(required)</u>, (Default: stdio set to <mark>'inherit'</mark> = uses its parent stdio) <br>
+          - returns a <reqval>childProcess</reqval> which streams the data between the parrent and child process
         </td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <td colspan="2"> Methods and Properties </td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <td> <strong>childProcess</strong>.channel </td>
-        <td> references the IPC channel between the parent and the child process
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 7.1.0 </span>
-            </span>
+        <td> - references the IPC channel between the parent and the child process
+          <span id="browserSupport" title="updated : 2019-06-19">
+            <span><i class="fab fa-node-js"></i> 7.1.0 </span>
+          </span>
         </td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <td> <strong>childProcess</strong>.connected </td>
-        <td> returns a boolean indicating if the IPC channel is connected to the parent process
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.7.2 </span>
-            </span>
+        <td> - returns a boolean indicating if the IPC channel is connected to the parent process </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>childProcess</strong>.send(<strong>msg</strong>, <a href="https://nodejs.org/docs/latest/api/child_process.html#subprocesssendmessage-sendhandle-options-callback" target="_blank">handle, options:obj</a>, <strong class="openable">fn(err)<div>
+              <p> - <strong>err</strong> - (if sending successful = <mark>null</mark>) (if sending fails = <mark>null</mark>) </p>
+            </div></strong>)
         </td>
-    </tr>
-    <tr>
+        <td> 
+          - sends a message through the IPC channel to this <strong>childProcess</strong> and returns a boolean indicating if the sending was successfull
+          <span id="browserSupport" title="updated : 2020-07-09">
+            <span><i class="fab fa-node-js"></i> 0.5.9 </span>
+            <span class="openable"><i class="fab fa-node-js"></i> more... <div>
+                <p> - 4.0.0 - callback supported </p>
+                <p> - 5.0.0 - return a boolean </p>
+                <p> - 5.8.0 - <i>option</i> argument </p>
+              </div></span>
+          </span>
+        </td>
+      </tr>
+      <tr>
         <td> <strong>childProcess</strong>.disconnect() </td>
-        <td> disconnects the IPC channel from the parent process <u>gracefully</u> (emits the 'disconnect' event if no message is pending) (can be invoked within the <mark>fork()</mark> child process module)
-            <span id="browserSupport" title="updated : 2019-06-19">
-                <span><i class="fab fa-node-js"></i> 0.7.2 </span>
-            </span>
+        <td> 
+          - <u>gracefully</u> disconnects the IPC channel from the parent process (emits the <mark>disconnect</mark> event if no message is pending) (can be invoked within the <mark>fork()</mark> child process module)
         </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess</strong>.kill(<strong>signal:str|nr</strong>) </td>
-        <td> sends a signal to the child process (default <mark>SIGTERM</mark>) <a href="https://nodejs.org/dist/latest-v12.x/docs/api/process.html#process_signal_events" target="_blank">(Node.js.org signal events)</a>
-            <span id="browserSupport" title="updated : 2019-06-20">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess</strong>.killed </td>
-        <td> returns a boolean inidcating that the child process has successfully received the signal by the <mark>kill()</mark> method (does NOT indicate the child process closure)
-            <span id="browserSupport" title="updated : 2019-06-20">
-                <span><i class="fab fa-node-js"></i> 0.5.10 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
         <td> <strong>childProcess</strong>.pid </td>
-        <td> returns the process identifier of the child process
-            <span id="browserSupport" title="updated : 2019-06-20">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess</strong>.ref() </td>
-        <td> reataches the removed child process in the parent event loop (reverses the <mark>unref()</mark> method's effect)
-            <span id="browserSupport" title="updated : 2019-06-21">
-                <span><i class="fab fa-node-js"></i> 0.7.10 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
         <td> 
-            <strong>childProcess</strong>.send(<strong>msg</strong>, <i class="openable">handle<div>
-                <p> - running server object (server which is listening) </p>
-                <p> - server socket <u>which is connected</u> </p>
-                <p> - in not an active server or server socket was sent the receiving side receives <mark>undefined</mark> </p>
-            </div></i>, <i class="openable">option:obj<div>
-                <p> keepOpen: <strong>bol</strong> - keepOpen: <strong>bol</strong> - used when passing <mark>net.Socket</mark> instances (as <i>handle</i>), when <mark>true</mark> the socket is kept open in the sending process (Default: <mark>false</mark>) </p>
-            </div></i>, <strong class="openable">fn(err)<div>
-                <p> - <strong>err</strong> - (if sending successful = <mark>null</mark>) (if sending fails = <mark>null</mark>) </p>
-            </div></strong>) 
+          - returns the process identifier of the child process
         </td>
-        <td>  sends a message through the IPC channel to this <strong>childProcess</strong> and returns a boolean indicating if the sending was successfull    
-            <span id="browserSupport" title="updated : 2020-07-09">
-                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
-                <span class="openable"><i class="fab fa-node-js"></i> more... <div>
-                    <p> - 4.0.0 - callback supported </p>
-                    <p> - 5.0.0 - return a boolean </p>
-                    <p> - 5.8.0 - <i>option</i> argument </p>
-                </div></span>
-            </span>
+      </tr>
+      <tr>
+        <td>
+          <strong>childProcess</strong>.kill(<strong>signal:str|nr</strong>)
         </td>
-    </tr>
-        <tr>
-        <td> <strong>childProcess</strong>.stderr </td>
-        <td> references the child process's standard error readable stream
-            <span id="browserSupport" title="updated : 2019-06-22">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
+        <td> 
+          - sends a signal to the child process (default <mark>SIGTERM</mark>) <a href="https://nodejs.org/dist/latest-v12.x/docs/api/process.html#process_signal_events" target="_blank">(Node.js.org signal events)</a>
         </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess</strong>.stdin </td>
-        <td> references the child process's standard in writable stream
-            <span id="browserSupport" title="updated : 2019-06-22">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
+      </tr>
+      <tr>
+        <td>
+          <strong>childProcess</strong>.killed
         </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess</strong>.stdio </td>
-        <td> references the child process's streams in an Array (<mark>[stdin, stdout, stderr]</mark>)
-            <span id="browserSupport" title="updated : 2019-06-22">
-                <span><i class="fab fa-node-js"></i> 0.7.10 </span>
-            </span>
+        <td> 
+          - returns a boolean inidcating the child process has successfully received the kill signal by the <mark>kill()</mark> method (does NOT indicate the child process closure)
         </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess</strong>.stdout </td>
-        <td> references the child process's standard out readable stream
-            <span id="browserSupport" title="updated : 2019-06-22">
-                <span><i class="fab fa-node-js"></i> 0.1.90 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
         <td> <strong>childProcess</strong>.unref() </td>
-        <td> removes the child process from the parent event loop, so the parent process won't wait for the child process to close <u>(if there is an IPC channel between the parent and child the parent process cannot be closed!)</u>
-            <span id="browserSupport" title="updated : 2019-06-21">
-                <span><i class="fab fa-node-js"></i> 0.7.10 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"> events </td>
-    </tr>
-    <tr>
-        <td> <strong>childPorcess.listener</strong><em>(</em>'close', function(<strong>exitCode, signal</strong>)<em>)</em> </td>
-        <td> event emitted when the stdio streams are closed <u>(not emited when the process ends)</u>
-            <span id="browserSupport" title="updated : 2019-06-24">
-                <span><i class="fab fa-node-js"></i> 0.7.7 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess.listener</strong><em>(</em>'disconnect' function()<em>)</em> </td>
-        <td> event emitted when the IPC channel is disconnected (also fired when the process ends)
-            <span id="browserSupport" title="updated : 2019-06-24">
-                <span><i class="fab fa-node-js"></i> 0.7.2 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess.listener</strong><em>(</em>'error', function(<strong>error</strong>)<em>)</em> </td>
-        <td> emitted when the child process cannot be spawned, cannot be killed or message sending fails
-            <span id="browserSupport" title="updated : 2019-06-24">
-                <span><i class="fab fa-node-js"></i> ?.?.? </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
-        <td> <strong>childProcess.listener</strong><em>(</em>'exit', function(<strong>extiCode, signal</strong>)<em>)</em> </td>
-        <td> event emitted when when the process ends (stdio streams might still be open)
-            <span id="browserSupport" title="updated : 2019-06-24">
-                <span><i class="fab fa-node-js"></i> 0.1.19 </span>
-            </span>
-        </td>
-    </tr>
-    <tr>
         <td> 
-            <strong>childProcess.listener</strong>('message' <strong>fn(msg, <strong class="openable">handle<div>
+          - removes the child process from the parent event loop, so the parent process won't wait for the child process to close <u>(if there is an IPC channel between the parent and child the parent process cannot be closed!)</u>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>childProcess</strong>.ref()
+        </td>
+        <td>
+          - reataches the removed child process in the parent event loop (reverses the <mark>unref()</mark> method's effect)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.stdio </td>
+        <td> - references the child process's streams in an Array (<mark>[stdin, stdout, stderr]</mark>) </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.stderr </td>
+        <td> - references the child process's standard error readable stream </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.stdin </td>
+        <td> - references the child process's standard in writable stream </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.stdout </td>
+        <td> - references the child process's standard out readable stream </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.signalCode </td>
+        <td> - signal received by the <strong>childProcess</strong> if any, else <mark>null</mark> </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.spawnargs </td>
+        <td> - list of command-line arguments the <strong>childProcess</strong> was launched with </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess</strong>.spawnfile </td>
+        <td> - executable file name of the child process that is launched </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> events </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>childProcess.listener</strong>('message' <strong>fn(msg, <strong class="openable">handle<div>
                 <p> - running server object (server which is listening) </p>
                 <p> - server socket <u>which is connected</u> </p>
                 <p> - in not an active server or server socket was sent = <mark>undefined</mark> </p>
-            </div></strong>)</strong>) 
+              </div></strong>)</strong>)
         </td>
-        <td> emitted when the child process recieves a message through the IPC channel
-            <span id="browserSupport" title="updated : 2019-06-24">
-                <span><i class="fab fa-node-js"></i> 0.5.9 </span>
-            </span>
+        <td> 
+          - emitted when the child process recieves a message through the IPC channel
         </td>
-    </tr>
-</table>
-<h2 style="color:green;"><u> Notes : </u></h2>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>childPorcess.listener</strong>('close', <reqval>fn(exitCode, signal)</reqval>) </td>
+        <td> 
+          - event emitted when the stdio streams are closed <u>(not emited when the process ends)</u>
+        </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess.listener</strong>('disconnect' <reqval>fn()</reqval>) </td>
+        <td> 
+          - event emitted when the IPC channel is disconnected (also fired when the process ends)
+        </td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess.listener</strong>('exit', <strong>fn(extiCode, signal)</strong>) </td>
+        <td> 
+          - event emitted when when the process ends (stdio streams might still be open)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess.listener</strong>('error', <reqval>fn(err)</reqval>) </td>
+        <td> 
+          - emitted when the child process cannot be spawned, cannot be killed or message sending fails
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>childProcess.listener</strong>('spawn', <reqval>fn()</reqval>) </td>
+        <td> 
+          - emitted when the child process is spawned (created)
+          <span id="browserSupport" title="updated : 2025-02-23">
+            <span><i class="fab fa-node-js"></i> 14.17.0 </span>
+          </span>
+        </td>
+      </tr>
+    </table>
+    <h2 style="color:green;"><u> Notes : </u></h2>
     <details class="example" id="notes">
-    <summary> Notes :</summary>
+      <summary> Notes :</summary>
     </details>
-<h2 style="color:green;"><u> Useful Links : </u></h2>
-    <p><a href="https://nodejs.org/dist/latest-v12.x/docs/api/child_process.html" target="_blank"> Node.js Child Process </a></p>
-<h2 style="color:green;"><u> Remember This : </u></h2>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/docs/latest/api/child_process.html" target="_blank"> Node.js Child Process </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
     <p> - detaching child processes supported on Windows [TESTED: 2020-02-09], but according to the Node.js specification this feature is not supported on POSIX <u>(however if there's an IPC channel between the parent and the child process the parent process cannot be closed!)</u> </p>
-<h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
     <p> - child processes are designed to run OS functionalities (running commands is shell or directly executables) </p>
-    <p> - a Node child processes is a separate process in the OS, we can detach it from its parent process (On Windows only!) [TESTED: 2020-02-09] </p>
-<hr>
-<!------------------------------------------------------------------------------------------------------>    
-<h2 style="color:darkblue;"><u> The <mark>exec()</mark> / <mark>execSync()</mark> Child Processes </u></h2>
-    <p> - these child processes return all the data in a string or a Buffer, the returned data size is <u>limited to 1024*1024 bytes by default</u> 
-    <pre class="syntax">
-SYNTAX :     exec(<strong>cmd:str</strong>, <i class="openable">options:obj<div>
-                <p> cwd: <strong>str</strong> - current working directory of the child process (Default: <mark>null</mark>) </p>
-                <p> env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> encoding: <strong>str</strong> - returned data encoding (Default: <mark>'utf8'</mark>) </p>
-                <p> shell: <strong>str</strong> - shell to execute the command with (Default: <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) </p>
-                <p> timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>0</mark>) </p>
-                <p> maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) </p>
-            </div></i>, <i class="openable">fn(err, stdout, stderr)<div>
-                <p> - err - error thrown by the current process (parent process) </p>
-                <p> - stdout - standard out of the child process (this is where we get the returned data) </p>
-                <p> - stderr - standard error of the child process </p>
-            </div></i>)                    // asynchronously spawns a shell (command prompt on Windows / bash on UNIX by default) and runs the passed <strong>cmd</strong> in it  
-                                                                                          when the child process is finished it returns the result in <u>one string</u>, <span class="openable">with limited size<div>
-            <p> - default max size 1024*1024 in bytes </p> 
-            <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
-        </div></span>    
-                                                                                          returns a ChildProcess object 
-           
-            execSync(<strong>cmd:str</strong>, <i class="openable">options:obj<div>
-                <p> cwd: <strong>str</strong> - current working directory of the child process (Default: null) </p>
-                <p> env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> encoding: <strong>str</strong> - returned data encoding (Default: <mark>'utf8'</mark>) </p>
-                <p> shell: <strong>str</strong> - shell to execute the command with (Default: <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) </p>
-                <p> timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>undefined</mark>) </p>
-                <p> maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) </p>
-                <p> input: <strong>str|Buffer|TypedArray|DataView</strong> - data passed to the spawned child process stdin (overrides <mark>stdio[0]</mark>) </p>
-                <p> stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-            </div></i>)                                            // synchronously spawns a shell (command prompt on Windows / bash on UNIX by default) and runs the passed <strong>cmd</strong> in it    
-                                                                                          returns a Buffer object with the child process result, <span class="openable">with limited size<div>
-            <p> - default max size 1024*1024 in bytes </p> 
-            <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
-        </div></span>
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    const {exec, execSync } = require('child_process');
+    <p> - the spawned child processes an individual process on OS level, we can detach it from its parent process (On Windows only!) [TESTED: 2020-02-09] </p>
+    <h2 class="header"> The <mark>exec()</mark> / <mark>execSync()</mark> / <mark>execFile()</mark> / <mark>execFileSync()</mark> / <mark>spawn()</mark> / <mark>spawnSync()</mark> / <mark>fork()</mark> child processes </h2>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+    const {
+      exec, execSync,
+      execFile, execFileSync,
+      spawn, spawnSync,
+      fork,
+    } = require('node:child_process');
     
-// exec() -----------------------------------------------------------------------------
-    exec('dir', (err, stdout, stder) => {                                              // asycnhronously spawns a shell (command prompt) to execute 'dir' command in it 
-        err;                                                                           // process errors are outputed here 
-        stdout;                                                                        // -> 'lists the current directory ...'      // the returned result is a string 
-        stderr;                                                                        // child process errors are printed here 
+// ------------------------------------------------------
+// exec() / execSync() -------------------------
+    exec('dir', (err, stdout, stder) => {          // asycnhronously spawns a shell (command prompt) to execute 'dir' command in it 
+        err;                                       // process errors are outputed here 
+        stdout;                                    // -> 'lists the current directory ...'      // the returned result is a string 
+        stderr;                                    // child process errors are printed here 
     });
     
-// execSync() -------------------------------------------------------------------------
-    execSync('ls', {shell:'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'});   // -> &lt;Buffer ...&gt;    // powershell is used as a shell here     // this is synchronous, the parent process is blocked until this child process finishes!    
-    </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>exec()</mark> TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------------
-    var {exec} = require('child_process');
     
-    var exe = exec('dir', function(err, stdout, stderr) {                     // since this spawns a shell it can execute any command of the command line 
-        console.log( stdout );                                                // this data is buffered (limited to 200KB)
-        console.log( err );
-        console.log( stderr );
+    execSync('ls', {shell:'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'});   // -> &lt;Buffer ...&gt; 
+                                                                                                // powershell configured as sheel to execute the passed command 
+                                                                                                // synchronous -> parent process blocked until the child process finishes!
+    
+    
+// ------------------------------------------------------
+// execFile() / execFileSync() ---------------------------
+    execFile('C:\\Windows\\System32\\notepad.exe', ['test.txt'], function(err, stdout, stderr) {   // asynchronously launches the notepad and passes the 'test.txt' file to it    
+        err;                                                                                      // process errors are outputed here 
+        stdout;                                                                                   // child process output is returned here (nothing in this situation becuase the notepad doesn't output anything)   
+        stderr;                                                                                   // child process errors are printed here 
     });
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\04 exec() TEST> node main.js
-        Volume in drive D has no label.
-        Volume Serial Number is D2B4-9907
-        
-        Directory of D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\04 exec() TEST
-        
-        2019-06-18  19:54    &lt;DIR&gt;          .
-        2019-06-18  19:54    &lt;DIR&gt;          ..
-        2019-06-18  20:23               193 main.js
-                    1 File(s)            193 bytes
-                    2 Dir(s)  1,086,743,945,216 bytes free
-        
-        null
-        
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\04 exec() TEST>    
-    </pre>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>execSync()</mark> TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------------
-    console.log( 'main thread start');
-        
-    var {execSync} = require("child_process");
-    var execS = execSync('node repeat.js', {killSignal:'SIGKILL'});
-    console.log( execS.toString() );
     
-    console.log( 'main thread end' );    
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\05 execSync() TEST> node main.js
-        main thread start
-        some outputed data
-        main thread end
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\05 execSync() TEST>    
-    </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;"><u> The <mark>execFile()</mark> / <mark>execFileSync()</mark> Child Processes </u></h2>
-    <p> - these child processes return all the data in a string or a Buffer, the returned data size is <u>limited to 1024*1024 bytes by default</u> 
-    <pre class="syntax">
-SYNTAX :    execFile(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process (Default: <mark>null</mark>) </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) <br>
-                <p> - encoding: <strong>str</strong> - returned data encoding (Default: <mark>'utf8'</mark>) <br>
-                <p> - timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>0</mark>) <br>
-                <p> - maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) <br>
-                <p> - killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) <br>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process <br>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process <br>
-                <p> - windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) <br>
-                <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) <br>
-                <p> - shell: <strong>str|bol</strong> - if <mark>true</mark> shell set to <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows (Default: <mark>false</mark>)
-            </div></i>, <i class="openable">fn(err, stdout, stderr)<div>
-                <p> - err - error thrown by the current process (parent process) </p>
-                <p> - stdout - standard out of the child process (this is where we get the returned data) </p>
-                <p> - stderr - standard error of the child process </p>
-            </div></i>)  // asynchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default)    
-                                                                                          <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad)  
-                                                                                          when the child process is finished it returns the result in one string, <span class="openable">with limited size<div>
-            <p> - default max size 1024*1024 in bytes </p> 
-            <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
-        </div></span>    
-                                                                                          returns a ChildProcess object 
-            
-            execFileSync(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process (Default: <mark>null</mark>) </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> - encoding: <strong>str</strong> - returned data encoding (Default: <mark>'buffer'</mark>) </p>
-                <p> - shell: <strong>str</strong> - shell to execute the command with (Default: <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) </p>
-                <p> - timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>undefined</mark>) </p>
-                <p> - maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> - killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> - windowsHide: <strong>bol</strong> - hide subprocess console window (Default: <mark>false</mark>) </p>
-                <p> - input: <strong>str|Buffer|TypedArray|DataView</strong> - data passed to the spawned child process stdin (overrides <mark>stdio[0]</mark>) </p>
-                <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-            </div></i>)                        // synchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default)
-                                                                                          <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad)  
-                                                                                          returns a Buffer object with the child process result, <span class="openable">with limited size<div>
-            <p> - default max size 1024*1024 in bytes </p> 
-            <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated! </p>
-        </div></span>
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    const {execFile, execFileSync} = require('child_process');
+    execFile('node', ['module.js'], (err, stdout, stderr) => {                                // the comand refers to the 'node.exe' (executable)
+      // ...
+    });
     
-// execFile() -------------------------------------------------------------------------
-    execFile('C:\\Windows\\System32\\notepad.exe', ['test.txt'], function(err, stdout, stderr){     // asynchronously launches the notepad and passes the 'test.txt' file to it    
-        err;                                                                           // process errors are outputed here 
-        stdout;                                                                        // child process output is returned here (nothing in this situation becuase the notepad doesn't output anything)   
-        stderr;                                                                        // child process errors are printed here 
-    });    
     
-// execFileSync() ---------------------------------------------------------------------
-    execFileSync('C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', ['date']);   // -> &lt;Buffer ...&gt;     // launches the PowerShell executable with the 'date' command 
-    </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>execFile()</mark> / <mark>execFileSync()</mark> TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------
-    var {execFile, execFileSync} = require('child_process');
-        
-    var execFileSync = execFileSync('node', ['module.js']);                            // node refers to the 'node.exe' unerneath (executable), 'module.js' is the file what we executin within node here    
-    console.log( execFileSync.toString() );                                  
-        
-    var execFile = execFile('node', ['module.js'], function(err, stdout, stderr){
-        console.log(`error = ${err}`);
-        console.log(`stdout = ${stdout}`);
-        console.log(`stderr = ${stderr}`);
-    });  
+    execFileSync('C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', ['date']);     // -> &lt;Buffer ...&gt;     // launches the PowerShell executable with the 'date' argument 
     
-// module.js (file) -------------------------------------------------------------------
-    var interval;
-    interval = setInterval(function(){
-        console.log( 'module message' );
-        if(interval._idleStart > 5000) {
-            clearInterval(interval);
-        }
-    }, 1000);
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\child process\15 execFile() execFileSync() TEST> node main.js
-        module message                                                                 // -! execFileSync() (blocks the main thread until the end of the child porcess) 
-        module message
-        module message
-        module message
-        module message
-        module message
+    var result = execFileSync('node', ['module.js']);                         // the comand refers to the 'node.exe' (executable)
+    result.toString();                                                        // -> 'some result...'
     
-        error = null                                                                   // -! execFile() asynchronously returns all these data at once (buffers) when the child process closes    
-        stdout = module message
-        module message
-        module message
-        module message
-        module message
-        module message
-        stderr =
-    PS D:\safe\code +\my site\03 improuve\learn webdesign\04 node.js\child process\15 execFile() execFileSync() TEST>    
-    </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;"><u> The <mark>spawn()</mark> / <mark>spawnSync()</mark> Child Processes </u></h2>
-    <p> - the spawn() returns a ChildProcess which streams the data, so the returned data has no size limit </p>
-    <p> - the spawnSync() return all the data in a string or a Buffer, the returned data size is limited to 1024*1024 bytes by default </p>
-    <pre class="syntax">
-SYNTAX :    spawn(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-        <p> - cwd: <strong>str</strong> - current working directory of the child process </p>
-        <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-        <p> - shell: <strong>str|bol</strong> - spawns a shell and runs the <strong>exePath</strong> as a command in it, (<mark>true</mark> = <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) (Default: <mark>false</mark>) </p>
-        <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-        <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-        <p> - windowsHide: <strong>bol</strong>-  hide the subprocess console window (Default: <mark>false</mark>) </p>
-        <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-        <p> - argv0: <strong>str</strong> - sets the value of argv[0] sent to the child process </p>
-        <p> - detached: <strong>bol</strong> - prepares the child process to run independently (Windows only) </p>
-        <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) </p>
-    </div></i>)                                // asynchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default)   
-                                                                                          <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad)  
-                                                                                          returns a ChildProcess which streams the data (can be listened on stdout as a ReadableStream)   
-                                                        
-            spawnSync(<strong>exePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">option:obj<div>
-                <p> - cwd: <strong>str</strong> - current working directory of the child process </p>
-                <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-                <p> - encoding: <strong>str</strong> - returned data encoding (Default: <mark>'buffer'</mark>) </p>
-                <p> - shell: <strong>str|bol</strong> - spawns a shell and runs the <strong>exePath</strong> as a command in it, (<mark>true</mark> = <mark>'/bin/sh'</mark> on UNIX | <mark>process.env.ComSpec</mark> on Windows) (Default: <mark>false</mark>) </p>
-                <p> - timeout: <strong>nr</strong> - maximum amount of time the process is allowed to run in milliseconds (Default: <mark>undefined</mark>) </p>
-                <p> - maxBuffer: <strong>nr</strong> - largest allowed data on stdout or stderr (Default: <mark>1024*1024</mark>) </p>
-                <p> - killSignal: <strong>str|nr</strong> - signal when the process is killed (Default: <mark>'SIGTERM'</mark>) </p>
-                <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-                <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-                <p> - windowsHide: <strong>bol</strong>-  hide the subprocess console window (Default: <mark>false</mark>) </p>
-                <p> - input: <strong>str|Buffer|TypedArray|DataView</strong> - data passed to the spawned child process stdin (overrides <mark>stdio[0]</mark>) </p>
-                <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>'pipe'</mark> = has its own stdio) </p>
-                <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) </p>
-            </div></i>)                            // synchronously launches an executable (<strong>exePath:str</strong>) (directly without shell by default)   
-                                                                                          <i>[arg, ...]</i> = we can pass commands if the executable is a shell or files to other executables (ex: to notepad)  
-                                                                                          returns an <span class="openable">object<div> 
-        <p> - pid: <strong>nr</strong> - child process id </p> 
-        <p> - output: <strong>arr</strong> - stdio in an Array </p>
-        <p> - stdout: <strong>buff|str</strong> - standard out </p>
-        <p> - stderr: <strong>buff|str</strong> - standard error </p>
-        <p> - status: <strong>nr|null</strong> - exit code or null if the subprocess terminated due to a signal </p>
-        <p> - signal: <strong>str|null</strong> - signal used to kill ths subprocess, null = subprocess did not terminated due to a signal </p>
-        <p> - error: <strong>err</strong> - error </p>
-    </div></span> with the child process result, <span class="openable">the returned data size is limited<div>
-        <p> - default max size 1024*1024 in bytes </p>
-        <p> - if the returned data size is larger than allowed then the data is trunkated and the process is terminated!) </p>
-    </div></span>     
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    const {spawn, spawnSync} = require('child_process');
     
-// spanw() ----------------------------------------------------------------------------
-    var mySpawn = spawn('C:\\Program Files\\nodejs\\node.exe', ['.\\child_1.js']);     // this child process streams the data 
+// ------------------------------------------------------
+// spawn() / spawnSync() --------------------------------
+    var mySpawn = spawn('C:\\Program Files\\nodejs\\node.exe', ['.\\child_1.js']);
     
-    mySpawn.stdout.on('data', function(data){                                          // the streamed data can be listened as a ReadableStream  
+    mySpawn.stdout.on('data', function(data){                                        // the data is streamed between the parrent and child process, so there's a live message communication
         data;
     });
     
-// spawnSync() ------------------------------------------------------------------------
-    spawnSync('C:\\Program Files\\nodejs\\node.exe', ['.\\child_1.js']);               // -> {stdout:&lt;Buffer ...&gt;, ...}   // returns an object with the child prcess data and other  
+    
+    spawnSync('C:\\Program Files\\nodejs\\node.exe', ['.\\child_1.js']);             // -> { stdout: &lt;Buffer ...&gt;, ... }   // returns an object with the child prcess data
+    
+    
+// ------------------------------------------------------
+// fork() --------------------------------
+    var frk = fork('module1.js');                  // asynchronously launches and returns a node child process
+    
+    frk.send({msg:'data to send'});                // sending a message to the child process through the IPC channel 
+    frk.on('message', function(message){ ... });       // listening for messages on the IPC channel 
+    
+    
+    // module1.js (file)-------------------------------
+    process.on('message', function(message){ });   // sending a message to the parent process through the IPC channel
+    process.send({msg:'child data to send'});      // listening for messages on the IPC channel 
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>spawn()</mark> TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------------
-    var {spawn} = require("child_process");
-        
-    // spawn child 1 --------------------------------------------------------
-    var spw1 = spawn('node', ['module.js']);                                  // -! 'node' is an executable command! 
-    spw1.stdout.on('data', function(data){                                    // stdout (standar out channel) listens to the 'data' event an hanles it 
-        console.log(data.toString());
-    });
-    spw1.stderr.on('data', function(data){
-        console.log(data);
-    })
-    spw1.on('exit', function(code, signal){                                   // exit event fired once the process has finished executing 
-        console.log(`spawn-1 exit code = ${code}, signal = ${signal}`);
-    })
-
-    // spawn child 2 --------------------------------------------------------
-    var spw2 = spawn(process.env.comspec, ['/c', 'type', 'some text.txt']);   // !! this is how we can execute commands on windows 
-    spw2.stdout.on('data', (data) => {
-        console.log(data.toString());
-    })
-    spw2.stderr.on('data', (data) =>{
-        console.log( data.toString() );
-    })
-    spw2.on('exit', (code, signal) => {
-        console.log(`spawn-2 exit code = ${code}, signal = ${signal}`);
-    })
-    
-// module.js (file) ---------------------------------------------------------------------------------
-    console.log( 'module data returned!');    
-    
-// some text.txt (file) -----------------------------------------------------------------------------
-    Kicsi kutya tarka                                                         
-    se fule se farka     
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\01 - spawn() TEST> node main.js
-        Kicsi kutya tarka                                                     // spw2 fires faster 
-        se fule se farka
-        spawn-2 exit code = 0, signal = null
-        module data returned!                                                 // spw1 fires second 
-
-        spawn-1 exit code = 0, signal = null
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\01 - spawn() TEST>    
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>spawnSync()</mark> TEST </u></h3>    
-    <p> - synchronous version returns simply an object which holds the returned data </p>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------------
-    var {spawnSync} = require("child_process");
-        
-    // spawn child 1 --------------------------------------------------------
-    var spw1 = spawnSync('node', ['module.js']);                              // synchronous object (will block all further execution untill this process exits)    
-    console.log( spw1.stdout.toString() );                                    // we just read returned data 
-    console.log( spw1.stderr.toString() );
-    console.log( spw1.error );
-    
-    // spawn child 1 --------------------------------------------------------
-    var spw2 = spawnSync(process.env.comspec, ['/c', 'type', 'some text.txt']); 
-    console.log( spw2.stdout.toString() );                                    // we just read returned data 
-    console.log( spw2.stderr.toString() );
-    console.log( spw2.error );
-    
-// module.js (file) ---------------------------------------------------------------------------------
-    console.log( 'module data returned!');    
-    
-// some text.txt (file) -----------------------------------------------------------------------------
-    Kicsi kutya tarka                                                         
-    se fule se farka     
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\02 spawnSync() TEST> node main.js
-    module data returned!                                                     // spw1 
-    
-    undefined
-    Kicsi kutya tarka                                                         // spw2 
-    se fule se farka
-    
-    undefined
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\02 spawnSync() TEST>    
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>spawn()</mark> / <mark>spawnSync()</mark> option object TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------------
-    var {spawnSync} = require("child_process");
-    
-    var chProcess = spawnSync('dir', {env:process.env, shell:true});          // running spawn in a shell 
-    console.log( chProcess.stdout.toString() );
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\03 spawn() spawnSync() object TEST> node main.js
-        Volume in drive D has no label.
-        Volume Serial Number is D2B4-9907
-    
-        Directory of D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\03 spawn() spawnSync() object TEST
-    
-        2019-06-18  19:21    <DIR>          .
-        2019-06-18  19:21    <DIR>          ..
-        2019-06-18  19:21    <DIR>          01
-        2019-06-18  19:44               158 main.js
-                    1 File(s)            158 bytes
-                    3 Dir(s)  1,086,743,945,216 bytes free
-
-    PS D:\safe\code +\my site\03 improuve\Learn webdesign\04 Node.js\child process\03 spawn() spawnSync() object TEST>    
-    </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;"><u> The <mark>fork()</mark> Child Process </u></h2>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h3 class="header" id="stdioConfig"> Options <mark>stdio</mark> for <mark>fork()</mark> child process <a href="https://nodejs.org/docs/latest/api/child_process.html#optionsstdio" target="_blank">[link]</a> </h3>
+    <p> - <mark>undefined</mark>, <mark>null</mark> same as <mark>'pipe'</mark> </p>
     <pre class="syntax">
-SYNTAX :    fork(<strong>modulePath:str</strong>, <i>[arg, ...]</i>, <i class="openable">options:obj<div>
-        <p> - cwd: <strong>str</strong> - current working directory of the child process </p>
-        <p> - env: <strong>str</strong> - environment variables (Default: <mark>process.env</mark>) </p>
-        <p> - uid: <strong>nr</strong> - sets the user identity of the process </p>
-        <p> - gid: <strong>nr</strong> - sets the group identity of the process </p>
-        <p> - stdio: <strong>str|Arr</strong> - <a href="#stdioConfig">stdio configuration [link]</a> (Default: <mark>['inherit', 'inherit', 'inherit', 'ipc']</mark> <u>(must have one 'ipc' channel)</u> <u>(overrides the 'silent' option is specified)</u> </p>
-        <p> - detached: <strong>bol</strong> - prepares the child process to run independently (Windows only) </p>
-        <p> - windowsVerbatimArguments: <strong>bol</strong> - no quoting or escaping of arguments on Windows (Default: <mark>false</mark>) </p>
-        <p> - silent: <strong>bol</strong> - <mark>false</mark> = stdio set to <mark>'inherit'</mark> | <mark>true</mark> = stdio set to <mark>'pipe'</mark> (Default: <mark>false</mark>) </p>
-        <p> - execPath: <strong>str</strong> - executable used to create the child process </p>
-        <p> - execArgv: <em>[<strong>str, ...</strong>]</em> - list of arguments passed to the executable (Default: <mark>process.execArgv</mark>) </p>
-    </div></i>)                             // asynchronously launches a node.js process (<strong>modulePath</strong>) (directly without shell)
-                                                                                          <i>[arg, ...]</i> = command line argument 3, 4, ... to pass to the child process   
-                                                                                          streams the data, communicates by an IPC channel with the parent process <u>(required)</u>, (Default: stdio set to <mark>'inherit'</mark> = uses its parent stdio)    
-                                                                                          returns a ChildProcess object 
+    <strong>childProcessCreator</strong>(<strong>cmd</strong>, <i>...</i>,  <i class="openable">option:obj<div>
+    <p> - <mark>stdio</mark> options: </p>
+    <p class="indent-lv1"> <mark>['pipe', 'pipe','pipe']</mark> : (Default) child process has its own stdio (<u>same as <mark>stdio:'pipe'</mark></u>) </p>
+    <p class="indent-lv1"> <mark>['ignore', 'ignore', 'ignore']</mark> : stdio are attached to <mark>dev/null</mark> (pit-bucked, leads nowhere) (<u>same as <mark>stdio:'ignore'</mark></u>) </p>
+    <p class="indent-lv1"> <mark>['inherit', 'inherit', 'inherit']</mark> : uses its parent's stdio (<u>same as <mark>stdio:'inherit'</mark></u> </p>
+    <p class="indent-lv1"> <mark>[<strong>stdin, stdout, stderr</strong>, 'ipc']</mark> : creates an IPC channel between the child and the process </p>
+    <p class="indent-lv1"> <mark>[<strong>stream:obj, ...</strong>]</mark> : a stream object can be attached to any of the channel </p>
+    </div></i>)
     </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-// main.js (file)----------------------------------------------------------------------
-    const {fork} = require('child_process);
-    
-    var frk = fork('module1.js');                                                      // asynchronously launches and returns a node child process  
-    
-    frk.send({msg:'data to send'});                                                    // sending a message to the child process through the IPC channel 
-    frk.on('message', function(message){ });                                           // listening for messages on the IPC channel  
-    
-// module1.js (file)-------------------------------------------------------------------
-    process.on('message', function(message){ });                                       // sending a message to the parent process through the IPC channel
-    process.send({msg:'child data to send'});                                          // listening for messages on the IPC channel 
-    </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>fork()</mark> TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
+    <details class="example">
+      <summary> Example : </summary>
+      <pre style="margin-bottom:1px;">
 // main.js (file) ---------------------------------------------------------------------------------
-    var {fork} = require('child_process');
-
-    var frk = fork('module1.js');                                             // create the forked process (IPC channer extabilished)
-    
-    frk.send({msg:'main module message'});                                    // messaging through the IPC channle 
-    frk.on('message', (data) =>{
-        console.log(data.msg);
-    })    
-    
-// module1.js (file) ------------------------------------------------------------------------------
-    process.on('message', function(data){                                     // messaging through the IPC channel  
-        console.log(data.msg);
-    });
-    process.send({msg:'module1 message'});
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\06 fork() TEST> node main.js
-        main module message
-        module1 message    
-                                                                               // -! does not exit because the IPC channel is not closed 
-    </pre>
-</details>    
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;" id="stdioConfig"><u> child process <mark>stdio</mark> options</u></h2>
-    <p style="color:yellow;"> - <mark>undefined</mark>, <mark>null</mark> same as <mark>'pipe'</mark> </p>
-    <pre class="syntax">
-SYNTAX:     <strong>childProcessCreator</strong>(<strong>cmd</strong><i>, args option:obj</i>)
-                - <i>option:obj</i> : stdio['pipe', 'pipe','pipe']                            // (Default) child process has its own stdio                           // <u>same as <mark>stdio:'pipe'</mark></u>
-                             : stdio:['ignore', 'ignore', 'ignore']                    // stdio are attached to <mark>dev/null</mark> (pit-bucked, leads nowhere)          // <u>same as <mark>stdio:'ignore'</mark></u>
-                             : stdio:['inherit', 'inherit', 'inherit']                 // uses its parent's stdio                                             // <u>same as <mark>stdio:'inherit'</mark></u>    
-                             : stdio:[<strong>stdin, stdout, stderr</strong>, 'ipc']                    // creates an IPC channel between the child and the process   
-                             : stdio:[<strong>stream:obj, ...</strong>]                                 // a stream object can be attached to any of the channel    
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-    var {spawn} = require('child_process');
-    var out = fs.openSync('out.txt', 'a');
-        
-    var spawn1 = spawn('node', ['module1.js'], {stdio:'pipe'});                        // Default: same as (stdio:['pipe', 'pipe', 'pipe']);   
-    spawn.stdio;                                                                       // -> [Socket{...}, Socket{...}, Socket{...}]            // child process have its own stdio   
-    
-    var spawn2 = spawn('node', ['module1.js'], {stdio:'inherit'});                     // same as (stdio:['inherit', 'inherit', 'inherit']);                                
-    spawn2.stdio;                                                                      // -> [null, null, null]                                 // child crocess uses its parent's stdio  
-    
-    var spawn3 = spawn('node', ['module1.js'], {stdio:'ignore'});                      // same as (stdio:['ignore', 'ignore', 'ignore']);                           
-    spawn.stdio;                                                                       // -> [null, null, null]                                 // child stdio streams are dumped in 'dev/null' (leads nowhere)  
-    
-    var spawn4 = spawn('node', ['module1.js'], {stdio:[null, out, undefined, 'ipc']}); // using 'null' or 'undefined' is the same as 'pipe', stdout piped into a file, IPC channel estabilished  
-    spawn4.stdio;                                                                      // -> [Socket{...}, null, Socket{...}, null] 
-    </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> options.stdio TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------------
-    var {spawn} = require('child_process');
+    var { spawn } = require('child_process');
     var fs = require('fs');
         
     var out = fs.openSync('out.txt', 'a');
@@ -920,21 +426,21 @@ SYNTAX:     <strong>childProcessCreator</strong>(<strong>cmd</strong><i>, args o
     var spawn3 = spawn('node', ['module3.js'], {stdio:'inherit'});             // child process uses the parent's streams (does not have it own streams)    // -! data is printed directly in the parent module   
     var spawn4 = spawn('node', ['module4.js'], {stdio:['ignore', out, 'ignore']});  // the stdout is piped into a stream file 
     var spawn5 = spawn('node', ['module5.js'], {stdio:[null, null, null, 'ipc']});  // an IPC channel is estabilished between the parent and the child   
-        
-    console.log( spawn1.stdio );                                               // -> [Socket{...}, Socket{...}, Socket{...}]    // child has its own streams   
-    console.log( spawn2.stdio );                                               // -> [null, null, null ]                        // child does not have its own streams 
-    console.log( spawn3.stdio );                                               // -> [null, null, null ]                        // child does not have its own streams 
-    console.log( spawn4.stdio );                                               // -> [null, null, null ]                        // child does not have its own streams 
-    console.log( spawn5.stdio );                                               // -> [Socket{...}, Socket{...}, Socket{...}, null]  // has an IPC channel 
     
-    spawn5.on('message', function(msg){
+    spawn1.stdio;                                                          // -> [Socket{...}, Socket{...}, Socket{...}]    // child has its own streams   
+    spawn2.stdio;                                                          // -> [null, null, null ]                        // child does not have its own streams 
+    spawn3.stdio;                                                          // -> [null, null, null ]                        // child does not have its own streams 
+    spawn4.stdio;                                                          // -> [null, null, null ]                        // child does not have its own streams 
+    spawn5.stdio;                                                          // -> [Socket{...}, Socket{...}, Socket{...}, null]  // has an IPC channel 
+    
+    spawn5.on('message', function(msg) {
         console.log( msg );                                                    // receive the message passed throug the IPC channel   
-    });    
+    });
     
 // module1.js - module4.js (files) ----------------------------------------------------------------
     setInterval(function(){
         console.log('module1 is running!');
-    }, 1000);    
+    }, 1000);
     
 // module5.js (file) ------------------------------------------------------------------------------
     setInterval(function(){
@@ -949,7 +455,7 @@ SYNTAX:     <strong>childProcessCreator</strong>(<strong>cmd</strong><i>, args o
     module4 is running!
     module4 is running!    
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\child process\19 options.stdio TEST> node main
         [Socket{...}, Socket{...}, Socket{...}]                                // -! spawn1.stdio
         [null, null, null ]                                                    // -! spawn2.stdio
@@ -964,10 +470,10 @@ SYNTAX:     <strong>childProcessCreator</strong>(<strong>cmd</strong><i>, args o
         module5 is running!                                                    // CTRL + C pressed (exiting the program)
     PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\child process\19 options.stdio TEST>    
     </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> options.silent TEST </u></h3>    
-    <pre style="margin-bottom:1px;">
+      <hr>
+      <!------------------------------------------------------------------------------------------------------>
+      <h3 class="header"> The <mark>options.silent</mark> option </h3>
+      <pre style="margin-bottom:1px;">
 // main.js (file) ---------------------------------------------------------------------------------
     var {fork} = require('child_process');
     var fork = fork('module1.js', {silent:true});                              // this is basically same as (stdio:'pipe')
@@ -976,35 +482,19 @@ SYNTAX:     <strong>childProcessCreator</strong>(<strong>cmd</strong><i>, args o
     
 // module1.js (file) ------------------------------------------------------------------------------
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\child process\20 option.silet TEST> node main.js
         [Socket {...}, Socket {...}, Socket {...}, null]
     PS D:\safe\code +\my site\03 improuve\learn webdesign\04 Node.js\child process\20 option.silet TEST>    
     </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 class="headerExtra"><u> Properties and Methods </u></h2>   
-<h2 style="color:darkblue;"><u> <mark>channel</mark> / <mark>connected</mark> / <mark>disconnect()</mark> / <mark>send()</mark> methods and properties </u></h2>
-    <pre class="syntax">
-SYNTAX :    <strong>childProcess</strong>.channel                                                       // references the IPC channel between the parent and the child process   
-            <strong>childProcess</strong>.connected                                                     // returns a boolean indicating if the IPC channel is connected to the parent process   
-            
-            <strong>childProcess</strong>.disconnect()                                                  // disconnects the IPC channel from the parent process <u>gracefully</u> (emits the 'disconnect' event if no message is pending) (can be invoked within the <mark>fork()</mark> child process module)    
-            
-            <strong>childProcess</strong>.send(<strong>msg</strong>, <i class="openable">handle<div>
-                <p> - running server object (server which is listening) </p>
-                <p> - server socket <u>which is connected</u> </p>
-                <p> - in not an active server or server socket was sent the receiving side receives <mark>undefined</mark> </p>
-            </div></i>, <i class="openable">option:obj<div>
-                <p> keepOpen: <strong>bol</strong> - keepOpen: <strong>bol</strong> - used when passing <mark>net.Socket</mark> instances (as <i>handle</i>), when <mark>true</mark> the socket is kept open in the sending process (Default: <mark>false</mark>) </p>
-            </div></i>, <strong class="openable">fn(err)<div>
-                <p> - <strong>err</strong> - (if sending successful = <mark>null</mark>) (if sending fails = <mark>null</mark>) </p>
-            </div></strong>)                    // sends a message through the IPC channel to this <strong>childProcess</strong> and returns a boolean indicating if the sending was successfull    
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h2 class="headerExtra"><u> Properties and Methods </u></h2>
+    <h3 class="header"> The <mark>channel</mark> / <mark>connected</mark> / <mark>disconnect()</mark> / <mark>send()</mark> methods and properties </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
 // main.js (file) ---------------------------------------------------------------------
 // ------------------------------------------------------------------------------------
     var {fork} = require('child_process');
@@ -1027,167 +517,13 @@ SYNTAX :    <strong>childProcess</strong>.channel                               
 // ------------------------------------------------------------------------------------
     process.on('message', function(message){ message });                               // sent message handled here 
     </pre>
-    <p> - sending a 'handle' server object (or an acitve server socket) to the child process </p>
-    <pre>
-// main.js (file) ---------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-    var http = require('http');
-    var {fork} = require('child_process');
-    
-    var ch_1 = fork('./module1.js');
-    
-    var server = http.createServer().listen(1000, 'localhost');
-    
-    server.on('listening', function(){                                                 // emitted when the server is listening 
-        ch_1.send('', server);                                                         // sending the (active) listening server to the child process 
-    });
-    
-// module1.js (file) ------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-    process.on('message', function(msg, handle){
-        console.log( handle );                                                         // -> server object received and runnning   
-    });    
-    </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>channel</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-// main.js (file)-------------------------------------------------------------------
-    var {exec, spawn, fork} = require("child_process");
-        
-    // test for IPC channel in different processes ------------
-    var exc = exec('node module1.js');
-    var spw = spawn(process.env.comspec, ['/c', 'node', 'module1.js']);
-    var frk = fork('module1.js');
-    
-    console.log( exc.channel );
-    console.log( spw.channel );
-    console.log( frk.channel );                                               // only the 'fork' child process has IPC channel 
-    console.log( process.channel );                                           // undefined because this parent process didn't spawn an IPC channel
-    
-// module1.js (file)----------------------------------------------------------------
-    console.log( process.channel );                                           // IPC channel returned because this is a child process and it spawned and IPC channel 
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\07 channel TEST> node main.js
-        undefined                                                             // -! exc.channel 
-        undefined                                                             // -! spw.channel 
-        Pipe {                                                                // -! frk.channel 
-            buffering: false,
-            pendingHandle: null,
-            sockets: { got: {}, send: {} }
-        }
-        undefined                                                             // -! process.channel (main.js)
-        Pipe {                                                                // -! process.channel (module1.js)
-            buffering: false,
-            pendingHandle: null,
-            sockets: { got: {}, send: {} }
-        }
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\07 channel TEST>   
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>connected</mark> / <mark>disconnect()</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-    var {fork} = require('child_process');
-        
-    var frk = fork('module1.js');
-        
-    console.log( frk.connected );                                             // true (IPC channel estabilished)  
-    frk.disconnect();   
-    console.log( frk.connected );                                             // false (IPC channel disconnecte)
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\08 connected disconnect() TEST> node main.js
-        true                                                                  // -! frk.connected                 // we disconnect at this point 
-        false                                                                 // -! frk.connected
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\08 connected disconnect() TEST>    
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u><mark>send()</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-// main.js (file)-------------------------------------------------------------------
-    var {fork} = require("child_process");
-    
-    var frk = fork("module1.js");
-    var sendCheck = frk.send('my Message', function(arg){ 
-            console.log(arg)                                                  // argument null indicates a successfull send 
-        });
-        
-    if(sendCheck) frk.disconnect();                                           // if the message is sent successfully we disconnect the IPC channel (if we wouldn't disconnect the IPC it would keep the child process alive)   
-    
-// module1.js (file)----------------------------------------------------------------
-    process.on('message', function(data){
-        console.log( data );
-    });
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\09 send() TEST> node main.js
-        null                                                                  // -! send callback function's first argument 
-        my Message                                                            // -! message received an printed in 'module1.js'
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child Process\09 send() TEST>    
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>send()</mark> seding handles TEST </u></h3>
-    <p> Server which is listening can be sent to the child with the <mark>send()</mark> method </p>
-    <pre>
-// main.js (file) ---------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-    var http = require('http');
-    var {fork} = require('child_process');
-    
-    var ch_1 = fork('./ch.js');
-    
-    var server = http.createServer().listen(1000, 'localhost');
-    
-    server.on('listening', function(){
-        ch_1.send('some message', server);                                             // once the server is listening it is sent to the child process 
-    });
-    
-// ch.js (file) -----------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-    process.on('message', function(msg, handle){
-        console.log( msg );
-        console.log( handle );                                                         // server object received 
-        console.log( handle.listening );                                               // -> true        // server still listening   
-    });
-    </pre>
-    <p> Server not listening cannot be sent (other side receives <mark>undefined</mark>) </p>
-    <pre>
-// main.js (file) ---------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-    var http = require('http');
-    var {fork} = require('child_process');
-    
-    var ch_1 = fork('./ch.js');
-    
-    var server = http.createServer()                                                   // server not listening (not running at all)
-    
-    ch_1.send('some message', server);                                                 // sending the server object 
-    
-// ch.js (file) -----------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-    process.on('message', function(msg, handle){
-        console.log( msg );
-        console.log( handle );                                                         // -> undeifned      // because the server is not running  
-    });
-    </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;"><u> <mark>pid</mark> / <mark>kill()</mark> / <mark>killed</mark> methods and property </u></h2>
-    <pre class="syntax">
-SYNTAX :    <strong>childProcess</strong>.pid                                                   // returns the process identifier of the child process 
-            
-            <strong>childProcess</strong>.kill(<strong>signal:str|nr</strong>)                                   // sends a signal to the child process (default <mark>SIGTERM</mark>) <a href="https://nodejs.org/dist/latest-v12.x/docs/api/process.html#process_signal_events" target="_blank">(Node.js.org signal events)</a>
-            <strong>childProcess</strong>.killed                                                // returns a boolean inidcating that the child process has successfully received the signal by the <mark>kill()</mark> method (does NOT indicate the child process closure)    
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h3 class="header"> The <mark>pid</mark> / <mark>kill()</mark> / <mark>killed</mark> methods and properties </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
 // main.js (file) ---------------------------------------------------------------------------
     var {fork} = require('child_process');
     var frk = fork('module1.js');
@@ -1198,102 +534,35 @@ SYNTAX :    <strong>childProcess</strong>.pid                                   
     
     frk.on('exit', function(code, signal) {
         signal                                                                 // -> 'SIGINT'       // the sent signal 
-    })    
+    }) 
+    
+    
 // module1.js (file) ------------------------------------------------------------------------
     process.on('message', function(message){ });                               // listening to the IPC channel keeps the child process alive 
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>pid</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-    var {spawn, execSync} = require("child_process");
-    
-    var spw = spawn(process.env.comspec, ["/c", "dir"]);
-    var ex = execSync('dir');
-    
-// pid ----------------------------------------------------------
-    console.log( 'this process\'s id = ' + process.pid );
-    console.log( 'spawn process id = ' + spw.pid );
-    console.log( 'execSync process id = ' + ex.pid );                          // undefined because this process is already closed here     
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child process\10 pid TEST> node main.js
-        this process's id = 8260                                               // -! process.pid
-        spawn process id = 8496                                                // -! spw.pid
-        execSync process id = undefined                                        // -! ex.pid
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child process\10 pid TEST>    
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>kill()</mark> / <mark>killed</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-    var {exec} = require("child_process");
-
-    var ex = exec("dir");
-    ex.kill('SIGTERM');                                                        // sending a signal to the child process
-    console.log( ex.killed );                                                  // check successful send 
-        
-    ex.on('exit', function(code, signal){
-        console.log("code = (" + code + ") signal = (" + signal + ")" );
-    })
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child process\11 kill() killed TEST> node main.js
-        true                                                                   // -! ex.killed 
-        code = (null) signal = (SIGTERM)
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child process\11 kill() killed TEST>    
-    </pre>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> kill child process with a signal TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------    
-    var {fork} = require('child_process');
-        
-    var frk = fork('module1.js');
-    
-    frk.send('sent data');                                                     // send some data through the IPC channel 
-    
-    frk.on('exit', function(code, signal){                                     // listening to the exit event of the child process 
-        console.log(`exit code = (${code}) signal = (${signal})`);
-    });
-    
-    setTimeout(function(){                                                     // sendind a signal to the child process to terminate it after 2s 
-        frk.kill('SIGTERM');
-    }, 2000);
-    
-// module1.js (file) ------------------------------------------------------------------------    
-    process.on('message', function(msg){                                       // listening to the IPC channel keeps the process alive 
-        console.log( msg );
-    }) 
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child process\12 kill child process with a signal TEST> node main.js
-        sent data                                                              // child process prints the received data 
-        exit code = (null) signal = (SIGTERM)                                  // after 2 seconds we kill the child process 
-    PS D:\safe\code +\my Site\03 Improuve\learn webdesign\04 Node.js\child process\12 kill child process with a signal TEST>    
-    </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;"><u> <mark>unref()</mark> / <mark>ref()</mark> methods </u></h2>
-    <pre class="syntax">
-SYNTAX :   <strong>childProcess</strong>.unref()                                                // removes the child process from the parent event loop, so the parent process won't wait for the child process to close <u>(if there is an IPC channel between the parent and child the parent process cannot be closed!)</u>    
-           <strong>childProcess</strong>.ref()                                                  // reataches the removed child process in the parent event loop (reverses the <mark>unref()</mark> method's effect)  
-    </pre>    
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h3 class="header"> The <mark>unref()</mark> / <mark>ref()</mark> methods </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
 // main.js (file) ---------------------------------------------------------------------------
     var {spawn} = require('child_process');
+    
     var fs = require('fs');
     var out = fs.openSync('out.txt', 'a');                                     // the stdout of the child process is collected in this file (I couldn't output the data in the terminal [TESTED 2019-06-21])   
     
-    var spawn = spawn('node', ['module1.js'], 
-        {stdio:['ignore', out, 'ignore'],                                      // redirecting the stdout of the created child process  
-        detached:true});                                                       // -! required if we want to detach the child process 
+    var spawn = spawn('node', ['module1.js'],
+      {
+        stdio: ['ignore', out, 'ignore'],                                      // redirecting the stdout of the created child process  
+        detached: true
+      },
+    );                                                                         // -! required if we want to detach the child process 
+    
     spawn.unref();                                                             // child process is removed from the parent's event loop (parent process can be closed even if the child process is still running)     
-    // spawn.ref();                                                            // this would reatach the child process in the parent event loop  
+    spawn.ref();                                                            // reatach the child process in the parent event loop
+    
     
 // module1.js (file) ------------------------------------------------------------------------
   // -! this module will run in the background infinitely careful!
@@ -1301,57 +570,13 @@ SYNTAX :   <strong>childProcess</strong>.unref()                                
         console.log( 'module is running!' );
     }, 500);
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> TEST </u></h3>
-    <p style="color:yellow;"> - I could make these properties work but detaching and hanling detached child processes and their output is really confusing at this point for me, so I simply collected the output in a file [TESTED 2019-06-21] </p>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------
-    var {fork, spawn, exec} = require('child_process');
-    var fs = require('fs');
-    
-    const out = fs.openSync('./out.log', 'a');                                 // this file collects the outpu data of the detached child process
-    
-    var spawn = spawn('node', ['module1.js'], {stdio:['ignore', out, 'ignore'], detached:true});    // we redirect the stdout stream to the created file and prepare the child to be detached (detached:true)   
-    spawn.unref();                                                             // this is where we child process is removed form the parents event loop so it can run alone 
-    // spawn.ref();                                                            // -! this would reatach the child process to its parents event loop 
-    
-// module1.js (file) ------------------------------------------------------------------------
-    setInterval(function(){                                                    // continuos task                        
-        console.log('child process running!');
-    }, 1000);
-    
-    setTimeout(function(){                                                     // this makes sure that the child process closes after 7 seconds
-        process.exit();
-    }, 7000);
-    
-// out.log (file) ---------------------------------------------------------------------------
-    child process running!                                                     // this file collects the output of the detached child process 
-    child process running!
-    child process running!
-    child process running!
-    child process running!
-    child process running!
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 improuve\Learn webdesign\04 node.js\child process\13 unref() ref() TEST> node main.js
-    PS D:\safe\code +\my Site\03 improuve\Learn webdesign\04 node.js\child process\13 unref() ref() TEST>               // the parent process closes immediately because the child is process is removed from its event loop  
-    </pre>
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 style="color:darkblue;"><u> <mark>stdio</mark> / <mark>stdin</mark> / <mark>stdout</mark> / <mark>stderr</mark> properties </u></h2>
-    <pre class="syntax">
-SYNTAX :    <strong>childProcess</strong>.stdin                                                 // references the child process's standard in writable stream 
-            <strong>childProcess</strong>.stdout                                                // references the child process's standard out readable stream 
-            <strong>childProcess</strong>.stderr                                                // references the child process's standard error readable stream   
-            
-            <strong>childProcess</strong>.stdio                                                 // references the child process's streams in an Array (<mark>[stdin, stdout, stderr]</mark>) 
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h3 class="header"> The <mark>stdio</mark> / <mark>stdin</mark> / <mark>stdout</mark> / <mark>stderr</mark> properties </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
     var {exec} = require('child_process');
     var exec = exec('dir');
     
@@ -1366,83 +591,16 @@ SYNTAX :    <strong>childProcess</strong>.stdin                                 
     exec.stdio[1] === exec.stdout                                              // -> true 
     exec.stdio[2] === exec.stderr                                              // -> true 
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>stdin</mark> / <mark>stdout</mark> / <mark>stderr</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h2 class="headerExtra"> Events </h2>
+    <h3 class="header"> The <mark>exit</mark> / <mark>close</mark> / <mark>disconnect</mark> / <mark>error</mark> / <mark>message</mark> events </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
 // main.js (file) ---------------------------------------------------------------------------
-    var {exec, spawn, fork} = require('child_process');
-    
-    var exec = exec('dir');
-    var fork = fork('module1.js');
-    
-    console.log( exec.stdin );                                                 // references the streams of the child process 
-    console.log( exec.stdout );
-    console.log( exec.stderr );
-    
-    console.log( fork.stdin );                                                 // fork child process doesn't uses streams so all these are null
-    console.log( fork.stdout );
-    console.log( fork.stderr );
-        
-// module1.js (file) ------------------------------------------------------------------------
-    // (empty file)  
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 improuve\Learn webdesign\04 node.js\child process\17 stdin stdout stderr TEST> node main
-        Socket { ... }                                                         // -! exec.stdin
-        Socket { ... }                                                         // -! exec.stdout
-        Socket { ... }                                                         // -! exec.stderr
-        null                                                                   // -! fork.stdin
-        null                                                                   // -! fork.stdout
-        null                                                                   // -! fork.stderr
-    PS D:\safe\code +\my Site\03 improuve\Learn webdesign\04 node.js\child process\17 stdin stdout stderr TEST>
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>stdio</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------
-    var {spawn} = require('child_process');
-        
-    var spawn = spawn(process.env.comspec, ['/c', 'ls']);
-        
-    console.log( spawn.stdio[0] === spawn.stdin );                             // -> true 
-    console.log( spawn.stdio[1] === spawn.stdout );                            // -> true
-    console.log( spawn.stdio[2] === spawn.stderr );                            // -> true
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 improuve\Learn webdesign\04 node.js\child process\18 stdio TEST> node main
-        true
-        true
-        true
-    PS D:\safe\code +\my Site\03 improuve\Learn webdesign\04 node.js\child process\18 stdio TEST>
-    </pre>
-    
-    
-</details>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h2 class="headerExtra"><u> Events </u></h2>    
-<h2 style="color:darkblue;"><u> <mark>exit</mark> / <mark>close</mark> / <mark>disconnect</mark> / <mark>error</mark> / <mark>message</mark> events </u></h2>
-    <pre class="syntax">
-SYNTAX :    <strong>childProcess.listener</strong>('exit', function(<strong>extiCode, signal</strong>))                  // event emitted when when the process ends (stdio streams might still be open)  
-            <strong>childPorcess.listener</strong>('close', function(<strong>exitCode, signal</strong>))                 // event emitted when the stdio streams are closed <u>(not emited when the process ends)</u>
-            <strong>childProcess.listener</strong>('disconnect' function())                             // event emitted when the IPC channel is disconnected (also fired when the process ends)   
-            
-            <strong>childProcess.listener</strong>('error', function(<strong>error</strong>))                            // emitted when the child process cannot be spawned, cannot be killed or message sending fails 
-            
-            <strong>childProcess.listener</strong>('message' <strong>fn(msg, <strong class="openable">handle<div>
-                <p> - running server object (server which is listening) </p>
-                <p> - server socket <u>which is connected</u> </p>
-                <p> - in not an active server or server socket was sent = <mark>undefined</mark> </p>
-            </div></strong>)</strong>)                          // emitted when the child process recieves a message through the IPC channel 
-    </pre>
-<details class="example">
-<summary> DEMO </summary>
-    <pre>
-// main.js (file) ---------------------------------------------------------------------------
-    var {fork, spawn} = require('child_process');
+    var { fork, spawn } = require('node:child_process');
     var fork = fork('module1.js');
     
 // exit -----------------------------------------------------------------------
@@ -1450,100 +608,59 @@ SYNTAX :    <strong>childProcess.listener</strong>('exit', function(<strong>exti
         code;                                                                  // -> 0                  // exit code (anything above 0 means some problem)
         signal;                                                                // -> null               // signal recieved by this process 
     });
+    
 // close ---------------------------------------------------------------------- 
     fork.on('close', function(code, signal){                                   // fires when the standard input output streams are closed of this process 
         code;                                                                  // -> 0                  // exit code (anything above 0 means some problem)
         signal;                                                                // -> null               // signal recieved by this process 
     });
+    
 // disconnect -----------------------------------------------------------------
     fork.on('disconnect', function(){ })                                       // fires when the IPC channel closes between the processes // -! also fired when the process closes 
+    
 // error ----------------------------------------------------------------------
     fork.on('error', function(error){                                          // fires when an error occures (like message sending)
         error;                                                                 // -> Error              // error object of the thrown corresponding error
     });
+    
 // message --------------------------------------------------------------------
     fork.on('message', function(message, serverObj){                           // fires when the child process sends a message through the IPC channel   
         message;                                                               // -> 'child data sent'  // message sent by the child process
         serverObj;                                                             // [NOT TESTED]        
     });
     
+    
 // module1.js (file) ------------------------------------------------------------------------
-    process.send('child data sent');   
+    process.send('child data sent');
     </pre>
-</details>
-<details class="example">
-<summary> Example : </summary>
-<h3 style="color:darkblue;"><u> <mark>exit</mark> / <mark>close</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------
-    var {exec} = require('child_process');
-    var exec = exec('dir');
+    </details>
+    <hr>
+    <!------------------------------------------------------------------------------------------------------>
+    <h3 class="header"> The <mark>spawn</mark> event </h3>
+    <details class="example">
+    <summary> DEMO </summary>
+    <pre>
+    import { fork, exec } from 'node:child_process';
     
-    exec.on('close', function(code, signal){
-        console.log(`close event -> exit code = ${code}, signal = ${signal}`);
-    })
-    exec.on('exit', function(code, signal){
-        console.log(`exit event -> exit code = ${code}, signal = ${signal}`);
-    });
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 improuve\learn webdesign\04 node.js\child process\21 exit close TEST> node main
-        exit event -> exit code = 0, signal = null
-        close event -> exit code = 0, signal = null
-    PS D:\safe\code +\my Site\03 improuve\learn webdesign\04 node.js\child process\21 exit close TEST>    
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>disconnect</mark> TEST </u></h3>
-    <p> - I keep both processes active in this test because if we close the process the IPC channel is closed as well, therefore the 'disconnect' event would be emitted upon closing </p>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------
-    var {fork} = require('child_process');
-    var fork = fork('module1.js');
     
-    fork.on('disconnect', function(){
-        console.log( 'IPC channel is closed now! ');
+    const forkChildProces = fork('module1.mjs');
+    const execChildProcess = exec('ls -la', (err, stdout, stderr) => {
+      if (err) console.log(err);
+      
+      console.log(stdout);
     })
     
-    setTimeout(function(){                                                     // disconnecting the IPC channel after 2 seconds 
-        fork.disconnect();                                      
-    }, 2000);
+    forkChildProces.on('spawn', () => {
+      console.log('fork child proces spawned!')
+    })
     
-// module1.js (file) ------------------------------------------------------------------------
-    setInterval(() => {}, 1000);                                               // this keeps both processes open because the parent is not allowed to close utill this child runs     
+    execChildProcess.on('spawn', () => {
+      console.log('exec child proces spawned!')
+    })
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 improuve\learn webdesign\04 node.js\child process\22 disconnect TEST> node main
-        IPC channel is closed now!                                             // after 2 seconds               // -! program never ends
-    </pre>
-<hr>
-<!------------------------------------------------------------------------------------------------------>
-<h3 style="color:darkblue;"><u> <mark>message</mark> / <mark>error</mark> TEST </u></h3>
-    <pre style="margin-bottom:1px;">
-// main.js (file) ---------------------------------------------------------------------------
-    var {spawn, fork} = require('child_process');
-    var spawn = spawn('dir');
-    var fork = fork('module1.js');
-    
-    spawn.on('error', function(error){                                         // that's cool because we can hadle child errors without shutting down the whole program 
-        console.log( 'error = ' + error);
-    });
-    
-    fork.on('message', function(msg, srvObj){                                  // data sent through the IPC channel is hanled here 
-        console.log( 'received message = ' + msg);
-    });
-    
-// module1.js (file) ------------------------------------------------------------------------
-    process.send('message form the child process');    
-    </pre>
-    <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my Site\03 improuve\learn webdesign\04 node.js\child process\23 message error TEST> node main
-        error = Error: spawn dir ENOENT                                        // -! error event 
-        received message = message form the child process                      // -! message event 
-    PS D:\safe\code +\my Site\03 improuve\learn webdesign\04 node.js\child process\23 message error TEST>    
-    </pre>
-</details>
-    
-<br><br>
-</body>
+    </details>
+
+
+    <br><br>
+  </body>
 </html>
