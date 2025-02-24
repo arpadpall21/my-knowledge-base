@@ -179,14 +179,14 @@
         def __call__(self<i>, arg, ...</i>):                                                  // makes the instance callable (ex: <mark><strong>obj</strong>()</mark>) 
         
         
-<span style="color:darkgray;">// public methods and attributes ------------------------------------------------------</span>
+// public methods and attributes ------------------------------------------------------
         def <strong>methodId</strong>(self, <i>arg, ...</i>):                                                  // owned by this class and accessible by classes and instances on the prototype chain    
             self                                                                       // references the instance that will be created (always the 1st argument) 
 
         <strong>attrId</strong><i> = val</i>                                                                   // owned by this class and accessible by classes and instances on the prototype chain    
                                                                                           // -! if it holds a mutable data, members who inherit it can modify its value 
     
-    <span style="color:darkgray;">// class methods ------------------------------------------------------------------</span>
+// class methods ------------------------------------------------------------------
         <em>@classmethod</em>
         def <strong>methodId</strong>(cls, <i>arg, ...</i>):                                                   // (method called on the class directly) owned by this class and accessible by classes and instances on the prototype chain  
             cls                                                                        // references the class in the inheritance chain that calls this method  
@@ -195,19 +195,34 @@
         def <strong>methodId</strong>(<i>arg, ...</i>):                                                        // same as <mark>@classmethod</mark> but does not get the class as its 1st argument  
     
     
-<span style="color:darkgray;">// protected methods and attributes ---------------------------------------------------</span>
+// protected methods and attributes ---------------------------------------------------
         def _<strong>methodId</strong>(self):                                                           // <mark>_</mark> (single underscore) prefixed attributes|methods signify 'protected' method|attribute (used within this class an any of the subclasses) 
         _<strong>attrId</strong><i> = val</i>                                                           // -! this is just a practice these are available publicly   
     
     
-<span style="color:darkgray;">// private methods and attributes -----------------------------------------------------</span>
+// private methods and attributes -----------------------------------------------------
         def __<strong>methodId</strong>(self, <i>arg, ...</i>):                                                // inteded to be used privately, but they are <u>NOT PRIVATE, just well hidden</u> 
         __<strong>attrId</strong><i> = val</i>                                                                 // from outside this class we can access as <mark style="padding:2px;">_<strong>ClassId_1</strong>__<strong>methodId</strong></mark> (ex: <mark style="padding:2px;">TestClass._TestClass__privAttr</mark>) / inside its class accessed as <mark style="padding:2px">self.__<strong>methodId</strong></mark>  
                                                                                        // owned by this class and accessible by classes and instances on the prototype chain 
     
     
-<span style="color:darkgray;">// ------------------------------------------------------------------------------------</span>
-<span style="color:darkgray;">// sub-class --------------------------------------------------------------------------</span>
+// attribute getter / setter / deleter -------------------------------------------------
+        <lit>@property</lit>                                                          // attribute getter
+        def <reqval>attr_A</reqval>(self):
+            return <reqval>attrVal</reqval>
+        
+        @<reqval>attr_A</reqval>.setter                                               // attribute setter
+        def x(self, value):
+            // logic to set attirbute <mark>value</mark>
+        
+        @<reqval>attr_A</reqval>.deleter                                              // attribute deleter
+        def x(self):
+            // logic to delete attirbute 
+    
+    
+    
+// ------------------------------------------------------------------------------------
+// sub-class --------------------------------------------------------------------------
     class <strong>ClassId_2</strong><small>(<i>ClassId_1, ...</i>)</small>:                                                   // multiple base classes can be passed    
         <em>def __init__(self, <i>arg, ...</i>):</em>
             super().__init__(<i>arg, ...</i>)                                                 // this is how we call the super object initialization    
@@ -227,7 +242,7 @@
     
     <strong>class</strong>.<strong>someMethod</strong>(<strong>obj</strong>, <i>arg, ...</i>)                                                    // same as calling <mark><strong>obj</strong>.<strong>someMethod</strong>(<i>arg, ...</i>)</mark>   
     </pre>
-  <details class="example">
+  <details class="example" open>
     <summary> DEMO </summary>
     <pre>
     class B():
@@ -242,6 +257,8 @@
     obj = A('a', 'b')                                                                  // creates an object 
     obj.__dict__                                                                       // -> {'a': 'a', 'b': 'b'}
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> setting class attributes on existing class </h4>
     <pre>
     class TestClass:
@@ -267,6 +284,8 @@
     
     TestClass.__dict__["newAttr"] = 'new-val'                                          // -! TypeError        // setting class attributes through mappingproxy is not allowed  
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> method and attribute inheritance </h4>
     <pre>
     class B():
@@ -295,6 +314,8 @@
     obj.__dict__                                                                       // -> {'attr1': 'new-val'}  
     A.attr1                                                                            // -> 'val;            // inheritable data not modified
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> <mark>@classmethod</mark> / <mark>@staticmethod</mark> </h4>
     <pre>
     class B:
@@ -316,6 +337,8 @@
     
      A.clsMethod('x')                                                                  // -> 'x'              // inherited from the super class   
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> private methods and attributes </h4>
     <pre>
     class B:
@@ -345,6 +368,8 @@
     A.__privateAttr                                                                    // -! AttributeError 
     obj.__privateAttr                                                                  // -! AttributeError
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> <mark>super()</mark> </h4>
     <pre>
     class C:
@@ -367,6 +392,8 @@
     
     A.__mro__                                                                          // -> (&lt;class '__main__.A'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.C'&gt;, &lt;class 'object'&gt;)   // inheritance chain order  
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> <mark>__doc__</mark> / <mark>del</mark> / calling method on the class </h4>
     <pre>
     class A:
@@ -397,6 +424,8 @@
     hasattr(A, 'attr')                                                                 // -> False 
     hasattr(A, 'method')                                                               // -> False 
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
     <h4 class="header"> Creating callable instances </h4>
     <pre>
     class MyClass:
@@ -411,6 +440,38 @@
     obj = MyClass(1, 2)
     obj()                    // -> 'my object was called!"
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
+    <h4 class="header"> Attribute getter / setter / deleter (<mark>@property</mark>) </h4>
+    <pre>
+    class SomeClass:
+        def __init__(self):
+            self._x = None
+    
+        @property
+        def x(self):
+            return self._x
+    
+        @x.setter
+        def x(self, value):
+            self._x = value
+    
+        @x.deleter
+        def x(self):
+            del self._x
+    
+    
+    some_obj = SomeClass()
+    
+    some_obj.x                        // -> None
+    
+    some_obj.x = 'some value'
+    some_obj.x                        // -> 'some value'
+    
+    del some_obj.x
+    some_obj.x                        // -> AttributeError
+    </pre>
+    
   </details>
   <!---------------------------------------------------------------------------------------------->
   <hr>
