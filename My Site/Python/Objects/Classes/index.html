@@ -223,9 +223,21 @@
             // logic to delete attirbute 
     
     
-        functools.<lit>cached_property</lit>                                        // same as <mark>@property</mark> but caches set value<u>s</u>
+        @functools.<lit id="functools">cached_property</lit>                                        // same as <mark>@property</mark> but caches set value<u>s</u>
         def <reqval>cached_attr</reqval>(self):                                     // doesn't need any setter or deleter methods
             return <reqval>attrVal</reqval>                                         // -! multiple values set are cached <u>so it's not threadsafe! (delete only deletes the most recently set value)</u>
+    
+    
+// singledispatchmethod -------------------------------------------------
+        @functools.<lit>singledispatchmethod</lit>                                  // allows different method implementation based on the 1st argument's type
+        def <reqval>methodId</reqval>(self, <reqval>arg</reqval>):                                   // default definition we raise a NotImplementedError
+            raise NotImplementedError(<i>msg:str</i>)
+    
+        @<reqval>methodId</reqval>.register                                        // defining a method that will run when the 1st argument is <reqval>pyType</reqval>
+        def _(self, <reqval>arg</reqval>: <reqval>pyType</reqval>):
+            return <reqval>val</reqval>
+        
+        <optval>...</optval>
     
     
     
@@ -250,7 +262,7 @@
     
     <strong>class</strong>.<strong>someMethod</strong>(<strong>obj</strong>, <i>arg, ...</i>)                                                    // same as calling <mark><strong>obj</strong>.<strong>someMethod</strong>(<i>arg, ...</i>)</mark>   
     </pre>
-  <details class="example" open>
+  <details class="example">
     <summary> DEMO </summary>
     <pre>
     class B():
