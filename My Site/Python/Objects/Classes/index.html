@@ -170,6 +170,9 @@
   <hr>
   <h2 class="header"> Classes <mark>class</mark> </h2>
   <pre class="syntax">
+    import functools
+    
+    
     class <strong>ClassId_1</strong>:
         <i>docString:str</i>                                                                  // document string (docstring) is readable by <mark><strong>ClassId_1</strong>.__doc__</mark> (used to document the class)
         
@@ -218,6 +221,11 @@
         @<reqval>attr_A</reqval>.deleter                                              // attribute deleter
         def x(self):
             // logic to delete attirbute 
+    
+    
+        functools.<lit>cached_property</lit>                                        // same as <mark>@property</mark> but caches set value<u>s</u>
+        def <reqval>cached_attr</reqval>(self):                                     // doesn't need any setter or deleter methods
+            return <reqval>attrVal</reqval>                                         // -! multiple values set are cached <u>so it's not threadsafe! (delete only deletes the most recently set value)</u>
     
     
     
@@ -471,7 +479,73 @@
     del some_obj.x
     some_obj.x                        // -> AttributeError
     </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
+    <h4 class="header"> Cached property (<mark>@cached_property</mark>) </h4>
+    <pre>
+    import functools
     
+    
+    class Person:
+        def __init__(self, name, surname):
+            self.name = name
+            self.surname = surname
+    
+        @property
+        def full_name(self):
+            return self.name + " " + self.surname
+    
+        @functools.cached_property                      # cached property
+        def full_name_flipped(self):
+            return self.surname + " " + self.name
+    
+    
+    peti = Person('Peter', 'Pall')
+    
+    // @property ------------------
+    peti.full_name                        // -> Peter Pall (regular @property decorator)
+    peti.full_name = "Peter Bela"         // AttributeError (because no setter attirubte configured)
+    del peti.full_name                    // AttributeError (because no deleter attirubte configured)
+    
+    
+    // @cached_property -----------
+    peti.full_name_flipped                    // -> Pall Peter (cached attribute is not recomputed )
+    peti.full_name_flipped 
+    
+    peti.full_name_flipped = "Pall Bela"      // cached property don't need setter 
+    peti.full_name_flipped                    // -> "Pall Bela"
+    
+    del peti.full_name_flipped                // -! cached property don't need any deleter however this deletes the latest set (cached) value 
+    peti.full_name_flipped                    // -> "Pall Peter" (previously cached value)
+    del peti.full_name_flipped                // -! deletes the latest cached value 
+    peti.full_name_flipped                    // raises an Attribute Error (all caches are deleted)
+    </pre>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
+    <h4 class="header"> Singledispatchmethod (<mark>@singledispatchmethod</mark>) </h4>
+    <pre>
+    import functools
+    
+    class Negator:
+        @functools.singledispatchmethod
+        def neg(self, arg):
+            raise NotImplementedError(f"Cannot negate {arg}, supported types: int | bool")
+    
+        @neg.register
+        def _(self, arg: int):
+            return -arg
+    
+        @neg.register
+        def _(self, arg: bool):
+            return not arg
+    
+    
+    negator = Negator()
+    
+    negator.neg('test')                   // -> NotImplementedError
+    negator.neg(324)                      // -> -324
+    negator.neg(False)                    // -> -True
+    </pre>
   </details>
   <!---------------------------------------------------------------------------------------------->
   <hr>

@@ -53,33 +53,41 @@ import functools
 
 
 
+
 ####################################################################
-### @cached_property ###
+### reduce ###
 ####################################################################
-class Person:
-    def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
 
-    @property
-    def full_name(self):
-        return self.name + " " + self.surname
-
-    @functools.cached_property                      # cached property
-    def full_name_flipped(self):
-        print('------------')
-        return self.surname + " " + self.name
+# print( functools.reduce(lambda a, b: a + b, [1, 2, 3, 4, 5]) )       # -> 15
+# print( functools.reduce(lambda a, b: a + b, [1, 2, 3, 4, 5], 10) )       # -> 25  # starts with 10
 
 
-peti = Person('Peter', 'Pall')
 
-# print( peti.full_name )               # -> Peter Pall (regular @property decorator)
-# peti.full_name = "Peter Bela"         # AttributeError (because no setter attirubte configured)
-# del peti.full_name                    # AttributeError (because no deleter attirubte configured)
+####################################################################
+### singledispatch ###
+####################################################################
+# @functools.singledispatch
+# def process(value):
+#     raise NotImplementedError("Unsupported type")
 
 
-print( peti.full_name_flipped )       # -> Pall Peter 
-print( peti.full_name_flipped )       # -> Pall Peter (cached attribute is not recomputed )
+# @process.register
+# def _(value: int):
+#     return f"Processing an integer: {value}"
 
-peti.full_name_flipped = "Pall Bela"
-print( peti.full_name_flipped )
+
+# @process.register
+# def _(value: str):
+#     return f"Processing a string: {value}"
+
+
+# @process.register
+# def _(value: list):
+#     return f"Processing a list of length {len(value)}"
+
+# # Usage
+# print(process(10))          # Output: Processing an integer: 10
+# print(process("hello"))     # Output: Processing a string: hello
+# print(process([1, 2, 3]))   # Output: Processing a list of length 3
+
+
