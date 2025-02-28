@@ -1,1 +1,0 @@
-document.getElementById('def_demo_1').style.color = "green";
