@@ -1,2 +1,3 @@
 # My Knowledge Base
-- Personal Site where I document technologies I use
+
+- A personal site where I document the technologies I use.

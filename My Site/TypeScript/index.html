@@ -13,7 +13,7 @@
 
   <body>
     <h1> TypeScript </h1>
-    <p> Updated ( 2022-12-04 )</p>
+    <p> Updated: ( 2022-12-04 / 2025-02-28 )</p>
     <nav class="sitenav">
       <a href="../index.html">MySite > </a> TypeScript
     </nav>
@@ -259,6 +259,10 @@
     <lit>enum</lit> <strong>Enum</strong> { <strong>MEMBER</strong><small>=<i>val</i></small><i>, ...</i> }                              // enum (a set of <u>unchangable values</u> where only one member can be used) 
                                                                // values (<i>val</i>) are defined as <mark>0, 1, 2, ...</mark> by default
                                                                // values can be accessed as <mark><strong>Enum.MEMBER</strong></mark> or <mark><strong>Enum['MEMBER']</strong></mark> 
+    
+    
+    <a href="https:\/\/www.typescriptlang.org/docs/handbook/utility-types.html" target=_blank">Utility Types...</a>         // types that facilitate common type transormation
+                                    // ex: get the return type of a function, make all interface properties optional, etc... 
     </pre>
     <details class="example">
       <summary> DEMO </summary>
@@ -267,7 +271,7 @@
     let myArray : number[] = [1, 2, 3];                     // array of types (array will have only number types)
     let myArray2 : (number|string)[] = [1, 2, '3'];         // number or string types can be contained 
     let myArray3 : any[] = [1, '2', false];                 // array can have any types
-    </pre>
+      </pre>
       <hr>
       <!---------------------------------------------------------------->
       <h4 class="header"> The <mark>any</mark> / <mark>unknown</mark> types </h4>
@@ -291,7 +295,7 @@
     const new2:string = b1;     // -! not assignable (this throws an error)
     
     b2(10);                     // -! not callable (this throws an error)
-    </pre>
+      </pre>
       <hr>
       <!---------------------------------------------------------------->
       <h4 class="header"> The <mark>void</mark> / <mark>never</mark> types</h4>
@@ -312,7 +316,7 @@
         while (true)
             console.log( '?' );
     }
-    </pre>
+      </pre>
       <hr>
       <!---------------------------------------------------------------->
       <h4 class="header"> Tuple & Enum types </h4>
@@ -340,7 +344,89 @@
     
     console.log( Pepe.SURNAME, Pepe.NAME );                 // -> 'Bozóki Péter'    
     console.log( concateName(Pepe.NAME, Pepe.SURNAME) )     // -> 'Bozóki Péter'    
-    </pre>
+      </pre>
+      <hr>
+      <!---------------------------------------------------------------->
+      <h4 class="header"> Utility Types </h4>
+      <pre>
+// Awaited&lt; &gt; ------------------------------------------------
+    async function getUserData(): Promise<{ name: string, age: number }> {
+      return { name: 'Some user', age: 21 }
+    }
+    
+    type User = Awaited&lt;ReturnType&lt;typeof getUserData&gt;&gt;;      // getting the type the promise resolves
+    
+    const user: User = { name: 'Some other user', age: 22 };
+    
+    
+// Partial&lt; &gt; ----------------------------------------------- 
+    interface Person {
+      id: number;
+      name: string;
+      age: number;
+    }
+    
+    type PersonOpt = Partial&lt;Person&gt;                          // makes all properties are optional
+    
+    const personA: PersonOpt = { name : 'Doe John'}
+    const personB: PersonOpt = { id : 1, age: 32 }
+    
+    
+// Required&lt; &gt; ------------------------------------------
+    interface Person {
+      id?: number;
+      name?: string;
+      age?: number;
+    }
+   
+    type PersonReq = Required&lt;Person&gt;               // makes all properties required
+   
+    const person: PersonReq = {
+      id: 1,
+      name : 'Doe John',
+      age: 21,
+    }
+    
+    
+// Omit&lt; &gt; -----------------------------------------
+    interface Person {
+      id: number;
+      name: string;
+      age: number;
+    }
+    
+    type PersonWithoutAge = Omit&lt;Person, 'age'&gt;         // removes the age property
+    
+    const person: PersonWithoutAge = {
+      id: 1,
+      name : 'Doe John',
+    }
+    
+    
+// Pick&lt; &gt; -------------------------------
+    interface Person {
+      id: number;
+      name: string;
+      age: number;
+    }
+    
+    type PersonWithNameAndAge = Pick&lt;Person, 'name' | 'age'&gt;      // removes the age property
+    
+    const person: PersonWithNameAndAge = {
+      name : 'Doe John',
+      age: 21,
+    }
+    
+    
+// ReturnType&lt; &gt; --------------------------- 
+    function getPerson(): { name: string, age: number } {
+      return { name: 'Doe', age: 43 }
+    }
+    
+    type Person = ReturnType&lt;typeof getPerson&gt;;                // get return type
+    
+    const person: Person = { name: 'John', age: 50 }
+      </pre>
     </details>
     <hr>
     <!------------------------------------------------------------------------------------->
