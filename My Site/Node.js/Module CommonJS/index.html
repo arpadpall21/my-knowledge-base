@@ -311,29 +311,28 @@
     <p> - Node.js loads a file as CommonJS module when : </p>
     <p class="indent-lv1"> - a file has <mark>*.cjs</mark> extension </p>
     <p class="indent-lv1"> - a file has <mark>*.js</mark> extension and the nearest <mark>package.json</mark> file contains a top-level <mark>"type":"commonjs"</mark> field <u>or does not contain any <mark>"type"</mark> fields</u> </p>
-    <p> - CommonJS modules can import (require) other CommonJS modules <u>but cannot required ECMAScript modules Statically <span style="color:yellow;">(Dynamically can <mark>import()</mark>)</u></p>
-      <p> - the code inside CommonJS modules does not run in strict mode (like in ECMAScript modules) </p>
-      <p> - when required <mark>*.json</mark> files are parsed into JavaScript objects </p>
-      <details class="example">
-        <summary> DEMO </summary>
-        <p> - <mark>main.cjs</mark> file (loades as CommonJS module) </p>
-        <pre>
+    <p> - the code inside CommonJS modules does not run in strict mode (like in ECMAScript modules) </p>
+    <p> - when required <mark>*.json</mark> files are parsed into JavaScript objects </p>
+    <details class="example">
+      <summary> DEMO </summary>
+      <p> - <mark>main.cjs</mark> file (loades as CommonJS module) </p>
+      <pre>
     require('./module1.cjs');                                                          // requiring CommonJS module 
     require('./module1.mjs');                                                          // -! Error thrown (cannot require ECMAScript module)
     
 // module runs in non strict mode -----------------------------------------------------
     x = 21;                                                                            // runs no problem (undeclared variables are not allowed in strict mode)    
     </pre>
-        <hr>
-        <!---------------------------------------------------------------------------------------------------->
-        <h4 style="color:darkblue;"><u> Loading <mark>*.js</mark> files as CommonJS module </u></h4>
-        <p> - <mark>*.js</mark> files loaded as CommonJS module by Default (when no <mark>package.json</mark> file is nearby or the <mark>package.json</mark> file has no <mark>"type"</mark> field) </p>
-        <p> - <mark>main.js</mark> file <u>loaded as CommonJS module because the nearest <mark>package.json</mark> file has a top-level <mark>"type":"commonjs"</mark> field</u> </p>
-        <pre>
+      <hr>
+      <!---------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> Loading <mark>*.js</mark> files as CommonJS module </u></h4>
+      <p> - <mark>*.js</mark> files loaded as CommonJS module by Default (when no <mark>package.json</mark> file is nearby or the <mark>package.json</mark> file has no <mark>"type"</mark> field) </p>
+      <p> - <mark>main.js</mark> file <u>loaded as CommonJS module because the nearest <mark>package.json</mark> file has a top-level <mark>"type":"commonjs"</mark> field</u> </p>
+      <pre>
     require('fs');                                                                     // file loaded as CommonJS module 
     </pre>
-        <p> - nearest <mark>package.json</mark> file </p>
-        <pre>
+      <p> - nearest <mark>package.json</mark> file </p>
+      <pre>
     {
     "name": "module-ecmascript",
     "version": "1.0.0",
@@ -347,228 +346,65 @@
     "type":"commonjs"                                                                  // this makes Node.js load *.js files as CommonJS module  
     }                                                                                  // -! Node.js does the same even when the "type" filed is not present   
     </pre>
-        <hr>
-        <!---------------------------------------------------------------------------------------------------->
-        <h4 style="color:darkblue;"><u> Loading JSON data </u></h4>
-        <p> - <mark>main.cjs</mark> file </p>
-        <pre>
-    require('./data.json');                                                            // -> {p1:'some string', p2:21, p3:[1, 2, 3]}         
-    </pre>
-        <p> - <mark>data.json</mark> file </p>
-        <pre>
-    {"p1":"some string", "p2":21, "p3":[1, 2, 3]} 
-    </pre>
-      </details>
       <hr>
       <!---------------------------------------------------------------------------------------------------->
-      <h2 class="header"> Dynamic import 
-      
-      
-      </h2>
-      
-      
-      <p> - by default CommonJS modules require modules statically, (required module loads on the spot) </p>
-      <p> - CommonJS modules can require modules dynamically, so they don't block the main module, once the main module is finished loading the dynamically required module start loading <u>(this is not an asynchronous module loading mechanism)</u> </p>
-      <p> - the main benefit of dynamically loading modules is that we can require modules only when needed (from a function body 'dynamically') </p>
-      <details class="example">
-        <summary> DEMO </summary>
-        <pre>
-// static -----------------------------------------------------------------------------
-    require('./module1.cjs');                                                          // the required module is loaded here and the required data is available here    
-    
-    require('./module1.mjs');                                                          // -! throws an Error we cannot load ECMAScript modules Statically   
-    
-// dynamic syntax ---------------------------------------------------------------------
-    import('./module2.cjs')                                                            // the required module is loaded once the current module is fully loaded     // -! not asynchronous loading!    
-        .then(res => {res})                                                            // -> the required data will be available here  
-        .catch(err => {err})
-        
-    import('./module2.mjs')                                                            // -! ECMAScript modules can be loaded in CommonJS modules dynamically    
-        .then(res => {res})                                                            // -> the required data will be available here  
-        .catch(err => {err})
-        
-// require from a function (when needed 'dynamically') --------------------------------
-    setTimeout(function(){
-        import('./module3.mjs')                                                        // module is required after 5 seconds (dynamically)
-            .then(res => {res}) 
-            .catch(err => {err})
-        
-        // require('./module3.cjs')                                                    // -! this would trow an error (static syntax is not allowed in a function)    
-    }, 5000);
+      <h4 style="color:darkblue;"><u> Loading JSON data </u></h4>
+      <p> - <mark>main.cjs</mark> file </p>
+      <pre>
+    require('./data.json');                                                            // -> {p1:'some string', p2:21, p3:[1, 2, 3]}         
     </pre>
-      </details>
-      <details class="example">
-        <summary> Example : </summary>
-        <h4 style="color:darkblue;"><u> Static VS Dynamic module requiring TEST </u></h4>
-        <p> - <mark>main.cjs</mark> file </p>
-        <pre>
-// dynamically import CommonJS module -------------------------------------------------
-    import('./module1.cjs')                                                            // dynamically loads the module (once this mudule is fully finished loading then loads the 'module1.mjs' module)    
-        .then(res => console.log(res))                                                 // -> {default:{x:'CommonJS module-1 data'}, x:'CommonJS module-1 data'}   
-        .catch(err => console.log(err));
-        
-// dynamically import ECMAScript module -----------------------------------------------
-    import('./module1.mjs')                                                            // -! ECMAScript modules can be loaded dynamically too
-        .then(res => console.log(res))                                                 // -> {x:'ECMAScript module-1 data'}
-        .catch(err => console.log(err));
-        
-    console.log( '--- main module end---' );    
+      <p> - <mark>data.json</mark> file </p>
+      <pre>
+    {"p1":"some string", "p2":21, "p3":[1, 2, 3]} 
     </pre>
-        <p> - <mark>module1.cjs</mark> file (CommonJS module) </p>
-        <pre>
-    console.log('module1.cjs start');
+    </details>
+    <hr>
+    <!---------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Dynamic import
+      <i class="fab fa-js">2020</i>
+      <span id="browserSupport" title="updated: 2025-03-01">
+        <span><i class="fab fa-chrome"></i> 63 </span>
+        <span><i class="fab fa-firefox"></i> 67 </span>
+        <span><i class="fab fa-opera"></i> 50 </span>
+        <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 63 </span>
+        <span><i class="fab fa-safari"></i> 11.1 </span>
+        <span><i class="fab fa-node-js"></i> 13.2.0 </span>
+      </span>
+    </h2>
+    <pre>
+// static import ---------------------
+    require('./module1.cjs');                    // synchronous module loading 
     
-    exports.x = "CommonJS module-1 data";    
-    </pre>
-        <p> - <mark>module1.mjs</mark> file (ECMAScript module) </p>
-        <pre>
-    console.log('module1.mjs start');
     
-    export var x = "ECMAScript module-1 data";    
-    </pre>
-        <pre class="cmd">
-pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Module ECMAScript$ sudo node main.cjs
-    --- main module end---
-    module1.mjs start
-    [Module: null prototype] { x: 'ECMAScript module-1 data' }
-    module1.cjs start
-    [Module: null prototype] {
-    default: { x: 'CommonJS module-1 data' },
-    x: 'CommonJS module-1 data'
+// dynamic import --------------------
+  // synchronous -----------------------
+    function loadModule(path) {
+      return require(path);                     // dynamic module loading (inside a function call)
     }
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> module execution order TEST </u></h4>
-        <p> - execution order maintained just like in the browser </p>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    console.time('execution time');
-    require('./module1.js');
-    require('./module2.js');
     
-    console.log( 'main module is finished loading');
-    console.timeEnd('execution time');
+    const module1 = loadModule('./module1')
     
-// module1.js --------------------------------------------------------------------------
-    var goal = 70000;
-    var counter = 0;
-        
-    while( counter &lt; goal ) {
-        counter++;
-    } 
     
-    console.log('module1 is finished loading');    
+  // asynchronous ----------------------
+    import('./module1.cjs')
+        .then(res => res)                    // -> the imported module
+        .catch(err => err)
     
-// module2.js --------------------------------------------------------------------------
-    console.log( 'module2 is finished loading');    
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Modules\01 - Module Execution Order TEST> node main.js
-        module1 is finished loading
-        module2 is finished loading
-        main module is finished loading
-        execution time: 10.233ms
-    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Modules\01 - Module Execution Order TEST>    
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> module infinite cycle TEST </u></h4>
-        <p> - moudles cannot call each other infinitely </p>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    require('./module1.js');
-    
-    console.info('main module');
-    
-// module1.js --------------------------------------------------------------------------
-    require('./main.js');                                           // some built in mechanism prevents modules from calling each other infinitely 
-
-    console.info('module1 module');    
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Modules\02 - Module Infinte Cycle TEST> node main.js
-        module1 module
-        main module
-    PS D:\safe\code +\my site\03 improuve\Learn WebDesign\04 Node.js\Modules\02 - Module Infinte Cycle TEST>
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style="color:darkblue;"><u> CommonJS TEST </u></h4>
-        <pre>
-// module-1.js -----------------------------------------------------------
-    exports.someData = "this data is going to be exported!";              // this is how we export data from this module  
-    
-// main.js ---------------------------------------------------------------
-    var importedData = require('./module-1.js');                          // this is where we get the exported data 
-    console.log(importedData);    
-    </pre>
-        <pre class="cmd">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Basics\CommonJs> node main.js
-    { someData: 'this data is going to be exported!' }    
-    </pre>
-        <!------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style="color:darkblue;"><u> CommonJS does NOT export variable bindings TEST </u></h4>
-        <pre>
-// mod1.js ---------------------------------------------------------------
-    exports.sum = (a, b) => a + b;                                        // exported function OK
-    
-    // variable binding is not exported --------------------------------------
-    exports.car1;                                                         // data is not hoisted
-    var car1 = {mark:'audi', year:2010, gearBoxAuto:false};
-    exports.car1;                                                         // -! variable binding is NOT exported 
-        
-    exports.car2 = {mark:'audi', year:2010, gearBoxAuto:false}            // this is the right one 
-    
-    // way around not expored variable ---------------------------------------
-    var car3 = {mark:'bmw', year:2016, gearBoxAuto:true};
-    exports.car3 = car3;                                                  // -! this will work!
-
-    
-// main2.js --------------------------------------------------------------
-    var received = require('./mod1.js');
-    
-    console.log( received );
-    </pre>
-        <pre class="cmd">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Basics\CommonJs> node main2.js
-    { sum:[Function], 
-      car2: {mark:'audi', year:2010, gearBoxAuto:false}, 
-      car3:{ mark:'bmw', year:2016, gearBoxAuto:true } }    
-  </pre>
-        <!------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style="color:darkblue;"><u> is <mark>require()</mark> asynchronous TEST </u></h4>
-        <p> - No it is NOT!</p>
-        <pre>
-// 02 main.js ------------------------------------------------------------
-    var imported = require('./02 module1.js');
-    var nativeVar = 'native data';
-
-    console.log(imported);
-    console.log(nativeVar);
-    
-// 02 module1.js ---------------------------------------------------------
-    module.exports = "module1 data";
-    </pre>
-        <pre class="cmd">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Basics\CommonJs> node '02 main.js'
-    module1 data
-    native data    
-    </pre>
-      </details>
-      <!------------------------------------------------------------------------------------------------------------------>
-      <hr>
-      <h2 style="color:darkblue;"><u> The <mark>__filename</mark> / <mark>__dirname</mark> / <mark>module</mark> / <mark>exports</mark> / <mark>require</mark> / <mark>import()</mark> properties and method </u></h2>
-      <details class="example">
-        <summary> DEMO </summary>
-        <pre>
+    import('./module1.mjs')                   // able to load ECMA module
+        .then(res => res)
+        .catch(err => err)
+      </pre>
+    <!------------------------------------------------------------------------------------------------------------------>
+    <hr>
+    <h3 class="header"> The <mark>__filename</mark> / <mark>__dirname</mark> / <mark>module</mark> / <mark>exports</mark> / <mark>require</mark> / <mark>import()</mark> properties and method </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
     __dirname                                                                          // -> drectory's absolute path  // like   D:\Test Site\
     __filename                                                                         // -> file's absolute path      // like   D:\Test Site\main.js
     </pre>
-        <p> - loading modules </p>
-        <pre>
+      <p> - loading modules </p>
+      <pre>
 // static -----------------------------------------------------------------------------
     require('./module1.cjs');                                                          // the required module is loaded here and the required data is available here    
     
@@ -583,8 +419,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
         .then(res => {res})                                                            // -> the required data will be available here  
         .catch(err => {err})
     </pre>
-        <p><b> <mark>module.exports</mark> VS <mark>exports</mark> </b></p>
-        <pre>
+      <p><b> <mark>module.exports</mark> VS <mark>exports</mark> </b></p>
+      <pre>
 // module.exports ---------------------------------------------------------------------
     module.exports = 21;                                                               // exported as -> 21                             // can export assigned data 
     module.exports = {p1:21};                                                          // exported as -> {p1:21}                        // can export assigned data      // -! overrides the previously exported data    
@@ -598,8 +434,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
     exports.p1 = 21;                                                                   // exported as -> {p1:21}                        // properties added to the export object   
     exports.p2 = 22;                                                                   // exported as -> {p1:21, p2:22} 
     </pre>
-        <p> - using module specifies </p>
-        <pre>
+      <p> - using module specifies </p>
+      <pre>
 // relative specifier -----------------------------------------------------------------
     require('./module1.cjs');                                                          // path given relative to the current file location 
     
@@ -609,42 +445,14 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
 // absolute specifier -----------------------------------------------------------------
     require('module1.cjs');                                                            // resolved relative to the nearest 'node_modules' directory (see module.paths to check resolution)  
     </pre>
-      </details>
-      <details class="example">
-        <summary> Example </summary>
-        <h4 style='color:darkblue;'><u> <mark>__dirname</mark> and <mark>__filename</mark> TEST </u></h4>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    var mod2Data = require('./module1.js');
-
-    console.log( `main module directory ->     ${__dirname}` );
-    console.log( `main module file      ->     ${__filename}` );
-
-    console.log( `module1 directory     ->     ${mod2Data.module2_dirname}`);
-    console.log( `moduel1 file          ->     ${mod2Data.module2_pathname}`);
-    
-// module1.js --------------------------------------------------------------------------
-    exports.module2_pathname = __filename;
-    exports.module2_dirname = __dirname;    
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\03 - __dirname and __pathname TEST> node main.js
-        main module directory ->     D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\03 - __dirname and __pathname TEST
-        main module file      ->     D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\03 - __dirname and __pathname TEST\main.js
-        module1 directory     ->     D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\03 - __dirname and __pathname TEST
-        moduel1 file          ->     D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\03 - __dirname and __pathname TEST\module1.js
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\03 - __dirname and __pathname TEST>
-    </pre>
-      </details>
-      <!------------------------------------------------------------------------------------------------------------------>
-      <hr>
-      <h2 style="color:darkblue;"><u> The <mark>module</mark> object </u></h2>
-      <p> - each CommonJS Module has its own <mark>module</mark> object that references the module itself </p>
-      <h3 style="color:darkblue;"><u> The <mark>exports</mark> / <mark>require()</mark> / <mark>id</mark> / <mark>filename</mark> / <mark>loaded</mark> / <mark>paths</mark> / <mark>children</mark> / <mark>parent</mark> properties and method </u></h3>
-      <details class="example">
-        <summary> DEMO </summary>
-        <p> - <mark>main.js</mark> (file) </p>
-        <pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------------------------>
+    <hr>
+    <h3 class="header"> The <mark>exports</mark> / <mark>require()</mark> / <mark>id</mark> / <mark>filename</mark> / <mark>loaded</mark> / <mark>paths</mark> / <mark>children</mark> / <mark>parent</mark> properties and method </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <p> - <mark>main.js</mark> (file) </p>
+      <pre>
 // module.require ---------------------------------------------------------------------
     module.require('./module1');                                                       // -> {p1:21, p2:'some string', p3:false}       // imported data (data what was exported by 'module1.js')    
     
@@ -669,8 +477,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
 // children ---------------------------------------------------------------------------
     module.children;                                                                   // -> [Module]                                  // the 'module' object of './module1' child module    
     </pre>
-        <p> - <mark>module1.js</mark> (file) </p>
-        <pre>
+      <p> - <mark>module1.js</mark> (file) </p>
+      <pre>
 // module.exports ---------------------------------------------------------------------
     module.exports = {p1:21, p2:'some string'};                                        // exports the passed object  
     module.exports.p3 = false                                                          // property added to the above exported object 
@@ -682,8 +490,8 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
 // module.parent ----------------------------------------------------------------------
     module.parent;                                                                     // -> [Module]                                  // the module object of 'main.js' parent module that required this module first   
     </pre>
-        <p><b> <mark>module.exports</mark> VS <mark>exports</mark> </b></p>
-        <pre>
+      <p><b> <mark>module.exports</mark> VS <mark>exports</mark> </b></p>
+      <pre>
 // module.exports ---------------------------------------------------------------------
     module.exports = 21;                                                               // exported => 21                               // can export assigned data 
     module.exports = {p1:21};                                                          // exported => {p1:21}                          // can export assigned data      // -! overrides the previously exported data    
@@ -698,296 +506,14 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
     exports.p1 = 21;                                                                   // exported => {p1:21}                          // properties added to the export object   
     exports.p2 = 22;                                                                   // exported => {p1:21, p2:22}
     </pre>
-      </details>
-      <details class="example">
-        <summary> Example </summary>
-        <h4 style='color:darkblue;'><u> <mark>children</mark> / <mark>exports</mark> / <mark>filename</mark> / <mark>id</mark> TEST </u></h4>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    var {module1Id, module1Exports} = require("./module1.js");
-    
-    console.log( module.children );                                 // references the 'module1.js' 'module' object 
-    
-    console.log( "------------------------------------------------------------------------" );
-    console.log( module1Exports );                                  // module1's exports content 
-        
-    console.log( "------------------------------------------------------------------------" );
-    console.log( module.filename );                                 
-        
-    console.log( "------------------------------------------------------------------------" );
-    console.log( module1Id );                                       // module1's id 
-    
-// module1.js --------------------------------------------------------------------------
-    exports.expData = 'some exported data';
-    exports.module1Id = module.id;
-    exports.module1Exports = module.exports;
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\04 - children exports filename id TEST>
-        [                                                           // -! module.children 
-        Module {
-            id: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\04 - ' +
-            'TEST\\module1.js',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\04 - TEST',
-            exports: {
-            expData: 'some exported data',
-            module1Id: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\04 - ' +
-                'TEST\\module1.js',
-            module1Exports: [Circular]
-            },
-            parent: Module {
-            id: '.',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\04 - TEST',
-            exports: {},
-            parent: null,
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\04 - ' +
-                'TEST\\main.js',
-            loaded: false,
-            children: [Circular],
-            paths: [Array]
-            },
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\04 - ' +
-            'TEST\\module1.js',
-            loaded: true,
-            children: [],
-            paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\04 - ' +
-                'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-                'Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-            ]
-        }
-        ]
-        ------------------------------------------------------------------------
-        {                                                           // -! module.exports (of 'module1.js')
-        expData: 'some exported data',
-        module1Id: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\04 - ' +
-            'TEST\\module1.js',
-        module1Exports: [Circular]
-        }
-        ------------------------------------------------------------------------
-        D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\04 - TEST\main.js     // -! module.filename
-        ------------------------------------------------------------------------
-        D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\04 - TEST\module1.js  // -! module.id (of 'module1.js')
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\04 - children exports filename id TEST>    
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> <mark>lodaded</mark> / <mark>parent</mark> / <mark>paths</mark> TEST </u></h4>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    // module.loaded ----------------------     
-    console.log ( module.loaded );                                  // -> false     // because the module is not finished loading
-    setTimeout(() => { console.log( module.loaded)}, 0);            // -> true      // because the module is fully loaded when this kicks in 
-    console.log( "------------------------------------------------------------------------" );
-        
-    // module.parent ----------------------
-    require('./module1.js');                                        // the other module will print its parent (what is this module) 
-    console.log( "------------------------------------------------------------------------" );
-        
-    // module.paths -----------------------
-    console.log( module.paths );
-    console.log( "------------------------------------------------------------------------" );    
-    
-// module1.js --------------------------------------------------------------------------
-    // module.parent ----------------------
-    console.log( module.parent );
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\05 - loaded parent paths TEST> node main.js
-        false                                                       // -! module.load 
-        ------------------------------------------------------------------------
-        Module {                                                    // -! module.parent (of 'module1.js' which is this module's 'module' object)
-        id: '.',
-        path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\05 - loaded parent ' +
-            'paths TEST',
-        exports: {},
-        parent: null,
-        filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\05 - loaded parent paths TEST\\main.js',
-        loaded: false,
-        children: [
-            Module {
-            id: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\05 - loaded parent paths ' +
-                'TEST\\module1.js',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\05 - loaded parent ' +
-                'paths TEST',
-            exports: {},
-            parent: [Circular],
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\05 - loaded parent paths ' +
-                'TEST\\module1.js',
-            loaded: false,
-            children: [],
-            paths: [Array]
-            }
-        ],
-        paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\05 - loaded parent paths ' +
-            'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-            'Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-        ]
-        }
-        ------------------------------------------------------------------------
-        [                                                           // -! module.paths 
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\05 - loaded parent paths ' +
-            'TEST\\node_modules',
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\node_modules',
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\node_modules',
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-        'D:\\Safe\\CODE +\\My Site\\node_modules',
-        'D:\\Safe\\CODE +\\node_modules',
-        'D:\\Safe\\node_modules',
-        'D:\\node_modules'
-        ]
-        ------------------------------------------------------------------------
-        true                                                        // -! module.loaded   
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\05 - loaded parent paths TEST>
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> <mark>module.require</mark> VS <mark>require</mark> TEST </u></h4>
-        <p> - the <mark>module.require</mark> can only be used as require method </p>
-        <p> - the <mark>require</mark> can used as a require method but also has its own properties (like: <mark>cache</mark> and <mark>main</mark>) </p>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    // they both require other modules ----------------------- 
-    console.log( require('./module1.js') );
-    console.log( module.require('./module1.js') );
-    console.log( '---------------------------------------------------------' );
-    
-    // here is the difference --------------------------------
-    console.log( require.cache );                                   // -> undefined 
-    console.log( module.require.cache );                            // -> cached module 
-    
-// module1.js --------------------------------------------------------------------------
-    exports.module1Var = "moduel1 exported data";
-    
-    console.warn('module1 has finished running!');    
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\06 - module.require() VS require() TEST> node main.js
-        module1 has finished running!                               // -! 'moduel1.js' executed 
-        { module1Var: 'moduel1 exported data' }                     // -! require('module1.js')
-        { module1Var: 'moduel1 exported data' }                     // -! module.require('module1.js')
-        ---------------------------------------------------------
-        [Object: null prototype] {                                  // -! require.cache 
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\Modules\\06 - module.require() VS require() TEST\\main.js': Module {
-            id: '.',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\06 - module.require() VS require() TEST',
-            exports: {},
-            parent: null,
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\06 - module.require() VS require() ' +
-            'TEST\\main.js',
-            loaded: false,
-            children: [ [Module] ],
-            paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\06 - module.require() VS require() ' +
-                'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-                'Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-            ]
-        },
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\Modules\\06 - module.require() VS require() TEST\\module1.js': Module {
-            id: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\06 - module.require() VS require() ' +
-            'TEST\\module1.js',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\06 - module.require() VS require() TEST',
-            exports: { module1Var: 'moduel1 exported data' },
-            parent: Module {
-            id: '.',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\06 - module.require() VS require() TEST',
-            exports: {},
-            parent: null,
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\06 - module.require() VS require() ' +
-                'TEST\\main.js',
-            loaded: false,
-            children: [Array],
-            paths: [Array]
-            },
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\06 - module.require() VS require() ' +
-            'TEST\\module1.js',
-            loaded: true,
-            children: [],
-            paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\06 - module.require() VS require() ' +
-                'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-                'Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-            ]
-        }
-        }                                                           // -! module.require.cache 
-        undefined
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\06 - module.require() VS require() TEST>    
-    </pre>
-      </details>
-      <!------------------------------------------------------------------------------------------------------------------>
-      <hr>
-      <h2 style="color:darkblue;"><u> The <mark>require()</mark> / <mark>require.cache</mark> / <mark>require.main</mark> / <mark>require.resovle()</mark> / <mark>require.resolve.paths()</mark> objects and methods </u></h2>
-      <details class="example">
-        <summary> DEMO </summary>
-        <p> - <mark>main.js</mark> (file) </p>
-        <pre>
+    </details>
+    <!------------------------------------------------------------------------------------------------------------------>
+    <hr>
+    <h3 class="header"> The <mark>require()</mark> / <mark>require.cache</mark> / <mark>require.main</mark> / <mark>require.resovle()</mark> / <mark>require.resolve.paths()</mark> objects and methods </h3>
+    <details class="example">
+      <summary> DEMO </summary>
+      <p> - <mark>main.js</mark> (file) </p>
+      <pre>
 // require() --------------------------------------------------------------------------
     require('./module1');                                                              // -> {testData:'module1.js data'}          // the exported data by 'module1.js'
     
@@ -1005,288 +531,15 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/Modu
     require.resolve.paths('./module1');                                                // -> ['/home/test']                        // directories where nodejs searches for this module    
     require.resolve.paths('someModule');                                               // -> ['/home/test/node_modules', '/home/node_modules', '/node_modules', ...]    
     </pre>
-        <p> - <mark>module1.js</mark> (file) </p>
-        <pre>
+      <p> - <mark>module1.js</mark> (file) </p>
+      <pre>
     require('./child1');
     
     exports.testData = 'module1.js data';    
     </pre>
-      </details>
-      <details class="example">
-        <summary> Example </summary>
-        <h4 style='color:darkblue;'><u> <mark>require()</mark> / <mark>require.cache</mark> TEST </u></h4>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    console.log( require.cache );                                   // at this point only the main.js is cached 
-    require('./module1');
-    console.log( require.cache );                                   // here both the main.js and module1.js are cached   
-    
-// module1.js --------------------------------------------------------------------------
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\07 - require() require.cache TEST> node main.js
-        [Object: null prototype] {                                  // -! require.cache 
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\Modules\\07 - require() require.cache TEST\\main.js': Module {
-            id: '.',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\07 - require() ' +
-            'require.cache TEST',
-            exports: {},
-            parent: null,
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\07 - require() require.cache ' +
-            'TEST\\main.js',
-            loaded: false,
-            children: [],
-            paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\07 - require() require.cache ' +
-                'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-                'Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-            ]
-        }
-        }
-        [Object: null prototype] {                                  // -! module.cache (conatins both modules at this point)   
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\Modules\\07 - require() require.cache TEST\\main.js': Module {
-            id: '.',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\07 - require() ' +
-            'require.cache TEST',
-            exports: {},
-            parent: null,
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\07 - require() require.cache ' +
-            'TEST\\main.js',
-            loaded: false,
-            children: [ [Module] ],
-            paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\07 - require() require.cache ' +
-                'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-                'Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-            ]
-        },
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 Node.js\\Modules\\07 - require() require.cache TEST\\module1.js': Module {
-            id: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\07 - require() require.cache ' +
-            'TEST\\module1.js',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\07 - require() ' +
-            'require.cache TEST',
-            exports: {},
-            parent: Module {
-            id: '.',
-            path: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\07 - require() ' +
-                'require.cache TEST',
-            exports: {},
-            parent: null,
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\07 - require() require.cache ' +
-                'TEST\\main.js',
-            loaded: false,
-            children: [Array],
-            paths: [Array]
-            },
-            filename: 'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\07 - require() require.cache ' +
-            'TEST\\module1.js',
-            loaded: true,
-            children: [],
-            paths: [
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\Modules\\07 - require() require.cache ' +
-                'TEST\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 ' +
-                'Improuve\\Learn WebDesign\\04 ' +
-                'Node.js\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\03 Improuve\\node_modules',
-            'D:\\Safe\\CODE +\\My Site\\node_modules',
-            'D:\\Safe\\CODE +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-            ]
-        }
-        }
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\07 - require() require.cache TEST>    
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> <mark>require.main</mark> TEST </u></h4>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    require('./module1.js');
-    console.log( require.main );                                    // -> module 'object' of this module 
-    
-// module1.js --------------------------------------------------------------------------
-    console.log( require.main );                                    // -> module 'object' of this module
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\code +\my site\03 Improuve\Learn WebDesign\04 Node.js\Modules\08 - require.main TEST> node main.js
-        Module {                                                    // -! require.main (of 'module1.js')
-        id: '.',
-        path: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-            'TEST',
-        exports: {},
-        parent: null,
-        filename: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-            'TEST\\main.js',
-        loaded: false,
-        children: [
-            Module {
-            id: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-                'TEST\\module1.js',
-            path: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-                'TEST',
-            exports: {},
-            parent: [Circular],
-            filename: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-                'TEST\\module1.js',
-            loaded: false,
-            children: [],
-            paths: [Array]
-            }
-        ],
-        paths: [
-            'D:\\Safe\\code +\\my site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\08 - require.main TEST\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 ' +
-            'Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 Improuve\\node_modules',
-            'D:\\Safe\\code +\\my site\\node_modules',
-            'D:\\Safe\\code +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-        ]
-        }
-        Module {                                                    // -! require.main (of 'main.js')
-        id: '.',
-        path: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-            'TEST',
-        exports: {},
-        parent: null,
-        filename: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-            'TEST\\main.js',
-        loaded: false,
-        children: [
-            Module {
-            id: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-                'TEST\\module1.js',
-            path: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-                'TEST',
-            exports: {},
-            parent: [Circular],
-            filename: 'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-                'WebDesign\\04 Node.js\\Modules\\08 - require.main ' +
-                'TEST\\module1.js',
-            loaded: true,
-            children: [],
-            paths: [Array]
-            }
-        ],
-        paths: [
-            'D:\\Safe\\code +\\my site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\08 - require.main TEST\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 Improuve\\Learn ' +
-            'WebDesign\\04 Node.js\\Modules\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 ' +
-            'Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 Improuve\\Learn WebDesign\\node_modules',
-            'D:\\Safe\\code +\\my site\\03 Improuve\\node_modules',
-            'D:\\Safe\\code +\\my site\\node_modules',
-            'D:\\Safe\\code +\\node_modules',
-            'D:\\Safe\\node_modules',
-            'D:\\node_modules'
-        ]
-        }
-    PS D:\Safe\code +\my site\03 Improuve\Learn WebDesign\04 Node.js\Modules\08 - require.main TEST>    
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> <mark>require.resolve()</mark> / <mark>require.resolve.paths()</mark> TEST </u></h4>
-        <pre style="margin-bottom:1px;">
-// main.js -----------------------------------------------------------------------------
-    console.log( require.resolve('./module1') );                    // absolute path and filename of the called module without calling it  
-    console.log( require.resolve.paths('./module1') );              // search paths  
-    
-// module1.js --------------------------------------------------------------------------
-    console.warn( 'module1 is running' );                           // this never fires because the module is not called 
-    </pre>
-        <pre class="cmd" style="margin-top:1px;">
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\09 - require.resolve() require.resolve.paths() TEST>node main.js
-        D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\09 - require.resolve() require.resolve.paths() TEST\module1.js    // -! require.resolve('module1.js')
-        [                                                                                                                                       // -! require.resolve.paths('./module1.js')
-        'D:\\Safe\\CODE +\\My Site\\03 Improuve\\Learn WebDesign\\04 ' +
-            'Node.js\\Modules\\09 - require.resolve() ' +
-            'require.resolve.paths() TEST'
-        ]
-    PS D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\Modules\09 - require.resolve() require.resolve.paths() TEST>    
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> <mark>require()</mark> *.json and files TEST </u></h4>
-        <pre>
-    console.log( require('./data.json') );                                             // -> {p1:21, p2:[false, true], p3:'some string'}
-                                                                                       // the imported json is parsed to JavaScript 
-    </pre>
-        <!------------------------------------------------------------------------------------------------------------------>
-        <hr>
-        <h4 style='color:darkblue;'><u> <mark>cache</mark> TEST </u></h4>
-        <p> - in this case the <mark>require.cache</mark> holds : </p>
-        <p style="text-indent:25px;"> - the <mark>module</mark> object of this module </p>
-        <p style="text-indent:25px;"> - the <mark>module</mark> objects of the required <mark>module1</mark> and <mark>module2</mark> dependencies </p>
-        <p style="text-indent:25px;"> - the <mark>module</mark> objects of the <mark>child1</mark> and <mark>child2</mark> (dependencies of <mark>module2</mark>) </p>
-        <pre>
-    require('./module1'); 
-    require('./module2');                                                              // this module has other 2 dependencies ('child1.js' and 'child2.js)
-    require('fs');                                                                     // not cached because it's a built-in module   
-    
-    console.log( require.cache );                                                      // -> {'/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/CommonJS Module/main.js':Module{...}, 
-                                                                                       // ->  '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/CommonJS Module/module1.js':Module{...},
-                                                                                       // ->  '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/CommonJS Module/module2.js': Module{...},
-                                                                                       // ->  '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/CommonJS Module/child1.js': Module{...},
-                                                                                       // ->  '/home/pall/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/Node.js/CommonJS Module/child2.js': Module{...}}
-    </pre>
-      </details>
+    </details>
 
-      <br><br>
-    </body>
+    <br><br>
+  </body>
 
-  </html>
+</html>

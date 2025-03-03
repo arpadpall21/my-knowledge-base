@@ -26,89 +26,39 @@
       <th style="width:20%;"> Hashable members Only </th>
     </tr>
     <tr>
-      <td>
-        List
-      </td>
-      <td>
-        yes
-      </td>
-      <td>
-        yes
-      </td>
-      <td>
-        yes
-      </td>
-      <td>
-        no
-      </td>
+      <td> List </td>
+      <td> yes </td>
+      <td> yes </td>
+      <td> yes </td>
+      <td> no </td>
     </tr>
     <tr>
-      <td>
-        Tuple
-      </td>
-      <td>
-        yes
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        yes
-      </td>
-      <td>
-        no
-      </td>
+      <td> Tuple </td>
+      <td> yes </td>
+      <td> no </td>
+      <td> yes </td>
+      <td> no </td>
     </tr>
     <tr>
-      <td>
-        Set
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        no (existing members cannot be changed but we can add/remove members)
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        yes
-      </td>
+      <td> Set </td>
+      <td> no </td>
+      <td> no (existing members cannot be changed but we can add/remove members) </td>
+      <td> no </td>
+      <td> yes </td>
     </tr>
     <tr>
-      <td>
-        FrozenSet
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        yes
-      </td>
+      <td> FrozenSet </td>
+      <td> no </td>
+      <td> no </td>
+      <td> no </td>
+      <td> yes </td>
     </tr>
     <tr>
-      <td>
-        Dictionary
-      </td>
-      <td>
-        from Python v3.7
-      </td>
-      <td>
-        yes
-      </td>
-      <td>
-        no
-      </td>
-      <td>
-        yes (keys, but not their values)
-      </td>
+      <td> Dictionary </td>
+      <td> from Python v3.7 </td>
+      <td> yes </td>
+      <td> no </td>
+      <td> yes (keys, but not their values) </td>
     </tr>
   </table>
   <br>
@@ -125,16 +75,8 @@
         sorted(<strong>iterable</strong>, <small class="openable">key=<i>fn</i>
           <div>
             <p> Default: <mark>None</mark> </p>
-            <p> - function takes 1 argument and must return a number </p>
-            <p> - the returned number is bound to the checked item, then the sort order is defined according to the
-              bound numbers order </p>
-            <p> ex: </p>
-            <pre>
-    someList = ['xxxx', 'x', 'xx']
-    sorted(key=len)             // the len global function returns the length for each element 
-                                // len('xxxx') -> 4  |  len('x') -> 1  |  len('xx') -> 2
-                                // the sort order is defined by the returned numbers -> 1 | 2 | 4
-                                // -> ['x', 'xx', 'xxxx']
+            <p> - function takes 1 argument which is the current memeber </p>
+            <p> - this function basically recompute the current member before sort <u>(can return a tuple with multiple values for group sort)</u> </p>
     </pre>
           </div>
         </small>, <small class="openable">reverse=<i>bol</i>
@@ -145,14 +87,9 @@
         </small>)
       </td>
       <td>
-        - sorts the passed <strong>iterable</strong>'s items and returns the result in a new list (does not modify the
-        passed <strong>iterable</strong>) <br>
-        - cannot sort iterables containing mixed data types, (ex: when the list contains stirngs and numbers = raises an
-        error) <br>
-        - strings are sorted based on ASCII translation order
-        <span id="browserSupport" title="updated : 2022-02-28">
-          <span><i class="fab fa-python"></i> 2.4 </span>
-        </span>
+        - sorts the passed <strong>iterable</strong>'s items and returns the result in a new list (does not modify the passed <strong>iterable</strong>) <br>
+        - cannot sort iterables containing mixed data types, (ex: when the list contains stirngs and numbers = raises an error) <br>
+        - strings are sorted according to character unicode points
       </td>
     </tr>
     <tr>
@@ -926,7 +863,7 @@
     myList1                                                                            // -> [111, 1, 3, 15, 1.1]                 // original not modified 
     
     myTuple = ['kcp', 'AB', 'ab', 'kac', 'KCP']
-    sorted(myTuple)                                                                    // -> ['AB', 'KCP', 'ab', 'kac', 'kcp']    // sort strings in ASCII transition order   
+    sorted(myTuple)                                                                    // -> ['AB', 'KCP', 'ab', 'kac', 'kcp']    // sort strings in unocide point order
     
     myString = 'developer'
     sorted(myString)                                                                   // -> ['d', 'e', 'e', 'e', 'l', 'o', 'p', 'r', 'v']    
@@ -934,28 +871,18 @@
     myList2 = ['kcp', 111, 1, 'AB', 3, 15, 'ab', 'kac', 'KCP']
     sorted(myList2)                                                                    // -! raises a TypeError because the sort does not support sort between strings and numbers    
     
+    
     myList3 = [[11, 22], [3, 4], [1, 2]]
     sorted(myList3)                                                                    // -> [[1, 2], [3, 4], [11, 22]]
     
     myList4 = [{'p33':33}, {"p1":1, "p3":3}]
     sorted(myList4)                                                                    // -! raises a TypeError because the sort does not support sort between dictionaries     
     
-    myTuple2 = ('Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing')
-    sorted(myTuple2, key=len)                                                          // -> ['sit', 'amet', 'Lorem', 'ipsum', 'dolor', 'adipiscing', 'consectetur']    
-                                                                                       // items are sorted by length (the <mark>len</mark> function returns the length for each string)    
-    myTuple3 = (4, 145, 844, 2, 12, 10, -4)
-    def sort10(nr):                                                                    // custom sort function, sort numbers lower than 10 left, larger than 10 right   
-        if nr &lt; 10:
-            return -1
-        elif nr > 10:
-            return 1
-        else:
-            return 0
-    sorted(myTuple3, key=sort10)                                                       // -> [4, 2, -4, 10, 145, 844, 12]    
+    data = [(1, 'one'), (3, 'three'), (2, 'two')]                                     // the <mark>key</mark> lambda function returns which data should be used for sorting
+    sorted(data, key=lambda x: x[0])                                                  // -> [(1, 'one'), (3, 'three'), (2, 'two')]
     
-    myTuplew = (4, 145, 844, 2, 12, 10, -4)
-    sorted(myTuplew, reverse=True)                                                     // -> [844, 145, 12, 10, 4, 2, -4]
-                                                                                       // sorts the list in descending order     
+    data = [(1, 'banana'), (3, 'apple'), (2, 'banana'), (1, 'apple'), (2, 'apple')]   // the <mark>key</mark> lambda function can return a tuple for group sort 
+    sorted(data, key=lambda x: (x[0], x[1]))                                          // -> [(1, 'apple'), (1, 'banana'), (2, 'apple'), (2, 'banana'), (3, 'apple')]
     
     
 // all() ------------------------------------------------------------------------------
@@ -963,7 +890,7 @@
     some_set = ('a', 0, True)
     
     all(some_list)                                                                     // -> True
-    all(some_set)                                                                      // -> False    
+    all(some_set)                                                                      // -> False 
     
     
 // filter() ---------------------------------------------------------------------------
