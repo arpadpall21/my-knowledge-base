@@ -112,13 +112,26 @@
         - returns an <strong>iterator</strong> object containing the items for which the passed <strong>fn</strong> returned <mark>True</mark>
       </td>
     </tr>
+    <tr>
+      <td>|</td>
+      <td></td>
+    </tr>
     <tr id="map">
         <td>
             map(<strong>fn</strong>, <strong>iterableArg1</strong>, <i>iterableArg2, ...</i>)
         </td>
         <td>
-            - runs the passed function for each item in the iterable(s)<br>
-            - returns the result in a <strong>genObj</strong> (generator object)
+          - runs the passed function for each item in the iterable(s)<br>
+          - returns the result in a <strong>genObj</strong> (generator object)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            zip(<strong>iterable</strong>, <optval>...</optval>)
+        </td>
+        <td>
+          - sequentially aggregates <strong>iterable</strong> elements and returns the result as tuple in a <strong>genObj</strong> (generator object) <br>
+          - ex: <mark>zip([1, 2], ['a', 'b']) -> ((1, 'a'), (2, 'b'))</mark>
         </td>
     </tr>
   </table>
@@ -901,16 +914,22 @@
     for i in bigger_than_2:
         i                     // -> 3, 4
     </pre>
-    <h4 class="header"> <mark>map()</mark> </h4>
+    <h4 class="header"> The <mark>map()</mark> / <mark>zip()</mark> methods </h4>
     <pre>
+// map() ---------------------------------------------------
     def test(a, b):
         return a + b
     
-    for i in map(test, [1, 32, -145], [1, 8, 145]):
-        print( i )                            // -> 2  |  40  |  0
+    result = map(test, [1, 32, -145], [1, 8, 145])             // generator object 
+    list(result)                                              // -> [2, 40, 0]
     
-    for i in map(test, ('a', 'b', 'c'), ('x', 'y', 'z')):
-        print( i )                            // -> "ax"  |  "by"  |  "cz"
+// zip() ---------------------------------------------------
+    name = ("John", "Charles", "Ann")
+    sex = ("M", "M", "F")
+    age = (32, 38, 27)
+    
+    result = zip(name, sex, age)                            // generator object 
+    list(result)                                            // -> [('John', 'M', 32), ('Charles', 'M', 38), ('Ann', 'F', 27)]
     </pre>
   </details>
   <hr>
