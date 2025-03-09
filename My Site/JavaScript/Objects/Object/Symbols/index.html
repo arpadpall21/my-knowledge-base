@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Symbols </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../../Assets/stylesPages.css">
+    <script src="../../../../Assets/scriptPages.js"></script>
+  </head>
+  <body>
+    <h1> Symbols
+      <span class="fab fa-js">ES6</span>
+    </h1>
+    <p> Updated: ( 2025-03-09 ) </p>
+    <nav class="sitenav">
+      <a href="../../../../index.html">MySite > </a>
+      <a href="../../../index.html">JavaScript > </a>
+      <a href="../../index.html"> Objects > </a>
+      <a href="../index.html"> Objects > </a> Symbols
+    </nav>
+    <!-- <br> -->
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - Symbols are unique and immutable primitive data types, they are primarily used to create unique identifiers for object properties, ensuring that no property keys conflict, even if they have the same name </p>
+    <p> - we use Symbols in order to create private properties as well as for implementing certain design patterns (ex: <mark>Symbol.iterator</mark>) </p>
+    <p> - Symbols are kind-of hidden, the intent mostly is to do some meta programming (should not be used for sensitive data) </p>
+    <pre class="syntax">
+    <reqval>symbol</reqval> = Symbol(<optval>descriptor:str</optval>)                   // creates and returns a new unique symbol
+    
+    <reqval>obj</reqval>[<reqval>symbol</reqval>]<opt> = <optval>val</optval></opt>     // get / set symbol value as object property
+    
+    
+    Object.getOwnSymbols(<reqval>obj</reqval>)                          // returns the object's symbols in an Array
+    </pre>
+    <pre>
+    var sym = Symbol('some symbol'); 
+    
+    var myObj = {
+      [sym]: 'some symbol value',
+      Symbol('another symbol'): 'another symbol value',       // -! thwors SyntaxError (because the symbol is not referenced)
+    };
+    
+    myObj[sym];                                               // -> 'some symbol value'
+    
+    myObj[sym] = 'update symbol value'                        // set
+    myObj[sym];                                               // -> 'update symbol value'
+    
+    sym = null                                                // delete symbol 
+    myObj[sym]                                                // -> undefined  
+    
+    for(let i in myObj){
+        i;                                                    // symbols are not shown on iteration   
+    }
+    
+    Object.getOwnPropertySymbols(myObj);                      // -> [ Symbol(some symbol) ]     // get object's symbols
+    
+    
+// symbols are unique --------------------------------------
+    Symbol('some symbol') === Symbol('some symbol')           // -> false
+      </pre>
+    <!----------------------------------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="headerExtra"> Well-Known Symbols <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol" target="_blank">[link]</a></h2>
+    <p> - well-known symbols are a set of built-in symbols that are used to expose certain behaviors of objects and to enable interoperability between different parts of the language, these symbols are defined in the <mark>Symbol</mark> global object </p>
+    <pre class="syntax">
+    <reqval>obj</reqval>[Symbol.<reqval>symbol</reqval>]                // this is how you can check if a well-known symbol is implemented on the object 
+                                                                        // returns the Symbol.<reqval>symbol</reqval> value (<mark>undefined</mark> if not implemented)
+    </pre>
+    <!----------------------------------------------------------------------------------------------------------------------------->
+    <hr>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+// check if the object/value implements a symbol --------------------------------------
+    [][Symbol.iterator];                                                               // -> values() { [native code] }             // Array implements the iterator symbol 
+    ' '[Symbol.iterator];                                                              // -> [Symbol.iterator]() { [native code] }  // string (primitive value) implements the iterator symbol    
+    
+    {}[Symbol.iterator];                                                               // -> undefined                              // Object does not implement the iterator symbol
+    
+// [Symbol.toPrimitive] ---------------------------------------------------------------
+    var testObj = {p1:1, [Symbol.toPrimitive](hint){
+        if(hint == 'number') return 10;                                                // if the object is converted to a number it will return this value 
+        if(hint == 'string') return 'f@szagyerek';                                     // if the object is converted to a string it will return this value
+        return 'default'                                                               // if the object is called as a primitive value it will return this value 
+    }};
+    
+    Number(testObj);                                                                   // -> 10             // object converted to a number 
+    String(testObj);                                                                   // -> 'f@szagyerek'  // object converted to a string 
+    '=' + testObj;                                                                     // -> '=default'     // object called as primitive value
+    </pre>
+    </details>
+    <!----------------------------------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="headerExtra"> Global Symbol Registry </h2>
+    <p> - the global symbol registry is basically a globally available symbol namespace where we can register an retrive symbols (only symbols not a key-value store) </p>
+    <p> - it's usefull when we want to implement a globally available unique identifier store </p>
+    <p> - we can only get or set symbols, there's no way to list available symbols out </p>
+    <pre class="syntax">
+    Symbol.for(<reqval>symKey:str</reqval>)                      // registers a new <reqval>symbol</reqval> in the global symbol registry and returns it (idempotent => won't recreate new symbol on multiple call) 
+    
+    Symbol.keyFor(<reqval>symbol</reqval>)                      // returns the <reqval>symKey:str</reqval> if <reqval>symbol</reqval> is registered in the global symbol registry, otherwise returns <mark>undefined</mark>   
+    </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+    const pallSym = Symbol('pall')
+    
+    const pallSymGlobal = Symbol.for('pall')
+    
+    console.log( Symbol.keyFor(pallSym) )              // -> undefined
+    console.log( Symbol.keyFor(pallSymGlobal) )        // -> 'pall'
+    </pre>
+      <!----------------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> Some use case </h4>
+      <pre>
+    const puplFinction = Symbol.for('Pulp Fiction')
+    const pocaHontas = Symbol.for('Poca Hontas')
+    const starWars = Symbol.for('Star Wars')
+    
+    const wolfOfWallStreet = Symbol('Wolf of Wall Street')
+    
+// in other part of your app --------------------------
+    Symbol.keyFor(wolfOfWallStreet)                       // -> undefined         // check wich symbol is registered in the global symbol registry
+    Symbol.keyFor(starWars)                               // -> 'Star Wars'
+    </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>

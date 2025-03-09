@@ -169,36 +169,47 @@
     <p class="indent-lv1"> - iterable collection that holds unique values of any type </p>
     <p class="indent-lv1"> - refeneced objects when deleted are not removed from the Set (not garbage collected) </p>
     <p class="indent-lv1"><u> Usage: </u></p>
-    <p class="indent-lv2"> - a collection where no duplicate members are allowed </p>
-    
-    
-    
-    
-    
-    <br><br><br><br><br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br><br><br><br><br>
-    
-    
-    <p class="indent-lv1"> - if the object that is refeneced by a Map key is deleted the Map will keep the original object (not garbage collected) </p>
+    <p class="indent-lv2"> - a collection where no duplicate members are allowed (filters them automatically) </p>
+    <p class="indent-lv2"> - a collection object references </p>
+    <p> <mark class="mark">WeakSet</mark> object: </p>
+    <p class="indent-lv1"> - can hold only object, or object references as members </p>
+    <p class="indent-lv1"> - refeneced objects when deleted are removed from the WeakSet (garbage collected) </p>
     <p class="indent-lv1"><u> Usage: </u></p>
-    <p class="indent-lv2"> - normal iterable key-value pair data structure </p>
-    <p class="indent-lv2"> - holding some metadata for objects (key = object reference, value = some meta data) </p>
-    <p> <mark class="mark">WeakMap</mark> object: </p>
-    <p class="indent-lv1"> - holds key-value pairs <u>(not iterable)</u> </p>
-    <p class="indent-lv1"> - keys can be only be object references </p>
-    <p class="indent-lv1"> - if the object that is refeneced by a WeakMap key is deleted the WeakMap will not keep the original object (garbage collected) </p>
-    <p class="indent-lv1"><u> Usage: </u></p>
-    <p class="indent-lv2"> - holding some metadata for objects (key = object reference, value = some meta data) </p>
+    <p class="indent-lv2"> - a collection object references (weakly held) </p>
+    <pre>
+// Set ---------------------------------------------
+  // collection of unique values --
+    const fruits = new Set();
+    
+    fruits.add('apple');
+    fruits.add('pear');
+    fruits.add('apple');
+    
+    fruits.values();                            // -> SetIterator ['apple', 'pear']       // no duplicate members
+    
+  // strongly holds objects -------
+    let eva = { name: 'Eva' }
+    const persons = new Set([eva])
+    
+    persons.values();                           // -> SetIterator [{ name: 'Eva' }]
+    
+    eva = null;                                 // deleting object reference
+    
+    persons.values();                           // -> SetIterator [{ name: 'Eva' }]     // set still holds the original object 
     
     
+// WeakSet -----------------------------------------
+  // weakly holds objects ---------
+    let eva = { name: 'Eva' }
+    const persons = new WeakSet([eva])
     
+    persons.has(eva);                           // -> true
     
+    eva = null;                                 // deleting object reference
     
-    
+    persons.has(eva);                           // -> false         // weak set still does not hold the original object 
+    </pre>
     <h2 class="headerExtra"><u> The <mark>Set</mark> Object </u></h2>
-    <p> - the <mark>Set</mark> object is an <u>iteror</u> object which holds <u>unique primitives</u> or objects </p>
-    <p> - the Set object uses the <mark>===</mark> (same value equality operator) to check for equal primitives or equal object references, <u>the latest equal value overwrites the previous one!</u> </p>
-    <p style="color:yellow;"> - Set object items accessible by the <mark>forEach()</mark> method or by the <mark>for... of</mark> loop <u>because it is an iterator object</u> (we cannot access Set items like Array items (ex: <mark>Set[0]</mark> this always returns undefined)) </p>
     <details class="example">
       <summary> DEMO </summary>
       <pre>
@@ -295,9 +306,6 @@
     <!---------------------------------------------------------------------------------------------------------------------------->
     <hr>
     <h2 class="headerExtra"> The <mark>WeakSet</mark> Object </h2>
-    <p> - the WeakSet object is basically an object garbage collection tool, marks unreferenced objects for garbage collection </p>
-    <p> - it "weakly" holds <u>unique object references only</u> if the held object reference is not referenced than it will be garbage collected </p>
-    <p> - because objects are weakly held there is no iterator list to keep track of them, so the <u>WeakSet object is not iterable</u> </p>
     <details class="example">
       <summary> DEMO </summary>
       <pre>
