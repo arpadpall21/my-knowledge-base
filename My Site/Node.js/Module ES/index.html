@@ -455,6 +455,39 @@
     import.meta.url;                                                                   // -> 'file:///home/pall/Node.js/Module%20ECMAScript/main.mjs'       // absolute path of the module location (as file protocol (percent encoded))    
     </pre>
     </details>
+    <!---------------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 style="color:darkblue;"><u> Top level <mark>await</mark>
+        <span class="browserSupport" title="updated : 2021-09-07">
+          <span><i class="fab fa-chrome"></i> 89 </span>
+          <span><i class="fab fa-firefox"></i> 89 </span>
+          <span><i class="fab fa-opera"></i> 75 </span>
+          <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 89 </span>
+          <span><i class="fab fa-safari"></i> 15 </span>
+          <span><i class="fab fa-node-js"></i> 14.8 </span>
+        </span>
+      </u></h2>
+    <p> - top level await supported only by ES module (but not by CommonJs module) </p>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+  // &lt;script src="./topAwait.js" type="module"&gt;&lt;/script&gt; (file) -----------------------
+  
+  const resPromise = new Promise((res, rej) => {
+    setTimeout(() => res('resolved!'), 3000);
+  });
+  const rejPromise = new Promise((res, rej) => {
+    setTimeout(() => rej('rejected!'), 5000);
+  });
+  
+  await resPromise;                                                                    // -> 'resolved!'     //  waits till the promise is resolved and returns the result 
+  await rejPromise;                                                                    // waits till the promise is rejected which exits the program, block all furhter executesion and throws an UndhandledPromiseRejection error    
+  
+  console.log( '--end --' );                                                           // -! never executed because an awaited promise is rejected before this  
+  </pre>
+    </details>
+
+
 
     <br><br>
   </body>
