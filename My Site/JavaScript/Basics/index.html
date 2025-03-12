@@ -88,6 +88,122 @@
     </details>
     <!--------------------------------------------------------------------------------------------------------------------------->
     <hr>
+    <h2 class="header"> Declaring variables </h2>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> Variable </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td> <strong>id</strong><i> = value</i> </td>
+        <td>
+          - (global variable) global scoped (<span style="color:green;">Reassignable</span> / <span style="color:green;">Redeclarable</span>) <br>
+          - creates a property on the global object (no matter here declared) <br>
+          - not hoisted <br>
+          - <u>discouraged to use, in strict mode throws an error</u>
+        </td>
+      </tr>
+      <tr>
+        <td> var <strong>id</strong><i> = value</i> </td>
+        <td>
+          - global & function scoped (<span style="color:green;">Reassignable</span> / <span style="color:green;">Redeclarable</span>) <br>
+          - creates a property on the current scope <br>
+          - hoisted <br>
+        </td>
+      </tr>
+      <tr>
+        <td> let <strong>id</strong><i> = value</i> </td>
+        <td>
+          - block scoped <mark>{ }</mark> (<span style="color:green;">Reassignable</span> / <span style="color:orangered;">Not-Redeclarable</span>) <br>
+          - does not create a property on the current scope <br>
+          - not hoisted <br>
+          <span id="browserSupport" title="updated: 2021-05-26">
+            <span><i class="fab fa-chrome"></i> 48 </span>
+            <span><i class="fab fa-firefox"></i> 44 </span>
+            <span><i class="fab fa-opera"></i> 17 </span>
+            <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 14 </span>
+            <span><i class="fab fa-safari"></i> 10 </span>
+            <span><i class="fab fa-node-js"></i> 6 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td> const <strong>id</strong><i> = value</i> </td>
+        <td>
+          - block scoped <mark>{ }</mark> (<span style="color:orangered;">Not-Reassignable</span> / <span style="color:orangered;">Not-Redeclarable</span>) <br>
+          - does not create a property on the current scope <br>
+          - not hoisted <br>
+          <span id="browserSupport" title="updated: 2021-05-26">
+            <span><i class="fab fa-chrome"></i> 21 </span>
+            <span><i class="fab fa-firefox"></i> 36 </span>
+            <span><i class="fab fa-opera"></i> 9 </span>
+            <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> 11 </span>
+            <span><i class="fab fa-safari"></i> 5.1 </span>
+            <span><i class="fab fa-node-js"></i> 6 </span>
+          </span>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+// global variable ---------------------------------------
+    function hello() {
+      x = 'Hello';          // -! declared on the global scope (so careful don't use it)
+    }
+    
+    global.x;               // -> 'hello'
+    
+    
+// var ------------------------------------
+    var x = 'Hello';
+    x = 'New Hello';                    // reassignable 
+    var x = 'Hello again';              // redeclarable
+    
+    global.x;                           // -> 'Hello again'     // creates a property on the current scope
+    
+    function hello() {
+      var y = 'Hello from this function';      // function scoped (not available outside the function block)
+    }
+    
+    {
+      var z = 'Hello from this block';    // not block scoped (this becomes a global variable)
+    }
+    
+    z;                                    // -> 'Hello from this block'
+    
+    
+// const / let -------------------------
+    let x = 'Hello 1';
+    const y = 'Hello 2';
+    
+    let x = 'Hello 1';                  // -! not redeclarable (thros an error)
+    const y = 'Hello 2';                // -! not redeclarable (thros an error)
+    
+    x = 'New Hello 1';                  // reassignable 
+    y = 'New Hello 1';                  // -! not reassignable (throws an error)
+    
+    global.x;                           // -> undefined (does not create a property on the current scope)
+    global.y;                           // -> undefined (does not create a property on the current scope)
+    
+    {
+      let a = 'Hello from this block 1';      // block scoped (any JS block including function block)
+      const b = 'Hello from this block 2';    // block scoped (any JS block including function block)
+    }
+    
+    a;                                  // -> undefined
+    b;                                  // -> undefined
+    
+  // complex data still can be mutated ----
+    const myObj = { a: 1 };
+    myObj.b = 2;                    // const cannot be reassigned but complex data still can be mutated
+    
+    myObj;                          // -> { a: 1, b: 2 }
+      </pre>
+    </details>
+    <!--------------------------------------------------------------------------------------------------------------------------->
+    <hr>
     <h2 style="color:darkblue;"><u> Comments </u></h2>
     <pre class="syntax">
     <strong>jsCode</strong>                   // <strong>comment</strong>   // on a line text after <mark>//</mark> is commented out   
@@ -330,9 +446,6 @@
     
     console.log('Hello Wold!');
     </pre>
-    
-    
-    
     <!--------------------------------------------------------------------------------------------------------------------------->
     <hr>
     <h2 class="headerExtra"><u> JavaScript in the browser </u></h2>
@@ -354,6 +467,6 @@
     &lt;/body&gt;
     &lt;/html&gt;
     </pre>
-      <br><br>
-    </body>
-  </html>
+    <br><br>
+  </body>
+</html>
