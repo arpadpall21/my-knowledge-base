@@ -1,818 +1,818 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <title> File System </title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="../../Assets/stylesPages.css">
-  <script src="../../Assets/scriptPages.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title> File System </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
 
-<body>
-  <h1> File System </h1>
-  <p> Updated ( 2019-09-19 / 2020-07-09 / 2024-10-18 )</p>
-  <nav class="sitenav">
-    <a href="../../index.html">MySite > </a>
-    <a href="../index.html">Node.js > </a> File System
-  </nav>
-  <p class="subSite"><a href="Promises API/index.html"> Promise API > </a></p>
-  <table class="table">
-    <caption> File Descriptors </caption>
-    <tr>
-      <th style="width:30%"> Method </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.open(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-system-flags" target="_blank">flag</a>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">mode</a>, <strong>fn(err, fd)</strong>) <br>
-        <lit>fs</lit>.openSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-system-flags" target="_blank">flag</a>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">mode</a>)
-      </td>
-      <td>
-        - (async/sync) allocates a new file descriptor
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.close(<strong>fd:nr</strong>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.closeSync(<strong>fd:nr</strong>)
-      </td>
-      <td>
-        - (async/sync) closes the passed file descriptor
-      </td>
-    </tr>
-  </table>
-  <br>
-  <table class="table">
-    <caption> Read and Write files </caption>
-    <tr>
-      <th style="width:30%"> Method / Property </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td colspan="2"> Read </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.readFile(<strong>path:str|buf|urlObj|(fd:nr)</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfilepath-options-callback" target="_blank">option:obj</a>, <strong>fn(err, data)</strong>) <br>
-        <lit>fs</lit>.readFileSync(<strong>path:str|buf|urlObj|(fd:nr)</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfilesyncpath-options" target="_blank">option:obj</a>) <br>
-      </td>
-      <td>
-        - (async/sync) reads the full content of the passed file or file descriptor
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.read(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <strong class="openable">offset:nr, length:nr, position:nr|bigInt<div>
-            <p> - <strong>offset</strong> - where to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
-            <p> - <strong>length</strong> - number of bytes to read from the source (Default: <mark>0</mark>) </p>
-            <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
-          </div></strong>, <reqval>fn(err, bytesRead, buf)</reqval>) <br>
-        <lit>fs</lit>.readSync(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <strong class="openable">offset:nr, length:nr, position:nr|bigInt<div>
-            <p> - <strong>offset</strong> - where to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
-            <p> - <strong>length</strong> - number of bytes to read from the source (Default: <mark>0</mark>) </p>
-            <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
-          </div></strong>)
-      </td>
-      <td>
-        - (aysnc/sync) reads the file content and stores in <reqval>buf</reqval> <br>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.read(<reqval>fd</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfd-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesRead, buf)</reqval>)
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.read(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfd-buffer-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesRead, buf)</reqval>)<br>
-        <lit>fs</lit>.readSync(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfd-buffer-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesRead, buf)</reqval>)
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.readv(<reqval>fd:nr</reqval>, <reqval>buf:buf[]|TypedArray[]|DataView[]</reqval>, <i class="openable">position:nr<div>
-            <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
-          </div></i>) <br>
-        <lit>fs</lit>.readvSync(<reqval>fd:nr</reqval>, <reqval>buf:buf[]|TypedArray[]|DataView[]</reqval>, <i class="openable">position:nr<div>
-            <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
-          </div></i>)
-      </td>
-      <td>
-        - (async/ sync) reads the file content and stores in <reqval>buf</reqval>s (multiple) <br>
-        <span id="browserSupport" title="updated : 2024-10-19">
-          <span><i class="fab fa-node-js"></i> 13.3.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.createReadStream(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscreatereadstreampath-options" target="_blank">option:obj</a>)
-      </td>
-      <td> - creates and returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsreadstream" target="_blank">readableStream</a> (to read the file content)
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="2"> Write </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.writeFile(<reqval>path:str|buf|urlObj|(fd:nr)</reqval>, <reqval>data:str|buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefilefile-data-options-callback" target="_blank">option:obj</a>, <reqval>fn(err</reqval>)<br>
-        <lit>fs</lit>.writeFileSync(<reqval>path:str|buf|urlObj|(fd:nr)</reqval>, <reqval>data:str|buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefilesyncfile-data-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) writes <reqval>data</reqval> to a file (overwrites content, creates file if not exist)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.appendFile(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsappendfilepath-data-options-callback" target="_blank">option:obj</a>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.appendFileSync(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsappendfilepath-data-options-callback" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) appends <reqval>data</reqval> to the file content (creates a new file if it doesn't exist)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.write(<strong>fd</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <strong class="openable">offset<div>
-            <p> - position to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
-          </div></strong>, <optval class="openable">length, position<div>
-            <p> - <reqval>length</reqval> - how many bites to write </p>
-            <p> - <reqval>position</reqval> - position to start reading the file </p>
-          </div>
-        </optval>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
-        <lit>fs</lit>.writeSync(<strong>fd</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <strong class="openable">offset<div>
-            <p> - position to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
-          </div></strong>, <optval class="openable">length, position<div>
-            <p> - <reqval>length</reqval> - how many bites to write </p>
-            <p> - <reqval>position</reqval> - position to start reading the file </p>
-          </div>
-        </optval>)
-      </td>
-      <td>
-        - (async/sync) writes <reqval>buf</reqval> content into a file <br>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.write(<strong>fd</strong>, <strong>str</strong>, <optval class="openable">position:nr<div>
-            <p> - position where data should be written in the file </p>
-          </div>
-        </optval>, <optval>encode:str</optval>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
-        <lit>fs</lit>.writeSync(<strong>fd</strong>, <strong>str</strong>, <optval class="openable">position:nr<div>
-            <p> - position where data should be written in the file </p>
-          </div>
-        </optval>, <optval>encode:str</optval>)
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.write(<strong>fd:nr</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefd-buffer-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
-        <lit>fs</lit>.writeSync(<strong>fd</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefd-buffer-options-callback" target="_blank">option:obj</a>)
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.writev(<strong>fd:nr</strong>, <strong>buf:buf[]|TypedArray[]|DataView[]</strong>, <i class="openable">position:nr<div>
-            <p> - position where data should be written in the file </p>
-          </div></i>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
-        <lit>fs</lit>.writevSync(<strong>fd:nr</strong>, <strong>buf:buf[]|TypedArray[]|DataView[]</strong>, <i class="openable">position:nr<div>
-            <p> - position where data should be written in the file </p>
-          </div></i>)
-      </td>
-      <td>
-        - (async/sync) writes <reqval>buf</reqval>s (multiple) content into a file <br>
-        <span id="browserSupport" title="updated : 2024-10-18">
-          <span><i class="fab fa-node-js"></i> 12.9.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.createWriteStream(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscreatewritestreampath-options" target="_blank">option:obj</a>)
-      </td>
-      <td> - creates and returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fswritestream" target="_blank">writableStream</a> (to write the file content)
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.truncate(<strong>path:str|buf|urlObj</strong>, <i class="openable">len:nr<div>
-            <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
-          </div></i>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.truncateSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">len:nr<div>
-            <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
-          </div></i>)
-      </td>
-      <td>
-        - (async/sync) truncates the file's content <u>as bytes</u> (LINUX <mark>truncate()</mark>)
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.ftruncate(<strong>fd:nr</strong>, <i class="openable">len:nr<div>
-            <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
-          </div></i>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.ftruncateSync(<strong>fd:nr</strong>, <i class="openable">len:nr<div>
-            <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
-          </div></i>)
-      </td>
-      <td>
-      </td>
-    </tr>
-  </table>
-  <br>
-  <table class="table">
-    <caption> Directories </caption>
-    <tr>
-      <th style="width:30%;"> Method </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.opendir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsopendirpath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, dir)</reqval>)
-        <lit>fs</lit>.opendirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsopendirsyncpath-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsdir" target="_blank">fsDir</a> (provides furhter info about the directory)
-        <span id="browserSupport" title="updated : 2024-10-20">
-          <span><i class="fab fa-node-js"></i> 12.12.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.readdir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreaddirpath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, files)</reqval>) <br>
-        <lit>fs</lit>.readdirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreaddirpath-options-callback" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - returns an Array holding file names as strings
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.mkdir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirpath-options-callback" target="_blank">option:obj</a>, <strong>fn(err, path)</strong>)
-        <lit>fs</lit>.mkdirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirsyncpath-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) creates a directory (cannot override existing directories by default)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.mkdtemp(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirpath-options-callback" target="_blank">option:obj</a>, <strong>fn(err, path)</strong>)
-        <lit>fs</lit>.mkdtempSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirsyncpath-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) creates a directory (cannot override existing directories by default) (appends 6 random character after the passed directory name)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.rmdir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmdirpath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err</reqval>))<br>
-        <lit>fs</lit>.rmdirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmdirpath-options-callback" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) deletes the targeted directory (empty directories only, use <mark>rm()</mark> to recursively remove entire directory trees)
-      </td>
-    </tr>
-  </table>
-  <br>
-  <table class="table">
-    <caption> Hard and Symbolic links </caption>
-    <tr>
-      <th style="width:30%;"> Method </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.link(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.linkSync(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>)
-      </td>
-      <td>
-        - (async/sync) creates a hard-link of the original file (there are no directory hard-links)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.symlink(<strong>targetPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.symlinkSync(<strong>targetPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>)
-      </td>
-      <td>
-        - (async/sync) creates a symbolic-link to the file or directory
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.readlink(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>, <reqval>fn(err, link)</reqval>)
-        <lit>fs</lit>.readlinkSync(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>)
-      </td>
-      <td>
-        - (async/sync) returns the original file location where the symbolic-link is pointing to
-      </td>
-    </tr>
-  </table>
-  <br>
-  <table class="table">
-    <caption> Other File Operations </caption>
-    <tr>
-      <th style="width:30%"> Method </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.constants
-      </td>
-      <td>
-        - returns an object containing os specific file system constants <a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_fs_constants_1" target="_blank">Node.js FS constants [link]</a>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.copyFile(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
-            <p> <mark>0</mark> = overwrites existing (Default) </p>
-            <p> <mark>1</mark> = error if destination exist </p>
-            <p> <mark>2</mark> = copy-on-write (default if COW not supported) </p>
-            <p> <mark>4</mark> = copy-on-write (error if COW not suported) </p>
-            <p> - values can be grouped ex: <mark>2|4</mark> </p>
-          </div></i>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.copyFileSync(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
-            <p> <mark>0</mark> = overwrites existing (Default) </p>
-            <p> <mark>1</mark> = error if destination exist </p>
-            <p> <mark>2</mark> = copy-on-write (default if COW not supported) </p>
-            <p> <mark>4</mark> = copy-on-write (error if COW not suported) </p>
-            <p> - values can be grouped ex: <mark>2|4</mark> </p>
-          </div></i>)
-      </td>
-      <td>
-        - (async/sync) copy (and renames) files <u>(cannot copy directories)</u>
-        <span id="browserSupport" title="updated : 2024-10-20">
-          <span><i class="fab fa-node-js"></i> 8.5.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.cp(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscpsrc-dest-options-callback" target="_blank">option:obj</a>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.cpSync(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscpsyncsrc-dest-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) copy (and renames) files <u>(can copy directory structures)</u>
-        <span id="browserSupport" title="updated : 2024-10-20">
-          <span><i class="fab fa-node-js"></i> 16.7.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.rename(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>, <strong>fs(err)</strong>)<br>
-        <lit>fs</lit>.renameSync(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>, <strong>fs(err)</strong>)
-      </td>
-      <td>
-        - (async/sync) moves (and renames) files or directories (recursively moves the whole directory)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.unlink(<strong>srcPath:str|buf|urlObj</strong>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.unlinkSync(<strong>srcPath:str|buf|urlObj</strong>)
-      </td>
-      <td>
-        - (async/sync) deletes a file or a symbolic-link (cannot remove directories) (LINUX <mark>unlink()</mark>)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.rm(<strong>srcPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmpath-options-callback" target="_blank">option:obj</a>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.rmSync(<strong>srcPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmsyncpath-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (async/sync) deletes a file or directories
-        <span id="browserSupport" title="updated : 2024-10-20">
-          <span><i class="fab fa-node-js"></i> 14.14.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.access(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">access</a>, <strong>fn(err)</strong>)<br>
-        <lit>fs</lit>.accessSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">access</a>)
-      </td>
-      <td>
-        - (aysnc/sync) tests the specified access, on fail error is thrown
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.realpath(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>, <strong>fn(err, resPath)</strong>) <br>
-        <lit>fs</lit>.realpathSync(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>)
-      </td>
-      <td>
-        - (async/sync) resolves the given path
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.realpath.native(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>, <strong>fn(err, resPath)</strong>) <br>
-        <lit>fs</lit>.realpathSync.native(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>)
-      </td>
-      <td>
-        - does the same as <mark>realpath()</mark> / <mark>realpathSync()</mark> but faster
-        <span id="browserSupport" title="updated : 2024-10-20">
-          <span><i class="fab fa-node-js"></i> 9.2.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.chmod(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
-            <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
-            <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
-            <p> <mark>7</mark> - read, write, and execute </p>
-            <p> <mark>6</mark> - read and write </p>
-            <p> <mark>5</mark> - read and execute </p>
-            <p> <mark>4</mark> - read only </p>
-            <p> <mark>3</mark> - write and execute </p>
-            <p> <mark>2</mark> - write only </p>
-            <p> <mark>1</mark> - execute only </p>
-            <p> <mark>0</mark> - no permission </p>
-          </div></i>, <strong>fn(err)</strong>) <br>
-        <lit>fs</lit>.chmodSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
-            <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
-            <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
-            <p> <mark>7</mark> - read, write, and execute </p>
-            <p> <mark>6</mark> - read and write </p>
-            <p> <mark>5</mark> - read and execute </p>
-            <p> <mark>4</mark> - read only </p>
-            <p> <mark>3</mark> - write and execute </p>
-            <p> <mark>2</mark> - write only </p>
-            <p> <mark>1</mark> - execute only </p>
-            <p> <mark>0</mark> - no permission </p>
-          </div></i>)
-      </td>
-      <td>
-        - (async/sync) - modifies the unix-access
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.fchmod(<strong>fd:nr</strong>, <i class="openable">mode:str|nr<div>
-            <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
-            <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
-            <p> <mark>7</mark> - read, write, and execute </p>
-            <p> <mark>6</mark> - read and write </p>
-            <p> <mark>5</mark> - read and execute </p>
-            <p> <mark>4</mark> - read only </p>
-            <p> <mark>3</mark> - write and execute </p>
-            <p> <mark>2</mark> - write only </p>
-            <p> <mark>1</mark> - execute only </p>
-            <p> <mark>0</mark> - no permission </p>
-          </div></i>, <strong>fn(err)</strong>) <br>
-        <lit>fs</lit>.fchmodSync(<strong>fd:nr</strong>, <i class="openable">mode:str|nr<div>
-            <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
-            <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
-            <p> <mark>7</mark> - read, write, and execute </p>
-            <p> <mark>6</mark> - read and write </p>
-            <p> <mark>5</mark> - read and execute </p>
-            <p> <mark>4</mark> - read only </p>
-            <p> <mark>3</mark> - write and execute </p>
-            <p> <mark>2</mark> - write only </p>
-            <p> <mark>1</mark> - execute only </p>
-            <p> <mark>0</mark> - no permission </p>
-          </div></i>)
-      </td>
-      <td>
-        - does the same as <mark>chmod() / chmodSync()</mark> but with <reqval>fd</reqval>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.lchmod(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
-            <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
-            <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
-            <p> <mark>7</mark> - read, write, and execute </p>
-            <p> <mark>6</mark> - read and write </p>
-            <p> <mark>5</mark> - read and execute </p>
-            <p> <mark>4</mark> - read only </p>
-            <p> <mark>3</mark> - write and execute </p>
-            <p> <mark>2</mark> - write only </p>
-            <p> <mark>1</mark> - execute only </p>
-            <p> <mark>0</mark> - no permission </p>
-          </div></i>, <strong>fn(err)</strong>) <br>
-        <lit>fs</lit>.lchmodSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
-            <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
-            <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
-            <p> <mark>7</mark> - read, write, and execute </p>
-            <p> <mark>6</mark> - read and write </p>
-            <p> <mark>5</mark> - read and execute </p>
-            <p> <mark>4</mark> - read only </p>
-            <p> <mark>3</mark> - write and execute </p>
-            <p> <mark>2</mark> - write only </p>
-            <p> <mark>1</mark> - execute only </p>
-            <p> <mark>0</mark> - no permission </p>
-          </div></i>)
-      </td>
-      <td>
-        - does the same as <mark>chmod() / chmodSync()</mark> but for symbolic-links modifies symbolic-link itself (not the referenced file) (MacOS only)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.chown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.chownSync(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>)
-      </td>
-      <td>
-        - (async/sync) changes the owner and the group
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.fchown(<strong>fd:nr</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.fchownSync(<strong>fd:nr</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>)
-      </td>
-      <td>
-        - does the same as <mark>chown() / chownSync()</mark> but with <reqval>fd</reqval>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.lchown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.lchownSync(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>)
-      </td>
-      <td>
-        - does the same as <mark>chown() / chownSync()</mark> but for symbolic-links modifies symbolic-link itself (not the referenced file)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.existsSync(<strong>path:str|buf|urlObj</strong>)
-      </td>
-      <td>
-        - (sync) checks if the path exists and returns a boolean accordingly (<mark>exists()</mark> asynchronous version is deprecated)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.stat(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
-          </div></i>, <strong>fn(err, statsObj)</strong>) <br>
-        <lit>fs</lit>.statSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
-          </div></i>) <br>
-      </td>
-      <td>
-        - (async/sync) returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsstats" target="_blank">fsStat</a> (file stats object)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.fstat(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
-          </div></i>, <strong>fn(err, statsObj)</strong>) <br>
-        <lit>fs</lit>.fstatSync(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
-          </div></i>) <br>
-      </td>
-      <td>
-        - does the same as <mark>stat() / statSync()</mark> but with <reqval>fd</reqval>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.lstat(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
-          </div></i>, <strong>fn(err, statsObj)</strong>) <br>
-        <lit>fs</lit>.lstatSync(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
-          </div></i>) <br>
-      </td>
-      <td>
-        - does the same as <mark>stat() / statSync()</mark> for symbolic-links targets the symbolic-link itself (not the referenced file)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.statfs(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsstatfspath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, stats)</reqval>)<br>
-        <lit>fs</lit>.statfsSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsstatfssyncpath-options" target="_blank">option:obj</a>)
-      </td>
-      <td>
-        - (sync/async) returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsstatfs" target="_blank">statFs</a> object (provides info about the mounted file system)
-        <span id="browserSupport" title="updated : 2024-10-19">
-          <span><i class="fab fa-node-js"></i> 18.15.0 </span>
-          <span><i class="fab fa-node-js"></i> 19.6.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.utimes(<strong>path:str|buf|urlObj</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.utimesSync(<strong>path:str|buf|urlObj</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>)
-      </td>
-      <td>
-        - (async/sync) modifies the access and modified times for the targeted file
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.futimes(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.futimesSync(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>)
-      </td>
-      <td>
-        - does the same as <mark>utimes() / utimesSync()</mark> but with <reqval>fd</reqval>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.lutimes(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>, <reqval>fn(err)</reqval>)<br>
-        <lit>fs</lit>.lutimesSync(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>)
-      </td>
-      <td>
-        - does the same as <mark>utimes() / utimesSync()</mark> for symbolic-links targets the symbolic-link itself (not the referenced file)
-        <span id="browserSupport" title="updated : 2024-10-19">
-          <span><i class="fab fa-node-js"></i> 12.19.0 </span>
-          <span><i class="fab fa-node-js"></i> 14.4.0 </span>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.watchFile(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
-            <p> bigint: <strong>bol</strong> - the returned parameters are in bigints instead of numbers </p>
-            <p> persistend: <strong>bol</strong> - keeps the process alive while the file is watched (Default: <mark>true</mark>) </p>
-            <p> interval: <strong>nr</strong> - how often check for changes in milliseconds (Default: <mark>5007</mark>) </p>
-          </div></i>, <strong class="openable">fn(curSt, prevSt)<div>
-            <p> - <strong>curSt</strong> - current Stats object </p>
-            <p> - <strong>prevSt</strong> - previous Stats object </p>
-          </div></strong>)
-      </td>
-      <td>
-        - watches for changes in the passed file (use <reqval>watch()</reqval> instead of this (recommended by Node.js docs))
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.unwatchFile(<strong>path:str|buf|urlObj</strong>)
-      </td>
-      <td>
-        - stop watching for changes on the passed file (use <reqval>watch()</reqval> instead of this (recommended by Node.js docs))
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.watch(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
-            <p> persistent: <strong>bol</strong> - keeps the process alive while the file is watched (Default: <mark>true</mark>) </p>
-            <p> recursive: <strong>bol</strong> - also watches subdirectories (Default: <mark>false</mark>) (macOS and Windows only) </p>
-            <p> encode: <strong>str</strong> - encoding for the filename (Default: <mark>utf-8</mark>) </p>
-          </div></i>, <reqval>fn(evType, filename)</reqval>)
-      </td>
-      <td>
-        - watches the passed file or directory <u>(not 100% reliable)</u>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.fsync(<reqval>fd:nr</reqval>, <reqval>fn(err)</reqval>) <br>
-        <lit>fs</lit>.fsyncSync(<reqval>fd:nr</reqval>) <br>
-      </td>
-      <td> 
-        - (async/sync) flushes all data to the open file descriptior <a href="https://nodejs.org/docs/latest/api/fs.html#fsfsyncfd-callback" target="_blank">[link]</a>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <lit>fs</lit>.fdataSync(<reqval>fd:nr</reqval>, <reqval>fn(err)</reqval>) <br>
-        <lit>fs</lit>.fdatasyncSync(<reqval>fd:nr</reqval>) <br>
-      </td>
-      <td> 
-        - (async/sync) flushes all data to the open file descriptior (does not flush modified data) <a href="https://nodejs.org/docs/latest/api/fs.html#fsfdatasyncfd-callback" target="_blank">[link]</a>
-      </td>
-    </tr>
-  </table>
-  <br>
-  <h2 style="color:green;"><u> Notes : </u></h2>
-  <details class="example" id="notes">
-    <summary> Notes :</summary>
-    <p> - <mark>datasync()</mark> / <mark>datasyncSync()</mark> / <mark>fsync()</mark> / <mark>fsyncSync()</mark> / <mark>filehandle.datasync</mark> / <mark>filehandle.sync</mark>- synchronizes the file with the storage [NOT TESTED 2020-07-10] (because I have no idea how this can be used) </p>
-    <p> - <mark>lchmod()</mark> and <mark>lchmodSync()</mark> does the same as <mark>chmod()</mark> and <mark>chmodSync()</mark> but they are available only on macOS </p>
-    <p> - <mark>lchown()</mark> and <mark>lchownSync()</mark> does the same as <mark>chown()</mark> and <mark>chownSync()</mark> they were deprecated before v10.6.0 but after are no longer deprecated [2020-07-10] </p>
-  </details>
-  <h2 style="color:green;"><u> Useful Links : </u></h2>
-  <p><a href="https://nodejs.org/dist/latest-v22.x/docs/api/fs.html" target="_blank"> Node.js File System </a></p>
-  <h2 style="color:green;"><u> Remember This : </u></h2>
-
-  <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
-  <p> - the <mark>fs</mark> library provides methods to work with the file system </p>
-  <p> - there are 3 main approaches: </p>
-  <p class="indent-lv1"> - callback methods </p>
-  <p class="indent-lv1"> - promises (promises Api) </p>
-  <pre>
+  <body>
+    <h1> File System </h1>
+    <p> Updated ( 2019-09-19 / 2020-07-09 / 2024-10-18 )</p>
+    <nav class="sitenav">
+      <a href="../../index.html">MySite > </a>
+      <a href="../index.html">Node.js > </a> File System
+    </nav>
+    <p class="subSite"><a href="Promises API/index.html"> Promise API > </a></p>
+    <table class="table">
+      <caption> File Descriptors </caption>
+      <tr>
+        <th style="width:30%"> Method </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.open(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-system-flags" target="_blank">flag</a>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">mode</a>, <strong>fn(err, fd)</strong>) <br>
+          <lit>fs</lit>.openSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-system-flags" target="_blank">flag</a>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">mode</a>)
+        </td>
+        <td>
+          - (async/sync) allocates a new file descriptor
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.close(<strong>fd:nr</strong>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.closeSync(<strong>fd:nr</strong>)
+        </td>
+        <td>
+          - (async/sync) closes the passed file descriptor
+        </td>
+      </tr>
+    </table>
+    <br>
+    <table class="table">
+      <caption> Read and Write files </caption>
+      <tr>
+        <th style="width:30%"> Method / Property </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td colspan="2"> Read </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.readFile(<strong>path:str|buf|urlObj|(fd:nr)</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfilepath-options-callback" target="_blank">option:obj</a>, <strong>fn(err, data)</strong>) <br>
+          <lit>fs</lit>.readFileSync(<strong>path:str|buf|urlObj|(fd:nr)</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfilesyncpath-options" target="_blank">option:obj</a>) <br>
+        </td>
+        <td>
+          - (async/sync) reads the full content of the passed file or file descriptor
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.read(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <strong class="openable">offset:nr, length:nr, position:nr|bigInt<div>
+              <p> - <strong>offset</strong> - where to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
+              <p> - <strong>length</strong> - number of bytes to read from the source (Default: <mark>0</mark>) </p>
+              <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
+            </div></strong>, <reqval>fn(err, bytesRead, buf)</reqval>) <br>
+          <lit>fs</lit>.readSync(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <strong class="openable">offset:nr, length:nr, position:nr|bigInt<div>
+              <p> - <strong>offset</strong> - where to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
+              <p> - <strong>length</strong> - number of bytes to read from the source (Default: <mark>0</mark>) </p>
+              <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
+            </div></strong>)
+        </td>
+        <td>
+          - (aysnc/sync) reads the file content and stores in <reqval>buf</reqval> <br>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.read(<reqval>fd</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfd-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesRead, buf)</reqval>)
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.read(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfd-buffer-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesRead, buf)</reqval>)<br>
+          <lit>fs</lit>.readSync(<reqval>fd</reqval>, <reqval>buf:buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreadfd-buffer-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesRead, buf)</reqval>)
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.readv(<reqval>fd:nr</reqval>, <reqval>buf:buf[]|TypedArray[]|DataView[]</reqval>, <i class="openable">position:nr<div>
+              <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
+            </div></i>) <br>
+          <lit>fs</lit>.readvSync(<reqval>fd:nr</reqval>, <reqval>buf:buf[]|TypedArray[]|DataView[]</reqval>, <i class="openable">position:nr<div>
+              <p> - <strong>position</strong> - where to start reading the file (Default: <mark>0</mark>) </p>
+            </div></i>)
+        </td>
+        <td>
+          - (async/ sync) reads the file content and stores in <reqval>buf</reqval>s (multiple) <br>
+          <span id="browserSupport" title="updated : 2024-10-19">
+            <span><i class="fab fa-node-js"></i> 13.3.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.createReadStream(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscreatereadstreampath-options" target="_blank">option:obj</a>)
+        </td>
+        <td> - creates and returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsreadstream" target="_blank">readableStream</a> (to read the file content) </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Write </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.writeFile(<reqval>path:str|buf|urlObj|(fd:nr)</reqval>, <reqval>data:str|buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefilefile-data-options-callback" target="_blank">option:obj</a>, <reqval>fn(err</reqval>)<br>
+          <lit>fs</lit>.writeFileSync(<reqval>path:str|buf|urlObj|(fd:nr)</reqval>, <reqval>data:str|buf|TypedArray|DataView</reqval>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefilesyncfile-data-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) writes <reqval>data</reqval> to a file (overwrites content, creates file if not exist)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.appendFile(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsappendfilepath-data-options-callback" target="_blank">option:obj</a>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.appendFileSync(<strong>path:str|buf|urlObj|fd</strong>, <strong>data:str|buf</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsappendfilepath-data-options-callback" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) appends <reqval>data</reqval> to the file content (creates a new file if it doesn't exist)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.write(<strong>fd</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <strong class="openable">offset<div>
+              <p> - position to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
+            </div></strong>, <optval class="openable">length, position<div>
+              <p> - <reqval>length</reqval> - how many bites to write </p>
+              <p> - <reqval>position</reqval> - position to start reading the file </p>
+            </div>
+          </optval>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
+          <lit>fs</lit>.writeSync(<strong>fd</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <strong class="openable">offset<div>
+              <p> - position to start writing <reqval>buf</reqval> (Default: <mark>0</mark>) </p>
+            </div></strong>, <optval class="openable">length, position<div>
+              <p> - <reqval>length</reqval> - how many bites to write </p>
+              <p> - <reqval>position</reqval> - position to start reading the file </p>
+            </div>
+          </optval>)
+        </td>
+        <td>
+          - (async/sync) writes <reqval>buf</reqval> content into a file <br>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.write(<strong>fd</strong>, <strong>str</strong>, <optval class="openable">position:nr<div>
+              <p> - position where data should be written in the file </p>
+            </div>
+          </optval>, <optval>encode:str</optval>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
+          <lit>fs</lit>.writeSync(<strong>fd</strong>, <strong>str</strong>, <optval class="openable">position:nr<div>
+              <p> - position where data should be written in the file </p>
+            </div>
+          </optval>, <optval>encode:str</optval>)
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.write(<strong>fd:nr</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefd-buffer-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
+          <lit>fs</lit>.writeSync(<strong>fd</strong>, <strong>buf:buf|TypedArray|DataView</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fswritefd-buffer-options-callback" target="_blank">option:obj</a>)
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.writev(<strong>fd:nr</strong>, <strong>buf:buf[]|TypedArray[]|DataView[]</strong>, <i class="openable">position:nr<div>
+              <p> - position where data should be written in the file </p>
+            </div></i>, <reqval>fn(err, bytesWritten, buf)</reqval>)<br>
+          <lit>fs</lit>.writevSync(<strong>fd:nr</strong>, <strong>buf:buf[]|TypedArray[]|DataView[]</strong>, <i class="openable">position:nr<div>
+              <p> - position where data should be written in the file </p>
+            </div></i>)
+        </td>
+        <td>
+          - (async/sync) writes <reqval>buf</reqval>s (multiple) content into a file <br>
+          <span id="browserSupport" title="updated : 2024-10-18">
+            <span><i class="fab fa-node-js"></i> 12.9.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.createWriteStream(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscreatewritestreampath-options" target="_blank">option:obj</a>)
+        </td>
+        <td> - creates and returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fswritestream" target="_blank">writableStream</a> (to write the file content) </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.truncate(<strong>path:str|buf|urlObj</strong>, <i class="openable">len:nr<div>
+              <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.truncateSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">len:nr<div>
+              <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>)
+        </td>
+        <td>
+          - (async/sync) truncates the file's content <u>as bytes</u> (LINUX <mark>truncate()</mark>)
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.ftruncate(<strong>fd:nr</strong>, <i class="openable">len:nr<div>
+              <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.ftruncateSync(<strong>fd:nr</strong>, <i class="openable">len:nr<div>
+              <p> - number of bytes to truncate (if bigger than the file's content the remaining space is filled with <mark>\0</mark> characters) (Default: <mark>0</mark>) </p>
+            </div></i>)
+        </td>
+        <td>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <table class="table">
+      <caption> Directories </caption>
+      <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.opendir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsopendirpath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, dir)</reqval>)
+          <lit>fs</lit>.opendirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsopendirsyncpath-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsdir" target="_blank">fsDir</a> (provides furhter info about the directory)
+          <span id="browserSupport" title="updated : 2024-10-20">
+            <span><i class="fab fa-node-js"></i> 12.12.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.readdir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreaddirpath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, files)</reqval>) <br>
+          <lit>fs</lit>.readdirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsreaddirpath-options-callback" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - returns an Array holding file names as strings
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.mkdir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirpath-options-callback" target="_blank">option:obj</a>, <strong>fn(err, path)</strong>)
+          <lit>fs</lit>.mkdirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirsyncpath-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) creates a directory (cannot override existing directories by default)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.mkdtemp(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirpath-options-callback" target="_blank">option:obj</a>, <strong>fn(err, path)</strong>)
+          <lit>fs</lit>.mkdtempSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsmkdirsyncpath-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) creates a directory (cannot override existing directories by default) (appends 6 random character after the passed directory name)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.rmdir(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmdirpath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err</reqval>))<br>
+          <lit>fs</lit>.rmdirSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmdirpath-options-callback" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) deletes the targeted directory (empty directories only, use <mark>rm()</mark> to recursively remove entire directory trees)
+        </td>
+      </tr>
+    </table>
+    <br>
+    <table class="table">
+      <caption> Hard and Symbolic links </caption>
+      <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.link(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.linkSync(<strong>path:str|buf|urlObj</strong>, <strong>hardLink:str|buf|urlObj</strong>)
+        </td>
+        <td>
+          - (async/sync) creates a hard-link of the original file (there are no directory hard-links)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.symlink(<strong>targetPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.symlinkSync(<strong>targetPath:str|buf|urlObj</strong>, <strong>symLinkPath:str|buf|urlObj</strong>)
+        </td>
+        <td>
+          - (async/sync) creates a symbolic-link to the file or directory
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.readlink(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>, <reqval>fn(err, link)</reqval>)
+          <lit>fs</lit>.readlinkSync(<strong>symLinkPath:str|buf|urlObj</strong>, <i>encode:str</i>)
+        </td>
+        <td>
+          - (async/sync) returns the original file location where the symbolic-link is pointing to
+        </td>
+      </tr>
+    </table>
+    <br>
+    <table class="table">
+      <caption> Other File Operations </caption>
+      <tr>
+        <th style="width:30%"> Method </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.constants
+        </td>
+        <td>
+          - returns an object containing os specific file system constants <a href="https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_fs_constants_1" target="_blank">Node.js FS constants [link]</a>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.copyFile(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
+              <p> <mark>0</mark> = overwrites existing (Default) </p>
+              <p> <mark>1</mark> = error if destination exist </p>
+              <p> <mark>2</mark> = copy-on-write (default if COW not supported) </p>
+              <p> <mark>4</mark> = copy-on-write (error if COW not suported) </p>
+              <p> - values can be grouped ex: <mark>2|4</mark> </p>
+            </div></i>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.copyFileSync(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <i class="openable">copyMode:nr<div>
+              <p> <mark>0</mark> = overwrites existing (Default) </p>
+              <p> <mark>1</mark> = error if destination exist </p>
+              <p> <mark>2</mark> = copy-on-write (default if COW not supported) </p>
+              <p> <mark>4</mark> = copy-on-write (error if COW not suported) </p>
+              <p> - values can be grouped ex: <mark>2|4</mark> </p>
+            </div></i>)
+        </td>
+        <td>
+          - (async/sync) copy (and renames) files <u>(cannot copy directories)</u>
+          <span id="browserSupport" title="updated : 2024-10-20">
+            <span><i class="fab fa-node-js"></i> 8.5.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.cp(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscpsrc-dest-options-callback" target="_blank">option:obj</a>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.cpSync(<strong>srcPath:str|buf|urlObj</strong>, <strong>destPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fscpsyncsrc-dest-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) copy (and renames) files <u>(can copy directory structures)</u>
+          <span id="browserSupport" title="updated : 2024-10-20">
+            <span><i class="fab fa-node-js"></i> 16.7.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.rename(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>, <strong>fs(err)</strong>)<br>
+          <lit>fs</lit>.renameSync(<strong>oldPath:str|buf|urlObj</strong>, <strong>newPath:str|buf|urlObj</strong>, <strong>fs(err)</strong>)
+        </td>
+        <td>
+          - (async/sync) moves (and renames) files or directories (recursively moves the whole directory)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.unlink(<strong>srcPath:str|buf|urlObj</strong>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.unlinkSync(<strong>srcPath:str|buf|urlObj</strong>)
+        </td>
+        <td>
+          - (async/sync) deletes a file or a symbolic-link (cannot remove directories) (LINUX <mark>unlink()</mark>)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.rm(<strong>srcPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmpath-options-callback" target="_blank">option:obj</a>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.rmSync(<strong>srcPath:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsrmsyncpath-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (async/sync) deletes a file or directories
+          <span id="browserSupport" title="updated : 2024-10-20">
+            <span><i class="fab fa-node-js"></i> 14.14.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.access(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">access</a>, <strong>fn(err)</strong>)<br>
+          <lit>fs</lit>.accessSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#file-access-constants" target="_blank">access</a>)
+        </td>
+        <td>
+          - (aysnc/sync) tests the specified access, on fail error is thrown
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.realpath(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>, <strong>fn(err, resPath)</strong>) <br>
+          <lit>fs</lit>.realpathSync(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>)
+        </td>
+        <td>
+          - (async/sync) resolves the given path
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.realpath.native(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>, <strong>fn(err, resPath)</strong>) <br>
+          <lit>fs</lit>.realpathSync.native(<strong>path:str|buf|urlObj</strong>, <small>{encoding:<strong>str</strong>}</small>)
+        </td>
+        <td>
+          - does the same as <mark>realpath()</mark> / <mark>realpathSync()</mark> but faster
+          <span id="browserSupport" title="updated : 2024-10-20">
+            <span><i class="fab fa-node-js"></i> 9.2.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.chmod(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+              <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+              <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+              <p> <mark>7</mark> - read, write, and execute </p>
+              <p> <mark>6</mark> - read and write </p>
+              <p> <mark>5</mark> - read and execute </p>
+              <p> <mark>4</mark> - read only </p>
+              <p> <mark>3</mark> - write and execute </p>
+              <p> <mark>2</mark> - write only </p>
+              <p> <mark>1</mark> - execute only </p>
+              <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err)</strong>) <br>
+          <lit>fs</lit>.chmodSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+              <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+              <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+              <p> <mark>7</mark> - read, write, and execute </p>
+              <p> <mark>6</mark> - read and write </p>
+              <p> <mark>5</mark> - read and execute </p>
+              <p> <mark>4</mark> - read only </p>
+              <p> <mark>3</mark> - write and execute </p>
+              <p> <mark>2</mark> - write only </p>
+              <p> <mark>1</mark> - execute only </p>
+              <p> <mark>0</mark> - no permission </p>
+            </div></i>)
+        </td>
+        <td>
+          - (async/sync) - modifies the unix-access
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.fchmod(<strong>fd:nr</strong>, <i class="openable">mode:str|nr<div>
+              <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+              <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+              <p> <mark>7</mark> - read, write, and execute </p>
+              <p> <mark>6</mark> - read and write </p>
+              <p> <mark>5</mark> - read and execute </p>
+              <p> <mark>4</mark> - read only </p>
+              <p> <mark>3</mark> - write and execute </p>
+              <p> <mark>2</mark> - write only </p>
+              <p> <mark>1</mark> - execute only </p>
+              <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err)</strong>) <br>
+          <lit>fs</lit>.fchmodSync(<strong>fd:nr</strong>, <i class="openable">mode:str|nr<div>
+              <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+              <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+              <p> <mark>7</mark> - read, write, and execute </p>
+              <p> <mark>6</mark> - read and write </p>
+              <p> <mark>5</mark> - read and execute </p>
+              <p> <mark>4</mark> - read only </p>
+              <p> <mark>3</mark> - write and execute </p>
+              <p> <mark>2</mark> - write only </p>
+              <p> <mark>1</mark> - execute only </p>
+              <p> <mark>0</mark> - no permission </p>
+            </div></i>)
+        </td>
+        <td>
+          - does the same as <mark>chmod() / chmodSync()</mark> but with <reqval>fd</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.lchmod(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+              <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+              <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+              <p> <mark>7</mark> - read, write, and execute </p>
+              <p> <mark>6</mark> - read and write </p>
+              <p> <mark>5</mark> - read and execute </p>
+              <p> <mark>4</mark> - read only </p>
+              <p> <mark>3</mark> - write and execute </p>
+              <p> <mark>2</mark> - write only </p>
+              <p> <mark>1</mark> - execute only </p>
+              <p> <mark>0</mark> - no permission </p>
+            </div></i>, <strong>fn(err)</strong>) <br>
+          <lit>fs</lit>.lchmodSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">mode:str|nr<div>
+              <p> - on Windows only the writing permission can be changed (<mark>0o666</mark> read-write) (<mark>0o400</mark> read-only) </p>
+              <p> - linux file access mechanism used (ex: <mark>0744</mark> = owner has full permission but the gropu and others can read only) <u style="color:orangered;">(the first digit is always <mark>0</mark>)</u> </p>
+              <p> <mark>7</mark> - read, write, and execute </p>
+              <p> <mark>6</mark> - read and write </p>
+              <p> <mark>5</mark> - read and execute </p>
+              <p> <mark>4</mark> - read only </p>
+              <p> <mark>3</mark> - write and execute </p>
+              <p> <mark>2</mark> - write only </p>
+              <p> <mark>1</mark> - execute only </p>
+              <p> <mark>0</mark> - no permission </p>
+            </div></i>)
+        </td>
+        <td>
+          - does the same as <mark>chmod() / chmodSync()</mark> but for symbolic-links modifies symbolic-link itself (not the referenced file) (MacOS only)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.chown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.chownSync(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>)
+        </td>
+        <td>
+          - (async/sync) changes the owner and the group
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.fchown(<strong>fd:nr</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.fchownSync(<strong>fd:nr</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>)
+        </td>
+        <td>
+          - does the same as <mark>chown() / chownSync()</mark> but with <reqval>fd</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.lchown(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.lchownSync(<strong>path:str|buf|urlObj</strong>, <strong>uid:nr</strong>, <strong>gid:nr</strong>)
+        </td>
+        <td>
+          - does the same as <mark>chown() / chownSync()</mark> but for symbolic-links modifies symbolic-link itself (not the referenced file)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.existsSync(<strong>path:str|buf|urlObj</strong>)
+        </td>
+        <td>
+          - (sync) checks if the path exists and returns a boolean accordingly (<mark>exists()</mark> asynchronous version is deprecated)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.stat(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, statsObj)</strong>) <br>
+          <lit>fs</lit>.statSync(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>) <br>
+        </td>
+        <td>
+          - (async/sync) returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsstats" target="_blank">fsStat</a> (file stats object)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.fstat(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, statsObj)</strong>) <br>
+          <lit>fs</lit>.fstatSync(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>) <br>
+        </td>
+        <td>
+          - does the same as <mark>stat() / statSync()</mark> but with <reqval>fd</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.lstat(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>, <strong>fn(err, statsObj)</strong>) <br>
+          <lit>fs</lit>.lstatSync(<strong>fd:nr</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the <mark>Stats</mark> object values will be represented in bigint values instead of numbers (Default: <mark>false</mark>) </p>
+            </div></i>) <br>
+        </td>
+        <td>
+          - does the same as <mark>stat() / statSync()</mark> for symbolic-links targets the symbolic-link itself (not the referenced file)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.statfs(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsstatfspath-options-callback" target="_blank">option:obj</a>, <reqval>fn(err, stats)</reqval>)<br>
+          <lit>fs</lit>.statfsSync(<strong>path:str|buf|urlObj</strong>, <a href="https://nodejs.org/docs/latest/api/fs.html#fsstatfssyncpath-options" target="_blank">option:obj</a>)
+        </td>
+        <td>
+          - (sync/async) returns a <a href="https://nodejs.org/docs/latest/api/fs.html#class-fsstatfs" target="_blank">statFs</a> object (provides info about the mounted file system)
+          <span id="browserSupport" title="updated : 2024-10-19">
+            <span><i class="fab fa-node-js"></i> 18.15.0 </span>
+            <span><i class="fab fa-node-js"></i> 19.6.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.utimes(<strong>path:str|buf|urlObj</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.utimesSync(<strong>path:str|buf|urlObj</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>)
+        </td>
+        <td>
+          - (async/sync) modifies the access and modified times for the targeted file
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.futimes(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.futimesSync(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>)
+        </td>
+        <td>
+          - does the same as <mark>utimes() / utimesSync()</mark> but with <reqval>fd</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.lutimes(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>, <reqval>fn(err)</reqval>)<br>
+          <lit>fs</lit>.lutimesSync(<strong>fd:nr</strong>, <strong>atime:nr|str|Date</strong>, <strong>mtime:nr|str|Date</strong>)
+        </td>
+        <td>
+          - does the same as <mark>utimes() / utimesSync()</mark> for symbolic-links targets the symbolic-link itself (not the referenced file)
+          <span id="browserSupport" title="updated : 2024-10-19">
+            <span><i class="fab fa-node-js"></i> 12.19.0 </span>
+            <span><i class="fab fa-node-js"></i> 14.4.0 </span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.watchFile(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+              <p> bigint: <strong>bol</strong> - the returned parameters are in bigints instead of numbers </p>
+              <p> persistend: <strong>bol</strong> - keeps the process alive while the file is watched (Default: <mark>true</mark>) </p>
+              <p> interval: <strong>nr</strong> - how often check for changes in milliseconds (Default: <mark>5007</mark>) </p>
+            </div></i>, <strong class="openable">fn(curSt, prevSt)<div>
+              <p> - <strong>curSt</strong> - current Stats object </p>
+              <p> - <strong>prevSt</strong> - previous Stats object </p>
+            </div></strong>)
+        </td>
+        <td>
+          - watches for changes in the passed file (use <reqval>watch()</reqval> instead of this (recommended by Node.js docs))
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.unwatchFile(<strong>path:str|buf|urlObj</strong>)
+        </td>
+        <td>
+          - stop watching for changes on the passed file (use <reqval>watch()</reqval> instead of this (recommended by Node.js docs))
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.watch(<strong>path:str|buf|urlObj</strong>, <i class="openable">option:obj<div>
+              <p> persistent: <strong>bol</strong> - keeps the process alive while the file is watched (Default: <mark>true</mark>) </p>
+              <p> recursive: <strong>bol</strong> - also watches subdirectories (Default: <mark>false</mark>) (macOS and Windows only) </p>
+              <p> encode: <strong>str</strong> - encoding for the filename (Default: <mark>utf-8</mark>) </p>
+            </div></i>, <reqval>fn(evType, filename)</reqval>)
+        </td>
+        <td>
+          - watches the passed file or directory <u>(not 100% reliable)</u>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.fsync(<reqval>fd:nr</reqval>, <reqval>fn(err)</reqval>) <br>
+          <lit>fs</lit>.fsyncSync(<reqval>fd:nr</reqval>) <br>
+        </td>
+        <td>
+          - (async/sync) flushes all data to the open file descriptior <a href="https://nodejs.org/docs/latest/api/fs.html#fsfsyncfd-callback" target="_blank">[link]</a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>fs</lit>.fdataSync(<reqval>fd:nr</reqval>, <reqval>fn(err)</reqval>) <br>
+          <lit>fs</lit>.fdatasyncSync(<reqval>fd:nr</reqval>) <br>
+        </td>
+        <td>
+          - (async/sync) flushes all data to the open file descriptior (does not flush modified data) <a href="https://nodejs.org/docs/latest/api/fs.html#fsfdatasyncfd-callback" target="_blank">[link]</a>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <h2 style="color:green;"><u> Notes : </u></h2>
+    <details class="example" id="notes">
+      <summary> Notes :</summary>
+      <p> - <mark>datasync()</mark> / <mark>datasyncSync()</mark> / <mark>fsync()</mark> / <mark>fsyncSync()</mark> / <mark>filehandle.datasync</mark> / <mark>filehandle.sync</mark>- synchronizes the file with the storage [NOT TESTED 2020-07-10] (because I have no idea how this can be used) </p>
+      <p> - <mark>lchmod()</mark> and <mark>lchmodSync()</mark> does the same as <mark>chmod()</mark> and <mark>chmodSync()</mark> but they are available only on macOS </p>
+      <p> - <mark>lchown()</mark> and <mark>lchownSync()</mark> does the same as <mark>chown()</mark> and <mark>chownSync()</mark> they were deprecated before v10.6.0 but after are no longer deprecated [2020-07-10] </p>
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+    <p><a href="https://nodejs.org/dist/latest-v22.x/docs/api/fs.html" target="_blank"> Node.js File System </a></p>
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+    <p> - to set the UNIX file access use the <a href="../Process/index.html#umask" target="_blank">process.umask()</a> method </p>
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - the <mark>fs</mark> library provides methods to work with the file system </p>
+    <p> - there are 3 main approaches: </p>
+    <p class="indent-lv1"> - callback methods </p>
+    <p class="indent-lv1"> - promises (promises Api) </p>
+    <pre>
     import fs from 'node:fs';
     import fsPromise from 'node:fs/promises';
     
@@ -827,13 +827,13 @@
 // promises Api -------------
     await fsPromises.readFile('./test.txt')     // -> file content as node buffer
   </pre>
-  <!--------------------------------------------------------------------------------->
-  <hr>
-  <h3 class="header"> Allocate File Descriptors <mark>open()</mark> / <mark>openSync()</mark> / <mark>close()</mark> / <mark>closeSync()</mark> methods </u></h3>
+    <!--------------------------------------------------------------------------------->
+    <hr>
+    <h3 class="header"> Allocate File Descriptors <mark>open()</mark> / <mark>openSync()</mark> / <mark>close()</mark> / <mark>closeSync()</mark> methods </u></h3>
   <p> - allocated file descriptors then can be used for file system operations </p>
   <details class="example">
     <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>open()</mark> / <mark>openSync()</mark> / <mark>close()</mark> / <mark>closeSync()</mark> TEST </u></h4>
+    <h4 class="header"> The <mark>open()</mark> / <mark>openSync()</mark> / <mark>close()</mark> / <mark>closeSync()</mark> methods </h4>
     <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
@@ -1342,7 +1342,7 @@ console.log( "----- end of module -----");
     <h4 style="color:darkblue;"><u> symbolic-link option argument TEST </u></h4>
     <p> - the <mark>file</mark> or <mark>dir</mark> type arguments are automatically detected </p>
     <p> - the <mark>'junction'</mark> type argument resolves the target path of the symbolic-link to absolute <u>(only for directory symbolic-links)</u>
-    <pre style="margin-bottom:1px;">
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     fs.symlink('./main.js', 'smLink1.js', 'file', function(err){                      // type is automatically detected (putting 'dir' here won't work because this is a file [TESTED])   
@@ -1355,16 +1355,16 @@ console.log( "----- end of module -----");
         console.log( fs.readlinkSync('symlinkDir') );                                 // -> 'D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\01.1 symbolic-link option argument TEST\main.js\'        
     });
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\01.1 symbolic-link option argument TEST> node main    
         .\main.js                                                                                                                                           // -! fs.readlinkSync('smLink1.js')
         D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\01.1 symbolic-link option argument TEST\   // -! fs.readlinkSync('symlinkDir')
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\01.1 symbolic-link option argument TEST>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>link()</mark> / <mark>linkSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>link()</mark> / <mark>linkSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     console.log( fs.statSync('testFile').nlink );                                      // -> 1             (1 file in the hard-link chain (no other file linked))
@@ -1376,35 +1376,35 @@ console.log( "----- end of module -----");
         console.log( fs.statSync('testFile').nlink );                                  // -> 3             (3 files in the hard-link chain)
     });    
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02 link() linkSync() TEST> node main    
         1                                                                              // -! fs.statSync('testFile').nlink
         3                                                                              // -! fs.statSync('testFile').nlink
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02 link() linkSync() TEST>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> placing hard-links in other than the current directory TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> placing hard-links in other than the current directory TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     fs.linkSync('./testFile', './subDir/link1');                                       // hard-link created in the subdirectory 
     fs.linkSync('./testFile', '../link2');                                             // hard-link created in the parent directory 
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02.1 placing hard-links in other than the current directory TEST\testDir> node main                                   
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02.1 placing hard-links in other than the current directory TEST\testDir>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> hard-link directories TEST </u></h4>
-    <p style="color:yellow;"> - hard-linking directories is not allowed! </p>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> hard-link directories TEST </u></h4>
+      <p style="color:yellow;"> - hard-linking directories is not allowed! </p>
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     fs.linkSync('testDir1', 'testDir2');                                               // throws an error (hard-linking directories not allowed)   
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02.2 hard-link directories TEST> node main
         hard-link directories TEST> node main                                                                            
         fs.js:130
@@ -1414,10 +1414,10 @@ console.log( "----- end of module -----");
         Error: EPERM: operation not permitted, link 'testDir1' -> 'testDir2'
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02.2 hard-link directories TEST>
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> hard-link chain break TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> hard-link chain break TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     fs.linkSync('testFile', 'link1');                                                  // creating a hard link chain 
@@ -1429,7 +1429,7 @@ console.log( "----- end of module -----");
     console.log( fs.statSync('link2').nlink );                                         // -> 4
     console.log( fs.statSync('link3').nlink );                                         // -> 4  
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02.3 hard-link chain break TEST> node main  
         4                                                                              // -! fs.statSync('testFile').nlink 
         4                                                                              // -! fs.statSync('link1').nlink 
@@ -1437,19 +1437,19 @@ console.log( "----- end of module -----");
         4                                                                              // -! fs.statSync('link3').nlink 
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\06 Hard-Link and Symbolic-Link\02.3 hard-link chain break TEST> node main    
     </pre>
-  </details>
-  <!--------------------------------------------------------------------------------->
-  <hr>
-  <h3 class="header"> Other File Operations </h3>
-  <h4 class="header indent-lv1"> <mark>constants</mark> / <mark>existsSync()</mark> / <mark>realpath()</mark> / <mark>realpath.native()</mark> / <mark>realpathSync()</mark> / <mark>realpathSync.native()</mark> </h4>
-  <h4 class="header indent-lv1"> <mark>access()</mark> / <mark>accessSync()</mark> / <mark>chmod()</mark> / <mark>chmodSync()</mark> / <mark>fchmod()</mark> / <mark>fchmodSync()</mark> / <mark>chown()</mark> / <mark>chownSync()</mark> / <mark>fchown()</mark> / <mark>fchownSync()</mark> </h4>
-  <h4 class="header indent-lv1"> <mark>rename()</mark> / <mark>renameSync()</mark> / <mark>copyFile()</mark> / <mark>copyFileSync()</mark> / <mark>unlink()</mark> / <mark>unlinkSync()</mark> </h4>
-  <h4 class="header indent-lv1"> <mark>watchFile()</mark> / <mark>unwatchFile()</mark> / <mark>watch()</mark> </h4>
-  <h4 class="header indent-lv1"> <mark>stat()</mark> / <mark>statSync()</mark> / <mark>fstat()</mark> / <mark>fstatSync()</mark> / <mark>lstat()</mark> / <mark>lstatSync()</mark> / <mark>utimes()</mark> / <mark>utimesSync()</mark> / <mark>futimes()</mark> / <mark>futimesSync()</mark> / <mark>lutimes()</mark> / <mark>lutimesSync()</mark> </h4>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>constants</mark> / <mark>existsSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+    </details>
+    <!--------------------------------------------------------------------------------->
+    <hr>
+    <h3 class="header"> Other File Operations </h3>
+    <h4 class="header indent-lv1"> <mark>constants</mark> / <mark>existsSync()</mark> / <mark>realpath()</mark> / <mark>realpath.native()</mark> / <mark>realpathSync()</mark> / <mark>realpathSync.native()</mark> </h4>
+    <h4 class="header indent-lv1"> <mark>access()</mark> / <mark>accessSync()</mark> / <mark>chmod()</mark> / <mark>chmodSync()</mark> / <mark>fchmod()</mark> / <mark>fchmodSync()</mark> / <mark>chown()</mark> / <mark>chownSync()</mark> / <mark>fchown()</mark> / <mark>fchownSync()</mark> </h4>
+    <h4 class="header indent-lv1"> <mark>rename()</mark> / <mark>renameSync()</mark> / <mark>copyFile()</mark> / <mark>copyFileSync()</mark> / <mark>unlink()</mark> / <mark>unlinkSync()</mark> </h4>
+    <h4 class="header indent-lv1"> <mark>watchFile()</mark> / <mark>unwatchFile()</mark> / <mark>watch()</mark> </h4>
+    <h4 class="header indent-lv1"> <mark>stat()</mark> / <mark>statSync()</mark> / <mark>fstat()</mark> / <mark>fstatSync()</mark> / <mark>lstat()</mark> / <mark>lstatSync()</mark> / <mark>utimes()</mark> / <mark>utimesSync()</mark> / <mark>futimes()</mark> / <mark>futimesSync()</mark> / <mark>lutimes()</mark> / <mark>lutimesSync()</mark> </h4>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>constants</mark> / <mark>existsSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
 // constants --------------------------------------------------------------------------
@@ -1459,7 +1459,7 @@ console.log( "----- end of module -----");
     console.log( fs.existsSync('testFile') );                                          // -> true          // path exists  
     console.log( fs.existsSync('noFile') );                                            // -> false         // path doesn't exists     
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\01 constants existsSync() TEST> node main           
         [Object: null prototype] {                                                     // -! fs.constants 
         UV_FS_SYMLINK_DIR: 1,
@@ -1499,11 +1499,11 @@ console.log( "----- end of module -----");
         false                                                                          // -! fs.existsSync('noFile')
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\01 constants existsSync() TEST>     
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>realpath()</mark> / <mark>realpath.native()</mark> / <mark>realpathSync()</mark> / <mark>realpathSync.native()</mark> TEST </u></h4>
-    <p> - you can see that the <mark>realpath.native()</mark> is faster than the <mark>realpath()</mark>, the 'native' methods are faster [TESTED: 2019-10-04] </p>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>realpath()</mark> / <mark>realpath.native()</mark> / <mark>realpathSync()</mark> / <mark>realpathSync.native()</mark> TEST </u></h4>
+      <p> - you can see that the <mark>realpath.native()</mark> is faster than the <mark>realpath()</mark>, the 'native' methods are faster [TESTED: 2019-10-04] </p>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
 // realpath() / realpath.native() --------------------------------------------------
@@ -1526,7 +1526,7 @@ console.log( "----- end of module -----");
     
 console.log( "-----  end of module -----" );
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\02 realpath() realpathSync() realpath.native() realpathSync.native() TEST> node main  
         realpathSync() resolved path = D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\02 realpath() realpathSync() realpath.native() realpathSync.native() TEST\testFile
         realpathSync.native() resolved path = D:\Safe\CODE +\My Site\03 Improuve\Learn WebDesign\04 Node.js\File System\05 File Management\02 realpath() realpathSync() realpath.native() realpathSync.native() TEST\testFile
@@ -1535,10 +1535,10 @@ console.log( "-----  end of module -----" );
         realpath() resolved path = D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\02 realpath() realpathSync() realpath.native() realpathSync.native() TEST
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\02 realpath() realpathSync() realpath.native() realpathSync.native() TEST>
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>access()</mark> / <mark>accessSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>access()</mark> / <mark>accessSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
     fs.chmodSync('testFile', 0o400)                                                    // file is read-only 
@@ -1549,7 +1549,7 @@ console.log( "-----  end of module -----" );
         console.log(err);                                                              // no writing permission = error is thrown 
     });
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\03 access() accessSync() TEST> node main       
         [Error: EPERM: operation not permitted, access 'D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\03 access() accessSync() TEST\testFile'] {
         errno: -4048,
@@ -1559,10 +1559,10 @@ console.log( "-----  end of module -----" );
         }
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\03 access() accessSync() TEST>     
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>chmod()</mark> / <mark>chmodSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>chmod()</mark> / <mark>chmodSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
 // program checks the file for writting condition, if the file is read-only changes the permission to read-write 
@@ -1582,7 +1582,7 @@ console.log( "-----  end of module -----" );
     });
     
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\04 chmod() chmodSync() TEST> node main    
 // access permission changed to read-write -------------------------------------------
         [Error: EPERM: operation not permitted, access 'D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\04 chmod() chmodSync() TEST\testFile'] {
@@ -1601,10 +1601,10 @@ console.log( "-----  end of module -----" );
         }
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\04 chmod() chmodSync() TEST>     
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>chown()</mark> / <mark>chownSync()</mark> TEST </u></h4>
-    <pre>
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>chown()</mark> / <mark>chownSync()</mark> TEST </u></h4>
+      <pre>
     var fs = require('fs');
     
     fs.chown('testFile.txt', 1500, 1500, function(err){
@@ -1613,22 +1613,22 @@ console.log( "-----  end of module -----" );
     
     fs.chownSync('testFile2.txt', 1500, 1500);    
     </pre>
-    <pre class="cmd">
+      <pre class="cmd">
 pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/File System/TEST$ sudo node main // -! sudo must be used 
 pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/File System/TEST$    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>chmod()</mark> TEST (on Linux) </u></h4>
-    <pre>
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>chmod()</mark> TEST (on Linux) </u></h4>
+      <pre>
     var fs = require('fs');
     
     fs.chmodSync('testFile.txt', 0744);                                                // synchronously changes the file access to 744 = rwxr--r--
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>rename()</mark> / <mark>renameSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>rename()</mark> / <mark>renameSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
 // rename files -----------------------------------------------------------------------
@@ -1652,14 +1652,14 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         if(err) console.log(err);
     });
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\05 rename() renameSync() TEST> node main          
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\05 rename() renameSync() TEST>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>copyFile()</mark> / <mark>copyFileSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>copyFile()</mark> / <mark>copyFileSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     fs.copyFileSync('testFile1', 'someDir/file_A', 0);                                 // overrides the target file if exist (new file renamed)
@@ -1674,7 +1674,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         if(err) console.log(err);                                                      // error is thrown (no copy-on-write mechanism implemented)
     });
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\06 copyFile() copyFileSync() TEST> node main        
 // ---------------- fs.copyFile('testFile2', 'someDir/file_B', 1, function(err){ if(err) console.log(err); });-------------------------------
         [Error: EEXIST: file already exists, copyfile 'D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\06 copyFile() copyFileSync() TEST\testFile2' -> 'D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\06 copyFile() copyFileSync() TEST\someDir\file_B'] {
@@ -1694,10 +1694,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         }
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\06 copyFile() copyFileSync() TEST>     
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>unlink()</mark> / <mark>unlinkSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>unlink()</mark> / <mark>unlinkSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require("fs");
     
     fs.unlinkSync('testFile');                                                         // synchronously deletes the file  
@@ -1706,14 +1706,14 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         if(err) console.log(err);
     });
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\07 unlink() unlinkSync() TEST> node main    
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\05 File Management\07 unlink() unlinkSync() TEST>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>watch()</mark> method and <mark>FSWatcher</mark> object TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>watch()</mark> method and <mark>FSWatcher</mark> object TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
     var watchObj = fs.watch('testDir', {recursive:true}, function(eventType, fileName){ // returns the fsWatcher object (also watches for subdirectory changes)    
@@ -1739,7 +1739,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
     }, 10000);
     
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\03 watch() FSWatcher TEST> node main    
         callback fired! (event type = change, file name = newDir\another File)         // subdirectory file modified 
         change event fired! (event type = change, file name = newDir\another File)
@@ -1748,10 +1748,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         close event fired!
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\03 watch() FSWatcher TEST>     
     </pre>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>watchFile()</mark> / <mark>unwathcFile()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>watchFile()</mark> / <mark>unwathcFile()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
     fs.watchFile('testFile', function(current, previous){                              // watching a file 
@@ -1766,7 +1766,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         fs.unwatchFile('testFolder');                                                  // close the watch after the first modification
     });
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\04 watchFile() unwatchFile() TEST> node main       
 // testFile --------------------------------------------------------------------------
         3                                                                             // -! current.size
@@ -1776,10 +1776,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         0                                                                             // -! previous size
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\04 watchFile() unwatchFile() TEST>    
     </pre>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>unwathcFile()</mark> multiple listeners TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>unwathcFile()</mark> multiple listeners TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
 // listeners ------------------------------------------------------------------------
@@ -1798,15 +1798,15 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
 // unwatch file ----------------------------------------------------------------------
     fs.unwatchFile('testFile', listener1);                                            // only the 'listener1' watcher listener is removed from watching (the 'listener2' is still watching)    
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\05 unwatchFile() multiple listeners TEST> node main     
         listener2 fired! (current size = 4, previous size = 9)                        // file modified twice (listener2 watches only)  
         listener2 fired! (current size = 6, previous size = 4)    
     </pre>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>StatWatcher</mark> / <mark>unref()</mark> / <mark>ref()</mark> TEST </u></h4>
-    <pre>
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>StatWatcher</mark> / <mark>unref()</mark> / <mark>ref()</mark> TEST </u></h4>
+      <pre>
     var fs = require('fs');
     
     var statWatcher_1 = fs.watchFile('./testFile.txt', function(curent, new_){         // watches the file (returns the StatWatcher of this watch) 
@@ -1820,10 +1820,10 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
         statWatcher_1.unref();                                                         // again this statWatcher not prevent the process from closing 
     }, 10000);    
     </pre>
-    <!--------------------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>stat()</mark> / <mark>statSync()</mark> / <mark>fstat()</mark> / <mark>fstatSync()</mark> / <mark>lstat()</mark> / <mark>lstatSync()</mark> TEST </u></h4>
-    <pre style="margin-bottom:1px;">
+      <!--------------------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>stat()</mark> / <mark>statSync()</mark> / <mark>fstat()</mark> / <mark>fstatSync()</mark> / <mark>lstat()</mark> / <mark>lstatSync()</mark> TEST </u></h4>
+      <pre style="margin-bottom:1px;">
     const fs = require('fs');
     
 // stat() / statSync() ------------------------------------------------------------------
@@ -1855,7 +1855,7 @@ pall@Ryzen:~/Documents/CodePlus/My Site/03 Improuve/Learn WebDesign/04 Node.js/F
     
 console.log( "----- end of module -----" );    
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\06 stat() statSync() fstat() fstatSync() lstat() lstatSync() TEST> node main                                                       
         statSync() file size = 823
         fstatSync() file size = 823
@@ -1866,12 +1866,12 @@ console.log( "----- end of module -----" );
         lstat() symbolic-link size = 10
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\06 stat() statSync() fstat() fstatSync() lstat() lstatSync() TEST>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>utimes()</mark> / <mark>utimesSync()</mark> / <mark>futimes()</mark> / <mark>futimesSync()</mark> TEST </u></h4>
-    <p style="color:yellow;"> - the <mark>utimes()</mark> method works just fine as it is specified [TESTED : 2019-10-02], but in this situation (below) along with the <mark>futimesSync()</mark> method it just does not modifies the expected data for some reasons</p>
-    <p style="color:yellow;"> - maybe the <mark>f</mark> versions of these methods override the normal <mark>utimes()</mark> and <mark>utimesSync()</mark> methods? (bug?) </p>
-    <pre style="margin-bottom:1px;">
+      <!----------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>utimes()</mark> / <mark>utimesSync()</mark> / <mark>futimes()</mark> / <mark>futimesSync()</mark> TEST </u></h4>
+      <p style="color:yellow;"> - the <mark>utimes()</mark> method works just fine as it is specified [TESTED : 2019-10-02], but in this situation (below) along with the <mark>futimesSync()</mark> method it just does not modifies the expected data for some reasons</p>
+      <p style="color:yellow;"> - maybe the <mark>f</mark> versions of these methods override the normal <mark>utimes()</mark> and <mark>utimesSync()</mark> methods? (bug?) </p>
+      <pre style="margin-bottom:1px;">
         const fs = require('fs');
     
     var fd = fs.openSync('testFile', 'rs+');
@@ -1908,7 +1908,7 @@ console.log( "----- end of module -----" );
     
 console.log( '----- end of module -----' );
     </pre>
-    <pre class="cmd" style="margin-top:1px;">
+      <pre class="cmd" style="margin-top:1px;">
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\07 utimes() utimesSync() futimes() futimesSync() TEST> node main  
         original acces time = 1570035525796
         original modify time = 1570035525796
@@ -1923,11 +1923,11 @@ console.log( '----- end of module -----' );
         utimes modified time = 1570035566779
     PS D:\safe\code +\My Site\03 improuve\learn webdesign\04 node.js\file system\03 watching files\07 utimes() utimesSync() futimes() futimesSync() TEST>    
     </pre>
-    <!----------------------------------------------------------------------------------------------------------------->
-    <hr>
-    <h4 style="color:darkblue;"><u> <mark>lutimes()</mark> / <mark>lutimesSync()</mark> TEST </u></h4>
-    <p style="color:yellow"> - in this test [2020-07-11] these methods does NOT modify the atime and mtime of the symbolic-links as supposed to they do, however the original file's time is not modified either </p>
-    <pre>
+      <!----------------------------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 style="color:darkblue;"><u> <mark>lutimes()</mark> / <mark>lutimesSync()</mark> TEST </u></h4>
+      <p style="color:yellow"> - in this test [2020-07-11] these methods does NOT modify the atime and mtime of the symbolic-links as supposed to they do, however the original file's time is not modified either </p>
+      <pre>
     var fs = require('fs');
 
     fs.lutimes('./sym', 1000, 1000, function(err){
@@ -1936,10 +1936,9 @@ console.log( '----- end of module -----' );
 
     fs.lutimesSync('./sym2', 1000, 1000);
     </pre>
-  </details>
+    </details>
 
-
-  <br><br>
-</body>
+    <br><br>
+  </body>
 
 </html>
