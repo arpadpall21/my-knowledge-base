@@ -200,6 +200,84 @@
         </td>
       </tr>
       <tr>
+        <td> <em>process</em>.getuid() </td>
+        <td>
+          - returns the process user id (user id that started the process)
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.geteuid() </td>
+        <td>
+          - returns the process <span class="openable">effective user id<div>
+            <p> - most of the time user id that started the process, but also can be different in case the process has elevated priviledges </p>
+            <p> - process user id used to verify process access </p>
+          </div></span>
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.getgid() </td>
+        <td>
+          - returns the process group id (user group id that started the process)
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.getegid() </td>
+        <td>
+          - returns the process <span class="openable">effective group id<div>
+            <p> - most of the time user group id that started the process, but also can be different in case the process has elevated priviledges </p>
+            <p> - process group id used to verify process access </p>
+          </div></span>
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.setuid(<reqval>id:nr|str</reqval>) </td>
+        <td>
+          - sets the process user id (user id that started the process)
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.geteuid(<reqval>id:nr|str</reqval>) </td>
+        <td>
+          - sets the process <span class="openable">effective user id<div>
+            <p> - most of the time user id that started the process, but also can be different in case the process has elevated priviledges </p>
+            <p> - process user id used to verify process access </p>
+          </div></span>
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.getgid(<reqval>id:nr|str</reqval>) </td>
+        <td>
+          - sets the process group id (user group id that started the process)
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.getegid(<reqval>id:nr|str</reqval>) </td>
+        <td>
+          - sets the process <span class="openable">effective group id<div>
+            <p> - most of the time user group id that started the process, but also can be different in case the process has elevated priviledges </p>
+            <p> - process group id used to verify process access </p>
+          </div></span>
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.getgroups() </td>
+        <td>
+          - returns the groups this process is part of (groups of the user that started the process)
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.setgroups(<reqval>nr[]</reqval>) </td>
+        <td>
+          - sets the groups this process is part of (overrides existing)
+        </td>
+      </tr>
+      <tr>
+        <td> <em>process</em>.initgroups(<reqval>user:nr|str</reqval> <reqval>extraGroup:nr|str</reqval>) </td>
+        <td>
+          - sets the <reqval>user</reqval> groups plus the <reqval>extraGroup</reqval> as groups this process is part of (overrides existing)
+        </td>
+      </tr>
+      <tr>
         <td>|</td>
         <td></td>
       </tr>
@@ -695,22 +773,32 @@
     <details class="example" open>
       <summary> DEMO </summary>
       <pre style="margin-bottom:1px;">
-      
-      
-      
+    import process from 'node:process';
+    
+    process.pid;                        // -> 70849
+    process.ppid;                       // -> 89111
+    
+    
+    process.getuid();                   // -> 1001
+    process.geteuid();                  // -> 1001
+    process.getgid();                   // -> 21
+    process.getegid();                  // -> 21
+    
+    process.setuid(1002);               // sets the user id for the process
+    process.seteuid(1003);              // sets the effective user id for the process
+    process.setgid(22);                 // sets the group id for the process
+    process.setegid(23);                // sets the effective gruop id for the process
+    
+    process.getgroups();                // -> [702,  33, 100, 204]      // sets the process groups
+    process.setgroups([987, 999]);
+    process.getgroups();                // -> [987, 999]
+    
+    
+    process.getgroups();                // -> [987, 999]
+    process.initgroups('pall', 1111);   // sets all the <mark>pall</mark> user's group as process group plus group <mark>1111</mark>
+    process.getgroups();                // -> [1111, 555, 234, 101]
       </pre>
     </details>
-
-
-
-
-
-
-
-
-
-
-
     <!------------------------------------------------------------------------------------------------------------------>
     <hr>
     <h3 id="getBuiltinModule" class="header"> The <mark>getBuiltinModule()</mark> method </h3>
