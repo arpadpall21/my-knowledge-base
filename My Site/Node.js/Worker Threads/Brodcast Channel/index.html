@@ -1,0 +1,114 @@
+<!DOCYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> BrodcastChannel </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> BrodcastChannel
+      <span class="browserSupport" title="updated : 2025-03-24">
+        <span><i class="fab fa-node-js"></i> 15.4 </span>
+      </span>
+    </h1>
+    <p> Updated: ( 2020-07-01 / 2025-03-23 )</p>
+    <nav class="sitenav">
+      <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html">Node.js > </a>
+      <a href="../index.html">Worker Threads > </a> BrodcastChannel
+    </nav>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td> new <lit>worker_threads</lit>.BroadcastChannel(<reqval>id:str</reqval>) </td>
+        <td>
+          - creates and returns a new <strong>broadcastChannel</strong> named with <reqval>id</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>broadcastChannel</strong>.postMessage(<reqval>val:any</reqval>) </td>
+        <td>
+          - broadcasts a message through the broadcast channel
+        </td>
+      </tr>
+
+
+
+
+
+
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+
+
+
+
+    </table>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - a <mark>BroadcastChannel</mark> instance provides asynchronous one-to-many communication with all other channels bound same channel name </p>
+    <pre>
+// main.mjs (file) ----------------------------------------------
+    import { BroadcastChannel, Worker } from 'node:worker_threads';
+    
+    const bc = new BroadcastChannel('bc1');
+    
+    const worker1 = new Worker('./worker1.mjs');
+    const worker2 = new Worker('./worker2.mjs');
+    
+    bc.postMessage('Hello Workers');                    // send message
+    bc.close();                                         // close channel
+    
+    
+// -----------------------------------------------------------------
+// worker1.mjs (file) ----------------------------------------------
+    import { BroadcastChannel } from 'node:worker_threads';
+    
+    const bc = new BroadcastChannel('bc1');                 // same channel name
+    
+    bc.onmessage = (ev) => {
+      ev.data;                                              // -> 'Hello Workers'
+    };
+    
+    bc.onmessageerror = (err) => {
+      err;                                                  // -> err
+    }
+    
+    
+// -----------------------------------------------------------------
+// worker2.mjs (file) ----------------------------------------------
+    import { BroadcastChannel } from 'node:worker_threads';
+    
+    const bc = new BroadcastChannel('bc1');                 // same channel name
+    
+    bc.onmessage = (ev) => {
+      ev.data;                                              // -> 'Hello Workers'
+    };
+      </pre>
+
+    <br><br>
+  </body>
+
+</html>

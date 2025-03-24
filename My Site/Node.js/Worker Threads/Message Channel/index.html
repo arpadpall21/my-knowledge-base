@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> MessageChannel & MessagePort </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> MessageChannel & MessagePort </h1>
+    <p> Updated: ( 2020-07-01 / 2025-03-23 )</p>
+    <nav class="sitenav">
+      <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html">Node.js > </a>
+      <a href="../index.html">Worker Threads > </a> MessageChannel & MessagePort
+    </nav>
+    <table class="table">
+      <caption>
+        MessageChannel
+      </caption>
+      <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td> new <strong>workerMd</strong>.MessageChannel() </td>
+        <td>
+          - creates and returns a new <strong>msgChannel</strong> <br>
+          - the returned <strong>msgChannel</strong> has 2 <reqval>msgPort</reqval> endpoints available as <mark>port1</mark> and <mark>port2</mark> properties
+        </td>
+      </tr>
+    </table>
+    <br>
+    <table class="table">
+      <caption>
+        MessagePort
+      </caption>
+      <tr>
+        <th style="width:30%;"> Method / Property </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <strong>msgPort</strong>.postMessage(<reqval>val:any</reqval>, <i class="openable">[obj, ...]<div>
+              <p> - this is called 'Transfer List' object passed here are <u>removed from this thread</u> </p>
+              <p> - only <mark>ArrayBuffer</mark> <mark>MessagePort</mark> and <mark>FileHandle</mark> objects can be passed <u><mark>SharedArrayBuffer</mark> is not allowed because it is not transferable</u> </p>
+              <p style="color:orangered;"> - if the <mark>ArrayBuffer</mark> was created by a <mark>Buffer</mark> method (<mark>Buffer.from()</mark> <mark>Buffer.alloc()</mark>) it <u>CANNOT be transfered</u> </p>
+              <p style="font-weight:bold; font-size:1.1em; text-decoration:underline;"> Example : </p>
+              <p> - <mark>worker_1.postMessage(arrBuf_1, [arrBuf_1])</mark> = the <mark>arrBuff_1</mark> ArrayBuffer is moved to the worker (not available in this thread anymore) </p>
+              <p> - <mark>worker_1.postMessage(null, [arrBuf_1])</mark> = the <mark>arrBuff_1</mark> ArrayBuffer is removed from this thread (not available in the worker either) [TESTED: 2020-07-04] </p>
+            </div></i>)
+        </td>
+        <td>
+          - sends a message through the MessageChannel
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort</strong>.close() </td>
+        <td>
+          - disables further message sending on either side of the channel, when called the <mark>close</mark> event is emited on either side of the channel
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort</strong>.unref() </td>
+        <td>
+          - removes this <strong>msgPort</strong> from the event loop, so this <strong>msgPort</strong> does not prevent the process from closing
+        </td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort</strong>.ref() </td>
+        <td>
+          - (re)attaches this <strong>msgPort</strong> in the event loop, so this <strong>msgPort</strong> does prevent the process from closing (opposite of <mark>unref()</mark>)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort</strong>.start() </td>
+        <td>
+          - [Internally called] when the <mark>message</mark> event is attached or when the <mark>.onmessage</mark> property is attached to the <strong>msgPort</strong> <br>
+          - method exist for parity with the Web <mark>MessagePort</mark> API
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"> events </td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort.listener</strong>('message', <strong>fn(msg)</strong>) </td>
+        <td>
+          - emitted when a message is received on this MessagePort
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort.listener</strong>('close', <strong>fn</strong>) </td>
+        <td>
+          - emitted once when either side of the channel is closed
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <strong>msgPort.listener</strong>('messageerror', <strong>fn</strong>) </td>
+        <td>
+          - emitted when deserializing the message is failed
+          <span class="browserSupport" title="updated : 2020-07-07">
+            <span><i class="fab fa-node-js"></i> 14.5.0 </span>
+          </span>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <details class="example" id="notes">
+      <summary> Notes & Tips :</summary>
+      <!-- <p> - paragraph removes the 'empty' message from the detail TAG -->
+    </details>
+    <h2 style="color:green;"><u> Useful Links : </u></h2>
+
+    <h2 style="color:green;"><u> Remember This : </u></h2>
+
+    <h2 style="color:green;"><u> Description and Demonstration : </u></h2>
+    <p> - <mark>MessageChannel</mark> instance represent an asynchronous, two-way communications channel (used for thread communication) </p>
+    <p> - <mark>MessagePort</mark> instance represent one end of the <mark>MessageChannel</mark> </p>
+    <hr>
+    <pre>
+    var workerMd = require('worker_threads');
+    
+// MessageChannel / MessagePort -------------------------------------------------------
+    var msgChannel = new workerMd.MessageChannel();                                    // creates a new MessageChannel  
+    
+    msgChannel.port1;                                                                  // MessagePort-1 (one side of the channel)
+    msgChannel.port2;                                                                  // MessagePort-2 (other side of the channel)
+    
+    workerMd.parentPort;                                                               // default MessagePort to the parent thread 
+    
+// postMessage() / close() ------------------------------------------------------------
+    workerMd.parentPort.postMessage('some message');                                   // sends a message to the other side of the channel (which is in the parent thread)   
+    
+    workerMd.parentPort.close();                                                       // closes the MessagePort on both sides (closes the channel)   
+    
+// unref() / ref() --------------------------------------------------------------------
+    workerMd.parentPort.unref();                                                       // removes this port from the event loop so the process can be closed (even if this port has som work pending)  
+    workerMd.parentPort.ref();                                                         // (re)attaches this port int the event loop (port will prevent the process from closing if it has some work pending)  
+    
+// message / close / messageerror -----------------------------------------------------
+    workerMd.parentPort.on('message', function(msg){                                   // emitted when a message is received on the port 
+        msg;                                                                             // -> received message 
+    });
+    
+    workerMd.parentPort.on('close', ()=>{});                                           // emitted when either sides of this channel are closed        
+    
+    workerMd.parentPort.on('messageerror', function(err){                              // emitted when deserializing the message is failed 
+        err;                                                                             // -> error 
+    });
+    </pre>
+
+    <br><br>
+  </body>
+
+</html>
