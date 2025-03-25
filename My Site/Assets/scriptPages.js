@@ -384,6 +384,17 @@ $(document).ready(function () {
 
     });
   }
+
+  // -------------------------------------------------------------------------------------
+  // hide element .headerSection if not followed by some content -------------------------
+  const headerSectionElements = document.getElementsByClassName('headerSection');
+
+  for (const headerSectionElement of headerSectionElements) {
+    const nextSiblingElement = headerSectionElement.nextElementSibling;
+    if (nextSiblingElement.classList.contains('headerSection')) {
+      headerSectionElement.style.display = 'none';
+    }
+  }
 });
 
 // for personal fasting code (code does not handle overlapping days (ex: cannot specify hours from 23:00 to 03:00))
