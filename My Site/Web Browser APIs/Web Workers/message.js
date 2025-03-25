@@ -1,1 +1,0 @@
-postMessage( "message sent from My first Web Worker".fontcolor("green") );
