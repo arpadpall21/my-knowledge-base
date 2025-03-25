@@ -307,15 +307,6 @@ $(document).ready(function () {
     }
   });
 
-  // format notes section
-  // -------------------------------------------------------------------------------------
-  if (!document.getElementById("notes")) {
-  } else {
-    if (!document.getElementById("notes").querySelector("p")) {
-      $("#notes summary").append(" (empty)");
-    }
-  }
-
   // -------------------------------------------------------------------------------------
   // table styling (auto orders in order to be backward compatible) ----------------------
   for (const table of document.querySelectorAll('.table')) {

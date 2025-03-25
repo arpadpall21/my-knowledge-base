@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <title> GraphQL </title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="../../Assets/stylesPages.css">
-  <script src="../../Assets/scriptPages.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title> GraphQL </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
 
-<body>
-  <h1> GraphQL </h1>
-  <p> Updated ( 2023-06-14 )</p>
-  <nav class="sitenav">
-    <a href="../../index.html" title="home">MySite > </a>
-    <a href="../index.html">Network APIs > </a> GraphQL
-  </nav>
-  <details class="example" id="notes" open>
-    <summary> Notes & Tips :</summary>
+  <body>
+    <h1> GraphQL </h1>
+    <p> Updated ( 2023-06-14 )</p>
+    <nav class="sitenav">
+      <a href="../../index.html" title="home">MySite > </a>
+      <a href="../index.html">Network APIs > </a> GraphQL
+    </nav>
+    <h2 class="headerSection"> Remember This : </h2>
     <h4 class="header"> GraphQL implementation </h4>
     <p> Server side: </p>
     <p style="text-indent: 30px;"> - I was using <mark><a href="https://pypi.org/project/ariadne/" target="_blank">ariadne</a></mark> python library to implement a GraphQL server (ariadne implements a GarpQL SDL schema first approach, this is the reason why I chose it) </p>
@@ -31,23 +30,22 @@
     <p> - GraphQL docs recommends not to version GraphQL endpoints, instead we should add a new field to our GraphQL schema and keep the old one for backward compatible </p>
     <h4 class="header"> null instead of error </h4>
     <p> - if some reason data is not available on a field (resorce server is down, etc...) it's recommended to return <mark>null</mark> instead of an error </p>
-  </details>
-  <h2 class="headerSection"> Useful Links : </h2>
+    <h2 class="headerSection"> Useful Links : </h2>
 
-  <h2 class="headerSection"> Remember This : </h2>
+    <h2 class="headerSection"> Remember This : </h2>
 
-  <h2 class="headerSection"> Description and Demonstration : </h2>
-  <p> - GraphQL is an network API query languages built on top of HTTP and websocket connection (on HTTP level always sends a POST request and receives a 200 OK response) </p>
-  <p> - it uses its own SDL (Schema Definition Language) to request the server, the response is a JSON object having a top level <mark class='mark'>data</mark> or <mark class='mark'>errors</mark> fields containing the response data or eventual errors </p>
-  <p> - unlike REST servers GraphQL servers expose their resources on a single endpoint (usually <mark class='mark'>/graphql</mark>), the response JSON has the same shape as the request shema </p>
-  <p> - the infamous GrapQL graph is a JSON-like object (schema), the server exposes its resources on the graph fields </p>
-  <p> - GraphQL performs <u>type validation on requests</u> (responds with an error if any wrong type is passed in the query SDL) </p>
-  <p> - the client requests resources by specifying the fileds on this graph <u>(we cannot request for a whole object on the schema, instead we have to describe what fields we want on that object)</u> </p>
-  <p> - There are 3 query types that the server accepts: </p>
-  <p style='text-indent:30px;'> - <mark>Query</mark> -> getting data from the server (like GET) </p>
-  <p style='text-indent:30px;'> - <mark>Mutation</mark> -> modifying data on the server (like POST / PUT / DELETE) <u>mutation queries are executed sequentially on the server in order to avoid race conditions</u></p>
-  <p style='text-indent:30px;'> - <mark>Subscription</mark> -> client subscribes to an event and gets notified by the server (pub-sub) <u>works through web socket connection</u></p>
-  <pre class='syntax'>
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+    <p> - GraphQL is an network API query languages built on top of HTTP and websocket connection (on HTTP level always sends a POST request and receives a 200 OK response) </p>
+    <p> - it uses its own SDL (Schema Definition Language) to request the server, the response is a JSON object having a top level <mark class='mark'>data</mark> or <mark class='mark'>errors</mark> fields containing the response data or eventual errors </p>
+    <p> - unlike REST servers GraphQL servers expose their resources on a single endpoint (usually <mark class='mark'>/graphql</mark>), the response JSON has the same shape as the request shema </p>
+    <p> - the infamous GrapQL graph is a JSON-like object (schema), the server exposes its resources on the graph fields </p>
+    <p> - GraphQL performs <u>type validation on requests</u> (responds with an error if any wrong type is passed in the query SDL) </p>
+    <p> - the client requests resources by specifying the fileds on this graph <u>(we cannot request for a whole object on the schema, instead we have to describe what fields we want on that object)</u> </p>
+    <p> - There are 3 query types that the server accepts: </p>
+    <p style='text-indent:30px;'> - <mark>Query</mark> -> getting data from the server (like GET) </p>
+    <p style='text-indent:30px;'> - <mark>Mutation</mark> -> modifying data on the server (like POST / PUT / DELETE) <u>mutation queries are executed sequentially on the server in order to avoid race conditions</u></p>
+    <p style='text-indent:30px;'> - <mark>Subscription</mark> -> client subscribes to an event and gets notified by the server (pub-sub) <u>works through web socket connection</u></p>
+    <pre class='syntax'>
 <span style='color:darkgray;'>// GraphQL server SDL </span>
     
     type <strong>queryType</strong> {                           // describes the <strong>queryType</strong> (<mark>Query</mark> -> get data) (<mark>Mutation</mark> -> modify data on the server) (<mark>Subscription</mark> -> client subscribes to a server event (pub-sub))    
@@ -60,7 +58,7 @@
         <span style='color:darkgray;'>...</span>
     }
 </pre>
-  <pre class='syntax'>
+    <pre class='syntax'>
 <span style='color:darkgray;'>// GraphQL query SDL </span>
     
     <i>queryType</i> <i>Name</i> {                           // the query type and name are optional (falls back to default -> <mark>query</mark>)
@@ -130,14 +128,14 @@
           }
         }
   </pre>
-  <p> - to implement a GraphQL server or client we need a library that supports GraphQL (I'm using python ariadne with uvicorn (FastApi ASGI server) as server and GraphiQL client here) </p>
-  <p> - almost all languages have GraphQL support <a href='https://graphql.org/code/' target="_blank">[link]</a></p>
-  <details class="example">
-    <summary> DEMO (can be pseudocode) </summary>
-    <br>
+    <p> - to implement a GraphQL server or client we need a library that supports GraphQL (I'm using python ariadne with uvicorn (FastApi ASGI server) as server and GraphiQL client here) </p>
+    <p> - almost all languages have GraphQL support <a href='https://graphql.org/code/' target="_blank">[link]</a></p>
     <details class="example">
-      <summary> Basics </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> DEMO (can be pseudocode) </summary>
+      <br>
+      <details class="example">
+        <summary> Basics </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       name
@@ -146,7 +144,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -157,13 +155,13 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       address         // -! cannot request entire objects (only object fields) (this would be an error response)
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import QueryType, make_executable_schema, gql
@@ -212,11 +210,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Query / Mutation / Subscription </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Query / Mutation / Subscription </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
   # request 1 -------------------
     query getAllProducts{
@@ -259,7 +257,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
   # response 1 ------------------
     {
@@ -308,14 +306,14 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lighgray;' class='cmd'>
+        <pre style='margin:0; background-color:lighgray;' class='cmd'>
 # web socket client responses -------------
     python client.py
     websocket client connected!
     recently added products: [{'name': 'Melon', 'price': 2.99, 'origin': {'country': 'Kongo', 'continent': 'Africa'}}]
     recently added products: [{'name': 'Plum', 'price': 1.39, 'origin': {'country': 'Hungary', 'continent': 'Europe'}}]
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # server implementation -------------------
     
     import asyncio
@@ -449,11 +447,11 @@
         print('websocket client connected!')
         sleep(3600)
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Arguments </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Arguments </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       employee(id: 2, convertNameToUppercase: true) {
@@ -466,7 +464,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -487,7 +485,7 @@
       }
     }    
   </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -549,11 +547,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Aliases </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Aliases </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       alias1: products {
@@ -567,7 +565,7 @@
     }
     
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -602,7 +600,7 @@
       }
     }
   </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -648,11 +646,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Variables </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Variables </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query getProducts($price: Float) {        # variables must be passed at query level (if value is required in the SDL the variable type here must be required as well -> <mark>!</mark> (not the case here))
       products(priceHigherThan: $price) {
@@ -666,7 +664,7 @@
       "price": 3.7
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -683,7 +681,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query getProduct($price: Float) {
       allProducts: products {
@@ -709,7 +707,7 @@
       "price": 3.7
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -768,7 +766,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -850,11 +848,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Directives </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Directives </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($includePrice: Boolean!) {
       products {
@@ -868,7 +866,7 @@
       "includePrice": true
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -893,7 +891,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($includeOrigin: Boolean!) {
       products {
@@ -911,7 +909,7 @@
       "includeOrigin": false
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -936,7 +934,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($includeOrigin: Boolean!) {
       products {
@@ -954,7 +952,7 @@
       "includeOrigin": true
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -995,7 +993,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Prices($excludeOrigin: Boolean!) {
       products {
@@ -1013,7 +1011,7 @@
       "excludeOrigin": true
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1038,7 +1036,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -1116,11 +1114,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Fragments </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Fragments </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     {
       allProducts: products {
@@ -1140,7 +1138,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1199,7 +1197,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType
@@ -1279,11 +1277,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Inline Fragments </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Inline Fragments </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "digital") {
@@ -1300,7 +1298,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1312,7 +1310,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "mechanical") {
@@ -1329,7 +1327,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1341,7 +1339,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "hybrid") {      # no type found for that argument
@@ -1358,7 +1356,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1366,7 +1364,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType, ObjectType, UnionType
@@ -1441,13 +1439,13 @@
         server = Server(config)
         server.run()
     </pre>
+      </details>
     </details>
-  </details>
-  <hr>
-  <!---------------------------------------------------------------->
-  <h2 class="header"> Types </h2>
-  <p> - GraplQL is language agnostinc so it uses its own types not the types of the underlying programming language </p>
-  <pre class='syntax'>
+    <hr>
+    <!---------------------------------------------------------------->
+    <h2 class="header"> Types </h2>
+    <p> - GraplQL is language agnostinc so it uses its own types not the types of the underlying programming language </p>
+    <pre class='syntax'>
 <span style='color:darkgray;'>// GraphQL types </span>
     
   <span style='color:darkgray;'>#scalar types ----------------------------</span>
@@ -1502,12 +1500,12 @@
       <i>...</i>
     }
   </pre>
-  <details class="example">
-    <summary> DEMO (can be pseudocode) </summary>
-    <br>
     <details class="example">
-      <summary> Types </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      <summary> DEMO (can be pseudocode) </summary>
+      <br>
+      <details class="example">
+        <summary> Types </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Person {
       person(id: 1) {
@@ -1523,7 +1521,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1549,7 +1547,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Person {
       person(id: 10) {                  # nullable -> may return null
@@ -1562,7 +1560,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1570,7 +1568,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     from ariadne import gql, make_executable_schema, QueryType
     from ariadne.asgi import GraphQL
@@ -1630,11 +1628,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Input Type </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Input Type </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
   # request 1
     mutation AddProduct ($product: InputProduct!) {
@@ -1653,7 +1651,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
   # response 1
     {
@@ -1678,7 +1676,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType, MutationType
@@ -1746,11 +1744,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Union Type </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Union Type </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "digital") {
@@ -1767,7 +1765,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1779,7 +1777,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "mechanical") {
@@ -1796,7 +1794,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1808,7 +1806,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color:lightblue;'>
+        <pre style='margin:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       camera(cameraType: "hybrid") {      # no type found for that argument
@@ -1825,7 +1823,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1833,7 +1831,7 @@
       }
     }
     </pre>
-      <pre style='margin:0;'>
+        <pre style='margin:0;'>
 # implementation --------------------------
     
     from ariadne import gql, make_executable_schema, QueryType, ObjectType, UnionType
@@ -1908,11 +1906,11 @@
         server = Server(config)
         server.run()
     </pre>
-    </details>
-    <br>
-    <details class="example">
-      <summary> Interface </summary>
-      <pre style='margin-bottom:0; background-color:lightblue;'>
+      </details>
+      <br>
+      <details class="example">
+        <summary> Interface </summary>
+        <pre style='margin-bottom:0; background-color:lightblue;'>
 # request ---------------------------------
     query Camera {
       mechanicalCamera {
@@ -1927,7 +1925,7 @@
       }
     }
     </pre>
-      <pre style='margin:0; background-color: lightgreen;'>
+        <pre style='margin:0; background-color: lightgreen;'>
 # response --------------------------------
     {
       "data": {
@@ -1940,6 +1938,274 @@
           "filmLength": 24,
           "mark": "Nikon",
           "nrOfOptics": 1
+        }
+      }
+    }
+    </pre>
+        <pre style='margin:0;'>
+# implementation --------------------------
+    
+    from ariadne import gql, make_executable_schema, QueryType
+    from ariadne.asgi import GraphQL
+    from uvicorn import Config, Server
+    
+    
+    type_defs = gql("""
+        type Query {
+            mechanicalCamera: MechanicalCamera
+            digitalCamera: DigitalCamera
+        }
+    
+        interface Camera {
+            mark: String!
+            nrOfOptics: Int!
+        }
+    
+        type MechanicalCamera implements Camera {       # implements Camera interface
+            mark: String!
+            nrOfOptics: Int!
+            filmLength: Int!
+        }
+    
+        type DigitalCamera implements Camera {          # implements Camera interface
+            mark: String!
+            nrOfOptics: Int!
+            displaySize: Int!
+        }
+    """)
+    
+    query = QueryType()
+    
+    
+    @query.field('mechanicalCamera')
+    def resolve_mechanical_camera(*_):
+        return {
+            'mark': 'Nikon',
+            'nrOfOptics': 1,
+            'filmLength': 24
+        }
+    
+    
+    @query.field('digitalCamera')
+    def resolve_digital_camera(*_):
+        return {
+            'mark': 'Nikon',
+            'nrOfOptics': 1,
+            'displaySize': 17,
+        }
+    
+    
+    schema = make_executable_schema(type_defs, query)
+    app = GraphQL(schema, debug=True)
+    
+    if __name__ == '__main__':
+        config = Config(app, port=3000)
+        config.routes = [("/", app), ("/graphql", app)]
+    
+        server = Server(config)
+        server.run()
+    </pre>
+      </details>
+    </details>
+    <hr>
+    <!---------------------------------------------------------------->
+    <h2 class="header"> Introspection </h2>
+    <p> - introspection is used to query information about the schema from the client side (unfortunately there's no way to request for the full server SDL schema) </p>
+    <pre class='syntax'>
+<span style="color:darkgray;">// GraphQL query SDL</span>
+
+    {                                          // requests all the types implemented in the schema
+      __schema {
+        types {
+          name
+        }
+      }
+    }
+  
+  
+    {
+      __type(name: <strong>type:str</strong>) {                 // requests informations about the specific <strong>type</strong>
+        name
+        kind
+        fields {
+          name
+          type {
+            name
+            kind
+          }
+        }
+      }
+    }
+  </pre>
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre style='margin-bottom:0; background-color:lightblue;'>
+# request ---------------------------------
+    {                                          // requests all types implemented in the schema
+      __schema {
+        types {
+          name
+        }
+      }
+    }
+    </pre>
+      <pre style='margin:0; background-color: lightgreen;'>
+# response --------------------------------
+    {
+      "data": {
+        "__schema": {
+          "types": [
+            {
+              "name": "Query"
+            },
+            {
+              "name": "String"
+            },
+            {
+              "name": "ID"
+            },
+            {
+              "name": "Mutation"
+            },
+            {
+              "name": "Camera"
+            },
+            {
+              "name": "MechanicalCamera"
+            },
+            {
+              "name": "Int"
+            },
+            {
+              "name": "DigitalCamera"
+            },
+            {
+              "name": "Person"
+            },
+            {
+              "name": "Location"
+            },
+            {
+              "name": "Boolean"
+            },
+            {
+              "name": "__Schema"
+            },
+            {
+              "name": "__Type"
+            },
+            {
+              "name": "__TypeKind"
+            },
+            {
+              "name": "__Field"
+            },
+            {
+              "name": "__InputValue"
+            },
+            {
+              "name": "__EnumValue"
+            },
+            {
+              "name": "__Directive"
+            },
+            {
+              "name": "__DirectiveLocation"
+            }
+          ]
+        }
+      }
+    }
+    </pre>
+      <pre style='margin:0; background-color:lightblue;'>
+# request ---------------------------------
+    {
+      __type(name: "Query") {
+        name
+        kind
+        fields {
+          name
+          type {
+            name
+            kind
+          }
+        }
+      }
+    }
+    </pre>
+      <pre style='margin:0; background-color: lightgreen;'>
+# response --------------------------------
+    {
+      "data": {
+        "__type": {
+          "name": "Query",
+          "kind": "OBJECT",
+          "fields": [
+            {
+              "name": "camera",
+              "type": {
+                "name": "Camera",
+                "kind": "UNION"
+              }
+            },
+            {
+              "name": "getPerson",
+              "type": {
+                "name": "Person",
+                "kind": "OBJECT"
+              }
+            }
+          ]
+        }
+      }
+    }
+    </pre>
+      <pre style='margin:0; background-color:lightblue;'>
+# request ---------------------------------
+    {
+      __type(name: "Person") {
+        name
+        kind
+        fields {
+          name
+          type {
+            name
+            kind
+          }
+        }
+      }
+    }
+    </pre>
+      <pre style='margin:0; background-color: lightgreen;'>
+# response --------------------------------
+    {
+      "data": {
+        "__type": {
+          "name": "Person",
+          "kind": "OBJECT",
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            },
+            {
+              "name": "name",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            },
+            {
+              "name": "location",
+              "type": {
+                "name": "Location",
+                "kind": "OBJECT"
+              }
+            }
+          ]
         }
       }
     }
@@ -2008,291 +2274,22 @@
         server.run()
     </pre>
     </details>
-  </details>
-  <hr>
-  <!---------------------------------------------------------------->
-  <h2 class="header"> Introspection </h2>
-  <p> - introspection is used to query information about the schema from the client side (unfortunately there's no way to request for the full server SDL schema) </p>
-  <pre class='syntax'>
-<span style="color:darkgray;">// GraphQL query SDL</span>
+    <hr>
+    <!---------------------------------------------------------------->
+    <h2 class="header"> REST Api VS GraphQL </h2>
+    <p> - GraphQL is NOT a replacement for REST Api, it does some things better and some things worse </p>
+    <p> - GraphQL is more suited for large applications with complex data requirements, REST Api is more suited for simple applications with simple data requirements </p>
+    <p> - Pros GrapQL over REST Api : </p>
+    <p style="text-indent: 30px;"> - Uses a single API endpoint </p>
+    <p style="text-indent: 30px;"> - In a single request we can specify exactly what we want (no multiple roundtrips needed for different resources, this leads to a performance increase) </p>
+    <p style="text-indent: 30px;"> - Strongly typed schema -> there's a type validation on request </p>
 
-    {                                          // requests all the types implemented in the schema
-      __schema {
-        types {
-          name
-        }
-      }
-    }
-  
-  
-    {
-      __type(name: <strong>type:str</strong>) {                 // requests informations about the specific <strong>type</strong>
-        name
-        kind
-        fields {
-          name
-          type {
-            name
-            kind
-          }
-        }
-      }
-    }
-  </pre>
-  <details class="example">
-    <summary> DEMO (can be pseudocode) </summary>
-    <pre style='margin-bottom:0; background-color:lightblue;'>
-# request ---------------------------------
-    {                                          // requests all types implemented in the schema
-      __schema {
-        types {
-          name
-        }
-      }
-    }
-    </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
-# response --------------------------------
-    {
-      "data": {
-        "__schema": {
-          "types": [
-            {
-              "name": "Query"
-            },
-            {
-              "name": "String"
-            },
-            {
-              "name": "ID"
-            },
-            {
-              "name": "Mutation"
-            },
-            {
-              "name": "Camera"
-            },
-            {
-              "name": "MechanicalCamera"
-            },
-            {
-              "name": "Int"
-            },
-            {
-              "name": "DigitalCamera"
-            },
-            {
-              "name": "Person"
-            },
-            {
-              "name": "Location"
-            },
-            {
-              "name": "Boolean"
-            },
-            {
-              "name": "__Schema"
-            },
-            {
-              "name": "__Type"
-            },
-            {
-              "name": "__TypeKind"
-            },
-            {
-              "name": "__Field"
-            },
-            {
-              "name": "__InputValue"
-            },
-            {
-              "name": "__EnumValue"
-            },
-            {
-              "name": "__Directive"
-            },
-            {
-              "name": "__DirectiveLocation"
-            }
-          ]
-        }
-      }
-    }
-    </pre>
-    <pre style='margin:0; background-color:lightblue;'>
-# request ---------------------------------
-    {
-      __type(name: "Query") {
-        name
-        kind
-        fields {
-          name
-          type {
-            name
-            kind
-          }
-        }
-      }
-    }
-    </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
-# response --------------------------------
-    {
-      "data": {
-        "__type": {
-          "name": "Query",
-          "kind": "OBJECT",
-          "fields": [
-            {
-              "name": "camera",
-              "type": {
-                "name": "Camera",
-                "kind": "UNION"
-              }
-            },
-            {
-              "name": "getPerson",
-              "type": {
-                "name": "Person",
-                "kind": "OBJECT"
-              }
-            }
-          ]
-        }
-      }
-    }
-    </pre>
-    <pre style='margin:0; background-color:lightblue;'>
-# request ---------------------------------
-    {
-      __type(name: "Person") {
-        name
-        kind
-        fields {
-          name
-          type {
-            name
-            kind
-          }
-        }
-      }
-    }
-    </pre>
-    <pre style='margin:0; background-color: lightgreen;'>
-# response --------------------------------
-    {
-      "data": {
-        "__type": {
-          "name": "Person",
-          "kind": "OBJECT",
-          "fields": [
-            {
-              "name": "id",
-              "type": {
-                "name": null,
-                "kind": "NON_NULL"
-              }
-            },
-            {
-              "name": "name",
-              "type": {
-                "name": null,
-                "kind": "NON_NULL"
-              }
-            },
-            {
-              "name": "location",
-              "type": {
-                "name": "Location",
-                "kind": "OBJECT"
-              }
-            }
-          ]
-        }
-      }
-    }
-    </pre>
-    <pre style='margin:0;'>
-# implementation --------------------------
-    
-    from ariadne import gql, make_executable_schema, QueryType
-    from ariadne.asgi import GraphQL
-    from uvicorn import Config, Server
-    
-    
-    type_defs = gql("""
-        type Query {
-            mechanicalCamera: MechanicalCamera
-            digitalCamera: DigitalCamera
-        }
-    
-        interface Camera {
-            mark: String!
-            nrOfOptics: Int!
-        }
-    
-        type MechanicalCamera implements Camera {       # implements Camera interface
-            mark: String!
-            nrOfOptics: Int!
-            filmLength: Int!
-        }
-    
-        type DigitalCamera implements Camera {          # implements Camera interface
-            mark: String!
-            nrOfOptics: Int!
-            displaySize: Int!
-        }
-    """)
-    
-    query = QueryType()
-    
-    
-    @query.field('mechanicalCamera')
-    def resolve_mechanical_camera(*_):
-        return {
-            'mark': 'Nikon',
-            'nrOfOptics': 1,
-            'filmLength': 24
-        }
-    
-    
-    @query.field('digitalCamera')
-    def resolve_digital_camera(*_):
-        return {
-            'mark': 'Nikon',
-            'nrOfOptics': 1,
-            'displaySize': 17,
-        }
-    
-    
-    schema = make_executable_schema(type_defs, query)
-    app = GraphQL(schema, debug=True)
-    
-    if __name__ == '__main__':
-        config = Config(app, port=3000)
-        config.routes = [("/", app), ("/graphql", app)]
-    
-        server = Server(config)
-        server.run()
-    </pre>
-  </details>
-  <hr>
-  <!---------------------------------------------------------------->
-  <h2 class="header"> REST Api VS GraphQL </h2>
-  <p> - GraphQL is NOT a replacement for REST Api, it does some things better and some things worse </p>
-  <p> - GraphQL is more suited for large applications with complex data requirements, REST Api is more suited for simple applications with simple data requirements </p>
-  <p> - Pros GrapQL over REST Api : </p>
-  <p style="text-indent: 30px;"> - Uses a single API endpoint </p>
-  <p style="text-indent: 30px;"> - In a single request we can specify exactly what we want (no multiple roundtrips needed for different resources, this leads to a performance increase) </p>
-  <p style="text-indent: 30px;"> - Strongly typed schema -> there's a type validation on request </p>
+    <p> - Cons GrapQL over REST Api : </p>
+    <p style="text-indent: 30px;"> - Learning and implementing GraphQL is failry complex </p>
+    <p style="text-indent: 30px;"> - Has no support for HTTP caching mechanism </p>
+    <p style="text-indent: 30px;"> - Has no native file upload feature </p>
 
-  <p> - Cons GrapQL over REST Api : </p>
-  <p style="text-indent: 30px;"> - Learning and implementing GraphQL is failry complex </p>
-  <p style="text-indent: 30px;"> - Has no support for HTTP caching mechanism </p>
-  <p style="text-indent: 30px;"> - Has no native file upload feature </p>
-
-
-  <br><br>
-</body>
+    <br><br>
+  </body>
 
 </html>
