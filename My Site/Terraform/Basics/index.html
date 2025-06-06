@@ -154,7 +154,7 @@
   <p><a href="https://registry.terraform.io/browse/providers" target="_blank"> terraform providers (registry.terraform.io)</a></p>
   <p><a href="https://developer.hashicorp.com/terraform/language/providers" target="_blank"> terraform providers docs (registry.terraform.io)</a></p>
   <h2 class="headerSection"> Remember This : </h2>
-  <p> - terraform has also provisioner support for local|remote script execution and file transfer <u>but terraform itself recommends not to used it (but as last resort)</u> <a href="https://spacelift.io/blog/terraform-provisioners" target="_blank">[link]</a></p>
+  <p> - terraform provisioners also support local|remote script execution and file transfer <u>but terraform itself recommends not to used it (but as last resort)</u> <a href="https://spacelift.io/blog/terraform-provisioners" target="_blank">[link]</a></p>
   <h2 class="headerSection"> Description and Demonstration : </h2>
   <p> - terraform is an open source infrastructure as code tool, automates the provisioning of computing resources based on configuration (uses HCL <b>H</b>ashicorp <b>C</b>onfiguration <b>L</b>anguage) </p>
   <p> - <mark class="mark">declarative approach</mark> </p>
@@ -230,7 +230,7 @@
   <p> - this file (<mark>terraform.tfstate</mark>) also keeps important meta data like dependencies, caching, etc... (dependency is very important for the deploy|destroy order (ex: the vnet must be create before the virtual machine)) </p>
   <p> - <mark class="mark">state lock</mark> </p>
   <p class="indent-lv1"> - locking is basically allowing single user usage of the state file at a time </p>
-  <p class="indent-lv1"> - the locking mechanism is iplemented by the used backend (ex: Azure blob storage is automatically locks the container while the terraform state is used)</p>
+  <p class="indent-lv1"> - the locking mechanism is implemented by the used backend (ex: Azure blob storage is automatically locks the container while the terraform state is used)</p>
   <p> - <mark class="mark"> backend (state file location)</mark> <a href="https://developer.hashicorp.com/terraform/language/settings/backends/configuration" target="_blank">[link]</a> </p>
   <p class="indent-lv1"> - terraform calls "backend" the location where the state file is stored </p>
   <p class="indent-lv1"> - by default the state file is stored in the current directory, but we can specify local or remote backends with the <mark>backend</mark> block <a href="https://developer.hashicorp.com/terraform/language/settings/backends/local" target="_blank">[link]</a></p>
@@ -272,7 +272,7 @@
   
   
 // referencing block attributes & return values ----------------------------
-    resource "<reqval>providerA</reqval>_<reqval>resourceTypeA</reqval>" "<reqval>resourceNameA</reqval>" {   // each resource has return attributes (that should be documented)
+    resource "<reqval>providerA</reqval>_<reqval>resourceTypeA</reqval>" "<reqval>resourceNameA</reqval>" {   // each resource has return attributes (that is documented in the official readme)
       <reqval>attr</reqval> = <reqval>val</reqval>
     }
     
@@ -367,7 +367,7 @@
   <p> - meta arguments are available in all resources, they perform different 'meta' task on the resource </p>
   <pre class="syntax">
 // <mark>count</mark> ----------------------------------
-    resource|module "<reqval>name</reqval>" {
+    resource|module "<reqval>name</reqval>" {             // generated resource|module <reqval>name</reqval>s can be referenced by indexes (<mark><reqval>name</reqval>[<reqval>idx</reqval>]</mark>)
       count = <reqval>exp:->int</reqval>                    // runs the resource or module the number of times (starts with <mark>0</mark> included)
       
       // usage --------
@@ -376,7 +376,7 @@
     
     
 // <mark>for_each</mark> ------------------------------------
-    resource|module "<reqval>name</reqval>" {
+    resource|module "<reqval>name</reqval>" {                       // generated resource|module <reqval>name</reqval>s can be referenced by indexes (<mark><reqval>name</reqval>[<reqval>idx</reqval>]</mark>)
       for_each = <reqval>exp:->map|set</reqval>                    // runs the resource or module the number of times as many members the <reqval>map|set</reqval> has
       
       // usage --------
@@ -385,16 +385,19 @@
     }
     
     
+    
 // <mark>depends_on</mark> ----------------------------------
     // explicit dependency resolution (described above)
     
     
 // <mark>provider</mark> ------------------------------------
-    // sets hich provider the resouce will use <a href="https://developer.hashicorp.com/terraform/language/meta-arguments/resource-provider" target="_blank">[link]</a> (overrides the global provider for this resource)
+    resource "<reqval>name</reqval>" {
+      provider = <reqval>providerRef</reqval>     // sets hich provider the resouce will use <a href="https://developer.hashicorp.com/terraform/language/meta-arguments/resource-provider" target="_blank">[link]</a> (overrides the global provider for this resource)
+    }
     
     
 // <mark>lifecycle</mark> ----------------------------------
-    resource "<reaval>name</reaval>" {
+    resource "<reqval>name</reqval>" {
       lifecycle {
         <reqval class="openable">lifecycleMetaArgument<div>
           <p> - <mark>create_before_destroy</mark> - creates the new resource before destroying the old one</p>
