@@ -449,6 +449,7 @@
     
     
 // <mark>ChildComponent.js</mark> ------------------------------------------------------------------
+  // before v19 --------------------------------
     import { forwardRef } from 'react';
     
     const <strong>ChildComponent</strong> = forwardRef((props, ref) => {      // forward referencing the component    
@@ -456,8 +457,16 @@
     })
     
     export default <strong>ChildComponent</strong>
+    
+    
+  // after v19 ---------------------------------
+    const <strong>ChildComponent</strong> ({ ref }) => {                 // pass ref directly as prop
+        return &lt;span ref={ref}&gt; &lt;/span&gt;                      // DOM node forwarded to <reqval>Component</reqval>
+    }
+    
+    export default <strong>ChildComponent</strong>
     </pre>
-    <details class="example" open>
+    <details class="example">
       <summary> Example : </summary>
       <pre>
 // Main.js ----------------------------------------------------------------------------
@@ -491,16 +500,30 @@
     </pre>
     <h3 class="header"> [from v19] pass <mark>ref</mark> props instead of using <mark>forwaredRef()</mark> </h3>
     <pre>
+// Parent.js (file) ------------------------------
+    import { useRef, useEffect } from 'react';
+    import Child from './Child';
+    
+    function Parent() {
+      const childRef = useRef(null);
+    
+      useEffect(() => {
+        console.log(childRef.current)                         // directly references the child component's paragraph (as DOM object)
+      }, []);
+    
+      return &lt;Child ref={childRef} /&gt;
+    }
+    
+    export default Parent;
     
     
+// Child.js (file) ------------------------------
+    function Child({ ref }) {
+      return &lt;p ref={ref}&gt; Hello, this is the child component! &lt;/p&gt;
+    }
     
-    
-    
+    export default Child;
     </pre> 
-    
-    
-    
-    
     </details>
     <!----------------------------------------------------------------------------------------------->
     <hr>
