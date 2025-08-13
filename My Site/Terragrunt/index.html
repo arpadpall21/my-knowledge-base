@@ -71,23 +71,47 @@ stage 3 :
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 - terragrunt is a wrapper around terraform (and openTofu)
+    - orchestration tool 
+    - extends the capabilities of Terraform/OpenTofu
 
-- improves code reusability
+- improves code reusability (reuse the same stack for different environments)
 - provides centralized configuration approach
 - environment specific config
 
 - terragrunt uses .hcl files (tipicaly terragrunt.hcl)
+- it's common to have a root.hcl on the main directory and the child directories have the terragrunt.hcl file 
 
 - stack can be executed individually or run all stacks that are in subdirectories
 - terragrunt uses parallel deployment 
     - does this mean running terragrunt apply --all?
 
+
 Concepts:
-  - stack: collection of terraform modules
+  - Unit: 
+    - single instance or infrastructure managed by Terragrunt
+    - has its own state
+    - basically a directory containing a terragrunt.hcl file
+    - it's commot to use a root.hcl in the main directory then use terragrunt.hcl in sub directories
+    - units can be nested (a directory containing terragrunt.hcl file can contain further child units (dir with terragrunt.hcl file))
+  - Stack:
+    - is a collection terraform units
+    - a stack (collection of unit) is intended to be managed in concert
+    ??? terragrunt.stack.hcl (central organization of related resources, like declaring local variables, etc...) 
+  - Module:
+    - a terraform or OpenTofu module which is reusable
+    - it's commont to version modules
+  - Resource:
+    - terraform or OpenTofu resource
+  - State:
+    - terraform or OpenTofu state
+  - DAG (Directed Acyclic Graph)
+    - Teggragunt uses it to determine dependency order within a unit
+
 
 
 
 Builtin functions: https://terragrunt.gruntwork.io/docs/reference/built-in-functions/
+
 
 
 
