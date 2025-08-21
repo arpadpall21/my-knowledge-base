@@ -79,11 +79,20 @@ stage 3 :
 - environment specific config
 
 - terragrunt uses .hcl files (tipicaly terragrunt.hcl)
-- it's common to have a root.hcl on the main directory and the child directories have the terragrunt.hcl file 
+- it's common to have a root.hcl on the main directory and the child directories have the terragrunt.hcl file
+    - a terragrunt.hcl file contains configurations for that stack
 
 - stack can be executed individually or run all stacks that are in subdirectories
-- terragrunt uses parallel deployment 
+- terragrunt executes parallel deployment (executes stacks in parallel)
     - does this mean running terragrunt apply --all?
+
+- terragrunt stored its cache files in .terragrunt-cache directory (which is tipically added to .gitignore)
+
+- terragrunt first does dependency resolution (creates a direct acyclic grap DAG), then executes independed modules (stacks) in parallel
+
+
+Parallel Execution: Terragrunt then executes the apply or plan commands for these independent modules concurrently, up to the limit specified by the --parallelism flag (default is 10). This means that if you have multiple modules that do not depend on each other, they can be processed simultaneously, significantly speeding up the overall execution time.
+
 
 
 Concepts:
@@ -96,7 +105,9 @@ Concepts:
   - Stack:
     - is a collection terraform units
     - a stack (collection of unit) is intended to be managed in concert
-    ??? terragrunt.stack.hcl (central organization of related resources, like declaring local variables, etc...) 
+    ??? terragrunt.stack.hcl (central organization of related resources, like declaring local variables, etc...)
+    - it's possible to have nested stack, this approach is used to namespace dependencies
+    
   - Module:
     - a terraform or OpenTofu module which is reusable
     - it's commont to version modules
@@ -113,7 +124,25 @@ Concepts:
 Builtin functions: https://terragrunt.gruntwork.io/docs/reference/built-in-functions/
 
 
+CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
+    basically all terraform commands can be executed but with 'terragrunt' instead of 'terraform'
 
+    terragrunt [option] plan
+        - [option]
+            --log-format bare (for less output)
+            --parallelism=<nr> (default 10)
+    terragrunt [option] apply
+        - [option]
+            --log-format bare
+            --parallelism=<nr> (default 10)
+    terragrunt [option] destroy
+        - [option]
+            --log-format bare
+            --parallelism=<nr> (default 10)
+    terragrunt run --all apply      -> executes the stack
+
+
+    
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
