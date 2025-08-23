@@ -122,9 +122,17 @@ Concepts:
     - each stack can manage their own backend
   - Stack:
     - is a collection terraform units
-    - a stack (collection of unit) is intended to be managed in concert
+    - manages dependencies between units
+    - organizes the infrastructure into logical groups
+    - 2 stack types:
+      - implicit (directory structure)
+        - basically auto detects units in folder structure
+      - explicit (defined by terragrunt.stack.hcl file)
+    
     ??? terragrunt.stack.hcl (central organization of related resources, like declaring local variables, etc...)
     - it's possible to have nested stack, this approach is used to namespace dependencies
+    
+    
     
   - Module:
     - a terraform or OpenTofu module which is reusable
@@ -158,12 +166,18 @@ CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
             --log-format bare
             --parallelism=<nr> (default 10)
     
-    terragrunt run <CMD>
-        - 
-
-
+    // stack commands
+    terragrunt run --all apply
+    terragrunt run --all plan
+    terragrunt run --all destroy
+    terragrunt run --all output       // view the output of units
+        - --all runs the command on all units
     
-
+    
+According to Ned in the cloud terragrunt addresses 3 problems
+    - Managint large configs
+    - Managing different environments that uses the same config
+    - DRY code
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
