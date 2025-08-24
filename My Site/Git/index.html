@@ -1,579 +1,579 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <title> Git </title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="../Assets/stylesPages.css">
-  <script src="../Assets/scriptPages.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title> Git </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../Assets/stylesPages.css">
+    <script src="../Assets/scriptPages.js"></script>
+  </head>
 
-<body>
-  <h1> Git </h1>
-  <p> Updated ( 2020-04-14 / 2020-07-21 / 2022-03-04 )</p>
-  <nav class="sitenav">
-    <a href="../index.html">MySite > </a> Git
-  </nav>
-  <p class="subSite"><a href="./LFS/index.html"> Git LFS (Large File Storage) > </a></p>
-  <p class="subSite"><a href="./Pre-Commit/index.html"> Pre-Commit > </a></p>
-  <table class="table">
-    <tr>
-      <th style="width:30%;"> Command </th>
-      <th> Description </th>
-    </tr>
-    <tr>
-      <td colspan="2"> Initializing Git Repositories </td>
-    </tr>
-    <tr>
-      <td>
-        git init <i>dirPath</i>
-      </td>
-      <td>
-        - initializes a git repo (creates a <mark>.git</mark> dir)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git config <small>[options]</small> user.name <i>userName</i>
-      </td>
-      <td>
-        - gets or sets the user name for the local Git repo <br>
-        <small>[options]</small> <br>
-        - (<small>--global</small>) for global user (used when no local user is set)
-      </td>
-    </tr>
-    <tr>
-      <td> git config <small>[options]</small> user.email <i>userEmail</i> </td>
-      <td>
-        - gets or sets the user email for the local Git repo <br>
-        <small>[options]</small> <br>
-        - (<small>--global</small>) for global user (used when no local user is set)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git status <br>
-      </td>
-      <td>
-        - checks the status for the Modified Area (files modified after the last commit) and the Stagin Area <br>
-        - also returns the current branch we are on, if the HEAD is detached etc...
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git log <small>[options]</small>
-      </td>
-      <td>
-        - list the version history (commits) of the current branch <br>
-        <small>[options]</small> <br>
-        - (<small>--oneline</small>) one line per commit <br>
-        - (<small>--follow <strong>filePath</strong></small>) tracks the version history of the specified file <br>
-        - (<small>--oneline --all --graph</small>) prints the git treey graphically <br>
-        - (<small>--stat</small>) prints the change status for each commit <br>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git reflog </td>
-      <td>
-        - displays the git command history log <br>
-        - (<mark>git reset --hard <reqval>logHash</reqval></mark>) checks out a history state (go back in time ex: when force pushed accidentally) 
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="2"> Staging Area and Commit Management </td>
-    </tr>
-    <tr>
-      <td> git add <small>[options]</small> <strong>path</strong> </td>
-      <td>
-        - add files from the Modified area <u>(or untracked files)</u> to the Staging area (and updates the git history) <br>
-        <small>[options]</small> <br>
-        - (<small>--all</small>) all files <br>
-        - (<small>-f</small>) add <reqval>path</reqval> focefuly (ex: ignored files can be added like this) <br>
-        - (<small>--</small>) avoids conflicts when file names contain <mark>-</mark> (hiphens) (ex: <mark>git add -- *</mark> will add all files to the staging area without problem) <br>
-        - (<small>-p</small>) display file content differences between the last commit and the Modified Area (uses the <mark>diff</mark> command) <u>(does not add untracked files to the Stagin Area)</u>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git rm <small>[options]</small> <strong>path</strong> </td>
-      <td>
-        - <u>delete <strong>path</strong> from the file system</u> and updates deleted status in the Staging Area <br>
-        - <small>[options]</small> <br>
-        - (<small>-r</small>) recursive delete (all files in dir) <br>
-        - (<small>--cached</small>) untracks the specified item(s) and puts as deleted status in the Stagin Area (Git won't track this file any more)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git mv <strong>srcPath</strong> <strong>trgPath</strong>
-      </td>
-      <td>
-        - moves/renames <strong>srcPath</strong> to <strong>trgPath</strong> (directory or file) <br>
-        - <u>must be used when renaming (otherwise git tracks <strong>srcPath</strong> as deleted and <strong>trgPath</strong> as new)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git commit <small>[options]</small>
-      </td>
-      <td>
-        - creates a new commit on the top of the current branch (changes in the Stagin Area are commited) (opens the default text editor to input the commit message) <br>
-        <small>[options]</small> <br>
-        - (<small>-a</small>) also commits files from the Modified Area <u>(Untracked files are not commited)</u> <br>
-        - (<small>-m <strong>message</strong>)</small> commit message (in this case the default text editor is not opened) <br>
-        - (<small>--amend</small>) modifies the current commit (instead of creating a new) <br>
-        - (<small>--on-edit</small>) does not modify the most recent commit's message
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git checkout <small>master</small><strong>|branchName|tagName|commitId</strong> </td>
-      <td>
-        - navigates to the specified branch or commit point (files at that commit point are on the file system now, on the Git Tree <u>the <mark>HEAD</mark> indicates where you are</u>) <br>
-      </td>
-    </tr>
-    <tr>
-      <td> git checkout -b <strong>branchName</strong> </td>
-      <td>
-        - creates a new branch (from the current commit) and navigates to it
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git revert <strong>tagName|commitId</strong> </td>
-      <td>
-        - reverts (undoes) the current (specified) commit by creating a new 'revert commit' (careful about conflicts)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git reflog </td>
-      <td>
-        - prints the git history log
-      </td>
-    </tr>
-    <tr>
-      <td> git reset <small>[options]</small> <strong>tagName|commitId</strong> </td>
-      <td>
-        - removes all commits on the branch <u>aftert the specified <strong>tagName|commitId</strong></u> <u>(commits are removed and modifications placed back in the Modified Area)</u> <br>
-        <small>[options] </small> <br>
-        - (<small>--hard</small>) also destroys file modifications after the specified commit
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git reset --hard <strong>remoteVar</strong>/<strong>branch</strong> </td>
-      <td>
-        - pulls the branch from the remote repository and <u>overwrites</u> the current branch
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git reset <small>[--hard]</small> <i>path</i> </td>
-      <td>
-        - empties the Staging Area by putting files back to their previoues place (or only the specified file)
-        <br>
-        - (<small>--hard</small>) also destroys file modifications
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git cherry-pick <strong>commitId</strong> </td>
-      <td>
-        - picks the specified <strong>commitId</strong> and put at the top of the current branch
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="2"> Tag </td>
-    </tr>
-    <tr>
-      <td> git tag </td>
-      <td> - list all local tags </td>
-    </tr>
-    <tr>
-      <td> git tag <small>[options]</small> <strong>tagName</strong> <i>commitId</i> </td>
-      <td>
-        - adds a tag to the most recent (or on the specified commit) commit <br>
-        <small>[options]</small> <br>
-        - (<small>-d</small>) deletes the specified tag (doesn't matter which commit is checked out)
-      </td>
-    </tr>
-    <tr>
-      <td> git tag --delete <reqval>tagName</reqval> <optval>tagName ...</optval> </td>
-      <td> - deletes the specified local tag(s) </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td> git ls-remote --tags </td>
-      <td> - list all remote tags </td>
-    </tr>
-    <tr>
-      <td> git push origin <reqval>tagName</reqval>|--tags </td>
-      <td> - pushes the specified or all local tags to the remote repo </td>
-    </tr>
-    <tr>
-      <td> git push origin --delete <reqval>tagName</reqval> </td>
-      <td> - deletes the specified tag from the remote repo </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="2"> Stash </td>
-    </tr>
-    <tr>
-      <td>
-        git stash <small>[options]</small>
-      </td>
-      <td>
-        - stashes all the current changes <br>
-        <small>[options]</small> <br>
-        - (<small>-m <strong>name</strong></small>) adds a name to the stash entry <br>
-        - (<small>push <strong>path</strong></small>) stashes only the specifed file/directory
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git stash list
-      </td>
-      <td>
-        - prints the stash list
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git stash pop <i>stashId</i>
-      </td>
-      <td>
-        - copies the most recent (or the specified) stashed changes back to the Modified Area <u>deletes the stash</u>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git stash apply <i>stashId</i>
-      </td>
-      <td>
-        - copies the most recent (or the specified) stashed changes back to the Modified Area
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git stash drop <i>stashId</i>
-      </td>
-      <td>
-        - deletes the most recent (or the specified) stash entry
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        Branches and Merging Branches
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git branch <small>[options]</small>
-      </td>
-      <td>
-        - lists all local branches <br>
-        <small>[options]</small> <br>
-        - (<small>-a</small>) remote branches are also listed <br>
-        - (<small>-D <strong>branchName</strong>
-          <optval>...</optval>
-        </small>) deletes the specified local branch(es)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git branch <strong>branchName</strong> <i>commitId|tag</i>
-      </td>
-      <td>
-        - creates a new branch from the current commit (or from the specified commit)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git branch -m <i>oldBranchName</i> <strong>newBranchName</strong>
-      </td>
-      <td>
-        - renames the specified <i>oldBranchName</i> branch (if <i>oldBranchName</i> is omitted the current
-        branch is
-        renamed)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git push -d <strong>remoteVar</strong> <strong>branch</strong>
-      </td>
-      <td>
-        - deletes the specified <strong>branch</strong> from remote repo <u>(so careful with this)</u>
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git diff <small>[options]</small>
-      </td>
-      <td>
-        - prints change diffs between the current Commit and the Modified Area and Stagng Area <br>
-        <small>[options]</small> <br>
-        - (<small>--staged</small>) only prints diffs between the previous Commit and the Staging Area <br>
-        - (<strong>branch|commitId</strong> <strong>branch|commitId</strong>) prints the diffs between the specified branches or commits
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git merge <strong>branchName</strong> <small>[-m <strong>message</strong>]</small>
-      </td>
-      <td>
-        - merges the specified branch into the current branch by creating new 'merge' commit on the current branch <br>
-        <small>[options]</small> <br>
-        - (<small>-m <strong>message</strong></small>) adds a message to the new commit
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git merge --abort|--continue
-      </td>
-      <td>
-        - (used on merge conflict) aborts or continues the merge process
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git rebase <small>[options]</small> <strong>branch</strong>
-      </td>
-      <td>
-        - rebases <strong>branch</strong> to the current branch  <br>
-        <small>[options]</small> <br>
-        - (<small>-i</small>) (interactive mode) open the default text editor to finegrain the rebase process (commits to pick, exclude, etc...)
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git rebase --abort|--continue
-      </td>
-      <td>
-        - (used on rebase conflict) aborts or continues the rebase process
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        Remote Repo (on GitHub)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git clone <strong>repoUrl</strong>
-      </td>
-      <td>
-        - clones the remote repository in the current local directory
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git remote <small>[options]</small>
-      </td>
-      <td>
-        - lists remote repository variables <br>
-        <small>[options]</small> <br>
-        - (<small>-v</small>) variables are printed with their URLs (the <mark>origin</mark> is the default and set when the repo is cloned)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git remote add <strong>remoteVar URL</strong>
-      </td>
-      <td>
-        - sets a remote variable
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git remote rename <strong>oldVar newVar</strong>
-      </td>
-      <td>
-        - renames the specified remote variable
-      </td>
-    </tr>
-    <tr>
-      <td>
-        git remote remove <strong>remoteVar</strong>
-      </td>
-      <td>
-        - deletes the specified remote variable
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git push <i>URL|remoteVar</i> <small>[options]</small>
-      </td>
-      <td>
-        - pushes local changes to the remote repo <br>
-        <small>[options]</small> <br>
-        - (<small>-f</small>) force push (override remote changes) <br>
-        - (<small>--delete <strong>branchName</strong></small>) deletes the remote branch (so careful with that)
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git pull <i class="openable">URL|remoteVar<div>
-            <p> - <mark>origin</mark> if not specified </p>
-          </div></i>
-      </td>
-      <td>
-        - pulls changes from the remote repo and updates the local repo (this is basically <mark>fetch</mark> + <mark>checkout</mark>) <br>
-        - (<mark>git reset --hard <strong>remoteVar</strong>/<strong>branch</strong></mark> to 'force pull' (override the local branch with the remote))
-      </td>
-    </tr>
-    <tr>
-      <td>|</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        git fetch <i>remoteVar</i>
-      </td>
-      <td>
-        - fetches changes from the remote repo <u>without making any changes locally</u>
-      </td>
-    </tr>
-  </table>
-  <br>
-  <h2 class="headerSection"> Notes : </h2>
-   <h2 class="headerSection"> Description and Demonstration </h2>
-  <h2 class="headerSection"> Useful Links : </h2>
-  <p><a href="https://git-lfs.github.com/" target="_blanc">git-fls.github.com</a></p>
-  <h2 class="headerSection"> Remember This : </h2>
-  <h2 class="headerSection"> Description and Demonstration : </h2>
-  <h2 class="headerExtra"><u> GitHub </u></h2>
-  <p> - GitHub is a hosting service for Git repositories and Gists, on GitHub we can manage our repositories just like we do locally with Git (we can get 1GB free space apparently [2020-04-19])</p>
-  <p> - a GitHub repo is called 'remote repo', team members working on the same project connect to and synchronize
-    this repository </p>
-  <p> - a <mark class="mark">Gits</mark> is a code snippet on GitHub, GitHub's Gist service is a lightweight hosting service to distribute and version control code snippets </p>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 class="headerExtra"><u> Git </u></h2>
-  <p> - Git is a distributed version control system, it tracks and stores repository history during the developement stages </p>
-  <p> - a Git Commit is basically a project status, when you 'chechout' a commit <u>Git shows you the files at that commit stage on the file system</u> </p>
-  <p> - files can be in 1 of the following 3 states: </p>
-  <p class="indent-lv1"> - <mark class="mark">Modified</mark> - changes <u>since the last commit</u> </p>
-  <p class="indent-lv1"> - <mark class="mark">Staging Area</mark> - changes that will be commited </p>
-  <p class="indent-lv1"> - <mark class="mark">Committed</mark> - saved changes in a commit</p>
-  <p> - other than the above 3 sates changes can be stashed (it's a separated area for putting changes aside) </p>
-  <img src="Git Tree.jpg" height=250>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 style="color:darkblue;"><u> Initializing Git Repositories <mark>init</mark> / <mark>config</mark> /
-      <mark>status</mark> / <mark>log</mark> </u></h2>
-  <details class="example">
-    <summary> DEMO </summary>
-    <pre class="cmd">
+  <body>
+    <h1> Git </h1>
+    <p> Updated ( 2020-04-14 / 2020-07-21 / 2022-03-04 )</p>
+    <nav class="sitenav">
+      <a href="../index.html">MySite > </a> Git
+    </nav>
+    <p class="subSite"><a href="./LFS/index.html"> Git LFS (Large File Storage) > </a></p>
+    <p class="subSite"><a href="./Pre-Commit/index.html"> Pre-Commit > </a></p>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> Command </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td colspan="2"> Initializing Git Repositories </td>
+      </tr>
+      <tr>
+        <td>
+          git init <i>dirPath</i>
+        </td>
+        <td>
+          - initializes a git repo (creates a <mark>.git</mark> dir)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git config <small>[options]</small> user.name <i>userName</i>
+        </td>
+        <td>
+          - gets or sets the user name for the local Git repo <br>
+          <small>[options]</small> <br>
+          - (<small>--global</small>) for global user (used when no local user is set)
+        </td>
+      </tr>
+      <tr>
+        <td> git config <small>[options]</small> user.email <i>userEmail</i> </td>
+        <td>
+          - gets or sets the user email for the local Git repo <br>
+          <small>[options]</small> <br>
+          - (<small>--global</small>) for global user (used when no local user is set)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git status <br>
+        </td>
+        <td>
+          - checks the status for the Modified Area (files modified after the last commit) and the Stagin Area <br>
+          - also returns the current branch we are on, if the HEAD is detached etc...
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git log <small>[options]</small>
+        </td>
+        <td>
+          - list the version history (commits) of the current branch <br>
+          <small>[options]</small> <br>
+          - (<small>--oneline</small>) one line per commit <br>
+          - (<small>--follow <strong>filePath</strong></small>) tracks the version history of the specified file <br>
+          - (<small>--oneline --all --graph</small>) prints the git treey graphically <br>
+          - (<small>--stat</small>) prints the change status for each commit <br>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git reflog </td>
+        <td>
+          - displays the git command history log <br>
+          - (<mark>git reset --hard <reqval>logHash</reqval></mark>) checks out a history state (go back in time ex: when force pushed accidentally)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Staging Area and Commit Management </td>
+      </tr>
+      <tr>
+        <td> git add <small>[options]</small> <strong>path</strong> </td>
+        <td>
+          - add files from the Modified area <u>(or untracked files)</u> to the Staging area (and updates the git history) <br>
+          <small>[options]</small> <br>
+          - (<small>--all</small>) all files <br>
+          - (<small>-f</small>) add <reqval>path</reqval> focefuly (ex: ignored files can be added like this) <br>
+          - (<small>--</small>) avoids conflicts when file names contain <mark>-</mark> (hiphens) (ex: <mark>git add -- *</mark> will add all files to the staging area without problem) <br>
+          - (<small>-p</small>) display file content differences between the last commit and the Modified Area (uses the <mark>diff</mark> command) <u>(does not add untracked files to the Stagin Area)</u>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git rm <small>[options]</small> <strong>path</strong> </td>
+        <td>
+          - <u>delete <strong>path</strong> from the file system</u> and updates deleted status in the Staging Area <br>
+          - <small>[options]</small> <br>
+          - (<small>-r</small>) recursive delete (all files in dir) <br>
+          - (<small>--cached</small>) untracks the specified item(s) and puts as deleted status in the Stagin Area (Git won't track this file any more)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git mv <strong>srcPath</strong> <strong>trgPath</strong>
+        </td>
+        <td>
+          - moves/renames <strong>srcPath</strong> to <strong>trgPath</strong> (directory or file) <br>
+          - must be used when renaming (otherwise git tracks <strong>srcPath</strong> as deleted and <strong>trgPath</strong> as new)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git commit <small>[options]</small>
+        </td>
+        <td>
+          - creates a new commit on the top of the current branch (changes in the Stagin Area are commited) (opens the default text editor to input the commit message) <br>
+          <small>[options]</small> <br>
+          - (<small>-a</small>) also commits files from the Modified Area <u>(Untracked files are not commited)</u> <br>
+          - (<small>-m <strong>message</strong>)</small> commit message (in this case the default text editor is not opened) <br>
+          - (<small>--amend</small>) modifies the current commit (instead of creating a new) <br>
+          - (<small>--on-edit</small>) does not modify the most recent commit's message
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git checkout <small>master</small><strong>|branchName|tagName|commitId</strong> </td>
+        <td>
+          - navigates to the specified branch or commit point (files at that commit point are on the file system now, on the Git Tree <u>the <mark>HEAD</mark> indicates where you are</u>) <br>
+        </td>
+      </tr>
+      <tr>
+        <td> git checkout -b <strong>branchName</strong> </td>
+        <td>
+          - creates a new branch (from the current commit) and navigates to it
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git revert <strong>tagName|commitId</strong> </td>
+        <td>
+          - reverts (undoes) the current (specified) commit by creating a new 'revert commit' (careful about conflicts)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git reflog </td>
+        <td>
+          - prints the git history log
+        </td>
+      </tr>
+      <tr>
+        <td> git reset <small>[options]</small> <strong>tagName|commitId</strong> </td>
+        <td>
+          - removes all commits on the branch <u>aftert the specified <strong>tagName|commitId</strong></u> <u>(commits are removed and modifications placed back in the Modified Area)</u> <br>
+          <small>[options] </small> <br>
+          - (<small>--hard</small>) also destroys file modifications after the specified commit
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git reset --hard <strong>remoteVar</strong>/<strong>branch</strong> </td>
+        <td>
+          - pulls the branch from the remote repository and <u>overwrites</u> the current branch
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git reset <small>[--hard]</small> <i>path</i> </td>
+        <td>
+          - empties the Staging Area by putting files back to their previoues place (or only the specified file)
+          <br>
+          - (<small>--hard</small>) also destroys file modifications
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git cherry-pick <strong>commitId</strong> </td>
+        <td>
+          - picks the specified <strong>commitId</strong> and put at the top of the current branch
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Tag </td>
+      </tr>
+      <tr>
+        <td> git tag </td>
+        <td> - list all local tags </td>
+      </tr>
+      <tr>
+        <td> git tag <small>[options]</small> <strong>tagName</strong> <i>commitId</i> </td>
+        <td>
+          - adds a tag to the most recent (or on the specified commit) commit <br>
+          <small>[options]</small> <br>
+          - (<small>-d</small>) deletes the specified tag (doesn't matter which commit is checked out)
+        </td>
+      </tr>
+      <tr>
+        <td> git tag --delete <reqval>tagName</reqval> <optval>tagName ...</optval> </td>
+        <td> - deletes the specified local tag(s) </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> git ls-remote --tags </td>
+        <td> - list all remote tags </td>
+      </tr>
+      <tr>
+        <td> git push origin <reqval>tagName</reqval>|--tags </td>
+        <td> - pushes the specified or all local tags to the remote repo </td>
+      </tr>
+      <tr>
+        <td> git push origin --delete <reqval>tagName</reqval> </td>
+        <td> - deletes the specified tag from the remote repo </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Stash </td>
+      </tr>
+      <tr>
+        <td>
+          git stash <small>[options]</small>
+        </td>
+        <td>
+          - stashes all the current changes <br>
+          <small>[options]</small> <br>
+          - (<small>-m <strong>name</strong></small>) adds a name to the stash entry <br>
+          - (<small>push <strong>path</strong></small>) stashes only the specifed file/directory
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git stash list
+        </td>
+        <td>
+          - prints the stash list
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git stash pop <i>stashId</i>
+        </td>
+        <td>
+          - copies the most recent (or the specified) stashed changes back to the Modified Area <u>deletes the stash</u>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git stash apply <i>stashId</i>
+        </td>
+        <td>
+          - copies the most recent (or the specified) stashed changes back to the Modified Area
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git stash drop <i>stashId</i>
+        </td>
+        <td>
+          - deletes the most recent (or the specified) stash entry
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          Branches and Merging Branches
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git branch <small>[options]</small>
+        </td>
+        <td>
+          - lists all local branches <br>
+          <small>[options]</small> <br>
+          - (<small>-a</small>) remote branches are also listed <br>
+          - (<small>-D <strong>branchName</strong>
+            <optval>...</optval>
+          </small>) deletes the specified local branch(es)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git branch <strong>branchName</strong> <i>commitId|tag</i>
+        </td>
+        <td>
+          - creates a new branch from the current commit (or from the specified commit)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git branch -m <i>oldBranchName</i> <strong>newBranchName</strong>
+        </td>
+        <td>
+          - renames the specified <i>oldBranchName</i> branch (if <i>oldBranchName</i> is omitted the current
+          branch is
+          renamed)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git push -d <strong>remoteVar</strong> <strong>branch</strong>
+        </td>
+        <td>
+          - deletes the specified <strong>branch</strong> from remote repo <u>(so careful with this)</u>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git diff <small>[options]</small>
+        </td>
+        <td>
+          - prints change diffs between the current Commit and the Modified Area and Stagng Area <br>
+          <small>[options]</small> <br>
+          - (<small>--staged</small>) only prints diffs between the previous Commit and the Staging Area <br>
+          - (<strong>branch|commitId</strong> <strong>branch|commitId</strong>) prints the diffs between the specified branches or commits
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git merge <strong>branchName</strong> <small>[-m <strong>message</strong>]</small>
+        </td>
+        <td>
+          - merges the specified branch into the current branch by creating new 'merge' commit on the current branch <br>
+          <small>[options]</small> <br>
+          - (<small>-m <strong>message</strong></small>) adds a message to the new commit
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git merge --abort|--continue
+        </td>
+        <td>
+          - (used on merge conflict) aborts or continues the merge process
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git rebase <small>[options]</small> <strong>branch</strong>
+        </td>
+        <td>
+          - rebases <strong>branch</strong> to the current branch <br>
+          <small>[options]</small> <br>
+          - (<small>-i</small>) (interactive mode) open the default text editor to finegrain the rebase process (commits to pick, exclude, etc...)
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git rebase --abort|--continue
+        </td>
+        <td>
+          - (used on rebase conflict) aborts or continues the rebase process
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          Remote Repo (on GitHub)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git clone <strong>repoUrl</strong>
+        </td>
+        <td>
+          - clones the remote repository in the current local directory
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git remote <small>[options]</small>
+        </td>
+        <td>
+          - lists remote repository variables <br>
+          <small>[options]</small> <br>
+          - (<small>-v</small>) variables are printed with their URLs (the <mark>origin</mark> is the default and set when the repo is cloned)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git remote add <strong>remoteVar URL</strong>
+        </td>
+        <td>
+          - sets a remote variable
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git remote rename <strong>oldVar newVar</strong>
+        </td>
+        <td>
+          - renames the specified remote variable
+        </td>
+      </tr>
+      <tr>
+        <td>
+          git remote remove <strong>remoteVar</strong>
+        </td>
+        <td>
+          - deletes the specified remote variable
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git push <i>URL|remoteVar</i> <small>[options]</small>
+        </td>
+        <td>
+          - pushes local changes to the remote repo <br>
+          <small>[options]</small> <br>
+          - (<small>-f</small>) force push (override remote changes) <br>
+          - (<small>--delete <strong>branchName</strong></small>) deletes the remote branch (so careful with that)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git pull <i class="openable">URL|remoteVar<div>
+              <p> - <mark>origin</mark> if not specified </p>
+            </div></i>
+        </td>
+        <td>
+          - pulls changes from the remote repo and updates the local repo (this is basically <mark>fetch</mark> + <mark>checkout</mark>) <br>
+          - (<mark>git reset --hard <strong>remoteVar</strong>/<strong>branch</strong></mark> to 'force pull' (override the local branch with the remote))
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          git fetch <i>remoteVar</i>
+        </td>
+        <td>
+          - fetches changes from the remote repo <u>without making any changes locally</u>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <h2 class="headerSection"> Notes : </h2>
+    <h2 class="headerSection"> Description and Demonstration </h2>
+    <h2 class="headerSection"> Useful Links : </h2>
+    <p><a href="https://git-lfs.github.com/" target="_blanc">git-fls.github.com</a></p>
+    <h2 class="headerSection"> Remember This : </h2>
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+    <h2 class="headerExtra"><u> GitHub </u></h2>
+    <p> - GitHub is a hosting service for Git repositories and Gists, on GitHub we can manage our repositories just like we do locally with Git (we can get 1GB free space apparently [2020-04-19])</p>
+    <p> - a GitHub repo is called 'remote repo', team members working on the same project connect to and synchronize
+      this repository </p>
+    <p> - a <mark class="mark">Gits</mark> is a code snippet on GitHub, GitHub's Gist service is a lightweight hosting service to distribute and version control code snippets </p>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 class="headerExtra"><u> Git </u></h2>
+    <p> - Git is a distributed version control system, it tracks and stores repository history during the developement stages </p>
+    <p> - a Git Commit is basically a project status, when you 'chechout' a commit <u>Git shows you the files at that commit stage on the file system</u> </p>
+    <p> - files can be in 1 of the following 3 states: </p>
+    <p class="indent-lv1"> - <mark class="mark">Modified</mark> - changes <u>since the last commit</u> </p>
+    <p class="indent-lv1"> - <mark class="mark">Staging Area</mark> - changes that will be commited </p>
+    <p class="indent-lv1"> - <mark class="mark">Committed</mark> - saved changes in a commit</p>
+    <p> - other than the above 3 sates changes can be stashed (it's a separated area for putting changes aside) </p>
+    <img src="Git Tree.jpg" height=250>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 style="color:darkblue;"><u> Initializing Git Repositories <mark>init</mark> / <mark>config</mark> /
+        <mark>status</mark> / <mark>log</mark> </u></h2>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
 // init -----------------------------------------------------------------------------------
     $ git init                                                                             // initializes the current directory as a Git repo
     $ git init /home/someUser/gitProject                                                   // initializes the specified directory as a Git repo 
@@ -605,11 +605,11 @@
         * 11e1676 (origin/master, origin/HEAD) index file modified
         * 600f577 Initial
     </pre>
-  </details>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>init</mark> TEST </u></h4>
-    <pre class="cmd">
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>init</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git init                                                        // initializes the current directory as Git Repo 
         Initialized empty Git repository in /home/pall/testRepo/.git/
     pall@ryzen:~/testRepo$ ls -la
@@ -623,11 +623,11 @@
     pall@ryzen:/$ git init /home/pall/testRepo                                             // initializes the specified directory 
         Initialized empty Git repository in /home/pall/testRepo/.git/
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>config</mark> TEST </u></h4>
-    <p> - same goes for the user email configurations </p>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>config</mark> TEST </u></h4>
+      <p> - same goes for the user email configurations </p>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git config user.name Pall                                       // configures the user name for the local Git repo
     pall@ryzen:~/testRepo$ git config user.name                                            // returns the local Git repositorie's user name 
         Pall
@@ -635,10 +635,10 @@
         arapdPall21                                                                        // -! if there's no local Git configuration than global configurations will be used  
     pall@ryzen:~/testRepo$    
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>status</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>status</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git status
         On branch master
     
@@ -656,10 +656,10 @@
             
     pall@ryzen:~/testRepo$ git status
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>log</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>log</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git log --oneline
         0088d40 (HEAD -> master) css file modified                                         // version history of the master branch  
         11e1676 (origin/master, origin/HEAD) index file modified                           // -! status of the remote repository (displayed red in the terminal)   
@@ -675,16 +675,16 @@
         * 600f577 Initial
     pall@ryzen:~/testRepo$ 
     </pre>
-  </details>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 style="color:darkblue;"><u> Stagin Area and Commit management <mark>add</mark> / <mark>rm</mark> /
-      <mark>commit</mark> / <mark>tag</mark> / <mark>checkout</mark> / <mark>revert</mark> / <mark>reset</mark>
-    </u>
-  </h2>
-  <details class="example">
-    <summary> DEMO </summary>
-    <pre class="cmd">
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 style="color:darkblue;"><u> Stagin Area and Commit management <mark>add</mark> / <mark>rm</mark> /
+        <mark>commit</mark> / <mark>tag</mark> / <mark>checkout</mark> / <mark>revert</mark> / <mark>reset</mark>
+      </u>
+    </h2>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
 // add ------------------------------------------------------------------------------------
     $ git add *                                                                            // add all files (including nested onces) from the Modified Area to the Stagin Area      // -! also adds untracket files    
     $ git add -p *                                                                         // add all files (including nested onces) from the Modified Area to the Stagin Area      // -! does not add untracked files 
@@ -720,12 +720,12 @@
     
     git reset HEAD                                                                         // empties the Stagin Area by placing files back to their previous place 
     </pre>
-  </details>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>add</mark> TEST </u></h4>
-    <p> - using the <mark>git add *</mark> woluld simply add both files to the Stagin Area in the below example </p>
-    <pre class="cmd">
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>add</mark> TEST </u></h4>
+      <p> - using the <mark>git add *</mark> woluld simply add both files to the Stagin Area in the below example </p>
+      <pre class="cmd">
     all@ryzen:~/testRepo$ git status
         On branch master
     
@@ -773,10 +773,10 @@
     
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>rm</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>rm</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git rm -r TEST                                                  // removes files recursively from the file system and puts the deleted status in the Stagin Area    
         rm 'TEST/feature1.js'
         rm 'TEST/feature2.js'
@@ -821,10 +821,10 @@
         index.html  styles.css  TEST                                                       // -! files are not deleted just untracked by Git  
     pall@ryzen:~/testRepo$         
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>commit</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>commit</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git status
         On branch master
 
@@ -869,10 +869,10 @@
         600f577 Initial
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>tag</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>tag</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git tag tag1                                                    // adds a tag name to the most recent commit  
     pall@ryzen:~/testRepo$ git log --oneline
         0043cd1 (HEAD -> master, tag: tag1) new commit message                             // tagname added 
@@ -906,10 +906,10 @@
         600f577 (tag: Initial) Initial
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>checkout</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>checkout</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git checkout feature1                                           // navigation to the 'feature1' branch  
         Switched to branch 'feature1'
     pall@ryzen:~/testRepo$ git checkout basicHTML                                          // navigation to the basicHTML tagged branch 
@@ -941,10 +941,10 @@
         * 600f577 Initial
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>revert</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>revert</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git log --oneline --graph --all
         * 768628c (HEAD -> master) paragraphs are removed
         * efec648 (tag: addScript) script added                                            // this commit will be reverted 
@@ -994,9 +994,9 @@
         * 600f577 Initial
     pall@ryzen:~/testRepo$ google-chrome-stable index.html
     </pre>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>reset</mark> TEST </u></h4>
-    <pre class="cmd">
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>reset</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git log --oneline
         b807d96 (HEAD -> master) Revert "Revert "script added""
         58d2929 Revert "script added"
@@ -1072,18 +1072,18 @@
         no changes added to commit (use "git add" and/or "git commit -a")
     pall@ryzen:~/testRepo$ 
     </pre>
-  </details>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 style="color:darkblue;"><u> Stash <mark>stash save</mark> / <mark>stash list</mark> / <mark>stash pop</mark> /
-      <mark>stash apply</mark> / <mark>stash drop</mark> </u></h2>
-  <p> - the Stash is an area where you can put modifications aside, so this clears the Modified and Stagin areas (for
-    someting else) </p>
-  <p> - we can have multiple stash entries and recall them when we need them, <u>the Stash cannot be pushed to the
-      remote repository</u></p>
-  <details class="example">
-    <summary> DEMO </summary>
-    <pre class="cmd">
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 style="color:darkblue;"><u> Stash <mark>stash save</mark> / <mark>stash list</mark> / <mark>stash pop</mark> /
+        <mark>stash apply</mark> / <mark>stash drop</mark> </u></h2>
+    <p> - the Stash is an area where you can put modifications aside, so this clears the Modified and Stagin areas (for
+      someting else) </p>
+    <p> - we can have multiple stash entries and recall them when we need them, <u>the Stash cannot be pushed to the
+        remote repository</u></p>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
 // stash save -----------------------------------------------------------------------------
     git stash save                                                                         // moves all files to the Stash from the Modified and the Stagin areas   
     git stash save -u                                                                      // does the same as above but also moves untracket files    
@@ -1100,11 +1100,11 @@
 // stash drop -----------------------------------------------------------------------------
     git stash drop stash@{3}                                                               // deletes the 4th stash entry 
     </pre>
-  </details>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>stash</mark> / <mark>stash list</mark> TEST </u></h4>
-    <pre class="cmd">
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>stash</mark> / <mark>stash list</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git status
         On branch master
     
@@ -1168,10 +1168,10 @@
         stash@{0}: WIP on master: 973bebd basic HTML page                                  // stash 
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>pop</mark> / <mark>apply</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>pop</mark> / <mark>apply</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git stash list                                                  // list current stash 
         stash@{0}: On master: styles.css file modified
         stash@{1}: On master: index file modified
@@ -1201,9 +1201,9 @@
         stash@{0}: On master: styles.css file modified                                     // the applied entry is still in the stash list 
     pall@ryzen:~/testRepo$ 
     </pre>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>drop</mark> TEST </u></h4>
-    <pre class="cmd">
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>drop</mark> TEST </u></h4>
+      <pre class="cmd">
     all@ryzen:~/testRepo$ git stash list
         stash@{0}: On master: script.js file added                                         // 3 stash entries 
         stash@{1}: On master: index.html file modified
@@ -1215,19 +1215,19 @@
         stash@{1}: On master: styles.css file modified
     pall@ryzen:~/testRepo$     
     </pre>
-  </details>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 style="color:darkblue;"><u> Branches and Merging Branches <mark>branch</mark> / <mark>diff</mark> /
-      <mark>merge</mark> / <mark>rebase</mark> </u></h2>
-  <p> - commit hashes are basically computed from the content of the commit, every commit contains the hash which is
-    ahead of it, this is how they form the commit chain (or tree) </p>
-  <p> - rebasing is basically going back to a specific commit then comparing the commits ahead, so git recomputes the
-    hashes and check if there's any change compared to the content what it has now </p>
-  <img src="Merge VS Rebase.jpg" height="250">
-  <details class="example">
-    <summary> DEMO </summary>
-    <pre class="cmd">
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 style="color:darkblue;"><u> Branches and Merging Branches <mark>branch</mark> / <mark>diff</mark> /
+        <mark>merge</mark> / <mark>rebase</mark> </u></h2>
+    <p> - commit hashes are basically computed from the content of the commit, every commit contains the hash which is
+      ahead of it, this is how they form the commit chain (or tree) </p>
+    <p> - rebasing is basically going back to a specific commit then comparing the commits ahead, so git recomputes the
+      hashes and check if there's any change compared to the content what it has now </p>
+    <img src="Merge VS Rebase.jpg" height="250">
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
 // branch ---------------------------------------------------------------------------------
     git branch -a                                                                          // lists all local and remote branches (remote branches are listed red)   
     git branch feature1 6d667f8                                                            // creates the 'feature1' branch from the 6d667f8 commit  
@@ -1251,11 +1251,11 @@
     git merge 'feature1'                                                                   // moves the current 'master' branch on the same level as 'feature1' 
     git rebase 'feature1'                                                                  // moves the current 'master' branch on the same level as 'feature1' 
     </pre>
-  </details>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>branch</mark> TEST </u></h4>
-    <pre class="cmd">
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>branch</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git branch                                                      // list local branches only 
         feature1
         * master
@@ -1281,10 +1281,10 @@
         600f577 (tag: Init, b2) Initial                                                    // 'b2' branch added here 
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>diff</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>diff</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git diff                                                        // prints file differences between the previous commit and the Modified Area    
         diff --git a/index.html b/index.html
         index 4a17951..762e0cf 100644
@@ -1344,10 +1344,10 @@
         }
     pall@ryzen:~/testRepo$     
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>merge</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>merge</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git log --oneline --graph --all
         * 24a3001 (origin/feature1, feature1) feature1 added
         | * c133fed (HEAD -> master, origin/master) paragraphs added and styled
@@ -1407,10 +1407,10 @@
         nothing to commit, working tree clean
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>rebase</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>rebase</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo3$ log --oneline --all --graph
         * be6f32d (HEAD -> style) st2                                                      // there are 2 separate branches 
         * 7d57f54 st1
@@ -1443,14 +1443,14 @@
         * 7f47516 Initial
     pall@ryzen:~/testRepo3$ 
     </pre>
-  </details>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 style="color:darkblue;"><u> Remote Repository (no GitHub) <mark>clone</mark> / <mark>remote</mark> /
-      <mark>push</mark> / <mark>pull</mark> / <mark>fetch</mark></u></h2>
-  <details class="example">
-    <summary> DEMO </summary>
-    <pre class="cmd">
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 style="color:darkblue;"><u> Remote Repository (no GitHub) <mark>clone</mark> / <mark>remote</mark> /
+        <mark>push</mark> / <mark>pull</mark> / <mark>fetch</mark></u></h2>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre class="cmd">
 // clone ----------------------------------------------------------------------------------
     git clone git@github.com:gulpjs/gulp.git                                               // clones the Gulp repo into the current local direcoty 
     
@@ -1474,11 +1474,11 @@
     git pull origin                                                                        // downloads and updates all branches from the 'origin' remote repository   
                                                                                            // pull = fetch + merge commands 
     </pre>
-  </details>
-  <details class="example">
-    <summary> Example : </summary>
-    <h4 style="color:darkblue;"><u> <mark>clone</mark> TEST </u></h4>
-    <pre class="cmd">
+    </details>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> <mark>clone</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~$ git clone https://github.com/gulpjs/gulp.git                             // clones the gulp repo in the current directory  
     Cloning into 'gulp'...
         remote: Enumerating objects: 23, done.
@@ -1489,10 +1489,10 @@
         Resolving deltas: 100% (3010/3010), done.
     pall@ryzen:~$ ls
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>remote</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>remote</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git remote -v                                                   // list remote repo variables with their URLs
         origin  https://github.com/arpadpall21/testRepo.git (fetch)
         origin  https://github.com/arpadpall21/testRepo.git (push)
@@ -1513,10 +1513,10 @@
         testRepo2   https://github.com/arpadpall21/testRepo2.git (push)
     pall@ryzen:~/testRepo$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>push</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>push</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@ryzen:~/testRepo$ git push origin --all                                           // pushes all branches to the specified remote repository   
         Username for 'https://github.com': arpadpall21
         Password for 'https://arpadpall21@github.com': 
@@ -1550,10 +1550,10 @@
         * style                                                                            // -! the branch is not deleted locally 
     pall@Ryzen:~/Test/testRepo3$ 
     </pre>
-    <hr>
-    <!--------------------------------------------------------------------------------------------------->
-    <h4 style="color:darkblue;"><u> <mark>pull</mark> TEST </u></h4>
-    <pre class="cmd">
+      <hr>
+      <!--------------------------------------------------------------------------------------------------->
+      <h4 style="color:darkblue;"><u> <mark>pull</mark> TEST </u></h4>
+      <pre class="cmd">
     pall@Ryzen:~/Test/testRepo3$ git log --all --oneline --graph
         * 7f47516 (HEAD -> master, style) Initial                                          // locally we have 1 commit with 2 branches 
     pall@Ryzen:~/Test/testRepo3$ git pull origin                                           // all remote commits and branches are downloaded and the local project is updated 
@@ -1580,24 +1580,24 @@
         * 7f47516 (style) Initial
     pall@Ryzen:~/Test/testRepo3$ 
     </pre>
-  </details>
-  <hr>
-  <!--------------------------------------------------------------------------------------------------->
-  <h2 class="header"> Ignoring files (<mark>.gitignore</mark> / <mark>.gitkeep</mark>) </h2>
-  <p> - the <mark class="mark">.gitignore</mark> file contains glob paths for files that are ignored by git </p>
-  <p class="indent-lv1"> - to untrack already tracked files add new paths to <mark class="mark">.gitignore</mark> then run <mark>git rm --cached <strong>path:glob</strong></mark> </p>
-  <p> - the <mark class="mark">.gitkeep</mark> file makes an empty directory trackable (since git cannot track empty directories) </p>
-  <pre class="syntax">
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Ignoring files (<mark>.gitignore</mark> / <mark>.gitkeep</mark>) </h2>
+    <p> - the <mark class="mark">.gitignore</mark> file contains glob paths for files that are ignored by git </p>
+    <p class="indent-lv1"> - to untrack already tracked files add new paths to <mark class="mark">.gitignore</mark> then run <mark>git rm --cached <strong>path:glob</strong></mark> </p>
+    <p> - the <mark class="mark">.gitkeep</mark> file makes an empty directory trackable (since git cannot track empty directories) </p>
+    <pre class="syntax">
 <span style="color:darkgray;">// .gitignore (file) </span>
     # <strong>comment</strong>
     
     <strong>glob</strong>
     <i>...</i>
     </pre>
-  <details class="example">
-    <summary> DEMO </summary>
-    <p> - <mark>.gitignore</mark> file </p>
-    <pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <p> - <mark>.gitignore</mark> file </p>
+      <pre>
     // glob                               // ignored file                                  // tracked file 
 // ----------------------------------------------------------------------------------------
     **/logs                               logs/debug.log
@@ -1681,8 +1681,8 @@
     logs/debug.log                        logs/debug.log                                   debug.log
                                                                                            build/logs/debug.log
     </pre>
-    <p> - <mark>.gitkeep</mark> file </p>
-    <pre>
+      <p> - <mark>.gitkeep</mark> file </p>
+      <pre>
     // original path                      // tracked by Git 
 // ---------------------------------------
     logs/mondaylog1.log                   yes
@@ -1690,18 +1690,18 @@
     logs/tuesday/.gitkeep                 yes         // directory tracked because there's a .gitkeep file inside it (not empty)
     logs/wednesday/                       no          // all empty directories are ignored by Git 
     </pre>
-  </details>
-  <!----------------------------------------------------------------------------------------------------->
-  <hr>
-  <h3 style="color:darkblue;"><u> <mark>.dockerignore</mark> VS <mark>.gitignore</mark> </u></h3>
-  <p> - Git and Docker do fundamentally different thins, Git track only files (for version control) VS Docker deals
-    with
-    directory structures for container file system managament </p>
-  <p> - this is one of the reasons why globs are used differently in these files! But there are other tricky things
-    around globs as well </p>
-  <details class="example">
-    <summary> DEMO </summary>
-    <pre>
+    </details>
+    <!----------------------------------------------------------------------------------------------------->
+    <hr>
+    <h3 style="color:darkblue;"><u> <mark>.dockerignore</mark> VS <mark>.gitignore</mark> </u></h3>
+    <p> - Git and Docker do fundamentally different thins, Git track only files (for version control) VS Docker deals
+      with
+      directory structures for container file system managament </p>
+    <p> - this is one of the reasons why globs are used differently in these files! But there are other tricky things
+      around globs as well </p>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
     // -! in .gitignore golb files and directories are recursively checked, if there's a match the WHOLE PATH IS IGNORED (because git tracks only files)
     // -! in .dockerignore there's no recursive check and only the matching part of the path is ignored (because docker copies directory structures)
     
@@ -1758,10 +1758,14 @@
                                     logs/tuesday/log2.log           no                              logs/tuesday/log2.log   
                                     logs/overall.log                no                              logs/overall.log        
     </pre>
-  </details>
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Tags </h2>
+    <p> - a tag is basically a metadata attached to a commit, <u>tags are unique within the repo</u> (so the same tagname cannot be used on different branches) </p>
+    <p> - tags are used to reference a specific commit (a snapshot at a particular point in time) </p>
 
-
-  <br><br>
-</body>
+    <br><br>
+  </body>
 
 </html>
