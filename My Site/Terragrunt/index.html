@@ -107,8 +107,11 @@ stage 3 :
 
 - terragrunt first does dependency resolution (creates a direct acyclic grap DAG), then executes independed modules (stacks) in parallel
 
-
 - demo mock data + explain why use it
+
+Unit's Underlying mechanics
+    - the 'terraform' block copies the referenced module into the current .terragrunt-cache
+    - executes terraform plan|apply (depending terragrunt cmd)
 
 
 Parallel Execution: Terragrunt then executes the apply or plan commands for these independent modules concurrently, up to the limit specified by the --parallelism flag (default is 10). This means that if you have multiple modules that do not depend on each other, they can be processed simultaneously, significantly speeding up the overall execution time.
@@ -123,6 +126,7 @@ Concepts:
     - it's common to use a root.hcl in the main directory then use terragrunt.hcl in sub directories
     - units can be nested (a directory containing terragrunt.hcl file can contain further child units (dir with terragrunt.hcl file))
     - each stack can manage their own backend
+    - units are atomic
   - Stack:
     - is a collection terraform units
     - manages dependencies between units
@@ -188,6 +192,9 @@ According to Ned in the cloud terragrunt addresses 3 problems
 
 At documentation I need a good example 
 
+recommended to bo added to .gitignore
+  - .terragrunt-cache
+  - 
 
 
 
