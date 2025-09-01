@@ -13,179 +13,51 @@
   <body>
     <h1> Terragrunt </h1>
     <p> Updated: ( 2025-06-07 ) </p>
-  <nav class="sitenav"> 
-    <a href="../index.html">MySite > </a> Terragrunt
-  </nav>
+    <nav class="sitenav">
+      <a href="../index.html">MySite > </a> Terragrunt
+    </nav>
 
     <p class="subSite"><a href> SubSite > </a></p>
 
     <table class="table">
       <tr>
-        <th style="width:30%;"> Method / Property / statement ect... </th>
+        <th style="width:30%;"> CMD </th>
         <th> Description </th>
       </tr>
       <tr>
+        <td> terragrunt init </td>
+        <td> 
+          - initializes the terragrunt project (<a href="https://terragrunt.gruntwork.io/docs/features/auto-init/" target="_blank">automatically called on other commands like <mark>terragrunt plan</mark>)</a><br>
+          - calls <mark>terraform|tofu init</mark> under the hood
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Unit Commands </td>
+      </tr>
+      <tr>
         <td>
-          demo prop
+          terragrunt <opt>[options]</opt> plan|apply|destroy
         </td>
         <td>
-          - demo description
-          <span class="browserSupport">
-            <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-            <span><i class="fab fa-firefox"></i> </span>
-            <span><i class="fab fa-opera"></i> </span>
-            <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> </span>
-            <span><i class="fab fa-safari"></i> </span>
-            <span><i class="fab fa-node-js"></i> </span>
-          </span>
+          - processes terragrunt configs then passes them to the <mark>terraform|tofu plan|apply|destroy</mark> command <br>
+          <opt>[options]</opt><br>
+          - (<opt>--log-format bare</opt>) less logs<br>
+          - (<opt>--parallelism <otpval>nr</otpval></opt>) limits the number of parallel execution threads (Default: 10)
         </td>
       </tr>
 
     </table>
-    <br>
-    <h2 class="headerSection"> Notes : </h2>
-
-    <h2 class="headerSection"> Useful Links : </h2>
-    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/blocks/" target="_blank"> reference: blocks (terragrunt.gruntwork.io) </a></p>
-    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/attributes/" target="_blank"> reference: attributes (terragrunt.gruntwork.io) </a></p>
-    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/functions/" target="_blank"> reference: functions (terragrunt.gruntwork.io) </a></p>
-    <h2 class="headerSection"> Remember This : </h2>
-
-    <h2 class="headerSection"> Description and Demonstration : </h2>
-    <p> - Terragrunt is a thin wrapper around Terrafrom or OpenTofu (so esentially under the hood commands <mark>terraform</mark>|<mark>tofu</mark> are executed), so esentially terragrunt is an orchestration tool that extends the capabilities of terraform|OpenTofu </p>
-    <p> - Terragrunt aims to improve Terraform|OpenTofu with: </p>
-    <p class="indent-lv1"> - code reusability (DRY) (encourages to create modules then reuse them) </p>
-    <p class="indent-lv1"> - certalized configuration aproach </p>
-    <p class="indent-lv1"> - use environment specific config </p>
-    <p> - Terragrunt uses <mark>.hcl</mark> files for its configurations, it's a convention to use <mark>terragrunt.hcl</mark> for unit configs and <mark>root.hcl</mark> of root module configs </p>
 
 
 
-    <pre>
-// terragrunt project demo
-    
-    my-terragrunt-project/
-    ├── deployments/
-    │   ├── root.hcl
-    │   ├── dev/
-    │   │   ├── app/
-    │   │   │   └── terragrunt.hcl
-    │   │   ├── db/
-    │   │   │   └── terragrunt.hcl
-    │   │   └── vpc/
-    │   │       └── terragrunt.hcl
-    │   ├── prod/
-    │   │   ├── app/
-    │   │   │   └── terragrunt.hcl
-    │   │   ├── db/
-    │   │   │   └── terragrunt.hcl
-    │   │   └── vpc/
-    │   │       └── terragrunt.hcl
-    └── modules/
-        ├── app/
-        │   └── main.tf
-        ├── db/
-        │   └── main.tf
-        └── vpc/
-            └── main.tf
-    </pre>
-
-
-    <!--
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-stage 1: high level overview 
-    - read through 
-    - create notes 
-    - deciede what exactly will you document down 
-    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
-    
-stage 2:  low level overview
-    - deeper understanding of all what you've taken down in stage 1
-    
-stage 3 : 
-    - organize and document down everything 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-
-
-
-- terragrunt is a wrapper around terraform (and openTofu)
-    - orchestration tool 
-    - extends the capabilities of Terraform/OpenTofu
-
-- improves code reusability (reuse the same stack for different environments)
-- provides centralized configuration approach
-- environment specific config
-
-- terragrunt uses .hcl files (tipicaly terragrunt.hcl) which is terraform's standard format
-- it's common to have a root.hcl on the main directory and the child directories have the terragrunt.hcl file
-    - a terragrunt.hcl file contains configurations for that stack
-
-- stack can be executed individually or run all stacks that are in subdirectories
-- terragrunt executes parallel deployment (executes stacks in parallel)
-    - does this mean running terragrunt apply --all?
-
-- terragrunt stored its cache files in .terragrunt-cache directory (which is tipically added to .gitignore)
-
-- terragrunt first does dependency resolution (creates a direct acyclic grap DAG), then executes independed modules (stacks) in parallel
-
-- demo mock data + explain why use it
-
-Unit's Underlying mechanics
-    - the 'terraform' block copies the referenced module into the current .terragrunt-cache
-    - executes terraform plan|apply (depending terragrunt cmd)
-
-
-Parallel Execution: Terragrunt then executes the apply or plan commands for these independent modules concurrently, up to the limit specified by the --parallelism flag (default is 10). This means that if you have multiple modules that do not depend on each other, they can be processed simultaneously, significantly speeding up the overall execution time.
-
-
-
-Concepts:
-  - Unit: 
-    - single instance or infrastructure managed by Terragrunt
-    - can have its own state
-    - basically a directory containing a terragrunt.hcl file
-    - it's common to use a root.hcl in the main directory then use terragrunt.hcl in sub directories
-    - units can be nested (a directory containing terragrunt.hcl file can contain further child units (dir with terragrunt.hcl file))
-    - each stack can manage their own backend
-    - units are atomic
-  - Stack:
-    - is a collection terraform units
-    - manages dependencies between units
-    - organizes the infrastructure into logical groups
-    - 2 stack types:
-      - implicit (directory structure)
-        - basically auto detects units in folder structure
-      - explicit (defined by terragrunt.stack.hcl file)
-    
-    ??? terragrunt.stack.hcl (central organization of related resources, like declaring local variables, etc...)
-    - it's possible to have nested stack, this approach is used to namespace dependencies
-    
-    
-    
-  - Module:
-    - a terraform or OpenTofu module which is reusable
-    - it's commont to version modules
-  - Resource:
-    - terraform or OpenTofu resource
-  - State:
-    - terraform or OpenTofu state
-  - DAG (Directed Acyclic Graph)
-    - Teggragunt uses it to determine dependency order within a unit
-
-
-
-
-Builtin functions: https://terragrunt.gruntwork.io/docs/reference/built-in-functions/
-
-
-CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
-    basically all terraform commands can be executed but with 'terragrunt' instead of 'terraform'
-
+<!--
     terragrunt init
         - initializes the project (auto init is enabled by default (https://terragrunt.gruntwork.io/docs/features/auto-init/))
-
+    
     terragrunt [option] plan
         - [option]
             --log-format bare (for less output)
@@ -206,6 +78,115 @@ CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
     terragrunt run --all output       // view the output of units
     terragrunt run --all validate
         - --all runs the command on all units
+
+-->
+
+    <br>
+    <h2 class="headerSection"> Notes : </h2>
+
+    <h2 class="headerSection"> Useful Links : </h2>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/blocks/" target="_blank"> reference: blocks (terragrunt.gruntwork.io) </a></p>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/attributes/" target="_blank"> reference: attributes (terragrunt.gruntwork.io) </a></p>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/functions/" target="_blank"> reference: functions (terragrunt.gruntwork.io) </a></p>
+    <h2 class="headerSection"> Remember This : </h2>
+
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+    <p> - Terragrunt is a thin wrapper around Terrafrom or OpenTofu (so esentially under the hood commands <mark>terraform</mark>|<mark>tofu</mark> are executed), so esentially terragrunt is an orchestration tool that extends the capabilities of terraform|OpenTofu </p>
+    <p> - Terragrunt aims to improve Terraform|OpenTofu with: </p>
+    <p class="indent-lv1"> - code reusability (DRY) (encourages to create modules then reuse them) </p>
+    <p class="indent-lv1"> - certalized configuration aproach </p>
+    <p class="indent-lv1"> - use environment specific config </p>
+    <p> - Terragrunt uses <mark>.hcl</mark> files for its configurations, it's a convention to use <mark>terragrunt.hcl</mark> for unit configs and <mark>root.hcl</mark> of root module configs </p>
+    <pre>
+// terragrunt's recommended project structure (demo) 
+    
+    my-terragrunt-project/
+    ├── deployments/
+    │   ├── root.hcl                                      // root module config 
+    │   ├── dev/                                          // environments 
+    │   │   ├── app/
+    │   │   │   └── terragrunt.hcl                        // unit configs
+    │   │   ├── db/
+    │   │   │   └── terragrunt.hcl
+    │   │   └── vpc/
+    │   │       └── terragrunt.hcl
+    │   ├── prod/
+    │   │   ├── app/
+    │   │   │   └── terragrunt.hcl
+    │   │   ├── db/
+    │   │   │   └── terragrunt.hcl
+    │   │   └── vpc/
+    │   │       └── terragrunt.hcl
+    └── modules/                                          // modules (the idea is to reuse modules across environments)
+        ├── app/
+        │   └── main.tf
+        ├── db/
+        │   └── main.tf
+        └── vpc/
+            └── main.tf
+    </pre>
+    <p> - there are 2 main Terragrunt concepts: </p>
+    <p class="indent-lv1"> - <mark class="mark">Unit</mark> </p>
+    <p class="indent-lv2"> - single instance of infrastructure managed by Terragrunt (directory containing a <mark>terragrunt.hcl</mark> file) </p>
+    <p class="indent-lv2"> - atomic -> single block contains all its dependencies <u>and backend (state file)</u> </p>
+    <p class="indent-lv2"> - under the hood Terragrunt basically executes <mark>terraform <reqval>cmd</reqval></mark> command on the unit </p>
+    <p class="indent-lv1"> - <mark class="mark">Stack</mark> </p>
+    <p class="indent-lv2"> - a collection of units, the main idea of stacks is to execute a collection of units </p>
+    <p class="indent-lv2"> - there are 2 graph types: </p>
+    <p class="indent-lv3"> - <mark class="mark">implicit stack</mark> </p>
+    <p class="indent-lv4"> - basically any directory where the <mark>terragrunt run --all <reqval>cmd</reqval></mark> is executed terragrunt does a DAG then starts executing underlying modules individually </p>
+    <p class="indent-lv3"> - <mark class="mark">explicit stack</mark> </p>
+    <p class="indent-lv4"> - this one uses a <mark>terragrunt.stack.hcl</mark> file which dynamicaly builds units (this one is a bit more involved, but I didn't found worth learning it at the time of writing this) <a href="https://terragrunt.gruntwork.io/docs/features/stacks/#explicit-stacks-blueprint-based-generation" target="_blank">[link]</a> </p>
+    <!--------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Under the Hood Mechanics </h2>
+    <p> - Terragrunt builds a DAG (Direct Acyclic Grap (which is basically a dependency tree) then starts <u>executing objects in parallel</u> (when possible, depending on dependencies), this mechanics is applied on both Unit and Stack levels </p>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!--
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+stage 1: high level overview 
+    - read through 
+    - create notes 
+    - deciede what exactly will you document down 
+    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
+    
+stage 2:  low level overview
+    - deeper understanding of all what you've taken down in stage 1
+    
+stage 3 : 
+    - organize and document down everything 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+- stack can be executed individually or run all stacks that are in subdirectories
+- terragrunt executes parallel deployment (executes stacks in parallel)
+    - does this mean running terragrunt apply --all?
+
+- terragrunt stored its cache files in .terragrunt-cache directory (which is tipically added to .gitignore)
+
+
+- demo mock data + explain why use it
+
+Unit's Underlying mechanics
+    - the 'terraform' block copies the referenced module into the current .terragrunt-cache
+    - executes terraform plan|apply (depending terragrunt cmd)
+
+
+
+
+CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
+    basically all terraform commands can be executed but with 'terragrunt' instead of 'terraform'
+
     
     
 According to Ned in the cloud terragrunt addresses 3 problems
@@ -250,6 +231,66 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     
 -->
 
+    <!--
+- terragrunt is a wrapper around terraform (and openTofu)
+    - orchestration tool 
+    - extends the capabilities of Terraform/OpenTofu
+
+- improves code reusability (reuse the same stack for different environments)
+- provides centralized configuration approach
+- environment specific config
+
+- terragrunt uses .hcl files (tipicaly terragrunt.hcl) which is terraform's standard format
+- it's common to have a root.hcl on the main directory and the child directories have the terragrunt.hcl file
+    - a terragrunt.hcl file contains configurations for that stack
+
+
+
+
+Concepts:
+  - Unit: 
+    - single instance or infrastructure managed by Terragrunt
+    - can have its own state
+    - basically a directory containing a terragrunt.hcl file
+    - it's common to use a root.hcl in the main directory then use terragrunt.hcl in sub directories
+    - units can be nested (a directory containing terragrunt.hcl file can contain further child units (dir with terragrunt.hcl file))
+    - each stack can manage their own backend
+    - units are atomic
+  - Stack:
+    - is a collection terraform units
+    - manages dependencies between units
+    - organizes the infrastructure into logical groups
+    - 2 stack types:
+      - implicit (directory structure)
+        - basically auto detects units in folder structure
+      - explicit (defined by terragrunt.stack.hcl file)
+    
+    ??? terragrunt.stack.hcl (central organization of related resources, like declaring local variables, etc...)
+    - it's possible to have nested stack, this approach is used to namespace dependencies
+    
+    
+    
+  - Module:
+    - a terraform or OpenTofu module which is reusable
+    - it's commont to version modules
+  - Resource:
+    - terraform or OpenTofu resource
+  - State:
+    - terraform or OpenTofu state
+  - DAG (Directed Acyclic Graph)
+    - Teggragunt uses it to determine dependency order within a unit
+
+
+
+
+- terragrunt first does dependency resolution (creates a direct acyclic grap DAG), then executes independed modules (stacks) in parallel
+
+
+
+Parallel Execution: Terragrunt then executes the apply or plan commands for these independent modules concurrently, up to the limit specified by the --parallelism flag (default is 10). This means that if you have multiple modules that do not depend on each other, they can be processed simultaneously, significantly speeding up the overall execution time.
+
+
+-->
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr>
     <hr>
