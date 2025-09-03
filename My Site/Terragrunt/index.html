@@ -25,6 +25,14 @@
         <th> Description </th>
       </tr>
       <tr>
+        <td> <a href="https://terragrunt.gruntwork.io/docs/reference/cli/" target="_blank">terragrunt cmd</a></td>
+        <td> - command reference </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
         <td> terragrunt init </td>
         <td> 
           - initializes the terragrunt project (<a href="https://terragrunt.gruntwork.io/docs/features/auto-init/" target="_blank">automatically called on other commands like <mark>terragrunt plan</mark>)</a><br>
@@ -46,47 +54,47 @@
           - processes terragrunt configs then passes them to the <mark>terraform|tofu plan|apply|destroy</mark> command <br>
           <opt>[options]</opt><br>
           - (<opt>--log-format bare</opt>) less logs<br>
-          - (<opt>--parallelism <otpval>nr</otpval></opt>) limits the number of parallel execution threads (Default: 10)
+          - (<opt>--parallelism <optval>nr</optval></opt>) limits the number of parallel execution threads (Default: 10)
         </td>
       </tr>
-
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Stack Commands </td>
+      </tr>
+      <tr>
+        <td>
+          terragrunt run --all plan|apply|destroy
+        </td>
+        <td>
+          - runs an implicit stack (runs each underlying units)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          terragrunt run --all output
+        </td>
+        <td>
+          - displays all outputs of each units in the stack 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          terragrunt run --all validate
+        </td>
+        <td>
+          - syntax validates all the stack units' config files
+        </td>
+      </tr>
     </table>
-
-
-
-<!--
-    terragrunt init
-        - initializes the project (auto init is enabled by default (https://terragrunt.gruntwork.io/docs/features/auto-init/))
-    
-    terragrunt [option] plan
-        - [option]
-            --log-format bare (for less output)
-            --parallelism=<nr> (default 10)
-    terragrunt [option] apply
-        - [option]
-            --log-format bare
-            --parallelism=<nr> (default 10)
-    terragrunt [option] destroy
-        - [option]
-            --log-format bare
-            --parallelism=<nr> (default 10)
-    
-    // stack commands
-    terragrunt run --all apply
-    terragrunt run --all plan
-    terragrunt run --all destroy
-    terragrunt run --all output       // view the output of units
-    terragrunt run --all validate
-        - --all runs the command on all units
-
--->
-
     <br>
     <h2 class="headerSection"> Notes : </h2>
 
     <h2 class="headerSection"> Useful Links : </h2>
-    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/blocks/" target="_blank"> reference: blocks (terragrunt.gruntwork.io) </a></p>
     <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/attributes/" target="_blank"> reference: attributes (terragrunt.gruntwork.io) </a></p>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/blocks/" target="_blank"> reference: blocks (terragrunt.gruntwork.io) </a></p>
     <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/functions/" target="_blank"> reference: functions (terragrunt.gruntwork.io) </a></p>
     <h2 class="headerSection"> Remember This : </h2>
 
@@ -97,6 +105,49 @@
     <p class="indent-lv1"> - certalized configuration aproach </p>
     <p class="indent-lv1"> - use environment specific config </p>
     <p> - Terragrunt uses <mark>.hcl</mark> files for its configurations, it's a convention to use <mark>terragrunt.hcl</mark> for unit configs and <mark>root.hcl</mark> of root module configs </p>
+    <p> - there are 2 main Terragrunt concepts: </p>
+    <p class="indent-lv1"> - <mark class="mark">Unit</mark> </p>
+    <p class="indent-lv2"> - single instance of infrastructure managed by Terragrunt (directory containing a <mark>terragrunt.hcl</mark> file) </p>
+    <p class="indent-lv2"> - atomic -> single block contains all its dependencies <u>and backend (state file)</u> </p>
+    <p class="indent-lv2"> - under the hood Terragrunt basically executes <mark>terraform <reqval>cmd</reqval></mark> command on the unit </p>
+    <p class="indent-lv1"> - <mark class="mark">Stack</mark> </p>
+    <p class="indent-lv2"> - a collection of units, the main idea of stacks is to execute a collection of units </p>
+    <p class="indent-lv2"> - there are 2 graph types: </p>
+    <p class="indent-lv3"> - <mark class="mark">implicit stack</mark> </p>
+    <p class="indent-lv4"> - basically any directory where the <mark>terragrunt run --all <reqval>cmd</reqval></mark> is executed, Terragrunt does a DAG then starts executing underlying units individually </p>
+    <p class="indent-lv3"> - <mark class="mark">explicit stack</mark> </p>
+    <p class="indent-lv4"> - this one uses a <mark>terragrunt.stack.hcl</mark> file which dynamicaly builds units (this one is a bit more involved, but I didn't found worth learning it at the time of writing this) <a href="https://terragrunt.gruntwork.io/docs/features/stacks/#explicit-stacks-blueprint-based-generation" target="_blank">[link]</a> </p>
+    <!--------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Under the Hood Mechanics </h2>
+    <p> - Terragrunt builds a DAG (Direct Acyclic Grap (which is basically a dependency tree) then starts <u>executing objects in parallel</u> (when possible, depending on dependencies), this mechanics is applied on both Unit and Stack levels </p>
+    <p> - the <mark>.terragrunt-cache</mark> directory is used to cache unit specific files (recommended to be added to <mark>.gitignore</mark>) </p>
+    <p> - the <mark>.terragrunt-stack</mark> directory is used to cache stack specific files (recommended to be added to <mark>.gitignore</mark>) </p>
+    <p> - the <mark>.terraform.lock.hcl</mark> file is used to check the provider integrity (recommended to check in the version control) </p>
+    <!--------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Config file (<mark>terragrunt.hcl</mark>) </h2>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/attributes/" target="_blank"> reference: attributes (terragrunt.gruntwork.io) </a></p>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/blocks/" target="_blank"> reference: blocks (terragrunt.gruntwork.io) </a></p>
+    <p><a href="https://terragrunt.gruntwork.io/docs/reference/hcl/functions/" target="_blank"> reference: functions (terragrunt.gruntwork.io) </a></p>
+    <pre class="syntax">
+// terragrunt.hcl (file) --
+    
+    <a href="https:\/\/terragrunt.gruntwork.io/docs/reference/hcl/attributes/#inputs" target="_target">inputs</a> = {                        // <span class="openable">passes values to terraform|OpenTofu modules<div>
+      <p> - these values are passed through environment varialbes to terraform|OpenTofu modules <a href="https://terragrunt.gruntwork.io/docs/reference/hcl/attributes/#inputs" target="_blank">[link]</a> </p>
+    </div></span>
+      <optval>terraformType</optval>
+      <optval>...</optval>
+    }
+    
+    <a href="https:\/\/terragrunt.gruntwork.io/docs/reference/hcl/blocks/#terraform" target="_target">terraform</a> = {     // describes how terragrunt interacts with Terraform|OpenTofu
+      source = <reqval>path|url</reqval>                                // path to Terraform|OpenTofu config file
+      extra_arguments = [<reqval>arg</reqval><optval>, ...</optval>]    // passess extra arguments to the <mark>terraform|tofu</mark> command
+    }
+    </pre>
+    <!--------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header"> Terragrunt project structure </h2>
     <pre>
 // terragrunt's recommended project structure (demo) 
     
@@ -125,31 +176,6 @@
         └── vpc/
             └── main.tf
     </pre>
-    <p> - there are 2 main Terragrunt concepts: </p>
-    <p class="indent-lv1"> - <mark class="mark">Unit</mark> </p>
-    <p class="indent-lv2"> - single instance of infrastructure managed by Terragrunt (directory containing a <mark>terragrunt.hcl</mark> file) </p>
-    <p class="indent-lv2"> - atomic -> single block contains all its dependencies <u>and backend (state file)</u> </p>
-    <p class="indent-lv2"> - under the hood Terragrunt basically executes <mark>terraform <reqval>cmd</reqval></mark> command on the unit </p>
-    <p class="indent-lv1"> - <mark class="mark">Stack</mark> </p>
-    <p class="indent-lv2"> - a collection of units, the main idea of stacks is to execute a collection of units </p>
-    <p class="indent-lv2"> - there are 2 graph types: </p>
-    <p class="indent-lv3"> - <mark class="mark">implicit stack</mark> </p>
-    <p class="indent-lv4"> - basically any directory where the <mark>terragrunt run --all <reqval>cmd</reqval></mark> is executed terragrunt does a DAG then starts executing underlying modules individually </p>
-    <p class="indent-lv3"> - <mark class="mark">explicit stack</mark> </p>
-    <p class="indent-lv4"> - this one uses a <mark>terragrunt.stack.hcl</mark> file which dynamicaly builds units (this one is a bit more involved, but I didn't found worth learning it at the time of writing this) <a href="https://terragrunt.gruntwork.io/docs/features/stacks/#explicit-stacks-blueprint-based-generation" target="_blank">[link]</a> </p>
-    <!--------------------------------------------------------------------------->
-    <hr>
-    <h2 class="header"> Under the Hood Mechanics </h2>
-    <p> - Terragrunt builds a DAG (Direct Acyclic Grap (which is basically a dependency tree) then starts <u>executing objects in parallel</u> (when possible, depending on dependencies), this mechanics is applied on both Unit and Stack levels </p>
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     <!--
 ---------------------------------------------------------------------------------------------
@@ -168,50 +194,17 @@ stage 3 :
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 
-- stack can be executed individually or run all stacks that are in subdirectories
-- terragrunt executes parallel deployment (executes stacks in parallel)
-    - does this mean running terragrunt apply --all?
-
-- terragrunt stored its cache files in .terragrunt-cache directory (which is tipically added to .gitignore)
-
-
 - demo mock data + explain why use it
-
-Unit's Underlying mechanics
-    - the 'terraform' block copies the referenced module into the current .terragrunt-cache
-    - executes terraform plan|apply (depending terragrunt cmd)
-
-
-
-
-CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
-    basically all terraform commands can be executed but with 'terragrunt' instead of 'terraform'
-
-    
-    
-According to Ned in the cloud terragrunt addresses 3 problems
-    - Managing large configs
-    - Managing different environments that uses the same config (module approach)
-    - DRY code
-    - Split up states
 
 
 At documentation I need a good example 
 
-recommended to bo added to .gitignore
-  - .terragrunt-cache
-  - .terragrunt-stack
-
-- .terraform.lock.hcl file
-  - recommended to check in the version control (with the unit)
-  - terraform uses it to check the provider integrity
 
 - the 'generate' block is used to generate files (whichi mostly used to create the provider.tf file)
 - the 'include' block tells Terragrunt to use the exact same Terragrunt configuration from path (arg) (include the configuration)
 
-- document the 'mock_outputs' in the 'dependency' block 
 
-- mention the .terragrunt.stack.hcl approach as well (I decided not to ducument it)
+- document the 'mock_outputs' in the 'dependency' block
 
 - demo dynamically generate backend
 
@@ -228,10 +221,75 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
         - altough guys in my company keep a state file per unit
 
     - clarify from which version stack are introduces
-    
 -->
 
-    <!--
+
+
+
+
+
+
+
+
+<!--
+
+recommended to bo added to .gitignore
+  - .terragrunt-cache
+  - .terragrunt-stack
+
+- .terraform.lock.hcl file
+  - recommended to check in the version control (with the unit)
+  - terraform uses it to check the provider integrity
+
+
+
+
+
+
+
+
+
+
+- mention the .terragrunt.stack.hcl approach as well (I decided not to ducument it)
+
+
+
+
+
+
+
+
+CMD: (https://terragrunt.gruntwork.io/docs/reference/cli/)
+    basically all terraform commands can be executed but with 'terragrunt' instead of 'terraform'
+
+    
+    
+According to Ned in the cloud terragrunt addresses 3 problems
+    - Managing large configs
+    - Managing different environments that uses the same config (module approach)
+    - DRY code
+    - Split up states
+
+
+
+
+
+
+
+
+
+- stack can be executed individually or run all stacks that are in subdirectories
+- terragrunt executes parallel deployment (executes stacks in parallel)
+    - does this mean running terragrunt apply --all?
+
+- terragrunt stored its cache files in .terragrunt-cache directory (which is tipically added to .gitignore)
+
+Unit's Underlying mechanics
+    - the 'terraform' block copies the referenced module into the current .terragrunt-cache
+    - executes terraform plan|apply (depending terragrunt cmd)
+
+
+
 - terragrunt is a wrapper around terraform (and openTofu)
     - orchestration tool 
     - extends the capabilities of Terraform/OpenTofu
