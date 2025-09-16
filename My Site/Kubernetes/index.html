@@ -106,17 +106,36 @@ stage 3 :
 
 
     - Kubernetes has its own internal virtual network, each Pod gets its IP address
+    - Kubernetes supports namespaces within a cluster, it's a mechanism to separate resources
+    
     
     ***********
     **  CLI  **
     ***********
   - kubectl -> CLI client to talk to the API server
+    - kubectl get namaespace
+        - list namespaces
+    - kubectl create namespace <namespaceName>
+        - creates a new namespace
+    - kubectl delete namespace <namespaceName>
+        - deletes the specified namespace
+    - kubectl config set-context --current --namespace=<namespaceName>
+        - set namespace
+    - kubectl get namespace <namespaceName> -o yaml
+        - get detailed info about the namespace
+    - kubectl config view --minify | grep namespace
+        - get which namespace is selected 
+    
+    
     - kubectl get nodes
         - list running nodes
     
     
-    - kubectl get pod
-        - list pods
+    - kubectl get pod [podName] [options]
+        - list pods (or the specified pod)
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
     - kubectl describe pod [podName]
         - describe all pods (or the specified pod)
         - status info about the pod(s)
@@ -134,22 +153,38 @@ stage 3 :
 
     - kubectl create deployment <deploymentName> --image=<imageName>
         - creates a deployment
-    - kubectl get deployment
+    - kubectl get deployment [options]
         - list deployments
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
     - kubectl delete deployment <deploymentName>
         - deletes the specified deployment
     - kubectl edit deployment <deploymentName>
         - opens the configs for the deployment that can be edited then once closed kubernetess applies changes
     
     
-    - kubectl get replicasets
+    - kubectl get replicaset
         - list replicasets
+    
+    
+    - kubectl get service [service] [options]
+        - list services (or the specified service)
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
+    - kubectl describe service [serviceName]
+        - describe all services (or the specified pod)
+        - status info about the pod(s)
+    - kubectl delete service <serviceName>
+        - deletes the specified service
     
     
     - kubectl apply -f <configFile>
         - executes the specified config file
         - applying the same config will update the existing deployment
-
+    - kucectl delete -f <configfile>
+        - removes resources described in the config file
 
   ***
   - minikube: single node for local dev (needs virtualization), needs to run in a vitual machine (I used qemu -> `brew install qemu`)
@@ -181,6 +216,9 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
     - it's commont to host stateful compoonents outside the K8s cluser
     
+    - how define which K8s cluster the kubectl is connected to?
+    
+    - how to control which node to deploy to?
     
 -->
 
@@ -188,42 +226,41 @@ WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
     <hr>
     <h2 class="header"> Config File </h2>
     <p> - the config file has 3 main sections: <mark class="mark">metadata</mark>, <mark class="mark">specification</mark> and <mark class="mark">status</mark> (the status is automatically generated, Kubernetess uses it to compare the desired VS actual status from here) </p>
+    <p> - components are referenced by giving labels then reference those lables </p>
     <pre>
 // ---------------------------------
     apiVersion: apps/v1
     kind: Deployment
-    metadata:
-        name: my-app-deployment
-    spec:
-        replicas: 3
+    metadata:                             // metadata section
+        name: nginx-deployment
+        labels:
+            app: nginx                    // deployment label
+    spec:                                 // specification section
+        replicas: 2
         selector:
             matchLabels:
-                app: my-app
+                app: nginx
         template:
             metadata:
                 labels:
-                    app: my-app
-            spec:
-                containers:
-                - name: my-app-container
-                    image: nginx:latest
-                    ports:
-                    - containerPort: 80
-    
+                    app: nginx            // template label
+            template:
+                metadata:
+                    lables:
+                        app: nginx
+                spec:
+                    // ...
     
 // ---------------------------------
     apiVersion: v1
     kind: Service
     metadata:
-      name: my-app-service
+        name: nginx-service
     spec:
-      selector:
-        app: my-app
-      ports:
-      - protocol: TCP
-        port: 80
-        targetPort: 80
-      type: ClusterIP
+        selector:
+            app: nginx                    // selector refers to deployment lables
+        ports:
+            // ...
     </pre>
     
     
