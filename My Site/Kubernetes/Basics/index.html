@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Demo </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Basics </h1>
+    <p> Updated: ( 2025-09-17 ) </p>
+    <nav class="sitenav">
+      <a href="../../index.html">MySite > </a> 
+      <a href="../index.html">Kubernetes > </a> Basics
+    </nav>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> CMD </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> get nodes
+        </td>
+        <td>
+          - list running nodes
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> get all
+        </td>
+        <td>
+          - list all resources in the current namespace
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> apply -f <reqval>configFilePath</reqval>
+        </td>
+        <td>
+          - applies configurations described in the config file to the kubernetes cluster (idempontent -> updates resources based on config changes) 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> delete -f <reqval>configFilePath</reqval>
+        </td>
+        <td>
+          - removes resources described in the config file from the kubernetes cluster 
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Namespace </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> get namespace <reqval>namespaceName</reqval> <opt>[options]</opt>
+        </td>
+        <td>
+          - list namespaces (or the specified namespace) <br>
+          <opt>[options]</opt> <br>
+          - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> create namespace <reqval>namespaceName</reqval>
+        </td>
+        <td>
+          - creates a new namespace 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> delete namespace <reqval>namespaceName</reqval>
+        </td>
+        <td>
+          - deletes the specified namespace 
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> config set-context --current --namespace=<reqval>namespaceName</reqval>
+        </td>
+        <td>
+          - set (selects) the current namespace
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> config view --minify | grep namespace
+        </td>
+        <td>
+          - returns the currently selected namespace
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Deployment </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> get deployment <optval>deploymentName</optval> <opt>[options]</opt>
+        </td>
+        <td>
+          - list all deployments (or the specified one)<br>
+          <opt>[options]</opt> <br>
+          - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> create deployment <optval>deploymentName</optval> --image=<reqval>dockerImage</reqval>
+        </td>
+        <td>
+          - creates a deployment from <reqval>dockerImage</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> delete deployment <optval>deploymentName</optval>
+        </td>
+        <td>
+          - deletes the specified deployment
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> edit deployment <optval>deploymentName</optval>
+        </td>
+        <td>
+          - in terminal editor opens the deployment config file (directly from etcd), once saved kubernetes applies the changes
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Pod </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> get pod <optval>podName</optval> <opt>[options]</opt>
+        </td>
+        <td>
+          - list all pods (or the specified one)<br>
+          <opt>[options]</opt> <br>
+          - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd)
+          - (<opt>-o wide</opt>) outputs extra info (ip address)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> describe pod <optval>podName</optval>
+        </td>
+        <td>
+          - prints details info about all pods (or the specified one)<br>
+          - info such as ip address, events, controllers, etc...<br>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> delete pod <reqval>podName</reqval>
+        </td>
+        <td>
+          - deletes the specified pod
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> exec -it <reqval>podName</reqval> <opt>[options]</opt> -- bash
+        </td>
+        <td>
+          - opens the 1st container's shell in the pod (just like in Docker)<br>
+          <opt>[options]</opt><br>
+          - (<opt>-c <optval>containerName</optval></opt>) specify which container's shell to open (if pod has multiple)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> logs <reqval>podName</reqval> <opt>[options]</opt>
+        </td>
+        <td>
+          - prints the 1st container's logs in the pod (just like in Docker)<br>
+          <opt>[options]</opt><br>
+          - (<opt>-f</opt>) follows the logs in real-time<br>
+          - (<opt>-c <optval>containerName</optval></opt>) specify which container's shell to open (if pod has multiple)<br>
+        </td>
+      </tr>
+
+
+
+
+
+
+
+
+    </table>
+    
+    <!--
+    
+    - kubectl get pod [podName] [options]
+        - list pods (or the specified pod)
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
+          - -o wide
+            - outputs more info (like IP address)
+    - kubectl describe pod [podName]
+        - describe all pods (or the specified pod)
+        - status info about the pod(s)
+    - kubectl delete pod <podName>
+        - deletes the specified pod (pod recreated if deployment persist)
+
+    
+    - kubectl logs <podName>
+        - get logs for the specified pod
+
+
+      kubectl exec -it <podName> -- bash
+        - enters the specified container's shell (just like in Docker)
+
+
+    - kubectl create deployment <deploymentName> --image=<imageName>
+        - creates a deployment
+    - kubectl get deployment [options]
+        - list deployments
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
+    - kubectl delete deployment <deploymentName>
+        - deletes the specified deployment
+    - kubectl edit deployment <deploymentName>
+        - opens the configs for the deployment that can be edited then once closed kubernetess applies changes
+    
+    
+    
+    - kubectl get replicaset
+        - list replicasets
+
+
+    
+    -->
+    
+    
+    <br>
+    <p> - Minikube is a single-node Kubernetes cluster on a local machine for development and testing, (it needs virtualization, I used qemu -> <mark class="mark">brew install qemu</mark>) </p>
+    <table class="table">
+      <caption> Minikube </caption>
+      <tr>
+        <th style="width:30%;"> CMD </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>minikube</lit> status
+        </td>
+        <td>
+          - prints the munikube's status
+        </td>
+      </tr>
+        <td>
+          <lit>minikube</lit> dashboard
+        </td>
+        <td>
+          - launches a web-based UI for managing the cluster 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>minikube</lit> start --driver=<reqval>vmDriver</reqval>
+        </td>
+        <td>
+          - starts minikube with <reqval>vmDriver</reqval> (ex: <mark>minikube start --driver=qemu</mark>)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>minikube</lit> stop
+        </td>
+        <td>
+          - stops minikube
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>minikube</lit> delete
+        </td>
+        <td>
+          - deletes all configurations and data from minikube
+        </td>
+      </tr>
+    </table>
+    
+    
+    
+
+    
+    
+    <h2 class="headerSection"> Notes : </h2>
+
+    <h2 class="headerSection"> Useful Links : </h2>
+
+    <h2 class="headerSection"> Remember This : </h2>
+
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+
+
+
+
+    <!--
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+stage 1: high level overview 
+    - read through 
+    - create notes 
+    - deciede what exactly will you document down 
+    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
+    
+stage 2:  low level overview
+    - deeper understanding of all what you've taken down in stage 1
+    
+stage 3 : 
+    - organize and document down everything 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+    - Kubernetes is an open source conatiner orchestration freamework developed by Google (Kubernetes is abbreviated as K8s)
+    
+    Features:
+      - High Availability
+      - Scalability
+      - Disaster Recovery
+
+    Components:
+      - Node: phisical or virtual machine
+        - each hode has 3 processes:
+          - Container Runtime: (like Docker)
+          - Kublet -> interacts with both the container runtime and the node (manages the pods) (this component applies configs on Pods)
+          - Kube Proxy: managest network rules on nodes
+      - Cluster: a group of Nodes (worker machines)
+      - Pod: abstraction over a group of containers (layer over containers)
+          - multiple container can be run inside a pod but usually one pod should contain one app
+      - Service: static IP address that can be attached to a pod (won't die in the attached Pod dies)
+          - internal service VS external service
+          - can be attached to multiple Pods -> becomes a load balancer
+      - Ingress: manages (maps) external traffic to an inside service
+      - ConfigMap: external configuration for your apps (connects to pods)
+      - Secret: stores secret data (base64 encoded)
+          - same method as ConfigMap but confidential
+      - Volumes: sotrage attached to a Pod (so if the Pod dies the data is persisted)
+          - remote or local
+      - Deployment: a blueprint for a Pod
+      - StatefulSet: Deployment (blueprint) for stateful pods (like DB)
+          - same principel as Deployment but for statefull containers
+
+      - Master Node runs 4 processes:
+          - Api Server: this is where we connect to, to control the cluster
+          - Scheduler: schedules pods based on configurations and specifications received from the API server
+              - ist job is to correctly 'schedule' pods based on resource availability
+          - Controller manager: detects pod state changes (like crashes)
+              - the controller manager requests the scheduler to start pods
+          - etcd: key-value store of the cluster state (all state is stored here)
+              - holds the current status of the Kubernetes cluster
+      - Usually there are multiple master nodes (for fault tollerance)
+
+
+    - Kubernetes has its own internal virtual network, each Pod gets its IP address
+    - Kubernetes supports namespaces within a cluster, it's a mechanism to separate resources
+    
+    
+    ***********
+    **  CLI  **
+    ***********
+  - kubectl -> CLI client to talk to the API server
+    
+    - kubectl get service [service] [options]
+        - list services (or the specified service)
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
+    - kubectl describe service [serviceName]
+        - describe all services (or the specified pod)
+        - status info about the pod(s)
+    - kubectl delete service <serviceName>
+        - deletes the specified service
+    
+    
+    
+    
+    - kubectl get secret [secretName] [options]
+        - list all or the specified secret
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
+    - kubectl describe secret [secretName]
+        - describe all secrets (or the specified one)
+        - status info about the pod(s)
+    - kubectl delete secret <secretName>
+        - deletes the specified secret
+    
+    
+    - kubectl get configmap [configmap] [options]
+        - list all or the specified configmap
+        - [options]
+          - -o yaml 
+            - output in yaml format (read directly from etcd)
+    - kubectl describe configmap [secretName]
+        - describe all configmaps (or the specified one)
+        - status info about the configmap(s)
+    - kubectl delete secret <secretName>
+        - deletes the specified secret
+    
+    
+
+
+
+
+    - Kubernetes is very good for stateless app management, but less for StatefulSet (in real life not really used to manage stateful sets)
+    
+    
+    *** Config File ***
+    - config file reference: https://kubernetes.io/docs/reference/kubernetes-api/
+    - config files have 3 pars:
+        - metadata
+        - specification
+        - status (automatically generated by K8s)
+    - components are identified by lables and referenced by selectors 
+
+
+    
+
+
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    - it's commont to host stateful compoonents outside the K8s cluser
+    
+    - how define which K8s cluster the kubectl is connected to?
+    
+    - how to control which node to deploy to?
+    
+    - what about load balancing?
+    
+    
+-->
+
+    
+    
+
+
+
+<!--
+
+
+
+
+
+
+
+
+
+    - kubectl get namaespace
+        - list namespaces
+    - kubectl create namespace <namespaceName>
+        - creates a new namespace
+    - kubectl delete namespace <namespaceName>
+        - deletes the specified namespace
+    - kubectl get namespace <namespaceName> -o yaml
+        - get detailed info about the namespace
+      
+      
+      
+    - kubectl config set-context --current --namespace=<namespaceName>
+        - set namespace
+    - kubectl config view --minify | grep namespace
+        - get which namespace is selected 
+
+
+
+
+
+
+
+
+        - kubectl apply -f <configFile>
+        - executes the specified config file
+        - applying the same config will update the existing deployment
+    - kucectl delete -f <configfile>
+        - removes resources described in the config file
+
+
+
+
+    - kubectl get nodes
+    - list running nodes
+    
+    
+    - kubectl get all
+        - get all resources in the current namespace
+
+
+
+
+  ***
+  - minikube: single node for local dev (needs virtualization), needs to run in a vitual machine (I used qemu -> `brew install qemu`)
+    - minikube start --driver=<vmDriver>
+        - start minikube in <vmDriver> VM
+    - minikube status
+        - prints the minikube status
+
+
+-->
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+
+    <h2 class="headerExtra"><u> Title 1 </u></h2>
+    <h2 class="header"> Title 1.1 </h2>
+    <h3 class="header"> Title 1.1.1 </h3>
+    <h4 class="header"> Title 1.1.1.1 </h4>
+    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
+    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
+    <p style="text-decoration:underline;"> - important information is underlined </p>
+    <p style="color:yellow;"> - very important information is written with yellow colors </p>
+    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
+    <div style="background-color:red;">
+      <p> - red background block means not learned or not tested information! </p>
+      <p> - </p>
+    </div>
+
+    <pre class="syntax">
+    <reqval>required value </reqval>
+    <optval>optional value </optval>
+    <lit>literally used </lit>
+    <opt>optionally used </opt>
+  
+    <prot style="color:#049500;">prototype chain</prot>
+        
+    <span class="openable"> this is an openable element<div>
+        <p> - openable elements listed here in paragraphs </p>
+        <p> - </p>
+    </div></span>
+    </pre>
+
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    examples of the current lessons 
+    
+// -----------------------------------------
+
+// -----------------------------------------
+    </pre>
+    </details>
+
+    <pre class="cmd">
+    command line demo 
+    </pre>
+    <pre class="formula">
+    formula code (like conversion meter...)
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> example title </u></h4>
+      <p> - live tests will come here </p>
+      <details>
+        <summary class="exampleCode"> CODE : </summary>
+        <pre>
+    copy of the exaple code 
+        </pre>
+      </details>
+    </details>
+    <!---------------------------------------------------------------------------------------------------------------------------------->
+    <hr>
+
+    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
+
+    <br><br>
+  </body>
+
+</html>
