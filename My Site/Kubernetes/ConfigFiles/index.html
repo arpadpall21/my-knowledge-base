@@ -31,41 +31,107 @@
     <img src="ExampleCluster.png" alt="ExampleCluster.png" height="250">
     <p> - config files below describe this architecture </p>
     <pre>
-// ---------------------------------
+// mongo-db.yaml (file) 
     apiVersion: apps/v1
     kind: Deployment
-    metadata:                             // metadata section
-        name: nginx-deployment
-        labels:
-            app: nginx                    // deployment label
-    spec:                                 // specification section
-        replicas: 2
-        selector:
-            matchLabels:
-                app: nginx
-        template:
-            metadata:
-                labels:
-                    app: nginx            // template label
-            template:
-                metadata:
-                    lables:
-                        app: nginx
-                spec:
-                    // ...
-    
-// ---------------------------------
+    metadata:
+      name: mongo-db-deployment
+      labels:
+        app: mongo-db
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: mongo-db
+      template:
+        metadata:
+          labels:
+            app: mongo-db
+        spec:
+          containers:
+          - name: mongo-db
+            image: mongo:8.0                      // container
+            ports:
+            - containerPort: 27017
+            env:                                  // environment variables for the container
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:                     // get value from secret
+                  name: mongo-secret              // references the secret name
+                  key: mongo-root-username        // references the secret key's value
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-password
+    ---                                           // config separator -> several configs can be declared in the same file
     apiVersion: v1
     kind: Service
     metadata:
-        name: nginx-service
+      name: mongo-db-service
     spec:
-        selector:
-            app: nginx                    // selector refers to deployment lables
-        ports:
-            // ...
+      selector:
+        app: mongo-db                             // service references the deployment by its label
+      ports:
+        - protocol: TCP
+          port: 27017
+          targetPort: 27017
     </pre>
-
+    <pre>
+// mongo-express.yaml (file) 
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: mongo-express-deployment
+      labels:
+        app: mongo-express
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: mongo-express
+      template:
+        metadata:
+          labels:
+            app: mongo-express
+        spec:
+          containers:
+          - name: mongo-express
+            image: mongo-express:1.0
+            ports:
+            - containerPort: 8081
+            env:
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-username
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-password
+            - name: ME_CONFIG_MONGODB_SERVER
+              valueFrom:
+                configMapKeyRef:              // get value from configmap
+                  name: mongo-configmap       // references the configmap
+                  key: database_url           // references the secret key's value
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb-express-service
+    spec:
+      selector:
+        app: mongo-express                  // service references the deployment by its label
+      type: LoadBalancer                    // external service
+      ports:
+        - protocol: TCP
+          port: 8081
+          targetPort: 8081
+          nodePort: 30001                   // available IP range for external port is 30000 - 32767
+    
+    </pre>
 
 
 
