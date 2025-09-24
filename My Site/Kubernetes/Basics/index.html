@@ -41,6 +41,7 @@
         <td>
           - list all resources in the current namespace<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o wide</opt>) outputs extra info<br>
         </td>
       </tr>
@@ -131,6 +132,7 @@
         <td>
           - list all deployments (or the specified one)<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o wide</opt>) outputs extra info<br>
           - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
         </td>
@@ -177,6 +179,7 @@
         <td>
           - list all pods (or the specified one)<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o wide</opt>) outputs extra info<br>
           - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
         </td>
@@ -236,6 +239,7 @@
         <td>
           - list all replicasets (or the specified one)<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o wide</opt>) outputs extra info<br>
           - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
         </td>
@@ -254,6 +258,7 @@
         <td>
           - list all services (or the specified one)<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o wide</opt>) outputs extra info<br>
           - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
         </td>
@@ -288,6 +293,7 @@
         <td>
           - list all configmaps (or the specified one)<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
         </td>
       </tr>
@@ -318,6 +324,7 @@
         <td>
           - list all secrets (or the specified one)<br>
           <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
           - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
         </td>
       </tr>
@@ -336,10 +343,6 @@
         <td>
           - deletes the specified secret
         </td>
-      </tr>
-      <tr>
-        <td>|</td>
-        <td></td>
       </tr>
     </table>
     <br>
@@ -402,6 +405,26 @@
           - exposes the service to the outside world (must be an external service)
         </td>
       </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>minikube</lit> addons list
+        </td>
+        <td>
+          - list available minikube addons (with their status) 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>minikube</lit> addons enable|disable <reqval>addon</reqval>
+        </td>
+        <td>
+          - enable|disable minikube addon (ex: <mark>minikube addons enable ingress</mark> enables minikube ingress)
+        </td>
+      </tr>
     </table>
     
     
@@ -457,6 +480,11 @@ stage 3 :
           - can be attached to multiple Pods -> becomes a load balancer
           - by default reachable cross namespaces
       - Ingress: manages (maps) external traffic to an inside service
+          - Ingress Controller -> component in cluster that manages external access to services running inside the cluster (must be installed (several 3rd party supported))
+            - role of the Ingress Controller:
+                - single entry point in the cluster
+                - TLS termination
+                - can route traffic to different services based on path (subdomain)
       - ConfigMap: external configuration for your apps (connects to pods)
       - Secret: stores secret data (base64 encoded)
           - same method as ConfigMap but confidential
@@ -487,6 +515,46 @@ stage 3 :
         - can be attached to a pod in order to whitelist pod access 
     
     
+    
+    ************
+    *** Helm ***
+    ************
+    - 
+    
+
+
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    - it's common to host stateful compoonents outside the K8s cluser
+    
+    - how define which K8s cluster the kubectl is connected to?
+    
+    - how to control which node to deploy to?
+    
+    - what about load balancing?
+    
+    - what about certificate stuff, each pod has it's own cert or how this works?
+    
+    - what the hell is a volume?
+    
+    - the concept of Control plane vs Data Plane
+    
+    - how to configure which pod/service etc.. runs on which vm?
+    
+-->
+
+    
+    
+
+
+
+
+
+
+
+
+<!--
     ***********
     **  CLI  **
     ***********
@@ -506,37 +574,7 @@ stage 3 :
     - components are identified by lables and referenced by selectors 
 
 
-    
 
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - it's common to host stateful compoonents outside the K8s cluser
-    
-    - how define which K8s cluster the kubectl is connected to?
-    
-    - how to control which node to deploy to?
-    
-    - what about load balancing?
-    
-    - what about certificate stuff, each pod has it's own cert or how this works?
-    
-    - what the hell is a volume?
-    
--->
-
-    
-    
-
-
-
-
-
-
-
-
-<!--
 
 
     - kubectl get secret [secretName] [options]
