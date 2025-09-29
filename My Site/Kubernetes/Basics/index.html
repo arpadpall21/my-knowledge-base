@@ -248,6 +248,9 @@
         <td>|</td>
         <td></td>
       </tr>
+      
+      
+      
       <tr>
         <td colspan="2"> Service </td>
       </tr>
@@ -277,6 +280,40 @@
         </td>
         <td>
           - deletes the specified service
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Ingress </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> get ingress <optval>ingressName</optval> <opt>[options]</opt>
+        </td>
+        <td>
+          - list all ingresses (or the specified one)<br>
+          <opt>[options]</opt> <br>
+          - (<opt>-n <optval>nameSpace</optval></opt>) on the specified namespace<br>
+          - (<opt>-o yaml</opt>) output in yaml format (retrieved directly from etcd) <br>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> describe ingress <optval>ingressName</optval>
+        </td>
+        <td>
+          - prints detailed info about all services (or the specified one)<br>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>kubectl</lit> delete ingress <reqval>ingressName</reqval>
+        </td>
+        <td>
+          - deletes the specified ingress
         </td>
       </tr>
       <tr>
@@ -406,6 +443,14 @@
         </td>
       </tr>
       <tr>
+        <td>
+          <lit>minikube</lit> tunnel
+        </td>
+        <td>
+          - creates a tunnel for ingresses
+        </td>
+      </tr>
+      <tr>
         <td>|</td>
         <td></td>
       </tr>
@@ -426,22 +471,16 @@
         </td>
       </tr>
     </table>
-    
-    
-    
-    
-    
-    
     <h2 class="headerSection"> Notes : </h2>
 
     <h2 class="headerSection"> Useful Links : </h2>
 
     <h2 class="headerSection"> Remember This : </h2>
-
+    <p> - minikube running on docker driver in order to expose external service run the <mark>minikube service &lt;service&gt;</mark> command, in order to expose ingresses run the <mark>minikube tunnel</mark> command </p>
     <h2 class="headerSection"> Description and Demonstration : </h2>
-
-
-
+    <p> - Kubernetes (K8s) is an open source conatiner orchestration freamework developed by Google, it's designed to work in cloud environments but can also run on-premises </p>
+    <p> - Kubernetes Components: </p>
+    <p class="indent-lv1"> - <mark class="mark">Node</mark></p>
 
     <!--
 ---------------------------------------------------------------------------------------------
@@ -475,24 +514,58 @@ stage 3 :
       - Cluster: a group of Nodes (worker machines)
       - Pod: abstraction over a group of containers (layer over containers)
           - multiple container can be run inside a pod but usually one pod should contain one app
+          - pods are deployed through Deployments
+      - Deployment: a blueprint for a Pod
+      - ReplicaSet:
+          - Controller that ensures a specified number of pod replicas are running at any given time (specified by Deployment)
+        
+        
+        
       - Service: static IP address that can be attached to a pod (won't die in the attached Pod dies)
           - internal service VS external service
+            - External services are used for development or debugging only, in prod the Ingress Controller is used to provide a single entry point in the cluster
           - can be attached to multiple Pods -> becomes a load balancer
           - by default reachable cross namespaces
+          - Types:
+            - ClusterIP (default): internal service
+            - Headless: direct communication with the pod (for stateful app (StatefulSet))
+            - NodePort: provides external access (available port range 30000 - 32767)
+            - LoadBalancer: exposes the service to an external load balancer ()
+          - Service Roles:
+            - Stable IP address in the cluster
+            - load balancing
+            - communication within the cluster or outside (not for prod use)
+            - loose couple pods 
+          
       - Ingress: manages (maps) external traffic to an inside service
           - Ingress Controller -> component in cluster that manages external access to services running inside the cluster (must be installed (several 3rd party supported))
             - role of the Ingress Controller:
                 - single entry point in the cluster
                 - TLS termination
                 - can route traffic to different services based on path (subdomain)
+          - Ingress Class
+              - basically maps a certain ingress controller to a name (ingress class)
+              - it's useful if the cluster has multiple ingress controllers, we can map ingress controllers implementation to classes then reference these ingres class names in the ingress
+
+
+        - Ingress Controller -> an implementation of Ingress (must be installed in the kubernetess cluster)
+            - runs as pod or a set of pods that evaluates and process ingress rules
       - ConfigMap: external configuration for your apps (connects to pods)
+          - can be mounted as volume inside the container
       - Secret: stores secret data (base64 encoded)
           - same method as ConfigMap but confidential
+          - can be mounted as volume inside the container
       - Volumes: sotrage attached to a Pod (so if the Pod dies the data is persisted)
           - remote or local
-      - Deployment: a blueprint for a Pod
+      
+      
       - StatefulSet: Deployment (blueprint) for stateful pods (like DB)
-          - same principel as Deployment but for statefull containers
+          - same principle as Deployment but for statefull containers
+          - the pod has a stickiy identity (this ensures that if the pod dies the same id -> state is reatached to the pod)
+          - it's quite a complex thing to setup because we have to manage the synchronisation, mechanism
+          - https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+
 
       - Master Node runs 4 processes:
           - Api Server: this is where we connect to, to control the cluster
@@ -504,25 +577,51 @@ stage 3 :
               - holds the current status of the Kubernetes cluster
       - Usually there are multiple master nodes (for fault tollerance)
 
-
+    
+    
+    
+*** Network ***
     - Kubernetes has its own internal virtual network, each Pod gets its IP address
+    - The Container Network Interface (CNI) in Kubernetes is a specification and set of libraries that define how network interfaces are configured for containers
+    - Kubernetes abstracts IP addresses through the use of names, allowing users to reference Services and Pods by their names rather than their IP addresses.
+      - Kubernetes auto assigns DNS names to services <service-name>.<namespace>.svc.cluster.local (ex my-service.default.svc.cluster.local)
+      - Pods are also get assigned names (but it's not commot to access pods directly but through services), pod DNS is <pod-name>.<namespace>.svc.cluster.local (ex: my-pod.default.svc.cluster.local)
+    
+    - Kubernetes uses a flat networking model, meaning that all Pods can communicate with each other without Network Address Translation
+    - Kubernetes includes a built-in DNS service that automatically assigns DNS names to Services and Pods. This allows for easy service discovery.
+    
+    
+*** Namespaces ***
     - Kubernetes supports namespaces within a cluster, it's a mechanism to separate resources
-        - namespaces can be used to separate resource groups (ex: db - monitoring - nginx)
-        - by default services can be accessed cross namespaces, but configmaps and secrets are not
-    
-    
-    - NetworkPolicy
-        - can be attached to a pod in order to whitelist pod access 
-    
-    
-    - External services are used for development or debugging only, we use the Ingress Controller to provide a single entry point in the cluster
+        - namespaces can be used to separate kubernetes components (ex: db - monitoring - nginx)
+        - pods and services can be referenced cross namespaces
+        - configmaps and secrets cannot be referenced cross namespaces (reachable only in their namespace)
     
     
     
+*** Persisting Data ***
+    - Persistent Volume
+        - a cluster resource 
+        - abstraction over a real storage
+        - not namespaced
+        - configured by the cluster administrator (to give available storage to the cluster)
+    - Persisten Volumen Claim (PVC)
+        - request for storage (PV) and defines how a pod can access the storage. It specifies the desired characteristics such as size and access modes, and once it is bound to a Persistent Volume (PV), it allows the pod to use that storage.
+        - must be in the same nanespace as the pod
+    - Storage Class
+        - Provisions Persistent Volume (PV) dynamically (provisioning is automated, based on specific requirements), so basically when a PVC is triggered the class automatically provision storage based on config
+        - Describes what happens to the PV when the PVC is deleted (Retain, Delete, Recycle)
     
-    --- Ingress ---
-        - Ingress Controller -> an implementation of Ingress (must be installed in the kubernetess cluster)
-            - a pod or a set of pods that evaluates and process ingress rules
+    
+    
+    
+    - ConfigMaps and Secrets can be mounted as volume inside the container
+    
+    
+    
+    
+    - just mention that resources (pods, configmaps, secrets) are referenced by name -> cool K8s feature!
+    - Pods in the kubernetes cluster are ephemeral (easily replacable)
     
     
     
@@ -530,29 +629,57 @@ stage 3 :
     ************
     *** Helm ***
     ************
-    - 
+    - package manager for kubernetes
+    - templating engine (configurable Helm Chart)
+    - Helm Cart -> basically a K8s package
     
 
 
 ?????????????????????????????????????????????????????????????????????????????????????????????
 WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
 ?????????????????????????????????????????????????????????????????????????????????????????????
-    - it's common to host stateful compoonents outside the K8s cluser
-    
     - how define which K8s cluster the kubectl is connected to?
     
     - how to control which node to deploy to?
-    
-    - what about load balancing?
-    
-    - what about certificate stuff, each pod has it's own cert or how this works?
-    
-    - what the hell is a volume?
-    
-    - the concept of Control plane vs Data Plane
-    
     - how to configure which pod/service etc.. runs on which vm?
     
+    - RBAC
+    
+    - what about etcd, where this data is stored phisically?
+    
+    - get some info about how multicontainer pod works
+      - multiple container in the same pod get the same IP but different ports (different services)
+
+
+
+    --- DONE --
+    - it's common to host stateful compoonents outside the K8s cluser
+        -> Yes it's prefered (according to Zsolt)
+
+
+    - what about certificate stuff, each pod has it's own cert or how this works?
+        -> No each namespace is automatically created, it's used to communicate with the api server (in order to verify the server's integrity)
+
+
+    - NetworkPolicy
+        - can be attached to a pod in order to control the network traffic of the pod: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+
+    - what about load balancing?
+        - by default the load is balanced in round-robin fashin
+        - to use different load balancing the ingress controller needs to support it, then we configure the load balancing in that ingress controller 
+
+
+    - the concept of Control plane vs Data Plane
+        - Control Plane:
+            - Manages the overall state and configuration of the Kubernetes cluster
+            - Ensures the cluster operates according to the desired state, making decisions and orchestrating workloads.
+            - Master Nodes
+        - Data Plane:
+            - Executes workloads and handles network traffic within the cluster.
+            - Runs application containers, manages resources, and facilitates communication between services
+            - Worker Nodes
+            
 -->
 
     
