@@ -503,6 +503,7 @@
     <p class="indent-lv4"> - pods in the kubernetes cluster are designed to be ephemeral (easily replacable) </p>
     <p class="indent-lv1"> - <mark class="mark">StatefulSet</mark> -> Deployment for stateful pods (like DB) </p>
     <p class="indent-lv2"> - pods have sticky identity so when the container inside fails and recreated the same id is reatached to the same pod </p>
+    <p class="indent-lv2"> - Remember: StatefulSets only provide connectivity features, but the acutal underlying logic must be implemented by the developer (like: DB WORM strategy) </p>
     <p class="indent-lv1"> - <mark class="mark">ConfigMap</mark> -> contains external configuration </p>
     <p class="indent-lv2"> - can be mounthed as volume inside the pod </p>
     <p class="indent-lv2"> - namespace scoped (cannot be referenced from another namespace) </p>
@@ -515,12 +516,13 @@
     <p class="indent-lv3"> - <mark class="mark">Headless</mark> -> routes direct communication with pods (used for StatefulSets) </p>
     <p class="indent-lv3"> - <mark class="mark">NodePort</mark> -> opens an external access (used for dev pupuses only) (available port range 30000 - 32767) </p>
     <p class="indent-lv3"> - <mark class="mark">LoadBalancer</mark> -> exposes the traffic for an external load balancer (like to Azure load balancer) </p>
+    <p class="indent-lv1"> - <mark class="mark">NetworkPolicy</mark> -> defines how groups of pods can communicate with each other and with other network endpoints <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/" target="_blank">[link]</a> </p>
     <p class="indent-lv1"> - <mark class="mark">Ingress</mark> -> routes external traffic to internal resources </p>
     <p class="indent-lv2"> - acts as cluster gateway, but also as TLS termination </p>
     <p class="indent-lv2"> - deployed as pod, so it be deployed on specific nodes as ReplicaSet </p>
     <p class="indent-lv2"> - <mark class="mark">Ingress Controller</mark> -> it's an implementation of Ingress, we can install different ingresses such as NGINX, HAProxy, etc... </p>
     <p class="indent-lv2"> - <mark class="mark">Ingress Class</mark> -> maps an Ingress Controller (Ingress Implementation) to a name, it's useful if several controllers are installed, so we can reference them by name </p>
-    <p class="indent-lv1"> - <mark class="mark">Volume</mark> -> storage attached to a pod </p>
+    <p class="indent-lv1"> - <mark class="mark">Volume</mark> -> storage attached to a pod <a href="https://kubernetes.io/docs/concepts/storage/" target="_blank">[link]</a> </p>
     <p class="indent-lv2"> - <mark class="mark">Persistent Volume (PV)</mark> -> abstraction over a real storage (disk, remote storage, etc...) (tipically configured by the cluster admin) </p>
     <p class="indent-lv2"> - <mark class="mark">Persistent Volume Claim (PVC)</mark> -> a request for storage describing sotrage caracteristics </p>
     <p class="indent-lv3"> - a Persistent Volume Claim (PVC) is created out of the available Persistent Volume (PV), then it can be attached to a pod as volume </p>
@@ -531,505 +533,34 @@
     <p> - Kubernetes has its own internal virtual network and DNS service (flat networking model is used, meaning there's no NAT) </p>
     <p> - names are automatically assigned when components are created (ex: pod name syntax <mark>&lt;pod-ip-address&gt;.&lt;namespace&gt;.pod.cluster.local</mark>) </p>
     <p> - when setting up the cluster, we typically configure using component names directly rather than referencing IP addresses or DNS names in most situations (ex: referencing pod names from a service) </p>
-    
-
-
-
-
-
-    <!--
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-stage 1: high level overview 
-    - read through 
-    - create notes 
-    - deciede what exactly will you document down 
-    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
-    
-stage 2:  low level overview
-    - deeper understanding of all what you've taken down in stage 1
-    
-stage 3 : 
-    - organize and document down everything 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-    - manifest
-        -> a file containing metadata for a group of accompanying files
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - how define which K8s cluster the kubectl is connected to?
-    
-    - how to control which node to deploy to?
-    - how to configure which pod/service etc.. runs on which vm?
-    
-    
-    
-    - get some info about how multicontainer pod works
-      - multiple container in the same pod get the same IP but different ports (different services)
-
-
-
------ DONE -----
-    - Aacess Control
-        - Kubernetes supports RBAC, so we can control who can access what
-        - Athentication can be setup by Client Cert, Bearer Tokens, OpenID Connect or Webhook Token
-
-
-
-    - how to deploy replicas on different nodes?
-        - be default he scheduler tries to distribute pods evenly on worker nodes
-          - the scheduler takes into consideration the nodes resources (CPU, RAM, etc...)
-        - we can control this by
-          - Node Selector
-          - Node Affinit
-          - Taints and Tolerations (configures to which pods not to deploy to)
-
-
-    - what about etcd, where this data is stored phisically?
-        - etcd is an opern source highly accessible key-vale store, the way we implement it in the kubernetes cluster is up to the dev team
-
-
-    - it's common to host stateful compoonents outside the K8s cluser
-        -> Yes it's prefered (according to Zsolt)
-
-
-    - what about certificate stuff, each pod has it's own cert or how this works?
-        -> No each namespace is automatically created, it's used to communicate with the api server (in order to verify the server's integrity)
-
-
-    - NetworkPolicy
-        - can be attached to a pod in order to control the network traffic of the pod: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-
-
-    - what about load balancing?
-        - by default the load is balanced in round-robin fashin
-        - to use different load balancing the ingress controller needs to support it, then we configure the load balancing in that ingress controller 
-
-
-    - the concept of Control plane vs Data Plane
-        - Control Plane:
-            - Manages the overall state and configuration of the Kubernetes cluster
-            - Ensures the cluster operates according to the desired state, making decisions and orchestrating workloads.
-            - Master Nodes
-        - Data Plane:
-            - Executes workloads and handles network traffic within the cluster.
-            - Runs application containers, manages resources, and facilitates communication between services
-            - Worker Nodes
-            
--->
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-*** Network ***
-    - Kubernetes has its own internal virtual network, each Pod gets its IP address
-    - The Container Network Interface (CNI) in Kubernetes is a specification and set of libraries that define how network interfaces are configured for containers
-   
-  
- 
-
-
-    - Kubernetes abstracts IP addresses through the use of names, allowing users to reference Services and Pods by their names rather than their IP addresses.
-      - Kubernetes auto assigns DNS names to services <service-name>.<namespace>.svc.cluster.local (ex my-service.default.svc.cluster.local)
-      - Pods are also get assigned names (but it's not commot to access pods directly but through services), pod DNS is <pod-name>.<namespace>.svc.cluster.local (ex: my-pod.default.svc.cluster.local)
-    
-    - Kubernetes uses a flat networking model, meaning that all Pods can communicate with each other without Network Address Translation
-    - Kubernetes includes a built-in DNS service that automatically assigns DNS names to Services and Pods. This allows for easy service discovery.
-
-
-
-
-    - just mention that resources (pods, configmaps, secrets) are referenced by name -> cool K8s feature!
-    - Pods in the kubernetes cluster are ephemeral (easily replacable)
-
-
-
-*** Namespaces ***
-    - Kubernetes supports namespaces within a cluster, it's a mechanism to separate resources
-        - namespaces can be used to separate kubernetes components (ex: db - monitoring - nginx)
-        - pods and services can be referenced cross namespaces
-        - configmaps and secrets cannot be referenced cross namespaces (reachable only in their namespace)
-
-
-
-*** Persisting Data ***
-    - Persistent Volume
-        - a cluster resource 
-        - abstraction over a real storage
-        - not namespaced
-        - configured by the cluster administrator (to give available storage to the cluster)
-    - Persisten Volumen Claim (PVC)
-        - request for storage (PV) and defines how a pod can access the storage. It specifies the desired characteristics such as size and access modes, and once it is bound to a Persistent Volume (PV), it allows the pod to use that storage.
-        - must be in the same nanespace as the pod
-    - Storage Class
-        - Provisions Persistent Volume (PV) dynamically (provisioning is automated, based on specific requirements), so basically when a PVC is triggered the class automatically provision storage based on config
-        - Describes what happens to the PV when the PVC is deleted (Retain, Delete, Recycle)
-    
-    
-    
-    
-    - ConfigMaps and Secrets can be mounted as volume inside the container
-
-
-
-
-
-
-
-    - Kubernetes is an open source conatiner orchestration freamework developed by Google (Kubernetes is abbreviated as K8s)
-    
-    Features:
-      - High Availability
-      - Scalability
-      - Disaster Recovery
-
-    Components:
-      - Node: phisical or virtual machine
-        - each hode has 3 processes:
-          - Container Runtime: (like Docker)
-          - Kublet -> interacts with both the container runtime and the node (manages the pods) (this component applies configs on Pods)
-          - Kube Proxy: managest network rules on nodes
-      - Cluster: a group of Nodes (worker machines)
-      - Pod: abstraction over a group of containers (layer over containers)
-          - multiple container can be run inside a pod but usually one pod should contain one app
-          - pods are deployed through Deployments
-      - Deployment: a blueprint for a Pod
-      
-      - ReplicaSet:
-          - Controller that ensures a specified number of pod replicas are running at any given time (specified by Deployment)
-        
-        
-        
-      - Service: static IP address that can be attached to a pod (won't die in the attached Pod dies)
-          - internal service VS external service
-            - External services are used for development or debugging only, in prod the Ingress Controller is used to provide a single entry point in the cluster
-          - can be attached to multiple Pods -> becomes a load balancer
-          - by default reachable cross namespaces
-          - Types:
-            - ClusterIP (default): internal service
-            - Headless: direct communication with the pod (for stateful app (StatefulSet))
-            - NodePort: provides external access (available port range 30000 - 32767)
-            - LoadBalancer: exposes the service to an external load balancer ()
-          - Service Roles:
-            - Stable IP address in the cluster
-            - load balancing
-            - communication within the cluster or outside (not for prod use)
-            - loose couple pods 
-          
-      - Ingress: manages (maps) external traffic to an inside service
-          - Ingress Controller -> component in cluster that manages external access to services running inside the cluster (must be installed (several 3rd party supported))
-            - role of the Ingress Controller:
-                - single entry point in the cluster
-                - TLS termination
-                - can route traffic to different services based on path (subdomain)
-          - Ingress Class
-              - basically maps a certain ingress controller to a name (ingress class)
-              - it's useful if the cluster has multiple ingress controllers, we can map ingress controllers implementation to classes then reference these ingres class names in the ingress
-
-
-        - Ingress Controller -> an implementation of Ingress (must be installed in the kubernetess cluster)
-            - runs as pod or a set of pods that evaluates and process ingress rules
-      - ConfigMap: external configuration for your apps (connects to pods)
-          - can be mounted as volume inside the container
-      - Secret: stores secret data (base64 encoded)
-          - same method as ConfigMap but confidential
-          - can be mounted as volume inside the container
-      - Volumes: sotrage attached to a Pod (so if the Pod dies the data is persisted)
-          - remote or local
-      
-      
-      - StatefulSet: Deployment (blueprint) for stateful pods (like DB)
-          - same principle as Deployment but for statefull containers
-          - the pod has a stickiy identity (this ensures that if the pod dies the same id -> state is reatached to the pod)
-          - it's quite a complex thing to setup because we have to manage the synchronisation, mechanism
-          - https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
-
-
-
-      - Master Node runs 4 processes:
-          - Api Server: this is where we connect to, to control the cluster
-          - Scheduler: schedules pods based on configurations and specifications received from the API server
-              - ist job is to correctly 'schedule' pods based on resource availability
-          - Controller manager: detects pod state changes (like crashes)
-              - the controller manager requests the scheduler to start pods
-          - etcd: key-value store of the cluster state (all state is stored here)
-              - holds the current status of the Kubernetes cluster
-      - Usually there are multiple master nodes (for fault tollerance)
-
-
-
-
-
-
-
-
-
-
-
-    ***********
-    **  CLI  **
-    ***********
-  - kubectl -> CLI client to talk to the API server
-    
-    
-
-    - Kubernetes is very good for stateless app management, but less for StatefulSet (in real life not really used to manage stateful sets)
-    
-    
-    *** Config File ***
-    - config file reference: https://kubernetes.io/docs/reference/kubernetes-api/
-    - config files have 3 pars:
-        - metadata
-        - specification
-        - status (automatically generated by K8s)
-    - components are identified by lables and referenced by selectors 
-
-
-
-
-
-    - kubectl get secret [secretName] [options]
-        - list all or the specified secret
-        - [options]
-          - -o yaml 
-            - output in yaml format (read directly from etcd)
-    - kubectl describe secret [secretName]
-        - describe all secrets (or the specified one)
-        - status info about the pod(s)
-    - kubectl delete secret <secretName>
-        - deletes the specified secret
-    
-    
-    - kubectl get configmap [configmap] [options]
-        - list all or the specified configmap
-        - [options]
-          - -o yaml 
-            - output in yaml format (read directly from etcd)
-    - kubectl describe configmap [secretName]
-        - describe all configmaps (or the specified one)
-        - status info about the configmap(s)
-    - kubectl delete secret <secretName>
-        - deletes the specified secret
-    
-    
-
-
-
-
-
-
-    - kubectl get service [service] [options]
-        - list services (or the specified service)
-        - [options]
-          - -o yaml 
-            - output in yaml format (read directly from etcd)
-    - kubectl describe service [serviceName]
-        - describe all services (or the specified pod)
-        - status info about the pod(s)
-    - kubectl delete service <serviceName>
-        - deletes the specified service
-
-
-
-
-
-
-
-    - kubectl get pod [podName] [options]
-        - list pods (or the specified pod)
-        - [options]
-          - -o yaml 
-            - output in yaml format (read directly from etcd)
-          - -o wide
-            - outputs more info (like IP address)
-    - kubectl describe pod [podName]
-        - describe all pods (or the specified pod)
-        - status info about the pod(s)
-    - kubectl delete pod <podName>
-        - deletes the specified pod (pod recreated if deployment persist)
-
-    
-    - kubectl logs <podName>
-        - get logs for the specified pod
-
-
-      kubectl exec -it <podName> -- bash
-        - enters the specified container's shell (just like in Docker)
-
-
-    - kubectl create deployment <deploymentName> --image=<imageName>
-        - creates a deployment
-    - kubectl get deployment [options]
-        - list deployments
-        - [options]
-          - -o yaml 
-            - output in yaml format (read directly from etcd)
-    - kubectl delete deployment <deploymentName>
-        - deletes the specified deployment
-    - kubectl edit deployment <deploymentName>
-        - opens the configs for the deployment that can be edited then once closed kubernetess applies changes
-    
-    
-    
-    - kubectl get replicaset
-        - list replicasets
-
-
-
-
-
-
-
-    - kubectl get namaespace
-        - list namespaces
-    - kubectl create namespace <namespaceName>
-        - creates a new namespace
-    - kubectl delete namespace <namespaceName>
-        - deletes the specified namespace
-    - kubectl get namespace <namespaceName> -o yaml
-        - get detailed info about the namespace
-      
-      
-      
-    - kubectl config set-context --current --namespace=<namespaceName>
-        - set namespace
-    - kubectl config view --minify | grep namespace
-        - get which namespace is selected 
-
-
-
-
-
-
-
-
-        - kubectl apply -f <configFile>
-        - executes the specified config file
-        - applying the same config will update the existing deployment
-    - kucectl delete -f <configfile>
-        - removes resources described in the config file
-
-
-
-
-    - kubectl get nodes
-    - list running nodes
-    
-    
-    - kubectl get all
-        - get all resources in the current namespace
-
-
-
-
-  ***
-  - minikube: single node for local dev (needs virtualization), needs to run in a vitual machine (I used qemu -> `brew install qemu`)
-    - minikube start --driver=<vmDriver>
-        - start minikube in <vmDriver> VM
-    - minikube status
-        - prints the minikube status
-
-
--->
-
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-------------------------------------------------------------------->
     <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
+    <h2 class="header"> General Knowledge </h2>
+    <p> The concepts of <mark class="mark">Control Plane</mark> VS <mark class="mark">Data Plane</mark> </p>
+    <p class="indent-lv1"> - Control Plane: </p>
+    <p class="indent-lv2"> - Manages the overall state and configuration of the Kubernetes cluster </p>
+    <p class="indent-lv2"> - Ensures the cluster operates according to the desired state, making decisions and orchestrating workloads </p>
+    <p class="indent-lv2"> - Master Nodes </p>
+    <p class="indent-lv1"> - Data Plane: </p>
+    <p class="indent-lv2"> - Executes workloads and handles network traffic within the cluster </p>
+    <p class="indent-lv2"> - Runs application containers, manages resources, and facilitates communication between services </p>
+    <p class="indent-lv2"> - Worker Nodes </p>
+    <p> Access Control </p>
+    <p class="indent-lv1"> - Kubernetes supports <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/" target="_blank">RBAC</a> (Role Based Access Control), so we can control who can access what </p>
+    <p class="indent-lv1"> - The following athentication strategies are supported: <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authentication-strategies" target="_blank">Client Cert, Bearer Tokens, OpenID Connect or Webhook Token</a> </p>
+    <p class="indent-lv1"> - <mark>kubectl</mark> connection is configured through the <mark>~/.kube/config</mark> file </p>
+    <p> Secure network communication inside the cluster </p>
+    <p class="indent-lv1"> - When creating cluster components Kubernetes automatically handles certificate creation in order to ensure TLS communication inside the cluster </p>
+    <p> Multi Container Pods </p>
+    <p class="indent-lv1"> - multiple containers within the same pod easily communicate with each other through <mark>localhost</mark> (ex: cont-1 listens on <mark>localhost:8080</mark> cont-2 listens on <mark>localhost:8081</mark>) </p>
+    <p class="indent-lv1"> - a pod has one IP address (pod name), multiple containers can be exposed each on its own port </p>
+    <p> Assign Pods to Nodes <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/" target="_blank">[link]</a> </p>
+    <p class="indent-lv1"> - by default the scheduler tries to distribute pods evenly on worker nodes (takes into consideration the nodes resources (CPU, RAM, etc...) </p>
+    <p class="indent-lv1"> - however we can control this behaviour with the follwoing strategies: <mark class="mark">Node Selector</mark>, <mark class="mark">Node Affinity</mark>, <mark class="mark">Taints and Tolerations</mark> (configures to which pods not to deploy to) </p>
+    <p> Load Balancing </p>
+    <p class="indent-lv1"> - by default the load is distributed in round-robin fashion among ReplicaSets </p>
+    <p class="indent-lv1"> - we can configure different load balancing strategies depending the installed Ingress Controller (implementation of ingress) </p>
 
-    <h2 class="headerExtra"><u> Title 1 </u></h2>
-    <h2 class="header"> Title 1.1 </h2>
-    <h3 class="header"> Title 1.1.1 </h3>
-    <h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-      <p> - red background block means not learned or not tested information! </p>
-      <p> - </p>
-    </div>
-
-    <pre class="syntax">
-    <reqval>required value </reqval>
-    <optval>optional value </optval>
-    <lit>literally used </lit>
-    <opt>optionally used </opt>
-  
-    <prot style="color:#049500;">prototype chain</prot>
-        
-    <span class="openable"> this is an openable element<div>
-        <p> - openable elements listed here in paragraphs </p>
-        <p> - </p>
-    </div></span>
-    </pre>
-
-    <details class="example">
-      <summary> DEMO (can be pseudocode) </summary>
-      <pre>
-    examples of the current lessons 
-    
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
-    </details>
-
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-    <details class="example">
-      <summary> Example : </summary>
-      <h4 style="color:darkblue;"><u> example title </u></h4>
-      <p> - live tests will come here </p>
-      <details>
-        <summary class="exampleCode"> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-      </details>
-    </details>
-    <!---------------------------------------------------------------------------------------------------------------------------------->
-    <hr>
-
-    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
 
     <br><br>
   </body>

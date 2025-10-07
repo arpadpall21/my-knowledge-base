@@ -17,9 +17,6 @@
       <a href="../../index.html">MySite > </a> 
       <a href="../index.html">Kubernetes > </a> Helm
     </nav>
-
-    <p class="subSite"><a href> SubSite > </a></p>
-
     <table class="table">
       <tr>
         <th style="width:30%;"> Method / Property / statement ect... </th>
@@ -27,21 +24,110 @@
       </tr>
       <tr>
         <td>
-          demo prop
+          <lit>helm</lit> create <reqval>chartDir</reqval>
         </td>
         <td>
-          - demo description
-          <span class="browserSupport">
-            <span><i class="fab fa-chrome"></i> 0/0 -webkit- </span>
-            <span><i class="fab fa-firefox"></i> </span>
-            <span><i class="fab fa-opera"></i> </span>
-            <span><i class="fab fa-internet-explorer"></i><i class="fab fa-edge"></i> </span>
-            <span><i class="fab fa-safari"></i> </span>
-            <span><i class="fab fa-node-js"></i> </span>
-          </span>
+          - scaffolds a Helm Chart directory structure (in the current dir) 
         </td>
       </tr>
-
+      <tr>
+        <td>
+          <lit>helm</lit> template <reqval class="openable">chartName<div>
+            <p> - value of <mark>name</mark> in the <mark>Chart.yaml</mark> file </p>
+          </div></reqval> <reqval>chartDir</reqval>
+        </td>
+        <td>
+          - renders templates (with the passed values) (also checks for syntax errors)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>helm</lit> install <reqval class="openable">chartName<div>
+            <p> - value of <mark>name</mark> in the <mark>Chart.yaml</mark> file </p>
+          </div></reqval> <reqval>chartDir</reqval> <opt>[options]</opt>
+        </td>
+        <td>
+          - installs the specified Helm Chart (applies changes to the Kubernetes cluster) <br>
+          <opt>[options]</opt><br>
+          - (<opt>--values <optval>pathTovalues.yaml</optval></opt>) installs values from the specified values file (Default: <mark>values.yaml</mark>)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>helm</lit> uninstall <reqval class="openable">chartName<div>
+            <p> - value of <mark>name</mark> in the <mark>Chart.yaml</mark> file </p>
+          </div></reqval> <reqval>chartDir</reqval>
+        </td>
+        <td>
+          - uninstalls the specified Helm Chart (removes Chart resource from the Kubernetes cluster)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>helm</lit> list <opt>[options]</opt>
+        </td>
+        <td>
+          - list installed charts (in the current namespace) <br>
+          <opt>[options]</opt> <br>
+          - (<opt>--all-namespaces</opt>) in all namespaces
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>helm</lit> upgrade <reqval class="openable">chartName<div>
+            <p> - value of <mark>name</mark> in the <mark>Chart.yaml</mark> file </p>
+          </div></reqval> <reqval>chartDir</reqval>
+        </td>
+        <td>
+          - applies Chart changes to the Kubernetes cluster (ex: changes in values.yaml) <br>
+          - increases the Chart revision number by 1 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>helm</lit> rollback <reqval class="openable">chartName<div>
+            <p> - value of <mark>name</mark> in the <mark>Chart.yaml</mark> file </p>
+          </div></reqval> <optval>revisionNr</optval>
+        </td>
+        <td>
+          - rolls back the Chart revision by 1 (or by <optval>revisionNr</optval>) <br>
+          - increases the Chart revision number by 1 (to see which version is rolled back run the <mark>helm history <reqval>chartName</reqval></mark> command)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>helm</lit> histroy <reqval class="openable">chartName<div>
+            <p> - value of <mark>name</mark> in the <mark>Chart.yaml</mark> file </p>
+          </div></reqval>
+        </td>
+        <td>
+          - displays a detailed revision history 
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <a href="https://helm.sh/docs/intro/cheatsheet/#list-add-remove-and-update-repositories" target="_blank">repoCommands</a></td>
+        <td> - link to all repo commands </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td> <a href="https://helm.sh/docs/intro/cheatsheet/" target="_blank">commands</a></td>
+        <td> - link to all commands </td>
+      </tr>
     </table>
     <br>
     <h2 class="headerSection"> Notes : </h2>
@@ -49,144 +135,143 @@
     <h2 class="headerSection"> Useful Links : </h2>
 
     <h2 class="headerSection"> Remember This : </h2>
-
+    <p> - Helm is an extension for Kubernetes, so it must be installed separately </p>
     <h2 class="headerSection"> Description and Demonstration : </h2>
-
-
-
-
-    <!--
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-stage 1: high level overview 
-    - read through 
-    - create notes 
-    - deciede what exactly will you document down 
-    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
-    
-stage 2:  low level overview
-    - deeper understanding of all what you've taken down in stage 1
-    
-stage 3 : 
-    - organize and document down everything 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-    - package manager for kubernetes
-    - templating engine (configurable Helm Chart)
-    - Helm Cart -> basically a K8s package
-
-    - helm needs to be installed (brew install helm)
-
-
-
-*****************
-*****  CMD  *****
-*****************
-    - helm create <chartname>
-        -> creates a new chart (scaffolds the Chart directory structure)
-
-    - helm template <chartName> <chartDir>
-        -> renders the template (yaml) and displays the output (also checks for yaml syntax errors)
-            -> <chartName> -> value of 'name' from the Chart.yaml file
-            -> <chartDir> -> the root directory name of the chart
-
-    - helm list
-        -> list deployed charts to the kubernetes cluster
-
-    - helm install <chartName> <chartDir> [options]
-        -> installs the chart in the cluster
-        [options]
-        --values <valuesFilePath> 
-            -> install with specific values file (Default: values.yaml)
-        
-    - helm uninstall <chartName> <chartDir>
-        -> uninstalls the chart from the cluster
-
-    - helm upgrade <chartName> <chartDir>
-        -> applies chart changes to the kubernetes cluster (creates a new revision)
-    - helm rollback <chartName> <chartDir>
-    
-    - helm history <release>
-        -> prints the 
-
-?????????????????????????????????????????????????????????????????????????????????????????????
-WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
-?????????????????????????????????????????????????????????????????????????????????????????????
-    - what is the Helm hub?
-        -> ArtifactHub: https://artifacthub.io/packages/search?kind=0&sort=relevance&page=1
-    
-    
-    
--->
-
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-
-    <h2 class="headerExtra"><u> Title 1 </u></h2>
-    <h2 class="header"> Title 1.1 </h2>
-    <h3 class="header"> Title 1.1.1 </h3>
-    <h4 class="header"> Title 1.1.1.1 </h4>
-    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
-    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
-    <p style="text-decoration:underline;"> - important information is underlined </p>
-    <p style="color:yellow;"> - very important information is written with yellow colors </p>
-    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
-    <div style="background-color:red;">
-      <p> - red background block means not learned or not tested information! </p>
-      <p> - </p>
-    </div>
-
+    <p> - Helm has 2 main features that supports Kubernetes: </p>
+    <p class="indent-lv1"> - it's a templating engine: we can parameterize kubernetes manifests (config.yaml) so they are reusable </p>
+    <p class="indent-lv1"> - it's a packages manager for Kubernetes (Default remote repo: <a href="https://artifacthub.io/" target="_blank">ArtifactHub</a>) </p>
+    <p> - a <mark class="mark">Helm Chart</mark> is essentially a parameterizable package for Kubernetes </p>
     <pre class="syntax">
-    <reqval>required value </reqval>
-    <optval>optional value </optval>
-    <lit>literally used </lit>
-    <opt>optionally used </opt>
-  
-    <prot style="color:#049500;">prototype chain</prot>
-        
-    <span class="openable"> this is an openable element<div>
-        <p> - openable elements listed here in paragraphs </p>
-        <p> - </p>
-    </div></span>
+// Helm Chart repo structure --
+    <reqval>chartDir</reqval>
+        ├- Chart.yaml           // metadata about the chart
+        ├- values.yaml          // default values for the chart's templates (can override when installing the chart)
+        ├- .helmignore          // files and directories to ignore when packaging the chart
+        ├- charts/              // contains any dependent charts that your chart relies on, these dependencies are specified in the Chart.yaml file.
+        │   └- // ...
+        └- templates/           // contains Kubernetes resource templates that Helm will render using the values provided in values.yaml.
+            └- // ...
     </pre>
-
-    <details class="example">
-      <summary> DEMO (can be pseudocode) </summary>
-      <pre>
-    examples of the current lessons 
-    
-// -----------------------------------------
-
-// -----------------------------------------
-    </pre>
-    </details>
-
-    <pre class="cmd">
-    command line demo 
-    </pre>
-    <pre class="formula">
-    formula code (like conversion meter...)
-    </pre>
-    <details class="example">
-      <summary> Example : </summary>
-      <h4 style="color:darkblue;"><u> example title </u></h4>
-      <p> - live tests will come here </p>
-      <details>
-        <summary class="exampleCode"> CODE : </summary>
-        <pre>
-    copy of the exaple code 
-        </pre>
-      </details>
-    </details>
-    <!---------------------------------------------------------------------------------------------------------------------------------->
     <hr>
-
-    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
-
+    <!---------------------------------------------------------------------------------->
+    <h2 class="header"> NGINX Helm Chart Example: </h2>
+    <pre class="syntax">
+// (nginx) chart directory structure --
+    nginx
+        ├- charts
+        ├- templates
+        │   ├- deployment.yaml
+        │   └- ingress.yaml
+        ├- Chart.yaml
+        └- values.yaml
+    </pre>
+    <pre>
+// Chart.yaml (file) --
+    apiVersion: v2
+    name: nginx                           // chart name
+    description: Basic Helm nginx chart
+    version: 0.1.0                        // chart version
+    appVersion: "1.0"                     // application version
+    </pre>
+    <pre>
+// values.yaml (file) --
+    replicaCount: 2
+    
+    image:
+      repository: nginx
+      pullPolicy: IfNotPresent
+      tag: "latest"
+    
+    service:
+      type: ClusterIP
+      port: 80
+    
+    ingress:
+      enabled: true
+      annotations: {}
+      hosts:
+        - host: localhost
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+      tls: []
+    </pre>
+    <pre>
+// deployment.yaml (file) --
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {{ .Release.Name }}-deployment
+    spec:
+      replicas: {{ .Values.replicaCount }}
+      selector:
+        matchLabels:
+          app: {{ .Release.Name }}
+      template:
+        metadata:
+          labels:
+            app: {{ .Release.Name }}
+        spec:
+          containers:
+            - name: {{ .Release.Name }}-container
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              ports:
+                - containerPort: 80
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ .Release.Name }}-service
+    spec:
+      type: {{ .Values.service.type }}
+      ports:
+        - port: {{ .Values.service.port }}
+          targetPort: 80
+      selector:
+        app: {{ .Release.Name }}
+    </pre>
+    <pre>
+// ingress.yaml (file) --
+    {{- if .Values.ingress.enabled }}
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: {{ .Release.Name }}-ingress
+      annotations:
+        {{- range $key, $value := .Values.ingress.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+    spec:
+      rules:
+        {{- range .Values.ingress.hosts }}
+        - host: {{ .host }}
+          http:
+            paths:
+              {{- range .paths }}
+              - path: {{ .path }}
+                pathType: {{ .pathType }}
+                backend:
+                  service:
+                    name: {{ $.Release.Name }}-service
+                    port:
+                      number: {{ $.Values.service.port }}
+              {{- end }}
+        {{- end }}
+      {{- if .Values.ingress.tls }}
+      tls:
+        {{- range .Values.ingress.tls }}
+        - hosts:
+            {{- range .hosts }}
+            - {{ . | quote }}
+            {{- end }}
+          secretName: {{ .secretName }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    </pre>
+    
+    
     <br><br>
   </body>
 
