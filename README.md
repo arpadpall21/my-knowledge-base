@@ -1,3 +1,4 @@
 # My Knowledge Base
 
-- A personal site where I document the technologies I use.
+## Description
+- A personal site where I document technologies I use
