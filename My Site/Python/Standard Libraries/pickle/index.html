@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> pickle </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> pickle </h1>
+    <p> Updated: ( 2025-02-03 ) </p>
+    <nav class="sitenav">
+      <a href="../../../index.html">MySite > </a>
+      <a href="../../index.html">Python > </a>
+      <a href="../index.html">Standard Libraries > </a> pickle
+    </nav>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> Method </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          <lit>pickle</lit>.dump(<reqval>var</reqval>, <reqval>file-like</reqval>, <a href="https://docs.python.org/3/library/pickle.html#pickle.dump" target="_blank">args...</a>)
+        </td>
+        <td>
+          - pickles (byte serializes) the passed data (<reqval>var</reqval>) and outputs it into a file (<reqval>file-like</reqval>)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pickle</lit>.dumps(<reqval>var</reqval>, <a href="https://docs.python.org/3/library/pickle.html#pickle.dumps" target="_blank">args...</a>)
+        </td>
+        <td>
+          - pickles (byte serializes) the passed data (<reqval>var</reqval>) and returns the result as <reqval>bytes</reqval>
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pickle</lit>.load(<reqval>file-like</reqval>, <a href="https://docs.python.org/3/library/pickle.html#pickle.load" target="_blank">args...</a>)
+        </td>
+        <td>
+          - unpickles the file (<reqval>file-like</reqval>) content and returns the result
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pickle</lit>.loads(<reqval>data:bytes</reqval>, <a href="https://docs.python.org/3/library/pickle.html#pickle.load" target="_blank">args...</a>)
+        </td>
+        <td>
+          - unpickles the passed <reqval>data</reqval> and returns the result
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2"> Classes are doing the same but give access to more advanced pickling tools </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pickle</lit>.<a href="https://docs.python.org/3/library/pickle.html#pickle.Pickler" target="_blank">Pickler</a>
+        </td>
+        <td>
+          - Pickler class
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <lit>pickle</lit>.<a href="https://docs.python.org/3/library/pickle.html#pickle.Unpickler" target="_blank">Unpickler</a>
+        </td>
+        <td>
+          - Unpickler class
+        </td>
+      </tr>
+    </table>
+    <br>
+    
+    <h2 class="headerSection"> Useful Links : </h2>
+    <p><a href="https://docs.python.org/3/library/pickle.html" target="_blank"> pickle (docs.python.org) </a> </p>
+    <h2 class="headerSection"> Remember This : </h2>
+
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+    <p> - pickle is a data serialization library, it's mainly used to serialize data into byte (byte data type), so the serialized data can be stored in file, sent through network, etc... </p>
+    <p> - pickle only serializes classes and functions as fully qualified name (which basically just a reference) </p>
+    <p> - in order to fully serialize classes and functions into byte we can use the <a href="https://pypi.org/project/dill/" target="_blank">dill</a> library (<mark class="mark">dill</mark> has the same interfaces as <mark class="mark">pickle</mark> has) </p>
+    <p> - there are different pickle protocols, while unpickling the protocol is automatically detected: </p>
+    <p class="indent-lv1"> - (<mark class="mark">0</mark>) (<mark class="mark">1</mark>) (<mark class="mark">2</mark> python v2.3) (<mark class="mark">3</mark> python v3) (<mark class="mark">4</mark> python v3.4) (<mark class="mark">5</mark> python v3.8) </p>
+    <p style="color:yellow;"> - unpickling is not safe, malicious code will run on unpickle, so you should only unpickle data you trust! </p>
+    <pre>
+    import pickle
+    
+    pickle.loads(b"cos\nsystem\n(S'echo hello world'\ntR.")     // !! this will execute
+    </pre>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+    import pickle
+    
+    my_dict = {
+      "a": 32,
+      "b": (
+        [
+          3,
+          2,
+          False
+        ],
+        (
+          {"x": "x"}
+        )
+      ),
+      "c": [32, 32.22]
+    }
+    
+    pickled_dict = pickle.dumps(my_dict)         // returns the pickled data as bytes
+    pickle.loads(pickled_dict)                   // -> unpikles the bytes and returns the original dictionary 
+    
+    pickle.dump(my_dict, open('./test', 'bw'))          // writes the picked data into a file
+    pickle.load(open('./test', 'br'))              // -> reads and unpickles the file and returns the data
+    
+    
+// classes ------------------
+    pickler = pickle.Pickler(open('./test', 'bw'))
+    pickler.dump(my_dict)
+    
+    unpicker = pickle.Unpickler(open('./test', 'br'))
+    unpicker.load()
+      </pre>
+      <hr>
+      <!------------------------------------------------------------------------------>
+      <h4 class="header"> Using <mark>dill</mark> to serialize classes and functions </h4>
+      <pre>
+// module_1.py (file) -------------------
+    import dill
+    
+    
+    class Parent:
+        cls_attr = 'class attribute'
+    
+        def add(self):
+            return self.a + self.b
+    
+    
+    class MyClass(Parent):
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+    
+    
+    res = dill.dump(MyClass, open('./test', 'bw'))        // fully serializes (pickles) the class 
+    
+    
+// module_2.py (file) -------------------
+    import dill
+    
+    MyClass = dill.load(open('./test', 'br'))       // the unpickled class fully available
+    
+    my_obj = MyClass(2, 3)
+    
+    my_obj.cls_attr                                 // -> 'class attribute'
+    my_obj.add()                                    // -> 5
+      </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>
