@@ -19,7 +19,7 @@
     </nav>
     <p class="subSite"> <a href="./Class Components/index.html">Class Components ></a> </p>
     <h2 class="headerSection"> Notes : </h2>
-    
+
     <h2 class="headerSection"> Useful Links : </h2>
 
     <h2 class="headerSection"> Remember This : </h2>
@@ -412,16 +412,19 @@
       </details>
       <!------------------------------------------------------------------------------------------------->
       <hr>
-      <h2 class="headerExtra"> Special React Components </h2>
-      <p> - <mark>Profiler</mark> - lets you measure the rendering performance of a Component tree (measure the performance in production mode (disable strict mode)) <a href="https://react.dev/reference/react/Profiler" target="_blank">[link]</a> </p>
-      <p> - <mark>StrictMode</mark> - runs React in strict mode to find common bugs <a href="https://react.dev/reference/react/StrictMode" target="_blank">[link]</a> </p>
+      <h2 class="headerExtra"> React Standard Components </h2>
+      <h4 class="header"> The <mark>&lt;Profiler&gt;</mark> Component </h4>
+      <p> - lets you measure the rendering performance of a Component tree (measure the performance in production mode (disable strict mode)) <a href="https://react.dev/reference/react/Profiler" target="_blank">[link]</a> </p>
+      <h4 class="header"> The <mark>&lt;StrctMode&gt;</mark> Component </h4>
+      <p> - runs React in strict mode to find common bugs <a href="https://react.dev/reference/react/StrictMode" target="_blank">[link]</a> </p>
       <p class="indent-lv1"> - re-render Components an extra time to find bugs (Component must be pure functions) </p>
       <p class="indent-lv1"> - re-run Effects an extra time to find bugs (like missing cleanup) </p>
       <p class="indent-lv1"> - check for deprecated code </p>
-      <p> - <mark>Suspense</mark> - loads suspense-enable data sources while displaying a fallback Component <a href="https://react.dev/reference/react/Suspense" target="_blank">[link]</a> </p>
-      <p class="indent-lv1"> - at the time of writing this it only usable for for <mark>lazy()</mark> loading (2024-02-23) </p>
+      <h4 class="header"> The <mark>&lt;Suspense&gt;</mark> Component </h4>
+      <p> - loads suspense-enable data sources while displaying a fallback Component <a href="https://react.dev/reference/react/Suspense" target="_blank">[link]</a> </p>
+      <p class="indent-lv1"> - used to display loading state when loading in a compoent </p>
       <pre class="syntax">
-  import { Suspense} from 'react';
+  import { Suspense } from 'react';
   
   function <reqval>Component</reqval>() {
       return (
@@ -430,10 +433,11 @@
           &lt;/Suspense&gt;
       )
   }
-  </pre>
+      </pre>
       <details class="example">
         <summary> Example : </summary>
         <h4 class="header"> The <mark>Suspense()</mark> Component </h4>
+        <p> - FYI: This is working without lazy loading as well </p>
         <pre>
     import { Suspense, lazy } from 'react';
     const ListComponent = lazy(() =&gt; import('./ListComponent'))
@@ -447,8 +451,57 @@
         &lt;/Suspense&gt;
       );
     }
-    </pre>
+        </pre>
       </details>
+      <h4 class="header"> The <mark>&lt;Activity&gt;</mark> Component <span id="browserSupport"><span><i class="fab fa-react"></i> 19.2 </span></span>
+      </h4>
+      <p> - Conditionally hides/shows child Components based on its state (Child Components are not unmounted, so their state is preserved when not displayed on screen) </p>
+      <p class="indent-lv1"> - This approach can be used for: </p>
+      <p class="indent-lv2"> - We want to preserve the state of the child Components (like an open menu, some user input while hiding the textarea, etc...) </p>
+      <p class="indent-lv2"> - We want to prerender something, so it's immediately available when the user needs it </p>
+      <pre class="syntax">
+  import { Activity } from 'react';
+  
+  function <reqval>Component</reqval>() {
+      return (
+          &lt;Activity mode={'visible'|'hidden'} &gt;                // <mark>'visible'|'hidden'</mark> shows|hides child Components
+              <reqval>Components...</reqval>
+          &lt;/Activity&gt;
+      )
+  }
+      </pre>
+      <details class="example">
+        <summary> Example : </summary>
+        <pre>
+    import { useState, Activity } from 'react';
+    
+    export default function CientComponent() {
+      const [showElement, setShowElement] = useState(true);
+      const [elementColor, setElementColor] = useState('black');
+      
+      function handleShowHideElement() {
+        setShowElement(!showElement)
+      }
+      function toggleElementColor() {
+        setElementColor(elementColor === 'black' ? 'red' : 'black')
+      }
+      
+      return (
+        &lt;&gt;
+        &lt;button onClick={handleShowHideElement}&gt; Show / Hide Element &lt;/button&gt;
+        &lt;button onClick={toggleElementColor}&gt; Toggle Component Color &lt;/button&gt;
+          &lt;Activity mode={showElement ? 'visible' : 'hidden'}&gt;
+            &lt;p style={{color: elementColor}}&gt; Test &lt;/p&gt;           // when the element is not shown its color state is preserved
+          &lt;/Activity&gt;
+        &lt;/&gt;
+      );
+    }
+        </pre>
+      </details>
+
+
+
+
 
       <br><br>
     </body>

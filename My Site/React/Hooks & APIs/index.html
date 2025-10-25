@@ -24,14 +24,15 @@
     <p class="subSite indent-lv1"><a href="#context"> <mark>createContext()</mark> / <mark>useContext()</mark> ></a> </p>
     <h2 class="header"> Ref hooks & APIs </h2>
     <p class="subSite indent-lv1"><a href="#ref"> <mark>useRef()</mark> > </a></p>
-    <p class="subSite indent-lv1"><a href="#forwardRef"> <mark>forwardRef()</mark> [Deprecated from v19] > </a>  </p>
+    <p class="subSite indent-lv1"><a href="#forwardRef"> <mark>forwardRef()</mark> [Deprecated from v19] > </a> </p>
     <p class="subSite indent-lv1"><a href="#useImperativeHandle"> <mark>useImperativeHandle()</mark> > </a></p>
     <h2 class="header"> Effect hooks </h2>
-    <p class="subSite indent-lv1"><a href="#effect"> <mark>useEffect()</mark> / <mark>useLayoutEffect()</mark> / <mark>useInsertionEffect()</mark> > </a> </p>
+    <p class="subSite indent-lv1"><a href="#effect"> <mark>useEffect()</mark> / <mark>useLayoutEffect()</mark> / <mark>useInsertionEffect()</mark> / <mark>useEffectEvent()</mark> > </a> </p>
     <h2 class="header"> Performance hooks & APIs </h2>
     <p class="subSite indent-lv1"><a href="#useMemo"> <mark>useMemo()</mark> / <mark>useCallback()</mark> > </a></p>
     <p class="subSite indent-lv1"><a href="#useTransition"> <mark>useTransition()</mark> / <mark>startTransition()</mark> / <mark>useDeferredValue()</mark> > </a></p>
     <p class="subSite indent-lv1"><a href="#lazy"> <mark>lazy()</mark> / <mark>memo()</mark> > </a> </p>
+    <p class="subSite indent-lv1"><a href="#cache"> <mark>cache()</mark> / <mark>cacheSignal()</mark> > </a> </p>
     <h2 class="header"> Other hooks </h2>
     <p class="subSite indent-lv1"><a href="#otherHooks"> Other hooks > </a></p>
     <h2 class="headerSection"> Description and Demonstration </h2>
@@ -498,8 +499,8 @@
     
     export default ChildComponent;
     </pre>
-    <h3 class="header"> [from v19] pass <mark>ref</mark> props instead of using <mark>forwaredRef()</mark> </h3>
-    <pre>
+      <h3 class="header"> [from v19] pass <mark>ref</mark> props instead of using <mark>forwaredRef()</mark> </h3>
+      <pre>
 // Parent.js (file) ------------------------------
     import { useRef, useEffect } from 'react';
     import Child from './Child';
@@ -523,7 +524,7 @@
     }
     
     export default Child;
-    </pre> 
+    </pre>
     </details>
     <!----------------------------------------------------------------------------------------------->
     <hr>
@@ -615,14 +616,17 @@
     <p> - these are 'escape patches' from the React paradigm <u>(don't use these tools to orchestrate data flow in your application)</u> </p>
     <!----------------------------------------------------------------------------------------------->
     <hr>
-    <h2 class="header" id="effect"> The <mark>useEffect()</mark> / <mark>useLayoutEffect()</mark> / <mark>useInsertionEffect()</mark> hooks</h2>
+    <h2 class="header" id="effect"> The <mark>useEffect()</mark> / <mark>useLayoutEffect()</mark> / <mark>useInsertionEffect()</mark> / <mark>useEffectEvent()</mark> hooks</h2>
     <p> - <mark>useEffect()</mark> - runs its function after the component is fully rendered </p>
     <p> - <mark>useLayoutEffect()</mark> - runs its function during component render (before React paints the DOM) </p>
     <p class="indent-lv1"> - used to calculate the layout before painting the new DOM </p>
     <p> - <mark>useInsertionEffect()</mark> - runs its function before DOM manipulation (before React paints the DOM) </p>
     <p class="indent-lv1"> - used to inject styles into the DOM (intended to solve the flicker problem when the style is inserted after render) </p>
+    <p> - <mark>useEffectEvent()</mark> <span id="browserSupport"><span><i class="fab fa-react"></i>19.2</span></span> available inside <mark>useEffect()</mark>/<mark>useLayoutEffect()</mark>/<mark>useInsertionEffect()</mark> in order to solve the following 2 problems: </p>
+    <p class="indent-lv1"> - have access to the latest state or prop values </p>
+    <p class="indent-lv1"> - encapsulated state or props don't have to be listed as dependency for <mark>useEffect()</mark>/<mark>useLayoutEffect()</mark>/<mark>useInsertionEffect()</mark> </p>
     <pre class="syntax">
-    import { useEffect, useLayoutEffect, useInsertionEffect } from 'react'
+    import {useEffect, useLayoutEffect, useInsertionEffect, useEffectEvent} from 'react'
     
     function <strong>Component</strong> () {
         useEffect(<strong class="openable">fn<div>
@@ -645,8 +649,22 @@
             <p> - only runs its function when any <optval>val</optval> changes (check diff with <mark>Object.is()</mark>) <u>(always runs for the 1st time)</u> </p>
             <p> - <mark>[]</mark> (empty Array) -> runs its function only when the component mounts for the 1st time </p>
         </div></opt>)
-    } 
-  </pre>
+    }
+    
+    
+    // useEffectEvent() <span id="browserSupport" style="color:yellow;"><span><i class="fab fa-react"></i>19.2</span></span> -------------------------------
+    function <strong>Component</strong> ({ <reqval>someProps</reqval> }) {
+        let [<reqval>someState</reqval>, <reqval>setSomeState</reqval>] = useState(<optval>...</optval>)
+        
+        const effectEvent = useEffectEvent(() => {
+          <reqval>someState</reqval>, <reqval>someProps</reqval>                // access to the latest state or props values
+        });
+        
+        useEffect(() => {
+          // ...
+          effectEvent()         // call in order to have access to the latest state or props
+        }, [])                  // states or props used inside <mark>effectEvent</mark> don't have to be listed as dependencies
+    </pre>
     <pre class="syntax">
   
 <span style="color:darkgray;">// <mark>useEffect()</mark> VS <mark>useLayoutEffect()</mark> VS <mark> useInsertionEffect()</mark> timing -----------------</span>
@@ -668,7 +686,7 @@
             return () => connection.disconnect();         // cleanup function trigger disconnect when the component Unmounts 
         }, [roomId]);                                     // -! reactive value used is required as dependency
     }
-    </pre>
+      </pre>
       <!----------------------------------------------------------------------------------------------->
       <hr>
       <h4 class="header"> The <mark>useLayoutEffect()</mark> hook </h4>
@@ -687,7 +705,7 @@
     }
     
     export default App;
-    </pre>
+      </pre>
       <!----------------------------------------------------------------------------------------------->
       <hr>
       <h4 class="header"> The <mark>useInsertionEffect()</mark> hook </h4>
@@ -716,7 +734,42 @@
     }
     
     export default App;
-    </pre>
+      </pre>
+      <!----------------------------------------------------------------------------------------------->
+      <hr>
+      <h4 class="header"> The <mark>useEffectEvent()</mark> hook </h4>
+      <pre>
+    import { useState, useEffect, useEffectEvent } from 'react';
+    
+    function SomeComponent() {
+      let [count, setCount] = useState(0);
+      
+// the problem without <mark>useEffectEvent</mark> ----------------
+      useEffect(() => {
+        const id = setInterval(() => {
+          console.log(`Log click count: ${count}`)    // the <mark>count</mark> value is always <mark>0</mark> (the initial value), becasue the useEffect function lock this value when executed   
+        }, 1000);
+        return () => clearInterval(id);
+      }, []);                                         // the <mark>count</mark> should be listed as dependency according to react lint rules
+    
+    
+// solution with <mark>useEffectEvent</mark> ----------------------
+      const logClickCount = useEffectEvent(() => {
+        console.log(`Log click count: ${count}`)      // inside <mark>useEffectEvent</mark> we can access the latest state or prop values
+      })
+      
+      useEffect(() => {
+        const id = setInterval(() => {
+          logClickCount()
+        }, 1000);
+        return () => clearInterval(id);
+      }, []);                                       // the <mark>count</mark> don't have to be listed as dependency
+      
+      return (
+        &lt;button onClick={() =&gt; setCount(count++)}&gt; increase count &lt;/button&gt;
+      )
+    }
+      </pre>
     </details>
     <!----------------------------------------------------------------------------------------------->
     <hr>
@@ -804,14 +857,14 @@
     <hr>
     <h2 class="header" id="useTransition"> The <mark>useTransition()</mark> / <mark>startTransition()</mark> / <mark>useDeferredValue()</mark> hooks & API </h2>
     <h3> IMPORTNAT: at the time of writing this (2024-02-22) these tools are new, so their usage will probably evolve in the furue </h3>
-    <p> - <mark>useTransition()</mark> <b>(v18)</b> - updates the state without blocking the UI </p>
+    <p> - <mark>useTransition()</mark> <span id="browserSupport"><span><i class="fab fa-react"></i>18</span></span> - updates the state without blocking the UI </p>
     <p class="indent-lv1"> - a transition is a background task where we update the state while not blocking the UI <u>(do not use any async logic in transition)</u> </p>
     <p class="indent-lv1"> - here's the idea and workfow of usage: </p>
-    <p class="indent-lv2"> 1) first we update states and render the UI while starting the transion </p>
+    <p class="indent-lv2"> 1) first we update states and render the UI while starting the transition </p>
     <p class="indent-lv2"> 2) the transition is pending until the operation finishes or interruped (while not blocking the UI) </p>
     <p class="indent-lv2"> 3) the transition finishes triggers a rerender in order to update the UI (with the transition result) </p>
-    <p> - <mark>startTransition()</mark> <b>(v18)</b> - API does the same as <mark>useTransition()</mark> but has no pending indicator (mostly used in class components) </p>
-    <p> - <mark>useDeferredValue()</mark> <b>(v18)</b> - defers the update of a state </p>
+    <p> - <mark>startTransition()</mark> <span id="browserSupport"><span><i class="fab fa-react"></i>18</span></span> - API does the same as <mark>useTransition()</mark> but has no pending indicator (mostly used in class components) </p>
+    <p> - <mark>useDeferredValue()</mark> <span id="browserSupport"><span><i class="fab fa-react"></i>18</span></span> - defers the update of a state </p>
     <pre class="syntax">
   import { useState, useTransition, startTransition, useDeferredValue } from 'react';
       
@@ -842,7 +895,7 @@
         <p> - the <reqval>deferedState</reqval> is updated only once <u>when the user stops typing</u> (that's the deferring principal) </p>
         </div></span>
     }
-  </pre>
+    </pre>
     <details class="example">
       <summary> Example : </summary>
       <h4 class="header"> The <mark>useTransation()</mark> hook </h4>
@@ -983,7 +1036,7 @@
       <p> return <mark>true</mark> -> component does not rerender </p>
       <p> return <mark>false</mark> -> component rerenders </p>
     </div></optval>)
-  </pre>
+    </pre>
     <details class="example">
       <summary> Example : </summary>
       <h4 class="header"> The <mark>lazy()</mark> API </h4>
@@ -1024,6 +1077,50 @@
       return &lt;p style={{ color: redText ? 'red' : 'black' }}&gt; ChildComponent &lt;/p&gt;;
     });
     </pre>
+    </details>
+    <!----------------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class="header" id="cache"> The <mark>cache()</mark> / <mark>cacheSignal()</mark> API </h2>
+    <p> - <mark>cache()</mark> <span id="browserSupport"><span><i class="fab fa-react"></i>19</span></span> - caches the result of a data fetch or computation (server component only) </p>
+    <p> - <mark>cacheSignal()</mark> <span id="browserSupport"><span><i class="fab fa-react"></i>19.2</span></span> - React internally calls it when the component is finished rendering in order to abort a potentially still running cahce function </p>
+    <pre class="syntax">
+    import { cache, cacheSignal } from 'react';
+    
+    function <reqval>someCpuExpensiveFn</reqval>(<reqval>arg, ...</reqval>) { <optval>...</optval> }
+    
+    
+    function <reqval>ServerComponent</reqval> () {
+      const <reqval>task</reqval> = cache(<reqval>someCpuExpensiveFn</reqval>)          // create cache function
+      
+      <reqval>task</reqval>('a'<optval>, ...,</optval> { signal: cacheSignal() })       // cache miss <reqval>someCpuExpensiveFn</reqval> executed
+      <reqval>task</reqval>('a'<optval>, ...,</optval> { signal: cacheSignal() })       // cache hit (for the same args) returns the cached result
+      <optval>...</optval>                                                              // the <mark>cacheSignal()</mark> retuns an AbortSignal which is internally called by React when the component is finished renderint (in order to abort potentially still running tasks)     
+    }
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+    import { cache, cacheSignal } from 'react';
+    
+    
+    async function caclulatePersonMeta(name, surname) {
+        // some cpu expensive work...
+        return { name, surname };
+    }
+    
+    export default async function Home() {
+      const getPersonMeta = cache(caclulatePersonMeta)                                // create cache function
+      
+      let arpad = await getPersonMeta('Arpad', 'Pall', { signal: cacheSignal() });    // cache miss -> runs caclulatePersonMeta()
+      arpad = await getPersonMeta('Arpad', 'Pall', { signal: cacheSignal() });        // cache hit -> returns the cached data
+                                                                                      // the cacheSignal() returns an AbortSignal which internally called by react when the component is finished rendering
+      return (
+        &lt;&gt;
+          &lt;p&gt; Hello: {arpad.name} {arpad.surname} &lt;/p&gt;
+        &lt;/&gt;
+      );
+    }
+      </pre>
     </details>
     <!----------------------------------------------------------------------------------------------->
     <hr>

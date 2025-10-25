@@ -31,6 +31,15 @@
         </td>
       </tr>
       <tr>
+        <td>
+          repr(<strong>data:any</strong>)
+        </td>
+        <td>
+          - returns a developer friendly printable string of the passed <reqval>data</reqval> <br>
+          - a class can control what this function returns for its instances by defining a <mark>__repr__()</mark> method
+        </td>
+      </tr>
+      <tr>
         <td>|</td>
         <td></td>
       </tr>
@@ -803,7 +812,7 @@
       <strong>string</strong>
     """
     
-<span style="color:darkgrey;">// formating --------------------------------------------------------------------------</span>
+// formating ----------------------------------------------
     '<strong>...</strong><mark>%<strong>f</strong></mark><strong>...</strong>' <em>%</em> <strong>val</strong>                                                                   // <strong>val</strong> is (are) evaluated according to <mark>%<strong>f</strong></mark> and (are) replaced in the string <u class="openable">possible evaluations<div>
         <p> <mark>d</mark> - signed integer decimal </p>
         <p> <mark>i</mark> - signed integer decimal </p>
@@ -826,10 +835,14 @@
     
     
     <span id="browserSupport" title="updated : 2022-05-02" style="color:yellow;"><span><i class="fab fa-python"></i> 3.6 </span></span>
-    <em>f|F</em>'<strong>...</strong>{<strong>exp</strong>}<strong>...</strong>'                                                                   // (f-string) expressions in curly brackets are evaluated and the result is placed in the stirng (faster than <mark><strong>str</strong>.format()</mark>)
+    <em>f|F</em>'<strong>...</strong>{<strong>exp</strong>}<strong>...</strong>'      // (f-string) expressions in curly brackets are evaluated and the result is placed in the stirng (faster than <mark><strong>str</strong>.format()</mark>)
                                                                           // <span id="browserSupport" title="updated : 2022-05-02" style="color:yellow;"><span><i class="fab fa-python"></i> 3.8 </span></span>  <mark>{=<reqval>exp</reqval>}</mark> self documenting expression in f-string expression 
     
-    <em>r|R</em>'<strong>...</strong>\<strong>...</strong>'                                                                       // dislables escape notations in ths tring 
+    <em>r|R</em>'<strong>...</strong>\<strong>...</strong>'                                                                       // dislables escape notations in ths string
+    
+// t-string <span id="browserSupport" style="color:yellow;"><span><i class="fab fa-python"></i> 3.14 </span></span> -
+    <a href="https:\/\/docs.python.org/3.14/library/string.templatelib.html#template-strings" target="_blank">t_str</a> = <lit>t|T</lit>'<reqval>...</reqval>{<reqval>exp</reqval>}<reqval>...</reqval>'        // (t-string) Template String Literal, returns a Tempalte object which holds literal and interpolated parts separately
+                                        // the idea is to process the interpolated part then return some result (can be used for ex: Template engine, SQL escape, input sanitization, HTML processing, etc...)   
     </pre>
     <details class="example">
       <summary> DEMO </summary>
@@ -860,7 +873,28 @@
     log_1 = 'logged one'                                                               // self documenting expression
     log_2 = 'logged two'
     f"Log results: ({log_1=}) ({log_2=})"                                              // -> Log results: (log_1='logged one') (log_2='logged two')
-    </pre>
+    
+    
+// t-string ------------------------------------
+    from string.templatelib import Interpolation
+    
+    name = 'World'
+    t_str = t'hello {name}!'
+    
+    t_str                                    // -> Template(strings=('hello ', '!'), interpolations=(Interpolation('World', 'name', None, ''),))
+    list(t_str)                              // -> ['hello ', Interpolation('World', 'name', None, ''), '!']
+    
+    def upper_interpoated_part(t_str):       // process template string
+        parts = []
+        for part in t_str:
+            if isinstance(part, Interpolation):
+                parts.append(str(part.value).upper())
+            else:
+                parts.append(part)
+        return ''.join(parts)
+    
+    upper_interpoated_part(t_str)               // -> hello WORLD!
+      </pre>
     </details>
     <hr>
     <!-------------------------------------------------------------------------------------------->
@@ -935,6 +969,32 @@
     string[-11:-7]                                                                     // -> 'test'               // indexing from the end 
     string[-6:]                                                                        // -> 'string'
     string[:-7]                                                                        // -> 'this is a test'
+    </pre>
+    </details>
+    <hr>
+    <!-------------------------------------------------------------------------------------------->
+    <h2 class="header"> The <mark>repr()</mark> method </h2>
+    <details class="example">
+      <summary> DEMO </summary>
+      <pre>
+    txt = """
+        Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit,
+    """
+    
+    class Person:
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+        def __repr__(self):
+            return f"Person('{self.name}', {self.age})"
+    
+    joe = Person("Joe", 34)
+    
+    repr(txt)                 // -> '\n    Lorem ipsum dolor sit amet,\n    consectetur adipiscing elit,\n'
+    repr(Person)              // -> "&lt;class '__main__.Person'&gt;""
+    repr(joe)                 // -> 'Person('Joe', 34)'                 // calls the instance's class __repr__ method
     </pre>
     </details>
     <hr>
