@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> React Router (v6) </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../Assets/stylesPages.css">
+    <script src="../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> React Router (v6) </h1>
+    <p> Updated ( 2022-02-27 )</p>
+    <nav class="sitenav">
+      <a href="../../index.html" title="home">MySite ></a>
+      <a href="../index.html" title="home">React Router ></a> v6
+    </nav>
+    <table class="table">
+      <tr>
+        <th style="width:30%;"> Command </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td> npm install react-router </td>
+        <td> install React Rooter (including react-router-dom) </td>
+      </tr>
+    </table>
+
+    <h2 class="headerSection"> Useful Links : </h2>
+    <p><a href="https://reactrouter.com/en/main" target="_blank">reactrouter.com</a></p>
+    <h2 class="headerSection"> Remember This : </h2>
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+    <p> - React Router allows client side routing for SPAs (Single Page Application), (frontend navigation without making request to the server for new pages) </p>
+    <p> - React Router keeps track of the URL and renders components on the UI based on the current URL (location) </p>
+    <p> - check out git hub repo <mark>arpadpall21/react_router_demo</mark> for a functional demo </p>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 style="color:darkblue;"><u> React Router sysntax before v6.4 </u></h4>
+      <pre>
+// index.js 
+    
+    import React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import './index.css';
+    import App from './components/App';
+    import Test from './components/Test';
+    import FallbackPage from './components/FallbackPage';
+  
+    import { BrowserRouter, Routes, Route, Link, NavLink } from 'react-router-dom';
+  
+  
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      &lt;BrowserRouter&gt;
+        &lt;nav&gt;                             // this part <mark>&lt;nav&gt;</mark> will always stay on the page 
+          &lt;Link to='/'&gt;Home&lt;/Link&gt;
+          &lt;NavLink class to='/test'&gt;Test&lt;/NavLink&gt;
+        &lt;/nav&gt;
+        &lt;main&gt;
+          &lt;Routes&gt;
+            &lt;Route index element={&lt;App /&gt;} /&gt;
+            &lt;Route path='/test' element={&lt;Test /&gt;} /&gt;
+            &lt;Route path='*' element={&lt;FallbackPage /&gt;} /&gt;     // fallback route (page rendered when an invalid URL is passed in the browser's navbar)
+          &lt;/Routes&gt;
+        &lt;/main&gt;
+      &lt;/BrowserRouter&gt;
+    );
+      </pre>
+      <pre>
+// index.css
+    .active {                         // styles the &lt;NavLink&gt; when its tab is active
+      background-color: lightcoral;
+    }
+      </pre>
+      <h4 style="color:darkblue;"><u> React Router sysntax afer v6.4 <mark>(demo on github repo
+            arpadpall21/react_router_demo)</mark></u></h4>
+      <pre>
+// index.js 
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route} from 'react-router-dom'
+    
+    import RootLayout from './components/RootLayout'
+    import HelpLayout from './components/HelpLayout'
+    
+    import './index.css'
+    import Home from './components/Home'
+    import About from './components/About'
+    import InvalidHelpLink from './components/InvalidHelpLink'
+    import Personel, { personelLoader } from './components/Personel'
+    import PersonelDetail, { personelDetailLoader } from './components/PersonelDetail'
+    import FallbackPage from './components/FallbackPage'
+    import Faq from './components/Faq'
+    import Contact, { contactAction } from './components/Contact'
+    
+    
+    const router = createBrowserRouter(
+      createRoutesFromElements(
+        &lt;Route path='/' element={&lt;RootLayout /&gt;} errorElement={&lt;FallbackPage /&gt;}&gt;     {/* the errorElement will catch all bubling error */}
+          &lt;Route index element={&lt;Home /&gt;} /&gt;
+          &lt;Route path='about' element={&lt;About /&gt;} /&gt;
+          &lt;Route path='personel' element={&lt;Personel /&gt;} loader={personelLoader} /&gt;    {/* route loader */}
+          &lt;Route
+            path='personel/:id'
+            element={&lt;PersonelDetail /&gt;}
+            loader={personelDetailLoader}
+          /&gt;
+          &lt;Route path='help' element={&lt;HelpLayout /&gt;}&gt;
+            &lt;Route path='faq' element={&lt;Faq /&gt;} /&gt;
+            &lt;Route path='contact' element={&lt;Contact /&gt;} action={contactAction}/&gt;      {/* the action will be triggered when the data is submitted */}
+            &lt;Route path='*' element={&lt;InvalidHelpLink /&gt;} /&gt;
+          &lt;/Route&gt;
+        &lt;/Route&gt;
+      )
+    )
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      &lt;React.StrictMode&gt;
+        &lt;RouterProvider router={router} /&gt;
+      &lt;/React.StrictMode&gt;
+    )
+      </pre>
+    </details>
+    <!----------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class='header'> Routing <mark>&lt;Route&gt;</mark> component </h2>
+    <pre class='syntax'>
+    &lt;Route path='<strong>baseRoute</strong>' element={<strong>reactComponent</strong>} &gt; 
+      &lt;Route
+        path='<strong>route</strong>'                       // routes are nested (this element is rendered on the <mark><strong>/baseRoute/route</strong></mark>)    
+        index                              // default parent (component rendered on the parent route)  
+        element={<strong>reactComponent</strong>}           // the react component to be rendered on this path
+        errorElement={<strong>reactComponent</strong>}      // component rendered if an error is bubbled up from a loader or an action function 
+        caseSensitive                      // canse sensitive route matching 
+        loader={<strong>promise</strong>}                   // an async function preloads data before the component is rendered (the idea is to start the component render and fetching some data in parallel)
+        action={<strong>promise</strong>}                   // an async function triggered when a <mark>&lt;Form&gt;</mark> submit triggeres
+      /&gt;
+      <span style='color:grey;'>// Routes...</span>
+    &lt;/Route&gt;
+  
+  
+  <span style='color:grey;'>// <strong>route</strong> (<mark>path='<strong>route</strong>'</mark>) -------------------</span>
+    <strong>path</strong>                                 // exact route segment 
+    :<strong>path</strong><small>?</small>   // dynamically passes the received value to the loader or action function (as argument), the param value aso can be recovered by the <mark>useParams</mark> hook in components    
+                                                        // optional <mark>?</mark> makes this param optional route segment
+    *                                                   // matches any following route 
+  </pre>
+    <h2 class="header"> The <mark>useParams()</mark> / <mark>useLoaderData()</mark> / <mark>useLocation()</mark> / <mark>useNavigation()</mark> hooks </h2>
+    <pre class='syntax'>
+  import { useParams, useLoaderData, useLocation, useNavigation } from 'react-router-dom'
+  
+  function <strong>Component</strong>() {
+    const params = useParams()            // return an object containing param values on the current route (if any)
+    const loaderData = useLoaderData()    // returns the <mark>loaderFn</mark> returned value 
+    const location = useLocation()        // returns an object containing location information (like the current url path)
+    const useNavigation()                 // returns navigation informations (ex like the loading state of the current component)
+    
+    return <strong>jsx</strong>
+  }  
+  </pre>
+    <h2 class="header"> Redirect <mark>&lt;Navigate&gt;</mark> component / <mark>redirect()</mark> function / <mark>useNavigate()</mark> hook </h2>
+    <pre class='syntax'>
+<span style='color:grey;'>// index.js -------------------------</span>
+  &lt;Route path='<strong>route</strong>' element={<strong>SomeComponent</strong>} loader={loaderFn} /&gt;
+  
+  async function loaderFn( { request, params} ) {     // the loader function receives the <mark>params</mark> and the <mark>request</mark> in an object   
+    <span style='color:grey'>// some loading logic...</span>
+    <small>return redirect(<i>route</i>)</small>                            // we can return <mark>redirect()</mark> to redirect the user
+  }
+  
+  
+<span style='color:grey;'>// SomeComponent.js -------------------</span>
+  import { Navigate, useNavigate } from 'react-router-dom'
+  
+  function <strong>Component</strong>() {
+    const navigate = useNavigate()
+    
+    function <reqval>handerSomeEvent</reqval>() {
+      naviage(<reqval>route</reqval>)                          // redirects to <strong>route</strong>   
+    }
+    
+    if (<strong>someCondition</strong>) {
+        return &lt;Navigate to='<strong>route</strong>'&gt;          // redirects to <strong>route</strong>   
+    }
+    
+    return <strong>jsx</strong>
+  }  
+  </pre>
+
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+<span style='color:grey;'>// index.js ----------------------------------------</span>
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom'
+    
+    import RootLayout from './layout/RootLayout'
+    import Home from './Home'
+    import Workers, { loadingWorkers } from './Workers'
+    import ErrorComponent from './ErrorComponent'
+    
+    
+    const router = createBrowserRouter(
+      createRoutesFromElements(
+        &lt;Route path='/' element={&lt;RootLayout /&gt;}&gt;
+          &lt;Route index element={&lt;Home /&gt;} /&gt;
+          &lt;Route 
+            path='workers/:id?'                       // param is optional (both <mark>/workers</mark> and <mark>/workers/1</mark> are accepted)
+            caseSensitive
+            element={&lt;Workers /&gt;} 
+            errorElement={&lt;ErrorComponent /&gt;}         // component rendered if the loader throws an error 
+            loader={loadingWorkers}                   // loader (pre loads data)
+          /&gt;
+          &lt;Route path="*" element={&lt;h1&gt;404 Resource Not Found&lt;/h1&gt;} /&gt;
+        &lt;/Route&gt;
+      )
+    )
+  
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      &lt;React.StrictMode&gt;
+        &lt;RouterProvider router={router} /&gt;
+      &lt;/React.StrictMode&gt;
+    )
+    
+    
+<span style='color:grey;'>// RootLayout.js -----------------------------------</span>
+    import { Link, Outlet } from 'react-router-dom'
+    
+    
+    export default function RootLayout() {
+      return (
+        &lt;div&gt;
+          &lt;header&gt;
+            &lt;Link to='/'&gt;Home&lt;/Link&gt;      will stay on the page (only child compoennts are changed in the <mark>&lt;Outlet&gt;</mark>)
+            &lt;Link to='/workers'&gt;Workers&lt;/Link&gt;
+          &lt;/header&gt;
+          &lt;main&gt;
+            &lt;Outlet /&gt;                          // all child components are rendered here 
+          &lt;/main&gt;
+        &lt;/div&gt;
+      )
+    }
+    
+    
+<span style='color:grey;'>// Workers.js --------------------------------------</span>
+    import { useLoaderData, useParams, useLocation, useNavigation, redirect } from 'react-router-dom'
+    
+    
+    export default function Workers() {
+      const workers = useLoaderData()       // loader returned value 
+      const param = useParams()             // route segment param
+      const location = useLocation()        // current url location     (location.pathname)
+      const navigation = useNavigation()    // getting component render state (navigation.state)
+    
+      let workerOutlet = undefined
+      if (Array.isArray(workers)) {
+        workerOutlet = (
+          &lt;ul&gt;
+            {workers.map(worker =&gt; {
+              return &lt;li key={worker.id}&gt; Woker id: {worker.id} name {worker.name}&lt;/li&gt;
+            })}
+          &lt;/ul&gt;
+        )
+      } else {
+        workerOutlet = (
+          &lt;div&gt;
+            &lt;p&gt; Worker id: {param.id}&lt;/p&gt;
+            &lt;p&gt; Worker name: {workers.name}&lt;/p&gt;
+          &lt;/div&gt;
+        )
+      }
+    
+      return (
+        &lt;div&gt;
+          &lt;h2&gt; Workers Page &lt;/h2&gt;
+          {workerOutlet}
+        &lt;/div&gt;
+      )
+    }
+    
+    const workers = [
+      { id: 1, name: 'Arpad' },
+      { id: 2, name: 'Attila' },
+      { id: 3, name: 'Steven' },
+      { id: 4, name: 'Mike' },
+      { id: 5, name: 'Peter' },
+      { id: 6, name: 'Arnold' },
+    ]
+    
+    export async function loadingWorkers({ params }) {      // loader (and action) function receives the <mark>{ request, params }</mark> arguments
+      if (params && params.id) {                            // preloading data 
+        return workers[params.id - 1]
+      }
+    
+      if (workers.length &gt; 0) {
+        return workers
+      }
+    
+      return redirect('/')
+    }
+  </pre>
+    </details>
+    <!----------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class='header'> Using forms <mark>&lt;Form&gt;</mark> component & <mark>useAction()</mark> hook </h2>
+    <p> - the <mark>&lt;Form&gt;</mark> component works the same way as the native <mark>&lt;form&gt;</mark> element but
+      does not send the data to the backend </p>
+    <p> - instead of sending the data to the backend the <mark>useAction</mark> hook receives the form data and can handle
+      it as we please </p>
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+// index.js ------------------------
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route} from 'react-router-dom'
+    
+    import Contact, { contactAction } from './components/Contact'
+    
+    
+    const router = createBrowserRouter(
+      createRoutesFromElements(
+        &lt;Route
+          path='contact'
+          element={&lt;Contact /&gt;}
+          action={contactAction}            // action handler  
+        /&gt;
+      )
+    )
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      &lt;React.StrictMode&gt;
+        &lt;RouterProvider router={router} /&gt;
+      &lt;/React.StrictMode&gt;
+    )
+    
+    
+// Contact.js ----------------------
+    import { Form, redirect, useActionData } from 'react-router-dom'
+    
+    
+    export default function Contact() {
+      const actionData = useActionData()        // returns the <mark>contactAction</mark> action function return value 
+    
+      return (
+        &lt;div&gt;
+          &lt;Form
+            method='post'
+            action='/contact'                   // route to which action handler this form is submitted
+          &gt;
+            &lt;label&gt;
+              &lt;p&gt; Email: &lt;/p&gt;
+              &lt;input type='email' name='email' required /&gt;   // form fields must have <mark>name</mark> to identify them in the action handler
+            &lt;/label&gt;
+            &lt;label&gt;
+              &lt;p&gt; Message: &lt;/p&gt;
+              &lt;textarea name='message' required /&gt;
+            &lt;/label&gt;
+            &lt;button&gt;Submit&lt;/button&gt;             // triggers the <mark>contactAction</mark> action handler function (does not send the form data to the backend)   
+          &lt;/Form&gt;
+        &lt;/div&gt;
+      )
+    }
+    
+    export async function contactAction({ request }) {    // action handler tirggers on non-get request only (post, put, etc..)
+      const formData = await request.formData()
+      const email = formData.get('email')                 // get data from form fields
+      const message = formData.get('message')
+    
+      if (message.length < 10) {                          // do some validation 
+        return { error: 'Message must be at least 10 character long' }
+      }
+    
+      // update the form to the server...
+    }
+    </pre>
+    </details>
+    <!----------------------------------------------------------------------------------------->
+    <hr>
+    <h2 class='header'> <mark>&lt;Link&gt;</mark> / <mark>&lt;NavLink&gt;</mark> / <mark>&lt;Outlet&gt;</mark> Components
+    </h2>
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+<span style='color:grey;'>// index.js ----------------------------------------</span>
+  import React from 'react'
+  import ReactDOM from 'react-dom/client'
+  import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route} from 'react-router-dom'
+  
+  import RootLayout from './components/RootLayout'
+  import './index.css'
+  import Home from './components/Home'
+  import About from './components/About'
+  
+  
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      &lt;Route path='/' element={&lt;RootLayout /&gt;} &gt;
+        &lt;Route index element={&lt;Home /&gt;} /&gt;
+        &lt;Route path='about' element={&lt;About /&gt;} /&gt;
+      &lt;/Route&gt;
+    )
+  )
+  
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    &lt;React.StrictMode&gt;
+      &lt;RouterProvider router={router} /&gt;
+    &lt;/React.StrictMode&gt;
+  )
+  
+  
+<span style='color:grey;'>// RootLayout.js ----------------------------------------</span>
+  import { Link, NavLink, Outlet} from 'react-router-dom';
+  
+  export default function RootLayout() {
+    return (
+      &lt;div&gt;
+        &lt;header&gt;
+          &lt;Link to='/'&gt;Home&lt;/NavLink&gt;           // React Router navigation link (like the <mark>&lt;a&gt;</mark> but for frontend routing)   
+          &lt;NavLink to='about'&gt;About&lt;/NavLink&gt;   // does the same as <mark>&lt;Link&gt;</mark> but also has the <mark>active</mark> class which is triggered when this link is active   
+        &lt;/header&gt;
+        &lt;main&gt;
+          &lt;Outlet /&gt;                            // child components are rendered here 
+        &lt;/main&gt;
+      &lt;/div&gt;
+    )
+  }
+  </pre>
+    </details>
+
+    <br><br>
+  </body>
+
+</html>
