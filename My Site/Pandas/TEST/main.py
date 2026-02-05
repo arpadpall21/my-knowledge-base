@@ -129,7 +129,7 @@ import pandas as pd
 
 olympic_data = pd.read_excel("olympics-data.xlsx")
 
-# # olympic_data["medals_won"] = "Gold"   # add new column with default value
+# olympic_data["medals_won"] = "Gold"   # add new column with default value
 
 
 
@@ -142,9 +142,9 @@ olympic_data = pd.read_excel("olympics-data.xlsx")
 
 # # olympic_data["continent"] = olympic_data.apply(continent_condition, axis=1)  # add new column based on condition
 
-def in_column(row):
-    row["height_inch"] = row["height_cm"] > 200:
+olympic_data["height_inch"] = olympic_data.apply(lambda row: row["height_cm"] * 0.393701, axis=1)
 
+print( olympic_data.head() )
 
 
 
