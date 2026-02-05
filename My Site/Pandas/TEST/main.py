@@ -125,9 +125,9 @@
 ####################################################################
 # Adding new column / Drop column
 ####################################################################
-import pandas as pd
+# import pandas as pd
 
-olympic_data = pd.read_excel("olympics-data.xlsx")
+# olympic_data = pd.read_excel("olympics-data.xlsx")
 
 # olympic_data["medals_won"] = "Gold"   # add new column with default value
 
@@ -142,9 +142,9 @@ olympic_data = pd.read_excel("olympics-data.xlsx")
 
 # # olympic_data["continent"] = olympic_data.apply(continent_condition, axis=1)  # add new column based on condition
 
-olympic_data["height_inch"] = olympic_data.apply(lambda row: row["height_cm"] * 0.393701, axis=1)
+# olympic_data["height_inch"] = olympic_data.apply(lambda row: row["height_cm"] * 0.393701, axis=1)
 
-print( olympic_data.head() )
+# print( olympic_data.head() )
 
 
 
@@ -201,3 +201,18 @@ print( olympic_data.head() )
 
 # olympic_data = pd.read_excel("olympics-data.xlsx")
 # olympic_data.to_csv("olympics-data.csv", index=False)    # write DataFrame to CSV file without the index column
+
+
+
+
+####################################################################
+# merge dataframes
+####################################################################
+import pandas as pd
+
+olympic_data_short = pd.read_csv("olympics-data-short.csv")
+country_code_map = pd.read_csv("country-code-map.csv")
+
+print(
+    olympic_data_short
+)
