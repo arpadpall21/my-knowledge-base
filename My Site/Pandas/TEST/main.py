@@ -208,11 +208,164 @@
 ####################################################################
 # merge dataframes
 ####################################################################
-import pandas as pd
+# import pandas as pd
 
-olympic_data_short = pd.read_csv("olympics-data-short.csv")
-country_code_map = pd.read_csv("country-code-map.csv")
+# olympic_data_short = pd.read_csv("olympics-data-short.csv")
+# country_code_map = pd.read_csv("country-code-map.csv")
 
-print(
-    olympic_data_short
-)
+# print(
+#     olympic_data_short
+# )
+
+# print(
+#     country_code_map
+# )
+
+# # SQL style merge dataframes (join) on specified columns with left join (all rows from left DataFrame plus matching rows from right DataFrame)
+# print(
+#     pd.merge(olympic_data_short, country_code_map, left_on="born_country", right_on="country_code", how="left")
+# )
+# # SQL style merge dataframes (join) on specified columns with right join (all rows from right DataFrame plus matching rows from left DataFrame)
+# print(
+#     pd.merge(olympic_data_short, country_code_map, left_on="born_country", right_on="country_code", how="right")
+# )
+# SQL style merge dataframes (join) on specified columns with inner join (only matching rows from both DataFrames)
+# print(
+#     pd.merge(olympic_data_short, country_code_map, left_on="born_country", right_on="country_code", how="inner")
+# )
+
+
+
+####################################################################
+# concat dataframes
+####################################################################
+# import pandas as pd
+
+# olympic_data_short = pd.read_excel("olympics-data.xlsx")
+
+# hun_athletes = olympic_data_short[olympic_data_short["born_country"] == "HUN"].head(10)
+# rou_athletes = olympic_data_short[olympic_data_short["born_country"] == "ROU"].head(10)
+
+# hun_rou_athletes = pd.concat([hun_athletes, rou_athletes], ignore_index=True)   # concatenate two DataFrames into one, resetting the index
+
+
+
+
+####################################################################
+# handling null / missing values
+####################################################################
+# import pandas as pd
+
+# olympic_data = pd.read_excel("olympics-data.xlsx")
+
+
+# print(
+#     olympic_data_short.isna()          # returns a DataFrame of the same shape with boolean values indicating presence of null values
+# )
+
+# print(
+#     olympic_data_short.isna().sum()    # returns a Series with the count of null values in each column
+# )
+
+# new_olympic_data = olympic_data.head(100)
+
+# remove rows were there's any null values
+# print(
+#     new_olympic_data.dropna()
+# )
+# remove rows where a specific column has null values
+# print(
+#     new_olympic_data.dropna(subset="died_date")
+# )
+
+# print(
+#     new_olympic_data
+# )
+
+
+# # fill null values with a specified value
+# print(
+#     new_olympic_data.fillna("Unknown")
+# )
+
+
+# new_olympic_data = olympic_data.head(100)
+
+# # print(
+# #     new_olympic_data[new_olympic_data['died_date'].isna()]    # filter rows where 'died_date' is null
+# # )
+# print(
+#     new_olympic_data[new_olympic_data['died_date'].notna()]    # filter rows where 'died_date' is not null
+# )
+
+
+
+
+####################################################################
+# aggregation and grouping
+####################################################################
+# import pandas as pd
+
+# olympic_data = pd.read_excel("olympics-data.xlsx")
+
+# print(
+#     olympic_data["born_city"].value_counts()   # returns a Series with counts of unique values in 'born_city' column
+# )
+# print(
+#     olympic_data[olympic_data["born_country"] == "HUN"]["born_city"].value_counts()   # returns a Series with counts of unique values in 'born_city' column for athletes from Hungary
+# )
+
+
+
+# print(
+#     olympic_data.groupby("born_country")["height_cm"].mean()  # returns a Series with average height for each country
+# )
+
+# DO THE PIVOT TABLE THING
+
+
+
+
+####################################################################
+# shift()
+####################################################################
+# import pandas as pd
+
+# # Create a DataFrame for daily revenue
+# data = {
+#     "Date": ["2023-10-01", "2023-10-02", "2023-10-03", "2023-10-04", "2023-10-05"],
+#     "Revenue": [200, 250, 220, 270, 300]
+# }
+
+# revenue_df = pd.DataFrame(data)
+
+# # Convert 'Date' column to datetime for better handling
+# revenue_df["Date"] = pd.to_datetime(revenue_df["Date"])
+
+# # Shift the Revenue column by 1 day to create a "Previous Day Revenue" column
+# revenue_df["Previous Day Revenue"] = revenue_df["Revenue"].shift(1)
+
+# # Calculate the difference in revenue compared to the previous day
+# revenue_df["Revenue Difference"] = revenue_df["Revenue"] - revenue_df["Previous Day Revenue"]
+
+# # Display the DataFrame
+# print(revenue_df)
+
+
+
+####################################################################
+# cumsum()
+####################################################################
+# import pandas as pd
+
+# # Create a DataFrame for daily revenue
+# data = pd.DataFrame({
+#     "Date": ["2023-10-01", "2023-10-02", "2023-10-03", "2023-10-04", "2023-10-05"],
+#     "Revenue": [200, 250, 220, 270, 300]
+# })
+
+
+
+# total_revenue = data["Revenue"].cumsum()   # returns a Series with the cumulative sum of the 'Revenue' column
+
+# print(total_revenue)
