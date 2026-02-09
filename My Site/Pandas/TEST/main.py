@@ -1,65 +1,38 @@
-####################################################################
-# Accessing DataFrame Rows and Columns
-####################################################################
-# import pandas as pd
+import pandas as pd
 
-# df = pd.DataFrame(
-#     [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]],
-#     columns=["A", "B", "C"],
-# )
+coffe_shop = pd.DataFrame({                                                                           
+        'Day': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        'Coffee': ['Latte', 'Espresso', 'Cappuccino', 'Americano', 'Mocha', 'Flat White', 'Macchiato'],
+        'Units Sold': [120, 150, 200, 180, 220, 160, 140],
+    })
 
-# print( df.loc[0] )                 # return sthe 1st row as a Series
-# print( df.loc[0:1] )               # returns the 1st and 2nd rows as a DataFrame
-# print( df.loc[[0, 2, 5]] )         # returns the 1st, 3rd, and 6th rows as a DataFrame
-# print( df.loc[1:4, ["A", "C"]] )   # returns rows 2 to 5 of columns A and C as a DataFrame
+    # accessing by  label
+print( coffe_shop["Units Sold"] )    # returns the 'Units Sold' column as a Series
+print( coffe_shop[["Day", "Coffee"]] )   # returns the 'Day' and 'Coffee' columns as a DataFrame
 
-# print( df.iloc[0] )                  # returns the 1st row as a Series
-# print( df.iloc[0:2] )                # returns the 1st and 2nd rows as a DataFrame
-# print( df.iloc[[0, 2, 5]] )          # returns the 1st, 3rd, and 6th rows as a DataFrame
-# print( df.iloc[1:5, [0, 2]] )        # returns rows 2 to 5 of columns A and C as a DataFrame
-# print( df.iloc[0:2, 0:2])            # returns rows 1 to 2 of columns A and B as a DataFrame 
+    # indices also can be used as labels
+print( coffe_shop.loc[0])                 # returns the 1st row as a Series
+print( coffe_shop.loc[0:4])               # returns the 1st to 5th rows as a DataFrame
+print( coffe_shop.loc[[2, 3]])            # returns the 3rd and 4th rows as a DataFrame
 
-
-####################################################################
-# Modifying data in a DataFrame
-####################################################################
-# import pandas as pd
-
-# df = pd.DataFrame(
-#     [[1, 2, 3],
-#      [4, 5, 6],
-#      [7, 8, 9],
-#      [10, 11, 12],
-#      [13, 14, 15],
-#      [16, 17, 18]],
-#     columns=["A", "B", "C"],
-# )
-
-# # df.loc[0, "A"] = 100        # modify single value
-# # df.iloc[1, 0] = 200         # modify single value
-
-# df.iloc[0:2, 0:2] = 300       # modify multiple values
-
-# cofee["revenue"] = cofee["Units Sold"] * coffe["New Price"]     # add new column based on calculation (DOCU)
+print( coffe_shop.loc[0, ["Day"]])        # returns the value of the 'Day' column for the 1st row
+print( coffe_shop.loc[0:2, ["Day", "Units Sold"]])   # returns the 'Day' and 'Units Sold' columns for the 1st to 3rd rows as a DataFrame (slicing data by label)
 
 
 
-####################################################################
-# indexing
-####################################################################
-# import pandas as pd
 
-# data = {
-#     'Day': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-#     'Coffee': ['Latte', 'Espresso', 'Cappuccino', 'Americano', 'Mocha', 'Flat White', 'Macchiato'],
-#     'Units Sold': [120, 150, 200, 180, 220, 160, 140]
-# }
-# coffe_shop = pd.DataFrame(data)
 
-# print(coffe_shop.index)                 # indexed by default with a RangeIndex starting from 0 to 5
-# coffe_shop.index = coffe_shop['Day']    # set index (which is row labels) to 'Day' column
 
-# print(coffe_shop.loc["Wednesday"])      # access row by index label
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,7 +96,7 @@
 
 
 ####################################################################
-# Adding new column / Drop column
+# apply()
 ####################################################################
 # import pandas as pd
 
@@ -155,41 +128,6 @@
 
 # print( olympic_data.head() )
 
-
-
-####################################################################
-# rename columns
-####################################################################
-# import pandas as pd
-# from pathlib import Path
-
-# olympic_data = pd.read_excel(Path() / 'olympics-data.xlsx')
-
-# print( olympic_data.rename(columns={"born_country": "country_of_birth", "born_city": "city_of_birth"}) )  # returns a new DataFrame with renamed columns (does not modify original DataFrame)
-
-# olympic_data.rename(columns={"born_country": "country_of_birth", "born_city": "city_of_birth"}, inplace=True) # renames columns in the original DataFrame (modifies the original DataFrame)
-
-# print( olympic_data )
-
-
-
-
-####################################################################
-# rename columns
-####################################################################
-# import pandas as pd
-# from pathlib import Path
-
-# olympic_data = pd.read_excel(Path() / 'olympics-data.xlsx')
-# olympic_data["born_date"] = pd.to_datetime(olympic_data["born_date"], format="%Y-%m-%d")     # convert 'born_date' column to datetime, invalid parsing will be set as NaT
-
-# print(
-#     olympic_data.info()
-# )
-
-# print(
-#     olympic_data.sample(20)
-# )
 
 
 
@@ -237,7 +175,7 @@
 
 
 ####################################################################
-# concat dataframes
+# concat dataframes (do this stuff for example)
 ####################################################################
 # import pandas as pd
 
@@ -365,7 +303,21 @@
 # })
 
 
-
 # total_revenue = data["Revenue"].cumsum()   # returns a Series with the cumulative sum of the 'Revenue' column
 
 # print(total_revenue)
+
+
+
+
+
+
+
+
+
+
+###################################################################################
+###################################################################################
+###################################################################################
+###################################################################################
+###################################################################################
