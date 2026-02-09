@@ -72,30 +72,6 @@
         <td> - returns an <a href="https://pandas.pydata.org/docs/reference/indexing.html" target="_blank">index object</a> of the DataFrame's columns </td>
       </tr>
       <tr>
-        <td>|</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> <lit>pd</lit>.concat(<reqval>df</reqval>, <a href="https://pandas.pydata.org/docs/reference/api/pandas.concat.html" target="_blank">args</a>) </td>
-        <td> - concatenates two or more DataFrames along a particular axis (rows or columns) and returns a new DataFrame </td>
-      </tr>
-      <tr>
-        <td> <reqval>df</reqval>[<reqval>column:str</reqval>] = <reqval>list[val:any]|sr</reqval> </td>
-        <td> - adds a new column to the DataFrame with the specified column label and values </td>
-      </tr>
-      <tr>
-        <td> <reqval>df|sr</reqval>.drop(<opt class="openable">index=<optval>val</optval><div>
-          <p> - single label or list of labels </p>
-        </div></opt>, <opt class="openable">columns=<optval>val</optval><div>
-          <p> - single label or list of labels </p>
-        </div></opt>, <opt class="openable">inplace=<optval>bool</optval><div>
-            <p> - if True, modifies the original DataFrame </p>
-        </div></opt>, <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html" target="_blank">args</a>) </td>
-        <td>
-          - removes columns and/or rows by the specified labels and/or indices
-        </td>
-      </tr>
-      <tr>
         <td> <reqval>df|sr</reqval>.rename(<opt class="openable">columns=<optval>val</optval><div>
           <p> - dictionary mapping old column labels to new column labels </p>
         </div></opt>, <opt class="openable">index=<optval>val</optval><div>
@@ -104,12 +80,8 @@
             <p> - if True, modifies the original DataFrame </p>
         </div></opt>, <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rename.html" target="_blank">args</a>) </td>
         <td> 
-            - renames columns and/or indices by the specified labels and/or indices
+            - renames columns and indices (returns a new <reqval>df</reqval>)
         </td>
-      </tr>
-      <tr>
-        <td>|</td>
-        <td></td>
       </tr>
       <tr>
         <td> <reqval>df</reqval>.set_index(<reqval>col:str|list[val:any]</reqval>, <opt class="openable">inplace=<optval>bool</optval><div>
@@ -132,6 +104,30 @@
         <td></td>
       </tr>
       <tr>
+        <td> <lit>pd</lit>.concat([<reqval>df, df, ...</reqval>], <a href="https://pandas.pydata.org/docs/reference/api/pandas.concat.html" target="_blank">args</a>) </td>
+        <td> - concatenates two or more DataFrames along a particular axis (rows or columns) and returns a new <reqval>df</reqval> </td>
+      </tr>
+      <tr>
+        <td> <reqval>df</reqval>[<reqval>column:str</reqval>] = <reqval>list[val:any]|sr</reqval> </td>
+        <td> - adds a new column to the <reqval>df</reqval> with the specified column label and values </td>
+      </tr>
+      <tr>
+        <td> <reqval>df|sr</reqval>.drop(<opt class="openable">index=<optval>val</optval><div>
+          <p> - single label or list of labels </p>
+        </div></opt>, <opt class="openable">columns=<optval>val</optval><div>
+          <p> - single label or list of labels </p>
+        </div></opt>, <opt class="openable">inplace=<optval>bool</optval><div>
+            <p> - if True, modifies the original DataFrame </p>
+        </div></opt>, <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html" target="_blank">args</a>) </td>
+        <td>
+          - removes columns and/or rows by the specified labels and/or indices (returns a new <reqval>df</reqval>)
+        </td>
+      </tr>
+      <tr>
+        <td>|</td>
+        <td></td>
+      </tr>
+      <tr>
         <td> <reqval>df</reqval>.head(<optval>n:int</optval>) </td>
         <td> - returns first rows (Default: 5) as a new <reqval>df</reqval> </td>
       </tr>
@@ -141,7 +137,7 @@
       </tr>
       <tr>
         <td> <reqval>df</reqval>.sample(<optval>n:int</optval>) </td>
-        <td> - returns one random sample from the <reqval>df</reqval> as a new <reqval>df</reqval> </td>
+        <td> - returns one random record (feature) from the <reqval>df</reqval> as a new <reqval>df</reqval> </td>
       </tr>
       <tr>
         <td>|</td>
@@ -163,7 +159,7 @@
     <p> - Pandas is a library designed for inmemory data manipulation and analysis, optimized for all kinds of data operations (filtering, grouping, aggregating, merging, reshaping, etc.) </p>
     <hr>
     <!--------------------------------------------------------------------------------------------------->
-    <h2 class="header"> Add/Remove Columns, Rows & Dealing with Column Labels and Indices <mark>index</mark> / <mark>columns</mark> / <mark>concat()</mark> / <mark>drop()</mark> / <mark>rename()</mark> / <mark>set_index()</mark> / <mark>reset_index()</mark> </h2>
+    <h3 class="header"> Column Labels and Indices <mark>index</mark> / <mark>columns</mark> / <mark>rename()</mark> / <mark>set_index()</mark> / <mark>reset_index()</mark> </h3>
     <p> - Data in both DataFrames and Series can be labeled, on the X axis we call them <mark class="mark">column labes</mark> and on the Y axis we call them <mark class="mark">index</mark> (row labels) </p>
     <p> - Data can be accessed by both labels and integer positions (index positions) </p>
     <details class="example">
@@ -179,6 +175,41 @@
     coffe_shop.columns                          // -> Index(['Day', 'Coffee', 'Units Sold'], dtype='object')
     coffe_shop.index                            // -> Index(['mon', 'tue', 'wed', 'thu', 'fri'], dtype='object')
     
+    coffe_shop.rename(                          // rename columns and indices
+        columns={"Day": "Weekday", "Units Sold": "Sold"}, 
+        index={"mon": "MO", "tue": "TU", "wed": "WE", "thu": "TH", "fri": "FR"}, 
+        inplace=True, 
+    )                                           
+    coffe_shop.columns                         // -> Index(['Weekday', 'Coffee', 'Sold'], dtype='object') 
+    coffe_shop.index                           // -> Index(['MO', 'TU', 'WE', 'TH', 'FR'], dtype='object')
+    
+    coffe_shop.set_index(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"], inplace=True)   // set indices
+    coffe_shop.index                            // -> Index(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'], dtype='object')
+    
+    coffe_shop.set_index("Day", inplace=True)   // set 'Day' column as the new index 
+    coffe_shop.shape                            // -! ->  (5, 2) this removes the "Day" column and makes it the new index
+    coffe_shop.index                            // -> Index(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], dtype='object') indices are now the values from the "Day" column
+    
+    coffe_shop.reset_index(inplace=True)        // reset indices to default (restores the "Day" column as a regular column and resets the index to default integer index)
+    coffe_shop.shape                            // -> (5, 3) 
+    coffe_shop.index                            // -> RangeIndex(start=0, stop=7, step=1)
+      </pre>
+    </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h3 class="header"> Add/Remove Columns & Rows <mark>concat()</mark> / <mark>drop()</mark> </h3>
+    <pre class="syntax">
+    <reqval>df</reqval>[<reqval>column:str</reqval>] = <reqval>list[val:any]|sr</reqval>    // adds a new column to the <reqval>df</reqval> with the specified column label and values
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <pre>
+    coffe_shop = pd.DataFrame({
+        'Day': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],    // column labes
+        'Coffee': ['Latte', 'Espresso', 'Cappuccino', 'Americano', 'Mocha'],
+        'Units Sold': [120, 150, 200, 180, 220]},
+        index=["mon", "tue", "wed", "thu", "fri"]                         // custom index labels for rows
+    )
     
 // add columns and rows -----------------------------------
   // column -------------------
@@ -199,66 +230,16 @@
     
 // drop columns and indices --------------------------------
     coffe_shop.drop(columns=["Units Sold"], index=["thu", "fri"], inplace=True)  // drop the "Units Sold" column and the rows with indices "thu" and "fri"
-    
-    
-// rename / reset columns and indices ---------------------
-    coffe_shop.rename(                          // rename columns and indices
-        columns={"Day": "Weekday", "Units Sold": "Sold"}, 
-        index={"mon": "MO", "tue": "TU", "wed": "WE", "thu": "TH", "fri": "FR"}, 
-        inplace=True, 
-    )                                           
-    coffe_shop.columns                         // -> Index(['Weekday', 'Coffee', 'Sold'], dtype='object') 
-    coffe_shop.index                           // -> Index(['MO', 'TU', 'WE', 'TH', 'FR'], dtype='object')
-    
-    coffe_shop.set_index(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"], inplace=True)   // set indices
-    coffe_shop.index                            // -> Index(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'], dtype='object')
-    
-    coffe_shop.set_index("Day", inplace=True)   // set 'Day' column as the new index 
-    coffe_shop.shape                            // -! ->  (5, 2) this removes the "Day" column and makes it the new index
-    coffe_shop.index                            // -> Index(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], dtype='object') the indices are now the values from the "Day" column
-    
-    coffe_shop.reset_index(inplace=True)        // reset indices to default (restores the "Day" column as a regular column and resets the index to default integer index)
-    coffe_shop.shape                            // -> (5, 3) 
-    coffe_shop.index                            // -> RangeIndex(start=0, stop=7, step=1)
       </pre>
-      <h4 class="header"> Accessing Data by Label (column or indices) or by Indexing </h4>
-      <pre>
-    import pandas as pd
-    
-  // DataFrame ------------------------------------------
-    coffe_shop = pd.DataFrame({
-        'Day': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        'Coffee': ['Latte', 'Espresso', 'Cappuccino', 'Americano', 'Mocha', 'Flat White', 'Macchiato'],
-        'Units Sold': [120, 150, 200, 180, 220, 160, 140]
-    })
-    
-    coffe_shop.loc[0, "Day"]            // -> "Monday"     # access single value by row and column labels
-    coffe_shop.iloc[0, 0]               // -> "Monday"     # access single value by row and column indices
-    
-    
-  // Series ---------------------------------------------
-    weekdays = pd.Series(
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        index=["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
-    )
-    
-    weekdays.loc["mon"]                // -> "Monday"    # access value by label using loc
-    weekdays.iloc[0]                   // -> "Monday"    # access value by index using iloc
-      </pre>
-      <hr>
-      <!-------------------------------------------------------------------------------->
-      <h4 class="header">  </h4>
-      
-      
-      
     </details>
     <hr>
     <!--------------------------------------------------------------------------------------------------->
-    <h2 class="header"> Accessing Record (features)  <mark>loc[]</mark>, <mark>iloc[]</mark> </h2>
+    <h3 class="header"> Accessing Records (features)  <mark>loc[]</mark>, <mark>iloc[]</mark> </h3>
     <details class="example">
       <summary> Example : </summary>
       <h4 class="header"> Accessing Data with <mark>loc[]</mark> and <mark>iloc[]</mark> </h4>
       <pre>
+      
       
       </pre>
       

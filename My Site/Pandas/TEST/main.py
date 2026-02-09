@@ -6,19 +6,20 @@ coffe_shop = pd.DataFrame({
         'Units Sold': [120, 150, 200, 180, 220, 160, 140],
     })
 
-    # accessing by  label
-print( coffe_shop["Units Sold"] )    # returns the 'Units Sold' column as a Series
-print( coffe_shop[["Day", "Coffee"]] )   # returns the 'Day' and 'Coffee' columns as a DataFrame
+    ### accessing by  label
+# print( coffe_shop["Units Sold"] )    # returns the 'Units Sold' column as a Series
+# print( coffe_shop[["Day", "Coffee"]] )   # returns the 'Day' and 'Coffee' columns as a DataFrame
 
-    # indices also can be used as labels
-print( coffe_shop.loc[0])                 # returns the 1st row as a Series
-print( coffe_shop.loc[0:4])               # returns the 1st to 5th rows as a DataFrame
-print( coffe_shop.loc[[2, 3]])            # returns the 3rd and 4th rows as a DataFrame
+#     # indices also can be used as labels
+# print( coffe_shop.loc[0])                 # returns the 1st row as a Series
+# print( coffe_shop.loc[0:4])               # returns the 1st to 5th rows as a DataFrame
+# print( coffe_shop.loc[[2, 3]])            # returns the 3rd and 4th rows as a DataFrame
 
-print( coffe_shop.loc[0, ["Day"]])        # returns the value of the 'Day' column for the 1st row
-print( coffe_shop.loc[0:2, ["Day", "Units Sold"]])   # returns the 'Day' and 'Units Sold' columns for the 1st to 3rd rows as a DataFrame (slicing data by label)
+# print( coffe_shop.loc[0, ["Day"]])        # returns the value of the 'Day' column for the 1st row
+# print( coffe_shop.loc[0:2, ["Day", "Units Sold"]])   # returns the 'Day' and 'Units Sold' columns for the 1st to 3rd rows as a DataFrame (slicing data by label)
 
-
+coffe_shop.rename(index=["mon", "tue", "wed", "thu", "fri", "sat", "sun"], inplace=True)
+print( coffe_shop.loc["mon":"fri", ["Day", "Coffee"]] )
 
 
 
