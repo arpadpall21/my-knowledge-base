@@ -452,11 +452,56 @@
     df.loc[df["Name"].str.contains("Alice", case=False)]        // -> regular expression filter (returns a new DataFrame)
     </pre>
     </details>
+    <hr>
+    <!--------------------------------------------------------------------------------------------------->
+    <h2 class="header"> Merge, Aggregation and Grouping </h2>
+    <pre class="syntax">
+    <lit>pd</lit>.merge(<reqval>left:df</reqval>, <reqval>right:df</reqval>, <opt class="openable">how=<optval>str</optval><div>
+      <p> - <mark>left</mark> all records from the left <mark>df</mark> and matching records from the right <mark>df</mark> (Default) </p>
+      <p> - <mark>right</mark> all records from the right <mark>df</mark> and matching records from the left <mark>df</mark> </p>
+      <p> - <mark>inner</mark> only records with matching values in both <mark>df</mark>s </p>
+      <p> - <mark>outer</mark> all records from both <mark>df</mark>s </p>
+    </div></opt>, <a href="https:\/\/pandas.pydata.org/docs/reference/api/pandas.DataFrame.merge.html" target="_blank">args</a>)   // merges two <strong>df</strong>s based on the specified columns (SQL style joins) (returns a new <strong>df</strong>)
+    
+    
+    
+    </pre>
+
+    <details class="example" open>
+      <summary> Example : </summary>
+      <h4 class="header"> Merge </h4>
+      <pre>
+    import pandas as pd
+    
+    comp_1 = pd.DataFrame({
+        'Name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+        'Departement': ['HR', 'IT', 'HR', 'Finance', 'IT'],
+    })
+    
+    comp_2 = pd.DataFrame({
+        'Name': ['Johon', 'Betty', 'Maggie', 'Jeny'],
+        "DP": ['HR', 'Finance', 'Accounting', 'HR'],
+    })
+    
+    // all records from the left DataFrame (comp_1) and matching records from the right DataFrame (comp_2)
+    pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="left")            // -> returns a new DataFrame with the results
+    
+    // all records from the right DataFrame (comp_2) and matching records from the left DataFrame (comp_1)
+    pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="right")           // -> returns a new DataFrame with the results
+    
+    // only records with matching values in both DataFrames (comp_1 and comp_2)
+    pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="inner")           // -> returns a new DataFrame with the results
+  
+    // all records from both DataFrames
+    pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="outer")           // -> returns a new DataFrame with the results
+      </pre>
+      <h4 class="header"> Grouping </h4>
 
 
 
 
 
+    </details>
 
 
     <!--

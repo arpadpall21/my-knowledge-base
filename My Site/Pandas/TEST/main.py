@@ -1,57 +1,20 @@
 import pandas as pd
 
-comp_1 = pd.DataFrame({
-    'Name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
-    'Departement': ['HR', 'IT', 'HR', 'Finance', 'IT'],
+df = pd.DataFrame({
+    'Category': ['A', 'A', 'B', 'B', 'C', 'C'],
+    'Value': [10, 20, 15, 25, 30, 35],
+    'Quantity': [1, 2, 3, 4, 5, 6]
 })
 
-comp_2 = pd.DataFrame({
-    'Name': ['Johon', 'Betty', 'Maggie', 'Jeny'],
-    "DP": ['HR', 'Finance', 'Accounting', 'HR'],
-})
 
-comp_2_unique = comp_2.drop_duplicates(subset="DP") 
+print( 
 
-# print(
-#     pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="left")
-# )
-# print(
-#     pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="right")
-# )
-# print(
-#     pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="inner")
-# )
-print(
-    pd.merge(comp_1, comp_2, left_on="Departement", right_on="DP", how="outer")
+df.groupby("Category")
+
 )
 
 
 
-
-
-# olympic_data_short = pd.read_csv("olympics-data-short.csv")
-# country_code_map = pd.read_csv("country-code-map.csv")
-
-# print(
-#     olympic_data_short
-# )
-
-# print(
-#     country_code_map
-# )
-
-# # SQL style merge dataframes (join) on specified columns with left join (all rows from left DataFrame plus matching rows from right DataFrame)
-# print(
-#     pd.merge(olympic_data_short, country_code_map, left_on="born_country", right_on="country_code", how="left")
-# )
-# # SQL style merge dataframes (join) on specified columns with right join (all rows from right DataFrame plus matching rows from left DataFrame)
-# print(
-#     pd.merge(olympic_data_short, country_code_map, left_on="born_country", right_on="country_code", how="right")
-# )
-# SQL style merge dataframes (join) on specified columns with inner join (only matching rows from both DataFrames)
-# print(
-#     pd.merge(olympic_data_short, country_code_map, left_on="born_country", right_on="country_code", how="inner")
-# )
 
 
 
