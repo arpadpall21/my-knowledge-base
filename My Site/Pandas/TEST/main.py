@@ -1,17 +1,57 @@
+# import pandas as pd
+
+# coffe_shop = pd.DataFrame({
+#     'Coffe Category': ['A', 'A', 'B', 'B', 'C', 'C', 'C'],
+#     'Price': [54, 44, 32, 25, 19, 16, 20],
+#     'Sold': [24, 12, 73, 88, 54, 19, 30]
+# })
+
+
+# print(
+#     coffe_shop["Sold"].sum()    # total sold across all categories
+# )
+
+# print(
+#     coffe_shop.groupby("Coffe Category")["Price"].mean()      # average price for each coffee category
+# )
+# print(
+#     coffe_shop.groupby("Coffe Category")["Sold"].sum()        # total sold for each coffee category
+# )
+
+
+
+###########################################################
+### Complex example
+###########################################################
 import pandas as pd
 
-df = pd.DataFrame({
-    'Category': ['A', 'A', 'B', 'B', 'C', 'C'],
-    'Value': [10, 20, 15, 25, 30, 35],
-    'Quantity': [1, 2, 3, 4, 5, 6]
+company_data = pd.DataFrame({
+    'Department': ['HR', 'IT', 'Finance', 'HR', 'IT', 'Finance', 'IT', 'HR', 'Finance'],
+    'Employee': ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Hannah', 'Ivy'],
+    'Age': [25, 30, 35, 45, 40, 50, 28, 32, 38],
+    'Salary': [50000, 60000, 70000, 80000, 90000, 100000, 75000, 65000, 85000],
+    'Years_of_Experience': [1, 5, 10, 15, 20, 25, 3, 7, 12]
 })
 
+aggregated_data = company_data.groupby('Department').agg({
+    'Salary': ['mean', 'max', 'min'],
+    'Years_of_Experience': 'mean',
+    'Employee': 'count',
+    'Age': 'mean'
+}).reset_index()
 
-print( 
+aggregated_data.columns = [
+    'Department', 
+    'Average_Salary', 'Max_Salary', 'Min_Salary', 
+    'Average_Years_of_Experience', 
+    'Total_Employees', 
+    'Average_Age'
+]
 
-df.groupby("Category")
+print(aggregated_data)
 
-)
+
+
 
 
 
