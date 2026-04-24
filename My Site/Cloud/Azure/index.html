@@ -112,12 +112,37 @@
     
     
     <!--
-    - App Registration -> it's a digital identity of an application withing the Azure Tenant
-    - Enterprise Application
+    - App Registration (Application Object)
+      - Digital identity of an application withing the Azure Tenant
+      - Required to you app to be integrated in Entra ID and to be able to authenticate and access Azure resources
+      - This is where you configure redirect URLs, secrets, certificates
+      - We configure how the service can issue tokens, the resources it can access, and the actions that it can perform on those resources
+      - Also creates a service principal in the tenant where it has been created (On App Registration creation an Enterprise Application is automatically created (as a service principal))
+    - Enterprise Application (The Service Principal)
+      - The service principal for the app registration in a specific tenant
+      - an App Registration can have multiple Enterprise Applications (service principals) in different tenants (one-to-many relationship)
+      - Governing user access
+      - Represents the app in a specific tenant (describes what the app can do in that tenant)
+      
+      
+    - If an app like webApp (Azure) needs user access control (in the background) still creates an app registration and enterprise application (as service principal)
+    - If the app needs to talk to other Azure services (like Key Vault, storage, etc...) this can be achieved by managed identity (which is basically a service principal) 
+        - With managed identity no app registration is needed (managed identity is managed by Azure) (Managed identities only appears as Enterprise Applications)
+    
+    - Zero Trust
+        - resources need to authenticate and be authorized to access other resources (no matter if they are in the same network or not))
     
     
-    - Digital Identity for an App
-      - defines how an app can authenticate to Azure resources
+    
+    
+    
+    --------------------
+    ------ Policy ------
+    --------------------
+    - applying a new policy won't affect existing resources (admin can see policy violations on the policy report)
+    
+    
+    
     
     -->
     
@@ -129,14 +154,16 @@
     
     
     
+    
+    
     <p class="indent-lv1"> - <mark class="mark">Role</mark> -> in Azure we user RBAC (Role Based Access Control) in order to give priviledges to our users </p>
     <p class="indent-lv2"> - <mark>[Security Principal (User, Group, ...)]</mark> -> <mark>[Role]</mark> -> <mark>[Scope (Resource, Subscription, ...)]</mark> (Who -> What kind of rights -> To Which resource) </p>
     <p class="indent-lv2"> - RBAC is an authorization mechanism <u>not an authentication one</u> (for authentication we mostly use managed identity) </p>
     <p class="indent-lv1"> - <mark class="mark">Policy</mark> -> Limitation of resources (ex: location restriction) (built-in or custom) </p>
     <p class="indent-lv2"> - Can be assigned to a resource group or any higher scope (cannot be assigned to a single resource directly) </p>
-    <p class="indent-lv2"> - Applying a policy to a scope will affect current and future resources only (but we can remeditate to apply newly assigned policies to already existing resources) </p>
+    <p class="indent-lv2"> - Applying a policy to a scope will affect current and future resources only (but we can remeditate to apply newly assigned policies to already existing resources as well) </p>
     <p class="indent-lv2"> - We can define what action to take when the policy is violated (block, warn, etc...) </p>
-    <p class="indent-lv1"> - <mark class="mark">Initiative</mark> -> A collection of policies </p>
+    <p class="indent-lv2"> - <mark class="mark">Initiative</mark> -> A collection of policies </p>
     <p class="indent-lv1"> - <mark class="mark">Blueprint</mark> -> Describes an Azure environment (used to replicate the same environment)
     </p>
     <p class="indent-lv2"> - Describes role assignements, resources and policy assignements </p>
