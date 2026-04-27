@@ -85,7 +85,7 @@
     <h2 id="accessControl" class="header"> Access Control </h2>
     <p class="indent-lv1"> - <mark class="mark">Active Directory (Entra ID)</mark> -> Microsoft's cloud-based Identity and Access Management service (IAM) (Automatically created when creating Azure Account) </p>
     <p class="indent-lv2"> - Provides authentication and authorization for Microsoft and 3rd party services (uses protocols like <mark>OAuth 2.0</mark>, <mark>OpenID Connect</mark>, <mark>SAML</mark>, and <mark>WS-Federation</mark>) </p>
-    <p class="indent-lv2"> - <mark class="mark">Tenant</mark> (also called directory) is an Active Directory instance, it rrepresents a unique organization or entity, it's a namespace for users, groups, and applications, it's responsible for managing identities, authentication, and authorization for these objects) </p>
+    <p class="indent-lv2"> - <mark class="mark">Tenant</mark> (also called directory) is an Active Directory instance, it represents a unique organization or entity, it's a namespace for users, groups, and applications, it's responsible for managing identities, authentication, and authorization for these objects) </p>
     <p class="indent-lv3"> - A tenant is bound to one or more Subscriptions (one-to-many relationship), (but a subscription can only be associated with one tenant) </p>
     <p class="indent-lv3"> - An Azure account can have multiple tenants </p>
     <p class="indent-lv3"> - There are different Entra ID plans (Free, P1, P2 and Entra Suite) </p>
@@ -131,7 +131,7 @@
     
     - Zero Trust
         - resources need to authenticate and be authorized to access other resources (no matter if they are in the same network or not))
-    
+        - [look for more details on Zero Trust in the Security section]
     
     
     
@@ -140,7 +140,73 @@
     ------ Policy ------
     --------------------
     - applying a new policy won't affect existing resources (admin can see policy violations on the policy report)
+        - plicies are NOT destructive -> existing resources that violate the new policy will not be deleted or modified, but flagged
     
+    
+    --------------------
+    ------ RBAC -------
+    --------------------
+    - Roles are inherited through scopes (ex: a subscription owner automatically owns all the subscription's resource groups and resources)
+    
+    
+    ----------------------------------
+    ------ Administer Resources ------
+    ----------------------------------
+    - through access gates (like portal, PowerShell, CLI, SDK) we are accessing Azure Resource Manager (ARM) which is the Azure service responsible for managing resources, ARM is responsible for receiving requests, authenticating and authorizing them, and then processing the request by creating, updating, or deleting resources as needed. ARM also provides a consistent management layer for all Azure services, allowing us to manage resources in a unified way regardless of the underlying service.
+    
+    
+    
+    --------------------------
+    ------ ARM Template ------
+    --------------------------
+    - existing resources can export their configuration as ARM template (JSON file) and we can use this template to create new resources with the same configuration (we can also modify the template before using it to create new resources with a different configuration)
+        - this works for individual resources and for resource groups (exporting a resource group will export all its resources' configuration in the same template)
+    
+    
+    
+    
+    AI Agent -> an AI agent is a software program that uses artificial intelligence techniques to perform tasks or make decisions autonomously. AI agents can be designed to interact with their environment, learn from data, and adapt their behavior over time. They can be used in various applications, such as virtual assistants, chatbots, recommendation systems, and autonomous vehicles. AI agents typically consist of components such as perception (to understand the environment), reasoning (to make decisions), and action (to perform tasks).
+    
+    
+    
+    
+    
+    ------------------------------
+    ------ Virtual Networks ------
+    ------------------------------
+    - Resources in the same virtual network must live in the same region
+    - At least one subnet is required in a virtual network
+    
+    - by default subnets within the same virtual network can communicate with each other (but we can change this by using NSG (Network Security Group) rules) -> this is a virtual network feature in Azure 
+    - we can add additional ip ranges in the same virtual network
+        - we can extend the address range to an existing network (ex: 10.0.0.0/16 -> 10.0.1.0/24)
+        - we can also add a new address range (ex: 196.168.0.0/16)
+    
+    
+    - VMs don't see the VNet range – They only know their subnet's CIDR (the routing is automatic and handled by Azure)
+        - NIC ()
+    
+    
+    - on public ip routing preferences:
+        - Public -> traffic immediately goes to the public internet (default) (lower cost but higher latency)
+        - Microsoft Network -> traffic goes through Microsoft network (backbone) as close to the user as possible  before going to the public internet (higher cost but lower latency)
+    
+    
+    
+    
+    ???????????????????????????????????????????????????????????????????????
+    ???????????????????????????????????????????????????????????????????????
+    ???????????????????????????????????????????????????????????????????????
+    - does all subnet need to reserve 5 addresses???
+      - newtork address (first address in the subnet)
+      - broadcast address (last address in the subnet)
+      - 1 -> gateway (first address in the subnet)
+      - 2 and 3 -> for Azure DNS 
+    
+    
+    - NIC (Network Interface) VS private endpoint
+    
+    - NAT 
     
     
     
@@ -158,12 +224,12 @@
     
     <p class="indent-lv1"> - <mark class="mark">Role</mark> -> in Azure we user RBAC (Role Based Access Control) in order to give priviledges to our users </p>
     <p class="indent-lv2"> - <mark>[Security Principal (User, Group, ...)]</mark> -> <mark>[Role]</mark> -> <mark>[Scope (Resource, Subscription, ...)]</mark> (Who -> What kind of rights -> To Which resource) </p>
-    <p class="indent-lv2"> - RBAC is an authorization mechanism <u>not an authentication one</u> (for authentication we mostly use managed identity) </p>
+    <p class="indent-lv2"> - RBAC is an authorization mechanism <u>not an authentication one</u> </p>
     <p class="indent-lv1"> - <mark class="mark">Policy</mark> -> Limitation of resources (ex: location restriction) (built-in or custom) </p>
     <p class="indent-lv2"> - Can be assigned to a resource group or any higher scope (cannot be assigned to a single resource directly) </p>
-    <p class="indent-lv2"> - Applying a policy to a scope will affect current and future resources only (but we can remeditate to apply newly assigned policies to already existing resources as well) </p>
+    <p class="indent-lv2"> - Applying a policy to a scope will affect current and future resources only (but we can "remediate" to apply newly assigned policies to already existing resources as well) </p>
     <p class="indent-lv2"> - We can define what action to take when the policy is violated (block, warn, etc...) </p>
-    <p class="indent-lv2"> - <mark class="mark">Initiative</mark> -> A collection of policies </p>
+    <p class="indent-lv2"> - <mark class="mark">Initiative</mark> -> A collection (group) of policies </p>
     <p class="indent-lv1"> - <mark class="mark">Blueprint</mark> -> Describes an Azure environment (used to replicate the same environment)
     </p>
     <p class="indent-lv2"> - Describes role assignements, resources and policy assignements </p>
@@ -315,7 +381,7 @@
     <p class="indent-lv3"> - <mark class="mark">Standard</mark> -> provides monitoring and machine learning for better protection </p>
     <p class="indent-lv1"> - <mark class="mark">Front Door (CDN)</mark> -> Azure's CDN service </p>
     <p class="indent-lv1"> - <mark class="mark">Express Route</mark> -> a direct connection of an on-premise network and Azure (private traffic that does not go through the internet) </p>
-    <p class="indent-lv1"> - <mark class="mark">Bastilon</mark> -> provides secure, RDP and SSH access to virtual machines without exposing them to the public internet (doesn't need public IP) </p>
+    <p class="indent-lv1"> - <mark class="mark">Bastion</mark> -> provides secure, RDP and SSH access to virtual machines without exposing them to the public internet (doesn't need public IP) </p>
     <hr>
     <!---------------------------------------------------------------------------------------------------------->
     <h3 id="loggingAndMonitoring" class="header"> Logging & Monitoring </h3>
