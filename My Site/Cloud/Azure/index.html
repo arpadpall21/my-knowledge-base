@@ -46,10 +46,10 @@
     <h2 id="globalInfrastructure" class="header"> Global Infrastructure </h2>
     <p> - <mark class="mark">Azure backbone</mark> -> Azure's global network </p>
     <p> - <mark class="mark">Region</mark> -> Geographic location where one or multiple data centers reside </p>
-    <p class="indent-lv2"> - A region might have only one data center (Azure doesn't work like AWS), at service deployment we can control where (or which availability zones) to deploy our servcies </p>
-    <p class="indent-lv2"> - Regions have pair regions (not always the case) for resiliency reasons, the pair region is located a the same geographic area at least 300 miles away </p>
-    <p class="indent-lv3"> - Setting up the pair region is the developer's responsibility </p>
-    <p> - <mark class="mark">Availability Zone</mark> -> an individual data center group within a region </p>
+    <p class="indent-lv1"> - A region might have only one data center (Azure doesn't work like AWS), at service deployment we can control where (or which availability zones) to deploy our servcies </p>
+    <p class="indent-lv1"> - Regions have pair regions (not always the case) for resiliency reasons, the pair region is located a the same geographic area at least 300 miles away </p>
+    <p class="indent-lv2"> - Setting up the pair region is the developer's responsibility </p>
+    <p class="indent-lv1"> - <mark class="mark">Availability Zone</mark> -> an individual data center group within a region </p>
     <p class="indent-lv2"> - Availability zones are for resiliency resons (redundant service availability), therefore availability zones exist at least in a group of 3 (numbered 1, 2, 3, ...) </p>
     <p class="indent-lv2"> - Availability zones have low latency connections between them </p>
     <hr>
@@ -112,6 +112,24 @@
     
     
     <!--
+    ----------------------
+    ------ Concepts ------
+    ----------------------
+    - Network Virtual Appliance (NVA) -> a virtual machine that performs network functions like routing, firewall, etc... (ex: Azure Firewall, Azure Application Gateway, etc...) (in the "old days" these were physical appliances that we had to buy and maintain, but now with the cloud we can have them as virtual machines) (we can also use 3rd party NVAs from the marketplace)
+
+    - Zero Trust
+        - resources need to authenticate and be authorized to access other resources (no matter if they are in the same network or not))
+        - [look for more details on Zero Trust in the Security section]
+    
+    - IP Forwarding
+        - allows a node on the network to forward traffic that is not destined for itself (ex: a virtual machine with IP forwarding enabled can be used as a router to forward traffic between subnets or virtual networks)
+    
+    
+    -->
+    
+    
+    
+    <!--
     - App Registration (Application Object)
       - Digital identity of an application withing the Azure Tenant
       - Required to you app to be integrated in Entra ID and to be able to authenticate and access Azure resources
@@ -129,9 +147,6 @@
     - If the app needs to talk to other Azure services (like Key Vault, storage, etc...) this can be achieved by managed identity (which is basically a service principal) 
         - With managed identity no app registration is needed (managed identity is managed by Azure) (Managed identities only appears as Enterprise Applications)
     
-    - Zero Trust
-        - resources need to authenticate and be authorized to access other resources (no matter if they are in the same network or not))
-        - [look for more details on Zero Trust in the Security section]
     
     
     
@@ -165,7 +180,6 @@
     
     
     
-    AI Agent -> an AI agent is a software program that uses artificial intelligence techniques to perform tasks or make decisions autonomously. AI agents can be designed to interact with their environment, learn from data, and adapt their behavior over time. They can be used in various applications, such as virtual assistants, chatbots, recommendation systems, and autonomous vehicles. AI agents typically consist of components such as perception (to understand the environment), reasoning (to make decisions), and action (to perform tasks).
     
     
     
@@ -206,19 +220,35 @@
         - there are 2 types of peering: regional peering (between VNets in the same region) and global peering (between VNets in different regions)
         - done by virtual network pairing 
           - important settings live here how the traffic is routed between the peered (like controling forwarded traffic, transit traffic, etc...)
-        
+        - peering is not possible if networks have overlapping IP address spaces
+    
+    
+    - System Defined Routes VS User Defined Routes (UDR)
+        - System Defined Routes are automatically created by Azure to route traffic within a virtual network and between virtual networks and the internet. These routes are based on the IP address ranges of the virtual network and its subnets, and they ensure that traffic is properly routed to its destination. System Defined Routes cannot be modified or deleted by users.
+        - User Defined Routes (UDR) are custom routes that users can create to override the default routing behavior of Azure. UDRs allow users to specify custom next-hop addresses for specific IP address ranges, which can be used to route traffic through virtual appliances, on-premises networks, or other virtual networks. 
+          - UDRs take precedence over System Defined Routes, meaning that if a UDR matches a specific traffic flow, it will be used instead of the corresponding System Defined Route
+          - UDRs can also extend the routing capabilities of Azure by allowing users to define routes that are not covered by the default System Defined Routes (ex: routing traffic to a virtual appliance for inspection or filtering)
     
     
     
+    ---------------------------
+    ------ Routing Table ------
+    ---------------------------
+    - Captures outbound traffic from a subnet and controls where it goes next based on the destination IP range (not IP to IP routing)
     
-    ???????????????????????????????????????????????????????????????????????
-    ???????????????????????????????????????????????????????????????????????
-    ???????????????????????????????????????????????????????????????????????
-    - does all subnet need to reserve 5 addresses???
+    
+    
+    - does all subnet need to reserve 5 addresses??? (yes it does)
       - newtork address (first address in the subnet)
       - broadcast address (last address in the subnet)
       - 1 -> gateway (first address in the subnet)
       - 2 and 3 -> for Azure DNS 
+    
+    
+    
+    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
     
     
     - NIC (Network Interface) VS private endpoint
@@ -245,8 +275,25 @@
 
     - Gateway (service)
     
+    - Firewall (service)
     
-      
+    
+    
+    ------------------------------
+    ------ Service Endpoint ------
+    ------------------------------
+    - It's basically a "door" (direct secure connections) to a PaaS service (like Azure Storage, Azure SQL, etc...) that allows resources in a virtual network to securely access the service without going through the public internet (traffic stays on Microsoft backbone)
+    
+    ------------------------------
+    ------ Private Endpoint ------
+    ------------------------------
+    - Private Endpoint (service)
+        - Creates a private IP address in a subnet that acts as an entry point for traffic destined to a specific PaaS service (like Azure Storage, Azure SQL, etc...)
+        - creates a NIC which is visible on the subnet
+    
+    
+    
+    
     -->
     
     
