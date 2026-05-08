@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Storage </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Storage </h1>
+    <p> Updated: ( 2026-05-07 ) </p>
+    <nav class="sitenav">
+      <a href="../../../index.html" title="home">MySite > </a>
+      <a href="../../index.html">Cloud > </a>
+      <a href="../index.html">Azure > </a> Storage
+    </nav>
+
+    <h2 class="headerSection"> Notes : </h2>
+
+    <h2 class="headerSection"> Useful Links : </h2>
+
+    <h2 class="headerSection"> Remember This : </h2>
+
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+    <p class="indent-lv1"> - <mark class="mark">Storage Account</mark> account for the below 4 storage types </p>
+    <p class="indent-lv2"> - <mark class="mark">Blob Storage</mark> -> file storage </p>
+    <p class="indent-lv3"> - files are stored in Containers </p>
+    <p class="indent-lv3"> - there are 3 availability tiers (speed VS price) </p>
+    <p class="indent-lv4"> - <mark class="mark">Hot</mark> -> for frequently accessed data </p>
+    <p class="indent-lv4"> - <mark class="mark">Cool</mark> and <mark class="mark">Cold</mark>-> for infrequently accessed data (more than 30 and 90 days respectively) </p>
+    <p class="indent-lv4"> - <mark class="mark">Archive</mark> -> low price (must be rehydrated before access) </p>
+    <p class="indent-lv2"> - <mark class="mark">File Storage</mark> -> stores files like the Blob Storage but supprots SMB (Server Message Block) protocol (files are accessible remotely) </p>
+    <p class="indent-lv3"> - files are stored in Shares </p>
+    <p class="indent-lv2"> - <mark class="mark">Queue Storage</mark> -> queue accessible anywhere in the world via authenticated calls using HTTP(S) </p>
+    <p class="indent-lv3"> - a single message size can be up to 64 KB, the queue size is the capacity of the storage account</p>
+    <p class="indent-lv2"> - <mark class="mark">Table Storage</mark> -> NoSQL semi structured data storage </p>
+    <p class="indent-lv3"> - designed for fast data access and high volumes of data </p>
+    <p class="indent-lv3"> - the storage account contains tables </p>
+    <p class="indent-lv3"> - tables contain rows (entities) size limit 1MB </p>
+    <p class="indent-lv4"> - rows contain properties (up to 255) </p>
+    <p class="indent-lv5"> - default row properties are <mark class="mark">PartitionKey</mark>, <mark class="mark">RowKey</mark> and <mark class="mark">Timestamp</mark> (the PartitionKey and RowKey are indexed for fast data access) </p>
+    <p class="indent-lv1"> - <mark class="mark">CosmosDB</mark> works like table storage but offers much better global availability, speed and privacy features </p>
+    <p class="indent-lv2"> - accessible by various query languages (SQL, MongoDB, Table Storage, Cassandra, Germlin) </p>
+    <p class="indent-lv1"> - <mark class="mark">Disk Storage</mark> various (HDD, SSD) attachable storage form VMs </p>
+    <p class="indent-lv2"> - <mark class="mark">Managed disk</mark> -> the underlying storage is automatically managed, it also has better availability and security than unmanaged disk </p>
+    <p class="indent-lv2"> - <mark class="mark">Unmanaged disk</mark> -> we have to managed the underlying storage, more flexible than unmanaged disk </p>
+    <p class="indent-lv1"> - SQL Databases: </p>
+    <p class="indent-lv2"> - <mark class="mark">MySQL</mark> </p>
+    <p class="indent-lv2"> - <mark class="mark">PostgreSQL</mark> </p>
+    <p class="indent-lv2"> - <mark class="mark">Microsoft SQL Server</mark> services: </p>
+    <p class="indent-lv3"> - <mark class="mark">SQL Database</mark> </p>
+    <p class="indent-lv3"> - <mark class="mark">SQL Managed Instance</mark> -> enhanced SQL Database with full access from the OS perspective (designed for organization migration on-premise SQL Server workloads) </p>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--
+-----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
+---------------- Storage --------
+-----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
+    LRS (Local Redundant Storage) -> replicates data within a single data center (3 copies) (lowest cost but lowest durability)
+      - eleven nine durability (99.999999999%) -> 1 in 10 chance of data loss every 10 million years
+    ZRS (Zone Redundant Storage) -> replicates data across multiple availability zones within the same region (3 copies) (higher cost but higher durability)
+      - twelve nine durability (99.9999999999%) -> 1 in 100 chance of data loss every 10 million years
+    GRS (Geo Redundant Storage) -> replicates data to a secondary region (hundreds of miles away) (3 copies in the primary region and 3 copies in the secondary region) (higher cost but higher durability)
+      - fourteen nine durability (99.999999999999%) -> 1 in 10,000 chance of data loss every 10 million years
+      - RA-GRS (Read Access Geo Redundant Storage) -> feature of GRS (gives read access to the secondary region)
+    
+    - The stored data is encrypted at rest by default (Azure Storage Service Encryption (SSE)) and we can also use customer-managed keys (CMK) for encryption (Azure Key Vault) (this is a good option for sensitive data)
+    
+    
+    - for cool and cold tiers I still can access the data but I'm generally penalized if I read (or modify) the data frequently
+      - I'm also penalized for early deletion (if I delete the data before a certain period of time) (ex: for cool tier the minimum retention period is 30 days, for cold tier it's 90 days)
+    
+    - we can setup rules to automatically do stuff like (move data to a cooler tier after a certain period of time, delete data after a certain period of time, etc...)
+        - Lifecyle management
+    
+    - offers object replication -> replicates data between storage accounts (in the same region or in different regions)
+        - the replicated data is readable on the destination storage account
+            - can be used for disaster recovery, data distribution (write data in one region and read it from another region), etc...
+    
+    
+    We can generate an SAS (Shared Access Signature) token to give limited access to the storage account resources (like read, write, delete, list, etc...) for a certain period of time and for a certain set of IP addresses (or even for a certain set of protocols) (this is a good option for giving temporary access to the storage account resources without giving the storage account keys)
+        - direct access (no auth needed)
+    
+    
+    
+    
+    
+    -->
+
+
+
+
+
+
+
+
+
+
+
+    <!--
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+stage 1: high level overview 
+    - read through 
+    - create notes 
+    - deciede what exactly will you document down 
+    - UNDERSTAND AND WRITE DOWN THE CONCEPTS!!!
+    
+stage 2:  low level overview
+    - deeper understanding of all what you've taken down in stage 1
+    
+stage 3 : 
+    - organize and document down everything 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+
+
+
+?????????????????????????????????????????????????????????????????????????????????????????????
+WRITE DOWN WHAT YOU DON'T UNDERSTAD OR MUST BE TESTED AS QUESTIONS HERE
+?????????????????????????????????????????????????????????????????????????????????????????????
+    - 
+    
+-->
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+
+    <h2 class="headerExtra"><u> Title 1 </u></h2>
+    <h2 class="header"> Title 1.1 </h2>
+    <h3 class="header"> Title 1.1.1 </h3>
+    <h4 class="header"> Title 1.1.1.1 </h4>
+    <p> - stuff to learn <mark>syntax or command (or some tchnical stuff)</mark> bla bla bla </p>
+    <p> - stuff to learn <mark class="mark">highlights like file names and other things</mark> bla bla bla </p>
+    <p style="text-decoration:underline;"> - important information is underlined </p>
+    <p style="color:yellow;"> - very important information is written with yellow colors </p>
+    <p style="background-color:yellow;"> - highly important information has yellow background color </p>
+    <div style="background-color:red;">
+      <p> - red background block means not learned or not tested information! </p>
+      <p> - </p>
+    </div>
+
+    <pre class="syntax">
+    <reqval>required value </reqval>
+    <optval>optional value </optval>
+    <lit>literally used </lit>
+    <opt>optionally used </opt>
+  
+    <prot style="color:#049500;">prototype chain</prot>
+        
+    <span class="openable"> this is an openable element<div>
+        <p> - openable elements listed here in paragraphs </p>
+        <p> - </p>
+    </div></span>
+    </pre>
+
+    <details class="example">
+      <summary> DEMO (can be pseudocode) </summary>
+      <pre>
+    examples of the current lessons 
+    
+// -----------------------------------------
+
+// -----------------------------------------
+    </pre>
+    </details>
+
+    <pre class="cmd">
+    command line demo 
+    </pre>
+    <pre class="formula">
+    formula code (like conversion meter...)
+    </pre>
+    <details class="example">
+      <summary> Example : </summary>
+      <h4 class="header"> Example title </h4>
+      <p> - live tests will come here </p>
+      <details>
+        <summary class="exampleCode"> CODE : </summary>
+        <pre>
+    copy of the exaple code 
+        </pre>
+      </details>
+    </details>
+    <!---------------------------------------------------------------------------------------------------------------------------------->
+    <hr>
+
+    <h2 class="test" style><a href="TEST/index.html"> TEST > </a></h2>
+
+    <br><br>
+  </body>
+
+</html>
