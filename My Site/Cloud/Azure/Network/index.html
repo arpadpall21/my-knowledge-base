@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Network </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../Assets/stylesPages.css">
+    <script src="../../../Assets/scriptPages.js"></script>
+  </head>
+
+  <body>
+    <h1> Network </h1>
+    <p> Updated: ( 2023-10-23 / 2026-05-09 ) </p>
+    <nav class="sitenav">
+      <a href="../../../index.html" title="home">MySite > </a>
+      <a href="../../index.html">Cloud > </a>
+      <a href="../index.html">Azure > </a> Network
+    </nav>
+    <h2 class="headerSection"> Notes : </h2>
+
+    <h2 class="headerSection"> Useful Links : </h2>
+
+    <h2 class="headerSection"> Remember This : </h2>
+
+    <h2 class="headerSection"> Description and Demonstration : </h2>
+
+    <p> - <mark class="mark">Virtual Network</mark> -> IPv4 or IPv6 logical network for resource isolation </p>
+    <p class="indent-lv1"> - must reside in a single region </p>
+    <p class="indent-lv1"> - under the same subscription any VM can be used in a virtual network (even VMs in different resource groups) </p>
+    <p class="indent-lv1"> - <mark class="mark">vnet peering</mark> -> peering Azure Virtual Networks in different regions (throug Azure Backbone) </p>
+    <p class="indent-lv2"> - does no transitive communication (ex: in serial a connection <mark>A</mark> -> <mark>B</mark> -> <mark>C</mark>, <u><mark>A</mark> cannot communicate with <mark>C</mark></u>) </p>
+    <p> - <mark class="mark">Network Interface</mark> -> Virtual network interface card (NIC) that connects a VM into a virtual network </p>
+    <p> - <mark class="mark">Public IP</mark> -> Public IP for in or outbound internet traffic </p>
+    <p class="indent-lv1"> - Static -> fixed IP (for in and outbound traffic) </p>
+    <p class="indent-lv1"> - Dynamic -> changes every time the associated resource is restarted (for outbound traffic only) </p>
+    <p class="indent-lv2"> - SKU (Stock Keeping Unit): </p>
+    <p class="indent-lv3"> - <mark class="mark">Basic</mark> -> Static or Dynamic </p>
+    <p class="indent-lv3"> - <mark class="mark">Standard</mark> -> Static </p>
+    <p> - <mark class="mark">Network Security Group (NSG)</mark> -> controls the subnet traffic within the Virtual Network </p>
+    <p> - <mark class="mark">Application Security Group (ASG)</mark> -> controls the traffic of a group of servers </p>
+    <p class="indent-lv1"> - we can create a group of servers within a subnet, ASG controls the netwrok traffic of this group </p>
+    <p> - <mark class="mark">Virtual Network Gateway (VPN Gateway)</mark> -> allows and controls the communication between the virtual network and on-remises </p>
+    <p class="indent-lv1"> - communication between virtual network -> public internet | private network | other Azure virtual network (even in different region) </p>
+    <p> - <mark class="mark">Load Balancer</mark> -> load balances the traffic to multiple VMs or VM Scale Set </p>
+    <p class="indent-lv1"> - public load balancer -> load balances public internet traffic to VMs </p>
+    <p class="indent-lv1"> - private load balancer -> load balances traffic within a virtual network </p>
+    <p> - <mark class="mark">Application Gateway</mark> -> load balances web (HTTP) traffic </p>
+    <p class="indent-lv1"> - fine grained load balancing for web applications </p>
+    <p> - <mark class="mark">Route Table</mark> -> subnet traffic routing </p>
+    <p class="indent-lv1"> - each subnet has one, it's created with default settings when a subnet is created, but we can overide default settings </p>
+    <p> - <mark class="mark">Firewall</mark> -> Azure firewall on virtual network (monitors and controls traffic) </p>
+    <p> - <mark class="mark">DDoS protection plans</mark> -> Distributed Denial of Service protection of a virtual network </p>
+    <p class="indent-lv1"> - can protect autoscaling group to generate hight costs, etc.. </p>
+    <p class="indent-lv1"> - SKU (Stock Keeping Unit): </p>
+    <p class="indent-lv2"> - <mark class="mark">Basic</mark> </p>
+    <p class="indent-lv2"> - <mark class="mark">Standard</mark> -> provides monitoring and machine learning for better protection </p>
+    <p> - <mark class="mark">Front Door (CDN)</mark> -> Azure's CDN service </p>
+    <p> - <mark class="mark">Express Route</mark> -> a direct connection of an on-premise network and Azure (private traffic that does not go through the internet) </p>
+    <p> - <mark class="mark">Bastion</mark> -> provides secure, RDP and SSH access to virtual machines without exposing them to the public internet (doesn't need public IP) </p>
+
+
+
+<!--
+    ------------------------------
+    ------ Virtual Networks ------
+    ------------------------------
+    - Resources in the same virtual network must live in the same region
+    - At least one subnet is required in a virtual network
+    
+    - by default subnets within the same virtual network can communicate with each other (but we can change this by using NSG (Network Security Group) rules) -> this is a virtual network feature in Azure 
+    - we can add additional ip ranges in the same virtual network
+        - we can extend the address range to an existing network (ex: 10.0.0.0/16 -> 10.0.1.0/24)
+        - we can also add a new address range (ex: 196.168.0.0/16)
+    
+    
+    - VMs don't see the VNet range – They only know their subnet's CIDR (the routing is automatic and handled by Azure)
+        - NIC ()
+    
+    
+    - on public ip routing preferences:
+        - Public -> traffic immediately goes to the public internet (default) (lower cost but higher latency)
+        - Microsoft Network -> traffic goes through Microsoft network (backbone) as close to the user as possible  before going to the public internet (higher cost but lower latency)
+    
+    - network security group (NSG)
+        - it's basically a simple firewall that controlls traffic on OSI level 3 and 4 (network and transport layers)
+        - the traffic is controlled based on 5 tupples (source IP, source port, destination IP, destination port, protocol)
+        - can be assigned to a subnet or a network interface (NIC)
+        - one nsg can be associated with multiple subnets and multiple nics (many-to-many relationship)
+        - by default config all internal VNet communication is allowed but blocks all unsolicitated traffic from the internet
+        - only one NSG is allowed per subnet or NIC at a time
+        - rules define traffic control and have priority (lower number means higher priority) (ex: a rule with priority 100 will be evaluated before a rule with priority 200)
+    
+    
+    - Vnet peering
+        - traffict is kept on Microsoft backbone (doesn't go to the public internet)
+        - there are 2 types of peering: regional peering (between VNets in the same region) and global peering (between VNets in different regions)
+        - done by virtual network pairing 
+          - important settings live here how the traffic is routed between the peered (like controling forwarded traffic, transit traffic, etc...)
+        - peering is not possible if networks have overlapping IP address spaces
+    
+    
+    - System Defined Routes VS User Defined Routes (UDR)
+        - System Defined Routes are automatically created by Azure to route traffic within a virtual network and between virtual networks and the internet. These routes are based on the IP address ranges of the virtual network and its subnets, and they ensure that traffic is properly routed to its destination. System Defined Routes cannot be modified or deleted by users.
+        - User Defined Routes (UDR) are custom routes that users can create to override the default routing behavior of Azure. UDRs allow users to specify custom next-hop addresses for specific IP address ranges, which can be used to route traffic through virtual appliances, on-premises networks, or other virtual networks. 
+          - UDRs take precedence over System Defined Routes, meaning that if a UDR matches a specific traffic flow, it will be used instead of the corresponding System Defined Route
+          - UDRs can also extend the routing capabilities of Azure by allowing users to define routes that are not covered by the default System Defined Routes (ex: routing traffic to a virtual appliance for inspection or filtering)
+    
+    
+    
+    ---------------------------
+    ------ Routing Table ------
+    ---------------------------
+    - Captures outbound traffic from a subnet and controls where it goes next based on the destination IP range (not IP to IP routing)
+    
+    
+    
+    --------------------------------------------------------------------
+    ------ Load Balancer / Application Gateway / Azure Front Door ------
+    --------------------------------------------------------------------
+    - Load Balancer
+        - Mostly used for VMs (IaaS)
+          - OSI Layer 4 (transport layer) service (which means cannot balance load based on urls)
+          - rules control how traffic is distributed to the backend pool (ex: round robin, least connections, etc...)
+          - health probes monitor the health of the backend pool instances and only route traffic to healthy instances
+    - Application Gateway
+        - Mostly used for web applications (HTTP/HTTPS traffic)
+          - OSI Layer 7 (application layer) service (which means can balance load based on urls)
+        - has a WAF (Web Application Firewall) feature
+        - supports multi-site hosting 
+    - Azure Front Door
+        - Global load balancer mostly used for CDN services
+        - has a WAF (Web Application Firewall) feature
+    
+    
+    
+    -----------------------------
+    ------ Network Watcher ------
+    -----------------------------
+    - provides monitoring and diagnostic tools for Azure networking resources (like virtual networks, load balancers, etc...)
+    - can verify IP flow, capture packets, view topology, etc... (this is a nice way to check the traffic flow, we can also see rules that allow the traffic)
+    - can check the actual hop between resources (ex: if we have a load balancer between 2 VMs we can check if the traffic is actually going through the load balancer or not)
+    
+    
+    - does all subnet need to reserve 5 addresses??? (yes it does)
+      - newtork address (first address in the subnet)
+      - broadcast address (last address in the subnet)
+      - 1 -> gateway (first address in the subnet)
+      - 2 and 3 -> for Azure DNS 
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    
+    
+    - NIC (Network Interface) VS private endpoint
+    
+    - NAT
+    
+    
+    
+    
+    - Application Security Groups (ASGs)
+        - ASGs are used to group resources with similar network security requirements (ex: all web servers, all database servers, etc...)
+        - ASGs are used in NSG rules to allow or deny traffic to a group of resources instead of specifying individual IP addresses or subnets
+        - ASGs can be associated with multiple NSG rules and multiple resources (many-to-many relationship)
+        - it's basically an NSG folder where we define rules and we can put resources in it to apply these rules to them (instead of writing the same rules for each resource we can write them once in an ASG and then put the resources in it)
+        - https://www.youtube.com/watch?v=BqRvnElu2Wk
+
+
+    - DNS Zones
+        - https://www.youtube.com/watch?v=Dw955ED-SRA
+    - Private DNS Zones
+        - non public facing DNS zones
+        - used to resolve name withing the same virtual network or betewen VNets
+
+
+    - Gateway (service)
+    
+    - Firewall (service)
+    
+    
+    
+    ------------------------------
+    ------ Service Endpoint ------
+    ------------------------------
+    - It's basically a "door" (direct secure connections) to a PaaS service (like Azure Storage, Azure SQL, etc...) that allows resources in a virtual network to securely access the service without going through the public internet (traffic stays on Microsoft backbone)
+    
+    ------------------------------
+    ------ Private Endpoint ------
+    ------------------------------
+    - Private Endpoint (service)
+        - Creates a private IP address in a subnet that acts as an entry point for traffic destined to a specific PaaS service (like Azure Storage, Azure SQL, etc...)
+        - creates a NIC which is visible on the subnet
+
+
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+    <br><br>
+  </body>
+
+</html>

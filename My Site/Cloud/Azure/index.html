@@ -17,8 +17,12 @@
       <a href="../../index.html" title="home">MySite > </a>
       <a href="../index.html">Cloud > </a> Azure
     </nav>
+    <p class="subSite"><a href="Compute/index.html"> Compute > </a></p>
+    <p class="subSite"><a href="Network/index.html"> Network > </a></p>
+    <p class="subSite"><a href="Storage/index.html"> Storage > </a></p>
+    
     <p class="localLink"><a href="#globalInfrastructure">Global Infrastructure</a></p>
-    <p class="localLink"><a href="#hierarchyScopTags">Hierarchy, Scope and Tags</a></p>
+    <p class="localLink"><a href="#generalStructure">General Cloud Structure</a></p>
     <p class="localLink"><a href="#toolsToAccessAzureServices">Tools to Access Azure Services</a></p>
     <p class="localLink"><a href="#accessControl">Access Control</a></p>
     <p class="localLink"><a href="#costManagement">Cost Management</a></p>
@@ -26,15 +30,11 @@
     <p class="localLink"><a href="#azureDevOps">Azure DevOps</a></p>
     <p class="localLink"><a href="#supportServices">Support Services</a></p>
     <p class="localLink"><a href="#securityServices">Security Services</a></p>
-    <p class="localLink"><a href="#computeResources">Compute Resources</a></p>
     <p class="localLink"><a href="#messagingResources">Messaging Resources</a></p>
-    <p class="localLink"><a href="#storage">Storage</a></p>
-    <p class="localLink"><a href="#network">Network</a></p>
     <p class="localLink"><a href="#loggingAndMonitoring">Logging & Monitoring</a></p>
     <p class="localLink"><a href="#bigDataAnalyticsTools">Big Data Analytics Tools</a></p>
     <p class="localLink"><a href="#iotServices">IoT Services</a></p>
     <p class="localLink"><a href="#aiServices">AI Services</a></p>
-    <p class="subSite"><a href="Storage/index.html"> Storage > </a></p>
     <h2 class="headerSection"> Notes : </h2>
     <p> - we can test latency between our location and different Azure regions with speed test tools (like <a href="https://www.azurespeed.com/Azure/Latency" target="_blank">www.azurespeed.com/Azure/Latency</a>) </p>
     <h2 class="headerSection"> Useful Links : </h2>
@@ -42,21 +42,42 @@
     <h2 class="headerSection"> Remember This : </h2>
 
     <h2 class="headerSection"> Description and Demonstration : </h2>
-    <p> Concpets: </p>
-    <p class="indent-lv1"> - SKU (Stock Keeping Unit) describes the resource characteristics (type, class) (ex: VM SKU <mark>Standard_B1ls</mark> is a 1 CPU virtual machine, <mark>Standard_D2s_v4</mark> is a 2 CPU virtual machine) </p>
+    <table class="table">
+      <caption> Azure Concepts </caption>
+      <tr>
+        <th style="width:30%;"> Concept </th>
+        <th> Description </th>
+      </tr>
+      <tr>
+        <td>
+          SKU (Stock Keeping Unit)
+        </td>
+        <td>
+          - Describes a resource characteristics (type, class) (ex: VM SKU <mark>Standard_B1ls</mark> is a 1 CPU virtual machine, <mark>Standard_D2s_v4</mark> is a 2 CPU virtual machine)
+        </td>
+      </tr>
+      
+      
+      
+      
+      
+    </table>
+    
+    
+    
+    
     <h2 id="globalInfrastructure" class="header"> Global Infrastructure </h2>
     <p> - <mark class="mark">Azure backbone</mark> -> Azure's global network </p>
     <p> - <mark class="mark">Region</mark> -> Geographic location where one or multiple data centers reside </p>
     <p class="indent-lv1"> - A region might have only one data center (Azure doesn't work like AWS), at service deployment we can control where (or which availability zones) to deploy our servcies </p>
-    <p class="indent-lv1"> - Regions have pair regions (not always the case) for resiliency reasons, the pair region is located a the same geographic area at least 300 miles away </p>
+    <p class="indent-lv1"> - Regions can have pair regions (not always the case) for resiliency reasons, the pair region is located a the same geographic area at least 300 miles away </p>
     <p class="indent-lv2"> - Setting up the pair region is the developer's responsibility </p>
     <p class="indent-lv1"> - <mark class="mark">Availability Zone</mark> -> an individual data center group within a region </p>
     <p class="indent-lv2"> - Availability zones are for resiliency resons (redundant service availability), therefore availability zones exist at least in a group of 3 (numbered 1, 2, 3, ...) </p>
     <p class="indent-lv2"> - Availability zones have low latency connections between them </p>
     <hr>
     <!--------------------------------------------------------------------------------------------->
-    <h2 class="headerExtra"> Governing Azure Services </h2>
-    <h2 id="hierarchyScopTags" class="header"> Hierarchy, Scope and Tags </h2>
+    <h2 id="generalStructure" class="header"> General Cloud Structure </h2>
     <p> - <mark class="mark">Azure Hierarchy</mark> -> There are 4 levels </p>
     <p class="indent-lv1"> - <mark class="mark">Management Group</mark> (High level management, controls quotas and policies, can be nested (6 depth max)) </p>
     <p class="indent-lv1"> - <mark class="mark">Subscription</mark> (Used for billing, access control, and policies for resources are managed) </p>
@@ -71,19 +92,21 @@
     <p> - <mark class="mark">Tag</mark> -> additional information (key value pair) </p>
     <p class="indent-lv1"> - Can be assigned to a resource, resource group or a subscription </p>
     <p class="indent-lv1"> - Used for enhanced service management, automation, etc... </p>
-    <p class="indent-lv1"> - Tags are not inherited in the hierarchy </p>
+    <p class="indent-lv1"> - Tags are not inherited in the hierarchy (by Default) </p>
+    <p> - <mark class="mark">Resource Lock</mark> -> prevent actions on the specified scope </p>
+    <p class="indent-lv1"> - Can be assigned to subscription, resource group or resource scope </p>
+    <p class="indent-lv1"> - At the time of writing this there are types of locks, <mark class="mark">CanNotDelete</mark> and <mark class="mark">ReadOnly</mark> </p>
+    <p class="indent-lv1"> - Locks can be managed by administrators only </p>
     <img height="250" src='./Azure Hyerarchi.jpg' alt="Azure Hiearchy" />
     <hr>
     <!--------------------------------------------------------------------------------------------->
-    <h2 id="toolsToAccessAzureServices" class="header"> Tools to Access Azure Services </h2>
-    <p> - <mark class="mark">Azure Portal</mark> -> GUI in the web browser </p>
-    <p> - <mark class="mark">PowerShell</mark> -> A module in PowerShell allow acces to Azure </p>
-    <p> - <mark class="mark">CLI</mark> -> Terminal access by using the <mark>az</mark> CLI </p>
-    <p> - <mark class="mark">Cloud Shell</mark> -> PowerShell or <mark>az</mark> CLI use through Azure Portal </p>
-    <p> - <mark class="mark">SDK</mark> -> Programmatic access to Azure </p>
-    <hr>
-    <!--------------------------------------------------------------------------------------------->
     <h2 id="accessControl" class="header"> Access Control </h2>
+    <p class="indent-lv1"> - <mark class="mark">Access Methods (interaction Channels)</mark>
+    <p class="indent-lv2"> - <mark class="mark">Azure Portal</mark> -> GUI in the web browser </p>
+    <p class="indent-lv2"> - <mark class="mark">PowerShell</mark> -> A module in PowerShell allow acces to Azure </p>
+    <p class="indent-lv2"> - <mark class="mark">CLI</mark> -> Terminal access by using the <mark>az</mark> CLI </p>
+    <p class="indent-lv2"> - <mark class="mark">Cloud Shell</mark> -> PowerShell or <mark>az</mark> CLI use through Azure Portal </p>
+    <p class="indent-lv2"> - <mark class="mark">SDK</mark> -> Programmatic access to Azure </p>
     <p class="indent-lv1"> - <mark class="mark">Active Directory (Entra ID)</mark> -> Microsoft's cloud-based Identity and Access Management service (IAM) (Automatically created when creating Azure Account) </p>
     <p class="indent-lv2"> - Provides authentication and authorization for Microsoft and 3rd party services (uses protocols like <mark>OAuth 2.0</mark>, <mark>OpenID Connect</mark>, <mark>SAML</mark>, and <mark>WS-Federation</mark>) </p>
     <p class="indent-lv2"> - <mark class="mark">Tenant</mark> (also called directory) is an Active Directory instance, it represents a unique organization or entity, it's a namespace for users, groups, and applications, it's responsible for managing identities, authentication, and authorization for these objects) </p>
@@ -112,6 +135,11 @@
     
     
     
+    
+    
+    
+    
+    
     <!--
     ----------------------
     ------ Concepts ------
@@ -128,8 +156,13 @@
     - WAF (Web Application Firewall)
         - a security service that protects web applications from common web exploits and vulnerabilities (ex: SQL injection, cross-site scripting, etc...) (Azure Application Gateway has a WAF feature)
     
+    - SAS (Shared Access Signature)
+        - a URI that grants restricted access rights to Azure Storage resources (like read, write, delete, list, etc...) for a certain period of time and for a certain set of IP addresses (or even for a certain set of protocols) (this is a good option for giving temporary access to the storage account resources without giving the storage account keys)
+        - direct access (no auth needed) 
+    
     
     -->
+    
     
     
     
@@ -182,152 +215,7 @@
         - this works for individual resources and for resource groups (exporting a resource group will export all its resources' configuration in the same template)
     
     
-    
-    
-    
-    
-    
-    
-    
-    ------------------------------
-    ------ Virtual Networks ------
-    ------------------------------
-    - Resources in the same virtual network must live in the same region
-    - At least one subnet is required in a virtual network
-    
-    - by default subnets within the same virtual network can communicate with each other (but we can change this by using NSG (Network Security Group) rules) -> this is a virtual network feature in Azure 
-    - we can add additional ip ranges in the same virtual network
-        - we can extend the address range to an existing network (ex: 10.0.0.0/16 -> 10.0.1.0/24)
-        - we can also add a new address range (ex: 196.168.0.0/16)
-    
-    
-    - VMs don't see the VNet range – They only know their subnet's CIDR (the routing is automatic and handled by Azure)
-        - NIC ()
-    
-    
-    - on public ip routing preferences:
-        - Public -> traffic immediately goes to the public internet (default) (lower cost but higher latency)
-        - Microsoft Network -> traffic goes through Microsoft network (backbone) as close to the user as possible  before going to the public internet (higher cost but lower latency)
-    
-    - network security group (NSG)
-        - it's basically a simple firewall that controlls traffic on OSI level 3 and 4 (network and transport layers)
-        - the traffic is controlled based on 5 tupples (source IP, source port, destination IP, destination port, protocol)
-        - can be assigned to a subnet or a network interface (NIC)
-        - one nsg can be associated with multiple subnets and multiple nics (many-to-many relationship)
-        - by default config all internal VNet communication is allowed but blocks all unsolicitated traffic from the internet
-        - only one NSG is allowed per subnet or NIC at a time
-        - rules define traffic control and have priority (lower number means higher priority) (ex: a rule with priority 100 will be evaluated before a rule with priority 200)
-    
-    
-    - Vnet peering
-        - traffict is kept on Microsoft backbone (doesn't go to the public internet)
-        - there are 2 types of peering: regional peering (between VNets in the same region) and global peering (between VNets in different regions)
-        - done by virtual network pairing 
-          - important settings live here how the traffic is routed between the peered (like controling forwarded traffic, transit traffic, etc...)
-        - peering is not possible if networks have overlapping IP address spaces
-    
-    
-    - System Defined Routes VS User Defined Routes (UDR)
-        - System Defined Routes are automatically created by Azure to route traffic within a virtual network and between virtual networks and the internet. These routes are based on the IP address ranges of the virtual network and its subnets, and they ensure that traffic is properly routed to its destination. System Defined Routes cannot be modified or deleted by users.
-        - User Defined Routes (UDR) are custom routes that users can create to override the default routing behavior of Azure. UDRs allow users to specify custom next-hop addresses for specific IP address ranges, which can be used to route traffic through virtual appliances, on-premises networks, or other virtual networks. 
-          - UDRs take precedence over System Defined Routes, meaning that if a UDR matches a specific traffic flow, it will be used instead of the corresponding System Defined Route
-          - UDRs can also extend the routing capabilities of Azure by allowing users to define routes that are not covered by the default System Defined Routes (ex: routing traffic to a virtual appliance for inspection or filtering)
-    
-    
-    
-    ---------------------------
-    ------ Routing Table ------
-    ---------------------------
-    - Captures outbound traffic from a subnet and controls where it goes next based on the destination IP range (not IP to IP routing)
-    
-    
-    
-    --------------------------------------------------------------------
-    ------ Load Balancer / Application Gateway / Azure Front Door ------
-    --------------------------------------------------------------------
-    - Load Balancer
-        - Mostly used for VMs (IaaS)
-          - OSI Layer 4 (transport layer) service (which means cannot balance load based on urls)
-          - rules control how traffic is distributed to the backend pool (ex: round robin, least connections, etc...)
-          - health probes monitor the health of the backend pool instances and only route traffic to healthy instances
-    - Application Gateway
-        - Mostly used for web applications (HTTP/HTTPS traffic)
-          - OSI Layer 7 (application layer) service (which means can balance load based on urls)
-        - has a WAF (Web Application Firewall) feature
-        - supports multi-site hosting 
-    - Azure Front Door
-        - Global load balancer mostly used for CDN services
-        - has a WAF (Web Application Firewall) feature
-    
-    
-    
-    -----------------------------
-    ------ Network Watcher ------
-    -----------------------------
-    - provides monitoring and diagnostic tools for Azure networking resources (like virtual networks, load balancers, etc...)
-    - can verify IP flow, capture packets, view topology, etc... (this is a nice way to check the traffic flow, we can also see rules that allow the traffic)
-    - can check the actual hop between resources (ex: if we have a load balancer between 2 VMs we can check if the traffic is actually going through the load balancer or not)
-    
-    
-    - does all subnet need to reserve 5 addresses??? (yes it does)
-      - newtork address (first address in the subnet)
-      - broadcast address (last address in the subnet)
-      - 1 -> gateway (first address in the subnet)
-      - 2 and 3 -> for Azure DNS 
-    
-    
-    
-    
-    
-    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-    ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-    
-    
-    - NIC (Network Interface) VS private endpoint
-    
-    - NAT
-    
-    
-    
-    
-    - Application Security Groups (ASGs)
-        - ASGs are used to group resources with similar network security requirements (ex: all web servers, all database servers, etc...)
-        - ASGs are used in NSG rules to allow or deny traffic to a group of resources instead of specifying individual IP addresses or subnets
-        - ASGs can be associated with multiple NSG rules and multiple resources (many-to-many relationship)
-        - it's basically an NSG folder where we define rules and we can put resources in it to apply these rules to them (instead of writing the same rules for each resource we can write them once in an ASG and then put the resources in it)
-        - https://www.youtube.com/watch?v=BqRvnElu2Wk
-
-
-    - DNS Zones
-        - https://www.youtube.com/watch?v=Dw955ED-SRA
-    - Private DNS Zones
-        - non public facing DNS zones
-        - used to resolve name withing the same virtual network or betewen VNets
-
-
-    - Gateway (service)
-    
-    - Firewall (service)
-    
-    
-    
-    ------------------------------
-    ------ Service Endpoint ------
-    ------------------------------
-    - It's basically a "door" (direct secure connections) to a PaaS service (like Azure Storage, Azure SQL, etc...) that allows resources in a virtual network to securely access the service without going through the public internet (traffic stays on Microsoft backbone)
-    
-    ------------------------------
-    ------ Private Endpoint ------
-    ------------------------------
-    - Private Endpoint (service)
-        - Creates a private IP address in a subnet that acts as an entry point for traffic destined to a specific PaaS service (like Azure Storage, Azure SQL, etc...)
-        - creates a NIC which is visible on the subnet
-    
-    
-    
-    - Accessing storage (this one is a black whole)
-    
+  
     
     
     -->
@@ -341,31 +229,6 @@
     
     
     
-    
-    
-    
-    
-    
-    <!--
------------------------------------------------------------------------------------------
-------- Azure Compute Resources ---------------------------------------------------------
------------------------------------------------------------------------------------------
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    -->
     
     
     
@@ -403,13 +266,6 @@
     <p class="indent-lv2"> - Applying a policy to a scope will affect current and future resources only (but we can "remediate" to apply newly assigned policies to already existing resources as well) </p>
     <p class="indent-lv2"> - We can define what action to take when the policy is violated (block, warn, etc...) </p>
     <p class="indent-lv2"> - <mark class="mark">Initiative</mark> -> A collection (group) of policies </p>
-    <p class="indent-lv1"> - <mark class="mark">Blueprint</mark> -> Describes an Azure environment (used to replicate the same environment)
-    </p>
-    <p class="indent-lv2"> - Describes role assignements, resources and policy assignements </p>
-    <p class="indent-lv1"> - <mark class="mark">Resource Lock</mark> -> prevent actions on the specified scope </p>
-    <p class="indent-lv2"> - Can be assigned to subscription, resource group or resource scope </p>
-    <p class="indent-lv2"> - At the time of writing this there are types of locks, <mark class="mark">CanNotDelete</mark> and <mark class="mark">ReadOnly</mark> </p>
-    <p class="indent-lv2"> - Locks can be managed by administrators only </p>
     <hr>
     <!--------------------------------------------------------------------------------------------->
     <h2 id="costManagement" class="header"> Cost Management </h2>
@@ -418,34 +274,27 @@
     <p> - <mark class="mark">Azure Calculator</mark> -> Azure tool to calculate service pricing </p>
     <hr>
     <!--------------------------------------------------------------------------------------------->
-    <h2 id="serviceAvailability" class="header"> Service Availability (SLA) </h2>
-    <p> - Microsoft promises service uptimes (in percent per month), if if fails to do deliver its promise we'll get a refound on that service, this is called SLA (Service Level Agreement) </p>
-    <p> - for each service the SLA is documented (ex: VMs have a 99.99% SLA meaning 4m 22s downtime per month) </p>
-    <p> - the SLA can be calculated when using multiple services (ex if we have 2 required services the SLA formula is <mark class="mark">S1 * S2 / 100</mark>) </p>
-    <p> - there is no SLA for free services </p>
+    <h2 id="azureDevOps" class="header"> Azure DevOps </h2>
+    <p> - Microsoft DevOps SaaS echosystem </p>
+    <p> - <mark class="mark">Boards</mark> -> Jira style ticketing system </p>
+    <p> - <mark class="mark">Repos</mark> -> Code repositories </p>
+    <p> - <mark class="mark">Pipelines</mark> -> CI/CD pipelines </p>
+    <p class="indent-lv1"> - Concepts: </p>
+    <p class="indent-lv2"> - <mark class="mark">Trigger</mark> -> Action that triggers the pipeline </p>
+    <p class="indent-lv2"> - <mark class="mark">Template</mark> -> Pipeline script that can be imported and reused </p>
+    <p class="indent-lv2"> - <mark class="mark">Agent</mark> -> Machine that execute the pipeline jobs </p>
+    <p class="indent-lv2"> - <mark class="mark">Agent Pools</mark> -> A group of agents </p>
+    <p class="indent-lv2"> - <mark class="mark">Artifact</mark> -> The output of the pipeline process </p>
+    <p class="indent-lv2"> - <mark class="mark">Stage</mark> -> A set of jobs representing a functional proces (like test, build, deploy, etc...) </p>
+    <p class="indent-lv2"> - <mark class="mark">Job</mark> -> A set of steps executed on the same Agent </p>
+    <p class="indent-lv2"> - <mark class="mark">Step</mark> -> A <mark class="mark">Task</mark> or <mark class="mark">Script</mark> </p>
+    <p class="indent-lv3"> - <mark class="mark">Task</mark> -> Azure built-in script (like <mark>UsePythonVersion@0</mark> sets up a specified Python version) </p>
+    <p class="indent-lv3"> - <mark class="mark">Script</mark> -> A set of commands executed in bash os PowerShell </p>
+    <p> - <mark class="mark">Artifacts</mark> -> hosts & shares software packages </p>
+    <p> - <mark class="mark">Test Plans</mark> -> provides manual testing environments and tools (we can use all sorts of VMs for manual testing) </p>
     <hr>
     <!--------------------------------------------------------------------------------------------->
     <h2 class="headerExtra"> Resources </h2>
-    <h3 id="azureDevOps" class="header"> Azure DevOps </h3>
-    <p class="indent-lv1"> Azure development tools </p>
-    <p class="indent-lv2"> - <mark class="mark">Boards</mark> -> Jira style ticketing system </p>
-    <p class="indent-lv2"> - <mark class="mark">Repos</mark> -> Code repositories </p>
-    <p class="indent-lv2"> - <mark class="mark">Pipelines</mark> -> CI/CD pipelines </p>
-    <p class="indent-lv3"> - Concepts: </p>
-    <p class="indent-lv4"> - <mark class="mark">Trigger</mark> -> Action that triggers the pipeline </p>
-    <p class="indent-lv4"> - <mark class="mark">Template</mark> -> Pipeline script that can be imported and reused </p>
-    <p class="indent-lv4"> - <mark class="mark">Agent</mark> -> Machine that execute the pipeline jobs </p>
-    <p class="indent-lv4"> - <mark class="mark">Agent Pools</mark> -> A group of agents </p>
-    <p class="indent-lv4"> - <mark class="mark">Artifact</mark> -> The output of the pipeline process </p>
-    <p class="indent-lv4"> - <mark class="mark">Stage</mark> -> A set of jobs representing a functional proces (like test, build, deploy, etc...) </p>
-    <p class="indent-lv4"> - <mark class="mark">Job</mark> -> A set of steps executed on the same Agent </p>
-    <p class="indent-lv4"> - <mark class="mark">Step</mark> -> A <mark class="mark">Task</mark> or <mark class="mark">Script</mark> </p>
-    <p class="indent-lv5"> - <mark class="mark">Task</mark> -> Azure built-in script (like <mark>UsePythonVersion@0</mark> sets up a specified Python version) </p>
-    <p class="indent-lv5"> - <mark class="mark">Script</mark> -> A set of commands executed in bash os PowerShell </p>
-    <p class="indent-lv2"> - <mark class="mark">Artifacts</mark> -> hosts & shares software packages </p>
-    <p class="indent-lv2"> - <mark class="mark">Test Plans</mark> -> provides manual testing environments and tools (we can use all sorts of VMs for manual testing) </p>
-    <hr>
-    <!---------------------------------------------------------------------------------------------------------->
     <h3 id="supportServices" class="header"> Support Services </h3>
     <p class="indent-lv1"> - <mark class="mark">Marketplace</mark> -> marketplace for services or service groups built by Microsoft or 3rd party vendors </p>
     <p class="indent-lv1"> - <mark class="mark">App Configuration</mark> -> configuration store for storing configuration data and feature flags </p>
@@ -463,24 +312,6 @@
     <p class="indent-lv2"> - monitored service </p>
     <hr>
     <!---------------------------------------------------------------------------------------------------------->
-    <h3 id="computeResources" class="header"> Compute Resources </h3>
-    <p class="indent-lv1"> - <mark class="mark">VM (Virtual Machine)</mark> -> machine in the cloud </p>
-    <p class="indent-lv2"> - we can get different performance (there are built-in images but we can customize the performance) </p>
-    <p class="indent-lv1"> - <mark class="mark">VM Scale Set</mark> -> a group of VMs scalable behind a load balancer </p>
-    <p class="indent-lv1"> Container Resources: </p>
-    <p class="indent-lv2"> - <mark class="mark">Container Registry</mark> -> container storage </p>
-    <p class="indent-lv2"> - <mark class="mark">Container Instance</mark> -> container hosting solution </p>
-    <p class="indent-lv2"> - <mark class="mark">Kubernetes Services</mark> -> kubernetes solution </p>
-    <p class="indent-lv1"> - <mark class="mark">App Service</mark> -> enterprise grade web application hosting solution </p>
-    <p class="indent-lv2"> - supports multiple programming languages but also docker container </p>
-    <p class="indent-lv1"> - <mark class="mark">Function App</mark> -> serverless computing </p>
-    <p class="indent-lv2"> - can be triggered by different events (HTTP request, Timer, Storage events (when file up/down loaded)) </p>
-    <p class="indent-lv1"> - <mark class="mark">Logic Apps</mark> -> a serices of jobs executed in a workflow </p>
-    <p class="indent-lv2"> - Azure Logcal applications are pre-built apps to perform different tasks (email sending, log, etc...) </p>
-    <p class="indent-lv2"> - we can make a workflow (with programming features linear, conditional, loop) by using these apps </p>
-    <p class="indent-lv2"> - we can piece these apps together in a graphical interface </p>
-    <hr>
-    <!---------------------------------------------------------------------------------------------------------->
     <h3 id="messagingResources" class="header"> Messaging Resources </h3>
     <p class="indent-lv1"> - <mark class="mark">Event Hub</mark> -> high-throughput message broker that collects, transfomrs and stores large amounts of data </p>
     <p class="indent-lv2"> - can ingest millions of events per second </p>
@@ -488,42 +319,6 @@
     <p class="indent-lv2"> - supports multiple protocols (AMQP, HTTP, Kafka) </p>
     <p class="indent-lv2"> - each Event Hub contains several partitions, these are basically message channels where the order is garateed, however you need to specify a partition key in your message to make sure that they land to the same partition, otherwise messages are distributed in round-robin fashion across partitions </p>
     <p class="indent-lv2"> - the <mark class="mark">Event Grids Namespace</mark> is a logical container where several Event Grids live, it's basically provides, throughput config, access control and scallability for a group of Event Grids </p>
-    <hr>
-    <!---------------------------------------------------------------------------------------------------------->
-    <h3 id="network" class="header"> Network </h3>
-    <p class="indent-lv1"> - <mark class="mark">Virtual Network</mark> -> IPv4 or IPv6 logical network for resource isolation </p>
-    <p class="indent-lv2"> - must reside in a single region </p>
-    <p class="indent-lv2"> - under the same subscription any VM can be used in a virtual network (even VMs in different resource groups) </p>
-    <p class="indent-lv2"> - <mark class="mark">vnet peering</mark> -> peering Azure Virtual Networks in different regions (throug Azure Backbone) </p>
-    <p class="indent-lv3"> - does no transitive communication (ex: in serial a connection <mark>A</mark> -> <mark>B</mark> -> <mark>C</mark>, <u><mark>A</mark> cannot communicate with <mark>C</mark></u>) </p>
-    <p class="indent-lv1"> - <mark class="mark">Network Interface</mark> -> Virtual network interface card (NIC) that connects a VM into a virtual network </p>
-    <p class="indent-lv1"> - <mark class="mark">Public IP</mark> -> Public IP for in or outbound internet traffic </p>
-    <p class="indent-lv2"> - Static -> fixed IP (for in and outbound traffic) </p>
-    <p class="indent-lv2"> - Dynamic -> changes every time the associated resource is restarted (for outbound traffic only) </p>
-    <p class="indent-lv3"> - SKU (Stock Keeping Unit): </p>
-    <p class="indent-lv4"> - <mark class="mark">Basic</mark> -> Static or Dynamic </p>
-    <p class="indent-lv4"> - <mark class="mark">Standard</mark> -> Static </p>
-    <p class="indent-lv1"> - <mark class="mark">Network Security Group (NSG)</mark> -> controls the subnet traffic within the Virtual Network </p>
-    <p class="indent-lv1"> - <mark class="mark">Application Security Group (ASG)</mark> -> controls the traffic of a group of servers </p>
-    <p class="indent-lv2"> - we can create a group of servers within a subnet, ASG controls the netwrok traffic of this group </p>
-    <p class="indent-lv1"> - <mark class="mark">Virtual Network Gateway (VPN Gateway)</mark> -> allows and controls the communication between the virtual network and on-remises </p>
-    <p class="indent-lv2"> - communication between virtual network -> public internet | private network | other Azure virtual network (even in different region) </p>
-    <p class="indent-lv1"> - <mark class="mark">Load Balancer</mark> -> load balances the traffic to multiple VMs or VM Scale Set </p>
-    <p class="indent-lv2"> - public load balancer -> load balances public internet traffic to VMs </p>
-    <p class="indent-lv2"> - private load balancer -> load balances traffic within a virtual network </p>
-    <p class="indent-lv1"> - <mark class="mark">Application Gateway</mark> -> load balances web (HTTP) traffic </p>
-    <p class="indent-lv2"> - fine grained load balancing for web applications </p>
-    <p class="indent-lv1"> - <mark class="mark">Route Table</mark> -> subnet traffic routing </p>
-    <p class="indent-lv2"> - each subnet has one, it's created with default settings when a subnet is created, but we can overide default settings </p>
-    <p class="indent-lv1"> - <mark class="mark">Firewall</mark> -> Azure firewall on virtual network (monitors and controls traffic) </p>
-    <p class="indent-lv1"> - <mark class="mark">DDoS protection plans</mark> -> Distributed Denial of Service protection of a virtual network </p>
-    <p class="indent-lv2"> - can protect autoscaling group to generate hight costs, etc.. </p>
-    <p class="indent-lv2"> - SKU (Stock Keeping Unit): </p>
-    <p class="indent-lv3"> - <mark class="mark">Basic</mark> </p>
-    <p class="indent-lv3"> - <mark class="mark">Standard</mark> -> provides monitoring and machine learning for better protection </p>
-    <p class="indent-lv1"> - <mark class="mark">Front Door (CDN)</mark> -> Azure's CDN service </p>
-    <p class="indent-lv1"> - <mark class="mark">Express Route</mark> -> a direct connection of an on-premise network and Azure (private traffic that does not go through the internet) </p>
-    <p class="indent-lv1"> - <mark class="mark">Bastion</mark> -> provides secure, RDP and SSH access to virtual machines without exposing them to the public internet (doesn't need public IP) </p>
     <hr>
     <!---------------------------------------------------------------------------------------------------------->
     <h3 id="loggingAndMonitoring" class="header"> Logging & Monitoring </h3>
