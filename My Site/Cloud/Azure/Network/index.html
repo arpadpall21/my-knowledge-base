@@ -58,7 +58,16 @@
     <p class="indent-lv2"> - <mark class="mark">Standard</mark> -> provides monitoring and machine learning for better protection </p>
     <p> - <mark class="mark">Front Door (CDN)</mark> -> Azure's CDN service </p>
     <p> - <mark class="mark">Express Route</mark> -> a direct connection of an on-premise network and Azure (private traffic that does not go through the internet) </p>
-    <p> - <mark class="mark">Bastion</mark> -> provides secure, RDP and SSH access to virtual machines without exposing them to the public internet (doesn't need public IP) </p>
+    <p> - <mark class="mark">Bastion</mark> -> Fully managed (PaaS) jump host service that provides RDP and SSH access to VMs (so VMs are not directly exposed to the public internet) </p>
+    <p class="indent-lv1"> - Mainly used to access VMs through the Azure portal (but also allows remote access (native client must be enabled)) </p>
+    <p class="indent-lv1"> - Authentication is managed by Azure Entra ID </p>
+    <p class="indent-lv1"> - Has a public IP </p>
+    <p class="indent-lv1"> - Each bastion instance can support up to 25 RDP or 50 SSH sessions (depending on the load) </p>
+    <p class="indent-lv1"> - Must be deployed in its own dedicated subnet <mark>AzureBastionSubnet</mark> with a /27 or larger address space (so at least 32 IP addresses) </p>
+    <p class="indent-lv1"> - The <mark>AzureBastionSubnet</mark> must be deployed within the same VNet (where the VMs are located) </p>
+
+
+
 
 
 
@@ -205,32 +214,10 @@
         - creates a NIC which is visible on the subnet
 
 
-
-    ---------------------
-    ------ Bastion ------
-    ---------------------
-    - Azure Bastion is a fully managed Platform as a Service (PaaS) that provides secure and seamless Remote Desktop Protocol (RDP) and Secure Shell (SSH) connectivity to your virtual machines (VMs) directly over TLS from the Azure portal. It allows you to connect to VMs in your Azure virtual network without the need for a public IP address, agent, or additional client software. This enhances security by protecting your VMs from external threats and port scanning.
-    - Azure Bastion provides browser-based access to Azure VMs using RDP for Windows and SSH for Linux
-  
-    - Yes — by default, you do not remotely log in to the Azure Bastion host itself from your local machine like a normal VM; you use it as a managed service via the Azure portal.
-    - Azure Bastion is mainly for remote access to VMs via RDP and SSH, not a general-purpose gateway to any service.
-    
-    - Has a public IP
-    
-    - Azure Bastion is basically a PaaS jumpbox, that provides entry to the virtual network for RDP and SSH traffic without exposing the VMs to the public internet 
-    
-    - What about authentication?
-        - This goes trough Azure Entra ID -> I need to test this
-    
-    - 1 instance can be used aproximately for 25 RDP or 50 SSH sessions (depending on the load)
-    
-    - Azure Bastion is deployed in its own dedicated subnet, and your VMs should be in different subnets; for Bastion this is effectively the standard and required design.
-        - the name of the subnetn should be "AzureBastionSubnet" and it should have a /27 or larger address space
     
 -->
 
 
-/subscriptions/564b1b0a-8fd4-41d7-aa41-0a20231e36af/resourceGroups/Arpads_Playground/providers/Microsoft.Compute/virtualMachines/vm-1
 
 
 
